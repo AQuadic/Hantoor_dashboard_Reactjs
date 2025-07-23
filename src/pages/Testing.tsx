@@ -1,3 +1,5 @@
+import SearchBar from "@/components/general/dashboard/SearchBar";
+import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import TableEditButton from "@/components/general/dashboard/table/TableEditButton";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import {
@@ -19,6 +21,7 @@ const Testing = () => {
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
       />
+      <SearchBar />
       <Table dir="rtl">
         <TableHeader>
           <TableRow>
@@ -47,8 +50,18 @@ const Testing = () => {
             <TableCell className="font-medium">INV001</TableCell>
             <TableCell>Paid</TableCell>
             <TableCell>Credit Card</TableCell>
-            <TableCell>
+            <TableCell className="flex items-center gap-2">
               <TableEditButton handleEdit={() => alert("Edit clicked")} />
+              <TableDeleteButton handleDelete={() => alert("Delete clicked")} />
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">INV001</TableCell>
+            <TableCell>Paid</TableCell>
+            <TableCell>Credit Card</TableCell>
+            <TableCell className="flex items-center gap-2">
+              <TableEditButton handleEdit={() => alert("Edit clicked")} />
+              <TableDeleteButton handleDelete={() => alert("Delete clicked")} />
             </TableCell>
           </TableRow>
         </TableBody>
