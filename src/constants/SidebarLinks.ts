@@ -19,70 +19,87 @@ import Users from "@/components/icons/dashboard/Users"
 export const SidebarLinks = [
     {
         icons: DashboardIcon,
-        link: 'لوحة التحكم'
+        link: 'لوحة التحكم',
+        path: '/dashboard',
     },
     {
         icons: Subordinates,
-        link: 'المسؤولين الفرعيين'
+        link: 'المسؤولين الفرعيين',
+        path: '/dashboard/subordinates',
     },
     {
         icons: Users,
-        link: 'المستخدمين'
+        link: 'المستخدمين',
+        path: '/dashboard/users',
     },
     {
         icons: Countries,
-        link: 'البلاد'
+        link: 'البلاد',
+        path: '/dashboard/countries',
     },
     {
         icons: Brands,
-        link: 'الماركات'
+        link: 'الماركات',
+        path: '/dashboard/brands',
     },
     {
         icons: Agents,
-        link: 'الوكلاء'
+        link: 'الوكلاء',
+        path: '/dashboard/agents',
     },
     {
         icons: CarSections,
-        link: 'اقسام السيارات'
+        link: 'اقسام السيارات',
+        path: '/dashboard/car-sections',
     },
     {
         icons: Cars,
-        link: 'السيارات'
+        link: 'السيارات',
+        path: '/dashboard/cars',
     },
     {
         icons: Financing,
-        link: 'التمويل'
+        link: 'التمويل',
+        path: '/dashboard/financing',
     },
     {
         icons: Chats,
-        link: 'المحادثات'
+        link: 'المحادثات',
+        path: '/dashboard/chats',
     },
     {
         icons: SupportQuestions,
-        link: 'اسئلة الدعم الفني'
+        link: 'اسئلة الدعم الفني',
+        path: '/dashboard/support-questions',
     },
     {
         icons: SupportMsgs,
-        link: 'رسائل الدعم'
+        link: 'رسائل الدعم',
+        path: '/dashboard/support-messages',
     },
     {
         icons: FAQs,
-        link: 'الاسئلة الشائعة'
+        link: 'الاسئلة الشائعة',
+        path: '/dashboard/faqs',
     },
     {
         icons: Notification,
-        link: 'الاشعارات'
+        link: 'الاشعارات',
+        path: '/dashboard/notifications',
     },
     {
         icons: Contactus,
-        link: 'تواصل معنا'
+        link: 'تواصل معنا',
+        path: '/dashboard/contact-us',
     },
     {
         icons: Setting,
-        link: 'الاعدادات'
+        link: 'الاعدادات',
+        path: '/dashboard/settings',
     },
     {
         icons: Logout,
-        link: 'تسجيل الخروج'
+        link: 'تسجيل الخروج',
+        path: '/logout',
     },
-]
+];

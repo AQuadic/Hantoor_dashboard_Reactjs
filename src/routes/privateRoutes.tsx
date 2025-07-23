@@ -8,7 +8,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <Testing />,
   },
   {
-    path: "/",
+    path: "/dashboard",
     element: <DashboardPage />,
   },
 ];

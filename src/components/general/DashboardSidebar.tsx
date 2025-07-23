@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { SidebarLinks } from '@/constants/SidebarLinks'
 import { motion, AnimatePresence } from 'framer-motion';
+import { NavLink } from 'react-router';
 
 const DashboardSidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -51,14 +52,26 @@ const DashboardSidebar = () => {
                 )}
             </AnimatePresence>
 
-            <div className='hidden lg:block bg-white w-[288px] py-4'>
-                {SidebarLinks.map((link, index) => (
-                    <div key={index} className='flex items-center gap-[5px] mt-4 px-4'>
-                        <link.icons />
-                        <h1 className='text-[#606060] text-[15px] font-normal'>{link.link}</h1>
-                    </div>
-                )
-                )}
+            <div className='hidden lg:block bg-white w-[288px] py-4 border-l border-[#E1E1E1]'
+                style={{boxShadow: '10.27px 10.27px 51.33px 0px #64748B0A'}}
+            >
+            {SidebarLinks.map((link, index) => (
+                <NavLink
+                to={link.path}
+                end={link.path === '/dashboard'}
+                key={index}
+                className={({ isActive }) =>
+                    `block mt-4 px-4 py-2 rounded-md ${
+                    isActive ? 'bg-[#2A32F8] text-white mx-4' : 'hover:bg-blue-100 text-[#606060] mx-4'
+                    }`
+                }
+                >
+                <div className="flex items-center gap-[5px]">
+                    <link.icons />
+                    <h1 className="text-[15px] font-normal">{link.link}</h1>
+                </div>
+                </NavLink>
+            ))}
             </div>
         </section>
     )
