@@ -1,3 +1,4 @@
+import SearchBar from "@/components/general/dashboard/SearchBar";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import TableEditButton from "@/components/general/dashboard/table/TableEditButton";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
@@ -20,6 +21,7 @@ const Testing = () => {
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
       />
+      <SearchBar />
       <Table dir="rtl">
         <TableHeader>
           <TableRow>
