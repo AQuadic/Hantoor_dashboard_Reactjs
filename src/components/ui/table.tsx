@@ -10,7 +10,10 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
     >
       <table
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
+        className={cn(
+          "w-full caption-bottom text-sm border-separate border-spacing-y-4",
+          className
+        )}
         {...props}
       />
     </div>
@@ -63,23 +66,23 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
         "border-b-0 overflow-hidden transition-colors",
         // White background for all cells except last
         "[&>td]:bg-white [&>td]:border-0",
-        "[&>td:last-child]:bg-transparent", // Last cell transparent (appears outside)
-
+        "[&>td:last-child]:bg-transparent",
         // LTR/RTL friendly styling
         "[&>td:first-child]:rounded-s-full [&>td:first-child]:ps-6",
         "[&>td:nth-last-child(2)]:rounded-e-full [&>td:nth-last-child(2)]:pe-6",
-
-        // Hover states - don't apply to last cell
+        "[&>td]:py-7",
+        // Hover states
         "hover:[&>td:not(:last-child)]:bg-muted/50",
         "data-[state=selected]:[&>td:not(:last-child)]:bg-muted",
-
+        // Add spacing using transform (works but not ideal)
+        "before:content-[''] before:block before:h-4",
+        "after:content-[''] after:block after:h-4",
         className
       )}
       {...props}
     />
   );
 }
-
 function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   return (
     <th
