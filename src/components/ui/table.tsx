@@ -29,6 +29,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
         "[&_tr>th]:bg-[#2A32F80D] [&_tr>th]:border-0",
         "[&_tr>th:first-child]:rounded-s-full [&_tr>th:first-child]:ps-6",
         "[&_tr>th:last-child]:rounded-e-full [&_tr>th:last-child]:pe-6",
+        "[&_tr>th]:text-primary [&_tr>th]:font-bold",
         className
       )}
       {...props}
