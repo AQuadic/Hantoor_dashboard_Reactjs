@@ -1,7 +1,7 @@
-import SearchBar from "@/components/general/dashboard/SearchBar";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import TableEditButton from "@/components/general/dashboard/table/TableEditButton";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
+import ImageInput from "@/components/general/ImageInput";
 import {
   Table,
   TableBody,
@@ -10,10 +10,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Switch } from "@heroui/react";
+import { i } from "node_modules/react-router/dist/development/components-DzqPLVI1.mjs";
 import React from "react";
 
 const Testing = () => {
   const [selectedFilter, setSelectedFilter] = React.useState("All");
+  const [image, setImage] = React.useState<File | null>(null);
   return (
     <div dir="rtl" className="max-w-7xl mx-auto p-4">
       <TabsFilter
@@ -21,7 +24,6 @@ const Testing = () => {
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
       />
-      <SearchBar />
       <Table dir="rtl">
         <TableHeader>
           <TableRow>
@@ -62,10 +64,12 @@ const Testing = () => {
             <TableCell className="flex items-center gap-2">
               <TableEditButton handleEdit={() => alert("Edit clicked")} />
               <TableDeleteButton handleDelete={() => alert("Delete clicked")} />
+              <Switch />
             </TableCell>
           </TableRow>
         </TableBody>
       </Table>
+      <ImageInput image={image} setImage={setImage} />
     </div>
   );
 };
