@@ -4,6 +4,7 @@ import { RouteTypes } from "@/types/general/RouteTypes";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PrivateRouteGuard from "./guards/PrivateRouteGuard";
 import PublicRouteGuard from "./guards/PublicRouteGuard";
+import Providers from "./Providers";
 
 function App() {
   // Helper function to render routes recursively
@@ -20,19 +21,21 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public Routes - wrapped with PublicRouteGuard */}
-        <Route element={<PublicRouteGuard />}>
-          {renderRoutes(publicRoutes)}
-        </Route>
+    <Providers>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes - wrapped with PublicRouteGuard */}
+          <Route element={<PublicRouteGuard />}>
+            {renderRoutes(publicRoutes)}
+          </Route>
 
-        {/* Private Routes - wrapped with PrivateRouteGuard */}
-        <Route element={<PrivateRouteGuard />}>
-          {renderRoutes(privateRoutes)}
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          {/* Private Routes - wrapped with PrivateRouteGuard */}
+          <Route element={<PrivateRouteGuard />}>
+            {renderRoutes(privateRoutes)}
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </Providers>
   );
 }
 
