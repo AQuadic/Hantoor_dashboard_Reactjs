@@ -71,9 +71,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
         // LTR/RTL friendly styling
         "[&>td:first-child]:rounded-s-full [&>td:first-child]:ps-6",
         "[&>td:nth-last-child(2)]:rounded-e-full [&>td:nth-last-child(2)]:pe-6",
-        "[&>td]:py-7",
-        // Hover states
-        "hover:[&>td:not(:last-child)]:bg-muted/50",
+        "[&>td]:py-3",
         "data-[state=selected]:[&>td:not(:last-child)]:bg-muted",
         // Add spacing using transform (works but not ideal)
         "before:content-[''] before:block before:h-4",
