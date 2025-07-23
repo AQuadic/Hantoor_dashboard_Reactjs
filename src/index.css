@@ -4,7 +4,17 @@
 @source "../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
 
 @custom-variant dark (&:is(.dark *));
+@font-face {
+  font-family: "Helvetica Neue W23";
+  src: url("./assest/OnlineWebFonts_COM_b8bc6cdf6777e28b9ed3f6663a17766f/Helvetica Neue W23 for SKY Bd/Helvetica Neue W23 for SKY Bd.ttf")
+    format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
 
+body {
+  font-family: "Helvetica Neue W23", sans-serif;
+}
 @theme inline {
   --color-main-black: #1e1b1b;
   --radius-sm: calc(var(--radius) - 4px);
