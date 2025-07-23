@@ -1,3 +1,5 @@
+import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard"
+import ActiveUsers from "@/components/icons/dashboard/ActiveUsers"
 import Agents from "@/components/icons/dashboard/Agents"
 import Brands from "@/components/icons/dashboard/Brands"
 import Cars from "@/components/icons/dashboard/Cars"
@@ -19,6 +21,7 @@ import Users from "@/components/icons/dashboard/Users"
 export const SidebarLinks = [
     {
         icons: DashboardIcon,
+        activeIcon: ActiveDashboard,
         link: 'لوحة التحكم',
         path: '/dashboard',
     },
@@ -29,6 +32,7 @@ export const SidebarLinks = [
     },
     {
         icons: Users,
+        activeIcon: ActiveUsers,
         link: 'المستخدمين',
         path: '/dashboard/users',
     },
