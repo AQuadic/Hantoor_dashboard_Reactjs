@@ -1,11 +1,12 @@
 import React from 'react'
 import Email from '../icons/login/Email'
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router';
 
 const ForgetPass = () => {
     const { t } = useTranslation("login");
     return (
-        <section className='flex items-center justify-between container gap-4'>
+        <section className='flex items-center justify-between gap-4 !bg-white'>
             <img src="/images/loginIMG.png" className='lg:flex hidden h-screen' alt="Login image" />
             <div className="px-8 mx-auto lg:mt-0 mt-10">
                 <h1 className="text-[#1E1B1B] text-[30px] font-bold text-center">{t('forgetPassword')}</h1>
@@ -24,8 +25,8 @@ const ForgetPass = () => {
                     </div>
                 </div>
 
-                <div className="text-center">
-                    <button className="w-[214px] h-11 bg-[#2A32F8] rounded-[9.2px] mt-[17px] text-[#FFFFFF] text-lg font-bold">{t('next')}</button>
+                <div className="text-center w-[214px] h-11 bg-[#2A32F8] rounded-[9.2px]  mt-[17px] flex items-center justify-center mx-auto">
+                    <Link to='/verification-code' className="text-[#FFFFFF] text-lg font-bold">{t('next')}</Link>
                 </div>
             </div>
         </section>

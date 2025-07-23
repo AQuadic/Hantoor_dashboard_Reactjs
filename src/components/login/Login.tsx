@@ -8,7 +8,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 const Login = () => {
     const { t } = useTranslation("login");
     return (
-        <section className='flex items-center justify-between container gap-4'>
+        <section className='flex items-center justify-between gap-4 !bg-white'>
             <img src="/images/loginIMG.png" className='lg:flex hidden h-screen' alt="Login image" />
             <div className="px-8 mx-auto lg:mt-0 mt-10">
                 <h1 className="text-[#1E1B1B] text-[30px] font-bold text-center">{t('welcome')}</h1>
@@ -57,7 +57,7 @@ const Login = () => {
                 </div>
                 
                 <div className="mt-3 text-center">
-                    <Link to='/' className="text-[#000000] text-[19px] font-normal">{t('forgetPassword')}</Link>
+                    <Link to='/forget-password' className="text-[#000000] text-[19px] font-normal">{t('forgetPassword')}</Link>
                 </div>
             </div>
         </section>
