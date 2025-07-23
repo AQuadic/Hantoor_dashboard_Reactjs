@@ -1,6 +1,7 @@
 import { BreadcrumbItem, Breadcrumbs } from "@heroui/react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 interface DashboardHeaderProps {
@@ -13,6 +14,9 @@ interface DashboardHeaderProps {
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title, items }) => {
   const navigate = useNavigate();
+  const {
+    i18n: { language },
+  } = useTranslation();
   return (
     <div className="text-sm bg-white rounded-b-2xl shadow-sm">
       <Breadcrumbs
@@ -36,8 +40,12 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title, items }) => {
         onClick={() => navigate(-1)}
         className="px-9 flex items-center gap-3 pb-4"
       >
-        <span className="rounded-full p-3 border">
-          <ArrowLeft color="#5A5A5A" />
+        <span className="rounded-full p-3 border bg-background">
+          {language === "ar" ? (
+            <ArrowRight className="rotate-180" />
+          ) : (
+            <ArrowLeft className="rotate-180" />
+          )}
         </span>
         <h1 className="text-2xl font-bold">{title}</h1>
       </button>
