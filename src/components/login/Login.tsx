@@ -3,6 +3,7 @@ import Email from "../icons/login/Email";
 import Password from "../icons/login/Password";
 import { Link } from "react-router";
 import {Checkbox} from "@heroui/react";
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Login = () => {
     const { t } = useTranslation("login");
@@ -43,6 +44,12 @@ const Login = () => {
                 <div className="mt-4 flex items-center">
                     <Checkbox defaultSelected size="md"></Checkbox>
                     <p className="text-[#2A32F8] text-[14px] font-normal">{t('rememberMe')}</p>
+                </div>
+
+                <div className="mt-4 flex items-center justify-center">
+                    <ReCAPTCHA
+                        sitekey="YOUR_RECAPTCHA_SITE_KEY"
+                    />
                 </div>
 
                 <div className="text-center">
