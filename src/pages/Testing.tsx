@@ -1,4 +1,5 @@
 import TableEditButton from "@/components/general/dashboard/table/TableEditButton";
+import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import {
   Table,
   TableBody,
@@ -7,10 +8,17 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import React from "react";
 
 const Testing = () => {
+  const [selectedFilter, setSelectedFilter] = React.useState("All");
   return (
     <div dir="rtl" className="max-w-7xl mx-auto p-4">
+      <TabsFilter
+        filters={["All", "Paid", "Unpaid"]}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+      />
       <Table dir="rtl">
         <TableHeader>
           <TableRow>
