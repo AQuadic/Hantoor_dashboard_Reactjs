@@ -17,7 +17,7 @@ const DashboardUsers = () => {
                     ]}
                 />
 
-                <div className='flex items-center gap-2 px-8'>
+                <div className='flex flex-wrap items-center gap-2 md:px-8 px-2'>
                     <div className='flex-1'>
                         <SearchBar
                             term={''}

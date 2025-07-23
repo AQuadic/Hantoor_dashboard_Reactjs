@@ -9,7 +9,7 @@ const DashboardSidebar = () => {
   const toggleSidebar = () => setIsOpen(!isOpen);
 
   return (
-    <section className="relative">
+    <section className="relative h-screen overflow-auto">
       <img src="/images/dashboard/dashboardLogo.svg" alt="logo" className="lg:flex hidden py-8 px-8" />
 
       {/* Mobile menu toggle */}

@@ -58,7 +58,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
   return (
     <div>
       <hr className="border-gray-200" />
-      <div className="flex items-center justify-between mt-4">
+      <div className="flex flex-wrap items-center justify-between mt-4">
         <p className="text-center text-[#808080]">
           العدد {itemsPerPage} من {totalItems} عنصر
         </p>
