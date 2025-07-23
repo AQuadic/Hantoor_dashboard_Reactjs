@@ -36,8 +36,8 @@ const VerficationCode = () => {
                 <div className='text-center mt-3 underline'>
                     <Link to='/' className='text-[#2A32F8] text-[19px]'>{t('resend')}</Link>
                 </div>
-                <div className="text-center">
-                    <button className="w-[214px] h-11 bg-[#2A32F8] rounded-[9.2px] mt-[17px] text-[#FFFFFF] text-lg font-bold">{t('next')}</button>
+                <div className="text-center w-[214px] h-11 bg-[#2A32F8] rounded-[9.2px]  mt-[17px] flex items-center justify-center mx-auto">
+                    <Link to='/change-password' className="text-[#FFFFFF] text-lg font-bold">{t('next')}</Link>
                 </div>
             </div>
         </section>

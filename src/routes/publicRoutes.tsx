@@ -1,3 +1,4 @@
+import CahngePassword from "@/components/forgetpassword/ChangePassword";
 import VerficationCode from "@/components/forgetpassword/VerficationCode";
 import ForgetPassword from "@/pages/ForgetPassword";
 import LoginPage from "@/pages/LoginPage";
@@ -15,5 +16,9 @@ export const publicRoutes: RouteTypes[] = [
     {
     path: "/verification-code",
     element: <VerficationCode />,
+  },
+    {
+    path: "/change-password",
+    element: <CahngePassword />,
   },
 ];
