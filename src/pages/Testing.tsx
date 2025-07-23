@@ -1,5 +1,6 @@
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import TableEditButton from "@/components/general/dashboard/table/TableEditButton";
+import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import ImageInput from "@/components/general/ImageInput";
 import {
@@ -11,7 +12,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Switch } from "@heroui/react";
-import { i } from "node_modules/react-router/dist/development/components-DzqPLVI1.mjs";
 import React from "react";
 
 const Testing = () => {
@@ -69,6 +69,7 @@ const Testing = () => {
           </TableRow>
         </TableBody>
       </Table>
+      <TablePagination />
       <ImageInput image={image} setImage={setImage} />
     </div>
   );
