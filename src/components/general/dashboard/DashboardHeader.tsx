@@ -18,7 +18,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title, items }) => {
     i18n: { language },
   } = useTranslation();
   return (
-    <div className="text-sm bg-white rounded-b-2xl shadow-sm">
+    <div className="text-sm bg-white ">
       <Breadcrumbs
         className="my-2 border-b border-gray-200 pb-2 px-9"
         itemClasses={{
