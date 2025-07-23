@@ -4,11 +4,12 @@ import Password from "../icons/login/Password";
 import { Link } from "react-router";
 import {Checkbox} from "@heroui/react";
 import ReCAPTCHA from 'react-google-recaptcha';
+import DashboardButton from "../general/dashboard/DashboardButton";
 
 const Login = () => {
     const { t } = useTranslation("login");
     return (
-        <section className='flex items-center justify-between container gap-4'>
+        <section className='flex items-center justify-between gap-4 !bg-white'>
             <img src="/images/loginIMG.png" className='lg:flex hidden h-screen' alt="Login image" />
             <div className="px-8 mx-auto lg:mt-0 mt-10">
                 <h1 className="text-[#1E1B1B] text-[30px] font-bold text-center">{t('welcome')}</h1>
@@ -52,12 +53,12 @@ const Login = () => {
                     />
                 </div>
 
-                <div className="text-center">
-                    <button className="w-[214px] h-11 bg-[#2A32F8] rounded-[9.2px] mt-[17px] text-[#FFFFFF] text-lg font-bold">{t('enter')}</button>
+                <div className="flex items-center justify-center mt-[17px]">
+                    <DashboardButton title={t('enter')} />
                 </div>
                 
                 <div className="mt-3 text-center">
-                    <Link to='/' className="text-[#000000] text-[19px] font-normal">{t('forgetPassword')}</Link>
+                    <Link to='/forget-password' className="text-[#000000] text-[19px] font-normal">{t('forgetPassword')}</Link>
                 </div>
             </div>
         </section>
