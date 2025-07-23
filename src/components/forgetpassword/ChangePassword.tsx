@@ -1,6 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next';
 import Password from '../icons/login/Password';
+import DashboardButton from '../general/dashboard/DashboardButton';
+import { Link } from 'react-router';
 
 const CahngePassword = () => {
     const { t } = useTranslation("login");
@@ -38,9 +40,9 @@ const CahngePassword = () => {
                         <Password />
                     </div>
                 </div>
-                <div className="text-center">
-                    <button className="w-[214px] h-11 bg-[#2A32F8] rounded-[9.2px] mt-[17px] text-[#FFFFFF] text-lg font-bold">{t('saveAndEnter')}</button>
-                </div>
+                <Link to='/login' className="flex items-center justify-center mt-[17px]">
+                    <DashboardButton title={t('saveAndEnter')} />
+                </Link>
 
             </div>
         </section>

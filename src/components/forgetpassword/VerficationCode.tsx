@@ -2,6 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next';
 import { Form, InputOtp } from '@heroui/react';
 import { Link } from 'react-router';
+import DashboardButton from '../general/dashboard/DashboardButton';
 
 const VerficationCode = () => {
     const { t } = useTranslation("login");
@@ -36,9 +37,9 @@ const VerficationCode = () => {
                 <div className='text-center mt-3 underline'>
                     <Link to='/' className='text-[#2A32F8] text-[19px]'>{t('resend')}</Link>
                 </div>
-                <div className="text-center w-[214px] h-11 bg-[#2A32F8] rounded-[9.2px]  mt-[17px] flex items-center justify-center mx-auto">
-                    <Link to='/change-password' className="text-[#FFFFFF] text-lg font-bold">{t('next')}</Link>
-                </div>
+                <Link to='/change-password' className="mt-[17px] flex items-center justify-center mx-auto">
+                    <DashboardButton title={t('next')} />
+                </Link>
             </div>
         </section>
     )

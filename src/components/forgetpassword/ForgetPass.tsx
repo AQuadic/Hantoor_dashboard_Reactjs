@@ -2,6 +2,7 @@ import React from 'react'
 import Email from '../icons/login/Email'
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+import DashboardButton from '../general/dashboard/DashboardButton';
 
 const ForgetPass = () => {
     const { t } = useTranslation("login");
@@ -25,9 +26,10 @@ const ForgetPass = () => {
                     </div>
                 </div>
 
-                <div className="text-center w-[214px] h-11 bg-[#2A32F8] rounded-[9.2px]  mt-[17px] flex items-center justify-center mx-auto">
-                    <Link to='/verification-code' className="text-[#FFFFFF] text-lg font-bold">{t('next')}</Link>
-                </div>
+                <Link to='/verification-code' className="text-center mt-[17px] flex items-center justify-center mx-auto">
+                    <DashboardButton title={t('next')} />
+                </Link>
+
             </div>
         </section>
     )

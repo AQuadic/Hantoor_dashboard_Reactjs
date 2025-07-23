@@ -4,6 +4,7 @@ import Password from "../icons/login/Password";
 import { Link } from "react-router";
 import {Checkbox} from "@heroui/react";
 import ReCAPTCHA from 'react-google-recaptcha';
+import DashboardButton from "../general/dashboard/DashboardButton";
 
 const Login = () => {
     const { t } = useTranslation("login");
@@ -52,8 +53,8 @@ const Login = () => {
                     />
                 </div>
 
-                <div className="text-center">
-                    <button className="w-[214px] h-11 bg-[#2A32F8] rounded-[9.2px] mt-[17px] text-[#FFFFFF] text-lg font-bold">{t('enter')}</button>
+                <div className="flex items-center justify-center mt-[17px]">
+                    <DashboardButton title={t('enter')} />
                 </div>
                 
                 <div className="mt-3 text-center">
