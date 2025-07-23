@@ -1,7 +1,12 @@
+import DashboardSidebar from "@/components/general/DashboardSidebar";
 import React from "react";
 
 const HomePage = () => {
-  return <div className="bg-green-200">HomePage</div>;
+  return (
+    <div>
+  
+    </div>
+  )
 };
 
 export default HomePage;
