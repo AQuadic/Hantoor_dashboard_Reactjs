@@ -11,8 +11,8 @@ const PublicRouteGuard = () => {
   const { isAuthenticated } = useAuth();
 
   // redirect them to dashboard
-  if (!isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+  if (isAuthenticated) {
+    return <Navigate to="/" replace />;
   }
 
   // If not authenticated, allow access to public routes
