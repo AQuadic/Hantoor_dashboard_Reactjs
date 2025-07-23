@@ -11,7 +11,7 @@ const TableDeleteButton: React.FC<TableDeleteButtonProps> = ({
 }) => {
   const [isOpen, setIsOpen] = React.useState(false);
   return (
-    <div>
+    <div className="mt-2">
       <button onClick={() => setIsOpen(true)}>
         <DeleteIcon />
       </button>
