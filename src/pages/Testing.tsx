@@ -55,6 +55,15 @@ const Testing = () => {
               <TableDeleteButton handleDelete={() => alert("Delete clicked")} />
             </TableCell>
           </TableRow>
+          <TableRow>
+            <TableCell className="font-medium">INV001</TableCell>
+            <TableCell>Paid</TableCell>
+            <TableCell>Credit Card</TableCell>
+            <TableCell className="flex items-center gap-2">
+              <TableEditButton handleEdit={() => alert("Edit clicked")} />
+              <TableDeleteButton handleDelete={() => alert("Delete clicked")} />
+            </TableCell>
+          </TableRow>
         </TableBody>
       </Table>
     </div>
