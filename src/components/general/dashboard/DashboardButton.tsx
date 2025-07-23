@@ -33,7 +33,7 @@ const DashboardButton: React.FC<DashboardButtonProps> = ({
       } text-center`}
       onPress={onClick}
       {...(isAdd && {
-        endContent: <AddIcon />,
+        startContent: <AddIcon />,
       })}
       fullWidth
     >
