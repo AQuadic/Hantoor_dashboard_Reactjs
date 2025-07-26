@@ -1,6 +1,6 @@
+import DashboardPhoneInput from "@/components/general/dashboard/DashboardPhoneInput";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import TableEditButton from "@/components/general/dashboard/table/TableEditButton";
-import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import ImageInput from "@/components/general/ImageInput";
 import {
@@ -17,8 +17,14 @@ import React from "react";
 const Testing = () => {
   const [selectedFilter, setSelectedFilter] = React.useState("All");
   const [image, setImage] = React.useState<File | null>(null);
+  const [selectedCountry, setSelectedCountry] = React.useState({
+    name: "United States",
+    iso2: "US",
+    phone: "1",
+  });
+  const [phone, setPhone] = React.useState("");
   return (
-    <div dir="rtl" className="max-w-7xl mx-auto p-4">
+    <div dir="rtl" className="p-4 mx-auto max-w-7xl">
       <TabsFilter
         filters={["All", "Paid", "Unpaid"]}
         selectedFilter={selectedFilter}
@@ -69,8 +75,13 @@ const Testing = () => {
           </TableRow>
         </TableBody>
       </Table>
-      <TablePagination />
       <ImageInput image={image} setImage={setImage} />
+      <DashboardPhoneInput
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+        phone={phone}
+        setPhone={setPhone}
+      />
     </div>
   );
 };
