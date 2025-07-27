@@ -25,7 +25,7 @@ const ChangeLanguage = () => {
 
   return (
     <Button
-      className="flex items-center justify-center !w-12 !h-12 text-lg bg-white"
+      className="flex items-center justify-center !w-[44px] !h-[44px] text-lg bg-white"
       radius="full"
       isIconOnly
       onPress={toggleLanguage}
