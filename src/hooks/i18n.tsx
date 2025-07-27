@@ -5,14 +5,18 @@ import loginAr from "../locales/ar/login.json";
 import headerEn from "../locales/en/header.json";
 import loginEn from "../locales/en/login.json";
 
-const savedLang = localStorage.getItem("language") || "en";
+// Ensure we're in browser environment
+const savedLang =
+  typeof window !== "undefined"
+    ? localStorage.getItem("language") || "en"
+    : "en";
 
 // Initialize i18n
 i18n.use(initReactI18next).init({
   lng: savedLang,
   fallbackLng: "en",
   interpolation: { escapeValue: false },
-  ns: ["header"],
+  ns: ["header", "login"], // Add all namespaces you're using
   defaultNS: "header",
   resources: {
     en: {
@@ -26,10 +30,17 @@ i18n.use(initReactI18next).init({
   },
 });
 
-// ✅ Automatically update <html dir=""> on language change
+// Set initial direction based on saved language
+if (typeof document !== "undefined") {
+  document.documentElement.dir = savedLang === "ar" ? "rtl" : "ltr";
+}
+
+// Handle language changes
 i18n.on("languageChanged", (lng) => {
-  localStorage.setItem("language", lng);
-  document.documentElement.dir = lng === "ar" ? "rtl" : "ltr";
+  if (typeof window !== "undefined") {
+    localStorage.setItem("language", lng);
+    document.documentElement.dir = lng === "ar" ? "rtl" : "ltr";
+  }
 });
 
 export default i18n;
