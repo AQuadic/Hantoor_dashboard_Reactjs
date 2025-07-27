@@ -21,7 +21,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <DashboardUsers />,
     children: [
       {
-        path: "/add",
+        path: "add",
         element: <AddUsers />,
       },
     ],
@@ -36,7 +36,11 @@ export const privateRoutes: RouteTypes[] = [
     element: <BrandsPage />,
     children: [
       {
-        path: "/add",
+        path: "add",
+        element: <AddBrand />,
+      },
+      {
+        path: ":id",
         element: <AddBrand />,
       },
     ],
