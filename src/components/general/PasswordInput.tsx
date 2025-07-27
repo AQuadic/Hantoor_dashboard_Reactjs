@@ -82,11 +82,11 @@ export default function PasswordInput({
       classNames={{ label: "mb-2" }}
       value={value}
       onValueChange={(v) => setValue(v)}
-      className="max-w-xs"
+      className=""
       endContent={
         <button
           aria-label="toggle password visibility"
-          className="focus:outline-hidden"
+          className="mb-2 focus:outline-hidden"
           type="button"
           onClick={toggleVisibility}
         >

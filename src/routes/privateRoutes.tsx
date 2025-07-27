@@ -13,6 +13,7 @@ import EditFaq from "@/pages/faqs/EditFaq";
 import FAQsPage from "@/pages/faqs/FAQsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
+import SubordinatesChangePassword from "@/pages/subordinates/SubordinateChangePasswordPage";
 import SubordinatesPage from "@/pages/subordinates/SubordinatesPage";
 import AddQuestions from "@/pages/technicalsupport/AddQuestion";
 import EditQuestion from "@/pages/technicalsupport/EditQuestion";
@@ -118,4 +119,8 @@ export const privateRoutes: RouteTypes[] = [
     path: "/subordinates/:id",
     element: <AddSubordinatePage />,
   },
+  {
+    path: "/subordinates/change_password/:id",
+    element: <SubordinatesChangePassword />,
+  }
 ];
