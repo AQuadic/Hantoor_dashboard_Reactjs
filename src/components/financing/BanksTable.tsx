@@ -19,7 +19,7 @@ const BanksTable = () => {
     {
         id: 2,
         question: "/",
-        country: "الامارات",
+        country: "مصر",
         count: 22,
     },
     {

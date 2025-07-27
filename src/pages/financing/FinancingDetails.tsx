@@ -12,33 +12,34 @@ const FinancingDetails = () => {
     const country = location.state?.country;
 
     return (
-        <div className="pt-2 pb-6 bg-white">
-        <DashboardHeader
-            titleAr="التمويل"
-            titleEn="Financing"
-            subtitleAr={country ? ` ${country}` : "-"}
-            subtitleEn={country ? ` ${country}` : "-"}
-            items={[
-            { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
-            { titleAr: "التمويل", titleEn: "Financing" },
-            ]}
-        />
+        <section>
+            <div className="pt-2 pb-6 bg-white">
+            <DashboardHeader
+                titleAr="التمويل"
+                titleEn="Financing"
+                subtitleAr={country ? ` ${country}` : "-"}
+                subtitleEn={country ? ` ${country}` : "-"}
+                items={[
+                { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
+                { titleAr: "التمويل", titleEn: "Financing" },
+                ]}
+            />
 
-        <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
-            <div className="flex-1">
-            <SearchBar term={""} setTerm={() => {}} />
+            <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
+                <div className="flex-1">
+                <SearchBar term={""} setTerm={() => {}} />
+                </div>
+                <div className="flex-1">
+                <DashboardDatePicker />
+                </div>
+
+                <Link to="/bank/add">
+                <DashboardButton title={"اضافة بنك جديد"} variant="add" />
+                </Link>
             </div>
-            <div className="flex-1">
-            <DashboardDatePicker />
             </div>
-
-            <Link to="/bank/add">
-            <DashboardButton title={"اضافة بنك جديد"} variant="add" />
-            </Link>
-        </div>
-
-        <BanksTable />
-        </div>
+            <BanksTable />
+        </section>
     );
 };
 

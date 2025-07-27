@@ -135,7 +135,7 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/financing/details/:id",
     element: <FinancingDetails />
-  }
+  },
   {
     path: "/subordinates/change_password/:id",
     element: <SubordinatesChangePassword />,
