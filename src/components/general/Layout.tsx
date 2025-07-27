@@ -20,9 +20,7 @@ const Layout = () => {
             exit={{ opacity: 0, y: 50 }}
             transition={{ duration: 0.4, ease: "easeInOut" }}
           >
-            <div className="p-4">
-              <Outlet />
-            </div>
+            <Outlet />
           </motion.div>
         </AnimatePresence>
       </div>
