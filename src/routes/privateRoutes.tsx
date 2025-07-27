@@ -1,3 +1,4 @@
+import AddUsers from "@/components/users/AddUsers";
 import DashboardPage from "@/pages/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import Testing from "@/pages/Testing";
@@ -15,5 +16,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/dashboard/users",
     element: <DashboardUsers />,
+  },
+    {
+    path: "/dashboard/addUsers",
+    element: <AddUsers />,
   },
 ];
