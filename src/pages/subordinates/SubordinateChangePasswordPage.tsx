@@ -10,7 +10,11 @@ const SubordinatesChangePassword = () => {
         titleEn={"Change Password"}
         items={[
           { titleAr: "لوحة التحكم", titleEn: "Dashbard", link: "/" },
-          { titleAr: "المستخدمين", titleEn: "Users", link: "/users" },
+          {
+            titleAr: "المسؤولين الفرعيين",
+            titleEn: "Subordinates",
+            link: "/subordinates",
+          },
           {
             titleAr: "تغيير كلمة المرور",
             titleEn: "Change Password",

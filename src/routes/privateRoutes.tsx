@@ -12,6 +12,7 @@ import AddFaq from "@/pages/faqs/AddFaq";
 import EditFaq from "@/pages/faqs/EditFaq";
 import FAQsPage from "@/pages/faqs/FAQsPage";
 import ProfilePage from "@/pages/ProfilePage";
+import AddPermissionPage from "@/pages/subordinates/AddPermissionPage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
 import SubordinatesChangePassword from "@/pages/subordinates/SubordinateChangePasswordPage";
 import SubordinatesPage from "@/pages/subordinates/SubordinatesPage";
@@ -99,18 +100,18 @@ export const privateRoutes: RouteTypes[] = [
 
   // FAQs route
   {
-    path:'/faqs',
-    element: <FAQsPage />
+    path: "/faqs",
+    element: <FAQsPage />,
   },
   {
-    path:'/faq/add',
-    element: <AddFaq />
+    path: "/faq/add",
+    element: <AddFaq />,
   },
   {
-    path:'/faq/edit',
-    element: <EditFaq />
+    path: "/faq/edit",
+    element: <EditFaq />,
   },
-  
+
   {
     path: "/subordinates/add",
     element: <AddSubordinatePage />,
@@ -122,5 +123,13 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/subordinates/change_password/:id",
     element: <SubordinatesChangePassword />,
-  }
+  },
+  {
+    path: "/subordinates/permissions/add",
+    element: <AddPermissionPage />,
+  },
+  {
+    path: "/subordinates/permissions/:id",
+    element: <AddPermissionPage />,
+  },
 ];

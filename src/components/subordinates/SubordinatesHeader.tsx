@@ -48,9 +48,15 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker />
         </div>
-        <Link to="/subordinates/add">
-          <DashboardButton title={"اضافة مسؤول فرعي جديد"} variant="add" />
-        </Link>
+        {selectedFilter === "Subordinates" ? (
+          <Link to="/subordinates/add">
+            <DashboardButton title={"اضافة مسؤول فرعي جديد"} variant="add" />
+          </Link>
+        ) : (
+          <Link to="/subordinates/add">
+            <DashboardButton title={"اضافة صلاحية جديدة "} variant="add" />
+          </Link>
+        )}
       </div>
     </div>
   );
