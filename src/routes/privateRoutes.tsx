@@ -6,7 +6,6 @@ import DashboardUsers from "@/pages/DashboardUsers";
 import ProfilePage from "@/pages/ProfilePage";
 import Testing from "@/pages/Testing";
 import { RouteTypes } from "@/types/general/RouteTypes";
-
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/testing",
@@ -16,33 +15,30 @@ export const privateRoutes: RouteTypes[] = [
     path: "/",
     element: <DashboardPage />,
   },
+  // Users routes - flattened
   {
     path: "/users",
     element: <DashboardUsers />,
-    children: [
-      {
-        path: "add",
-        element: <AddUsers />,
-      },
-    ],
   },
-
   {
-    path: "/profile",
-    element: <ProfilePage />,
+    path: "/users/add",
+    element: <AddUsers />,
   },
+  // Brands routes - flattened
   {
     path: "/brands",
     element: <BrandsPage />,
-    children: [
-      {
-        path: "add",
-        element: <AddBrand />,
-      },
-      {
-        path: ":id",
-        element: <AddBrand />,
-      },
-    ],
+  },
+  {
+    path: "/brands/add",
+    element: <AddBrand />,
+  },
+  {
+    path: "/brands/:id",
+    element: <AddBrand />,
+  },
+  {
+    path: "/profile",
+    element: <ProfilePage />,
   },
 ];

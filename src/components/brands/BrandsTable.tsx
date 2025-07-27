@@ -53,7 +53,7 @@ export function BrandsTable() {
             <TableCell className="w-full">{brand.count}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <ActiveStatus />
-              <Link to="">
+              <Link to="/brands/1">
                 <Edit />
               </Link>
 

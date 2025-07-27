@@ -24,7 +24,7 @@ const BrandsHeader = () => {
         <div className="flex-1">
           <DashboardDatePicker />
         </div>
-        <Link to="/dashboard/addUsers">
+        <Link to="/brands/add">
           <DashboardButton title={"اضافة ماركة جديدة"} variant="add" />
         </Link>
       </div>
