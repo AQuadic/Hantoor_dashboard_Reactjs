@@ -25,7 +25,7 @@ const BrandsHeader = () => {
           <DashboardDatePicker />
         </div>
         <Link to="/dashboard/addUsers">
-          <DashboardButton title={"إضافة مستخدم جديد"} variant="add" />
+          <DashboardButton title={"اضافة ماركة جديدة"} variant="add" />
         </Link>
       </div>
     </div>
