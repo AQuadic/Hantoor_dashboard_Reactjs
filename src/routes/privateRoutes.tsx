@@ -1,5 +1,6 @@
 import AddUsers from "@/components/users/AddUsers";
-import BrandsPage from "@/pages/BrandsPage";
+import AddBrand from "@/pages/brands/AddBrand";
+import BrandsPage from "@/pages/brands/BrandsPage";
 import DashboardPage from "@/pages/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import ProfilePage from "@/pages/ProfilePage";
@@ -18,11 +19,14 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/users",
     element: <DashboardUsers />,
+    children: [
+      {
+        path: "/add",
+        element: <AddUsers />,
+      },
+    ],
   },
-  {
-    path: "/addUsers",
-    element: <AddUsers />,
-  },
+
   {
     path: "/profile",
     element: <ProfilePage />,
@@ -30,5 +34,11 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/brands",
     element: <BrandsPage />,
+    children: [
+      {
+        path: "/add",
+        element: <AddBrand />,
+      },
+    ],
   },
 ];

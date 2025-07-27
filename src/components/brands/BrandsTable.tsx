@@ -1,7 +1,6 @@
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import ActiveStatus from "../icons/general/ActiveStatus";
-import Delete from "../icons/general/Delete";
 import Edit from "../icons/general/Edit";
 import {
   Table,
