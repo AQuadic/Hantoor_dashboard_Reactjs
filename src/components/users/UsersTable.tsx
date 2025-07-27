@@ -11,6 +11,7 @@ import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import Password from "../icons/general/Password";
 import Delete from "../icons/general/Delete";
+import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 
 export function UserTable() {
   const users = [
@@ -64,7 +65,7 @@ export function UserTable() {
             <TableCell className="flex gap-[7px]">
               <Link to='/users/edit'><Edit /></Link>
               <Link to=''><Password /></Link>
-              <Link to=''><Delete /></Link>
+              <TableDeleteButton handleDelete={() => {}} />
             </TableCell>
           </TableRow>
         ))}

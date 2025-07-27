@@ -57,7 +57,9 @@ export function BrandsTable() {
                 <Edit />
               </Link>
 
+              <div className="mt-2">
               <TableDeleteButton handleDelete={() => {}} />
+              </div>
             </TableCell>
           </TableRow>
         ))}
