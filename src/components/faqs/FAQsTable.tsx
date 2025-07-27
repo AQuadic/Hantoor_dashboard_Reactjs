@@ -1,11 +1,14 @@
-import { Link } from "react-router";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 const FAQsTable = () => {
-    const technicalsupport = [
+  const navigate = useNavigate();
+
+  const technicalsupport = [
     {
         id: 1,
         question: "مشكلة في عرض السيارات أو البيانات",
@@ -43,16 +46,23 @@ const FAQsTable = () => {
         </TableHeader>
         <TableBody>
             {technicalsupport.map((question, index) => (
-            <TableRow key={question.id}>
+            <TableRow
+                key={question.id}
+                onClick={() => navigate(`/faq/details/${question.id}`)}
+                className="cursor-pointer hover:bg-gray-100"
+            >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{question.question}</TableCell>
                 <TableCell>{question.country}</TableCell>
-                <TableCell className="">{question.count}</TableCell>
-                <TableCell className="">{question.count}</TableCell>
-                <TableCell className="">{question.date}</TableCell>
-                <TableCell className="flex gap-[7px] items-center">
+                <TableCell>{question.count}</TableCell>
+                <TableCell>{question.count}</TableCell>
+                <TableCell>{question.date}</TableCell>
+                <TableCell
+                className="flex gap-[7px] items-center"
+                onClick={(e) => e.stopPropagation()} 
+                >
                 <ActiveStatus />
-                <Link to="/faq/edit">
+                <Link to={`/faq/edit/${question.id}`}>
                     <Edit />
                 </Link>
 
