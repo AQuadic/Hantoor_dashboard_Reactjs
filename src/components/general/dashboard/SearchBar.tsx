@@ -18,7 +18,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
       <input
         type="text"
         placeholder={placeholder}
-        className="outline-none border-none ltr:ml-3 rtl:mr-3"
+        className="w-full border-none outline-none ltr:ml-3 rtl:mr-3"
         value={term}
         onChange={(e) => setTerm(e.target.value)}
       />
