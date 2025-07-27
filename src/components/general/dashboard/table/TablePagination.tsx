@@ -81,15 +81,15 @@ const TablePagination: React.FC<TablePaginationProps> = ({
             {steps.map((step, index) => (
               <React.Fragment key={index}>
                 {step === "..." ? (
-                  <div className="px-3 py-2 text-sm border min-w-[40px] border-gray-300">
+                  <div className="px-3 py-2 text-sm border min-w-[40px] bg-white border-gray-300">
                     ...
                   </div>
                 ) : (
                   <button
                     onClick={() => handleStepClick(step)}
-                    className={`px-3 py-2 text-sm border min-w-[40px] ${
+                    className={`px-3 py-2 text-sm border min-w-[40px] bg-white ${
                       step === currentPage
-                        ? "bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
+                        ? "!bg-blue-600 text-white border-blue-600 hover:bg-blue-700"
                         : "text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
                     }`}
                   >
@@ -104,7 +104,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
           <button
             onClick={handleNext}
             disabled={currentPage === totalPages}
-            className={`px-3 py-2 text-sm border rounded-md ${
+            className={`px-3 py-2 text-sm border rounded-md bg-white ${
               currentPage === totalPages
                 ? "text-gray-400 border-gray-200 cursor-not-allowed bg-gray-50"
                 : "text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400"
