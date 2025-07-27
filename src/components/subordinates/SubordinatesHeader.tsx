@@ -53,7 +53,7 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
             <DashboardButton title={"اضافة مسؤول فرعي جديد"} variant="add" />
           </Link>
         ) : (
-          <Link to="/subordinates/add">
+          <Link to="/subordinates/permissions/add">
             <DashboardButton title={"اضافة صلاحية جديدة "} variant="add" />
           </Link>
         )}
