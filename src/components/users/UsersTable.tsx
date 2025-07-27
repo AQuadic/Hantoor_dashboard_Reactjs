@@ -64,7 +64,7 @@ export function UserTable() {
             <TableCell><ActiveStatus /></TableCell>
             <TableCell className="flex gap-[7px]">
               <Link to='/users/edit'><Edit /></Link>
-              <Link to=''><Password /></Link>
+              <Link to='change-password'><Password /></Link>
               <TableDeleteButton handleDelete={() => {}} />
             </TableCell>
           </TableRow>
