@@ -10,7 +10,9 @@ import DashboardPage from "@/pages/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import AddFaq from "@/pages/faqs/AddFaq";
 import EditFaq from "@/pages/faqs/EditFaq";
+import FaqDetails from "@/pages/faqs/FaqDetails";
 import FAQsPage from "@/pages/faqs/FAQsPage";
+import FinancingPage from "@/pages/financing/FinancingPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AddPermissionPage from "@/pages/subordinates/AddPermissionPage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
@@ -107,11 +109,14 @@ export const privateRoutes: RouteTypes[] = [
     path: "/faq/add",
     element: <AddFaq />,
   },
-  {
-    path: "/faq/edit",
-    element: <EditFaq />,
+    {
+    path: "/faq/edit/:id",
+    element: <EditFaq />
   },
-
+{
+    path: "/faq/details/:id",
+    element: <FaqDetails />
+  },
   {
     path: "/subordinates/add",
     element: <AddSubordinatePage />,
@@ -120,6 +125,12 @@ export const privateRoutes: RouteTypes[] = [
     path: "/subordinates/:id",
     element: <AddSubordinatePage />,
   },
+
+  // Financing route
+  {
+    path: "/financing",
+    element: <FinancingPage/>
+  }
   {
     path: "/subordinates/change_password/:id",
     element: <SubordinatesChangePassword />,

@@ -1,5 +1,6 @@
 import ActiveCountries from "@/components/icons/dashboard/ActiveCountries";
 import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
+import ActiveFAQ from "@/components/icons/dashboard/ActiveFAQ";
 import ActiveSupportQuestions from "@/components/icons/dashboard/ActiveSupportQuestions";
 import ActiveUsers from "@/components/icons/dashboard/ActiveUsers";
 import Agents from "@/components/icons/dashboard/Agents";
@@ -87,6 +88,7 @@ export const SidebarLinks = [
   },
   {
     icons: FAQs,
+    activeIcon: ActiveFAQ,
     link: "الاسئلة الشائعة",
     path: "/faqs",
   },

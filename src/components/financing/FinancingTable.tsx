@@ -5,7 +5,8 @@ import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
-const FAQsTable = () => {
+
+const FinancingTable = () => {
   const navigate = useNavigate();
 
   const technicalsupport = [
@@ -14,21 +15,18 @@ const FAQsTable = () => {
         question: "مشكلة في عرض السيارات أو البيانات",
         country: "الامارات",
         count: 22,
-        date: "22/03/2024- 08:30 PM"
     },
     {
         id: 2,
         question: "مشكلة في عرض السيارات أو البيانات",
         country: "الامارات",
         count: 22,
-        date: "22/03/2024- 08:30 PM"
     },
     {
         id: 3,
         question: "مشكلة في عرض السيارات أو البيانات",
         country: "الامارات",
         count: 22,
-        date: "22/03/2024- 08:30 PM"
     },
     ];
     return (
@@ -36,11 +34,8 @@ const FAQsTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">السؤال</TableHead>
             <TableHead className="text-right">البلد</TableHead>
-            <TableHead className="text-right">عدد مرات الاستفادة</TableHead>
-            <TableHead className="text-right">عدد مرات عدم الاستفادة</TableHead>
-            <TableHead className="text-right">تاريخ ووقت الانشاء</TableHead>
+            <TableHead className="text-right">عدد البنوك</TableHead>
             <TableHead className="text-right">الحالة</TableHead>
             </TableRow>
         </TableHeader>
@@ -48,15 +43,12 @@ const FAQsTable = () => {
             {technicalsupport.map((question, index) => (
             <TableRow
                 key={question.id}
-                onClick={() => navigate(`/faq/details/${question.id}`)}
+                onClick={() => navigate(`/financing/details/${question.id}`)}
                 className="cursor-pointer hover:bg-gray-100"
             >
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{question.question}</TableCell>
                 <TableCell>{question.country}</TableCell>
                 <TableCell>{question.count}</TableCell>
-                <TableCell>{question.count}</TableCell>
-                <TableCell>{question.date}</TableCell>
                 <TableCell
                 className="flex gap-[7px] items-center"
                 onClick={(e) => e.stopPropagation()} 
@@ -77,4 +69,4 @@ const FAQsTable = () => {
     )
 }
 
-export default FAQsTable
+export default FinancingTable
