@@ -1,58 +1,24 @@
+import { Link } from "react-router";
 import {
   Table,
-  TableBody,
-  TableCell,
-  TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-
-const invoices = [
-  {
-    invoice: "1",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "2",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "3",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "4",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "5",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "6",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "7",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-]
+  TableHead,
+  TableBody,
+  TableCell,
+} from "../ui/table";
+import ActiveStatus from "../icons/general/ActiveStatus";
+import Edit from "../icons/general/Edit";
+import Password from "../icons/general/Password";
+import Delete from "../icons/general/Delete";
 
 export function UserTable() {
+  const users = [
+    { id: 1, image: "/", name: "محمد احمد", phone: "01010101010", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "asmaa@example.com", advancedCount: "5", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", statusTwo: 'Icon' },
+    { id: 2, image: "/", name: "محمد احمد", phone: "01010101010", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "john@example.com", advancedCount: "5", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", statusTwo: 'Icon' },
+    { id: 3, image: "/", name: "محمد احمد", phone: "01010101010", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "jane@example.com", advancedCount: "5", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", statusTwo: 'Icon' },
+  ];
+
   return (
     <Table>
       <TableHeader>
@@ -61,18 +27,48 @@ export function UserTable() {
           <TableHead className="text-right">الصورة</TableHead>
           <TableHead className="text-right">الاسم</TableHead>
           <TableHead className="text-right">رقم الجوال</TableHead>
+          <TableHead className="text-right">البريد الالكتروني</TableHead>
+          <TableHead className="text-right">تاريخ ووقت التسجيل</TableHead>
+          <TableHead className="text-right">طريقة التسجيل</TableHead>
+          <TableHead className="text-right">الدولة</TableHead>
+          <TableHead className="text-right">عدد مرات البحث المتقدم</TableHead>
+          <TableHead className="text-right">طريقة الدفع</TableHead>
+          <TableHead className="text-right">عدد مرات طلب تفاصيل سعر التأمين</TableHead>
+          <TableHead className="text-right">عدد السيارات في المفضلة</TableHead>
+          <TableHead className="text-right">العملة</TableHead>
+          <TableHead className="text-right">نشط منذ</TableHead>
+          <TableHead className="text-right">مدة الايقاف</TableHead>
+          <TableHead className="text-right">الحالة</TableHead>
+
         </TableRow>
       </TableHeader>
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+        {users.map((user, index) => (
+          <TableRow key={user.id}>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell>{user.image}</TableCell>
+            <TableCell>{user.name}</TableCell>
+            <TableCell>{user.phone}</TableCell>
+            <TableCell>{user.email}</TableCell>
+            <TableCell>{user.date}</TableCell>
+            <TableCell>{user.way}</TableCell>
+            <TableCell>{user.country}</TableCell>
+            <TableCell>{user.advancedCount}</TableCell>
+            <TableCell>{user.paymentMethod}</TableCell>
+            <TableCell>{user.noTimes}</TableCell>
+            <TableCell>{user.noCars}</TableCell>
+            <TableCell>{user.currency}</TableCell>
+            <TableCell>{user.status}</TableCell>
+            <TableCell>{user.SuspensionPeriod}</TableCell>
+            <TableCell><ActiveStatus /></TableCell>
+            <TableCell className="flex gap-[7px]">
+              <Link to=''><Edit /></Link>
+              <Link to=''><Password /></Link>
+              <Link to=''><Delete /></Link>
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
-  )
+  );
 }
