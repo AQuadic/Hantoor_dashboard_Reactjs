@@ -19,7 +19,7 @@ const EditUsers = () => {
             ]} 
             />
     
-            <div className="w-full bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
+            <div className="w-full bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
             {/* Name */}
             <div className="relative">
                 <input
