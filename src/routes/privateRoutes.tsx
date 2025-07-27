@@ -9,6 +9,7 @@ import EditCountries from "@/pages/countries/EditCountries";
 import DashboardPage from "@/pages/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import ProfilePage from "@/pages/ProfilePage";
+import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
 import SubordinatesPage from "@/pages/subordinates/SubordinatesPage";
 import AddQuestions from "@/pages/technicalsupport/AddQuestion";
 import EditQuestion from "@/pages/technicalsupport/EditQuestion";
@@ -82,7 +83,7 @@ export const privateRoutes: RouteTypes[] = [
     path: "/countries/edit",
     element: <EditCountries />,
   },
-   {
+  {
     path: "/countries/add",
     element: <AddCountries />,
   },
@@ -90,5 +91,13 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/subordinates",
     element: <SubordinatesPage />,
+  },
+  {
+    path: "/subordinates/add",
+    element: <AddSubordinatePage />,
+  },
+  {
+    path: "/subordinates/:id",
+    element: <AddSubordinatePage />,
   },
 ];
