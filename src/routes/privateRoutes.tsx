@@ -1,4 +1,5 @@
 import AddUsers from "@/components/users/AddUsers";
+import EditUsers from "@/components/users/EditUsers";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
 import DashboardPage from "@/pages/DashboardPage";
@@ -23,6 +24,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/users/add",
     element: <AddUsers />,
+  },
+  {
+    path: "/users/edit",
+    element: <EditUsers />,
   },
   // Brands routes - flattened
   {

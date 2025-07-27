@@ -12,14 +12,6 @@ import Password from "../icons/login/Password";
 const AddUsers = () => {
   return (
     <section>
-      {/* <DashboardHeader
-        title="إضافة مستخدم جدبد"
-        items={[
-          { title: "لوحة التحكم", link: "/" },
-          { title: "المستخدمين", link: "/dashboard/users" },
-          { title: "إضافة مستخدم جدبد" },
-        ]}
-      /> */}
       <DashboardHeader 
         titleAr={"لوحة التحكم"} titleEn={"Dashboard"} 
         items={[
@@ -39,7 +31,7 @@ const AddUsers = () => {
             className="w-full h-[53px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
             placeholder="username@mail.com"
           />
-          <h2 className="text-[#000000] text-[15px] font-normal absolute top-5 right-4">
+          <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
             الاسم
           </h2>
           <div className="absolute top-9 left-5"></div>
@@ -54,7 +46,7 @@ const AddUsers = () => {
               className=" w-full h-[53px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
               placeholder="username@mail.com"
             />
-            <h2 className="text-[#000000] text-[15px] font-normal absolute top-5 right-4">
+            <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
               البريد الالكنتروني
             </h2>
             <div className="absolute top-9 left-5"></div>
@@ -68,7 +60,7 @@ const AddUsers = () => {
               className=" w-full h-[53px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
               placeholder="+20"
             />
-            <h2 className="text-[#000000] text-[15px] font-normal absolute top-5 right-4">
+            <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
               رقم الجوال
             </h2>
             <div className="absolute top-9 left-5"></div>
@@ -101,10 +93,10 @@ const AddUsers = () => {
               className="w-full h-[53px] border border-[#E2E2E2] rounded-[12px] mt-[18px] px-4 pt-4"
               placeholder="********************"
             />
-            <h2 className="text-[#000000] text-[15px] absolute top-5 right-4">
+            <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
               كلمة المرور
             </h2>
-            <div className="absolute top-9.5 left-5">
+            <div className="absolute top-9.5 rtl:left-5 ltr:right-5">
               <Password />
             </div>
           </div>
@@ -119,10 +111,10 @@ const AddUsers = () => {
             className="w-full h-[53px] border border-[#E2E2E2] rounded-[12px] mt-[18px] px-4 pt-4"
             placeholder="********************"
           />
-          <h2 className="text-[#000000] text-[15px] absolute top-5 right-4">
+          <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
             كلمة المرور
           </h2>
-          <div className="absolute top-9.5 left-5">
+          <div className="absolute top-9.5 rtl:left-5 ltr:right-5">
             <Password />
           </div>
         </div>

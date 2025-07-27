@@ -28,7 +28,7 @@ const DashboardUsers = () => {
           <div className="flex-1">
             <DashboardDatePicker />
           </div>
-          <Link to="/addUsers">
+          <Link to="/users/add">
             <DashboardButton title={"إضافة مستخدم جديد"} variant="add" />
           </Link>
         </div>
