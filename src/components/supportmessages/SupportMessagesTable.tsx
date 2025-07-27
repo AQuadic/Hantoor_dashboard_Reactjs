@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
@@ -6,7 +5,6 @@ import View from "../icons/general/View";
 import { Link } from "react-router";
 
 const SupportMessagesTable = () => {
-    const navigate = useNavigate();
 
     const supportMessages = [
         {
@@ -51,8 +49,6 @@ const SupportMessagesTable = () => {
             {supportMessages.map((message, index) => (
             <TableRow
                 key={message.id}
-                onClick={() => navigate(`/faq/details/${message.id}`)}
-                className="cursor-pointer hover:bg-gray-100"
             >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{message.number}</TableCell>

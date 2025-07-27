@@ -1,3 +1,4 @@
+import ActiiveSupportMsgs from "@/components/icons/dashboard/ActiiveSupportMsgs";
 import ActiveCountries from "@/components/icons/dashboard/ActiveCountries";
 import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
 import ActiveFAQ from "@/components/icons/dashboard/ActiveFAQ";
@@ -83,6 +84,7 @@ export const SidebarLinks = [
   },
   {
     icons: SupportMsgs,
+    activeIcon: ActiiveSupportMsgs,
     link: "رسائل الدعم",
     path: "/support-messages",
   },

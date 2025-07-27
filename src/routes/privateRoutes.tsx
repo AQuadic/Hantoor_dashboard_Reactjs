@@ -3,6 +3,8 @@ import ChangePassword from "@/components/users/ChangePassword";
 import EditUsers from "@/components/users/EditUsers";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
+import ContactUsPage from "@/pages/contactus/ContactUsPage";
+import ContactUsView from "@/pages/contactus/ContactUsView";
 import AddCountries from "@/pages/countries/AddCountries";
 import CountriesPage from "@/pages/countries/CountriesPage";
 import EditCountries from "@/pages/countries/EditCountries";
@@ -171,5 +173,15 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/support-messages/view",
     element: <SupportMsgsConversation />
+  },
+
+  // Contact-us route
+  {
+    path: "/contact-us",
+    element: <ContactUsPage />
+  },
+  {
+    path: "/contact-us/view",
+    element: <ContactUsView />
   },
 ];
