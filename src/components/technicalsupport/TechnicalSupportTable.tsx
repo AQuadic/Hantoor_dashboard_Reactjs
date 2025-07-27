@@ -51,7 +51,7 @@ const TechnicalSupportTable = () => {
                 <TableCell className="">{question.date}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <ActiveStatus />
-                <Link to="/technical-support/1">
+                <Link to="/technical-support/edit">
                     <Edit />
                 </Link>
 

@@ -65,7 +65,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <AddQuestions />,
   },
   {
-    path: "/technical-support/:id",
+    path: "/technical-support/edit",
     element: <EditQuestion />,
   },
 ];
