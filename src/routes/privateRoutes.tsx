@@ -3,6 +3,9 @@ import ChangePassword from "@/components/users/ChangePassword";
 import EditUsers from "@/components/users/EditUsers";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
+import AddCountries from "@/pages/countries/AddCountries";
+import CountriesPage from "@/pages/countries/CountriesPage";
+import EditCountries from "@/pages/countries/EditCountries";
 import DashboardPage from "@/pages/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import ProfilePage from "@/pages/ProfilePage";
@@ -67,5 +70,19 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/technical-support/edit",
     element: <EditQuestion />,
+  },
+
+  // Countries route
+  {
+    path: "/countries",
+    element: <CountriesPage />,
+  },
+  {
+    path: "/countries/edit",
+    element: <EditCountries />,
+  },
+   {
+    path: "/countries/add",
+    element: <AddCountries />,
   },
 ];
