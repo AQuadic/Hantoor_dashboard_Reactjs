@@ -1,6 +1,6 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardDatePicker from "@/components/general/dashboard/DashboardDatePicker";
-import DashboardHeader from "@/components/general/dashboard/LayoutHeader";
+import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import SearchBar from "@/components/general/dashboard/SearchBar";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import UserSelects from "@/components/users/UserSelects";

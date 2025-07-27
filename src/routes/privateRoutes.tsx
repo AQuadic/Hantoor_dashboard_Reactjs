@@ -1,4 +1,5 @@
 import AddUsers from "@/components/users/AddUsers";
+import BrandsPage from "@/pages/BrandsPage";
 import DashboardPage from "@/pages/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import ProfilePage from "@/pages/ProfilePage";
@@ -25,5 +26,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/profile",
     element: <ProfilePage />,
+  },
+  {
+    path: "/brands",
+    element: <BrandsPage />,
   },
 ];

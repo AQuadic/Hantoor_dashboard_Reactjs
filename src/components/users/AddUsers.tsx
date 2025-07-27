@@ -6,7 +6,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import DashboardButton from "../general/dashboard/DashboardButton";
-import DashboardHeader from "../general/dashboard/LayoutHeader";
+import DashboardHeader from "../general/dashboard/DashboardHeader";
 import Password from "../icons/login/Password";
 
 const AddUsers = () => {
