@@ -1,3 +1,4 @@
+import ActiveCountries from "@/components/icons/dashboard/ActiveCountries";
 import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
 import ActiveSupportQuestions from "@/components/icons/dashboard/ActiveSupportQuestions";
 import ActiveUsers from "@/components/icons/dashboard/ActiveUsers";
@@ -39,6 +40,7 @@ export const SidebarLinks = [
   },
   {
     icons: Countries,
+    activeIcon: ActiveCountries,
     link: "البلاد",
     path: "/countries",
   },
