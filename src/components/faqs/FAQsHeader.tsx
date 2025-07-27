@@ -25,7 +25,7 @@ const FAQsHeader = () => {
             <DashboardDatePicker />
             </div>
             <Link to="/faq/add">
-            <DashboardButton title={"اضافة بلد جديدة"} variant="add" />
+            <DashboardButton title={"اضافة سؤال جديد"} variant="add" />
             </Link>
         </div>
         </div>
