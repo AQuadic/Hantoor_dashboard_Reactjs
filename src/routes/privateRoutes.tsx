@@ -10,6 +10,7 @@ import DashboardPage from "@/pages/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import AddFaq from "@/pages/faqs/AddFaq";
 import EditFaq from "@/pages/faqs/EditFaq";
+import FaqDetails from "@/pages/faqs/FaqDetails";
 import FAQsPage from "@/pages/faqs/FAQsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
@@ -105,11 +106,14 @@ export const privateRoutes: RouteTypes[] = [
     path:'/faq/add',
     element: <AddFaq />
   },
-  {
-    path:'/faq/edit',
+    {
+    path: "/faq/edit/:id",
     element: <EditFaq />
   },
-  
+  {
+    path: "/faq/details/:id",
+    element: <FaqDetails />
+  },
   {
     path: "/subordinates/add",
     element: <AddSubordinatePage />,
