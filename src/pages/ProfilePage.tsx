@@ -1,4 +1,4 @@
-import DashboardHeader from "@/components/general/dashboard/LayoutHeader";
+import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import EditProfileForm from "@/components/profile/EditProfileForm";
 import React from "react";
 
@@ -14,7 +14,10 @@ const ProfilePage = () => {
           { titleAr: "الملف الشخصي", titleEn: "Profile" },
         ]}
       />
-      <EditProfileForm profileImage={profileImage} setProfileImage={setProfileImage} />
+      <EditProfileForm
+        profileImage={profileImage}
+        setProfileImage={setProfileImage}
+      />
     </section>
   );
 };
