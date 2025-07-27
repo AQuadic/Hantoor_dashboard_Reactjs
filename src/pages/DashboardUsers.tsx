@@ -10,9 +10,15 @@ const DashboardUsers = () => {
   return (
     <section>
       <div className="py-2 bg-white">
-        <DashboardHeader
-          title="المستخدمين"
-          items={[{ title: "لوحة التحكم", link: "/" }, { title: "المستخدمين" }]}
+        <DashboardHeader 
+          titleAr={"المستخدمين"} titleEn={"Users"} 
+          items={[{
+            titleAr: "لوحة التحكم", link: "/",
+            titleEn: "Dashboard"
+          }, 
+          { titleAr: "المستخدمين", link: "/",
+            titleEn: "Users"
+          },]}
         />
 
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
@@ -22,7 +28,7 @@ const DashboardUsers = () => {
           <div className="flex-1">
             <DashboardDatePicker />
           </div>
-          <Link to="/dashboard/addUsers">
+          <Link to="/addUsers">
             <DashboardButton title={"إضافة مستخدم جديد"} variant="add" />
           </Link>
         </div>

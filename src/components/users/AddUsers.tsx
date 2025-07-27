@@ -12,13 +12,21 @@ import Password from "../icons/login/Password";
 const AddUsers = () => {
   return (
     <section>
-      <DashboardHeader
+      {/* <DashboardHeader
         title="إضافة مستخدم جدبد"
         items={[
           { title: "لوحة التحكم", link: "/" },
           { title: "المستخدمين", link: "/dashboard/users" },
           { title: "إضافة مستخدم جدبد" },
         ]}
+      /> */}
+      <DashboardHeader 
+        titleAr={"لوحة التحكم"} titleEn={"Dashboard"} 
+        items={[
+          { titleAr: "لوحة التحكم", titleEn: "Dashbard", link: "/" },
+          { titleAr: "المستخدمين", titleEn: "Users", link: "/users" },
+          { titleAr: "إضافة مستخدم جدبد", titleEn: "Add new user", link: "/dashboard/addUsers" },
+        ]} 
       />
 
       <div className="w-full bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
