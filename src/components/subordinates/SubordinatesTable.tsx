@@ -1,7 +1,6 @@
 import { Switch } from "@heroui/react";
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import Password from "../icons/general/Password";
 import {
@@ -12,7 +11,6 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import ChangePassword from "../users/ChangePassword";
 
 export function SubordinatesTable() {
   const subordinates = [
