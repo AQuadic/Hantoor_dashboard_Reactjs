@@ -7,6 +7,8 @@ import { useNavigate } from "react-router";
 interface DashboardHeaderProps {
   titleAr: string;
   titleEn: string;
+  subtitleAr?: string;
+  subtitleEn?: string;
   items: {
     titleAr: string;
     titleEn: string;
@@ -17,14 +19,20 @@ interface DashboardHeaderProps {
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   titleAr,
   titleEn,
+  subtitleAr,
+  subtitleEn,
   items,
 }) => {
   const navigate = useNavigate();
   const {
     i18n: { language },
   } = useTranslation();
+
+  const title = language === "ar" ? titleAr : titleEn;
+  const subtitle = language === "ar" ? subtitleAr : subtitleEn;
+
   return (
-    <div className="text-sm bg-white ">
+    <div className="text-sm bg-white">
       <Breadcrumbs
         className="py-2 mb-1 border-b border-gray-200 px-9"
         itemClasses={{
@@ -34,25 +42,25 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       >
         {items.map((item, index) => (
           <BreadcrumbItem key={index} href={item.link || "#"}>
-            <span
-              className={` ${index === items.length - 1 ? "text-primary" : ""}`}
-            >
+            <span className={`${index === items.length - 1 ? "text-primary" : ""}`}>
               {language === "ar" ? item.titleAr : item.titleEn}
             </span>
           </BreadcrumbItem>
         ))}
       </Breadcrumbs>
-      <button
-        onClick={() => navigate(-1)}
-        className="flex items-center gap-3 py-4 px-9"
-      >
-        <span className="p-3 border rounded-full bg-background">
+
+      <div className="flex items-start gap-3 py-4 px-9">
+        <button
+          onClick={() => navigate(-1)}
+          className="p-3 border rounded-full bg-background"
+        >
           {language === "ar" ? <ArrowRight /> : <ArrowLeft />}
-        </span>
-        <h1 className="text-2xl font-bold">
-          {language === "ar" ? titleAr : titleEn}
-        </h1>
-      </button>
+        </button>
+        <div>
+          <h1 className="text-2xl font-bold">{title}</h1>
+          {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+        </div>
+      </div>
     </div>
   );
 };

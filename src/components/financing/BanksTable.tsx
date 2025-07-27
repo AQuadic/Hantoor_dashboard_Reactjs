@@ -6,25 +6,25 @@ import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 
-const FinancingTable = () => {
-  const navigate = useNavigate();
+const BanksTable = () => {
+    const navigate = useNavigate();
 
-  const technicalsupport = [
+    const bank = [
     {
         id: 1,
-        question: "مشكلة في عرض السيارات أو البيانات",
+        question: "/",
         country: "الامارات",
         count: 22,
     },
     {
         id: 2,
-        question: "مشكلة في عرض السيارات أو البيانات",
-        country: "مصر",
+        question: "/",
+        country: "الامارات",
         count: 22,
     },
     {
         id: 3,
-        question: "مشكلة في عرض السيارات أو البيانات",
+        question: "/",
         country: "الامارات",
         count: 22,
     },
@@ -34,27 +34,29 @@ const FinancingTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">البلد</TableHead>
-            <TableHead className="text-right">عدد البنوك</TableHead>
+            <TableHead className="text-right">الصورة</TableHead>
+            <TableHead className="text-right">اسم البنك</TableHead>
+            <TableHead className="text-right">قيمة الفائدة</TableHead>
             <TableHead className="text-right">الحالة</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
-            {technicalsupport.map((question, index) => (
+            {bank.map((bank, index) => (
             <TableRow
-                key={question.id}
-                onClick={() => navigate(`/financing/details/${question.id}`, { state: { country: question.country } })}
+                key={bank.id}
+                onClick={() => navigate(`/faq/details/${bank.id}`)}
                 className="cursor-pointer hover:bg-gray-100"
             >
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{question.country}</TableCell>
-                <TableCell>{question.count}</TableCell>
+                <TableCell>{bank.question}</TableCell>
+                <TableCell>{bank.country}</TableCell>
+                <TableCell>{bank.count}</TableCell>
                 <TableCell
                 className="flex gap-[7px] items-center"
                 onClick={(e) => e.stopPropagation()} 
                 >
                 <ActiveStatus />
-                <Link to={`/faq/edit/${question.id}`}>
+                <Link to={`/faq/edit/${bank.id}`}>
                     <Edit />
                 </Link>
 
@@ -69,4 +71,4 @@ const FinancingTable = () => {
     )
 }
 
-export default FinancingTable
+export default BanksTable
