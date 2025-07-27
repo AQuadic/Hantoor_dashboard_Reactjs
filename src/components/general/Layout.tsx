@@ -1,8 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import DashboardHeader from "./DashboardHeader";
 import DashboardSidebar from "./DashboardSidebar";
+import DashboardHeader from "./LayoutHeader";
 
 const Layout = () => {
   const location = useLocation();
