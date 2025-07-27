@@ -97,7 +97,7 @@ export function SubordinatesTable() {
               <Link to={`/subordinates/${subordinate.id}`}>
                 <Edit />
               </Link>
-              <Link to={`/subordinates/${subordinate.id}`}>
+              <Link to={`/subordinates/change_password/${subordinate.id}`}>
                 <Password />
               </Link>
               <div className="mt-2">

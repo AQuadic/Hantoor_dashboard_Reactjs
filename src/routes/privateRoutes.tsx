@@ -15,7 +15,9 @@ import FAQsPage from "@/pages/faqs/FAQsPage";
 import FinancingDetails from "@/pages/financing/FinancingDetails";
 import FinancingPage from "@/pages/financing/FinancingPage";
 import ProfilePage from "@/pages/ProfilePage";
+import AddPermissionPage from "@/pages/subordinates/AddPermissionPage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
+import SubordinatesChangePassword from "@/pages/subordinates/SubordinateChangePasswordPage";
 import SubordinatesPage from "@/pages/subordinates/SubordinatesPage";
 import AddQuestions from "@/pages/technicalsupport/AddQuestion";
 import EditQuestion from "@/pages/technicalsupport/EditQuestion";
@@ -101,18 +103,18 @@ export const privateRoutes: RouteTypes[] = [
 
   // FAQs route
   {
-    path:'/faqs',
-    element: <FAQsPage />
+    path: "/faqs",
+    element: <FAQsPage />,
   },
   {
-    path:'/faq/add',
-    element: <AddFaq />
+    path: "/faq/add",
+    element: <AddFaq />,
   },
     {
     path: "/faq/edit/:id",
     element: <EditFaq />
   },
-  {
+{
     path: "/faq/details/:id",
     element: <FaqDetails />
   },
@@ -134,4 +136,16 @@ export const privateRoutes: RouteTypes[] = [
     path: "/financing/details/:id",
     element: <FinancingDetails />
   }
+  {
+    path: "/subordinates/change_password/:id",
+    element: <SubordinatesChangePassword />,
+  },
+  {
+    path: "/subordinates/permissions/add",
+    element: <AddPermissionPage />,
+  },
+  {
+    path: "/subordinates/permissions/:id",
+    element: <AddPermissionPage />,
+  },
 ];
