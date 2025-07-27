@@ -12,7 +12,7 @@ const AddFaq = () => {
             titleEn="Add new question"
             items={[
             { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
-            { titleAr: "اسئلة الدعم الفني", titleEn: "Technical support questions" },
+            { titleAr: "الاعدادات", titleEn: "Settings" },
             { titleAr: "اضافة سؤال جديد", titleEn: "Add new question" },
             ]}
 
@@ -59,7 +59,7 @@ const AddFaq = () => {
                 </div>
             </div>
 
-              <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
+            <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                 {/* Arabic Question */}
                 <div className="relative w-full">
                 <Input
