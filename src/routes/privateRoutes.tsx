@@ -21,6 +21,8 @@ import AddPermissionPage from "@/pages/subordinates/AddPermissionPage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
 import SubordinatesChangePassword from "@/pages/subordinates/SubordinateChangePasswordPage";
 import SubordinatesPage from "@/pages/subordinates/SubordinatesPage";
+import SupportMessagesPage from "@/pages/supportmessages/SupportMessagesPage";
+import SupportMsgsConversation from "@/pages/supportmessages/SupportMsgsConversation";
 import AddQuestions from "@/pages/technicalsupport/AddQuestion";
 import EditQuestion from "@/pages/technicalsupport/EditQuestion";
 import TechnicalSupport from "@/pages/technicalsupport/TechnicalSupport";
@@ -159,5 +161,15 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/subordinates/permissions/:id",
     element: <AddPermissionPage />,
+  },
+
+  // Support messages route
+  {
+    path: "/support-messages",
+    element: <SupportMessagesPage />
+  },
+  {
+    path: "/support-messages/view",
+    element: <SupportMsgsConversation />
   },
 ];
