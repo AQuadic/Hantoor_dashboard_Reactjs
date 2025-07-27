@@ -10,15 +10,15 @@ export const privateRoutes: RouteTypes[] = [
     element: <Testing />,
   },
   {
-    path: "/dashboard",
+    path: "/",
     element: <DashboardPage />,
   },
   {
-    path: "/dashboard/users",
+    path: "/users",
     element: <DashboardUsers />,
   },
-    {
-    path: "/dashboard/addUsers",
+  {
+    path: "/addUsers",
     element: <AddUsers />,
   },
 ];
