@@ -24,7 +24,7 @@ const EditIcon = () => {
         height="42.5"
         rx="21.25"
         stroke="#EBEBEB"
-        stroke-width="1.5"
+        strokeWidth="1.5"
       />
       <g clipPath="url(#clip0_318_18709)">
         <path
