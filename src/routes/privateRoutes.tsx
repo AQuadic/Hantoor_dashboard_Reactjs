@@ -8,6 +8,9 @@ import CountriesPage from "@/pages/countries/CountriesPage";
 import EditCountries from "@/pages/countries/EditCountries";
 import DashboardPage from "@/pages/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
+import AddFaq from "@/pages/faqs/AddFaq";
+import EditFaq from "@/pages/faqs/EditFaq";
+import FAQsPage from "@/pages/faqs/FAQsPage";
 import ProfilePage from "@/pages/ProfilePage";
 import SubordinatesPage from "@/pages/subordinates/SubordinatesPage";
 import AddQuestions from "@/pages/technicalsupport/AddQuestion";
@@ -91,4 +94,19 @@ export const privateRoutes: RouteTypes[] = [
     path: "/subordinates",
     element: <SubordinatesPage />,
   },
+
+  // FAQs route
+  {
+    path:'/faqs',
+    element: <FAQsPage />
+  },
+  {
+    path:'/faq/add',
+    element: <AddFaq />
+  },
+  {
+    path:'/faq/edit',
+    element: <EditFaq />
+  },
+  
 ];
