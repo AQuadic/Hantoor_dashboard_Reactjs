@@ -11,7 +11,9 @@ const SubordinatesPage = () => {
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
       />
-      <SubordinatesTable />
+      <div className="px-2 md:px-8">
+        <SubordinatesTable />
+      </div>
     </section>
   );
 };

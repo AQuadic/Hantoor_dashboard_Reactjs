@@ -6,7 +6,9 @@ const BrandsPage = () => {
   return (
     <section>
       <BrandsHeader />
-      <BrandsTable />
+      <div className="px-2 md:px-8">
+        <BrandsTable />
+      </div>
     </section>
   );
 };
