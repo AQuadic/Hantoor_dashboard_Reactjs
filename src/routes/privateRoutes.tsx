@@ -1,9 +1,14 @@
 import AddUsers from "@/components/users/AddUsers";
+import ChangePassword from "@/components/users/ChangePassword";
+import EditUsers from "@/components/users/EditUsers";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
 import DashboardPage from "@/pages/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import ProfilePage from "@/pages/ProfilePage";
+import AddQuestions from "@/pages/technicalsupport/AddQuestion";
+import EditQuestion from "@/pages/technicalsupport/EditQuestion";
+import TechnicalSupport from "@/pages/technicalsupport/TechnicalSupport";
 import Testing from "@/pages/Testing";
 import { RouteTypes } from "@/types/general/RouteTypes";
 export const privateRoutes: RouteTypes[] = [
@@ -24,6 +29,14 @@ export const privateRoutes: RouteTypes[] = [
     path: "/users/add",
     element: <AddUsers />,
   },
+  {
+    path: "/users/edit",
+    element: <EditUsers />,
+  },
+  {
+    path: "/users/change-password",
+    element: <ChangePassword />,
+  },
   // Brands routes - flattened
   {
     path: "/brands",
@@ -40,5 +53,19 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/profile",
     element: <ProfilePage />,
+  },
+
+  // Technical Support route
+  {
+    path: "/technical-support",
+    element: <TechnicalSupport />,
+  },
+  {
+    path: "/technical-support/add",
+    element: <AddQuestions />,
+  },
+  {
+    path: "/technical-support/edit",
+    element: <EditQuestion />,
   },
 ];

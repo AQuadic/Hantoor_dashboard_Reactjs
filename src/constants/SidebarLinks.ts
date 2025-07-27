@@ -1,4 +1,5 @@
 import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
+import ActiveSupportQuestions from "@/components/icons/dashboard/ActiveSupportQuestions";
 import ActiveUsers from "@/components/icons/dashboard/ActiveUsers";
 import Agents from "@/components/icons/dashboard/Agents";
 import Brands from "@/components/icons/dashboard/Brands";
@@ -73,8 +74,9 @@ export const SidebarLinks = [
   },
   {
     icons: SupportQuestions,
+    activeIcon: ActiveSupportQuestions,
     link: "اسئلة الدعم الفني",
-    path: "/support-questions",
+    path: "/technical-support",
   },
   {
     icons: SupportMsgs,
