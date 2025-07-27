@@ -12,10 +12,10 @@ const AddBrand = () => {
 
   const isEdit = Boolean(brandId);
 
-  const oldValues = {
-    image: "aaa",
-    name: "car name",
-  };
+  // const oldValues = {
+  //   image: "aaa",
+  //   name: "car name",
+  // };
 
   return (
     <div>
