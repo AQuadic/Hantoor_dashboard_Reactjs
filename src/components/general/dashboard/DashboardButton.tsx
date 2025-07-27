@@ -11,7 +11,7 @@ interface DashboardButtonProps {
 
 const AddIcon = () => {
   return (
-    <div className="bg-white/30 p-1 rounded-full border-2 border-white">
+    <div className="p-1 border-2 border-white rounded-full bg-white/30">
       <Plus size={16} />
     </div>
   );
@@ -26,12 +26,17 @@ const DashboardButton: React.FC<DashboardButtonProps> = ({
   const isAdd = variant === "add";
   return (
     <Button
+      type="button"
       isLoading={isLoading}
       color="primary"
       className={`w-[200px] py-6 rounded-[9px] flex items-center font-bold ${
         isAdd && "justify-between rounded-full"
       } text-center`}
-      onPress={onClick}
+      onPress={() => {
+        if (onClick) {
+          onClick();
+        }
+      }}
       {...(isAdd && {
         startContent: <AddIcon />,
       })}
