@@ -12,6 +12,7 @@ import AddFaq from "@/pages/faqs/AddFaq";
 import EditFaq from "@/pages/faqs/EditFaq";
 import FaqDetails from "@/pages/faqs/FaqDetails";
 import FAQsPage from "@/pages/faqs/FAQsPage";
+import FinancingPage from "@/pages/financing/FinancingPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
 import SubordinatesPage from "@/pages/subordinates/SubordinatesPage";
@@ -122,4 +123,10 @@ export const privateRoutes: RouteTypes[] = [
     path: "/subordinates/:id",
     element: <AddSubordinatePage />,
   },
+
+  // Financing route
+  {
+    path: "/financing",
+    element: <FinancingPage/>
+  }
 ];
