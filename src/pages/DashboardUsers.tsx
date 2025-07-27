@@ -5,6 +5,7 @@ import SearchBar from '@/components/general/dashboard/SearchBar';
 import TablePagination from '@/components/general/dashboard/table/TablePagination';
 import UserSelects from '@/components/users/UserSelects';
 import { UserTable } from '@/components/users/UsersTable';
+import { Link } from 'react-router';
 const DashboardUsers = () => {
     return (
         <section >
@@ -28,7 +29,9 @@ const DashboardUsers = () => {
                     <div className='flex-1'>
                         <DashboardDatePicker />
                     </div>
-                    <DashboardButton title={'إضافة مستخدم جديد'} variant="add" />
+                    <Link to='/dashboard/addUsers'>
+                        <DashboardButton title={'إضافة مستخدم جديد'} variant="add" />
+                    </Link>
                 </div>
 
                 <UserSelects />
