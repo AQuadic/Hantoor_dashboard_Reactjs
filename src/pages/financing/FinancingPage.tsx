@@ -7,17 +7,18 @@ const FinancingPage = () => {
     return (
         <div>
             <FinancingHeader />
-            <FinancingTable />
-            
-        <TablePagination
-            currentPage={0}
-            setCurrentPage={function (): void {
-                throw new Error("Function not implemented.");
-            }}
-            totalPages={0}
-            totalItems={0}
-            itemsPerPage={0}
-        />
+            <div className="px-2 md:px-8">
+                <FinancingTable />
+                <TablePagination
+                    currentPage={0}
+                    setCurrentPage={function (): void {
+                        throw new Error("Function not implemented.");
+                    }}
+                    totalPages={0}
+                    totalItems={0}
+                    itemsPerPage={0}
+                />
+            </div>
         </div>
     )
 }

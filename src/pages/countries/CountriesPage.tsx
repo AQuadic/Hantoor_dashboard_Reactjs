@@ -1,11 +1,23 @@
 import CountriesHeader from "@/components/countries/CountriesHeader"
 import CountriesTable from "@/components/countries/CountriesTable"
+import TablePagination from "@/components/general/dashboard/table/TablePagination";
 
 const CountriesPage = () => {
     return (
         <div>
             <CountriesHeader />
-            <CountriesTable />
+            <div className="px-2 md:px-8">
+                <CountriesTable />
+                <TablePagination
+                    currentPage={0}
+                    setCurrentPage={function (): void {
+                        throw new Error("Function not implemented.");
+                    }}
+                    totalPages={0}
+                    totalItems={0}
+                    itemsPerPage={0}
+                />
+            </div>
         </div>
     )
 }

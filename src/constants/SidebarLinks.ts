@@ -1,7 +1,11 @@
 import ActiiveSupportMsgs from "@/components/icons/dashboard/ActiiveSupportMsgs";
+import ActiveBrands from "@/components/icons/dashboard/ActiveBrands";
+import ActiveContactUs from "@/components/icons/dashboard/ActiveContactUs";
 import ActiveCountries from "@/components/icons/dashboard/ActiveCountries";
 import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
 import ActiveFAQ from "@/components/icons/dashboard/ActiveFAQ";
+import ActiveFinancing from "@/components/icons/dashboard/ActiveFinancing";
+import ActiveSubordinates from "@/components/icons/dashboard/ActiveSubordinates";
 import ActiveSupportQuestions from "@/components/icons/dashboard/ActiveSupportQuestions";
 import ActiveUsers from "@/components/icons/dashboard/ActiveUsers";
 import Agents from "@/components/icons/dashboard/Agents";
@@ -31,6 +35,7 @@ export const SidebarLinks = [
   },
   {
     icons: Subordinates,
+    activeIcon: ActiveSubordinates,
     link: "المسؤولين الفرعيين",
     path: "/subordinates",
   },
@@ -48,6 +53,7 @@ export const SidebarLinks = [
   },
   {
     icons: Brands,
+    activeIcon: ActiveBrands,
     link: "الماركات",
     path: "/brands",
   },
@@ -68,6 +74,7 @@ export const SidebarLinks = [
   },
   {
     icons: Financing,
+    activeIcon: ActiveFinancing,
     link: "التمويل",
     path: "/financing",
   },
@@ -101,6 +108,7 @@ export const SidebarLinks = [
   },
   {
     icons: Contactus,
+    activeIcon: ActiveContactUs,
     link: "تواصل معنا",
     path: "/contact-us",
   },
