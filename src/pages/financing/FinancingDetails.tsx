@@ -34,7 +34,7 @@ const FinancingDetails = () => {
                 </div>
 
                 <Link to="/bank/add">
-                <DashboardButton title={"اضافة بنك جديد"} variant="add" />
+                    <DashboardButton title={"اضافة بنك جديد"} variant="add" />
                 </Link>
             </div>
             </div>

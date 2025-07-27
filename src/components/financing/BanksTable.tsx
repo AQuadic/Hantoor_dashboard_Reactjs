@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import ActiveStatus from "../icons/general/ActiveStatus";
@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 
 const BanksTable = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const bank = [
     {
@@ -44,8 +44,8 @@ const BanksTable = () => {
             {bank.map((bank, index) => (
             <TableRow
                 key={bank.id}
-                onClick={() => navigate(`/faq/details/${bank.id}`)}
-                className="cursor-pointer hover:bg-gray-100"
+                // onClick={() => navigate(`/faq/details/${bank.id}`)}
+                // className="cursor-pointer hover:bg-gray-100"
             >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{bank.question}</TableCell>
@@ -53,10 +53,10 @@ const BanksTable = () => {
                 <TableCell>{bank.count}</TableCell>
                 <TableCell
                 className="flex gap-[7px] items-center"
-                onClick={(e) => e.stopPropagation()} 
+                // onClick={(e) => e.stopPropagation()} 
                 >
                 <ActiveStatus />
-                <Link to={`/faq/edit/${bank.id}`}>
+                <Link to={`/bank/edit/${bank.id}`}>
                     <Edit />
                 </Link>
 
