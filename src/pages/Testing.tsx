@@ -11,17 +11,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { getCountryByIso2 } from "@/utils/getCountryByIso";
 import { Switch } from "@heroui/react";
 import React from "react";
 
 const Testing = () => {
   const [selectedFilter, setSelectedFilter] = React.useState("All");
   const [image, setImage] = React.useState<File | null>(null);
-  const [selectedCountry, setSelectedCountry] = React.useState({
-    name: "United States",
-    iso2: "US",
-    phone: "1",
-  });
+  const [selectedCountry, setSelectedCountry] = React.useState(
+    getCountryByIso2("EG")
+  );
   const [phone, setPhone] = React.useState("");
   return (
     <div dir="rtl" className="p-4 mx-auto max-w-7xl">

@@ -1,13 +1,13 @@
+import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import DashboardSidebar from "./DashboardSidebar";
-import { motion, AnimatePresence } from "framer-motion";
 
 const Layout = () => {
   const location = useLocation();
 
   return (
-    <div className="flex h-screen">
+    <div className="flex min-h-screen">
       <DashboardSidebar />
       <div className="flex-1 p-4 overflow-y-auto">
         <AnimatePresence mode="wait">

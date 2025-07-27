@@ -1,6 +1,10 @@
 import { arabicCountryNames } from "@/constants/arabicCountryNames";
 import { Input } from "@heroui/react";
-import { getCountryDataList, ICountry, TCountryCode } from "countries-list";
+import {
+  ICountry,
+  countries as rawCountries,
+  TCountryCode,
+} from "countries-list";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -31,8 +35,7 @@ const DashboardPhoneInput: React.FC<MobileInputProps> = ({
   const [searchTerm, setSearchTerm] = useState("");
 
   const countries: CountryWithCode[] = useMemo(() => {
-    const data = getCountryDataList();
-    return Object.entries(data).map(([iso2, country]) => ({
+    return Object.entries(rawCountries).map(([iso2, country]) => ({
       ...country,
       iso2: iso2 as TCountryCode,
     }));
@@ -48,10 +51,17 @@ const DashboardPhoneInput: React.FC<MobileInputProps> = ({
     const languageKey = languageMap[currentLanguage] || "name";
 
     if (currentLanguage === "ar") {
-      return arabicCountryNames[country.iso2 as keyof typeof arabicCountryNames] || country.name;
+      return (
+        arabicCountryNames[country.iso2 as keyof typeof arabicCountryNames] ||
+        country.name
+      );
     }
 
-    const value = country[languageKey] as string | string[] | number | undefined;
+    const value = country[languageKey] as
+      | string
+      | string[]
+      | number
+      | undefined;
     if (typeof value === "string") {
       return value;
     } else if (Array.isArray(value)) {
@@ -66,13 +76,15 @@ const DashboardPhoneInput: React.FC<MobileInputProps> = ({
     const name = getCountryName(country);
     return (
       name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      country.phone[0].toString().includes(searchTerm.toLowerCase())
+      country.phone.some((code) =>
+        code.toString().includes(searchTerm.toLowerCase())
+      )
     );
   });
 
   return (
     <div
-      className={`relative w-full h-[50px] mt-3 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2.5 p-2 border-2 dark:border-neutral-700 rounded-[8px] focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
+      className={`bg-white relative w-full h-[50px] mt-3 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2.5 p-2 border-2 dark:border-neutral-700 rounded-[8px] focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
     >
       <button
         disabled={disabled}
@@ -82,13 +94,13 @@ const DashboardPhoneInput: React.FC<MobileInputProps> = ({
         {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
       </button>
       <img
-        src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry.iso2}.svg`}
+        src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry.iso2.toUpperCase()}.svg`}
         alt={`${selectedCountry.name} flag`}
         draggable={false}
         width={24}
         height={16}
       />
-      <p className="dark:text-neutral-200">+{selectedCountry.phone[0]}</p>
+      <p className="dark:text-neutral-200">+{selectedCountry.phone?.[0]}</p>
       <div className="bg-[#AAAAAA] w-[1px] h-5"></div>
       <input
         disabled={disabled}
@@ -119,14 +131,14 @@ const DashboardPhoneInput: React.FC<MobileInputProps> = ({
               className="flex items-center gap-2 text-left"
             >
               <img
-                src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country.iso2}.svg`}
+                src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country.iso2.toUpperCase()}.svg`}
                 alt={`${country.name} flag`}
                 draggable={false}
                 width={24}
                 height={16}
               />
               <span>{getCountryName(country)}</span>
-              <span>+{country.phone[0]}</span>
+              <span>+{country.phone?.[0]}</span>
             </button>
           ))}
         </div>
