@@ -5,14 +5,20 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 
 interface DashboardHeaderProps {
-  title: string;
+  titleAr: string;
+  titleEn: string;
   items: {
-    title: string;
+    titleAr: string;
+    titleEn: string;
     link?: string;
   }[];
 }
 
-const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title, items }) => {
+const DashboardHeader: React.FC<DashboardHeaderProps> = ({
+  titleAr,
+  titleEn,
+  items,
+}) => {
   const navigate = useNavigate();
   const {
     i18n: { language },
@@ -20,7 +26,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title, items }) => {
   return (
     <div className="text-sm bg-white ">
       <Breadcrumbs
-        className="mb-1 border-b border-gray-200 py-2 px-9"
+        className="py-2 mb-1 border-b border-gray-200 px-9"
         itemClasses={{
           separator: "px-2",
         }}
@@ -31,23 +37,21 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ title, items }) => {
             <span
               className={` ${index === items.length - 1 ? "text-primary" : ""}`}
             >
-              {item.title}
+              {language === "ar" ? item.titleAr : item.titleEn}
             </span>
           </BreadcrumbItem>
         ))}
       </Breadcrumbs>
       <button
         onClick={() => navigate(-1)}
-        className="px-9 flex items-center gap-3 pb-4"
+        className="flex items-center gap-3 pb-4 px-9"
       >
-        <span className="rounded-full p-3 border bg-background">
-          {language === "ar" ? (
-            <ArrowRight className="rotate-180" />
-          ) : (
-            <ArrowLeft className="rotate-180" />
-          )}
+        <span className="p-3 border rounded-full bg-background">
+          {language === "ar" ? <ArrowRight /> : <ArrowLeft />}
         </span>
-        <h1 className="text-2xl font-bold">{title}</h1>
+        <h1 className="text-2xl font-bold">
+          {language === "ar" ? titleAr : titleEn}
+        </h1>
       </button>
     </div>
   );
