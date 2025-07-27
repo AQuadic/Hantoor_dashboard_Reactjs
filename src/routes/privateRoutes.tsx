@@ -13,6 +13,7 @@ import EditFaq from "@/pages/faqs/EditFaq";
 import FaqDetails from "@/pages/faqs/FaqDetails";
 import FAQsPage from "@/pages/faqs/FAQsPage";
 import AddBank from "@/pages/financing/AddBank";
+import EditBank from "@/pages/financing/EditBank";
 import FinancingDetails from "@/pages/financing/FinancingDetails";
 import FinancingPage from "@/pages/financing/FinancingPage";
 import ProfilePage from "@/pages/ProfilePage";
@@ -140,6 +141,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/bank/add",
     element: <AddBank/>
+  },
+  {
+    path: "/bank/edit/:id",
+    element: <EditBank/>
   },
 
 

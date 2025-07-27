@@ -49,7 +49,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
         ))}
       </Breadcrumbs>
 
-      <div className="flex items-start gap-3 py-4 px-9">
+      <div className="flex items-center gap-3 py-4 px-9">
         <button
           onClick={() => navigate(-1)}
           className="p-3 border rounded-full bg-background"

@@ -36,7 +36,7 @@ const AddBank = ({
     return (
         <form className="p-8">
             <div className="p-8 bg-white rounded-2xl ">
-                <h3 className="mb-4 text-lg font-bold">الصورة الشخصية</h3>
+                <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">صورة شعار البنك</h3>
                 <ImageInput image={profileImage} setImage={setProfileImage} />
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     {/* Arabic bank */}
