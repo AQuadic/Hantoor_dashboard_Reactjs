@@ -72,15 +72,17 @@ const EditCountries = () => {
                         size="lg"
                         />
                     </div>
-                    <div className="relative w-full">
-                    <Input
-                        label="مدة خدمة البحث المتقدم"
-                        variant="bordered"
-                        placeholder="3"
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
-                    />
-                    </div>
+                    <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
+                        <p className="text-right text-black text-sm">مدة خدمة البحث المتقدم</p>
+                        <div className="flex items-center justify-between gap-1">
+                            <span className="text-gray-500 text-sm">3</span>
+                            <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
+                            <option value="شهر">شهر</option>
+                            <option value="أيام">أيام</option>
+                            <option value="سنوات">سنوات</option>
+                            </select>
+                        </div>
+                        </div>
                 </div>
         
                 <div className="mt-4">
