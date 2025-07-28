@@ -8,6 +8,7 @@ import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
 import ActiveFAQ from "@/components/icons/dashboard/ActiveFAQ";
 import ActiveFinancing from "@/components/icons/dashboard/ActiveFinancing";
 import ActiveModels from "@/components/icons/dashboard/ActiveModels";
+import ActiveSetting from "@/components/icons/dashboard/ActiveSetting";
 import ActiveSubordinates from "@/components/icons/dashboard/ActiveSubordinates";
 import ActiveSupportQuestions from "@/components/icons/dashboard/ActiveSupportQuestions";
 import ActiveUsers from "@/components/icons/dashboard/ActiveUsers";
@@ -120,6 +121,7 @@ export const SidebarLinks = [
   },
   {
     icons: Setting,
+    activeIcon: ActiveSetting,
     link: "الاعدادات",
     path: "/settings",
   },
