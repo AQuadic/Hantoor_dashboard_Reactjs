@@ -57,7 +57,7 @@ export function PermissionsTable() {
             <TableCell className="w-full">{permission.managersCount}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch defaultSelected={permission.isActive} />
-              <Link to={`subordinates/permissions/${permission.id}`}>
+              <Link to={`/subordinates/permissions/${permission.id}`}>
                 <Edit />
               </Link>
               <div className="mt-2">
