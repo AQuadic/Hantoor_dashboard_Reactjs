@@ -11,7 +11,7 @@ import ContactUsView from "@/pages/contactus/ContactUsView";
 import AddCountries from "@/pages/countries/AddCountries";
 import CountriesPage from "@/pages/countries/CountriesPage";
 import EditCountries from "@/pages/countries/EditCountries";
-import DashboardPage from "@/pages/DashboardPage";
+import DashboardPage from "@/pages/dashboardpage/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import AddFaq from "@/pages/faqs/AddFaq";
 import EditFaq from "@/pages/faqs/EditFaq";
