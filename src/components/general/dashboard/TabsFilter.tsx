@@ -23,7 +23,7 @@ const TabsFilter: React.FC<TabsFilterProps> = ({
   } = useTranslation();
   return (
     <LayoutGroup>
-      <div className="relative flex flex-wrap gap-3 px-8 pb-4">
+      <div className="relative flex flex-wrap gap-3 pb-4">
         {filters.map((filter) => {
           // You may want to use titleEn or titleAr for selection, here using titleEn
           const isSelected = filter.titleEn === selectedFilter;

@@ -1,6 +1,7 @@
 import AddUsers from "@/components/users/AddUsers";
 import ChangePassword from "@/components/users/ChangePassword";
 import EditUsers from "@/components/users/EditUsers";
+import AddAgentWrapper from "@/pages/agents/AddAgentWrapper";
 import AgentPage from "@/pages/agents/AgentPage";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
@@ -190,5 +191,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/agents",
     element: <AgentPage />
+  },
+  {
+    path: "/agent/add",
+    element: <AddAgentWrapper />
   }
 ];
