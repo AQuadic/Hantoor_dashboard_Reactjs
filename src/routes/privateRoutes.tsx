@@ -3,6 +3,7 @@ import ChangePassword from "@/components/users/ChangePassword";
 import EditUsers from "@/components/users/EditUsers";
 import AddAgentWrapper from "@/pages/agents/AddAgentWrapper";
 import AgentPage from "@/pages/agents/AgentPage";
+import EditAgentWrapper from "@/pages/agents/EditAgentWrapper";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
 import ContactUsPage from "@/pages/contactus/ContactUsPage";
@@ -195,5 +196,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/agent/add",
     element: <AddAgentWrapper />
+  },
+  {
+    path: "/agent/edit/:id",
+    element: <EditAgentWrapper />
   }
 ];

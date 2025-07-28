@@ -49,7 +49,7 @@ const AgentPageTable = () => {
                 <TableCell className="">{agent.count}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <ActiveStatus />
-                <Link to="/countries/edit">
+                <Link to="/agent/edit/:id">
                     <Edit />
                 </Link>
 
