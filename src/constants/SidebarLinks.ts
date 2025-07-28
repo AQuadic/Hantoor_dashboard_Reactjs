@@ -7,6 +7,7 @@ import ActiveCountries from "@/components/icons/dashboard/ActiveCountries";
 import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
 import ActiveFAQ from "@/components/icons/dashboard/ActiveFAQ";
 import ActiveFinancing from "@/components/icons/dashboard/ActiveFinancing";
+import ActiveModels from "@/components/icons/dashboard/ActiveModels";
 import ActiveSubordinates from "@/components/icons/dashboard/ActiveSubordinates";
 import ActiveSupportQuestions from "@/components/icons/dashboard/ActiveSupportQuestions";
 import ActiveUsers from "@/components/icons/dashboard/ActiveUsers";
@@ -67,6 +68,7 @@ export const SidebarLinks = [
   },
   {
     icons: CarSections,
+    activeIcon: ActiveModels,
     link: "اقسام السيارات",
     path: "/models",
   },
