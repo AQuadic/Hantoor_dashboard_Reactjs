@@ -86,7 +86,7 @@ const AddMaintenanceCenter = () => {
         </div>
 
         <div className="mt-6">
-            <DashboardButton title="إضافة" />
+            <DashboardButton title="حفظ" />
         </div>
         </div>
     )
