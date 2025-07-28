@@ -39,9 +39,9 @@ const DashboardChart = () => {
                 <DashboardDatePicker />
             </div>
             
-            <div className="mb-2">
+            {/* <div className="mb-2">
                 <div className="text-right text-sm text-gray-600 mb-1">العدد</div>
-            </div>
+            </div> */}
 
             <ChartContainer config={chartConfig} className="min-h-[200px] w-full bg-[#F4F4FE] rounded-[10px]">
                 <BarChart accessibilityLayer data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 5 }}>
