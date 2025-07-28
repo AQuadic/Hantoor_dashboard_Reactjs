@@ -17,20 +17,13 @@ const getCountryByIso2 = (iso2: string) => {
     phone: [country.phone],
   };
 };
-interface EditProfileFormProps {
-    profileImage: File | null;
-    setProfileImage: React.Dispatch<React.SetStateAction<File | null>>;
-}
 
-const EditBank = ({
-    profileImage,
-    setProfileImage,
-}: EditProfileFormProps)  => {
+const EditBank =()  => {
      const [selectedCountry, setSelectedCountry] = useState(
         getCountryByIso2("EG")
     );
     const [phone, setPhone] = useState("");
-
+    const [profileImage, setProfileImage] = useState<File | null>(null);
 
     return (
         <section>
