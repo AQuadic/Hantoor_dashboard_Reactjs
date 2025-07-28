@@ -1,6 +1,9 @@
 import AddUsers from "@/components/users/AddUsers";
 import ChangePassword from "@/components/users/ChangePassword";
 import EditUsers from "@/components/users/EditUsers";
+import AddAgentWrapper from "@/pages/agents/AddAgentWrapper";
+import AgentPage from "@/pages/agents/AgentPage";
+import EditAgentWrapper from "@/pages/agents/EditAgentWrapper";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
 import ContactUsPage from "@/pages/contactus/ContactUsPage";
@@ -8,7 +11,7 @@ import ContactUsView from "@/pages/contactus/ContactUsView";
 import AddCountries from "@/pages/countries/AddCountries";
 import CountriesPage from "@/pages/countries/CountriesPage";
 import EditCountries from "@/pages/countries/EditCountries";
-import DashboardPage from "@/pages/DashboardPage";
+import DashboardPage from "@/pages/dashboardpage/DashboardPage";
 import DashboardUsers from "@/pages/DashboardUsers";
 import AddFaq from "@/pages/faqs/AddFaq";
 import EditFaq from "@/pages/faqs/EditFaq";
@@ -184,4 +187,18 @@ export const privateRoutes: RouteTypes[] = [
     path: "/contact-us/view",
     element: <ContactUsView />
   },
+
+  // Agents route
+  {
+    path: "/agents",
+    element: <AgentPage />
+  },
+  {
+    path: "/agent/add",
+    element: <AddAgentWrapper />
+  },
+  {
+    path: "/agent/edit/:id",
+    element: <EditAgentWrapper />
+  }
 ];
