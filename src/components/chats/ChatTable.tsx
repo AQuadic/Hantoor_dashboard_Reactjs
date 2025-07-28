@@ -46,7 +46,7 @@ const ChatTable = () => {
                 <TableCell className="">{chat.count}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <ActiveStatus />
-                <Link to="/chat/:id">
+                <Link to={`/chats/${chat.id}`}>
                     <ChatIcon />
                 </Link>
 
