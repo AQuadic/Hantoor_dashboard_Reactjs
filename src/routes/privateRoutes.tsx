@@ -6,6 +6,7 @@ import AgentPage from "@/pages/agents/AgentPage";
 import EditAgentWrapper from "@/pages/agents/EditAgentWrapper";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
+import ChatPage from "@/pages/chats/ChatPage";
 import ContactUsPage from "@/pages/contactus/ContactUsPage";
 import ContactUsView from "@/pages/contactus/ContactUsView";
 import AddCountries from "@/pages/countries/AddCountries";
@@ -200,5 +201,11 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/agent/edit/:id",
     element: <EditAgentWrapper />
+  },
+
+  // Chats route
+  {
+    path: "/chats",
+    element: <ChatPage/>
   }
 ];

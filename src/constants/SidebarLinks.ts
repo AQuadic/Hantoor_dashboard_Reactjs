@@ -1,6 +1,7 @@
 import ActiiveSupportMsgs from "@/components/icons/dashboard/ActiiveSupportMsgs";
 import ActiveAgents from "@/components/icons/dashboard/ActiveAgents";
 import ActiveBrands from "@/components/icons/dashboard/ActiveBrands";
+import ActiveChats from "@/components/icons/dashboard/ActiveChats";
 import ActiveContactUs from "@/components/icons/dashboard/ActiveContactUs";
 import ActiveCountries from "@/components/icons/dashboard/ActiveCountries";
 import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
@@ -82,6 +83,7 @@ export const SidebarLinks = [
   },
   {
     icons: Chats,
+    activeIcon: ActiveChats,
     link: "المحادثات",
     path: "/chats",
   },
