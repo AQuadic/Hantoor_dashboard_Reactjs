@@ -23,6 +23,7 @@ import AddBank from "@/pages/financing/AddBank";
 import EditBank from "@/pages/financing/EditBank";
 import FinancingDetails from "@/pages/financing/FinancingDetails";
 import FinancingPage from "@/pages/financing/FinancingPage";
+import ModelPage from "@/pages/models/ModelPage";
 import ProfilePage from "@/pages/ProfilePage";
 import AddPermissionPage from "@/pages/subordinates/AddPermissionPage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
@@ -212,5 +213,11 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/chats/:id",
     element: <ConversationPage/>
+  },
+
+  // Models route
+  {
+    path: "/models",
+    element: <ModelPage/>
   },
 ];

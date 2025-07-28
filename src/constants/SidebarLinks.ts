@@ -68,7 +68,7 @@ export const SidebarLinks = [
   {
     icons: CarSections,
     link: "اقسام السيارات",
-    path: "/car-sections",
+    path: "/models",
   },
   {
     icons: Cars,
