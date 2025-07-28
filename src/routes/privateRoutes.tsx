@@ -25,6 +25,7 @@ import FinancingDetails from "@/pages/financing/FinancingDetails";
 import FinancingPage from "@/pages/financing/FinancingPage";
 import ModelPage from "@/pages/models/ModelPage";
 import ProfilePage from "@/pages/ProfilePage";
+import SettingPage from "@/pages/setting/SettingPage";
 import AddPermissionPage from "@/pages/subordinates/AddPermissionPage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
 import SubordinatesChangePassword from "@/pages/subordinates/SubordinateChangePasswordPage";
@@ -219,5 +220,11 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/models",
     element: <ModelPage/>
+  },
+
+  // Setting route
+  {
+    path: "/settings",
+    element: <SettingPage/>
   },
 ];
