@@ -7,6 +7,7 @@ const AgentPage = () => {
     return (
         <div>
             <AgentPageHeader />
+            <div className="px-2 md:px-8">
             <AgentPageTable />
             <TablePagination
                 currentPage={0}
@@ -17,6 +18,7 @@ const AgentPage = () => {
                 totalItems={0}
                 itemsPerPage={0}
             />
+            </div>
         </div>
     )
 }
