@@ -1,7 +1,7 @@
 import AddUsers from "@/components/users/AddUsers";
 import ChangePassword from "@/components/users/ChangePassword";
 import EditUsers from "@/components/users/EditUsers";
-import AgentsPage from "@/pages/agents/AgentsDetailsPage";
+import AgentPage from "@/pages/agents/AgentPage";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
 import ContactUsPage from "@/pages/contactus/ContactUsPage";
@@ -189,6 +189,6 @@ export const privateRoutes: RouteTypes[] = [
   // Agents route
   {
     path: "/agents",
-    element: <AgentsPage />
+    element: <AgentPage />
   }
 ];
