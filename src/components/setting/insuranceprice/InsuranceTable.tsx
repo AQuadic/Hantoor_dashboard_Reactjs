@@ -1,9 +1,10 @@
 import { Link } from "react-router";
-import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
-import Edit from "../icons/general/Edit";
+
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "../ui/table";
+} from "@/components/ui/table";
+import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
+import ActiveStatus from "@/components/icons/general/ActiveStatus";
+import Edit from "@/components/icons/general/Edit";
 
 const InsuranceTable = () => {
     const countries = [

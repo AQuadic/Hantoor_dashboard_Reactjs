@@ -1,5 +1,5 @@
+import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
-import DashboardButton from "../general/dashboard/DashboardButton";
 import { Link } from "react-router";
 
 const InsuranceHeader = () => {
