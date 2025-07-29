@@ -40,6 +40,7 @@ import AddQuestions from "@/pages/technicalsupport/AddQuestion";
 import EditQuestion from "@/pages/technicalsupport/EditQuestion";
 import TechnicalSupport from "@/pages/technicalsupport/TechnicalSupport";
 import { RouteTypes } from "@/types/general/RouteTypes";
+import AddModel from "@/pages/models/AddModel";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -218,6 +219,14 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/models",
     element: <ModelPage />,
+  },
+  {
+    path: "/models/add",
+    element: <AddModel />,
+  },
+  {
+    path: "/models/:id",
+    element: <AddModel />,
   },
 
   // Setting route
