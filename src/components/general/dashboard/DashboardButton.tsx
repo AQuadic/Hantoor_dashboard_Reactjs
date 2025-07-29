@@ -29,7 +29,7 @@ const DashboardButton: React.FC<DashboardButtonProps> = ({
       type="button"
       isLoading={isLoading}
       className={`bg-[#2A32F8] text-white min-w-[200px] max-w-fit py-6 rounded-[9px] flex items-center font-bold ${
-        isAdd && "justify-between rounded-full"
+        isAdd && "gap-4 rounded-full"
       } text-center`}
       onPress={() => {
         if (onClick) {
