@@ -3,12 +3,12 @@ import { Checkbox, Select, SelectItem} from "@heroui/react";
 const CarsSelect = () => {
 
     const countries = [
-    {key: "مصر", label: "مصر"},
-    {key: "مصر", label: "مصر"},
-    {key: "مصر", label: "مصر"},
-    {key: "مصر", label: "مصر"},
-    {key: "مصر", label: "مصر"},
-    {key: "مصر", label: "مصر"},
+    {key: "1", label: "مصر"},
+    {key: "2", label: "مصر"},
+    {key: "3", label: "مصر"},
+    {key: "4", label: "مصر"},
+    {key: "5", label: "مصر"},
+    {key: "6", label: "مصر"},
     ];
     return (
         <div className='mt-[11px] flex flex-wrap items-center gap-[5px] px-8'>
