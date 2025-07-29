@@ -25,6 +25,7 @@ import FinancingDetails from "@/pages/financing/FinancingDetails";
 import FinancingPage from "@/pages/financing/FinancingPage";
 import ModelPage from "@/pages/models/ModelPage";
 import ProfilePage from "@/pages/ProfilePage";
+import AddWhatsappNumber from "@/pages/setting/AddWhatsappNumber";
 import SettingPage from "@/pages/setting/SettingPage";
 import AddPermissionPage from "@/pages/subordinates/AddPermissionPage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
@@ -226,5 +227,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/settings",
     element: <SettingPage/>
+  },
+  {
+    path: "/setting/add-whatsapp",
+    element: <AddWhatsappNumber/>
   },
 ];
