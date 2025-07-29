@@ -44,6 +44,7 @@ import TechnicalSupport from "@/pages/technicalsupport/TechnicalSupport";
 import { RouteTypes } from "@/types/general/RouteTypes";
 import AddModel from "@/pages/models/AddModel";
 import AddFeatures from "@/pages/features/AddFeatures";
+import EditFeatures from "@/pages/features/EditFeatures";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -264,5 +265,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/features/add",
     element: <AddFeatures />,
+  },
+  {
+    path: "/features/edit/:id",
+    element: <EditFeatures />,
   },
 ];
