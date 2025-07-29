@@ -11,7 +11,7 @@ const Layout = () => {
   return (
     <div className="flex min-h-screen">
       {!isLogin && <DashboardSidebar />}
-      <div className="flex-1 overflow-y-auto">
+      <div className="relative flex-1 overflow-y-auto">
         {!isLogin && <DashboardHeader />}
         {/* Animation container with relative positioning */}
         <div className="relative min-h-full">

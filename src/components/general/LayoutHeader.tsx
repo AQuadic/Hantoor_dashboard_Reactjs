@@ -10,7 +10,7 @@ const LayoutHeader = () => {
     i18n: { language },
   } = useTranslation();
   return (
-    <header className="bg-[#F4F4FE] border-l border-b py-6 px-14 flex items-center gap-4 justify-end">
+    <header className="sticky left-0 right-0 top-0 z-50 w-full bg-[#F4F4FE]  border-l border-b py-6 px-14 flex items-center gap-4 justify-end">
       <Link to="/profile" className="flex items-center gap-2">
         <ProfileIcon />
         <div>

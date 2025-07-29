@@ -1,10 +1,36 @@
 import * as React from "react";
-
 import { cn } from "@/lib/utils";
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
+  const containerRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      // Check if there's horizontal overflow
+      if (container.scrollWidth > container.clientWidth) {
+        // Prevent vertical scrolling when we're handling horizontal scroll
+        e.preventDefault();
+
+        // Scroll horizontally based on wheel delta
+        // Use deltaY for vertical wheel, deltaX for horizontal wheel/trackpad
+        const scrollAmount = e.deltaY !== 0 ? e.deltaY : e.deltaX;
+        container.scrollLeft += scrollAmount;
+      }
+    };
+
+    container.addEventListener("wheel", handleWheel, { passive: false });
+
+    return () => {
+      container.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   return (
     <div
+      ref={containerRef}
       data-slot="table-container"
       className="relative w-full overflow-x-auto"
     >
@@ -12,7 +38,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
         data-slot="table"
         className={cn(
           "w-full caption-bottom text-sm border-separate border-spacing-y-4",
-          className
+          className,
         )}
         {...props}
       />
@@ -30,12 +56,13 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
         "[&_tr>th:first-child]:rounded-s-full [&_tr>th:first-child]:ps-6",
         "[&_tr>th:last-child]:rounded-e-full [&_tr>th:last-child]:pe-6",
         "[&_tr>th]:text-primary [&_tr>th]:font-bold",
-        className
+        className,
       )}
       {...props}
     />
   );
 }
+
 function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
   return (
     <tbody
@@ -52,7 +79,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
       data-slot="table-footer"
       className={cn(
         "bg-muted/50 border-t font-medium [&>tr]:last:border-b-0",
-        className
+        className,
       )}
       {...props}
     />
@@ -76,19 +103,20 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
         // Add spacing using transform (works but not ideal)
         "before:content-[''] before:block before:h-4",
         "after:content-[''] after:block after:h-4",
-        className
+        className,
       )}
       {...props}
     />
   );
 }
+
 function TableHead({ className, ...props }: React.ComponentProps<"th">) {
   return (
     <th
       data-slot="table-head"
       className={cn(
         "text-foreground h-10 px-2 text-left align-middle font-medium whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
-        className
+        className,
       )}
       {...props}
     />
@@ -101,7 +129,7 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
       data-slot="table-cell"
       className={cn(
         "p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
-        className
+        className,
       )}
       {...props}
     />

@@ -13,7 +13,7 @@ const DashboardSidebar = () => {
       <img
         src="/images/dashboard/dashboardLogo.svg"
         alt="logo"
-        className="hidden p-6 bg-[#F4F4FE] lg:flex"
+        className="hidden px-6 py-1.5 bg-[#F4F4FE] lg:flex"
       />
 
       {/* Mobile menu toggle */}
