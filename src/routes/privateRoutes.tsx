@@ -6,6 +6,8 @@ import AgentPage from "@/pages/agents/AgentPage";
 import EditAgentWrapper from "@/pages/agents/EditAgentWrapper";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
+import ChatPage from "@/pages/chats/ChatPage";
+import ConversationPage from "@/pages/chats/ConversationPage";
 import ContactUsPage from "@/pages/contactus/ContactUsPage";
 import ContactUsView from "@/pages/contactus/ContactUsView";
 import AddCountries from "@/pages/countries/AddCountries";
@@ -21,7 +23,11 @@ import AddBank from "@/pages/financing/AddBank";
 import EditBank from "@/pages/financing/EditBank";
 import FinancingDetails from "@/pages/financing/FinancingDetails";
 import FinancingPage from "@/pages/financing/FinancingPage";
+import ModelPage from "@/pages/models/ModelPage";
 import ProfilePage from "@/pages/ProfilePage";
+import AddWhatsappNumber from "@/pages/setting/AddWhatsappNumber";
+import EditWhatsappNumber from "@/pages/setting/EditWhatsappNumber";
+import SettingPage from "@/pages/setting/SettingPage";
 import AddPermissionPage from "@/pages/subordinates/AddPermissionPage";
 import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
 import SubordinatesChangePassword from "@/pages/subordinates/SubordinateChangePasswordPage";
@@ -200,5 +206,35 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/agent/edit/:id",
     element: <EditAgentWrapper />
-  }
+  },
+
+  // Chats route
+  {
+    path: "/chats",
+    element: <ChatPage/>
+  },
+  {
+    path: "/chats/:id",
+    element: <ConversationPage/>
+  },
+
+  // Models route
+  {
+    path: "/models",
+    element: <ModelPage/>
+  },
+
+  // Setting route
+  {
+    path: "/settings",
+    element: <SettingPage/>
+  },
+  {
+    path: "/setting/add-whatsapp",
+    element: <AddWhatsappNumber/>
+  },
+  {
+    path: "/setting/edit-whatsapp/:id",
+    element: <EditWhatsappNumber/>
+  },
 ];

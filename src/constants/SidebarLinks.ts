@@ -1,11 +1,14 @@
 import ActiiveSupportMsgs from "@/components/icons/dashboard/ActiiveSupportMsgs";
 import ActiveAgents from "@/components/icons/dashboard/ActiveAgents";
 import ActiveBrands from "@/components/icons/dashboard/ActiveBrands";
+import ActiveChats from "@/components/icons/dashboard/ActiveChats";
 import ActiveContactUs from "@/components/icons/dashboard/ActiveContactUs";
 import ActiveCountries from "@/components/icons/dashboard/ActiveCountries";
 import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
 import ActiveFAQ from "@/components/icons/dashboard/ActiveFAQ";
 import ActiveFinancing from "@/components/icons/dashboard/ActiveFinancing";
+import ActiveModels from "@/components/icons/dashboard/ActiveModels";
+import ActiveSetting from "@/components/icons/dashboard/ActiveSetting";
 import ActiveSubordinates from "@/components/icons/dashboard/ActiveSubordinates";
 import ActiveSupportQuestions from "@/components/icons/dashboard/ActiveSupportQuestions";
 import ActiveUsers from "@/components/icons/dashboard/ActiveUsers";
@@ -66,8 +69,9 @@ export const SidebarLinks = [
   },
   {
     icons: CarSections,
+    activeIcon: ActiveModels,
     link: "اقسام السيارات",
-    path: "/car-sections",
+    path: "/models",
   },
   {
     icons: Cars,
@@ -82,6 +86,7 @@ export const SidebarLinks = [
   },
   {
     icons: Chats,
+    activeIcon: ActiveChats,
     link: "المحادثات",
     path: "/chats",
   },
@@ -116,6 +121,7 @@ export const SidebarLinks = [
   },
   {
     icons: Setting,
+    activeIcon: ActiveSetting,
     link: "الاعدادات",
     path: "/settings",
   },
