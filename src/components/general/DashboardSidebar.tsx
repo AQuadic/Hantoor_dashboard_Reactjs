@@ -2,11 +2,18 @@ import { SidebarLinks } from "@/constants/SidebarLinks";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const DashboardSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { i18n } = useTranslation();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
+  const currentLang = i18n.language;
+
+  const getLinkLabel = (link: any) => {
+    return currentLang === "ar" ? link.linkAr : link.linkEn;
+  };
 
   return (
     <section className="relative h-screen overflow-auto border-1 ltr:border-l rtl:border-r">
@@ -98,7 +105,7 @@ const DashboardSidebar = () => {
                     ) : (
                       <link.icons />
                     )}
-                    <h1 className="text-sm font-normal">{link.link}</h1>
+                    <h1 className="text-sm font-normal">{getLinkLabel(link)}</h1>
                   </>
                 )}
               </NavLink>
@@ -132,7 +139,7 @@ const DashboardSidebar = () => {
                 ) : (
                   <link.icons />
                 )}
-                <h1 className="text-[15px] font-normal">{link.link}</h1>
+                <h1 className="text-[15px] font-normal">{getLinkLabel(link)}</h1>
               </div>
             )}
           </NavLink>
