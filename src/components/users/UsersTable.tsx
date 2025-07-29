@@ -60,10 +60,8 @@ export function UserTable() {
             <TableCell>{user.currency}</TableCell>
             <TableCell>{user.status}</TableCell>
             <TableCell>{user.SuspensionPeriod}</TableCell>
-            <TableCell>
-                <Switch />
-            </TableCell>
             <TableCell className="flex gap-[7px]">
+                <Switch />
               <Link to='/users/edit'><Edit /></Link>
               <Link to='change-password'><Password /></Link>
               <TableDeleteButton handleDelete={() => {}} />
