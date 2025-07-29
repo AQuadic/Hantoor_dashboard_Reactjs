@@ -161,7 +161,7 @@ const DashboardSidebar = () => {
       </AnimatePresence>
 
       {/* Desktop Sidebar - Made scrollable */}
-      <div className="hidden lg:block flex-1 overflow-y-auto">
+      <div className="hidden lg:block flex-1 overflow-y-auto bg-white">
         <motion.div
           animate={{
             width: isDesktopCollapsed ? "80px" : "288px",
