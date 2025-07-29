@@ -13,7 +13,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   placeholder = "Search...",
 }) => {
   return (
-    <div className="flex items-center border rounded-full border-gray-300 px-6 py-2 bg-[#F3F6F9] ">
+    <div className="flex items-center border rounded-full border-gray-300 px-6 py-2 bg-[#F3F6F9]">
       <SearchIcon />
       <input
         type="text"
