@@ -48,7 +48,7 @@ const TermsTable = () => {
                 <TableCell>{profie.country}</TableCell>
                 <TableCell>{profie.description}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                <Link to={`/profile/edit-termsandconditions/${profie.id}`}>
+                <Link to={`/profile/edit-termsandconditions`}>
                     <Edit />
                 </Link>
 
