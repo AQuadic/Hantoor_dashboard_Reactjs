@@ -8,7 +8,7 @@ import loginEn from "../locales/en/login.json";
 // Ensure we're in browser environment
 const savedLang =
   typeof window !== "undefined"
-    ? localStorage.getItem("language") || "en"
+    ? localStorage.getItem("language") || "ar"
     : "en";
 
 // Initialize i18n
