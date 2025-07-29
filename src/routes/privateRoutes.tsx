@@ -1,5 +1,6 @@
 import AddProfile from "@/components/setting/profile/AddProfile";
 import EditProfile from "@/components/setting/profile/EditProfile";
+import AddTerms from "@/components/termsandconditions/AddTerms";
 import AddUsers from "@/components/users/AddUsers";
 import ChangePassword from "@/components/users/ChangePassword";
 import EditUsers from "@/components/users/EditUsers";
@@ -240,5 +241,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/profile/edit/:id",
     element: <EditProfile />,
+  },
+  {
+    path: "/setting/add-terms",
+    element: <AddTerms />,
   },
 ];

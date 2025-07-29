@@ -5,6 +5,7 @@ import GeneralSettings from "@/components/setting/GeneralSettings";
 import InsurancePage from "./InsurancePage";
 import ProfileSetting from "./ProfileSetting";
 import AdvertisingImages from "@/components/setting/advertisingimages/AdvertisingImages";
+import TermsAndConditions from "./TermsAndConditions";
 
 const SettingPage = () => {
     const [selectedFilter, setSelectedFilter] = useState("General Settings");
@@ -24,6 +25,7 @@ const SettingPage = () => {
                 {selectedFilter === "Insurance Price Request Button" && <InsurancePage />}
                 {selectedFilter === "Informational Pages" && <ProfileSetting />}
                 {selectedFilter === "Advertising Images" && <AdvertisingImages />}
+                {selectedFilter === "Terms and Conditions" && <TermsAndConditions />}
             </div>
         </div>
     );
