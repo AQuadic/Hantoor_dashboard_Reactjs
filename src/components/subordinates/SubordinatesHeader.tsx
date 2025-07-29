@@ -26,20 +26,20 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
         ]}
       />
 
-      {/*<TabsFilter*/}
-      {/*  filters={[*/}
-      {/*    {*/}
-      {/*      titleAr: "المسؤولين الفرعيين",*/}
-      {/*      titleEn: "Subordinates",*/}
-      {/*    },*/}
-      {/*    {*/}
-      {/*      titleAr: " الصلاحيات",*/}
-      {/*      titleEn: "Permissions",*/}
-      {/*    },*/}
-      {/*  ]}*/}
-      {/*  selectedFilter={selectedFilter}*/}
-      {/*  setSelectedFilter={setSelectedFilter}*/}
-      {/*/>*/}
+      <TabsFilter
+        filters={[
+          {
+            titleAr: "المسؤولين الفرعيين",
+            titleEn: "Subordinates",
+          },
+          {
+            titleAr: " الصلاحيات",
+            titleEn: "Permissions",
+          },
+        ]}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+      />
 
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
