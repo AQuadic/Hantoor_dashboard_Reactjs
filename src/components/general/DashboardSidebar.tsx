@@ -176,7 +176,7 @@ const DashboardSidebar = () => {
             width: isDesktopCollapsed ? "80px" : "288px",
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="py-4 border-l border-[#E1E1E1]"
+          className="py-4"
           style={{ boxShadow: "10.27px 10.27px 51.33px 0px #64748B0A" }}
         >
           {SidebarLinks.map((link, index) => (
