@@ -34,7 +34,7 @@ const TabsFilter: React.FC<TabsFilterProps> = ({
             key={filter.titleEn}
             onClick={() => setSelectedFilter(filter.titleEn)}
             className={`relative px-5 py-3 border-2 border-[#DBDEE1] rounded-xl overflow-hidden ${
-              isSelected ? "text-white bg-main-black" : "text-black"
+              isSelected ? "text-white bg-main-black border-none" : "text-black"
             }`}
           >
             {language === "ar" ? filter.titleAr : filter.titleEn}
