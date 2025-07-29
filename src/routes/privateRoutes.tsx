@@ -43,6 +43,7 @@ import EditQuestion from "@/pages/technicalsupport/EditQuestion";
 import TechnicalSupport from "@/pages/technicalsupport/TechnicalSupport";
 import { RouteTypes } from "@/types/general/RouteTypes";
 import AddModel from "@/pages/models/AddModel";
+import AddFeatures from "@/pages/features/AddFeatures";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -259,5 +260,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/profile/edit-termsandconditions",
     element: <EditTerms />,
+  },
+  {
+    path: "/features/add",
+    element: <AddFeatures />,
   },
 ];

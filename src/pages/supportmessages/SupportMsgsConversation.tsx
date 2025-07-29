@@ -33,8 +33,9 @@ const SupportMsgsConversation = () => {
     ];
 
     return (
-        <section className="py-10 px-4 max-w-2xl mx-auto">
-        <h2 className="text-[#071739] text-[23px] font-bold text-center mb-6">المحادثة</h2>
+        <section className="py-4 px-4 max-w-2xl mx-auto">
+        <h2 className="text-[#071739] text-[23px] font-bold text-center">المحادثة</h2>
+        <hr className="my-4"/>
         <div className="space-y-6">
             {messages.map((msg) => (
             <div

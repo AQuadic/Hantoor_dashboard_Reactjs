@@ -43,7 +43,7 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
 
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
-          <SearchBar term={""} setTerm={() => {}} />
+          <SearchBar term={"ابحث بالاسم, رقم الجوال, البريد الالكتروني"} setTerm={() => {}} />
         </div>
         <div className="flex-1">
           <DashboardDatePicker />
