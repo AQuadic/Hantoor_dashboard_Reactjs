@@ -6,12 +6,13 @@ import DashboardHeader from "./LayoutHeader";
 
 const Layout = () => {
   const location = useLocation();
+  const isLogin = location.pathname === "/login";
 
   return (
     <div className="flex min-h-screen">
-      <DashboardSidebar />
+      {!isLogin && <DashboardSidebar />}
       <div className="flex-1 overflow-y-auto">
-        <DashboardHeader />
+        {!isLogin && <DashboardHeader />}
         {/* Animation container with relative positioning */}
         <div className="relative min-h-full">
           <AnimatePresence mode="wait">
