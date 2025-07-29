@@ -1,14 +1,13 @@
 import { DateRangePicker } from "@heroui/date-picker";
 import React from "react";
+import DateSelectorIcon from "@/components/icons/general/DateSelectorIcon";
 
 const DashboardDatePicker = () => {
   return (
-    <div className="max-w-fit ">
+    <div dir="ltr" className="max-w-fit ">
       <DateRangePicker
-        className="rounded-full border"
-        classNames={{
-          base: "bg-green-200",
-        }}
+        selectorIcon={<DateSelectorIcon />}
+        className="rounded-full border bg-pink-200"
       />
     </div>
   );
