@@ -21,6 +21,7 @@ const TabsFilter: React.FC<TabsFilterProps> = ({
   const {
     i18n: { language },
   } = useTranslation();
+  if (!filters.length) return null;
   return (
     <LayoutGroup>
       <div className="relative flex flex-wrap gap-3 px-8 pb-4">
