@@ -15,7 +15,7 @@ const SettingTabs: React.FC<SubordinatesHeaderProps> = ({
         { titleAr: "اعدادات عامة", titleEn: "General Settings" },
         { titleAr: "زر طلب تفاصيل سعر التأمين", titleEn: "Insurance Price Request Button" },
         { titleAr: "الصفحات التعريفية", titleEn: "Informational Pages" },
-        { titleAr: "الصور الاعلانية", titleEn: "Promotional Images" },
+        { titleAr: "الصور الاعلانية", titleEn: "Advertising Images" },
         { titleAr: "الشروط والاحكام", titleEn: "Terms and Conditions" },
         { titleAr: "روابط التواصل الاجتماعي", titleEn: "Social Media Links" },
         { titleAr: "مميزات التطبيق", titleEn: "App Features" },
