@@ -59,7 +59,7 @@ const AdvertisingImages = () => {
                 <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
                 <h1 className="text-[17px] text-[#2A32F8] font-bold">فيديو قبل الدخول للمحادثة</h1>
                 <div className="mt-[14px] flex flex-wrap items-center gap-[14px]">
-                    <VideoInput video={video} setVideo={setVideo} />;
+                    <VideoInput video={video} setVideo={setVideo} />
 
                     <div className="relative">
                         <img src="/images/advertiseIMG.png" className="w-[378px] h-[169px]" alt="Image" />
