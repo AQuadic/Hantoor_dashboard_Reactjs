@@ -7,8 +7,8 @@
 @font-face {
   font-family: "Helvetica Neue W23";
   src: url("./assest/OnlineWebFonts_COM_b8bc6cdf6777e28b9ed3f6663a17766f/Helvetica Neue W23 for SKY Bd/Helvetica Neue W23 for SKY Bd.ttf")
-    format("woff");
-  font-weight: normal;
+  format("ttf");
+  font-weight: bold;  /* Changed to bold */
   font-style: normal;
 }
 
