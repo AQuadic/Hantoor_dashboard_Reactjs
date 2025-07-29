@@ -6,6 +6,7 @@ import InsurancePage from "./InsurancePage";
 import ProfileSetting from "./ProfileSetting";
 import AdvertisingImages from "@/components/setting/advertisingimages/AdvertisingImages";
 import TermsAndConditions from "./TermsAndConditions";
+import SocialMediaPage from "../socialmedia/SocialMediaPage";
 
 const SettingPage = () => {
     const [selectedFilter, setSelectedFilter] = useState("General Settings");
@@ -26,6 +27,7 @@ const SettingPage = () => {
                 {selectedFilter === "Informational Pages" && <ProfileSetting />}
                 {selectedFilter === "Advertising Images" && <AdvertisingImages />}
                 {selectedFilter === "Terms and Conditions" && <TermsAndConditions />}
+                {selectedFilter === "Social Media Links" && <SocialMediaPage />}
             </div>
         </div>
     );
