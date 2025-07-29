@@ -1,16 +1,12 @@
-import { BrandsTable } from "@/components/brands/BrandsTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import React from "react";
 import ModelHeader from "@/components/models/ModelHeader";
+import { ModelTable } from "@/components/models/ModelTable";
 
 const BrandsPage = () => {
   const [selectedFilter, setSelectedFilter] = React.useState("Models");
-  const [curentPage, setCurrentPage] = React.useState(1);
-  const [itemsPerPage, setItemsPerPage] = React.useState(10);
-  const [totalItems, setTotalItems] = React.useState(100); // Example total items, replace with actual data
-  const [totalPages, setTotalPages] = React.useState(
-    Math.ceil(totalItems / itemsPerPage),
-  );
+  const [currentModelsPage, setCurrentModelsPage] = React.useState(1);
+
   return (
     <section>
       <ModelHeader
@@ -18,13 +14,13 @@ const BrandsPage = () => {
         setSelectedFilter={setSelectedFilter}
       />
       <div className="px-2 md:px-8">
-        <BrandsTable />
+        <ModelTable />
         <TablePagination
-          currentPage={curentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-          totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
+          currentPage={currentModelsPage}
+          setCurrentPage={setCurrentModelsPage}
+          totalPages={12}
+          totalItems={50}
+          itemsPerPage={10}
         />
       </div>
     </section>
