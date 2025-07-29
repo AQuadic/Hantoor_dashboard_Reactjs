@@ -11,14 +11,15 @@ const DashboardSidebar = () => {
   const toggleDesktopSidebar = () => setIsDesktopCollapsed(!isDesktopCollapsed);
 
   return (
-    <section className="relative h-screen overflow-auto border-1 ltr:border-l rtl:border-r bg-white">
-      {/* Desktop Logo and Toggle Button */}
+    <section className="relative h-screen border-1 ltr:border-l rtl:border-r bg-white flex flex-col">
+      {/* Desktop Logo and Toggle Button - Made sticky */}
       <div
-        className={`hidden lg:flex items-center bg-[#F4F4FE] ${isDesktopCollapsed ? "justify-center px-2 py-1.5" : "justify-between px-6 py-1.5"}`}
+        className={`hidden lg:flex items-center bg-[#F4F4FE] sticky top-0 z-10 ${isDesktopCollapsed ? "justify-center px-2 py-1.5" : "justify-between px-6 py-1.5"}`}
       >
         <AnimatePresence mode="wait">
           {!isDesktopCollapsed && (
             <motion.img
+              className="flex items-center justify-center"
               key="logo"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -159,67 +160,68 @@ const DashboardSidebar = () => {
         )}
       </AnimatePresence>
 
-      {/* Desktop Sidebar */}
-      <motion.div
-        animate={{
-          width: isDesktopCollapsed ? "80px" : "288px",
-        }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="hidden lg:block"
-        style={{ boxShadow: "10.27px 10.27px 51.33px 0px #64748B0A" }}
-      >
-        {SidebarLinks.map((link, index) => (
-          <NavLink
-            to={link.path}
-            end={link.path === "/dashboard"}
-            key={index}
-            className={({ isActive }) =>
-              `block mt-4 rounded-md ${
-                isActive
-                  ? "bg-[#2A32F8] text-white mx-4"
-                  : "hover:bg-blue-100 text-[#606060] mx-4"
-              } ${isDesktopCollapsed ? "px-0 py-2 flex justify-center" : "px-4 py-2"}`
-            }
-            title={isDesktopCollapsed ? link.link : ""}
-          >
-            {({ isActive }) => (
-              <div
-                className={`flex items-center ${isDesktopCollapsed ? "justify-center" : "gap-[5px]"}`}
-              >
-                <div className="flex-shrink-0">
-                  {isActive && link.activeIcon ? (
-                    <link.activeIcon />
-                  ) : (
-                    <link.icons />
-                  )}
+      {/* Desktop Sidebar - Made scrollable */}
+      <div className="hidden lg:block flex-1 overflow-y-auto">
+        <motion.div
+          animate={{
+            width: isDesktopCollapsed ? "80px" : "288px",
+          }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          style={{ boxShadow: "10.27px 10.27px 51.33px 0px #64748B0A" }}
+        >
+          {SidebarLinks.map((link, index) => (
+            <NavLink
+              to={link.path}
+              end={link.path === "/dashboard"}
+              key={index}
+              className={({ isActive }) =>
+                `block mt-4 rounded-md ${
+                  isActive
+                    ? "bg-[#2A32F8] text-white mx-4"
+                    : "hover:bg-blue-100 text-[#606060] mx-4"
+                } ${isDesktopCollapsed ? "px-0 py-2 flex justify-center" : "px-4 py-2"}`
+              }
+              title={isDesktopCollapsed ? link.link : ""}
+            >
+              {({ isActive }) => (
+                <div
+                  className={`flex items-center ${isDesktopCollapsed ? "justify-center" : "gap-[5px]"}`}
+                >
+                  <div className="flex-shrink-0">
+                    {isActive && link.activeIcon ? (
+                      <link.activeIcon />
+                    ) : (
+                      <link.icons />
+                    )}
+                  </div>
+                  <AnimatePresence mode="wait">
+                    {!isDesktopCollapsed && (
+                      <motion.h1
+                        key="text"
+                        initial={{ opacity: 0, width: 0 }}
+                        animate={{ opacity: 1, width: "auto" }}
+                        exit={{ opacity: 0, width: 0 }}
+                        transition={{
+                          duration: 0.3,
+                          ease: "easeInOut",
+                          width: { duration: 0.3, ease: "easeInOut" },
+                          opacity: {
+                            duration: 0.2,
+                            delay: isDesktopCollapsed ? 0 : 0.1,
+                          },
+                        }}
+                        className="text-[15px] font-normal whitespace-nowrap overflow-hidden"
+                      >
+                        {link.link}
+                      </motion.h1>
+                    )}
+                  </AnimatePresence>
                 </div>
-                <AnimatePresence mode="wait">
-                  {!isDesktopCollapsed && (
-                    <motion.h1
-                      key="text"
-                      initial={{ opacity: 0, width: 0 }}
-                      animate={{ opacity: 1, width: "auto" }}
-                      exit={{ opacity: 0, width: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        ease: "easeInOut",
-                        width: { duration: 0.3, ease: "easeInOut" },
-                        opacity: {
-                          duration: 0.2,
-                          delay: isDesktopCollapsed ? 0 : 0.1,
-                        },
-                      }}
-                      className="text-[15px] font-normal whitespace-nowrap overflow-hidden"
-                    >
-                      {link.link}
-                    </motion.h1>
-                  )}
-                </AnimatePresence>
-              </div>
-            )}
-          </NavLink>
-        ))}
-      </motion.div>
+              )}
+            </NavLink>
+          ))}
+        </motion.div>
+      </div>
     </section>
   );
 };
