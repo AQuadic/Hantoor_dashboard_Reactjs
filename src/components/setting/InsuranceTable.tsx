@@ -41,7 +41,7 @@ const InsuranceTable = () => {
                 <TableCell>{country.country}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <ActiveStatus />
-                <Link to="/countries/edit">
+                <Link to="/setting/edit-whatsapp/:id">
                     <Edit />
                 </Link>
 
