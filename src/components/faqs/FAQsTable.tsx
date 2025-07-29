@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
+import { Switch } from "@heroui/react";
 const FAQsTable = () => {
   const navigate = useNavigate();
 
@@ -61,7 +61,7 @@ const FAQsTable = () => {
                 className="flex gap-[7px] items-center"
                 onClick={(e) => e.stopPropagation()} 
                 >
-                <ActiveStatus />
+                <Switch />
                 <Link to={`/faq/edit/${question.id}`}>
                     <Edit />
                 </Link>

@@ -7,17 +7,16 @@ import {
   TableBody,
   TableCell,
 } from "../ui/table";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import Password from "../icons/general/Password";
-import Delete from "../icons/general/Delete";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
+import { Switch } from "@heroui/react";
 
 export function UserTable() {
   const users = [
-    { id: 1, image: "/", name: "محمد احمد", phone: "01010101010", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "asmaa@example.com", advancedCount: "5", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", statusTwo: 'Icon' },
-    { id: 2, image: "/", name: "محمد احمد", phone: "01010101010", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "john@example.com", advancedCount: "5", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", statusTwo: 'Icon' },
-    { id: 3, image: "/", name: "محمد احمد", phone: "01010101010", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "jane@example.com", advancedCount: "5", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", statusTwo: 'Icon' },
+    { id: 1, image: "/", name: "محمد احمد", phone: "01010101010", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "asmaa@example.com", advancedCount: "5", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", isActive: true, statusTwo: 'Icon' },
+    { id: 2, image: "/", name: "محمد احمد", phone: "01010101010", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "john@example.com", advancedCount: "5", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", isActive: true, statusTwo: 'Icon' },
+    { id: 3, image: "/", name: "محمد احمد", phone: "01010101010", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "jane@example.com", advancedCount: "5", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", isActive: true, statusTwo: 'Icon' },
   ];
 
   return (
@@ -61,7 +60,9 @@ export function UserTable() {
             <TableCell>{user.currency}</TableCell>
             <TableCell>{user.status}</TableCell>
             <TableCell>{user.SuspensionPeriod}</TableCell>
-            <TableCell><ActiveStatus /></TableCell>
+            <TableCell>
+                <Switch />
+            </TableCell>
             <TableCell className="flex gap-[7px]">
               <Link to='/users/edit'><Edit /></Link>
               <Link to='change-password'><Password /></Link>

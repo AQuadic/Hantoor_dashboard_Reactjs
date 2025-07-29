@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
+import { Switch } from "@heroui/react";
 
 const FinancingTable = () => {
   const navigate = useNavigate();
@@ -12,19 +12,16 @@ const FinancingTable = () => {
   const technicalsupport = [
     {
         id: 1,
-        question: "مشكلة في عرض السيارات أو البيانات",
         country: "الامارات",
         count: 22,
     },
     {
         id: 2,
-        question: "مشكلة في عرض السيارات أو البيانات",
         country: "مصر",
         count: 22,
     },
     {
         id: 3,
-        question: "مشكلة في عرض السيارات أو البيانات",
         country: "الامارات",
         count: 22,
     },
@@ -53,7 +50,7 @@ const FinancingTable = () => {
                 className="flex gap-[7px] items-center"
                 onClick={(e) => e.stopPropagation()} 
                 >
-                <ActiveStatus />
+                <Switch />
                 <Link to={`/faq/edit/${question.id}`}>
                     <Edit />
                 </Link>

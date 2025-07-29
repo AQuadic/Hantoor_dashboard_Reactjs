@@ -1,9 +1,9 @@
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
+import { Switch } from "@heroui/react";
 
 const CountriesTable = () => {
     const countries = [
@@ -50,7 +50,7 @@ const CountriesTable = () => {
                 <TableCell className="">{country.count}</TableCell>
                 <TableCell className="">{country.date}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                <ActiveStatus />
+                <Switch />
                 <Link to="/countries/edit">
                     <Edit />
                 </Link>

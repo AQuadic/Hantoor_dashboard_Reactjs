@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import ChatIcon from "../icons/chats/ChatIcon";
 import ConversationPage from "@/pages/chats/ConversationPage";
+import { Switch } from "@heroui/react";
 
 const ChatTable = () => {
     const [openChatId, setOpenChatId] = useState<number | null>(null);
@@ -50,7 +50,7 @@ const ChatTable = () => {
                     <TableCell>{chat.brand}</TableCell>
                     <TableCell>{chat.count}</TableCell>
                     <TableCell className="flex gap-[7px] items-center">
-                    <ActiveStatus />
+                    <Switch />
                     <button onClick={() => setOpenChatId(chat.id)}>
                         <ChatIcon />
                     </button>
