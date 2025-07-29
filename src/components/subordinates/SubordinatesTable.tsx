@@ -16,7 +16,7 @@ export function SubordinatesTable() {
   const subordinates = [
     {
       id: 1,
-      image: "/path/to/image1.jpg",
+      image: "/",
       name: "محمد احمد",
       mobile: "+966 123456 789",
       email: "username@mail.com",
@@ -27,7 +27,7 @@ export function SubordinatesTable() {
     },
     {
       id: 2,
-      image: "/path/to/image2.jpg",
+      image: "/",
       name: "مصطفى خالد",
       mobile: "+966 123456 789",
       email: "username@mail.com",
@@ -38,7 +38,7 @@ export function SubordinatesTable() {
     },
     {
       id: 3,
-      image: "/path/to/image3.jpg",
+      image: "/",
       name: "إبراهيم محمود",
       mobile: "+966 123456 789",
       email: "username@mail.com",
@@ -49,7 +49,7 @@ export function SubordinatesTable() {
     },
     {
       id: 4,
-      image: "/path/to/image4.jpg",
+      image: "/",
       name: "محمد احمد",
       mobile: "+966 123456 789",
       email: "username@mail.com",
