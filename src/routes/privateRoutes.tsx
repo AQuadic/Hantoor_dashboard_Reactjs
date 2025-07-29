@@ -37,13 +37,8 @@ import SupportMsgsConversation from "@/pages/supportmessages/SupportMsgsConversa
 import AddQuestions from "@/pages/technicalsupport/AddQuestion";
 import EditQuestion from "@/pages/technicalsupport/EditQuestion";
 import TechnicalSupport from "@/pages/technicalsupport/TechnicalSupport";
-import Testing from "@/pages/Testing";
 import { RouteTypes } from "@/types/general/RouteTypes";
 export const privateRoutes: RouteTypes[] = [
-  {
-    path: "/testing",
-    element: <Testing />,
-  },
   {
     path: "/",
     element: <DashboardPage />,
@@ -125,13 +120,13 @@ export const privateRoutes: RouteTypes[] = [
     path: "/faq/add",
     element: <AddFaq />,
   },
-    {
+  {
     path: "/faq/edit/:id",
-    element: <EditFaq />
+    element: <EditFaq />,
   },
-{
+  {
     path: "/faq/details/:id",
-    element: <FaqDetails />
+    element: <FaqDetails />,
   },
   {
     path: "/subordinates/add",
@@ -145,21 +140,20 @@ export const privateRoutes: RouteTypes[] = [
   // Financing route
   {
     path: "/financing",
-    element: <FinancingPage/>
+    element: <FinancingPage />,
   },
   {
     path: "/financing/details/:id",
-    element: <FinancingDetails />
+    element: <FinancingDetails />,
   },
   {
     path: "/bank/add",
-    element: <AddBank/>
+    element: <AddBank />,
   },
   {
     path: "/bank/edit/:id",
-    element: <EditBank/>
+    element: <EditBank />,
   },
-
 
   {
     path: "/subordinates/change_password/:id",
@@ -177,64 +171,64 @@ export const privateRoutes: RouteTypes[] = [
   // Support messages route
   {
     path: "/support-messages",
-    element: <SupportMessagesPage />
+    element: <SupportMessagesPage />,
   },
   {
     path: "/support-messages/view",
-    element: <SupportMsgsConversation />
+    element: <SupportMsgsConversation />,
   },
 
   // Contact-us route
   {
     path: "/contact-us",
-    element: <ContactUsPage />
+    element: <ContactUsPage />,
   },
   {
     path: "/contact-us/view",
-    element: <ContactUsView />
+    element: <ContactUsView />,
   },
 
   // Agents route
   {
     path: "/agents",
-    element: <AgentPage />
+    element: <AgentPage />,
   },
   {
     path: "/agent/add",
-    element: <AddAgentWrapper />
+    element: <AddAgentWrapper />,
   },
   {
     path: "/agent/edit/:id",
-    element: <EditAgentWrapper />
+    element: <EditAgentWrapper />,
   },
 
   // Chats route
   {
     path: "/chats",
-    element: <ChatPage/>
+    element: <ChatPage />,
   },
   {
     path: "/chats/:id",
-    element: <ConversationPage/>
+    element: <ConversationPage />,
   },
 
   // Models route
   {
     path: "/models",
-    element: <ModelPage/>
+    element: <ModelPage />,
   },
 
   // Setting route
   {
     path: "/settings",
-    element: <SettingPage/>
+    element: <SettingPage />,
   },
   {
     path: "/setting/add-whatsapp",
-    element: <AddWhatsappNumber/>
+    element: <AddWhatsappNumber />,
   },
   {
     path: "/setting/edit-whatsapp/:id",
-    element: <EditWhatsappNumber/>
+    element: <EditWhatsappNumber />,
   },
 ];
