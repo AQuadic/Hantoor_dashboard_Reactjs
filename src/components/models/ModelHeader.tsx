@@ -23,9 +23,9 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
     },
     {
       titleAr: "انواع الهيكل",
-      titleEn: "Body Types",
+      titleEn: "Structure Types",
       addText: "اضافة نوع هيكل جديد",
-      link: "/body-types/add",
+      link: "/structure-types/add",
     },
     {
       titleAr: "انواع السيارة",
