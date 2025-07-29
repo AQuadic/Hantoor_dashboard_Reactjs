@@ -35,6 +35,7 @@ const ConversationPage = () => {
         <h2 className="text-[#071739] text-lg font-bold text-center mb-4">
             المحادثة
         </h2>
+        <hr className="my-4"/>
 
         <div className="flex flex-wrap items-center justify-between rounded-lg p-2 mb-4">
             <div className="flex items-center gap-3">
@@ -53,6 +54,8 @@ const ConversationPage = () => {
                 <Delete />
             </div>
         </div>
+        <hr className="my-4"/>
+
 
         <div className="space-y-4">
             {messages.map((msg) => (
@@ -65,8 +68,13 @@ const ConversationPage = () => {
                 <p className="text-xs font-medium text-[#071739]">{msg.name}</p>
                 <p className="text-[10px] text-gray-400 mb-1">{msg.time}</p>
 
-                <div className="bg-[#1C1C1E] text-white rounded-2xl px-3 py-2 max-w-xs text-sm">
-                    {msg.text}
+                <div className="flex items-center gap-3">
+                    <div className="bg-[#1C1C1E] text-white rounded-2xl px-3 py-2 max-w-xs text-sm">
+                        {msg.text}
+                    </div>
+                    <div>
+                    <Delete />
+                    </div>
                 </div>
                 </div>
             </div>
