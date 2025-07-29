@@ -135,27 +135,6 @@ const DashboardSidebar = () => {
 
             {/* Mobile Nav Links */}
             {SidebarLinks.map((link, index) => (
-              <NavLink
-                to={link.path}
-                end={link.path === "/dashboard"}
-                key={index}
-                className={({ isActive }) =>
-                  `flex items-center gap-4 mt-6 px-2 py-2 rounded-md ${
-                    isActive ? "bg-[#2A32F8] text-white" : "text-gray-600"
-                  }`
-                }
-              >
-                {({ isActive }) => (
-                  <>
-                    {isActive && link.activeIcon ? (
-                      <link.activeIcon />
-                    ) : (
-                      <link.icons />
-                    )}
-                    <h1 className="text-sm font-normal">{getLinkLabel(link)}</h1>
-                  </>
-                )}
-              </NavLink>
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: 20 }}
@@ -178,7 +157,9 @@ const DashboardSidebar = () => {
                       ) : (
                         <link.icons />
                       )}
-                      <h1 className="text-sm font-normal">{link.link}</h1>
+                      <h1 className="text-sm font-normal">
+                        {getLinkLabel(link)}
+                      </h1>
                     </>
                   )}
                 </NavLink>
@@ -188,36 +169,6 @@ const DashboardSidebar = () => {
         )}
       </AnimatePresence>
 
-      {/* Desktop Sidebar */}
-      <div
-        className="hidden lg:block bg-white w-[288px] py-4 border-l border-[#E1E1E1]"
-        style={{ boxShadow: "10.27px 10.27px 51.33px 0px #64748B0A" }}
-      >
-        {SidebarLinks.map((link, index) => (
-          <NavLink
-            to={link.path}
-            end={link.path === "/dashboard"}
-            key={index}
-            className={({ isActive }) =>
-              `block mt-4 px-4 py-2 rounded-md ${
-                isActive
-                  ? "bg-[#2A32F8] text-white mx-4"
-                  : "hover:bg-blue-100 text-[#606060] mx-4"
-              }`
-            }
-          >
-            {({ isActive }) => (
-              <div className="flex items-center gap-[5px]">
-                {isActive && link.activeIcon ? (
-                  <link.activeIcon />
-                ) : (
-                  <link.icons />
-                )}
-                <h1 className="text-[15px] font-normal">{getLinkLabel(link)}</h1>
-              </div>
-            )}
-          </NavLink>
-        ))}
       {/* Desktop Sidebar - Made scrollable */}
       <div className="hidden lg:block flex-1 overflow-y-auto bg-white">
         <motion.div
@@ -225,6 +176,7 @@ const DashboardSidebar = () => {
             width: isDesktopCollapsed ? "80px" : "288px",
           }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
+          className="py-4 border-l border-[#E1E1E1]"
           style={{ boxShadow: "10.27px 10.27px 51.33px 0px #64748B0A" }}
         >
           {SidebarLinks.map((link, index) => (
@@ -239,7 +191,7 @@ const DashboardSidebar = () => {
                     : "hover:bg-blue-100 text-[#606060] mx-4"
                 } ${isDesktopCollapsed ? "px-0 py-2 flex justify-center" : "px-4 py-2"}`
               }
-              title={isDesktopCollapsed ? link.link : ""}
+              title={isDesktopCollapsed ? getLinkLabel(link) : ""}
             >
               {({ isActive }) => (
                 <div
@@ -270,7 +222,7 @@ const DashboardSidebar = () => {
                         }}
                         className="text-[15px] font-normal whitespace-nowrap overflow-hidden"
                       >
-                        {link.link}
+                        {getLinkLabel(link)}
                       </motion.h1>
                     )}
                   </AnimatePresence>
