@@ -1,11 +1,34 @@
-import ModelHeader from "@/components/models/ModelHeader"
+import { BrandsTable } from "@/components/brands/BrandsTable";
+import TablePagination from "@/components/general/dashboard/table/TablePagination";
+import React from "react";
+import ModelHeader from "@/components/models/ModelHeader";
 
-const ModelPage = () => {
-    return (
-        <div>
-            <ModelHeader />
-        </div>
-    )
-}
+const BrandsPage = () => {
+  const [selectedFilter, setSelectedFilter] = React.useState("Models");
+  const [curentPage, setCurrentPage] = React.useState(1);
+  const [itemsPerPage, setItemsPerPage] = React.useState(10);
+  const [totalItems, setTotalItems] = React.useState(100); // Example total items, replace with actual data
+  const [totalPages, setTotalPages] = React.useState(
+    Math.ceil(totalItems / itemsPerPage),
+  );
+  return (
+    <section>
+      <ModelHeader
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+      />
+      <div className="px-2 md:px-8">
+        <BrandsTable />
+        <TablePagination
+          currentPage={curentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
+          itemsPerPage={itemsPerPage}
+        />
+      </div>
+    </section>
+  );
+};
 
-export default ModelPage
+export default BrandsPage;
