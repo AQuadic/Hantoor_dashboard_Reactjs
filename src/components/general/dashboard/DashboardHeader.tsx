@@ -2,7 +2,7 @@ import { BreadcrumbItem, Breadcrumbs } from "@heroui/react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 interface DashboardHeaderProps {
   titleAr: string;
@@ -24,6 +24,12 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
   items,
 }) => {
   const navigate = useNavigate();
+  const params = useParams();
+  const id = params.id;
+  const pathname = window.location.pathname;
+
+  const shouldShowBackButton =
+    pathname.includes("add") || pathname.includes("edit") || id;
   const {
     i18n: { language },
   } = useTranslation();
@@ -42,7 +48,9 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       >
         {items.map((item, index) => (
           <BreadcrumbItem key={index} href={item.link || "#"}>
-            <span className={`${index === items.length - 1 ? "text-primary" : ""}`}>
+            <span
+              className={`${index === items.length - 1 ? "text-primary" : ""}`}
+            >
               {language === "ar" ? item.titleAr : item.titleEn}
             </span>
           </BreadcrumbItem>
@@ -50,12 +58,14 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({
       </Breadcrumbs>
 
       <div className="flex items-center gap-3 py-4 px-9">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-3 border rounded-full bg-background"
-        >
-          {language === "ar" ? <ArrowRight /> : <ArrowLeft />}
-        </button>
+        {shouldShowBackButton && (
+          <button
+            onClick={() => navigate(-1)}
+            className="p-3 border rounded-full bg-background"
+          >
+            {language === "ar" ? <ArrowRight /> : <ArrowLeft />}
+          </button>
+        )}
         <div>
           <h1 className="text-2xl font-bold">{title}</h1>
           {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}

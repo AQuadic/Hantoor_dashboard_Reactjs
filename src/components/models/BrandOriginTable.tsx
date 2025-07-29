@@ -12,21 +12,21 @@ import {
 } from "../ui/table";
 
 export function BrandOriginTable() {
-  const brands = [
+  const brandOrigins = [
     {
       id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      origin: "أوروبا",
+      count: "3 من 5% عنصر",
     },
     {
-      id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      id: 2,
+      origin: "السين",
+      count: "3 من 5% عنصر",
     },
     {
-      id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      id: 3,
+      origin: "كوريا",
+      count: "3 من 5% عنصر",
     },
   ];
 
@@ -35,23 +35,22 @@ export function BrandOriginTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> الموديل</TableHead>
-          <TableHead className="text-right"> الوكيل</TableHead>
+          <TableHead className="text-right">صفاءة المفرقة</TableHead>
+          <TableHead className="text-right">المعدل</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brands.map((brand, index) => (
+        {brandOrigins.map((brand, index) => (
           <TableRow key={brand.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{brand.model}</TableCell>
-            <TableCell className="w-full">{brand.owner}</TableCell>
+            <TableCell>{brand.origin}</TableCell>
+            <TableCell>{brand.count}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <ActiveStatus />
-              <Link to="/brands/1">
+              <Link to={`/brand-origins/${brand.id}`}>
                 <Edit />
               </Link>
-
               <div className="mt-2">
                 <TableDeleteButton handleDelete={() => {}} />
               </div>
