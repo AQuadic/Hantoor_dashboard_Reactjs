@@ -4,6 +4,7 @@ import SettingTabs from "@/components/setting/SettingTabs";
 import GeneralSettings from "@/components/setting/GeneralSettings";
 import InsurancePage from "./InsurancePage";
 import ProfileSetting from "./ProfileSetting";
+import AdvertisingImages from "@/components/setting/advertisingimages/AdvertisingImages";
 
 const SettingPage = () => {
     const [selectedFilter, setSelectedFilter] = useState("General Settings");
@@ -22,6 +23,7 @@ const SettingPage = () => {
                 {selectedFilter === "General Settings" && <GeneralSettings />}
                 {selectedFilter === "Insurance Price Request Button" && <InsurancePage />}
                 {selectedFilter === "Informational Pages" && <ProfileSetting />}
+                {selectedFilter === "Advertising Images" && <AdvertisingImages />}
             </div>
         </div>
     );
