@@ -3,6 +3,7 @@ import SettingHeader from "@/components/setting/SettingHeader";
 import SettingTabs from "@/components/setting/SettingTabs";
 import GeneralSettings from "@/components/setting/GeneralSettings";
 import InsurancePage from "./InsurancePage";
+import ProfileSetting from "./ProfileSetting";
 
 const SettingPage = () => {
     const [selectedFilter, setSelectedFilter] = useState("General Settings");
@@ -20,6 +21,7 @@ const SettingPage = () => {
             <div className="mt-4">
                 {selectedFilter === "General Settings" && <GeneralSettings />}
                 {selectedFilter === "Insurance Price Request Button" && <InsurancePage />}
+                {selectedFilter === "Informational Pages" && <ProfileSetting />}
             </div>
         </div>
     );

@@ -1,8 +1,8 @@
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
-import DashboardButton from "../general/dashboard/DashboardButton";
+import DashboardButton from "../../general/dashboard/DashboardButton";
 import { Link } from "react-router";
 
-const InsuranceHeader = () => {
+const ProfileHeader = () => {
     return (
         <div className="flex items-center justify-between">
             <div className="w-full">
@@ -21,10 +21,10 @@ const InsuranceHeader = () => {
                 </Select>
             </div>
             <Link to='/setting/add-whatsapp'>
-                <DashboardButton title={'اضافة رقم واتساب جديد'} variant="add" />
+                <DashboardButton title={'اضافة صفحة تعريفية جديدة'} variant="add" />
             </Link>
         </div>
     )
 }
 
-export default InsuranceHeader
+export default ProfileHeader
