@@ -92,7 +92,7 @@ const AddSubordinatePage = () => {
               size="lg"
             >
               {authorities.map((authority) => (
-                <SelectItem key={authority.key} value={String(authority.key)}>
+                <SelectItem key={authority.key} textValue={authority.label}>
                   {authority.label}
                 </SelectItem>
               ))}
