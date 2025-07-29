@@ -48,9 +48,9 @@ const AddProfile = () => {
                 {/* Arabic Question */}
                 <div className="relative w-full">
                 <Input
-                    label="السؤال ( باللغة العربية )"
+                    label="عنوان النص ( باللغة العربية )"
                     variant="bordered"
-                    placeholder="اكتب هنا"
+                    placeholder="ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك"
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                     />
@@ -58,7 +58,7 @@ const AddProfile = () => {
                 {/* English Question */}
                 <div className="relative w-full">
                 <Input
-                    label="السؤال ( باللغة الانجليزية )"
+                    label="عنوان النص ( باللغة الانجليزية )"
                     variant="bordered"
                     placeholder="اكتب هنا"
                     classNames={{ label: "mb-2 text-base" }}
