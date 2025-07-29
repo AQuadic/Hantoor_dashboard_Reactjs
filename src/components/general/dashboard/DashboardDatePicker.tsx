@@ -4,10 +4,16 @@ import DateSelectorIcon from "@/components/icons/general/DateSelectorIcon";
 
 const DashboardDatePicker = () => {
   return (
-    <div dir="ltr" className="max-w-fit ">
+    <div dir={"ltr"} className="max-w-fit ">
       <DateRangePicker
-        selectorIcon={<DateSelectorIcon />}
-        className="rounded-full border bg-pink-200"
+        variant={"bordered"}
+        selectorIcon={
+          <span className="pl-10">
+            <DateSelectorIcon />
+          </span>
+        }
+        className=""
+        radius="full"
       />
     </div>
   );
