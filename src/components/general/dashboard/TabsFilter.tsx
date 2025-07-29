@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -35,23 +34,10 @@ const TabsFilter: React.FC<TabsFilterProps> = ({
             key={filter.titleEn}
             onClick={() => setSelectedFilter(filter.titleEn)}
             className={`relative px-5 py-3 border-2 border-[#DBDEE1] rounded-xl overflow-hidden ${
-              isSelected ? "text-white" : "text-black"
+              isSelected ? "text-white bg-main-black" : "text-black"
             }`}
           >
-            {isSelected && (
-              <motion.div
-                layoutId="tabHighlight"
-                className="absolute inset-0 z-0 bg-main-black rounded-xl"
-                transition={{
-                  type: "spring",
-                  stiffness: 500,
-                  damping: 30,
-                }}
-              />
-            )}
-            <span className="relative z-10">
-              {language === "ar" ? filter.titleAr : filter.titleEn}
-            </span>
+            {language === "ar" ? filter.titleAr : filter.titleEn}
           </button>
         );
       })}
