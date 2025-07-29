@@ -6,57 +6,112 @@ import SearchBar from "../general/dashboard/SearchBar";
 import TabsFilter from "../general/dashboard/TabsFilter";
 
 interface SubordinatesHeaderProps {
-    selectedFilter: string;
-    setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
+  selectedFilter: string;
+  setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
-    selectedFilter,
-    setSelectedFilter,
+  selectedFilter,
+  setSelectedFilter,
 }) => {
-    const filtersData = [
-        { titleAr: "الموديلات", titleEn: "Models" },
-        { titleAr: "انواع الهيكل", titleEn: "Body Types" },
-        { titleAr: "انواع السيارة", titleEn: "Car Types" },
-        { titleAr: "الفئات", titleEn: "Categories" },
-        { titleAr: "منشأ الماركة", titleEn: "Brand Origin" },
-        { titleAr: "عدد المقاعد", titleEn: "Number of Seats" },
-        { titleAr: "انواع الماكينة", titleEn: "Engine Types" },
-        { titleAr: "احجام الماكينة", titleEn: "Engine Sizes" },
-        { titleAr: "السعر من", titleEn: "Price From" },
-        { titleAr: "السعر الى", titleEn: "Price To" },
-    ];
+  const filtersData = [
+    {
+      titleAr: "الموديلات",
+      titleEn: "Models",
+      addText: "اضافة موديل جديد",
+      link: "/models/add",
+    },
+    {
+      titleAr: "انواع الهيكل",
+      titleEn: "Body Types",
+      addText: "اضافة نوع هيكل جديد",
+      link: "/body-types/add",
+    },
+    {
+      titleAr: "انواع السيارة",
+      titleEn: "Car Types",
+      addText: "اضافة نوع سيارة جديد",
+      link: "/car-types/add",
+    },
+    {
+      titleAr: "الفئات",
+      titleEn: "Categories",
+      addText: "اضافة فئة جديدة",
+      link: "/categories/add",
+    },
+    {
+      titleAr: "منشأ الماركة",
+      titleEn: "Brand Origin",
+      addText: "اضافة منشأ ماركة جديد",
+      link: "/brand-origins/add",
+    },
+    {
+      titleAr: "عدد المقاعد",
+      titleEn: "Number of Seats",
+      addText: "اضافة عدد مقاعد جديد",
+      link: "/seat-numbers/add",
+    },
+    {
+      titleAr: "انواع الماكينة",
+      titleEn: "Engine Types",
+      addText: "اضافة نوع ماكينة جديد",
+      link: "/engine-types/add",
+    },
+    {
+      titleAr: "احجام الماكينة",
+      titleEn: "Engine Sizes",
+      addText: "اضافة حجم ماكينة جديد",
+      link: "/engine-sizes/add",
+    },
+    {
+      titleAr: "السعر من",
+      titleEn: "Price From",
+      addText: "اضافة سعر من جديد",
+      link: "/price-from/add",
+    },
+    {
+      titleAr: "السعر الى",
+      titleEn: "Price To",
+      addText: "اضافة سعر الى جديد",
+      link: "/price-to/add",
+    },
+  ];
 
-    return (
-        <div className="pt-2 pb-6 bg-white">
-            <DashboardHeader
-                titleAr="اقسام السيارات"
-                titleEn="Car Sections"
-                items={[
-                    { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
-                    { titleAr: "اقسام السيارات", titleEn: "Car Sections" },
-                ]}
-            />
+  // Get the current filter data
+  const currentFilter =
+    filtersData.find((filter) => filter.titleEn === selectedFilter) ||
+    filtersData[0];
 
-            <TabsFilter
-                filters={filtersData}
-                selectedFilter={selectedFilter}
-                setSelectedFilter={setSelectedFilter}
-            />
+  return (
+    <div className="pt-2 pb-6 bg-white">
+      <DashboardHeader
+        titleAr="اقسام السيارات"
+        titleEn="Car Sections"
+        items={[
+          { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
+          { titleAr: "اقسام السيارات", titleEn: "Car Sections" },
+        ]}
+      />
 
-            <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
-                <div className="flex-1">
-                    <SearchBar term={""} setTerm={() => {}} />
-                </div>
-                <div className="flex-1">
-                    <DashboardDatePicker />
-                </div>
-                <Link to="/">
-                    <DashboardButton title="اضافة موديل جديد" variant="add" />
-                </Link>
-            </div>
+      <TabsFilter
+        filters={filtersData}
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
+      />
+
+      <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
+        <div className="flex-1">
+          <SearchBar term={""} setTerm={() => {}} />
         </div>
-    );
+        <div className="flex-1">
+          <DashboardDatePicker />
+        </div>
+        <Link to={currentFilter.link}>
+          <DashboardButton title={currentFilter.addText} variant="add" />
+        </Link>
+      </div>
+    </div>
+  );
 };
 
 export default ModelHeader;
