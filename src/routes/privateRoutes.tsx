@@ -1,9 +1,9 @@
+import EditProfile from "@/components/setting/profile/EditProfile";
 import AddUsers from "@/components/users/AddUsers";
 import ChangePassword from "@/components/users/ChangePassword";
 import EditUsers from "@/components/users/EditUsers";
 import AddAgentWrapper from "@/pages/agents/AddAgentWrapper";
 import AgentPage from "@/pages/agents/AgentPage";
-import AgentsDetailsPage from "@/pages/agents/AgentsDetailsPage";
 import EditAgentWrapper from "@/pages/agents/EditAgentWrapper";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
@@ -233,7 +233,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <EditWhatsappNumber />,
   },
   {
-    path: "/hi",
-    element: <AgentsDetailsPage />,
+    path: "/profile/edit/:id",
+    element: <EditProfile />,
   },
 ];
