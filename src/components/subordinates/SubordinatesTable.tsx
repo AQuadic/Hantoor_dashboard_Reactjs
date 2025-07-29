@@ -79,13 +79,7 @@ export function SubordinatesTable() {
         {subordinates.map((subordinate, index) => (
           <TableRow key={subordinate.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>
-              <img
-                src={subordinate.image}
-                alt={subordinate.name}
-                className="object-cover w-10 h-10 rounded-full"
-              />
-            </TableCell>
+            <TableCell>{subordinate.name}</TableCell>
             <TableCell>{subordinate.name}</TableCell>
             <TableCell>{subordinate.mobile}</TableCell>
             <TableCell>{subordinate.email}</TableCell>
