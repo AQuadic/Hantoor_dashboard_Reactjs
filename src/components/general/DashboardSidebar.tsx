@@ -2,12 +2,19 @@ import { SidebarLinks } from "@/constants/SidebarLinks";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const DashboardSidebar = () => {
-  const [isOpen, setIsOpen] = useState(false); // Mobile menu state
   const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false); // Desktop collapse state
+  const [isOpen, setIsOpen] = useState(false);
+  const { i18n } = useTranslation();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
+  const currentLang = i18n.language;
+
+  const getLinkLabel = (link: any) => {
+    return currentLang === "ar" ? link.linkAr : link.linkEn;
+  };
   const toggleDesktopSidebar = () => setIsDesktopCollapsed(!isDesktopCollapsed);
 
   return (
@@ -105,7 +112,7 @@ const DashboardSidebar = () => {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{ duration: 0.3 }}
             className="fixed top-0 right-0 z-50 bg-white lg:w-[288px] h-full p-4 shadow-lg lg:hidden"
           >
             <div className="flex justify-end">
@@ -128,6 +135,27 @@ const DashboardSidebar = () => {
 
             {/* Mobile Nav Links */}
             {SidebarLinks.map((link, index) => (
+              <NavLink
+                to={link.path}
+                end={link.path === "/dashboard"}
+                key={index}
+                className={({ isActive }) =>
+                  `flex items-center gap-4 mt-6 px-2 py-2 rounded-md ${
+                    isActive ? "bg-[#2A32F8] text-white" : "text-gray-600"
+                  }`
+                }
+              >
+                {({ isActive }) => (
+                  <>
+                    {isActive && link.activeIcon ? (
+                      <link.activeIcon />
+                    ) : (
+                      <link.icons />
+                    )}
+                    <h1 className="text-sm font-normal">{getLinkLabel(link)}</h1>
+                  </>
+                )}
+              </NavLink>
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: 20 }}
@@ -160,6 +188,36 @@ const DashboardSidebar = () => {
         )}
       </AnimatePresence>
 
+      {/* Desktop Sidebar */}
+      <div
+        className="hidden lg:block bg-white w-[288px] py-4 border-l border-[#E1E1E1]"
+        style={{ boxShadow: "10.27px 10.27px 51.33px 0px #64748B0A" }}
+      >
+        {SidebarLinks.map((link, index) => (
+          <NavLink
+            to={link.path}
+            end={link.path === "/dashboard"}
+            key={index}
+            className={({ isActive }) =>
+              `block mt-4 px-4 py-2 rounded-md ${
+                isActive
+                  ? "bg-[#2A32F8] text-white mx-4"
+                  : "hover:bg-blue-100 text-[#606060] mx-4"
+              }`
+            }
+          >
+            {({ isActive }) => (
+              <div className="flex items-center gap-[5px]">
+                {isActive && link.activeIcon ? (
+                  <link.activeIcon />
+                ) : (
+                  <link.icons />
+                )}
+                <h1 className="text-[15px] font-normal">{getLinkLabel(link)}</h1>
+              </div>
+            )}
+          </NavLink>
+        ))}
       {/* Desktop Sidebar - Made scrollable */}
       <div className="hidden lg:block flex-1 overflow-y-auto bg-white">
         <motion.div

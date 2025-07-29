@@ -41,7 +41,7 @@ const FeaturesTable = () => {
                 <TableCell>{profie.text}</TableCell>
                 <TableCell className="flex gap-[7px] items-center w-full">
                 <Switch />
-                <Link to={`/profile/edit-termsandconditions`}>
+                <Link to={`/features/edit/${profie.id}`}>
                     <Edit />
                 </Link>
 
