@@ -12,21 +12,24 @@ import {
 } from "../ui/table";
 
 export function CarTypesTable() {
-  const brands = [
+  const carTypes = [
     {
       id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      type: "SUV",
+      model: "Extreme",
+      count: "3 من 50",
     },
     {
-      id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      id: 2,
+      type: "سيدان",
+      model: "560",
+      count: "3 من 50",
     },
     {
-      id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      id: 3,
+      type: "كوبية",
+      model: "300",
+      count: "3 من 50",
     },
   ];
 
@@ -35,23 +38,24 @@ export function CarTypesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> الموديل</TableHead>
-          <TableHead className="text-right"> الوكيل</TableHead>
+          <TableHead className="text-right">الفصل</TableHead>
+          <TableHead className="text-right">النوع</TableHead>
+          <TableHead className="text-right">العدد</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brands.map((brand, index) => (
-          <TableRow key={brand.id}>
+        {carTypes.map((car, index) => (
+          <TableRow key={car.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{brand.model}</TableCell>
-            <TableCell className="w-full">{brand.owner}</TableCell>
+            <TableCell>{car.type}</TableCell>
+            <TableCell>{car.model}</TableCell>
+            <TableCell className={"w-full"}>{car.count}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <ActiveStatus />
-              <Link to="/brands/1">
+              <Link to={`/car-types/${car.id}`}>
                 <Edit />
               </Link>
-
               <div className="mt-2">
                 <TableDeleteButton handleDelete={() => {}} />
               </div>

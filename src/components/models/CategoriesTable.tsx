@@ -12,21 +12,24 @@ import {
 } from "../ui/table";
 
 export function CategoriesTable() {
-  const brands = [
+  const previousYearModels = [
     {
       id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      model: "Extreme 4 Runner",
+      status: "1",
+      count: "المعدة من 50 عنصر",
     },
     {
-      id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      id: 2,
+      model: "580 CLE",
+      status: "2",
+      count: "المعدة من 50 عنصر",
     },
     {
-      id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      id: 3,
+      model: "300 أبوطان",
+      status: "3",
+      count: "المعدة من 50 عنصر",
     },
   ];
 
@@ -35,23 +38,24 @@ export function CategoriesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> الموديل</TableHead>
-          <TableHead className="text-right"> الوكيل</TableHead>
+          <TableHead className="text-right">السنة السابقة</TableHead>
+          <TableHead className="text-right">الأوضاع</TableHead>
+          <TableHead className="text-right">العدد</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brands.map((brand, index) => (
-          <TableRow key={brand.id}>
+        {previousYearModels.map((item, index) => (
+          <TableRow key={item.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{brand.model}</TableCell>
-            <TableCell className="w-full">{brand.owner}</TableCell>
+            <TableCell>{item.model}</TableCell>
+            <TableCell>{item.status}</TableCell>
+            <TableCell>{item.count}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <ActiveStatus />
-              <Link to="/brands/1">
+              <Link to={`/categories/${item.id}`}>
                 <Edit />
               </Link>
-
               <div className="mt-2">
                 <TableDeleteButton handleDelete={() => {}} />
               </div>
