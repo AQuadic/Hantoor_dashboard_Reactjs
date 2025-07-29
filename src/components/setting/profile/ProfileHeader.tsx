@@ -20,7 +20,7 @@ const ProfileHeader = () => {
                 </SelectContent>
                 </Select>
             </div>
-            <Link to='/setting/add-whatsapp'>
+            <Link to='/setting/add-profile'>
                 <DashboardButton title={'اضافة صفحة تعريفية جديدة'} variant="add" />
             </Link>
         </div>

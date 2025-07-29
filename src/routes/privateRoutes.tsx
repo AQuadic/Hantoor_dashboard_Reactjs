@@ -1,3 +1,4 @@
+import AddProfile from "@/components/setting/profile/AddProfile";
 import EditProfile from "@/components/setting/profile/EditProfile";
 import AddUsers from "@/components/users/AddUsers";
 import ChangePassword from "@/components/users/ChangePassword";
@@ -231,6 +232,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/setting/edit-whatsapp/:id",
     element: <EditWhatsappNumber />,
+  },
+  {
+    path: "/setting/add-profile",
+    element: <AddProfile />,
   },
   {
     path: "/profile/edit/:id",
