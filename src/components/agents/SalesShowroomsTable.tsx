@@ -1,6 +1,4 @@
 import Location from "../icons/agents/Location";
-import Phone from "../icons/agents/Phone";
-import Whatsapp from "../icons/agents/Whatsapp";
 
 const SalesShowroomsTable = () => {
     return (
@@ -21,8 +19,8 @@ const SalesShowroomsTable = () => {
                 </div>
                 <div className="flex items-center gap-4">
                 <Location />
-                <Whatsapp />
-                <Phone />
+                <img src="../../../public/images/whatsapp.svg" />
+                <img src="../../../public/images/phone.svg" />
                 </div>
             </div>
             </div>

@@ -86,11 +86,10 @@ const DashboardChart = () => {
           <Bar
             dataKey="cars"
             fill="url(#blueGradient)"
-            radius={[8, 8, 0, 0]}
+            radius={[8, 8, 8, 8]}
             barSize={12}
             background={{
               fill: "#E0E7FF",
-              radius: [8, 8, 0, 0],
             }}
           />
         </BarChart>
