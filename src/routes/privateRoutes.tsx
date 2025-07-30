@@ -46,6 +46,7 @@ import AddModel from "@/pages/models/AddModel";
 import AddFeatures from "@/pages/features/AddFeatures";
 import EditFeatures from "@/pages/features/EditFeatures";
 import CarsPage from "@/pages/cars/CarsPage";
+import AddCars from "@/pages/cars/AddCars";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -276,5 +277,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/cars",
     element: <CarsPage />,
+  },
+  {
+    path: "/cars/add",
+    element: <AddCars />,
   },
 ];
