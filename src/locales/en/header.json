@@ -1,3 +1,5 @@
 {
-    
+    "dashboard":  "Dashboard",
+    "NumofCars": "Number of cars",
+    "NumofUsers": "Number of users"
 }

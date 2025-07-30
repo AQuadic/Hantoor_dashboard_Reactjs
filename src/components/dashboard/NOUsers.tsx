@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface UserData {
   label: string;
@@ -94,10 +95,12 @@ const NOUsers = () => {
     };
   });
 
+  const { t } = useTranslation("header");
+
   return (
     <section className="w-[251px] h-full bg-[#FFFFFF] rounded-[15px] mt-[15px] p-6">
       <h2 className="text-[#000000] text-[23px] font-bold mb-4">
-        عدد المستخدمين
+        {t('NumofUsers')}
       </h2>
 
       <div className="flex justify-center mb-8">
