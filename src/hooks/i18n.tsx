@@ -9,6 +9,9 @@ import loginEn from "../locales/en/login.json";
 import usersAr from "../locales/ar/users.json";
 import usersEn from "../locales/en/users.json";
 
+import countryAr from "../locales/ar/country.json";
+import countryEn from "../locales/en/country.json";
+
 // Ensure we're in browser environment
 const savedLang =
   typeof window !== "undefined"
@@ -27,11 +30,13 @@ i18n.use(initReactI18next).init({
       header: headerEn,
       login: loginEn,
       users: usersEn,
+      country: countryEn,
     },
     ar: {
       header: headerAr,
       login: loginAr,
       users: usersAr,
+      country: countryAr,
     },
   },
 });

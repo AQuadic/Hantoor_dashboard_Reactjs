@@ -1,0 +1,11 @@
+{
+    "arCountry": "Country (in Arabic)",
+    "enCountry": "Country (in English)",
+    "arCurrency": "Currency (in Arabic)",
+    "enCurrency": "Currency (in English)",
+    "tax": "Service Fee",
+    "time": "Advanced Search Service Duration",
+    "month": "Month",
+    "day": "Day",
+    "year": "Year"
+}
