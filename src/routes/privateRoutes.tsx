@@ -52,6 +52,7 @@ import AddBodyType from "@/pages/models/AddBodyType";
 import EditBodyType from "@/pages/models/EditBodyType";
 import AddCarTypes from "@/pages/models/AddCarTypes";
 import EditCarTypes from "@/pages/models/EditCarTypes";
+import AddCategories from "@/pages/models/AddCategories";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -258,6 +259,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/car-types/:id",
     element: <EditCarTypes />,
+  },
+  {
+    path: "/categories/add",
+    element: <AddCategories />,
   },
 
   // Setting route
