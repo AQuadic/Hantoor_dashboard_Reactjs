@@ -83,7 +83,7 @@ return (
             </div>
     
             <div className="mt-4">
-                <DashboardButton title={"اضافة"} />
+                <DashboardButton titleAr="حفظ" titleEn="Save" />
             </div>
             </div>
         </section>

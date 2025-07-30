@@ -56,7 +56,7 @@ const FAQsTable = () => {
                 <TableCell>{question.country}</TableCell>
                 <TableCell>{question.count}</TableCell>
                 <TableCell>{question.count}</TableCell>
-                <TableCell>{question.date}</TableCell>
+                <TableCell className="w-full">{question.date}</TableCell>
                 <TableCell
                 className="flex gap-[7px] items-center"
                 onClick={(e) => e.stopPropagation()} 

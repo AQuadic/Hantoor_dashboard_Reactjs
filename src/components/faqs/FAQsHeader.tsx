@@ -19,13 +19,18 @@ const FAQsHeader = () => {
 
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
             <div className="flex-1">
-            <SearchBar term={"ابحث بالاسم"} setTerm={() => {}} />
+              <SearchBar
+                termAr={"ابحث بالاسم"}
+                termEn={"Search by name"}
+                setTermAr={() => {}} 
+                setTermEn={() => {}} 
+                />
             </div>
             <div className="flex-1">
             <DashboardDatePicker />
             </div>
             <Link to="/faq/add">
-            <DashboardButton title={"اضافة سؤال جديد"} variant="add" />
+            <DashboardButton titleAr={"اضافة سؤال جديد"} titleEn={"Add a new question"} variant='add' />
             </Link>
         </div>
         </div>
