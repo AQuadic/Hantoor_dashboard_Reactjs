@@ -1,7 +1,35 @@
 import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
+import CarDetailsField from "@/components/cars/addcars/CarDetailsField";
+import { CarDetailsFieldsTypes } from "@/types/CarTypes";
+import { Plus } from "lucide-react";
+import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 
 const CarDetails = () => {
+  const [carDetailsFields, setCarDetailsFields] = React.useState<
+    CarDetailsFieldsTypes[]
+  >([
+    {
+      image: null,
+      titleEn: "",
+      titleAr: "",
+      descriptionEn: "",
+      descriptionAr: "",
+    },
+  ]);
+
+  const addCarDetailsField = () => {
+    setCarDetailsFields([
+      ...carDetailsFields,
+      {
+        image: null,
+        titleEn: "",
+        titleAr: "",
+        descriptionEn: "",
+        descriptionAr: "",
+      },
+    ]);
+  };
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
       <h1 className="text-lg text-[#2A32F8] font-bold mb-2">بيانات السيارة</h1>
@@ -126,6 +154,16 @@ const CarDetails = () => {
           <SelectItem>test </SelectItem>
         </Select>
       </div>
+
+      <div>
+        {carDetailsFields.map((field, index) => (
+          <CarDetailsField field={field} key={index} />
+        ))}
+      </div>
+      <AddFieldButton
+        title={" اضافة بيانات اخرى"}
+        onClick={addCarDetailsField}
+      />
     </div>
   );
 };
