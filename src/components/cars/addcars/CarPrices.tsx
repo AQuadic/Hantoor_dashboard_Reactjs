@@ -64,7 +64,7 @@ const CarPrices = () => {
           </div>
         </div>
       )}
-      <div className="mt-4  w-[calc(50%+16px)] h-[46px] border border-[#DBDEE1] rounded-[34px] flex items-center justify-around">
+      <div className="mt-4  w-[calc(50%+16px)] h-[46px] border border-[#DBDEE1] rounded-[34px] flex items-center px-4 gap-16">
         <Checkbox defaultSelected size="md">
           <p className="text-[#1E1B1B] md:text-base text-sm font-normal">
             شامل الضرائب
