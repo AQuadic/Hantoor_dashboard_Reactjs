@@ -8,12 +8,26 @@ const CarDetails = () => {
     CarDetailsFieldsTypes[]
   >([
     {
+      image: null,
       titleEn: "",
       titleAr: "",
       descriptionEn: "",
       descriptionAr: "",
     },
   ]);
+
+  const addCarDetailsField = () => {
+    setCarDetailsFields([
+      ...carDetailsFields,
+      {
+        image: null,
+        titleEn: "",
+        titleAr: "",
+        descriptionEn: "",
+        descriptionAr: "",
+      },
+    ]);
+  };
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
       <h1 className="text-lg text-[#2A32F8] font-bold mb-2">بيانات السيارة</h1>

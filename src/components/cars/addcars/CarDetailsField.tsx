@@ -2,6 +2,7 @@ import React from "react";
 import { CarDetailsFieldsTypes } from "@/types/CarTypes";
 import { Input } from "@heroui/react";
 import ImageInput from "@/components/general/ImageInput";
+import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 
 interface CarDetailsFieldProps {
   field: CarDetailsFieldsTypes;
@@ -50,6 +51,9 @@ const CarDetailsField = ({ field }: CarDetailsFieldProps) => {
           size="lg"
         />
       </div>
+      <span>
+        <TableDeleteButton handleDelete={() => {}} />
+      </span>
     </div>
   );
 };
