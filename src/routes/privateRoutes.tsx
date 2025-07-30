@@ -56,6 +56,7 @@ import AddCategories from "@/pages/models/AddCategories";
 import EditCategory from "@/pages/models/EditCategory";
 import AddBrandOrigins from "@/pages/models/AddBrandOrigins";
 import EditBrandOrigins from "@/pages/models/EditBrandOrigins";
+import AddSeats from "@/pages/models/AddSeats";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -278,6 +279,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/brand-origins/:id",
     element: <EditBrandOrigins />,
+  },
+  {
+    path: "/seat-numbers/add",
+    element: <AddSeats />,
   },
 
   // Setting route
