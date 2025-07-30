@@ -54,6 +54,7 @@ import AddCarTypes from "@/pages/models/AddCarTypes";
 import EditCarTypes from "@/pages/models/EditCarTypes";
 import AddCategories from "@/pages/models/AddCategories";
 import EditCategory from "@/pages/models/EditCategory";
+import AddBrandOrigins from "@/pages/models/AddBrandOrigins";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -268,6 +269,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/categories/:id",
     element: <EditCategory />,
+  },
+  {
+    path: "/brand-origins/add",
+    element: <AddBrandOrigins />,
   },
 
   // Setting route
