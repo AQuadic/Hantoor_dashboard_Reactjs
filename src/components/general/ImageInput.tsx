@@ -25,6 +25,9 @@ const ImageInput: React.FC<ImageInputProps> = ({
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  // Determine if we should show icon-only mode
+  const isIconMode = (width ?? 180) < 150;
+
   // Create preview when image changes
   useEffect(() => {
     if (image) {
@@ -56,7 +59,6 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-
     const files = e.dataTransfer.files;
     if (files.length > 0) {
       handleFileSelect(files[0]);
@@ -89,17 +91,17 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   return (
     <>
- <div
-  className={`bg-white ${isRounded ? "rounded-full" : "rounded-lg"} 
-              flex flex-col gap-5 items-center justify-center 
-              border-dashed border-2 cursor-pointer relative overflow-hidden`}
-  style={{ width: width ?? 180, height: height ?? 180 }}
-  onDragOver={handleDragOver}
-  onDragLeave={handleDragLeave}
-  onDrop={handleDrop}
-  onClick={handleClick}
->
-
+      <div
+        className={`bg-white ${isRounded ? "rounded-full" : "rounded-lg"} 
+                    flex flex-col items-center justify-center 
+                    border-dashed border-2 cursor-pointer relative overflow-hidden
+                    ${isIconMode ? "gap-0" : "gap-5"}`}
+        style={{ width: width ?? 180, height: height ?? 180 }}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        onClick={handleClick}
+      >
         {/* Hidden file input */}
         <input
           ref={fileInputRef}
@@ -113,10 +115,11 @@ const ImageInput: React.FC<ImageInputProps> = ({
         {image && (
           <button
             onClick={handleRemoveImage}
-            className="absolute top-2 right-2 bg-black text-white rounded-full p-1 transition-colors duration-200 z-10 hover:bg-gray-800"
+            className={`absolute ${isIconMode ? "top-1 right-1" : "top-2 right-2"} 
+                       bg-black text-white rounded-full p-1 transition-colors duration-200 z-10 hover:bg-gray-800`}
             aria-label="Remove image"
           >
-            <X size={16} />
+            <X size={isIconMode ? 12 : 16} />
           </button>
         )}
 
@@ -134,9 +137,12 @@ const ImageInput: React.FC<ImageInputProps> = ({
             <img
               src="/images/addImage.png"
               alt="Add Image"
-              className="w-[50px] h-[50px]"
+              className={isIconMode ? "w-[24px] h-[24px]" : "w-[50px] h-[50px]"}
             />
-            <p className="text-lg text-primary underline">اضافة صورة</p>
+            {/* Only show text when not in icon mode */}
+            {!isIconMode && (
+              <p className="text-lg text-primary underline">اضافة صورة</p>
+            )}
           </>
         )}
       </div>
