@@ -35,8 +35,7 @@ export function BrandOriginTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">صفاءة المفرقة</TableHead>
-          <TableHead className="text-right">المعدل</TableHead>
+          <TableHead className="text-right"> منشأ الماركة</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
@@ -44,8 +43,7 @@ export function BrandOriginTable() {
         {brandOrigins.map((brand, index) => (
           <TableRow key={brand.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{brand.origin}</TableCell>
-            <TableCell>{brand.count}</TableCell>
+            <TableCell className={"w-full"}>{brand.origin}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <ActiveStatus />
               <Link to={`/brand-origins/${brand.id}`}>
