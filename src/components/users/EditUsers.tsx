@@ -1,21 +1,23 @@
 import DashboardButton from '../general/dashboard/DashboardButton';
 import DashboardHeader from '../general/dashboard/DashboardHeader'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectItem} from "@heroui/react";
 const EditUsers = () => {
+    const countries = [
+        {key: "1", label: "مصر"},
+        {key: "2", label: "مصر"},
+        {key: "3", label: "مصر"},
+        {key: "4", label: "مصر"},
+        {key: "5", label: "مصر"},
+        {key: "6", label: "مصر"},
+    ];
     return (
         <section>
             <DashboardHeader 
-            titleAr={"لوحة التحكم"} titleEn={"Dashboard"} 
+            titleAr={"تعديل المستخدم"} titleEn={"Edit user"} 
             items={[
                 { titleAr: "لوحة التحكم", titleEn: "Dashbard", link: "/" },
                 { titleAr: "المستخدمين", titleEn: "Users", link: "/users" },
-                { titleAr: "إضافة مستخدم جدبد", titleEn: "Add new user", link: "/dashboard/addUsers" },
+                { titleAr: "تعديل المستخدم", titleEn: "Edit user", link: "/dashboard/addUsers" },
             ]} 
             />
     
@@ -66,20 +68,19 @@ const EditUsers = () => {
             </div>
             <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                 {/* Country */}
-                <div className="w-1/2">
-                <Select>
-                    <SelectTrigger
-                    className="w-full !h-[53px] rounded-[12px] mt-4"
-                    dir="rtl"
+                <div className="relative w-1/2 mt-[18px] rtl:pl-2 ltr:pr-2">
+                    <Select
+                    items={countries}
+                    label="البلد"
+                    placeholder="الجميع"
+                    classNames={{
+                        trigger: 'h-[53px] !h-[53px] min-h-[53px] bg-white border',
+                        label: '!text-[15px] !text-[#000000]',
+                        listbox: 'bg-white shadow-md',
+                    }}
                     >
-                    <SelectValue placeholder="البلد" />
-                    </SelectTrigger>
-                    <SelectContent dir="rtl">
-                    <SelectItem value="1">الامارات</SelectItem>
-                    <SelectItem value="2">الامارات</SelectItem>
-                    <SelectItem value="3">الامارات</SelectItem>
-                    </SelectContent>
-                </Select>
+                    {(country) => <SelectItem>{country.label}</SelectItem>}
+                    </Select>
                 </div>
             </div>
     
