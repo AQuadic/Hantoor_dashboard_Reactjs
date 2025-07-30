@@ -2,6 +2,8 @@ import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
 import CarDetailsField from "@/components/cars/addcars/CarDetailsField";
 import { CarDetailsFieldsTypes } from "@/types/CarTypes";
+import { Plus } from "lucide-react";
+import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 
 const CarDetails = () => {
   const [carDetailsFields, setCarDetailsFields] = React.useState<
@@ -158,6 +160,10 @@ const CarDetails = () => {
           <CarDetailsField field={field} key={index} />
         ))}
       </div>
+      <AddFieldButton
+        title={" اضافة بيانات اخرى"}
+        onClick={addCarDetailsField}
+      />
     </div>
   );
 };
