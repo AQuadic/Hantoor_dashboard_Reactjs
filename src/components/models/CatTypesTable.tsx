@@ -38,9 +38,8 @@ export function CarTypesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">الفصل</TableHead>
           <TableHead className="text-right">النوع</TableHead>
-          <TableHead className="text-right">العدد</TableHead>
+          <TableHead className="text-right">الهيكل</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
@@ -49,8 +48,7 @@ export function CarTypesTable() {
           <TableRow key={car.id}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>{car.type}</TableCell>
-            <TableCell>{car.model}</TableCell>
-            <TableCell className={"w-full"}>{car.count}</TableCell>
+            <TableCell className="w-full">{car.model}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <ActiveStatus />
               <Link to={`/car-types/${car.id}`}>

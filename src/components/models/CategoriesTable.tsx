@@ -16,19 +16,19 @@ export function CategoriesTable() {
     {
       id: 1,
       model: "Extreme 4 Runner",
-      status: "1",
+      status: "Extreme",
       count: "المعدة من 50 عنصر",
     },
     {
       id: 2,
       model: "580 CLE",
-      status: "2",
+      status: "Extreme",
       count: "المعدة من 50 عنصر",
     },
     {
       id: 3,
       model: "300 أبوطان",
-      status: "3",
+      status: "Extreme",
       count: "المعدة من 50 عنصر",
     },
   ];
@@ -38,10 +38,8 @@ export function CategoriesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">السنة السابقة</TableHead>
-          <TableHead className="text-right">الأوضاع</TableHead>
-          <TableHead className="text-right">العدد</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right"> اسم الفئة</TableHead>
+          <TableHead className="text-right">النوع</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -49,8 +47,7 @@ export function CategoriesTable() {
           <TableRow key={item.id}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>{item.model}</TableCell>
-            <TableCell>{item.status}</TableCell>
-            <TableCell>{item.count}</TableCell>
+            <TableCell className="w-full">{item.status}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <ActiveStatus />
               <Link to={`/categories/${item.id}`}>

@@ -15,17 +15,17 @@ export function NumberOfSeatsTable() {
   const brands = [
     {
       id: 1,
-      model: " 2024",
+      model: " 2",
       owner: "الشركة الدولية التجارية",
     },
     {
       id: 1,
-      model: " 2024",
+      model: " 4",
       owner: "الشركة الدولية التجارية",
     },
     {
       id: 1,
-      model: " 2024",
+      model: " 5",
       owner: "الشركة الدولية التجارية",
     },
   ];
@@ -35,8 +35,7 @@ export function NumberOfSeatsTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> الموديل</TableHead>
-          <TableHead className="text-right"> الوكيل</TableHead>
+          <TableHead className="text-right"> عدد المقاعد</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
@@ -44,8 +43,7 @@ export function NumberOfSeatsTable() {
         {brands.map((brand, index) => (
           <TableRow key={brand.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{brand.model}</TableCell>
-            <TableCell className="w-full">{brand.owner}</TableCell>
+            <TableCell className="w-full">{brand.model}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <ActiveStatus />
               <Link to="/brands/1">
