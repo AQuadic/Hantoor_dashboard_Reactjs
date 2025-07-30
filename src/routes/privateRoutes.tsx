@@ -51,6 +51,12 @@ import EditModel from "@/pages/models/EditModel";
 import AddBodyType from "@/pages/models/AddBodyType";
 import EditBodyType from "@/pages/models/EditBodyType";
 import AddCarTypes from "@/pages/models/AddCarTypes";
+import EditCarTypes from "@/pages/models/EditCarTypes";
+import AddCategories from "@/pages/models/AddCategories";
+import EditCategory from "@/pages/models/EditCategory";
+import AddBrandOrigins from "@/pages/models/AddBrandOrigins";
+import EditBrandOrigins from "@/pages/models/EditBrandOrigins";
+import AddSeats from "@/pages/models/AddSeats";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -253,6 +259,30 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/car-types/add",
     element: <AddCarTypes />,
+  },
+  {
+    path: "/car-types/:id",
+    element: <EditCarTypes />,
+  },
+  {
+    path: "/categories/add",
+    element: <AddCategories />,
+  },
+  {
+    path: "/categories/:id",
+    element: <EditCategory />,
+  },
+  {
+    path: "/brand-origins/add",
+    element: <AddBrandOrigins />,
+  },
+  {
+    path: "/brand-origins/:id",
+    element: <EditBrandOrigins />,
+  },
+  {
+    path: "/seat-numbers/add",
+    element: <AddSeats />,
   },
 
   // Setting route
