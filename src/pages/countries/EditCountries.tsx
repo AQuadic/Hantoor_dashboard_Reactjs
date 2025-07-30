@@ -1,9 +1,11 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton"
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader"
 import { Input } from "@heroui/react"
+import { useTranslation } from "react-i18next";
 
 const EditCountries = () => {
-      return (
+    const { t } = useTranslation("country");
+    return (
         <section>
             <DashboardHeader
                 titleAr="تعديل البلد"
@@ -20,7 +22,7 @@ const EditCountries = () => {
                     {/* Arabic country */}
                     <div className="relative w-full">
                     <Input
-                        label="البلد ( باللغة العربية )"
+                        label={t('arCountry')}
                         variant="bordered"
                         placeholder="الامارات"
                         classNames={{ label: "mb-2 text-base" }}
@@ -30,7 +32,7 @@ const EditCountries = () => {
                     {/* English country */}
                     <div className="relative w-full">
                     <Input
-                        label="البلد ( باللغة الانجليزية )"
+                        label={t('enCountry')}
                         variant="bordered"
                         placeholder="اكتب هنا"
                         classNames={{ label: "mb-2 text-base" }}
@@ -43,7 +45,7 @@ const EditCountries = () => {
                     {/* Arabic currency */}
                     <div className="relative w-full">
                     <Input
-                        label="العملة ( باللغة العربية )"
+                        label={t('arCurrency')}
                         variant="bordered"
                         placeholder="درهم اماراتي"
                         classNames={{ label: "mb-2 text-base" }}
@@ -53,7 +55,7 @@ const EditCountries = () => {
                     {/* English currency */}
                     <div className="relative w-full">
                     <Input
-                        label="العملة ( باللغة الانجليزية )"
+                        label={t('enCurrency')}
                         variant="bordered"
                         placeholder="اكتب هنا"
                         classNames={{ label: "mb-2 text-base" }}
@@ -65,7 +67,7 @@ const EditCountries = () => {
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     <div className="relative w-full">
                     <Input
-                        label="رسوم الخدمة"
+                        label={t('tax')}
                         variant="bordered"
                         placeholder="20 درهم"
                         classNames={{ label: "mb-2 text-base" }}
@@ -73,13 +75,13 @@ const EditCountries = () => {
                         />
                     </div>
                     <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                        <p className="text-right text-black text-sm">مدة خدمة البحث المتقدم</p>
+                        <p className="text-right text-black text-sm">{t('time')}</p>
                         <div className="flex items-center justify-between gap-1">
                             <span className="text-gray-500 text-sm">3</span>
                             <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                            <option value="شهر">شهر</option>
-                            <option value="أيام">أيام</option>
-                            <option value="سنوات">سنوات</option>
+                            <option value="شهر">{t('month')}</option>
+                            <option value="أيام">{t('day')}</option>
+                            <option value="سنوات">{t('year')}</option>
                             </select>
                         </div>
                         </div>
