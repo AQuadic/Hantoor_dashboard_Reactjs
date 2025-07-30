@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import {
   Table,
@@ -10,23 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Switch } from "@heroui/react";
 
 export function PriceToTable() {
-  const brands = [
+  const priceto = [
     {
       id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      price: "500.000 درهم",
     },
     {
       id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      price: "600.000 درهم",
     },
     {
       id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      price: "700.000 درهم",
     },
   ];
 
@@ -35,19 +32,17 @@ export function PriceToTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> الموديل</TableHead>
-          <TableHead className="text-right"> الوكيل</TableHead>
+          <TableHead className="text-right"> السعر الى</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brands.map((brand, index) => (
-          <TableRow key={brand.id}>
+        {priceto.map((price, index) => (
+          <TableRow key={price.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{brand.model}</TableCell>
-            <TableCell className="w-full">{brand.owner}</TableCell>
+            <TableCell className="w-full">{price.price}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <ActiveStatus />
+              <Switch />
               <Link to="/brands/1">
                 <Edit />
               </Link>
