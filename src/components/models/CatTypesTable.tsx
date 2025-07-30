@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import {
   Table,
@@ -10,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Switch } from "@heroui/react";
 
 export function CarTypesTable() {
   const carTypes = [
@@ -50,7 +50,7 @@ export function CarTypesTable() {
             <TableCell>{car.type}</TableCell>
             <TableCell className="w-full">{car.model}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <ActiveStatus />
+              <Switch />
               <Link to={`/car-types/${car.id}`}>
                 <Edit />
               </Link>
