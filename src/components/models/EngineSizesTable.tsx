@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import {
   Table,
@@ -10,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Switch } from "@heroui/react";
 
 export function EngineSizesTable() {
   const brands = [
@@ -42,8 +42,8 @@ export function EngineSizesTable() {
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{brand.Size}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <ActiveStatus />
-              <Link to="/brands/1">
+              <Switch />
+              <Link to={`/engine-size/edit/${brand.id}`}>
                 <Edit />
               </Link>
 

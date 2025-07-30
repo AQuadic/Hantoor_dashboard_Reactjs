@@ -61,7 +61,7 @@ const EditBodyType = () => {
                     </Select>
                 </div>
                 <div className='mt-4'>
-                    <DashboardButton title='اضافة' />
+                    <DashboardButton title='حفظ' />
                 </div>
             </div>
         </div>

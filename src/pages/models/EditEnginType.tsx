@@ -3,12 +3,12 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input } from "@heroui/react";
 import React from "react";
 
-const EditBrandOrigins = () => {
+const EditEnginType = () => {
   return (
     <div>
       <DashboardHeader
-        titleAr="تعديل منشأ الماركة"
-        titleEn="Edit brand origin"
+        titleAr="تعديل نوع الماكينة"
+        titleEn="Edit engine type"
         items={[
           {
             titleAr: "الصفحة الرئيسية",
@@ -21,8 +21,8 @@ const EditBrandOrigins = () => {
             link: "/models",
           },
           {
-            titleAr:"تعديل منشأ الماركة",
-            titleEn: "Edit brand origin",
+            titleAr:"تعديل نوع الماكينة",
+            titleEn: "Edit engine type",
             link: "/",
           },
         ]}
@@ -32,15 +32,15 @@ const EditBrandOrigins = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label="اسم منشأ الماركة ( باللغة العربية )"
+                label="نوع الماكينة ( باللغة العربية )"
                 variant="bordered"
-                placeholder="أوروبا"
+                placeholder="بنزين"
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
             </div>
             <Input
-              label="اسم منشأ الماركة ( باللغة الانجليزية )"
+              label="نوع الماكينة ( باللغة الانجليزية )"
               variant="bordered"
               placeholder="اكتب هنا"
               className="flex-1"
@@ -56,4 +56,4 @@ const EditBrandOrigins = () => {
   );
 };
 
-export default EditBrandOrigins;
+export default EditEnginType;
