@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import {
   Table,
@@ -10,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Switch } from "@heroui/react";
 
 export function CategoriesTable() {
   const previousYearModels = [
@@ -49,7 +49,7 @@ export function CategoriesTable() {
             <TableCell>{item.model}</TableCell>
             <TableCell className="w-full">{item.status}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <ActiveStatus />
+              <Switch />
               <Link to={`/categories/${item.id}`}>
                 <Edit />
               </Link>
