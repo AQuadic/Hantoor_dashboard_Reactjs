@@ -38,7 +38,10 @@ const SubordinatesChangePassword = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton title={"حفظ"} />
+          <DashboardButton 
+            titleEn={"Save"}
+              titleAr={"حفظ"}  
+          />
         </div>
       </div>
     </section>

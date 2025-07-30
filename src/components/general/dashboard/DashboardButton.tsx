@@ -1,9 +1,11 @@
 import { Button } from "@heroui/react";
 import { Plus } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface DashboardButtonProps {
-  title: string;
+  titleEn: string;
+  titleAr: string;
   variant?: "primary" | "add";
   isLoading?: boolean;
   onClick?: () => void;
@@ -18,12 +20,16 @@ const AddIcon = () => {
 };
 
 const DashboardButton: React.FC<DashboardButtonProps> = ({
-  title,
+  titleEn,
+  titleAr,
   onClick,
   variant,
   isLoading = false,
 }) => {
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
   const isAdd = variant === "add";
+
   return (
     <Button
       type="button"
@@ -41,7 +47,7 @@ const DashboardButton: React.FC<DashboardButtonProps> = ({
       })}
       fullWidth
     >
-      {title}
+      {isArabic ? titleAr : titleEn}
     </Button>
   );
 };

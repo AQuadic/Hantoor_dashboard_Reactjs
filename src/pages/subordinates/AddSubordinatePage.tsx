@@ -1,6 +1,6 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import DashboardPhoneInput from "@/components/general/dashboard/DashboardPhoneInput";
+// import DashboardPhoneInput from "@/components/general/dashboard/DashboardPhoneInput";
 import ImageInput from "@/components/general/ImageInput";
 import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
@@ -118,7 +118,10 @@ const AddSubordinatePage = () => {
             />
           </div>
 
-          <DashboardButton title="إضافة" />
+          <DashboardButton 
+            titleEn={"Add"}
+            titleAr={"اضافة"}  
+          />
         </div>
       </div>
     </div>

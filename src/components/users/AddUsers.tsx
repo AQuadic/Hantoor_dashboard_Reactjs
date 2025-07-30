@@ -122,7 +122,10 @@ const AddUsers = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton title={"اضافة"} />
+          <DashboardButton 
+            titleAr={"اضافة"} 
+            titleEn={"Save"} 
+          />
         </div>
       </div>
     </section>

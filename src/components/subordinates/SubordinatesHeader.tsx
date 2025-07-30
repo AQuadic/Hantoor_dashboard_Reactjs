@@ -43,18 +43,29 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
 
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
-          <SearchBar term={"ابحث بالاسم, رقم الجوال, البريد الالكتروني"} setTerm={() => {}} />
+          <SearchBar
+            termAr={"ابحث بالاسم, رقم الجوال, البريد الالكتروني"}
+            termEn={"Search by name, mobile number, email"}
+            setTermAr={() => {}} 
+            setTermEn={() => {}} 
+            />
         </div>
         <div className="flex-1">
           <DashboardDatePicker />
         </div>
         {selectedFilter === "Subordinates" ? (
           <Link to="/subordinates/add">
-            <DashboardButton title={"اضافة مسؤول فرعي جديد"} variant="add" />
+            <DashboardButton 
+              titleEn={"Add a new Subordinate"} 
+              titleAr={"اضافة مسؤول فرعي جديد"} 
+              variant="add" />
           </Link>
         ) : (
           <Link to="/subordinates/permissions/add">
-            <DashboardButton title={"اضافة صلاحية جديدة "} variant="add" />
+            <DashboardButton 
+              titleEn={"Add new permission"}
+              titleAr={"اضافة صلاحية جديدة "}  
+              variant="add" />
           </Link>
         )}
       </div>
