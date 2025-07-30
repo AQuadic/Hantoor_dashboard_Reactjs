@@ -18,7 +18,7 @@ const CarsSelect = () => {
                     label="الماركة"
                     placeholder="الجميع"
                     classNames={{
-                        trigger: '!h-[46px] bg-white border py-7.5',
+                        trigger: 'h-[46px] !h-[46px] min-h-[46px] bg-white border py-0',
                         label: 'text-sm text-gray-700',
                         listbox: 'bg-white shadow-md',
                     }}
@@ -33,7 +33,7 @@ const CarsSelect = () => {
                     label="النوع"
                     placeholder="الجميع"
                     classNames={{
-                        trigger: '!h-[46px] bg-white border py-7.5',
+                        trigger: 'h-[46px] !h-[46px] min-h-[46px] bg-white border py-0',
                         label: 'text-sm text-gray-700',
                         listbox: 'bg-white shadow-md',
                     }}
@@ -48,7 +48,7 @@ const CarsSelect = () => {
                     label="الموديل"
                     placeholder="الجميع"
                     classNames={{
-                        trigger: '!h-[46px] bg-white border py-7.5',
+                        trigger: 'h-[46px] !h-[46px] min-h-[46px] bg-white border py-0',
                         label: 'text-sm text-gray-700',
                         listbox: 'bg-white shadow-md',
                     }}
@@ -57,7 +57,7 @@ const CarsSelect = () => {
                 </Select>
             </div>
 
-            <div className="md:w-[340px] w-full h-[64px] border border-[#DBDEE1] rounded-[34px] flex items-center justify-around">
+            <div className="md:w-[340px] w-full h-[46px] border border-[#DBDEE1] rounded-[34px] flex items-center justify-around">
                 <div className="flex items-center">
                     <Checkbox defaultSelected size="md"></Checkbox>
                     <p className="text-[#1E1B1B] md:text-base text-sm font-normal">تحتوي على خصم</p>

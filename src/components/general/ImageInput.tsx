@@ -89,17 +89,17 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   return (
     <>
-      <div
-        className={`bg-white ${
-          isRounded ? "rounded-full" : "rounded-lg"
-        }  flex flex-col gap-5 items-center justify-center border-dashed border-2 cursor-pointer relative overflow-hidden ${
-          width ? `w-[${width}px]` : "w-[180px]"
-        } ${height ? `h-[${height}px]` : "h-[180px]"}`}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={handleClick}
-      >
+ <div
+  className={`bg-white ${isRounded ? "rounded-full" : "rounded-lg"} 
+              flex flex-col gap-5 items-center justify-center 
+              border-dashed border-2 cursor-pointer relative overflow-hidden`}
+  style={{ width: width ?? 180, height: height ?? 180 }}
+  onDragOver={handleDragOver}
+  onDragLeave={handleDragLeave}
+  onDrop={handleDrop}
+  onClick={handleClick}
+>
+
         {/* Hidden file input */}
         <input
           ref={fileInputRef}

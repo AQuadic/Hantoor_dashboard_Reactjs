@@ -25,7 +25,7 @@ const CarsHeader = () => {
             <div className="flex-1">
             <DashboardDatePicker />
             </div>
-            <Link to="/countries/add">
+            <Link to="/cars/add">
                 <DashboardButton title={"اضافة سيارة جديدة"} variant="add" />
             </Link>
         </div>
