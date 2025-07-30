@@ -19,13 +19,18 @@ const BrandsHeader = () => {
 
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
-          <SearchBar term={"ابحث بالاسم"} setTerm={() => {}} />
+            <SearchBar
+            termAr={"ابحث بالاسم"}
+            termEn={"Search by name"}
+            setTermAr={() => {}} 
+            setTermEn={() => {}} 
+            />
         </div>
         <div className="flex-1">
           <DashboardDatePicker />
         </div>
         <Link to="/brands/add">
-          <DashboardButton title={"اضافة ماركة جديدة"} variant="add" />
+          <DashboardButton titleAr={"اضافة ماركة جديدة"} titleEn={"Add new brand"} variant="add" />
         </Link>
       </div>
     </div>

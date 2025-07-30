@@ -59,7 +59,7 @@ const AddBrand = () => {
             />
           </div>
 
-          <DashboardButton title=" حفظ" />
+          <DashboardButton titleAr=" اضافة" titleEn="Add" />
         </div>
       </div>
     </div>
