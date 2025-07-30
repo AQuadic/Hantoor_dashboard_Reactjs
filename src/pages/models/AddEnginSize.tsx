@@ -3,12 +3,12 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input } from "@heroui/react";
 import React from "react";
 
-const EditEnginType = () => {
+const AddEnginSize = () => {
   return (
     <div>
       <DashboardHeader
-        titleAr="تعديل نوع الماكينة"
-        titleEn="Edit engine type"
+        titleAr="اضافة حجم ماكينة جديدة"
+        titleEn="Add new engine size"
         items={[
           {
             titleAr: "الصفحة الرئيسية",
@@ -16,13 +16,13 @@ const EditEnginType = () => {
             link: "/",
           },
           {
-            titleAr: "اقسام السيارات ",
-            titleEn: " Car Sections",
-            link: "/models",
+            titleAr: "أقسام السيارات",
+            titleEn: "Car Sections",
+            link: "/",
           },
           {
-            titleAr:"تعديل نوع الماكينة",
-            titleEn: "Edit engine type",
+            titleAr: "اضافة حجم ماكينة جديدة",
+            titleEn: "Add new engine size",
             link: "/",
           },
         ]}
@@ -32,15 +32,15 @@ const EditEnginType = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label="نوع الماكينة ( باللغة العربية )"
+                label="حجم الماكينة ( باللغة العربية )"
                 variant="bordered"
-                placeholder="بنزين"
+                placeholder="1200 CC"
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
             </div>
             <Input
-              label="نوع الماكينة ( باللغة الانجليزية )"
+              label="حجم الماكينة ( باللغة الانجليزية )"
               variant="bordered"
               placeholder="اكتب هنا"
               className="flex-1"
@@ -49,11 +49,11 @@ const EditEnginType = () => {
             />
           </div>
 
-          <DashboardButton title="اضافة" />
+          <DashboardButton title="إضافة" />
         </div>
       </div>
     </div>
   );
 };
 
-export default EditEnginType;
+export default AddEnginSize;
