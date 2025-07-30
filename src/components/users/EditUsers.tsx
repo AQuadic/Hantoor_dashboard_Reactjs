@@ -1,7 +1,9 @@
+import { useTranslation } from 'react-i18next';
 import DashboardButton from '../general/dashboard/DashboardButton';
 import DashboardHeader from '../general/dashboard/DashboardHeader'
 import { Select, SelectItem} from "@heroui/react";
 const EditUsers = () => {
+    const { t } = useTranslation("users");
     const countries = [
         {key: "1", label: "مصر"},
         {key: "2", label: "مصر"},
@@ -32,7 +34,7 @@ const EditUsers = () => {
                 placeholder="username@mail.com"
                 />
                 <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
-                الاسم
+                {t('name')}
                 </h2>
                 <div className="absolute top-9 left-5"></div>
             </div>
@@ -47,7 +49,7 @@ const EditUsers = () => {
                     placeholder="username@mail.com"
                 />
                 <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
-                    البريد الالكنتروني
+                    {t('email')}
                 </h2>
                 <div className="absolute top-9 left-5"></div>
                 </div>
@@ -61,7 +63,7 @@ const EditUsers = () => {
                     placeholder="+20"
                 />
                 <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
-                    رقم الجوال
+                    {t('phone')}
                 </h2>
                 <div className="absolute top-9 left-5"></div>
                 </div>
@@ -71,8 +73,8 @@ const EditUsers = () => {
                 <div className="relative w-1/2 mt-[18px] rtl:pl-2 ltr:pr-2">
                     <Select
                     items={countries}
-                    label="البلد"
-                    placeholder="الجميع"
+                    label={t('country')}
+                    placeholder={t('all')}
                     classNames={{
                         trigger: 'h-[53px] !h-[53px] min-h-[53px] bg-white border',
                         label: '!text-[15px] !text-[#000000]',
