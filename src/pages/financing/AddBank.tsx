@@ -170,7 +170,7 @@ const AddBank = () => {
                         <Add />
                         <p className='text-[#2A32F8] text-base'>اضافة بيانات اخرى</p>
                         </div>
-                    <DashboardButton title=" اضافة" />
+                        <DashboardButton titleAr="اضافة" titleEn="Add" />
                     </div>
                 </div>
 
@@ -226,7 +226,7 @@ const AddBank = () => {
                     <Add />
                     <p className='text-[#2A32F8] text-base'>اضافة بيانات اخرى</p>
                 </div>
-                <DashboardButton title=" اضافة" />
+                    <DashboardButton titleAr="اضافة" titleEn="Add" />
                 </div>
             </div>
         </form>

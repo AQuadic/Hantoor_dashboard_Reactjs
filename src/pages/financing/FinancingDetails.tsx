@@ -27,18 +27,26 @@ const FinancingDetails = () => {
 
             <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
                 <div className="flex-1">
-                <SearchBar term={""} setTerm={() => {}} />
+                    <SearchBar
+                        termAr={"ابحث بالاسم"}
+                        termEn={"Search by name"}
+                        setTermAr={() => {}} 
+                        setTermEn={() => {}} 
+                        />
                 </div>
                 <div className="flex-1">
                 <DashboardDatePicker />
                 </div>
 
                 <Link to="/bank/add">
-                    <DashboardButton title={"اضافة بنك جديد"} variant="add" />
+                    <DashboardButton titleAr={"اضافة بنك جديد"} titleEn="Add a new bank" variant="add" />
+
                 </Link>
             </div>
             </div>
-            <BanksTable />
+            <div className="md:px-8 px-2">
+                <BanksTable />
+            </div>
         </section>
     );
 };

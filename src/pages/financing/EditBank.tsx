@@ -182,7 +182,7 @@ const EditBank =()  => {
                             <Add />
                             <p className='text-[#2A32F8] text-base'>اضافة بيانات اخرى</p>
                             </div>
-                        <DashboardButton title=" اضافة" />
+                                <DashboardButton titleAr="حفظ" titleEn="Save" />
                         </div>
                     </div>
 
@@ -238,7 +238,7 @@ const EditBank =()  => {
                         <Add />
                         <p className='text-[#2A32F8] text-base'>اضافة بيانات اخرى</p>
                     </div>
-                    <DashboardButton title=" اضافة" />
+                            <DashboardButton titleAr="حفظ" titleEn="Save" />
                     </div>
                 </div>
             </form>

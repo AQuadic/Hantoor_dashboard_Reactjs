@@ -50,7 +50,7 @@ const BanksTable = () => {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{bank.question}</TableCell>
                 <TableCell>{bank.country}</TableCell>
-                <TableCell>{bank.count}</TableCell>
+                <TableCell className="w-full">{bank.count}</TableCell>
                 <TableCell
                 className="flex gap-[7px] items-center"
                 // onClick={(e) => e.stopPropagation()} 

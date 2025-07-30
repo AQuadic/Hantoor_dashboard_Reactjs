@@ -5,6 +5,7 @@ import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import View from "../icons/general/View";
 
 const FinancingTable = () => {
   const navigate = useNavigate();
@@ -45,16 +46,17 @@ const FinancingTable = () => {
             >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{question.country}</TableCell>
-                <TableCell>{question.count}</TableCell>
+                <TableCell className="w-full">{question.count}</TableCell>
                 <TableCell
                 className="flex gap-[7px] items-center"
                 onClick={(e) => e.stopPropagation()} 
                 >
                 <Switch />
-                <Link to={`/faq/edit/${question.id}`}>
-                    <Edit />
-                </Link>
-
+                <div 
+                onClick={() => navigate(`/financing/details/${question.id}`, { state: { country: question.country } })}
+                >
+                    <View />
+                </div>
                 <div className="mt-2">
                 <TableDeleteButton handleDelete={() => {}} />
                 </div>
