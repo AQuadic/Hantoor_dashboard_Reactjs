@@ -43,7 +43,7 @@ export function EngineTypesTable() {
             <TableCell className="w-full">{brand.model}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch />
-              <Link to="/brands/1">
+              <Link to={`/engin-type/edit/${brand.id}`}>
                 <Edit />
               </Link>
 

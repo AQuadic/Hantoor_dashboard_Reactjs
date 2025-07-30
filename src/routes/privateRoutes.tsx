@@ -59,6 +59,7 @@ import EditBrandOrigins from "@/pages/models/EditBrandOrigins";
 import AddSeats from "@/pages/models/AddSeats";
 import EditSeats from "@/pages/models/EditSeats";
 import AddEngineType from "@/pages/models/AddEngineType";
+import EditEnginType from "@/pages/models/EditEnginType";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -293,6 +294,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/engine-types/add",
     element: <AddEngineType />,
+  },
+  {
+    path: "/engin-type/edit/:id",
+    element: <EditEnginType />,
   },
 
   // Setting route
