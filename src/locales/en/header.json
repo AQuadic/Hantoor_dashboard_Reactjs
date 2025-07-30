@@ -1,5 +1,7 @@
 {
     "dashboard":  "Dashboard",
     "NumofCars": "Number of cars",
-    "NumofUsers": "Number of users"
+    "NumofUsers": "Number of users",
+    "confirmDeletion": "Confirm deletion",
+    "areYouSure": "Are you sure you want to delete?"
 }

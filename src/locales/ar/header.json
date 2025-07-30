@@ -1,5 +1,7 @@
 {
     "dashboard": "لوحة التحكم",
     "NumofCars": "عدد السيارات",
-    "NumofUsers": "عدد المستخدمين"
+    "NumofUsers": "عدد المستخدمين",
+    "confirmDeletion": "تأكيد الحذف",
+    "areYouSure": "هل أنت متأكد من الحذف؟"
 }
