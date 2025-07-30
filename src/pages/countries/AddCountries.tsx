@@ -34,7 +34,7 @@ const AddCountries = () => {
                     <Input
                         label={t('enCountry')}
                         variant="bordered"
-                        placeholder="اكتب هنا"
+                        placeholder={t('writeHere')}
                         classNames={{ label: "mb-2 text-base" }}
                         size="lg"
                     />
@@ -57,7 +57,7 @@ const AddCountries = () => {
                     <Input
                         label={t('enCurrency')}
                         variant="bordered"
-                        placeholder="اكتب هنا"
+                        placeholder={t('writeHere')}
                         classNames={{ label: "mb-2 text-base" }}
                         size="lg"
                     />

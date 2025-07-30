@@ -3,9 +3,11 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import ImageInput from "@/components/general/ImageInput";
 import { Input } from "@heroui/react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
 const AddBrand = () => {
+  const { t } = useTranslation("brands");
   const [profileImage, setProfileImage] = React.useState<File | null>(null);
   const params = useParams();
   const brandId = params.id;
@@ -37,23 +39,23 @@ const AddBrand = () => {
       />
       <div className="flex flex-col gap-8 p-8">
         <div className="p-8 bg-white rounded-2xl ">
-          <h3 className="mb-4 text-lg font-bold">الصورة الشخصية</h3>
+          <h3 className="mb-4 text-lg font-bold">{t('profileImage')}</h3>
           <ImageInput image={profileImage} setImage={setProfileImage} />
         </div>
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
-          <h3 className="mb-2 text-lg font-bold "> البيانات الاساسية</h3>
+          <h3 className="mb-2 text-lg font-bold ">{t('mainData')}</h3>
           <div className="flex gap-4">
             <Input
-              label="اسم الماركة ( باللغة العربية )"
+              label={t('arBrand')}
               variant="bordered"
               placeholder=" تويوتا"
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
             />
             <Input
-              label=" اسم الماركة ( باللغة الانجليزية )"
+              label={t('enBrand')}
               variant="bordered"
-              placeholder="اكتب هنا"
+              placeholder={t('writeHere')}
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
             />
