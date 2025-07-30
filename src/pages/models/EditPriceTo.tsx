@@ -4,7 +4,7 @@ import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
 import { useParams } from "react-router";
 
-const EditPriceFrom = () => {
+const EditPriceTo = () => {
   const [, setSelectedAgent] = React.useState("");
   const params = useParams();
   const brandId = params.id;
@@ -47,7 +47,7 @@ const EditPriceFrom = () => {
               <Input
                 label="السعر ( باللغة العربية )"
                 variant="bordered"
-                placeholder=" 500.000"
+                placeholder=" 100.000"
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
@@ -82,4 +82,4 @@ const EditPriceFrom = () => {
   );
 };
 
-export default EditPriceFrom;
+export default EditPriceTo;
