@@ -1,11 +1,11 @@
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import Edit from "../icons/general/Edit";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "../ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Switch } from "@heroui/react";
 
 const AgentPageTable = () => {
+    const navigate = useNavigate();
     const agents = [
     {
         id: 1,
@@ -42,17 +42,27 @@ const AgentPageTable = () => {
         </TableHeader>
         <TableBody>
             {agents.map((agent, index) => (
-            <TableRow key={agent.id}>
+            <TableRow
+                key={agent.id}
+                onClick={() =>
+                navigate(`/agent/details/${agent.id}`, {
+                    state: { country: agent.country },
+                })
+                }
+                className="cursor-pointer hover:bg-gray-100"
+            >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{agent.name}</TableCell>
                 <TableCell className="">{agent.count}</TableCell>
                 <TableCell className="w-full">{agent.count}</TableCell>
-                <TableCell className="flex gap-[7px] items-center">
+                <TableCell
+                    className="flex gap-[7px] items-center"
+                    onClick={(e) => e.stopPropagation()}
+                >
                 <Switch />
-                <Link to="/agent/edit/:id">
+                <Link to={`/agent/edit/${agent.id}`}>
                     <Edit />
                 </Link>
-
                 <div className="mt-2">
                 <TableDeleteButton handleDelete={() => {}} />
                 </div>

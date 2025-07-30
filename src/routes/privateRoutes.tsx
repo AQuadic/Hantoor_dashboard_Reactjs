@@ -66,6 +66,7 @@ import AddPriceFrom from "@/pages/models/AddPriceFrom";
 import EditPriceFrom from "@/pages/models/EditPriceFrom";
 import AddPriceTo from "@/pages/models/AddPriceTo";
 import EditPriceTo from "@/pages/models/EditPriceTo";
+import AgentsDetailsPage from "@/pages/agents/AgentsDetailsPage";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -228,6 +229,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/agent/edit/:id",
     element: <EditAgentWrapper />,
+  },
+  {
+    path: "/agent/details/:id",
+    element: <AgentsDetailsPage />,
   },
 
   // Chats route
