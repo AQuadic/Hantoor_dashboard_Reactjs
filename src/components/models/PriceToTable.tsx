@@ -43,7 +43,7 @@ export function PriceToTable() {
             <TableCell className="w-full">{price.price}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch />
-              <Link to="/brands/1">
+              <Link to={`/price-to/edit/${price.id}`}>
                 <Edit />
               </Link>
 

@@ -4,7 +4,7 @@ import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
 import { useParams } from "react-router";
 
-const AddPriceFrom = () => {
+const EditPriceFrom = () => {
   const [, setSelectedAgent] = React.useState("");
   const params = useParams();
   const brandId = params.id;
@@ -20,12 +20,12 @@ const AddPriceFrom = () => {
   return (
     <div>
       <DashboardHeader
-        titleAr="اضافة سعر جديد"
-        titleEn="Add a new price"
+        titleAr="تعديل السعر"
+        titleEn="Edit the price"
         items={[
           {
-            titleAr: "الصفحة الرئيسية",
-            titleEn: "Home",
+            titleAr: "لوحة التحكم",
+            titleEn: "dashboard",
             link: "/",
           },
           {
@@ -34,8 +34,8 @@ const AddPriceFrom = () => {
             link: "/models",
           },
           {
-            titleAr:"اضافة سعر جديد",
-            titleEn: "Add a new price",
+            titleAr:"تعديل السعر",
+            titleEn: "Edit the price",
             link: isEdit ? `/model/${brandId}` : "/brands/add",
           },
         ]}
@@ -47,7 +47,7 @@ const AddPriceFrom = () => {
               <Input
                 label="السعر ( باللغة العربية )"
                 variant="bordered"
-                placeholder=" 100.000"
+                placeholder=" 500.000"
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
@@ -75,11 +75,11 @@ const AddPriceFrom = () => {
             />
           </div>
 
-          <DashboardButton title="اضافة" />
+          <DashboardButton title="حفظ" />
         </div>
       </div>
     </div>
   );
 };
 
-export default AddPriceFrom;
+export default EditPriceFrom;

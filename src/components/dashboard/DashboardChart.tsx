@@ -7,6 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { useTranslation } from "react-i18next";
 
 const chartData = [
   { day: "مصر", cars: 25 },
@@ -32,13 +33,14 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const DashboardChart = () => {
+  const { t } = useTranslation("header");
   return (
     <section
       className="h-auto bg-[#FFFFFF] py-4 px-7 mt-[15px] rounded-[15px] flex-1"
       dir="rtl"
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-[#000000] text-[23px] font-bold">عدد السيارات</h2>
+        <h2 className="text-[#000000] text-[23px] font-bold">{t('NumofCars')}</h2>
         <DashboardDatePicker />
       </div>
 

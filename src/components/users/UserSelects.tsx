@@ -1,29 +1,45 @@
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select"
+import { Select, SelectItem} from "@heroui/react";
 
 const UserSelects = () => {
+    const countries = [
+        {key: "1", label: "مصر"},
+        {key: "2", label: "مصر"},
+        {key: "3", label: "مصر"},
+        {key: "4", label: "مصر"},
+        {key: "5", label: "مصر"},
+        {key: "6", label: "مصر"},
+    ];
     return (
         <div className='mt-[11px] flex items-center gap-[5px] px-8'>
-        <Select >
-        <SelectTrigger className="w-[160px] !h-[46px] rounded-[12px]" dir='rtl'>
-            <SelectValue placeholder="طريقة التسجيل" />
-        </SelectTrigger>
-        <SelectContent dir='rtl'>
-            <SelectItem value="1">الجميع</SelectItem>
-            <SelectItem value="2">الجميع</SelectItem>
-            <SelectItem value="3">الجميع</SelectItem>
-        </SelectContent>
-        </Select>
+            <div className="w-[160px]">
+                <Select
+                    items={countries}
+                    label="طريقة التسجيل"
+                    placeholder="الجميع"
+                    classNames={{
+                        trigger: 'h-[46px] !h-[46px] min-h-[46px] bg-white border !py-6',
+                        label: 'text-sm text-gray-700',
+                        listbox: 'bg-white shadow-md',
+                    }}
+                    >
+                    {(country) => <SelectItem>{country.label}</SelectItem>}
+                </Select>
+            </div>
 
-        <Select >
-        <SelectTrigger className="w-[160px] !h-[46px] rounded-[12px]" dir='rtl'>
-            <SelectValue placeholder="البلد" />
-        </SelectTrigger>
-        <SelectContent dir='rtl'>
-            <SelectItem value="1">الجميع</SelectItem>
-            <SelectItem value="2">الجميع</SelectItem>
-            <SelectItem value="3">الجميع</SelectItem>
-        </SelectContent>
-        </Select>
+            <div className="w-[160px]">
+                <Select
+                    items={countries}
+                    label="البلد"
+                    placeholder="الجميع"
+                    classNames={{
+                        trigger: 'h-[46px] !h-[46px] min-h-[46px] bg-white border !py-6',
+                        label: 'text-sm text-gray-700',
+                        listbox: 'bg-white shadow-md',
+                    }}
+                    >
+                    {(country) => <SelectItem>{country.label}</SelectItem>}
+                </Select>
+            </div>
     </div>
     )
 }

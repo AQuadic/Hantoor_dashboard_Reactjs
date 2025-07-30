@@ -10,7 +10,7 @@ const AddCountries = () => {
                 titleEn="Add new country"
                 items={[
                 { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
-                { titleAr: "البلاد", titleEn: "Countries" },
+                { titleAr: "البلاد", titleEn: "Countries", link: "/countries" },
                 { titleAr: "اضافة بلد جديدة", titleEn: "Add new country" },
                 ]}
             />
@@ -18,7 +18,7 @@ const AddCountries = () => {
             <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     {/* Arabic country */}
-                    <div className="relative w-full">
+                    <div className="relative w-full ">
                     <Input
                         label="البلد ( باللغة العربية )"
                         variant="bordered"

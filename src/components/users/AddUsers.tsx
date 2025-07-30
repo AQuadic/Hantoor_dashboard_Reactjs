@@ -1,15 +1,18 @@
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectItem} from "@heroui/react";
+
 import DashboardButton from "../general/dashboard/DashboardButton";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import Password from "../icons/login/Password";
 
 const AddUsers = () => {
+    const countries = [
+      {key: "1", label: "مصر"},
+      {key: "2", label: "مصر"},
+      {key: "3", label: "مصر"},
+      {key: "4", label: "مصر"},
+      {key: "5", label: "مصر"},
+      {key: "6", label: "مصر"},
+  ];
   return (
     <section>
       <DashboardHeader 
@@ -68,19 +71,18 @@ const AddUsers = () => {
         </div>
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Country */}
-          <div className="w-full">
-            <Select>
-              <SelectTrigger
-                className="w-full !h-[53px] rounded-[12px] mt-4"
-                dir="rtl"
-              >
-                <SelectValue placeholder="طريقة التسجيل" />
-              </SelectTrigger>
-              <SelectContent dir="rtl">
-                <SelectItem value="1">الجميع</SelectItem>
-                <SelectItem value="2">الجميع</SelectItem>
-                <SelectItem value="3">الجميع</SelectItem>
-              </SelectContent>
+          <div className="relative w-full mt-[18px]">
+            <Select
+              items={countries}
+              label="البلد"
+              placeholder="الجميع"
+              classNames={{
+                trigger: 'h-[53px] !h-[53px] min-h-[53px] bg-white border',
+                label: '!text-[15px] !text-[#000000]',
+                listbox: 'bg-white shadow-md',
+              }}
+            >
+              {(country) => <SelectItem>{country.label}</SelectItem>}
             </Select>
           </div>
 
