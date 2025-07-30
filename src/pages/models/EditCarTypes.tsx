@@ -59,7 +59,7 @@ const EditCarTypes = () => {
                     />
                 </div>
 
-                <DashboardButton title="اضافة" />
+                <DashboardButton title="حفظ" />
                 </div>
             </div>
             </div>

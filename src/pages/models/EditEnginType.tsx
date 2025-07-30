@@ -49,7 +49,7 @@ const EditEnginType = () => {
             />
           </div>
 
-          <DashboardButton title="اضافة" />
+          <DashboardButton title="حفظ" />
         </div>
       </div>
     </div>

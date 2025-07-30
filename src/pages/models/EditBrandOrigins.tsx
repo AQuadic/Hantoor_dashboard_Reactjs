@@ -18,7 +18,7 @@ const EditBrandOrigins = () => {
           {
             titleAr: "اقسام السيارات ",
             titleEn: " Car Sections",
-            link: "/",
+            link: "/models",
           },
           {
             titleAr:"تعديل منشأ الماركة",
@@ -49,7 +49,7 @@ const EditBrandOrigins = () => {
             />
           </div>
 
-          <DashboardButton title="اضافة" />
+          <DashboardButton title="حفظ" />
         </div>
       </div>
     </div>
