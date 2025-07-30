@@ -41,7 +41,7 @@ const AddBrand = () => {
           {
             titleAr: isEdit ? "تعديل موديل" : "اضافة موديل جديدة",
             titleEn: isEdit ? "Edit Model" : "Add Model",
-            link: isEdit ? `/brands/${brandId}` : "/brands/add",
+            link: isEdit ? `/model/${brandId}` : "/brands/add",
           },
         ]}
       />
