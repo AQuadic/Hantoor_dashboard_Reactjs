@@ -86,7 +86,7 @@ const AddSalesShowrooms = () => {
         </div>
 
         <div className="mt-6">
-            <DashboardButton title="حفظ" />
+            <DashboardButton titleAr="حفظ" titleEn="Save" />
         </div>
         </div>
     )
