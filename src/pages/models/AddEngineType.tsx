@@ -3,12 +3,12 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input } from "@heroui/react";
 import React from "react";
 
-const EditSeats = () => {
+const AddEngineType = () => {
   return (
     <div>
       <DashboardHeader
-        titleAr="تعديل عدد المقاعد"
-        titleEn="Edit number of seats"
+        titleAr="اضافة نوع ماكينة جديدة"
+        titleEn="Add new engine type"
         items={[
           {
             titleAr: "الصفحة الرئيسية",
@@ -16,13 +16,13 @@ const EditSeats = () => {
             link: "/",
           },
           {
-            titleAr: "اقسام السيارات ",
-            titleEn: " Car Sections",
-            link: "/models",
+            titleAr: "أقسام السيارات",
+            titleEn: "Car Sections",
+            link: "/",
           },
           {
-            titleAr:"تعديل عدد المقاعد",
-            titleEn: "Edit number of seats",
+            titleAr: "اضافة نوع ماكينة جديدة",
+            titleEn: "Add new engine type",
             link: "/",
           },
         ]}
@@ -32,15 +32,15 @@ const EditSeats = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label="عدد المقاعد ( باللغة العربية )"
+                label="نوع الماكينة ( باللغة العربية )"
                 variant="bordered"
-                placeholder="6"
+                placeholder="بنزين"
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
             </div>
             <Input
-              label="عدد المقاعد ( باللغة الانجليزية )"
+              label="نوع الماكينة ( باللغة الانجليزية )"
               variant="bordered"
               placeholder="اكتب هنا"
               className="flex-1"
@@ -49,11 +49,11 @@ const EditSeats = () => {
             />
           </div>
 
-          <DashboardButton title="اضافة" />
+          <DashboardButton title="إضافة" />
         </div>
       </div>
     </div>
   );
 };
 
-export default EditSeats;
+export default AddEngineType;
