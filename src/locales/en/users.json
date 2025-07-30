@@ -1,0 +1,10 @@
+{
+    "registerWay": "Registration Method",
+    "all": "All",
+    "country": "Country",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone number",
+    "password": "Password",
+    "confirmPassword": "Confirm password"
+}

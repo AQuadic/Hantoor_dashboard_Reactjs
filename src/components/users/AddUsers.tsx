@@ -3,8 +3,10 @@ import { Select, SelectItem} from "@heroui/react";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import Password from "../icons/login/Password";
+import { useTranslation } from "react-i18next";
 
 const AddUsers = () => {
+  const { t } = useTranslation("users");
     const countries = [
       {key: "1", label: "مصر"},
       {key: "2", label: "مصر"},
@@ -16,11 +18,11 @@ const AddUsers = () => {
   return (
     <section>
       <DashboardHeader 
-        titleAr={"إضافة مستخدم جدبد"} titleEn={"Dashboard"} 
+        titleAr={"إضافة مستخدم جدبد"} titleEn={"Add a new user"} 
         items={[
           { titleAr: "لوحة التحكم", titleEn: "Dashbard", link: "/" },
           { titleAr: "المستخدمين", titleEn: "Users", link: "/users" },
-          { titleAr: "إضافة مستخدم جدبد", titleEn: "Add new user", link: "/dashboard/addUsers" },
+          { titleAr: "إضافة مستخدم جدبد", titleEn: "Add a new user", link: "/dashboard/addUsers" },
         ]} 
       />
 
@@ -35,7 +37,7 @@ const AddUsers = () => {
             placeholder="username@mail.com"
           />
           <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
-            الاسم
+            {t('name')}
           </h2>
           <div className="absolute top-9 left-5"></div>
         </div>
@@ -50,7 +52,7 @@ const AddUsers = () => {
               placeholder="username@mail.com"
             />
             <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
-              البريد الالكنتروني
+              {t('email')}
             </h2>
             <div className="absolute top-9 left-5"></div>
           </div>
@@ -64,7 +66,7 @@ const AddUsers = () => {
               placeholder="+20"
             />
             <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
-              رقم الجوال
+              {t('phone')}
             </h2>
             <div className="absolute top-9 left-5"></div>
           </div>
@@ -74,8 +76,8 @@ const AddUsers = () => {
           <div className="relative w-full mt-[18px]">
             <Select
               items={countries}
-              label="البلد"
-              placeholder="الجميع"
+              label={t('country')}
+              placeholder={t('all')}
               classNames={{
                 trigger: 'h-[53px] !h-[53px] min-h-[53px] bg-white border',
                 label: '!text-[15px] !text-[#000000]',
@@ -96,7 +98,7 @@ const AddUsers = () => {
               placeholder="********************"
             />
             <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
-              كلمة المرور
+              {t('password')}
             </h2>
             <div className="absolute top-9.5 rtl:left-5 ltr:right-5">
               <Password />
@@ -114,7 +116,7 @@ const AddUsers = () => {
             placeholder="********************"
           />
           <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
-            كلمة المرور
+            {t('confirmPassword')}
           </h2>
           <div className="absolute top-9.5 rtl:left-5 ltr:right-5">
             <Password />

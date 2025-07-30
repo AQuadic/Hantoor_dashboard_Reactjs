@@ -1,6 +1,8 @@
 import { Select, SelectItem} from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 const UserSelects = () => {
+    const { t } = useTranslation("users");
     const countries = [
         {key: "1", label: "مصر"},
         {key: "2", label: "مصر"},
@@ -14,8 +16,8 @@ const UserSelects = () => {
             <div className="w-[160px]">
                 <Select
                     items={countries}
-                    label="طريقة التسجيل"
-                    placeholder="الجميع"
+                    label={t('registerWay')}
+                    placeholder={t('all')}
                     classNames={{
                         trigger: 'h-[46px] !h-[46px] min-h-[46px] bg-white border !py-6',
                         label: 'text-sm text-gray-700',
@@ -29,8 +31,8 @@ const UserSelects = () => {
             <div className="w-[160px]">
                 <Select
                     items={countries}
-                    label="البلد"
-                    placeholder="الجميع"
+                    label={t('country')}
+                    placeholder={t('all')}
                     classNames={{
                         trigger: 'h-[46px] !h-[46px] min-h-[46px] bg-white border !py-6',
                         label: 'text-sm text-gray-700',

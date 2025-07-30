@@ -1,9 +1,13 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import headerAr from "../locales/ar/header.json";
-import loginAr from "../locales/ar/login.json";
 import headerEn from "../locales/en/header.json";
+
+import loginAr from "../locales/ar/login.json";
 import loginEn from "../locales/en/login.json";
+
+import usersAr from "../locales/ar/users.json";
+import usersEn from "../locales/en/users.json";
 
 // Ensure we're in browser environment
 const savedLang =
@@ -22,10 +26,12 @@ i18n.use(initReactI18next).init({
     en: {
       header: headerEn,
       login: loginEn,
+      users: usersEn,
     },
     ar: {
       header: headerAr,
       login: loginAr,
+      users: usersAr,
     },
   },
 });
