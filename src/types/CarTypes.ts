@@ -5,3 +5,9 @@ export interface CarDetailsFieldsTypes {
   descriptionEn: string;
   descriptionAr: string;
 }
+
+export interface CarPackageFieldsTypes {
+  distanceAr: string;
+  distanceEn: string;
+  price: number;
+}
