@@ -3,12 +3,12 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input } from "@heroui/react";
 import React from "react";
 
-const AddEnginSize = () => {
+const EditEngineSize = () => {
   return (
     <div>
       <DashboardHeader
-        titleAr="اضافة حجم ماكينة جديدة"
-        titleEn="Add new engine size"
+        titleAr="تعديل حجم الماكينة"
+        titleEn="Edit engine size"
         items={[
           {
             titleAr: "الصفحة الرئيسية",
@@ -21,8 +21,8 @@ const AddEnginSize = () => {
             link: "/models",
           },
           {
-            titleAr: "اضافة حجم ماكينة جديدة",
-            titleEn: "Add new engine size",
+            titleAr: "تعديل حجم الماكينة",
+            titleEn: "Edit engine size",
             link: "/",
           },
         ]}
@@ -49,11 +49,11 @@ const AddEnginSize = () => {
             />
           </div>
 
-          <DashboardButton title="إضافة" />
+          <DashboardButton title="حفظ" />
         </div>
       </div>
     </div>
   );
 };
 
-export default AddEnginSize;
+export default EditEngineSize;

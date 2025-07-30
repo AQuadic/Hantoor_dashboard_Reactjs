@@ -43,7 +43,7 @@ export function EngineSizesTable() {
             <TableCell className="w-full">{brand.Size}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch />
-              <Link to={`/engin-size/edit/${brand.id}`}>
+              <Link to={`/engine-size/edit/${brand.id}`}>
                 <Edit />
               </Link>
 

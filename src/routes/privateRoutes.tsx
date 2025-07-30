@@ -61,6 +61,7 @@ import EditSeats from "@/pages/models/EditSeats";
 import AddEngineType from "@/pages/models/AddEngineType";
 import EditEnginType from "@/pages/models/EditEnginType";
 import AddEnginSize from "@/pages/models/AddEnginSize";
+import EditEngineSize from "@/pages/models/EditEnginSize";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -303,6 +304,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/engine-sizes/add",
     element: <AddEnginSize />,
+  },
+  {
+    path: "/engine-size/edit/:id",
+    element: <EditEngineSize />,
   },
 
   // Setting route
