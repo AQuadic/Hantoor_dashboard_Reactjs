@@ -11,21 +11,24 @@ const CountriesTable = () => {
         id: 1,
         question: "مشكلة في عرض السيارات أو البيانات",
         country: "الامارات",
-        count: 22,
+        currency: "درهم اماراتي",
+        count: 23,
         date: "22/03/2024- 08:30 PM"
     },
     {
         id: 2,
         question: "مشكلة في عرض السيارات أو البيانات",
-        country: "الامارات",
-        count: 22,
+        country: "مصر",
+        currency: "جنية مصري",
+        count: 15,
         date: "22/03/2024- 08:30 PM"
     },
     {
         id: 3,
         question: "مشكلة في عرض السيارات أو البيانات",
-        country: "الامارات",
-        count: 22,
+        country: "السعودية",
+        currency: "ريال سعودي",
+        count: 13,
         date: "22/03/2024- 08:30 PM"
     },
     ];
@@ -46,9 +49,9 @@ const CountriesTable = () => {
             <TableRow key={country.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{country.country}</TableCell>
-                <TableCell>{country.country}</TableCell>
+                <TableCell>{country.currency}</TableCell>
                 <TableCell className="">{country.count}</TableCell>
-                <TableCell className="">{country.date}</TableCell>
+                <TableCell className="w-full">{country.date}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <Switch />
                 <Link to="/countries/edit">

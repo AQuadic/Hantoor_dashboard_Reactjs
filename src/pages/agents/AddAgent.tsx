@@ -21,7 +21,7 @@ const AddAgent : React.FC<SubordinatesHeaderProps> = ({
                     titleEn="Add new agent"
                     items={[
                     { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
-                    { titleAr: "الوكلاء", titleEn: "Agents", link: "/" },
+                    { titleAr: "الوكلاء", titleEn: "Agents", link: "/agents" },
                     { titleAr: "اضافة وكيل جديد", titleEn: "Add new agent", link: "/" },
                     ]}
                 />

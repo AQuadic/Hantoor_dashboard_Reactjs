@@ -10,7 +10,7 @@ const EditCountries = () => {
                 titleEn="Edit country"
                 items={[
                 { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
-                { titleAr: "البلاد", titleEn: "Countries" },
+                { titleAr: "البلاد", titleEn: "Countries", link :'/countries' },
                 { titleAr: "تعديل البلد", titleEn: "Edit country" },
                 ]}
             />

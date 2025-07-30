@@ -11,21 +11,21 @@ const AgentPageTable = () => {
         id: 1,
         name:"الشركة الدولية التجارية",
         country: "الامارات",
-        count: 22,
+        count: 6,
         date: "22/03/2024- 08:30 PM"
     },
     {
         id: 2,
-        name:"الشركة الدولية التجارية",
+        name:"غبور",
         country: "الامارات",
-        count: 22,
+        count: 8,
         date: "22/03/2024- 08:30 PM"
     },
     {
         id: 3,
-        name:"الشركة الدولية التجارية",
+        name:"ابو ظبي للسيارات",
         country: "الامارات",
-        count: 22,
+        count: 12,
         date: "22/03/2024- 08:30 PM"
     },
     ];
@@ -46,7 +46,7 @@ const AgentPageTable = () => {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{agent.name}</TableCell>
                 <TableCell className="">{agent.count}</TableCell>
-                <TableCell className="">{agent.count}</TableCell>
+                <TableCell className="w-full">{agent.count}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <Switch />
                 <Link to="/agent/edit/:id">
