@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import {
   Table,
@@ -10,23 +9,21 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Switch } from "@heroui/react";
 
 export function EngineTypesTable() {
   const brands = [
     {
       id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      model: " بنزين",
     },
     {
       id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      model: " ديزل",
     },
     {
       id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
+      model: " كهرباء",
     },
   ];
 
@@ -35,8 +32,7 @@ export function EngineTypesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> الموديل</TableHead>
-          <TableHead className="text-right"> الوكيل</TableHead>
+          <TableHead className="text-right"> نوع الماكينة</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
@@ -44,10 +40,9 @@ export function EngineTypesTable() {
         {brands.map((brand, index) => (
           <TableRow key={brand.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{brand.model}</TableCell>
-            <TableCell className="w-full">{brand.owner}</TableCell>
+            <TableCell className="w-full">{brand.model}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <ActiveStatus />
+              <Switch />
               <Link to="/brands/1">
                 <Edit />
               </Link>

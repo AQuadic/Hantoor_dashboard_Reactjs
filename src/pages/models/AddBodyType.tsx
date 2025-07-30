@@ -4,7 +4,7 @@ import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
 import { useParams } from "react-router";
 
-const AddBrand = () => {
+const AddBodyType = () => {
   const [selectedAgent, setSelectedAgent] = React.useState("");
   const params = useParams();
   const brandId = params.id;
@@ -12,9 +12,9 @@ const AddBrand = () => {
   const isEdit = Boolean(brandId);
 
   const agents = [
-    { label: "وكيل 1", value: "agent1" },
-    { label: "وكيل 2", value: "agent2" },
-    { label: "وكيل 3", value: "agent3" },
+    { label: "الموديل 1", value: "model1" },
+    { label: "الموديل 2", value: "model2" },
+    { label: "الموديل 3", value: "model3" },
   ];
 
   // const oldValues = {
@@ -25,8 +25,8 @@ const AddBrand = () => {
   return (
     <div>
       <DashboardHeader
-        titleAr={isEdit ? "تعديل موديل" : "اضافة موديل جديد"}
-        titleEn={isEdit ? "Edit Model" : "Add Model"}
+        titleAr="اضافة نوع هيكل جديد"
+        titleEn="Add a new structure type"
         items={[
           {
             titleAr: "الصفحة الرئيسية",
@@ -39,8 +39,8 @@ const AddBrand = () => {
             link: "/",
           },
           {
-            titleAr: isEdit ? "تعديل موديل" : "اضافة موديل جديدة",
-            titleEn: isEdit ? "Edit Model" : "Add Model",
+            titleAr:"اضافة نوع هيكل جديد",
+            titleEn: "Add a new structure type",
             link: isEdit ? `/model/${brandId}` : "/brands/add",
           },
         ]}
@@ -50,9 +50,9 @@ const AddBrand = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label="اسم الموديل ( باللغة العربية )"
+                label="اسم نوع الهيكل ( باللغة العربية )"
                 variant="bordered"
-                placeholder=" تويوتا"
+                placeholder=" SUV"
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
@@ -60,7 +60,7 @@ const AddBrand = () => {
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
-                label="الوكيل"
+                label="الموديل"
                 onSelectionChange={(key) => setSelectedAgent(key as string)}
               >
                 {agents.map((agent) => (
@@ -71,7 +71,7 @@ const AddBrand = () => {
               </Select>
             </div>
             <Input
-              label=" اسم الموديل ( باللغة الانجليزية )"
+              label="اسم نوع الهيكل ( باللغة الانجليزية )"
               variant="bordered"
               placeholder="اكتب هنا"
               className="flex-1"
@@ -87,4 +87,4 @@ const AddBrand = () => {
   );
 };
 
-export default AddBrand;
+export default AddBodyType;
