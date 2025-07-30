@@ -48,7 +48,7 @@ const ChatTable = () => {
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{chat.name}</TableCell>
                     <TableCell>{chat.brand}</TableCell>
-                    <TableCell>{chat.count}</TableCell>
+                    <TableCell className="w-full">{chat.count}</TableCell>
                     <TableCell className="flex gap-[7px] items-center">
                     <Switch />
                     <button onClick={() => setOpenChatId(chat.id)}>

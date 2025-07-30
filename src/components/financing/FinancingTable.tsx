@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import Edit from "../icons/general/Edit";
+// import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
