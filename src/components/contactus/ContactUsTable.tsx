@@ -58,7 +58,7 @@ const ContactUsTable = () => {
                 <TableCell>{message.name}</TableCell>
                 <TableCell>{message.phone}</TableCell>
                 <TableCell>{message.email}</TableCell>
-                <TableCell>{message.country}</TableCell>
+                <TableCell className="w-full">{message.country}</TableCell>
                     <TableCell className="flex items-center gap-2">
                         <TableCell
                     className="flex gap-[7px] items-center"

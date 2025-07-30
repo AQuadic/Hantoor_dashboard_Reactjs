@@ -21,7 +21,7 @@ const InsuranceHeader = () => {
                 </Select>
             </div>
             <Link to='/setting/add-whatsapp'>
-                <DashboardButton title={'اضافة رقم واتساب جديد'} variant="add" />
+                <DashboardButton titleAr={'اضافة رقم واتساب جديد'} titleEn="Add a new whatsapp number" variant="add" />
             </Link>
         </div>
     )

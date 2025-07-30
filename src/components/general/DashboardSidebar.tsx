@@ -113,7 +113,7 @@ const DashboardSidebar = () => {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3 }}
-            className="fixed top-0 right-0 z-50 bg-white lg:w-[288px] h-full p-4 shadow-lg lg:hidden"
+            className="fixed top-0 right-0 bg-white lg:w-[288px] h-full p-4 shadow-lg lg:hidden z-99"
           >
             <div className="flex justify-end">
               <button onClick={toggleSidebar}>

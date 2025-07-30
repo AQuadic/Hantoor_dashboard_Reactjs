@@ -51,7 +51,7 @@ const AddWhatsappNumber = () => {
                         />
                     </div>
                 </div>
-                <DashboardButton title={"اضافة "} />
+            <DashboardButton titleAr="اضافة" titleEn="Add" />
             </div>
         </section>
     )

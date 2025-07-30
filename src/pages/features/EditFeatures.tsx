@@ -51,7 +51,7 @@ const EditFeatures = () => {
                 </div>
             </div>
             <div className="mt-5">
-                <DashboardButton title="حفظ" />
+                <DashboardButton titleAr="حفظ" titleEn="Save" />
             </div>
         </div> 
             

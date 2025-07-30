@@ -47,7 +47,7 @@ const AddFeatures = () => {
                 </div>
             </div>
             <div className="mt-5">
-                <DashboardButton title="اضافة" />
+                <DashboardButton titleAr="اضافة" titleEn="Add" />
             </div>
         </div> 
             

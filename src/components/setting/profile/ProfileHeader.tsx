@@ -21,7 +21,7 @@ const ProfileHeader = () => {
                 </Select>
             </div>
             <Link to='/setting/add-profile'>
-                <DashboardButton title={'اضافة صفحة تعريفية جديدة'} variant="add" />
+                <DashboardButton titleAr={'اضافة صفحة تعريفية جديدة'} titleEn="Add a new profile page" variant="add"/>
             </Link>
         </div>
     )

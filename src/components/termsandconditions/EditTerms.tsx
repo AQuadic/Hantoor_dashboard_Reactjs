@@ -62,7 +62,7 @@ const EditTerms = () => {
             </div>
     
             <div className="mt-4">
-                <DashboardButton title={"حفظ"} />
+                <DashboardButton titleAr="حفظ" titleEn="Save" />
             </div>
             </div>
         </div>

@@ -47,7 +47,7 @@ const ProfileTable = () => {
                 <TableCell>{profie.image}</TableCell>
                 <TableCell>{profie.text}</TableCell>
                 <TableCell>{profie.country}</TableCell>
-                <TableCell>{profie.description}</TableCell>
+                <TableCell className="w-full">{profie.description}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <Link to={`/profile/edit/${profie.id}`}>
                     <Edit />

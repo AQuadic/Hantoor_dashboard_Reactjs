@@ -19,7 +19,7 @@ const GeneralSettings = () => {
                     size="lg"
                 />
                 <div className='mt-4'>
-                    <DashboardButton title=" حفظ" />
+                    <DashboardButton titleAr="حفظ" titleEn="Save" />
                 </div>
                 </div>
             </div>
@@ -35,12 +35,12 @@ const GeneralSettings = () => {
                 <h2 className='text-[#2A32F8] text-[17px] font-bold mb-3'>نص مميزات التطبيق في الرئيسية</h2>
                 <div className='flex md:flex-row flex-col items-center gap-[15px]'>
                     <div className='w-full'>
-                        <Textarea className="mb-3" label="النص ( باللغة العربية )" placeholder="اكتب هنا" />
-                        <DashboardButton title=" حفظ"/>
+                        <Textarea className="mb-3" label="النص ( باللغة العربية )" placeholder="اكتب هنا" style={{ backgroundColor: '#f0f0f0' }}  />
+                        <DashboardButton titleAr="حفظ" titleEn="Save" />
                     </div>
                     <div className='w-full'>
                         <Textarea className="mb-3" label="النص ( باللغة الانجليزية )" placeholder="اكتب هنا" />
-                        <DashboardButton title=" حفظ"/>
+                        <DashboardButton titleAr="حفظ" titleEn="Save" />
                     </div>
                 </div>
             </div>
@@ -51,11 +51,11 @@ const GeneralSettings = () => {
                 <div className='flex md:flex-row flex-col items-center gap-[15px]'>
                     <div className='w-full'>
                         <Textarea className="mb-3" label="النص ( باللغة العربية )" placeholder="اكتب هنا" />
-                        <DashboardButton title=" حفظ"/>
+                        <DashboardButton titleAr="حفظ" titleEn="Save" />
                     </div>
                     <div className='w-full'>
                         <Textarea className="mb-3" label="النص ( باللغة الانجليزية )" placeholder="اكتب هنا" />
-                        <DashboardButton title=" حفظ"/>
+                        <DashboardButton titleAr="حفظ" titleEn="Save" />
                     </div>
                 </div>
             </div> 
@@ -66,11 +66,11 @@ const GeneralSettings = () => {
                 <div className='flex md:flex-row flex-col items-center gap-[15px]'>
                     <div className='w-full'>
                         <Textarea className="mb-3" label="النص ( باللغة العربية )" placeholder="اكتب هنا" />
-                        <DashboardButton title=" حفظ"/>
+                        <DashboardButton titleAr="حفظ" titleEn="Save" />
                     </div>
                     <div className='w-full'>
                         <Textarea className="mb-3" label="النص ( باللغة الانجليزية )" placeholder="اكتب هنا" />
-                        <DashboardButton title=" حفظ"/>
+                        <DashboardButton titleAr="حفظ" titleEn="Save" />
                     </div>
                 </div>
             </div>

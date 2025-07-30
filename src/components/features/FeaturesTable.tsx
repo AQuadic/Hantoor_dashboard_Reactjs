@@ -38,7 +38,7 @@ const FeaturesTable = () => {
             <TableRow key={profie.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{profie.image}</TableCell>
-                <TableCell>{profie.text}</TableCell>
+                <TableCell className="w-full">{profie.text}</TableCell>
                 <TableCell className="flex gap-[7px] items-center w-full">
                 <Switch />
                 <Link to={`/features/edit/${profie.id}`}>

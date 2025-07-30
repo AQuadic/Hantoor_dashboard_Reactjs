@@ -21,7 +21,7 @@ const TermsHeader = () => {
                     </Select>
                 </div>
                 <Link to='/setting/add-terms'>
-                    <DashboardButton title={'اضافة شروط واحكام جديدة'} variant="add" />
+                    <DashboardButton titleAr={'اضافة شروط واحكام جديدة'} titleEn="Add new terms and conditions" variant="add" />
                 </Link>
             </div>
     )

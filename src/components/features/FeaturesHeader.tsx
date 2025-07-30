@@ -5,7 +5,7 @@ const FeaturesHeader = () => {
     return (
         <div className="flex justify-end">
             <Link to="/features/add" >
-                <DashboardButton title={"اضافة مميزات جديدة"} variant="add" />
+                <DashboardButton titleAr={"اضافة مميزات جديدة"} titleEn="Add new features" variant="add" />
             </Link>
         </div>
     )

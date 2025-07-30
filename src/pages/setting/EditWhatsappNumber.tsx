@@ -51,7 +51,7 @@ const EditWhatsappNumber = () => {
                         />
                     </div>
                 </div>
-                <DashboardButton title={"حفظ"} />
+                    <DashboardButton titleAr="حفظ" titleEn="Save" />
             </div>
         </section>
     )
