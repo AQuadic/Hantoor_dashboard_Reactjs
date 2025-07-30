@@ -110,7 +110,7 @@ const CarsTable = () => {
             {chats.map((chat, index) => (
               <TableRow key={chat.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>
+                <TableCell >
                   <img
                     src={chat.image}
                     alt="car"

@@ -20,13 +20,18 @@ const CarsHeader = () => {
 
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
             <div className="flex-1">
-            <SearchBar term={"ابحث بالاسم"} setTerm={() => {}} />
+                <SearchBar
+                    termAr={"ابحث بالاسم"} 
+                    termEn={"Search by name"}
+                    setTermAr={() => {}} 
+                    setTermEn={() => {}} 
+                />
             </div>
             <div className="flex-1">
             <DashboardDatePicker />
             </div>
             <Link to="/cars/add">
-                <DashboardButton title={"اضافة سيارة جديدة"} variant="add" />
+                <DashboardButton titleAr={"اضافة سيارة جديدة"} titleEn={"Add a new car"} variant='add'/>
             </Link>
         </div>
         <CarsSelect />
