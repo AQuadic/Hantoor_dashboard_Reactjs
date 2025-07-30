@@ -63,6 +63,7 @@ import EditEnginType from "@/pages/models/EditEnginType";
 import AddEnginSize from "@/pages/models/AddEnginSize";
 import EditEngineSize from "@/pages/models/EditEnginSize";
 import AddPriceFrom from "@/pages/models/AddPriceFrom";
+import EditPriceFrom from "@/pages/models/EditPriceFrom";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -313,6 +314,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/price-from/add",
     element: <AddPriceFrom />,
+  },
+  {
+    path: "/price-from/edit/:id",
+    element: <EditPriceFrom />,
   },
 
   // Setting route
