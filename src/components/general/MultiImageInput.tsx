@@ -14,6 +14,7 @@ interface ImageInputProps {
   setImages: React.Dispatch<React.SetStateAction<File[] | null>>;
   isRounded?: boolean;
   maxImages?: number;
+  title?: string;
 }
 
 const MultiImageInput: React.FC<ImageInputProps> = ({
@@ -23,31 +24,12 @@ const MultiImageInput: React.FC<ImageInputProps> = ({
   setImages,
   isRounded = false,
   maxImages = 10,
+  title,
 }) => {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Create previews when images change
-  useEffect(() => {
-    if (images && images.length > 0) {
-      const previews: string[] = [];
-      let loadedCount = 0;
-
-      images.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          previews[index] = e.target?.result as string;
-          loadedCount++;
-          if (loadedCount === images.length) {
-            setImagePreviews([...previews]);
-          }
-        };
-        reader.readAsDataURL(file);
-      });
-    } else {
-      setImagePreviews([]);
-    }
-  }, [images]);
 
   // Handle file selection
   const handleFileSelect = (newFiles: FileList) => {
@@ -109,25 +91,6 @@ const MultiImageInput: React.FC<ImageInputProps> = ({
   };
 
   // Handle remove single image
-  const handleRemoveImage = (indexToRemove: number, e?: React.MouseEvent) => {
-    if (e) {
-      e.stopPropagation();
-    }
-
-    if (images) {
-      const updatedImages = images.filter(
-        (_, index) => index !== indexToRemove,
-      );
-      setImages(updatedImages.length > 0 ? updatedImages : null);
-    }
-
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const currentImageCount = images?.length || 0;
-  const hasImages = currentImageCount > 0;
 
   return (
     <div className="w-full">
@@ -153,47 +116,17 @@ const MultiImageInput: React.FC<ImageInputProps> = ({
         />
 
         {/* Content - Same as original design */}
-        <img
-          src="/images/addImage.png"
-          alt="Add Image"
-          className="w-[50px] h-[50px]"
-        />
-        <p className="text-lg text-primary underline">اضافة صورة</p>
-      </div>
-
-      {/* Image Gallery */}
-      {hasImages && (
-        <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {imagePreviews.map((preview, index) => (
-            <div
-              key={index}
-              className={`bg-white ${
-                isRounded ? "rounded-full" : "rounded-lg"
-              } relative overflow-hidden border border-gray-200 ${
-                width ? `w-[${width}px]` : "w-[180px]"
-              } ${height ? `h-[${height}px]` : "h-[180px]"}`}
-            >
-              {/* Remove button */}
-              <button
-                onClick={(e) => handleRemoveImage(index, e)}
-                className="absolute top-2 right-2 bg-black text-white rounded-full p-1 transition-colors duration-200 z-10 hover:bg-gray-800"
-                aria-label="Remove image"
-              >
-                <X size={16} />
-              </button>
-
-              {/* Image */}
-              <img
-                src={preview}
-                alt={`Uploaded preview ${index + 1}`}
-                className={`w-full h-full object-cover ${
-                  isRounded ? "rounded-full" : "rounded-lg"
-                }`}
-              />
-            </div>
-          ))}
+        <div className="flex flex-col items-center justify-center">
+          <img
+            src="/images/addImage.png"
+            alt="Add Image"
+            className="w-[36px] h-[36px]"
+          />
+          <p className="text-lg text-primary underline">
+            {title ? title : "اضافة صور"}
+          </p>
         </div>
-      )}
+      </div>
     </div>
   );
 };
