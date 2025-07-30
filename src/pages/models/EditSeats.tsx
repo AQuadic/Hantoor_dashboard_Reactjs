@@ -49,7 +49,7 @@ const EditSeats = () => {
             />
           </div>
 
-          <DashboardButton title="حفظ" />
+            <DashboardButton titleAr="حفظ" titleEn="Save" />
         </div>
       </div>
     </div>

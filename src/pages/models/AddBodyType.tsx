@@ -5,7 +5,7 @@ import React from "react";
 import { useParams } from "react-router";
 
 const AddBodyType = () => {
-  const [selectedAgent, setSelectedAgent] = React.useState("");
+  const [, setSelectedAgent] = React.useState("");
   const params = useParams();
   const brandId = params.id;
 
@@ -80,7 +80,7 @@ const AddBodyType = () => {
             />
           </div>
 
-          <DashboardButton title="اضافة" />
+            <DashboardButton titleAr="اضافة" titleEn="Add" />
         </div>
       </div>
     </div>

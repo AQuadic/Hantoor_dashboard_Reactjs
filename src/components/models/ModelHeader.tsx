@@ -14,68 +14,79 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
 }) => {
-  const filtersData = [
-    {
-      titleAr: "الموديلات",
-      titleEn: "Models",
-      addText: "اضافة موديل جديد",
-      link: "/models/add",
-    },
-    {
-      titleAr: "انواع الهيكل",
-      titleEn: "Structure Types",
-      addText: "اضافة نوع هيكل جديد",
-      link: "/structure-types/add",
-    },
-    {
-      titleAr: "انواع السيارة",
-      titleEn: "Car Types",
-      addText: "اضافة نوع سيارة جديد",
-      link: "/car-types/add",
-    },
-    {
-      titleAr: "الفئات",
-      titleEn: "Categories",
-      addText: "اضافة فئة جديدة",
-      link: "/categories/add",
-    },
-    {
-      titleAr: "منشأ الماركة",
-      titleEn: "Brand Origin",
-      addText: "اضافة منشأ ماركة جديد",
-      link: "/brand-origins/add",
-    },
-    {
-      titleAr: "عدد المقاعد",
-      titleEn: "Number of Seats",
-      addText: "اضافة عدد مقاعد جديد",
-      link: "/seat-numbers/add",
-    },
-    {
-      titleAr: "انواع الماكينة",
-      titleEn: "Engine Types",
-      addText: "اضافة نوع ماكينة جديد",
-      link: "/engine-types/add",
-    },
-    {
-      titleAr: "احجام الماكينة",
-      titleEn: "Engine Sizes",
-      addText: "اضافة حجم ماكينة جديد",
-      link: "/engine-sizes/add",
-    },
-    {
-      titleAr: "السعر من",
-      titleEn: "Price From",
-      addText: "اضافة سعر من جديد",
-      link: "/price-from/add",
-    },
-    {
-      titleAr: "السعر الى",
-      titleEn: "Price To",
-      addText: "اضافة سعر الى جديد",
-      link: "/price-to/add",
-    },
-  ];
+const filtersData = [
+  {
+    titleAr: "الموديلات",
+    titleEn: "Models",
+    addTextAr: "اضافة موديل جديد",
+    addTextEn: "Add New Model",
+    link: "/models/add",
+  },
+  {
+    titleAr: "انواع الهيكل",
+    titleEn: "Structure Types",
+    addTextAr: "اضافة نوع هيكل جديد",
+    addTextEn: "Add New Structure Type",
+    link: "/structure-types/add",
+  },
+  {
+    titleAr: "انواع السيارة",
+    titleEn: "Car Types",
+    addTextAr: "اضافة نوع سيارة جديد",
+    addTextEn: "Add New Car Type",
+    link: "/car-types/add",
+  },
+  {
+    titleAr: "الفئات",
+    titleEn: "Categories",
+    addTextAr: "اضافة فئة جديدة",
+    addTextEn: "Add New Category",
+    link: "/categories/add",
+  },
+  {
+    titleAr: "منشأ الماركة",
+    titleEn: "Brand Origin",
+    addTextAr: "اضافة منشأ ماركة جديد",
+    addTextEn: "Add New Brand Origin",
+    link: "/brand-origins/add",
+  },
+  {
+    titleAr: "عدد المقاعد",
+    titleEn: "Number of Seats",
+    addTextAr: "اضافة عدد مقاعد جديد",
+    addTextEn: "Add New Number of Seats",
+    link: "/seat-numbers/add",
+  },
+  {
+    titleAr: "انواع الماكينة",
+    titleEn: "Engine Types",
+    addTextAr: "اضافة نوع ماكينة جديد",
+    addTextEn: "Add New Engine Type",
+    link: "/engine-types/add",
+  },
+  {
+    titleAr: "احجام الماكينة",
+    titleEn: "Engine Sizes",
+    addTextAr: "اضافة حجم ماكينة جديد",
+    addTextEn: "Add New Engine Size",
+    link: "/engine-sizes/add",
+  },
+  {
+    titleAr: "السعر من",
+    titleEn: "Price From",
+    addTextAr: "اضافة سعر من جديد",
+    addTextEn: "Add New Price From",
+    link: "/price-from/add",
+  },
+  {
+    titleAr: "السعر الى",
+    titleEn: "Price To",
+    addTextAr: "اضافة سعر الى جديد",
+    addTextEn: "Add New Price To",
+    link: "/price-to/add",
+  },
+];
+
 
   // Get the current filter data
   const currentFilter =
@@ -101,13 +112,18 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
 
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
-          <SearchBar term={"ابحث بالاسم"} setTerm={() => {}} />
+            <SearchBar
+            termAr={"ابحث بالاسم"}
+            termEn={"Search by name"}
+            setTermAr={() => {}} 
+            setTermEn={() => {}} 
+            />
         </div>
         <div className="flex-1">
           <DashboardDatePicker />
         </div>
         <Link to={currentFilter.link}>
-          <DashboardButton title={currentFilter.addText} variant="add" />
+          <DashboardButton titleAr={currentFilter.addTextAr} titleEn={currentFilter.addTextEn} variant="add" />
         </Link>
       </div>
     </div>

@@ -61,7 +61,7 @@ const EditModel = () => {
                     </Select>
                 </div>
                 <div className='mt-4'>
-                    <DashboardButton title='اضافة' />
+                    <DashboardButton titleAr='اضافة' titleEn='Add' />
                 </div>
             </div>
         </div>

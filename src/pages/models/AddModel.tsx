@@ -5,7 +5,7 @@ import React from "react";
 import { useParams } from "react-router";
 
 const AddBrand = () => {
-  const [selectedAgent, setSelectedAgent] = React.useState("");
+  const [, setSelectedAgent] = React.useState("");
   const params = useParams();
   const brandId = params.id;
 
@@ -80,7 +80,7 @@ const AddBrand = () => {
             />
           </div>
 
-          <DashboardButton title="اضافة" />
+          <DashboardButton titleAr="اضافة" titleEn="Add" />
         </div>
       </div>
     </div>

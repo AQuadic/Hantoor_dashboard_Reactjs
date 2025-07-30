@@ -49,7 +49,7 @@ const AddBrandOrigins = () => {
             />
           </div>
 
-          <DashboardButton title="اضافة" />
+              <DashboardButton titleAr="اضافة" titleEn="Add" />
         </div>
       </div>
     </div>

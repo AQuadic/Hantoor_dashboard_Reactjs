@@ -49,7 +49,7 @@ const AddEnginSize = () => {
             />
           </div>
 
-          <DashboardButton title="إضافة" />
+          <DashboardButton titleAr="اضافة" titleEn="Add" />
         </div>
       </div>
     </div>
