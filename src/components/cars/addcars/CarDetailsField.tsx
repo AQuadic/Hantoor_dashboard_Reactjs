@@ -6,9 +6,10 @@ import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteB
 
 interface CarDetailsFieldProps {
   field: CarDetailsFieldsTypes;
+  handleDelete: () => void;
 }
 
-const CarDetailsField = ({ field }: CarDetailsFieldProps) => {
+const CarDetailsField = ({ field, handleDelete }: CarDetailsFieldProps) => {
   return (
     <div className="mt-4 flex items-center  gap-4 border-t pt-4">
       <span className="min-w-[65px]">
@@ -52,7 +53,7 @@ const CarDetailsField = ({ field }: CarDetailsFieldProps) => {
         />
       </div>
       <span>
-        <TableDeleteButton handleDelete={() => {}} />
+        <TableDeleteButton handleDelete={handleDelete} />
       </span>
     </div>
   );

@@ -30,6 +30,10 @@ const CarDetails = () => {
       },
     ]);
   };
+  const removeCarDetailsField = (index: number) => {
+    const updatedFields = carDetailsFields.filter((_, i) => i !== index);
+    setCarDetailsFields(updatedFields);
+  };
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
       <h1 className="text-lg text-[#2A32F8] font-bold mb-2">بيانات السيارة</h1>
@@ -157,7 +161,11 @@ const CarDetails = () => {
 
       <div>
         {carDetailsFields.map((field, index) => (
-          <CarDetailsField field={field} key={index} />
+          <CarDetailsField
+            handleDelete={() => removeCarDetailsField(index)}
+            field={field}
+            key={index}
+          />
         ))}
       </div>
       <AddFieldButton
