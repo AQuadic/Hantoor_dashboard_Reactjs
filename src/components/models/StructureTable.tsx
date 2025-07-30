@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import {
   Table,
@@ -50,9 +49,9 @@ export function StructureTable() {
             <TableCell>{item.type}</TableCell>
             <TableCell className="w-full">{item.model}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Link to={`/brands/${item.id}`}>
-                <Edit />
-              </Link>
+            <Link to={`/structure-types/edit/${item.id}`}>
+              <Edit />
+            </Link>
               <div className="mt-2">
                 <TableDeleteButton handleDelete={() => {}} />
               </div>
