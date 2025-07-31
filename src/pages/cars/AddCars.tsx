@@ -7,6 +7,7 @@ import CarPackages from "@/components/cars/addcars/CarPackages";
 import CarAccessories from "@/components/cars/addcars/CarAccessories";
 import CarOffers from "@/components/cars/addcars/CarOffers";
 import RentToOwn from "@/components/cars/addcars/RentToOwn";
+import CarAdvertisingImages from "@/components/cars/addcars/CarAdvertisingImages";
 
 const AddCars = () => {
   return (
@@ -20,6 +21,7 @@ const AddCars = () => {
         <CarAccessories />
         <CarOffers />
         <RentToOwn />
+        <CarAdvertisingImages />
       </div>
     </div>
   );

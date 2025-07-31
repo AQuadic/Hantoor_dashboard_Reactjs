@@ -2,15 +2,9 @@ import { Input, } from "@heroui/react";
 import React from "react";
 import { CarDetailsFieldsTypes } from "@/types/CarTypes";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
-import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import ImageInput from "@/components/general/ImageInput";
 
-interface CarDetailsFieldProps {
-  field: CarDetailsFieldsTypes;
-  handleDelete: () => void;
-}
-
-const RentToOwn = ({ field, handleDelete }: CarDetailsFieldProps) => {
+const RentToOwn = ( ) => {
   const [carDetailsFields, setCarDetailsFields] = React.useState<
     CarDetailsFieldsTypes[]
   >([
@@ -38,7 +32,7 @@ const RentToOwn = ({ field, handleDelete }: CarDetailsFieldProps) => {
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] ">
       <h1 className="text-lg text-[#2A32F8] font-bold mb-2">إيجار منتهي بالتملك</h1>
-    <div className="mt-4 flex items-center  gap-4 border-t pt-4">
+    <div className="mt-4 flex items-center  gap-4 pt-4">
       <span className="min-w-[65px]">
         {" "}
         <ImageInput image={null} setImage={() => {}} width={65} height={65} />
