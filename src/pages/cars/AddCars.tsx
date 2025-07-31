@@ -6,6 +6,7 @@ import CarPrices from "@/components/cars/addcars/CarPrices";
 import CarPackages from "@/components/cars/addcars/CarPackages";
 import CarAccessories from "@/components/cars/addcars/CarAccessories";
 import CarOffers from "@/components/cars/addcars/CarOffers";
+import RentToOwn from "@/components/cars/addcars/RentToOwn";
 
 const AddCars = () => {
   return (
@@ -18,6 +19,7 @@ const AddCars = () => {
         <CarPackages />
         <CarAccessories />
         <CarOffers />
+        <RentToOwn />
       </div>
     </div>
   );
