@@ -2,7 +2,7 @@ import React from 'react'
 
 const ContactUsView = () => {
     return (
-        <section className='py-10 bg-white h-screen'>
+        <section className='py-[13px] bg-white h-screen'>
             <h1 className='text-[#071739] text-[23px] font-bold text-center'>الملاحظات</h1>
             <hr className='my-4'/>
             <div className='px-8'>
