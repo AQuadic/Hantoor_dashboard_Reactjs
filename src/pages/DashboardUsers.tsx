@@ -51,9 +51,9 @@ const DashboardUsers = () => {
           setCurrentPage={function (): void {
             throw new Error("Function not implemented.");
           }}
-          totalPages={0}
-          totalItems={0}
-          itemsPerPage={0}
+          totalPages={100}
+          totalItems={100}
+          itemsPerPage={5}
         />
       </div>
     </section>

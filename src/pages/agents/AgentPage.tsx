@@ -14,9 +14,9 @@ const AgentPage = () => {
                 setCurrentPage={function (): void {
                     throw new Error("Function not implemented.");
                 }}
-                totalPages={0}
-                totalItems={0}
-                itemsPerPage={0}
+                totalPages={50}
+                totalItems={50}
+                itemsPerPage={10}
             />
             </div>
         </div>

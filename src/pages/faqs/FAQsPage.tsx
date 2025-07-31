@@ -13,9 +13,9 @@ const FAQsPage = () => {
                     setCurrentPage={function (): void {
                         throw new Error("Function not implemented.");
                     }}
-                    totalPages={0}
-                    totalItems={0}
-                    itemsPerPage={0}
+                    totalPages={10}
+                    totalItems={10}
+                    itemsPerPage={2}
                     />
             </div>
         </div>

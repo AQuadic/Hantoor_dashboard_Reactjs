@@ -13,9 +13,9 @@ const CountriesPage = () => {
                     setCurrentPage={function (): void {
                         throw new Error("Function not implemented.");
                     }}
-                    totalPages={0}
-                    totalItems={0}
-                    itemsPerPage={0}
+                    totalPages={20}
+                    totalItems={20}
+                    itemsPerPage={5}
                 />
             </div>
         </div>
