@@ -10,5 +10,6 @@
     "encategoryName": "Category name (in English)",
     "arType": "Type name (in Arabic)",
     "enType": "Type name (in English)",
-    "structure": "Structure"
+    "structure": "Structure",
+    "type": "Type"
 }

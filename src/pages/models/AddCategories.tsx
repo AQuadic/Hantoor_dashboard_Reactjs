@@ -2,8 +2,10 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const AddCategories = () => {
+  const { t } = useTranslation("models");
   const [, setSelectedAgent] = React.useState("");
 
   const agents = [
@@ -40,7 +42,7 @@ const AddCategories = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label="اسم الفئة ( باللغة العربية )"
+                label={t('arcategoryName')} 
                 variant="bordered"
                 placeholder=" 4 Runner"
                 classNames={{ label: "mb-2 text-base" }}
@@ -50,7 +52,7 @@ const AddCategories = () => {
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
-                label="النوع"
+                label={t('type')}
                 onSelectionChange={(key) => setSelectedAgent(key as string)}
               >
                 {agents.map((agent) => (
@@ -61,9 +63,9 @@ const AddCategories = () => {
               </Select>
             </div>
             <Input
-              label="اسم الفئة ( باللغة الانجليزية )"
+              label={t('encategoryName')}
               variant="bordered"
-              placeholder="اكتب هنا"
+              placeholder={t('writeHere')}
               className="flex-1"
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
