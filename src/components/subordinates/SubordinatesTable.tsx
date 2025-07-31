@@ -11,12 +11,16 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import admin1 from '/images/admin/admin1.svg'
+import admin2 from '/images/admin/admin2.svg'
+import admin3 from '/images/admin/admin3.svg'
+import admin4 from '/images/admin/admin4.svg'
 
 export function SubordinatesTable() {
   const subordinates = [
     {
       id: 1,
-      image: "",
+      image: admin1,
       name: "محمد احمد",
       mobile: "+966 123456 789",
       email: "username@mail.com",
@@ -27,7 +31,7 @@ export function SubordinatesTable() {
     },
     {
       id: 2,
-      image: "",
+      image: admin2,
       name: "مصطفى خالد",
       mobile: "+966 123456 789",
       email: "username@mail.com",
@@ -38,7 +42,7 @@ export function SubordinatesTable() {
     },
     {
       id: 3,
-      image: "",
+      image: admin3,
       name: "إبراهيم محمود",
       mobile: "+966 123456 789",
       email: "username@mail.com",
@@ -49,7 +53,7 @@ export function SubordinatesTable() {
     },
     {
       id: 4,
-      image: "",
+      image: admin4,
       name: "محمد احمد",
       mobile: "+966 123456 789",
       email: "username@mail.com",
@@ -79,7 +83,9 @@ export function SubordinatesTable() {
         {subordinates.map((subordinate, index) => (
           <TableRow key={subordinate.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{subordinate.name}</TableCell>
+            <TableCell>
+              <img src={subordinate.image} alt="admin" />
+            </TableCell>
             <TableCell>{subordinate.name}</TableCell>
             <TableCell>{subordinate.mobile}</TableCell>
             <TableCell>{subordinate.email}</TableCell>
