@@ -49,7 +49,7 @@ const AgentPageTable = () => {
                     state: { country: agent.country },
                 })
                 }
-                className="cursor-pointer hover:bg-gray-100"
+                className="cursor-pointer"
             >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{agent.name}</TableCell>
