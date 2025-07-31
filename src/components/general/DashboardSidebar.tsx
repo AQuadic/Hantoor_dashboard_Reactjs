@@ -21,12 +21,12 @@ const DashboardSidebar = () => {
     <section className="relative h-screen border-1 ltr:border-l rtl:border-r bg-white flex flex-col">
       {/* Desktop Logo and Toggle Button - Made sticky */}
       <div
-        className={`hidden lg:flex items-center bg-[#F4F4FE] sticky top-0 z-10 ${isDesktopCollapsed ? "justify-center px-2 py-1.5" : "justify-between px-6 py-1.5"}`}
+        className={`hidden lg:flex items-center bg-[#F4F4FE] h-16 sticky top-0 z-10 ${isDesktopCollapsed ? "justify-center px-2 py-1.5" : "justify-between px-6 py-1.5"}`}
       >
         <AnimatePresence mode="wait">
           {!isDesktopCollapsed && (
             <motion.img
-              className="flex items-center justify-center"
+              className="flex items-center justify-center h-full"
               key="logo"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
