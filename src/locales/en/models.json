@@ -11,5 +11,7 @@
     "arType": "Type name (in Arabic)",
     "enType": "Type name (in English)",
     "structure": "Structure",
-    "type": "Type"
+    "type": "Type",
+    "arBrandName": "Brand origin name (in Arabic)",
+    "enBrandName": "Brand origin name (in English)"
 }
