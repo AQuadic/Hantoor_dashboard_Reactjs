@@ -3,6 +3,7 @@ import { CarPackageFieldsTypes } from "@/types/CarTypes";
 import CarPackageField from "@/components/cars/addcars/CarPackageField";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import { Switch } from "@heroui/react";
+import Delete from "@/components/icons/general/Delete";
 
 const CarPackages = () => {
   const [packages, setPackages] = useState<CarPackageFieldsTypes[]>([
@@ -40,6 +41,21 @@ const CarPackages = () => {
           handleDelete={() => removePackage(index)}
         />
       ))}
+       <div className="flex items-center gap-2">
+         <div className="flex-1">
+           {packages.map((pkg, index) => (
+          <CarPackageField
+            index={index}
+            key={index}
+            pkg={pkg}
+            handleDelete={() => removePackage(index)}
+          />
+        ))}
+         </div>
+        <div>
+          <Delete />
+        </div>
+       </div>
       <AddFieldButton onClick={addPackage} title="اضافة باقات صيانة اخرى" />
     </div>
   );
