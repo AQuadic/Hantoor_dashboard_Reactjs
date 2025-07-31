@@ -27,7 +27,7 @@ const ForgetPass = () => {
                 </div>
 
                 <Link to='/verification-code' className="text-center mt-[17px] flex items-center justify-center mx-auto">
-                    <DashboardButton titleAr={('next')} titleEn='التالي' />
+                    <DashboardButton titleAr={('التالي')} titleEn='Next' />
                 </Link>
 
             </div>

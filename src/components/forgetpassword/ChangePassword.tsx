@@ -30,7 +30,7 @@ const CahngePassword = () => {
                     />
                 </div>
                 <Link to='/login' className="flex items-center justify-center mt-[17px]">
-                    <DashboardButton titleAr={('Save and enter')} titleEn={('حفظ ودخول')} />
+                    <DashboardButton titleAr={('حفظ ودخول' )} titleEn={('Save and enter')} />
                 </Link>
 
             </div>

@@ -7,7 +7,11 @@ import { useScrollRestoration } from "./useScrollRestoration";
 
 const Layout = () => {
   const location = useLocation();
-  const isLogin = location.pathname === "/login";
+  const isLoginOrRelatedPage =
+    location.pathname === "/login" ||
+    location.pathname === "/forget-password" ||
+    location.pathname === "/verification-code" ||
+    location.pathname === "/change-password"
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -17,14 +21,14 @@ const Layout = () => {
 
   return (
     <div className="flex min-h-screen">
-      {!isLogin && <DashboardSidebar />}
+      {!isLoginOrRelatedPage && <DashboardSidebar />}
       <div
         ref={(el) => {
           scrollContainerRef.current = el;
         }}
         className="relative flex-1 overflow-y-auto"
       >
-        {!isLogin && <DashboardHeader />}
+        {!isLoginOrRelatedPage && <DashboardHeader />}
         {/* Animation container with relative positioning */}
         <div className="relative min-h-full">
           <AnimatePresence mode="wait">
