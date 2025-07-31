@@ -9,6 +9,7 @@ import ActiveDashboard from "@/components/icons/dashboard/ActiveDashboard";
 import ActiveFAQ from "@/components/icons/dashboard/ActiveFAQ";
 import ActiveFinancing from "@/components/icons/dashboard/ActiveFinancing";
 import ActiveModels from "@/components/icons/dashboard/ActiveModels";
+import ActiveNotification from "@/components/icons/dashboard/ActiveNotification";
 import ActiveSetting from "@/components/icons/dashboard/ActiveSetting";
 import ActiveSubordinates from "@/components/icons/dashboard/ActiveSubordinates";
 import ActiveSupportQuestions from "@/components/icons/dashboard/ActiveSupportQuestions";
@@ -125,6 +126,7 @@ export const SidebarLinks = [
   },
   {
     icons: Notification,
+    activeIcon: ActiveNotification,
     linkAr: "الاشعارات",
     linkEn: "Notifications",
     path: "/notifications",
