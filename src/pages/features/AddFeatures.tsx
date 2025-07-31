@@ -21,7 +21,7 @@ const AddFeatures = () => {
         </div>
         <div className="p-8 bg-white rounded-2xl mt-[18px] mx-8">
             <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">الصورة</h3>
-            <ImageInput image={profileImage} setImage={setProfileImage} />
+            <ImageInput image={profileImage} setImage={setProfileImage} placeholderText="اضافة GIF" />
         </div>
         <div className="p-8 bg-white rounded-2xl mt-[18px] mx-8">
             <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">

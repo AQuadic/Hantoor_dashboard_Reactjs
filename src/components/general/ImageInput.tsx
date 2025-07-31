@@ -13,6 +13,7 @@ interface ImageInputProps {
   image: File | null;
   setImage: React.Dispatch<React.SetStateAction<File | null>>;
   isRounded?: boolean;
+  placeholderText?: string;
 }
 
 const ImageInput: React.FC<ImageInputProps> = ({
@@ -21,6 +22,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
   image,
   setImage,
   isRounded = false,
+  placeholderText,
 }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -141,7 +143,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
             />
             {/* Only show text when not in icon mode */}
             {!isIconMode && (
-              <p className="text-lg text-primary underline">اضافة صورة</p>
+              <p className="text-lg text-primary underline">{placeholderText || "اضافة صورة"}</p>
             )}
           </>
         )}
