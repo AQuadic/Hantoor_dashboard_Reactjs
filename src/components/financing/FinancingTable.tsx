@@ -42,7 +42,7 @@ const FinancingTable = () => {
             <TableRow
                 key={question.id}
                 onClick={() => navigate(`/financing/details/${question.id}`, { state: { country: question.country } })}
-                className="cursor-pointer hover:bg-gray-100"
+                className="cursor-pointe"
             >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{question.country}</TableCell>

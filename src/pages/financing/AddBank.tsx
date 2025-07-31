@@ -6,6 +6,7 @@ import React, { useState } from 'react'
 import { countries } from "countries-list";
 import Add from '@/components/icons/banks/Add';
 import Delete from '@/components/icons/banks/Delete';
+import { useTranslation } from 'react-i18next';
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -18,7 +19,7 @@ const getCountryByIso2 = (iso2: string) => {
 };
 
 const AddBank = () => {
-
+    const { t } = useTranslation("financing");
     const [selectedCountry, setSelectedCountry] = useState(
         getCountryByIso2("EG")
     );
@@ -29,13 +30,13 @@ const AddBank = () => {
     return (
         <form className="p-8">
             <div className="p-8 bg-white rounded-2xl ">
-                <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">صورة شعار البنك</h3>
+                <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">{t('bankLogo')}</h3>
                 <ImageInput image={profileImage} setImage={setProfileImage} />
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     {/* Arabic bank */}
                     <div className="relative w-full">
                     <Input
-                        label="اسم البنك ( باللغة العربية )"
+                        label={t('arbankName')}
                         variant="bordered"
                         placeholder="بنك أبوظبي الأول"
                         classNames={{ label: "mb-2 text-base" }}
@@ -45,9 +46,9 @@ const AddBank = () => {
                     {/* English bank */}
                     <div className="relative w-full">
                     <Input
-                        label="اسم البنك ( باللغة الانجليزية )"
+                        label={t('enbankName')}
                         variant="bordered"
-                        placeholder="اكتب هنا"
+                        placeholder={t('writeHere')}
                         classNames={{ label: "mb-2 text-base" }}
                         size="lg"
                     />
@@ -63,18 +64,18 @@ const AddBank = () => {
             <div className="flex flex-wrap gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
                 <div>
                     <div className="flex flex-col flex-1 gap-4">
-                    <h3 className=" text-lg font-bold text-[#2A32F8]">بيانات الوافد</h3>
-                    <h2 className="text-[15px] font-bold text-[#1E1B1B]">رينج المرتب</h2>
+                    <h3 className=" text-lg font-bold text-[#2A32F8]">{t('visitorData')}</h3>
+                    <h2 className="text-[15px] font-bold text-[#1E1B1B]">{t('salaryRang')}</h2>
                     <div className='flex items-center gap-[9px]'>
                         <Input
-                            label="المرتب من"
+                            label={t('salaryFrom')}
                             variant="bordered"
                             placeholder="5000 درهم"
                             classNames={{ label: "mb-2 text-base" }}
                             size="lg"
                         />
                         <Input
-                            label="المرتب الى"
+                            label={t('salaryTo')}
                             variant="bordered"
                             placeholder="5000 درهم"
                             classNames={{ label: "mb-2 text-base" }}
@@ -82,29 +83,29 @@ const AddBank = () => {
                         />
                     </div>
                     <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                        <p className="text-right text-black text-sm">المدة</p>
+                        <p className="text-right text-black text-sm">{t('duration')}</p>
                         <div className="flex items-center justify-between gap-1">
                             <span className="text-gray-500 text-sm">3</span>
                             <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                            <option value="شهر">شهر</option>
-                            <option value="أيام">أيام</option>
-                            <option value="سنوات">سنوات</option>
+                            <option value="شهر">{t('month')}</option>
+                            <option value="أيام">{t('day')}</option>
+                            <option value="سنوات">{t('years')}</option>
                             </select>
                         </div>
                     </div>
                         <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                        <p className="text-right text-black text-sm">جهة العمل</p>
+                        <p className="text-right text-black text-sm">{t('Workplace')}</p>
                         <div className="flex items-center justify-between gap-1">
-                            <span className="text-gray-500 text-sm">جهة حكومية</span>
+                            <span className="text-gray-500 text-sm">{t('GovernmentEntity')}</span>
                             <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                            <option value="1">جهة حكومية</option>
-                            <option value="2">جهة حكومية</option>
-                            <option value="3">جهة حكومية</option>
+                            <option value="1">{t('GovernmentEntity')}</option>
+                            <option value="2">{t('GovernmentEntity')}</option>
+                            <option value="3">{t('GovernmentEntity')}</option>
                             </select>
                         </div>
                     </div>
                     <Input
-                        label="قيمة الفائدة"
+                        label={t('InterestAmount')}
                         variant="bordered"
                         placeholder="5%"
                         classNames={{ label: "mb-2 text-base" }}
@@ -115,7 +116,7 @@ const AddBank = () => {
                     <div className="flex flex-col flex-1 gap-4">
                     <div className='flex items-center justify-between'>
                         <div>
-                            <h3 className=" text-lg font-bold text-[#2A32F8]">بيانات الوافد</h3>
+                            <h3 className=" text-lg font-bold text-[#2A32F8]"></h3>
                             <h2 className="text-[15px] font-bold text-[#1E1B1B] mt-2">رينج المرتب</h2>
                         </div>
                     <Delete />

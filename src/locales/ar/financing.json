@@ -1,0 +1,17 @@
+{
+    "bankLogo": "صورة شعار البنك",
+    "arbankName": "اسم البنك ( باللغة العربية )",
+    "enbankName": "اسم البنك ( باللغة الانجليزية )",
+    "writeHere": "اكتب هنا",
+    "visitorData": "بيانات الوافد",
+    "salaryRang": "رينج المرتب",
+    "salaryFrom": "المرتب من",
+    "salaryTo": "المرتب الى",
+    "duration": "المدة",
+    "month": "شهر",
+    "day": "يوم",
+    "year": "سنة",
+    "Workplace": "جهة العمل",
+    "GovernmentEntity": "جهة حكومية",
+    "InterestAmount": "قيمة الفائدة"
+}

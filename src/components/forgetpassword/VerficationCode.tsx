@@ -38,7 +38,7 @@ const VerficationCode = () => {
                     <Link to='/' className='text-[#2A32F8] text-[19px]'>{t('resend')}</Link>
                 </div>
                 <Link to='/change-password' className="mt-[17px] flex items-center justify-center mx-auto">
-                    <DashboardButton title={t('next')} />
+                    <DashboardButton titleAr={t('next')} titleEn='التالي' />
                 </Link>
             </div>
         </section>

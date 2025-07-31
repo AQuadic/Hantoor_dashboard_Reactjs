@@ -54,7 +54,7 @@ const Login = () => {
                 </div>
 
                 <div className="flex items-center justify-center mt-[17px]">
-                    <DashboardButton title={t('enter')} />
+                    <DashboardButton titleAr={t('enter')} titleEn="دخول" />
                 </div>
                 
                 <div className="mt-3 text-center">

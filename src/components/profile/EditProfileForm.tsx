@@ -41,7 +41,7 @@ const EditProfileForm = ({
             classNames={{ label: "mb-2 text-base" }}
             size="lg"
           />
-          <DashboardButton title=" حفظ" />
+          <DashboardButton titleAr=" حفظ" titleEn="Save"/>
         </div>
         <div className="flex flex-col flex-1 gap-4">
           <h3 className="mb-2 text-lg font-bold"> كلمة المرور</h3>
@@ -66,7 +66,7 @@ const EditProfileForm = ({
             classNames={{ label: "mb-2 text-base" }}
             size="lg"
           />
-          <DashboardButton title=" حفظ" />
+          <DashboardButton titleAr=" حفظ" titleEn="Save" />
         </div>
       </div>
     </form>

@@ -17,8 +17,13 @@ const ChatHeader = () => {
 
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
             <div className="flex-1">
-            <SearchBar term={"ابحث بالاسم"} setTerm={() => {}} />
-            </div>
+                <SearchBar
+                termAr={"ابحث بالاسم"}
+                termEn={"Search by name"}
+                setTermAr={() => {}} 
+                setTermEn={() => {}} 
+                />            
+                </div>
             <div className="flex-1">
             <DashboardDatePicker />
             </div>
