@@ -4,7 +4,8 @@ import PhotosAndVideos from "@/components/cars/addcars/PhotosAndVideos";
 import React from "react";
 import CarPrices from "@/components/cars/addcars/CarPrices";
 import CarPackages from "@/components/cars/addcars/CarPackages";
-import CarAccessoriess from "@/components/cars/addcars/CarAccessories";
+import CarAccessories from "@/components/cars/addcars/CarAccessories";
+import CarOffers from "@/components/cars/addcars/CarOffers";
 
 const AddCars = () => {
   return (
@@ -15,7 +16,8 @@ const AddCars = () => {
         <CarDetails />
         <CarPrices />
         <CarPackages />
-        <CarAccessoriess />
+        <CarAccessories />
+        <CarOffers />
       </div>
     </div>
   );
