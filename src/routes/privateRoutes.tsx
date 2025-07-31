@@ -69,6 +69,7 @@ import EditPriceTo from "@/pages/models/EditPriceTo";
 import AgentsDetailsPage from "@/pages/agents/AgentsDetailsPage";
 import NotificationPage from "@/pages/notification/NotificationPage";
 import NotificationDetails from "@/pages/notification/NotificationDetails";
+import AddNotification from "@/pages/notification/AddNotification";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -393,5 +394,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/notifications/details/:id",
     element: <NotificationDetails />,
+  },
+  {
+    path: "/notifications/add/",
+    element: <AddNotification />,
   },
 ];

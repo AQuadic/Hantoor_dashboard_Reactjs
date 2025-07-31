@@ -29,7 +29,7 @@ const NotificationsHeader = () => {
             <div className="flex-1">
             <DashboardDatePicker />
             </div>
-            <Link to="/faq/add">
+            <Link to="/notifications/add">
             <DashboardButton titleAr={"اضافة اشعار جديد"} titleEn={"Add a new notification"} variant='add' />
             </Link>
         </div>
