@@ -10,24 +10,34 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import brand1 from '/images/brand/brand1.svg'
+import brand2 from '/images/brand/brand2.svg'
+import brand3 from '/images/brand/brand3.svg'
+import brand4 from '/images/brand/brand4.svg'
 
 export function BrandsTable() {
   const brands = [
     {
       id: 1,
-      image: "/",
+      image: brand1,
       name: "محمد احمد",
       count: 22,
     },
     {
       id: 2,
-      image: "/",
+      image: brand2,
       name: "محمد احمد",
       count: 22,
     },
     {
       id: 3,
-      image: "/",
+      image: brand3,
+      name: "محمد احمد",
+      count: 22,
+    },
+      {
+      id: 3,
+      image: brand4,
       name: "محمد احمد",
       count: 22,
     },
@@ -48,7 +58,9 @@ export function BrandsTable() {
         {brands.map((brand, index) => (
           <TableRow key={brand.id}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{brand.image}</TableCell>
+            <TableCell>
+              <img src={brand.image} alt="brand" />
+            </TableCell>
             <TableCell>{brand.name}</TableCell>
             <TableCell className="w-full">{brand.count}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
