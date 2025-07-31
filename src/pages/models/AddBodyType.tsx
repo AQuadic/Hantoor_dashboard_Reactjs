@@ -2,9 +2,11 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
 const AddBodyType = () => {
+  const { t } = useTranslation("models");
   const [, setSelectedAgent] = React.useState("");
   const params = useParams();
   const brandId = params.id;
@@ -50,7 +52,7 @@ const AddBodyType = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label="اسم نوع الهيكل ( باللغة العربية )"
+                label={t('arStructureName')}
                 variant="bordered"
                 placeholder=" SUV"
                 classNames={{ label: "mb-2 text-base" }}
@@ -60,7 +62,7 @@ const AddBodyType = () => {
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
-                label="الموديل"
+                label={t('model')}
                 onSelectionChange={(key) => setSelectedAgent(key as string)}
               >
                 {agents.map((agent) => (
@@ -71,7 +73,7 @@ const AddBodyType = () => {
               </Select>
             </div>
             <Input
-              label="اسم نوع الهيكل ( باللغة الانجليزية )"
+              label={t('enStructureName')}
               variant="bordered"
               placeholder="اكتب هنا"
               className="flex-1"

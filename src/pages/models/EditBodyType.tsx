@@ -2,8 +2,10 @@ import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
 import { Input } from '@heroui/react'
 import { Select, SelectItem} from "@heroui/react";
+import { useTranslation } from 'react-i18next';
 
 const EditBodyType = () => {
+    const { t } = useTranslation("models");
     const agent = [
         {key: "1", label: "2025"},
         {key: "2", label: "2025"},
@@ -29,7 +31,7 @@ const EditBodyType = () => {
                 <div className="flex flex-col md:flex-row gap-[15px]">
                     <div className="w-full">
                     <Input
-                        label="اسم الفئة ( باللغة العربية )"
+                        label={t('arcategoryName')}
                         variant="bordered"
                         placeholder="SUV"
                         classNames={{ label: "mb-2 text-base" }}
@@ -38,7 +40,7 @@ const EditBodyType = () => {
                     </div>
                     <div className="w-full">
                     <Input
-                        label="اسم الفئة ( باللغة الانجليزية )"
+                        label={t('encategoryName')}
                         variant="bordered"
                         placeholder="اكتب هنا"
                         classNames={{ label: "mb-2 text-base" }}
@@ -49,7 +51,7 @@ const EditBodyType = () => {
                 <div className="w-1/2 rtl:pl-2 ltr:pr-2 mt-4">
                     <Select
                         items={agent}
-                        label="الموديل"
+                        label={t('model')}
                         placeholder="2025"
                         classNames={{
                             trigger: 'h-[53px] !h-[53px] min-h-[53px] bg-white border py-0',

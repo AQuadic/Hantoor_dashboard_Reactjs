@@ -2,5 +2,10 @@
     "arModelName": "Model name (in Arabic)",
     "enModelName": "Model name (in English)",
     "writeHere": "Write here",
-    "agent": "Agent"
+    "agent": "Agent",
+    "arStructureName": "Structure type name (in Arabic)",
+    "enStructureName": "Structure type name (in English)",
+    "model": "Model",
+    "arcategoryName": "Category name (in Arabic)",
+    "encategoryName": "Category name (in English)"
 }
