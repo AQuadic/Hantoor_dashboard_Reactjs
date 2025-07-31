@@ -34,6 +34,32 @@ const CarPrices = () => {
       >
         يوجد خصم على السعر
       </Checkbox>
+        <div className="flex gap-4 ">
+        <Input
+          value={price.toString()}
+          onChange={(e) => setPrice(Number(e.target.value))}
+          type="number"
+          label="نسبة الخصم"
+          variant="bordered"
+          placeholder="اكتب هنا"
+          classNames={{ label: "mb-2 text-base" }}
+          size="lg"
+          className="w-1/4"
+        />
+         <Input
+          type="date"
+          label="التاريخ"
+          variant="bordered"
+          placeholder="اكتب هنا"
+          classNames={{ label: "mb-2 text-base" }}
+          size="lg"
+          className="w-1/4"
+        />
+        <div className="bg-[#2E7CBE1A] w-1/4 px-5 py-4 flex items-center justify-between rounded-2xl">
+          <span>السعر بعد الخصم</span>
+          <span className="text-xl font-bold text-primary">{price}</span>
+        </div>
+      </div>
       {shouldDiscount && (
         <div className="flex items-center gap-4">
           <Input
