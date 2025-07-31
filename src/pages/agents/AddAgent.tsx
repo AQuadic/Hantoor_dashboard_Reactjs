@@ -3,6 +3,7 @@ import AddSalesShowrooms from '@/components/agents/AddSalesShowrooms';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
 import TabsFilter from '@/components/general/dashboard/TabsFilter'
 import { Input } from '@heroui/react'
+import { useTranslation } from 'react-i18next';
 
 interface SubordinatesHeaderProps {
     selectedFilter: string;
@@ -13,6 +14,7 @@ const AddAgent : React.FC<SubordinatesHeaderProps> = ({
     selectedFilter,
     setSelectedFilter,
 }) => { 
+    const { t } = useTranslation("agents");
     return (
         <section>
             <div className="pt-2 pb-6 bg-white ">
@@ -31,7 +33,7 @@ const AddAgent : React.FC<SubordinatesHeaderProps> = ({
                     {/* Arabic name */}
                     <div className="relative w-full">
                     <Input
-                        label="اسم الوكيل ( باللغة العربية )"
+                        label={t('arName')}
                         variant="bordered"
                         placeholder="الشركة الدولية التجارية"
                         classNames={{ label: "mb-2 text-base" }}
@@ -41,9 +43,9 @@ const AddAgent : React.FC<SubordinatesHeaderProps> = ({
                     {/* English name */}
                     <div className="relative w-full">
                     <Input
-                        label="اسم الوكيل ( باللغة الانجليزية )"
+                        label={t('enName')}
                         variant="bordered"
-                        placeholder="اكتب هنا"
+                        placeholder={t('writeHere')}
                         classNames={{ label: "mb-2 text-base" }}
                         size="lg"
                     />
@@ -54,16 +56,16 @@ const AddAgent : React.FC<SubordinatesHeaderProps> = ({
                     {/* Link */}
                     <div className="relative w-full">
                     <Input
-                        label="رابط الموقع الالكتروني"
+                        label={t('emailLink')}
                         variant="bordered"
-                        placeholder="اكتب هنا"
+                        placeholder={t('writeHere')}
                         classNames={{ label: "mb-2 text-base" }}
                         size="lg"
                         />
                     </div>
 
                     <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                        <p className="text-right text-black text-sm">الماركة</p>
+                        <p className="text-right text-black text-sm">{t('brand')}</p>
                         <div className="flex items-center justify-between gap-1">
                             <span className="text-gray-500 text-sm">تويوتا</span>
                             <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">

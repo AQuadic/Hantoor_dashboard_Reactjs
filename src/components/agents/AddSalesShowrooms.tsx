@@ -1,46 +1,27 @@
 import { Input } from '@heroui/react'
 import Add from '../icons/banks/Add'
 import DashboardButton from '../general/dashboard/DashboardButton'
+import { useTranslation } from 'react-i18next';
 
 const AddSalesShowrooms = () => {
+    const { t } = useTranslation("agents");
     return (
         <div className="bg-white mt-6 rounded-[15px]">
         <div className="flex flex-col md:flex-row gap-[15px]">
             <div className="w-full">
             <Input
-                label="اسم مركز الصيانة ( باللغة العربية )"
+                label={t('arServiceCenter')}
                 variant="bordered"
-                placeholder=" المركز الدولي لصيانة السيارات"
+                placeholder={t('placeholderName')}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
             />
             </div>
             <div className="w-full">
             <Input
-                label="اسم مركز الصيانة ( باللغة الانجليزية )"
+                label={t('enServiceCenter')}
                 variant="bordered"
-                placeholder="اكتب هنا"
-                classNames={{ label: "mb-2 text-base" }}
-                size="lg"
-            />
-            </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-[15px] mt-4">
-            <div className="w-full">
-            <Input
-                label="وصف العنوان ( باللغة العربية )"
-                variant="bordered"
-                placeholder="اكتب هنا"
-                classNames={{ label: "mb-2 text-base" }}
-                size="lg"
-            />
-            </div>
-            <div className="w-full">
-            <Input
-                label="وصف العنوان ( باللغة الانجليزية )"
-                variant="bordered"
-                placeholder="اكتب هنا"
+                placeholder={t('writeHere')}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
             />
@@ -50,16 +31,37 @@ const AddSalesShowrooms = () => {
         <div className="flex flex-col md:flex-row gap-[15px] mt-4">
             <div className="w-full">
             <Input
-                label="لينك جوجل ماب"
+                label={t('arAddress')}
                 variant="bordered"
-                placeholder="اكتب هنا"
+                placeholder={t('writeHere')}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
             />
             </div>
             <div className="w-full">
             <Input
-                label="رقم الجوال"
+                label={t('enAddress')}
+                variant="bordered"
+                placeholder={t('writeHere')}
+                classNames={{ label: "mb-2 text-base" }}
+                size="lg"
+            />
+            </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row gap-[15px] mt-4">
+            <div className="w-full">
+            <Input
+                label={t('linkGoogleMap')}
+                variant="bordered"
+                placeholder={t('writeHere')}
+                classNames={{ label: "mb-2 text-base" }}
+                size="lg"
+            />
+            </div>
+            <div className="w-full">
+            <Input
+                label={t('phoneNumber')}
                 variant="bordered"
                 placeholder="123456789"
                 classNames={{ label: "mb-2 text-base" }}
@@ -71,7 +73,7 @@ const AddSalesShowrooms = () => {
         <div className='mt-4 w-1/2'>
             <div className="w-full">
             <Input
-                label="رقم الواتساب"
+                label={t('whatsApp')}
                 variant="bordered"
                 placeholder="123456789"
                 classNames={{ label: "mb-2 text-base" }}

@@ -1,0 +1,17 @@
+{
+    "arName": "Agent Name (in Arabic)",
+    "enName": "Agent Name (in English)",
+    "emailLink": "Website Link",
+    "writeHere": "Write here",
+    "brand": "Brand",
+    "arCenterName": "Service Center Name (in Arabic)",
+    "placeholderName": "International Car Service Center",
+    "enCenterName": "Service Center Name (in English)",
+    "arAddress": "Address Description (in Arabic)",
+    "enAddress": "Address Description (in English)",
+    "linkGoogleMap": "Google Maps Link",
+    "phoneNumber": "Mobile Number",
+    "whatsApp": "WhatsApp Number",
+    "arServiceCenter": "Sales showroom name (in Arabic)",
+    "enServiceCenter": "Sales showroom name (in English)"
+}
