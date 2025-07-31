@@ -9,7 +9,7 @@ import { Link } from "react-router";
 const DashboardUsers = () => {
   return (
     <section>
-      <div className="py-2 bg-white">
+      <div className="py-2 bg-white border-b border-[#E1E1E1]">
         <DashboardHeader 
           titleAr={"المستخدمين"} titleEn={"Users"} 
           items={[{

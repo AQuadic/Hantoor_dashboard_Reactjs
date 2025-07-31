@@ -94,7 +94,7 @@ const filtersData = [
     filtersData[0];
 
   return (
-    <div className="pt-2 pb-6 bg-white">
+    <div className="pt-2 pb-6 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
         titleAr="اقسام السيارات"
         titleEn="Car Sections"
