@@ -2,6 +2,7 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
 const AddBrand = () => {
@@ -17,10 +18,7 @@ const AddBrand = () => {
     { label: "وكيل 3", value: "agent3" },
   ];
 
-  // const oldValues = {
-  //   image: "aaa",
-  //   name: "car name",
-  // };
+  const { t } = useTranslation("models");
 
   return (
     <div>
@@ -50,7 +48,7 @@ const AddBrand = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label="اسم الموديل ( باللغة العربية )"
+                label={t('arModelName')}
                 variant="bordered"
                 placeholder=" تويوتا"
                 classNames={{ label: "mb-2 text-base" }}
@@ -60,7 +58,7 @@ const AddBrand = () => {
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
-                label="الوكيل"
+                label={t('agent')}
                 onSelectionChange={(key) => setSelectedAgent(key as string)}
               >
                 {agents.map((agent) => (
@@ -71,9 +69,9 @@ const AddBrand = () => {
               </Select>
             </div>
             <Input
-              label=" اسم الموديل ( باللغة الانجليزية )"
+              label={t('enModelName')}
               variant="bordered"
-              placeholder="اكتب هنا"
+              placeholder={t('writeHere')}
               className="flex-1"
               classNames={{ label: "mb-2 text-base" }}
               size="lg"

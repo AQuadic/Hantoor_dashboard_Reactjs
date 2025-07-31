@@ -18,6 +18,9 @@ import brandsEn from "../locales/en/brands.json";
 import agentsAr from "../locales/ar/agents.json";
 import agentsEn from "../locales/en/agents.json";
 
+import modelsAr from "../locales/ar/models.json";
+import modelsEn from "../locales/en/models.json";
+
 // Ensure we're in browser environment
 const savedLang =
   typeof window !== "undefined"
@@ -39,6 +42,7 @@ i18n.use(initReactI18next).init({
       country: countryEn,
       brands: brandsEn,
       agents: agentsEn,
+      models: modelsEn,
     },
     ar: {
       header: headerAr,
@@ -47,6 +51,7 @@ i18n.use(initReactI18next).init({
       country: countryAr,
       brands: brandsAr,
       agents: agentsAr,
+      models: modelsAr,
     },
   },
 });
