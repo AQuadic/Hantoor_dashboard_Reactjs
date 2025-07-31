@@ -2,8 +2,10 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input } from "@heroui/react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const EditEnginType = () => {
+  const { t } = useTranslation("models");
   return (
     <div>
       <DashboardHeader
@@ -32,15 +34,15 @@ const EditEnginType = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label="نوع الماكينة ( باللغة العربية )"
+                label={t('arEngineType')}
                 variant="bordered"
-                placeholder="بنزين"
+                placeholder={t('gasoline')}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
             </div>
             <Input
-              label="نوع الماكينة ( باللغة الانجليزية )"
+              label={t('enEngineType')}
               variant="bordered"
               placeholder="اكتب هنا"
               className="flex-1"
