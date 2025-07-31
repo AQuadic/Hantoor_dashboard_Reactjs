@@ -3,8 +3,10 @@ import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
 import { Input } from '@heroui/react'
 import { Select, SelectItem} from "@heroui/react";
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 const EditCarTypes = () => {
+    const { t } = useTranslation("models");
     const [, setSelectedAgent] = React.useState("");
     const agents = [
         { label: "SUV", value: "model1" },
@@ -29,7 +31,7 @@ const EditCarTypes = () => {
                 <div className="flex gap-4">
                     <div className="flex-1">
                     <Input
-                        label="اسم النوع ( باللغة العربية )"
+                        label={t('arType')}
                         variant="bordered"
                         placeholder=" SUV"
                         classNames={{ label: "mb-2 text-base" }}
@@ -39,7 +41,7 @@ const EditCarTypes = () => {
                         className="mt-4"
                         size={"lg"}
                         variant="bordered"
-                        label="الهيكل"
+                        label={t('structure')}
                         onSelectionChange={(key) => setSelectedAgent(key as string)}
                     >
                         {agents.map((agent) => (
@@ -50,7 +52,7 @@ const EditCarTypes = () => {
                     </Select>
                     </div>
                     <Input
-                    label="اسم النوع ( باللغة الانجليزية )"
+                    label={t('enType')}
                     variant="bordered"
                     placeholder="اكتب هنا"
                     className="flex-1"
