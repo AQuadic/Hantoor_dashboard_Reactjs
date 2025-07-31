@@ -18,5 +18,7 @@
     "enSeatsNumbers": "Number of seats (in English)",
     "arEngineType": "Engine type (in Arabic)",
     "enEngineType": "Engine type (in English)",
-    "gasoline": "Gasoline"
+    "gasoline": "Gasoline",
+    "arEngineSize": "Engine size (in Arabic)",
+    "enEngineSize": "Engine size (in English)"
 }
