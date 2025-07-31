@@ -8,6 +8,7 @@ import CarAccessories from "@/components/cars/addcars/CarAccessories";
 import CarOffers from "@/components/cars/addcars/CarOffers";
 import RentToOwn from "@/components/cars/addcars/RentToOwn";
 import CarAdvertisingImages from "@/components/cars/addcars/CarAdvertisingImages";
+import DashboardButton from "@/components/general/dashboard/DashboardButton";
 
 const AddCars = () => {
   return (
@@ -22,6 +23,9 @@ const AddCars = () => {
         <CarOffers />
         <RentToOwn />
         <CarAdvertisingImages />
+        <div className="mt-6">
+          <DashboardButton titleAr="اضافة" titleEn="Add"/>
+        </div>
       </div>
     </div>
   );
