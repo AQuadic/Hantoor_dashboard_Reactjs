@@ -1,17 +1,29 @@
 import { AnimatePresence, motion } from "framer-motion";
-import React from "react";
+import React, { useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import DashboardSidebar from "./DashboardSidebar";
 import DashboardHeader from "./LayoutHeader";
+import { useScrollRestoration } from "./useScrollRestoration";
 
 const Layout = () => {
   const location = useLocation();
   const isLogin = location.pathname === "/login";
 
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+
+  useScrollRestoration(scrollContainerRef, {
+    storageKeyPrefix: "app-scroll",
+  });
+
   return (
     <div className="flex min-h-screen">
       {!isLogin && <DashboardSidebar />}
-      <div className="relative flex-1 overflow-y-auto">
+      <div
+        ref={(el) => {
+          scrollContainerRef.current = el;
+        }}
+        className="relative flex-1 overflow-y-auto"
+      >
         {!isLogin && <DashboardHeader />}
         {/* Animation container with relative positioning */}
         <div className="relative min-h-full">
