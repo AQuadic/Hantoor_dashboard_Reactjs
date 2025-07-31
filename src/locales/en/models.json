@@ -13,5 +13,7 @@
     "structure": "Structure",
     "type": "Type",
     "arBrandName": "Brand origin name (in Arabic)",
-    "enBrandName": "Brand origin name (in English)"
+    "enBrandName": "Brand origin name (in English)",
+    "arSeatsNumbers": "Number of seats (in Arabic)",
+    "enSeatsNumbers": "Number of seats (in English)"
 }
