@@ -11,6 +11,8 @@ import CarAdvertisingImages from "@/components/cars/addcars/CarAdvertisingImages
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 
 const AddCars = () => {
+    const handleDelete = () => {
+  };
   return (
     <div>
       <AddCarsHeader />
@@ -19,8 +21,25 @@ const AddCars = () => {
         <CarDetails />
         <CarPrices />
         <CarPackages />
-        <CarAccessories />
-        <CarOffers />
+        <CarAccessories
+          handleDelete={handleDelete}
+          field={{
+            image: null,
+            titleEn: "",
+            titleAr: "",
+            descriptionEn: "",
+            descriptionAr: "",
+          }}
+        />
+        <CarOffers 
+          handleDelete={handleDelete}
+          field={{
+            image: null,
+            titleEn: "",
+            titleAr: "",
+            descriptionEn: "",
+            descriptionAr: "",
+          }}/>
         <RentToOwn />
         <CarAdvertisingImages />
         <div className="mt-6">

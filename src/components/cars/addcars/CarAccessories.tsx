@@ -6,11 +6,12 @@ import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteB
 import ImageInput from "@/components/general/ImageInput";
 
 interface CarDetailsFieldProps {
-  field: CarDetailsFieldsTypes;
+  field?: CarDetailsFieldsTypes;
   handleDelete: () => void;
 }
 
-const CarAccessories = ({ field, handleDelete }: CarDetailsFieldProps) => {
+
+const CarAccessories = ({ handleDelete }: CarDetailsFieldProps) => {
   const [carDetailsFields, setCarDetailsFields] = React.useState<
     CarDetailsFieldsTypes[]
   >([
