@@ -8,24 +8,21 @@ const TermsTable = () => {
     const profile = [
     {
         id: 1,
-        image: '/',
-        text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
-        country: 'مصر',
-        description: 'Hantoor , حيث تلتقي التكنولوجيا بالتميز لتبسيط رحلتك نحو امتلاك السياره التي طالما حلمت بها...'
+        title: "سياسة الأسعار",
+        country: 'السعودية',
+        description: 'لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي تستخدم بشكل شائع لتوضيح الشكل المرئي للمستند أو الخط دون الاعتماد...'
     },
     {
         id: 2,
-        image: '/',
-        text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
+        title: "سياسة الأسعار",
         country: 'مصر',
-        description: 'Hantoor , حيث تلتقي التكنولوجيا بالتميز لتبسيط رحلتك نحو امتلاك السياره التي طالما حلمت بها...'
+        description: 'لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي تستخدم بشكل شائع لتوضيح الشكل المرئي للمستند أو الخط دون الاعتماد...'
     },
     {
         id: 3,
-        image: '/',
-        text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
-        country: 'مصر',
-        description: 'Hantoor , حيث تلتقي التكنولوجيا بالتميز لتبسيط رحلتك نحو امتلاك السياره التي طالما حلمت بها...'
+        title: "سياسة الأسعار",
+        country: 'السعودية',
+        description: 'لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي تستخدم بشكل شائع لتوضيح الشكل المرئي للمستند أو الخط دون الاعتماد...'
     },
     ];
     return (
@@ -43,8 +40,7 @@ const TermsTable = () => {
             {profile.map((profie, index) => (
             <TableRow key={profie.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{profie.image}</TableCell>
-                <TableCell>{profie.text}</TableCell>
+                <TableCell>{profie.title}</TableCell>
                 <TableCell>{profie.country}</TableCell>
                 <TableCell>{profie.description}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
