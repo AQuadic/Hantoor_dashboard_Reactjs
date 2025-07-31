@@ -17,8 +17,8 @@ const PermissionsCard: React.FC<PermissionsCardProps> = ({
   setSelectedPermissions,
 }) => {
   const {
-    i18n: { language },
-  } = useTranslation();
+    i18n: { language },t
+  } = useTranslation("users");
 
   const handleSelectOne = (index: number) => {
     console.log(index);
@@ -46,7 +46,7 @@ const PermissionsCard: React.FC<PermissionsCardProps> = ({
         <h3 className="mb-4 text-lg font-bold text-primary">
           {language === "ar" ? titleAr : titleEn}
         </h3>
-        <Checkbox onChange={handleSelectAll}>Select All</Checkbox>
+        <Checkbox onChange={handleSelectAll}>{t('selectAll')}</Checkbox>
       </div>
       <div className={"flex flex-wrap gap-2"}>
         {selectedPermissions.map((permission, index) => (

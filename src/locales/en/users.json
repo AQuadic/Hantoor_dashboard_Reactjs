@@ -6,5 +6,6 @@
     "email": "Email",
     "phone": "Phone number",
     "password": "Password",
-    "confirmPassword": "Confirm password"
+    "confirmPassword": "Confirm password",
+    "selectAll": "Select all"
 }
