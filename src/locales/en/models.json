@@ -20,5 +20,8 @@
     "enEngineType": "Engine type (in English)",
     "gasoline": "Gasoline",
     "arEngineSize": "Engine size (in Arabic)",
-    "enEngineSize": "Engine size (in English)"
+    "enEngineSize": "Engine size (in English)",
+    "arPrice": "Price (in Arabic)",
+    "enPrice": "Price (in English)",
+    "country": "Country"
 }
