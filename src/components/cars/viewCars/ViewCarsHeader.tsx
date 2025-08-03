@@ -1,5 +1,6 @@
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
+import DiscountPercentage from "./DiscountPercentage";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
@@ -68,7 +69,7 @@ const ViewCarsHeader: React.FC<SubordinatesHeaderProps> = ({
             className="object-cover w-[338px] h-[175px] rounded-xl"
             src="/public/images/carDetails.png"
           />
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1.5">
             <h3 className="text-xl font-bold">تويوتا كامري 2025</h3>
             <div className="flex items-center gap-2">
               <img
@@ -80,6 +81,7 @@ const ViewCarsHeader: React.FC<SubordinatesHeaderProps> = ({
             </div>
             <p className="text-xl font-bold text-primary">500.000 درهم</p>
             <p className="text-lg text-[#606060] line-through">600.200 درهم</p>
+            <DiscountPercentage percentage={15} />
           </div>
         </div>
       </div>
