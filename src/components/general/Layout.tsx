@@ -11,7 +11,7 @@ const Layout = () => {
     location.pathname === "/login" ||
     location.pathname === "/forget-password" ||
     location.pathname === "/verification-code" ||
-    location.pathname === "/change-password"
+    location.pathname === "/change-password";
 
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -26,7 +26,7 @@ const Layout = () => {
         ref={(el) => {
           scrollContainerRef.current = el;
         }}
-        className="relative flex-1 overflow-y-auto"
+        className="relative flex-1 overflow-y-auto pb-8"
       >
         {!isLoginOrRelatedPage && <DashboardHeader />}
         {/* Animation container with relative positioning */}
@@ -38,9 +38,10 @@ const Layout = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 50 }}
               transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="absolute inset-0 w-full"
+              className="absolute inset-0 w-full min-h-full"
             >
               <Outlet />
+              <div className="pb-8" />
             </motion.div>
           </AnimatePresence>
         </div>
