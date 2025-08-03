@@ -2,8 +2,10 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 const EditQuestion = () => {
+    const { t } = useTranslation("questions");
     return (
             <section>
             <DashboardHeader
@@ -25,7 +27,7 @@ const EditQuestion = () => {
                     className="w-full !h-16 rounded-[12px] mt-4"
                     dir="rtl"
                     >
-                    <SelectValue placeholder="البلد" />
+                    <SelectValue placeholder={t('country')} />
                     </SelectTrigger>
                     <SelectContent dir="rtl">
                     <SelectItem value="1">الامارات</SelectItem>
@@ -39,9 +41,9 @@ const EditQuestion = () => {
                 {/* Arabic Question */}
                 <div className="relative w-full">
                 <Input
-                    label="السؤال ( باللغة العربية )"
+                    label={t('arQuestion')}
                     variant="bordered"
-                    placeholder="اكتب هنا"
+                    placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                     />
@@ -49,9 +51,9 @@ const EditQuestion = () => {
                 {/* English Question */}
                 <div className="relative w-full">
                 <Input
-                    label="السؤال ( باللغة الانجليزية )"
+                    label={t('enQuestion')}
                     variant="bordered"
-                    placeholder="اكتب هنا"
+                    placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                 />
