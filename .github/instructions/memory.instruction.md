@@ -16,7 +16,7 @@ applyTo: "**"
 - Current project type: web app
 - Tech stack: React, TypeScript, Vite, TailwindCSS, framer-motion, react-router, i18next
 - Architecture patterns: component-based
-- Key requirements: performance, mobile usability, bug-free UI
+- Key requirements: performance, mobile usability, bug-free UI, consistent use of "Helvetica Neue W23 for SKY" font across all UI
 
 ## Coding Patterns
 
@@ -48,5 +48,9 @@ applyTo: "**"
 - Mobile sidebar must be scrollable
 - Fix any errors in the file
 - 2025-08-03: Fixed broken image in DiscountPercentage component by correcting image path to use Vite public directory root-relative path.
+
+## Notes
+
+- 2025-08-03: Requirement added to use "Helvetica Neue W23 for SKY" as the global font across the entire project. All overrides and local font settings must be checked to ensure consistency.
 
 Update memory after each significant change or decision
