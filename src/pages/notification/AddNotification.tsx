@@ -1,11 +1,14 @@
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
-import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
+import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
 import ImageInput from '@/components/general/ImageInput';
+import SuccessPopup from '@/components/general/SuccessPopup';
 import { Checkbox, Input, Select, SelectItem } from "@heroui/react";
-import React from 'react'
+import React, { useState } from 'react'
 
 const AddNotification = () => {
     const [profileImage, setProfileImage] = React.useState<File | null>(null);
+    const [showPopup, setShowPopup] = useState(false);
+
     const countries = [
         { key: "ae", label: "الامارات" },
         { key: "eg", label: "مصر" },
@@ -22,10 +25,17 @@ const AddNotification = () => {
         { name: "ابراهيم محمود", phone: "+966 123456 789" },
         { name: "مصطفي محمد", phone: "+966 123456 789" },
         { name: "Khaled Mohmed", phone: "+966 123456 789" },
-        { name: "Dina Khaled", phone: "+966 123456 789" }
+        { name: "Dina Khaled", phone: "+966 123456 789" },
     ];
+
+    const handleSend = () => {
+    setShowPopup(true);
+    setTimeout(() => setShowPopup(false), 2000);
+    };
+
+
     return (
-        <section>
+        <section className="relative">
             <div className="pt-2 pb-6 bg-white ">
                 <DashboardHeader
                     titleAr="اضافة اشعار جديد"
@@ -37,7 +47,7 @@ const AddNotification = () => {
                     ]}
                 />
                 <div className='px-8'>
-                    <ImageInput image={profileImage} setImage={setProfileImage} />
+                <ImageInput image={profileImage} setImage={setProfileImage} />
                 </div>
             </div>
             
@@ -66,7 +76,7 @@ const AddNotification = () => {
                         </div>
                     </div>
 
-                    <div className='flex xl:flex-row flex-col items-centerr gap-3 mt-4'>
+                    <div className='flex xl:flex-row flex-col items-center gap-3 mt-4'>
                         <div className="relative w-full">
                             <textarea
                                 id="arabic-description"
@@ -105,9 +115,9 @@ const AddNotification = () => {
                         classNames={{ label: "mb-2 text-base" }}
                         size="lg"
                         >
-                        {countries.map((authority) => (
-                            <SelectItem key={authority.key} textValue={authority.label}>
-                            {authority.label}
+                        {countries.map((c) => (
+                            <SelectItem key={c.key} textValue={c.label}>
+                            {c.label}
                             </SelectItem>
                         ))}
                         </Select>
@@ -128,7 +138,7 @@ const AddNotification = () => {
                     </div>
                 
                     <div className='mt-4'>
-                        <DashboardButton titleAr='ارسال' titleEn='Send' />
+                        <DashboardButton titleAr='ارسال' titleEn='Send' onClick={handleSend}/>
                     </div>
                 </div>
 
@@ -188,6 +198,7 @@ const AddNotification = () => {
                     </table>
                 </div>
             </div>
+            {showPopup && <SuccessPopup onClose={() => setShowPopup(false)} />}
 
         </section>
     )
