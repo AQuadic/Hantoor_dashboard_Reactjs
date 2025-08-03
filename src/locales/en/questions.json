@@ -2,5 +2,12 @@
     "country": "Country",
     "arQuestion": "Question (in Arabic)",
     "writeHere": "Write Here",
-    "enQuestion": "Question (in English)"
+    "enQuestion": "Question (in English)",
+    "arAnswer": "Answer (in Arabic)",
+    "enAnswer": "Answer (in English)",
+    "questionDetails": "Question Details",
+    "question": "Question",
+    "answer": "Answer",
+    "questionOne": "How can I view all the cars?",
+    "answerOne": "Lorem Ipsum is a method of writing texts in publishing and graphic design, commonly used to demonstrate the visual form of a document or font without relying on meaningful content. Lorem Ipsum can be used before publishing the final version."
 }
