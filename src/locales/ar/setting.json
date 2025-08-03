@@ -27,5 +27,14 @@
     "addPhoto": "اضافة صورة",
     "addVideo": "اضافة فيديو",
 
-    "pricingPolicy": "سياسة الأسعار"
+    "pricingPolicy": "سياسة الأسعار",
+
+    "socialMediaLinks": "روابط التواصل الاجتماعي",
+    "facebookLink": "رابط الفيسبوك",
+    "instagramLink": "رابط الانستجرام",
+    "whatsappLink": "رابط واتساب",
+    "tiktokLink": "رابط التيك توك",
+    "snapchatLink": "رابط السناب شات",
+    "xLink": "رابط اكس",
+    "linkedinLink": "رابط لينكدإن"
 }

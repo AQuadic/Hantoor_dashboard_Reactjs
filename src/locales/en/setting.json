@@ -27,5 +27,14 @@
     "addPhoto": "Add photo",
     "addVideo": "Add video",
     
-    "pricingPolicy": "Price policy"
+    "pricingPolicy": "Price policy",
+
+    "socialMediaLinks": "Social Media Links",
+    "facebookLink": "Facebook Link",
+    "instagramLink": "Instagram Link",
+    "whatsappLink": "WhatsApp Link",
+    "tiktokLink": "TikTok Link",
+    "snapchatLink": "Snapchat Link",
+    "xLink": "X Link",
+    "linkedinLink": "LinkedIn Link"
 }
