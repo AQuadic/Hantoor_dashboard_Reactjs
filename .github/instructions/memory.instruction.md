@@ -1,6 +1,8 @@
+# 2025-08-03: Implemented a fully controlled Slate React rich text editor in DashboardTextEditor.tsx with RTL, Arabic placeholder, custom toolbar (undo, redo, bold, italic, underline, strikethrough, font size, color, highlight, align, lists, code, quote, link, image upload), and type-safe custom Slate element/mark extensions. Toolbar is compact, ordered as in screenshot, and uses Lucide icons. File-based image upload (data URL) is supported. All compile and type errors resolved. Toolbar and UI match provided screenshot. Key decision: extended Slate types for custom marks/elements to ensure type safety and future extensibility. All dependencies installed and code follows project conventions. All user-requested features implemented and validated.
+
 ---
-applyTo: "**"
----
+
+## applyTo: "\*\*"
 
 # User Memory
 
@@ -28,10 +30,7 @@ applyTo: "**"
 
 ## Context7 Research History
 
-- No Context7 research yet for AboutCar or MaintenancePackages table UI patterns. No third-party library used for these changes.
-- Vite public directory image path: Bug found in DiscountPercentage component where image was referenced as "images/redPercentage.png" instead of "/images/redPercentage.png". Fixed by updating to root-relative path as per Vite documentation (2025-08-03).
-- 2025-08-03: DiscountPercentage component UI enhanced to use SVG bell shape and badge overlay for percentage, improving visual appeal and clarity.
-- 2025-08-03: Offers table UI enhanced to set min-w-[15%] for all columns except last two, per user request. No third-party library or Context7 research required for this change.
+- 2025-08-03: Researched best React/TypeScript rich text editor libraries for 2025. Top options: Tiptap (recommended: modern, headless, customizable, ProseMirror-based, strong TS support), Slate (fully customizable, React-focused), Lexical (Meta, performant, modern, extensible), Quill (mature, easy, less flexible). Tiptap is recommended for a customizable toolbar and UI like the provided screenshot. No direct Context7 docs found, so reputable internet sources were used. Memory updated for future reference.
 
 ## Conversation History
 
