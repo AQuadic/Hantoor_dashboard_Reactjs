@@ -48,7 +48,7 @@ const EditUsers = () => {
                 type="name"
                 name="name"
                 id="name"
-                className="w-full h-[53px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
+                className="w-full h-[64px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
                 placeholder="username@mail.com"
                 />
                 <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
@@ -63,7 +63,7 @@ const EditUsers = () => {
                     type="email"
                     name="email"
                     id="email"
-                    className=" w-full h-[53px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
+                    className=" w-full h-[64px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
                     placeholder="username@mail.com"
                 />
                 <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
@@ -72,7 +72,7 @@ const EditUsers = () => {
                 <div className="absolute top-9 left-5"></div>
                 </div>
                 {/* Phone */}
-                <div className="relative w-full">
+                <div className="relative w-full mt-[15px]">
                     <MobileInput
                         selectedCountry={selectedCountry}
                         setSelectedCountry={setSelectedCountry}
@@ -90,7 +90,7 @@ const EditUsers = () => {
                     label={t('country')}
                     placeholder={t('all')}
                     classNames={{
-                        trigger: 'h-[53px] !h-[53px] min-h-[53px] bg-white border',
+                        trigger: 'h-[64px] !h-[64px] min-h-[64px] bg-white border',
                         label: '!text-[15px] !text-[#000000]',
                         listbox: 'bg-white shadow-md',
                     }}

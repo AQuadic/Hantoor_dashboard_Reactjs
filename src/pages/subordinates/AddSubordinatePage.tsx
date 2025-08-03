@@ -2,16 +2,32 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 // import DashboardPhoneInput from "@/components/general/dashboard/DashboardPhoneInput";
 import ImageInput from "@/components/general/ImageInput";
+import MobileInput from "@/components/general/MobileInput";
 import { Input, Select, SelectItem } from "@heroui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router";
+import { countries } from "countries-list";
+
+const getCountryByIso2 = (iso2: string) => {
+  const country = countries[iso2 as keyof typeof countries];
+  if (!country) return { iso2: "EG", name: "Egypt", phone: ["20"] };
+  return {
+    iso2,
+    name: country.name,
+    phone: [country.phone],
+  };
+};
+
 
 const AddSubordinatePage = () => {
   const [profileImage, setProfileImage] = React.useState<File | null>(null);
   const params = useParams();
   const managerId = params.id;
   const isEdit = Boolean(managerId);
-
+    const [selectedCountry, setSelectedCountry] = useState(
+        getCountryByIso2("EG")
+    );
+    const [phone, setPhone] = useState("");
   const authorities = [
     { key: "manager", label: "مدير" },
     { key: "secretary", label: "سكرتير" },
@@ -63,16 +79,15 @@ const AddSubordinatePage = () => {
               label="الاسم"
               variant="bordered"
               placeholder="محمد احمد"
-              classNames={{ label: "mb-2 text-base" }}
+              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
               size="lg"
             />
-            <Input
-              label=" رقم الجوال"
-              variant="bordered"
-              placeholder="0123456789"
-              classNames={{ label: "mb-2 text-base" }}
-              size="lg"
-            />
+          <MobileInput
+              selectedCountry={selectedCountry}
+              setSelectedCountry={setSelectedCountry}
+              phone={phone}
+              setPhone={setPhone}
+          />
           </div>
 
           <div className="flex gap-4">
@@ -80,7 +95,7 @@ const AddSubordinatePage = () => {
               label="البريد الإلكتروني"
               variant="bordered"
               placeholder="username@mail.com"
-              classNames={{ label: "mb-2 text-base" }}
+              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
               size="lg"
               type="email"
             />
@@ -88,7 +103,7 @@ const AddSubordinatePage = () => {
               label="الصلاحيات"
               variant="bordered"
               placeholder="اختر الصلاحية"
-              classNames={{ label: "mb-2 text-base" }}
+              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
               size="lg"
             >
               {authorities.map((authority) => (
@@ -104,7 +119,7 @@ const AddSubordinatePage = () => {
               label="كلمة المرور"
               variant="bordered"
               placeholder="••••••••••••••••"
-              classNames={{ label: "mb-2 text-base" }}
+              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
               size="lg"
               type="password"
             />
@@ -112,7 +127,7 @@ const AddSubordinatePage = () => {
               label="تأكيد كلمة المرور"
               variant="bordered"
               placeholder="••••••••••••••••"
-              classNames={{ label: "mb-2 text-base" }}
+              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
               size="lg"
               type="password"
             />

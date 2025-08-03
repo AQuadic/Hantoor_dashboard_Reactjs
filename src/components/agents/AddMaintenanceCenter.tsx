@@ -2,9 +2,26 @@ import { Input } from '@heroui/react'
 import Add from '../icons/banks/Add'
 import DashboardButton from '../general/dashboard/DashboardButton'
 import { useTranslation } from 'react-i18next';
+import MobileInput from '../general/MobileInput';
+import { useState } from 'react';
+import { countries } from "countries-list";
+
+const getCountryByIso2 = (iso2: string) => {
+  const country = countries[iso2 as keyof typeof countries];
+  if (!country) return { iso2: "EG", name: "Egypt", phone: ["20"] };
+  return {
+    iso2,
+    name: country.name,
+    phone: [country.phone],
+  };
+};
 
 const AddMaintenanceCenter = () => {
     const { t } = useTranslation("agents");
+        const [selectedCountry, setSelectedCountry] = useState(
+            getCountryByIso2("EG")
+        );
+        const [phone, setPhone] = useState("");
     return (
         <div className="bg-white mt-6 rounded-[15px]">
         <div className="flex flex-col md:flex-row gap-[15px]">
@@ -13,18 +30,18 @@ const AddMaintenanceCenter = () => {
                 label={t('arCenterName')}
                 variant="bordered"
                 placeholder={t('placeholderName')}
-                classNames={{ label: "mb-2 text-base" }}
+                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
                 size="lg"
             />
             </div>
-            <div className="w-full">
-            <Input
-                label={t('enCenterName')}
-                variant="bordered"
-                placeholder={t('writeHere')}
-                classNames={{ label: "mb-2 text-base" }}
-                size="lg"
-            />
+                <div className="relative w-full">
+                <MobileInput
+                    selectedCountry={selectedCountry}
+                    setSelectedCountry={setSelectedCountry}
+                    phone={phone}
+                    setPhone={setPhone}
+                />
+                <div className="absolute top-9 left-5"></div>
             </div>
         </div>
 
@@ -34,7 +51,7 @@ const AddMaintenanceCenter = () => {
                 label={t('arAddress')}
                 variant="bordered"
                 placeholder={t('writeHere')}
-                classNames={{ label: "mb-2 text-base" }}
+                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
                 size="lg"
             />
             </div>
@@ -43,7 +60,7 @@ const AddMaintenanceCenter = () => {
                 label={t('enAddress')}
                 variant="bordered"
                 placeholder={t('writeHere')}
-                classNames={{ label: "mb-2 text-base" }}
+                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
                 size="lg"
             />
             </div>
@@ -55,7 +72,7 @@ const AddMaintenanceCenter = () => {
                 label={t('linkGoogleMap')}
                 variant="bordered"
                 placeholder={t('writeHere')}
-                classNames={{ label: "mb-2 text-base" }}
+                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
                 size="lg"
             />
             </div>
@@ -64,7 +81,7 @@ const AddMaintenanceCenter = () => {
                 label={t('phoneNumber')}
                 variant="bordered"
                 placeholder="123456789"
-                classNames={{ label: "mb-2 text-base" }}
+                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
                 size="lg"
             />
             </div>
@@ -76,7 +93,7 @@ const AddMaintenanceCenter = () => {
                 label={t('whatsApp')}
                 variant="bordered"
                 placeholder="123456789"
-                classNames={{ label: "mb-2 text-base" }}
+                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
                 size="lg"
             />
             </div>
