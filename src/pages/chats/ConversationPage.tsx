@@ -1,8 +1,10 @@
-import ActiveStatus from "@/components/icons/general/ActiveStatus";
 import Avatar from "/images/avatar.svg";
 import Delete from "@/components/icons/general/Delete";
 import carImage from '/images/carImage.png'
+import { Switch } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 const ConversationPage = () => {
+    const { t } = useTranslation("header");
     const messages = [
         {
         id: 1,
@@ -33,7 +35,7 @@ const ConversationPage = () => {
     return (
         <section className="bg-white mx-auto p-4">
         <h2 className="text-[#071739] text-lg font-bold text-center mb-4">
-            المحادثة
+            {t('conversation')}
         </h2>
         <hr className="my-4"/>
 
@@ -50,7 +52,7 @@ const ConversationPage = () => {
             </div>
             </div>
             <div className="flex items-center gap-[14px] md:mt-0 mt-4">
-                <ActiveStatus />
+                <Switch />
                 <Delete />
             </div>
         </div>

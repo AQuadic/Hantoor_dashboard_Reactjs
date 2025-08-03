@@ -3,5 +3,8 @@
     "NumofCars": "Number of cars",
     "NumofUsers": "Number of users",
     "confirmDeletion": "Confirm deletion",
-    "areYouSure": "Are you sure you want to delete?"
+    "areYouSure": "Are you sure you want to delete?",
+
+    "conversation": "Conversation"
+
 }
