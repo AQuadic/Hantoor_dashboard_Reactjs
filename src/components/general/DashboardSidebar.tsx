@@ -1,27 +1,56 @@
 import { SidebarLinks } from "@/constants/SidebarLinks";
 import { AnimatePresence, motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const DashboardSidebar = () => {
   const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false); // Desktop collapse state
   const [isOpen, setIsOpen] = useState(false);
+  const mobileSidebarRef = useRef<HTMLDivElement | null>(null);
   const { i18n } = useTranslation();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const currentLang = i18n.language;
 
-  const getLinkLabel = (link: any) => {
+  type SidebarLink = {
+    path: string;
+    linkAr: string;
+    linkEn: string;
+    icons: React.ComponentType;
+    activeIcon?: React.ComponentType;
+  };
+  const getLinkLabel = (link: SidebarLink) => {
     return currentLang === "ar" ? link.linkAr : link.linkEn;
   };
   const toggleDesktopSidebar = () => setIsDesktopCollapsed(!isDesktopCollapsed);
+
+  // Close mobile sidebar when clicking outside
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        mobileSidebarRef.current &&
+        !mobileSidebarRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen]);
 
   return (
     <section className="relative h-screen border-1 ltr:border-l rtl:border-r bg-white flex flex-col">
       {/* Desktop Logo and Toggle Button - Made sticky */}
       <div
-        className={`hidden lg:flex items-center bg-[#F4F4FE] h-16 sticky top-0 z-10 ${isDesktopCollapsed ? "justify-center px-2 py-1.5" : "justify-between px-6 py-1.5"}`}
+        className={`hidden lg:flex items-center bg-[#F4F4FE] h-16 sticky top-0 z-10 ${
+          isDesktopCollapsed
+            ? "justify-center px-2 py-1.5"
+            : "justify-between px-6 py-1.5"
+        }`}
       >
         <AnimatePresence mode="wait">
           {!isDesktopCollapsed && (
@@ -108,64 +137,91 @@ const DashboardSidebar = () => {
       {/* Mobile Sidebar */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ duration: 0.3 }}
-            className="fixed top-0 right-0 bg-white lg:w-[288px] h-full p-4 shadow-lg lg:hidden z-99"
-          >
-            <div className="flex justify-end">
-              <button onClick={toggleSidebar}>
-                <svg
-                  className="w-6 h-6 text-gray-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
-            </div>
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black z-[120] lg:hidden"
+              aria-hidden="true"
+              onClick={() => setIsOpen(false)}
+            />
+            {/* Sidebar */}
+            <motion.div
+              ref={mobileSidebarRef}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.3 }}
+              className="fixed top-0 right-0 bg-white lg:w-[288px] w-4/5 max-w-xs h-full p-4 shadow-lg lg:hidden z-[130] overflow-y-auto"
+              style={{ WebkitOverflowScrolling: "touch" }}
+            >
+              {/* Mobile Logo and Close Button */}
+              <div className="flex items-center justify-between h-16 mb-2">
+                <motion.img
+                  className="h-10"
+                  key="mobile-logo"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  transition={{ duration: 0.2 }}
+                  src="/images/dashboard/dashboardLogo.svg"
+                  alt="logo"
+                />
+                <button onClick={toggleSidebar}>
+                  <svg
+                    className="w-6 h-6 text-gray-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
 
-            {/* Mobile Nav Links */}
-            {SidebarLinks.map((link, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-              >
-                <NavLink
-                  to={link.path}
-                  end={link.path === "/dashboard"}
-                  className={({ isActive }) =>
-                    `flex items-center gap-4 mt-6 px-2 py-2 rounded-md ${
-                      isActive ? "bg-[#2A32F8] text-white" : "text-gray-600"
-                    }`
-                  }
+              {/* Mobile Nav Links */}
+              {SidebarLinks.map((link, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  {({ isActive }) => (
-                    <>
-                      {isActive && link.activeIcon ? (
-                        <link.activeIcon />
-                      ) : (
-                        <link.icons />
-                      )}
-                      <h1 className="text-sm font-normal">
-                        {getLinkLabel(link)}
-                      </h1>
-                    </>
-                  )}
-                </NavLink>
-              </motion.div>
-            ))}
-          </motion.div>
+                  <NavLink
+                    to={link.path}
+                    end={link.path === "/dashboard"}
+                    className={({ isActive }) =>
+                      `flex items-center gap-4 mt-6 px-2 py-2 rounded-md ${
+                        isActive ? "bg-[#2A32F8] text-white" : "text-gray-600"
+                      }`
+                    }
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {isActive && link.activeIcon ? (
+                          <link.activeIcon />
+                        ) : (
+                          <link.icons />
+                        )}
+                        <h1 className="text-sm font-normal">
+                          {getLinkLabel(link)}
+                        </h1>
+                      </>
+                    )}
+                  </NavLink>
+                </motion.div>
+              ))}
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
@@ -189,13 +245,19 @@ const DashboardSidebar = () => {
                   isActive
                     ? "bg-[#2A32F8] text-white mx-4"
                     : "hover:bg-blue-100 text-[#606060] mx-4"
-                } ${isDesktopCollapsed ? "px-0 py-2 flex justify-center" : "px-4 py-2"}`
+                } ${
+                  isDesktopCollapsed
+                    ? "px-0 py-2 flex justify-center"
+                    : "px-4 py-2"
+                }`
               }
               title={isDesktopCollapsed ? getLinkLabel(link) : ""}
             >
               {({ isActive }) => (
                 <div
-                  className={`flex items-center ${isDesktopCollapsed ? "justify-center" : "gap-[5px]"}`}
+                  className={`flex items-center ${
+                    isDesktopCollapsed ? "justify-center" : "gap-[5px]"
+                  }`}
                 >
                   <div className="flex-shrink-0">
                     {isActive && link.activeIcon ? (
