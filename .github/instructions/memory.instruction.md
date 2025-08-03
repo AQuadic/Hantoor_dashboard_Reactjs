@@ -29,11 +29,14 @@ applyTo: "**"
 ## Context7 Research History
 
 - No Context7 research yet for sidebar click-outside or mobile scroll patterns
+- Vite public directory image path: Bug found in DiscountPercentage component where image was referenced as "images/redPercentage.png" instead of "/images/redPercentage.png". Fixed by updating to root-relative path as per Vite documentation (2025-08-03).
+- 2025-08-03: DiscountPercentage component UI enhanced to use SVG bell shape and badge overlay for percentage, improving visual appeal and clarity.
 
 ## Conversation History
 
 - Sidebar must close on outside click (mobile)
 - Mobile sidebar must be scrollable
 - Fix any errors in the file
+- 2025-08-03: Fixed broken image in DiscountPercentage component by correcting image path to use Vite public directory root-relative path.
 
 Update memory after each significant change or decision
