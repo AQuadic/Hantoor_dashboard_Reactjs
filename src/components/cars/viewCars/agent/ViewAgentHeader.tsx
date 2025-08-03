@@ -25,7 +25,7 @@ const ViewAgentHeader = ({
           {
             titleAr: "السيارات",
             titleEn: "Cars",
-            link: "/dashboard/cars/view-cars",
+            link: "/cars",
           },
           {
             titleAr: "تفاصيل الوكيل",
