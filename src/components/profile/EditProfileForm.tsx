@@ -1,7 +1,19 @@
 import { Input } from "@heroui/react";
-import React from "react";
+import React, { useState } from "react";
 import ImageInput from "../general/ImageInput";
 import DashboardButton from "../general/dashboard/DashboardButton";
+import { countries } from "countries-list";
+import MobileInput from "../general/MobileInput";
+
+const getCountryByIso2 = (iso2: string) => {
+  const country = countries[iso2 as keyof typeof countries];
+  if (!country) return { iso2: "EG", name: "Egypt", phone: ["20"] };
+  return {
+    iso2,
+    name: country.name,
+    phone: [country.phone],
+  };
+};
 
 interface EditProfileFormProps {
   profileImage: File | null;
@@ -11,6 +23,10 @@ const EditProfileForm = ({
   profileImage,
   setProfileImage,
 }: EditProfileFormProps) => {
+    const [selectedCountry, setSelectedCountry] = useState(
+        getCountryByIso2("EG")
+    );
+    const [phone, setPhone] = useState("");
   return (
     <form className="p-8">
       <div className="p-8 bg-white rounded-2xl ">
@@ -24,22 +40,21 @@ const EditProfileForm = ({
             label="الاسم"
             variant="bordered"
             placeholder="محمد احمد"
-            classNames={{ label: "mb-2 text-base" }}
+            classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <Input
             label="البريد الالكتروني"
             variant="bordered"
             placeholder="username@mail.com"
-            classNames={{ label: "mb-2 text-base" }}
+            classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
-          <Input
-            label=" رقم الجوال"
-            variant="bordered"
-            placeholder="0123456789"
-            classNames={{ label: "mb-2 text-base" }}
-            size="lg"
+          <MobileInput
+              selectedCountry={selectedCountry}
+              setSelectedCountry={setSelectedCountry}
+              phone={phone}
+              setPhone={setPhone}
           />
           <DashboardButton titleAr=" حفظ" titleEn="Save"/>
         </div>
@@ -49,21 +64,21 @@ const EditProfileForm = ({
             label="كلمة المرور الحالية"
             variant="bordered"
             placeholder="********"
-            classNames={{ label: "mb-2 text-base" }}
+            classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <Input
             label="كلمة المرور الجديدة"
             variant="bordered"
             placeholder="********"
-            classNames={{ label: "mb-2 text-base" }}
+            classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <Input
             label="تأكيد كلمة المرور"
             variant="bordered"
             placeholder="********"
-            classNames={{ label: "mb-2 text-base" }}
+            classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <DashboardButton titleAr=" حفظ" titleEn="Save" />
