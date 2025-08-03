@@ -21,8 +21,8 @@ const CarsHeader = () => {
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
             <div className="flex-1">
                 <SearchBar
-                    termAr={"ابحث بالاسم"} 
-                    termEn={"Search by name"}
+                    termAr={"ابحث باسم السيارة / اسم الوكيل"} 
+                    termEn={"Search by car name/agent name"}
                     setTermAr={() => {}} 
                     setTermEn={() => {}} 
                 />
