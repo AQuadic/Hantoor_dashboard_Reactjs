@@ -36,5 +36,11 @@
     "tiktokLink": "TikTok Link",
     "snapchatLink": "Snapchat Link",
     "xLink": "X Link",
-    "linkedinLink": "LinkedIn Link"
+    "linkedinLink": "LinkedIn Link",
+
+    "image": "Image",
+    "addGIF": "Add GIF",
+    "arDescription": "Description (in Arabic)",
+    "enDescription": "Description (in English)",
+    "exploreNewCars": "Browse new cars from your location"
 }

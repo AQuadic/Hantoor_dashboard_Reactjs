@@ -3,8 +3,10 @@ import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
 import Delete from '@/components/icons/setting/Delete';
 import { Input } from '@heroui/react';
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 
 const EditFeatures = () => {
+    const { t } = useTranslation("setting");
     return (
         <div>
             <div className="pt-2 pb-6 bg-white ">
@@ -19,7 +21,7 @@ const EditFeatures = () => {
                 />
         </div>
         <div className="p-8 bg-white rounded-2xl mt-[18px] mx-8">
-            <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">الصورة</h3>
+            <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">{t('image')}</h3>
             <div className='relative w-[180px] h-[180px] border border-dashed rounded-[10px] flex items-center justify-center'>
                 <img src="/images/editfeatures.svg" alt="" />
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
@@ -32,9 +34,9 @@ const EditFeatures = () => {
                 {/* Arabic Question */}
                 <div className="relative w-full">
                 <Input
-                    label="الوصف ( باللغة العربية )"
+                    label={t('arDescription')}
                     variant="bordered"
-                    placeholder="تصفح السيارات الجديدة من مكانك"
+                    placeholder={t('exploreNewCars')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                     />
@@ -42,9 +44,9 @@ const EditFeatures = () => {
                 {/* English Question */}
                 <div className="relative w-full">
                 <Input
-                    label="الوصف ( باللغة الانجليزية )"
+                    label={t('enDescription')}
                     variant="bordered"
-                    placeholder="اكتب هنا"
+                    placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                 />
