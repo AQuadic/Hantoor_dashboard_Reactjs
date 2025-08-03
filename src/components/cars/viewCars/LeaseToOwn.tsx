@@ -3,7 +3,7 @@ import { Switch } from "@heroui/react";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 
 const LeaseToOwn = () => {
-  const accessories = [
+  const rentToOwn = [
     {
       duration: "3 سنوات",
       price: "500 درهم",
@@ -23,7 +23,7 @@ const LeaseToOwn = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {accessories.map((accessory, index) => (
+            {rentToOwn.map((accessory, index) => (
               <TableRow key={index}>
                 <TableCell className="">{accessory.price}</TableCell>
                 <TableCell className="w-full">{accessory.duration}</TableCell>
