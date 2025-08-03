@@ -1,17 +1,13 @@
-import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
+import ViewCarsHeader from "@/components/cars/viewCars/ViewCarsHeader";
 import React from "react";
 
 const ViewCars = () => {
+  const [selectedFilter, setSelectedFilter] = React.useState("Models");
   return (
     <div>
-      <DashboardHeader
-        titleAr="تفاصيل السيارة"
-        titleEn="Car details"
-        items={[
-          { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
-          { titleAr: "السيارات", titleEn: "Cars" },
-          { titleAr: "تفاصيل السيارة", titleEn: "Car details" },
-        ]}
+      <ViewCarsHeader
+        selectedFilter={selectedFilter}
+        setSelectedFilter={setSelectedFilter}
       />
     </div>
   );
