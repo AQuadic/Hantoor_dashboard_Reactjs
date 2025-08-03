@@ -31,6 +31,7 @@ applyTo: "**"
 - No Context7 research yet for AboutCar or MaintenancePackages table UI patterns. No third-party library used for these changes.
 - Vite public directory image path: Bug found in DiscountPercentage component where image was referenced as "images/redPercentage.png" instead of "/images/redPercentage.png". Fixed by updating to root-relative path as per Vite documentation (2025-08-03).
 - 2025-08-03: DiscountPercentage component UI enhanced to use SVG bell shape and badge overlay for percentage, improving visual appeal and clarity.
+- 2025-08-03: Offers table UI enhanced to set min-w-[15%] for all columns except last two, per user request. No third-party library or Context7 research required for this change.
 
 ## Conversation History
 
