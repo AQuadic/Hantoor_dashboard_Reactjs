@@ -61,7 +61,7 @@ const ViewCarsHeader: React.FC<SubordinatesHeaderProps> = ({
           { titleAr: "تفاصيل السيارة", titleEn: "Car details" },
         ]}
       />
-      <div className="px-9 bg-white mb-4">
+      <div className="px-9 bg-white mb-4 flex justify-between">
         <div className="flex gap-4 ">
           <img
             width={338}
@@ -82,6 +82,16 @@ const ViewCarsHeader: React.FC<SubordinatesHeaderProps> = ({
             <p className="text-xl font-bold text-primary">500.000 درهم</p>
             <p className="text-lg text-[#606060] line-through">600.200 درهم</p>
             <DiscountPercentage percentage={15} />
+          </div>
+        </div>
+        <div>
+          <div className="flex flex-col p-4 border rounded-2xl ">
+            <p className="text-2xl text-primary font-bold">10</p>
+            <p className="text-sm text-[#64748B]">عدد مرات الإضافة للمفضلة</p>
+          </div>
+          <div className="flex flex-col p-4 border rounded-2xl mt-1.5">
+            <p className="text-2xl text-primary font-bold">21</p>
+            <p className="text-sm text-[#64748B]">عدد المشاهدات</p>
           </div>
         </div>
       </div>
