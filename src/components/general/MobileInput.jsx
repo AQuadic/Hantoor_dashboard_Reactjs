@@ -12,7 +12,7 @@ const MobileInput = ({
   inputClassName = "",
   disabled = false,
 }) => {
-  const { t, i18n } = useTranslation("profile");
+  const { t, i18n } = useTranslation("users");
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -303,22 +303,21 @@ const MobileInput = ({
 
   return (
     <div
-      className={`relative w-full h-[53px] mt-[15px] px-4 pt-4 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2.5 p-2 border-2 dark:border-neutral-700 rounded-[8px] focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
+      className={`relative w-full h-[53px] px-4 py-7.5 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2.5 p-2 border-2 dark:border-neutral-700 rounded-[8px] focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
 
     >
 
       <input
         disabled={disabled}
-        placeholder={t("phone")}
+        placeholder='123456789'
         type="number"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
-        className="w-full bg-transparent dark:text-neutral-200 focus:outline-none rtl:text-right py-2"
+        className="w-full bg-transparent dark:text-neutral-200 focus:outline-none rtl:text-right py-2 mt-3"
       />
-      <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-0 ltr:top-4 rtl:right-4 ltr:left-4">
-        رقم الجوال
+      <h2 className="text-[#000000] text-[15px] font-normal absolute top-0.5 rtl:right-4 ltr:left-4">
+        {t('phone')}
       </h2>
-      <label htmlFor="phone" className="text-[#080808] font-normal text-sm absolute top-1.5 rtl:right-2"></label>
       {isOpen && (
         <div className="flex flex-col gap-2 border shadow-sm p-3 z-30 absolute left-0 top-11 max-h-[200px] min-w-full overflow-y-auto bg-white dark:bg-darkBg dark:text-neutral-200 rounded-[4px]">
           <Input
