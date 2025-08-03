@@ -1,0 +1,17 @@
+{
+    "noVideos": "Number of Videos",
+    "writeHere": "Write Here",
+    "chooseImage": "Image of Language and Country Selection Page",
+    "textFeatures": "App Features Text on Homepage",
+    "arText": "Text (in Arabic)",
+    "enText": "Text (in English)",
+    "advancedSearch": "Advanced Search Text on Homepage",
+    "financingText": "Financing Text on Car Details Page",
+    "appLinks": "App Links",
+    "androidLink": "App Link for Android",
+    "androidVersion": "Android App Version",
+    "publishDate": "Android App Publish Date",
+    "iphoneLink": "App Link for iPhone",
+    "iphoneVersion": "iPhone App Version",
+    "iphoneDate": "iPhone App Publish Date"
+}
