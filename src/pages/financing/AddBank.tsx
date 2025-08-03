@@ -58,7 +58,7 @@ const AddBank = () => {
                     ]}
                 />
             </div>
-                    <form className="p-8">
+        <form className="p-8">
             <div className="p-8 bg-white rounded-2xl ">
                 <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">{t('bankLogo')}</h3>
                 <ImageInput image={profileImage} setImage={setProfileImage} />
