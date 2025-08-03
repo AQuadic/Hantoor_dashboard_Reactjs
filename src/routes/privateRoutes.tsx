@@ -385,11 +385,15 @@ export const privateRoutes: RouteTypes[] = [
     path: "/cars/add",
     element: <AddCars />,
   },
+  {
+    path: "/cars/edit/:id",
+    element: <AddCars />,
+  },
 
   // Notification route
   {
-    path: "/notifications", 
-    element: <NotificationPage />
+    path: "/notifications",
+    element: <NotificationPage />,
   },
   {
     path: "/notifications/details/:id",
