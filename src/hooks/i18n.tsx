@@ -36,6 +36,9 @@ import settingEn from "../locales/en/setting.json";
 import profileAr from "../locales/ar/profile.json";
 import profileEn from "../locales/en/profile.json";
 
+import carsAr from "../locales/ar/cars.json";
+import carsEn from "../locales/en/cars.json";
+
 // Ensure we're in browser environment
 const savedLang =
   typeof window !== "undefined"
@@ -63,6 +66,7 @@ i18n.use(initReactI18next).init({
       notifications: notificationsEn,
       setting: settingEn,
       profile: profileEn,
+      cars: carsEn,
     },
     ar: {
       header: headerAr,
@@ -77,6 +81,7 @@ i18n.use(initReactI18next).init({
       notifications: notificationsAr,
       setting: settingAr,
       profile: profileAr,
+      cars: carsAr,
     },
   },
 });

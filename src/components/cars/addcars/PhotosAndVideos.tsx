@@ -3,8 +3,10 @@ import React, { useEffect, useState } from "react";
 import VideoInput from "@/components/general/VideoInput";
 import MultiImageInput from "@/components/general/MultiImageInput";
 import { Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const PhotosAndVideos = () => {
+  const { t } = useTranslation("cars");
   const [mainImage, setMainImage] = React.useState<File | null>(null);
   const [images, setImages] = React.useState<File[] | null>(null);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -49,7 +51,7 @@ const PhotosAndVideos = () => {
     <section>
       <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
         <h1 className="text-lg text-primary font-bold mb-2">
-          الصور والفيديوهات
+          {t('photosAndVideos')}
         </h1>
         <div className="flex md:flex-row flex-col gap-4">
           <ImageInput
