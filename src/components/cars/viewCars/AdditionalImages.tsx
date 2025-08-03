@@ -1,5 +1,5 @@
 const AdditionalImages = () => (
-  <div className="p-8 text-center flex gap-4 flex-wrap">
+  <div className="p-8 text-center flex gap-4 flex-wrap ">
     <img
       src="/images/additionalImages.png"
       alt="Additional Images Placeholder"
