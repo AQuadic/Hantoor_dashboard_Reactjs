@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import Avatar from "/images/avatar.svg";
 
 const SupportMsgsConversation = () => {
+    const { t } = useTranslation("header");
     const messages = [
         {
         id: 1,
@@ -34,7 +36,7 @@ const SupportMsgsConversation = () => {
 
     return (
         <section className="py-4 px-4 max-w-2xl mx-auto">
-        <h2 className="text-[#071739] text-[23px] font-bold text-center">المحادثة</h2>
+        <h2 className="text-[#071739] text-[23px] font-bold text-center">{t('conversation')}</h2>
         <hr className="my-4"/>
         <div className="space-y-6">
             {messages.map((msg) => (
