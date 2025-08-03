@@ -9,13 +9,17 @@ import CarOffers from "@/components/cars/addcars/CarOffers";
 import RentToOwn from "@/components/cars/addcars/RentToOwn";
 import CarAdvertisingImages from "@/components/cars/addcars/CarAdvertisingImages";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
+import { useParams } from "react-router";
 
 const AddCars = () => {
-    const handleDelete = () => {
-  };
+  const params = useParams();
+  const brandId = params.id;
+
+  const isEdit = Boolean(brandId);
+  const handleDelete = () => {};
   return (
     <div>
-      <AddCarsHeader />
+      <AddCarsHeader isEdit={isEdit} />
       <div className="md:px-8 px-2">
         <PhotosAndVideos />
         <CarDetails />
@@ -31,7 +35,7 @@ const AddCars = () => {
             descriptionAr: "",
           }}
         />
-        <CarOffers 
+        <CarOffers
           handleDelete={handleDelete}
           field={{
             image: null,
@@ -39,11 +43,12 @@ const AddCars = () => {
             titleAr: "",
             descriptionEn: "",
             descriptionAr: "",
-          }}/>
+          }}
+        />
         <RentToOwn />
         <CarAdvertisingImages />
         <div className="mt-6">
-          <DashboardButton titleAr="اضافة" titleEn="Add"/>
+          <DashboardButton titleAr="اضافة" titleEn="Add" />
         </div>
       </div>
     </div>

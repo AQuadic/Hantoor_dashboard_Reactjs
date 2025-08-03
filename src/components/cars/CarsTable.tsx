@@ -15,6 +15,7 @@ import { Switch } from "@heroui/react";
 import carImage from "/images/cartable.png";
 import TableEditButton from "@/components/general/dashboard/table/TableEditButton";
 import ViewIcon from "@/components/icons/dashboard/ViewIcon";
+import { Link } from "react-router";
 
 const CarsTable = () => {
   const [openChatId, setOpenChatId] = useState<number | null>(null);
@@ -110,7 +111,7 @@ const CarsTable = () => {
             {chats.map((chat, index) => (
               <TableRow key={chat.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell >
+                <TableCell>
                   <img
                     src={chat.image}
                     alt="car"
@@ -140,9 +141,9 @@ const CarsTable = () => {
                   <div className="">
                     <ViewIcon />
                   </div>
-                  <div className="mt-2">
+                  <Link to={`/cars/edit/${chat.id}`} className="mt-2">
                     <TableEditButton />
-                  </div>
+                  </Link>
                   <div className="mt-2">
                     <TableDeleteButton handleDelete={() => {}} />
                   </div>
