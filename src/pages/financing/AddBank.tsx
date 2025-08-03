@@ -1,7 +1,7 @@
 import DashboardButton from '@/components/general/dashboard/DashboardButton'
 import ImageInput from '@/components/general/ImageInput'
 import MobileInput from '@/components/general/MobileInput';
-import { Input } from '@heroui/react'
+import { Input, Select, SelectItem } from "@heroui/react";
 import React, { useState } from 'react'
 import { countries } from "countries-list";
 import Add from '@/components/icons/banks/Add';
@@ -26,7 +26,23 @@ const AddBank = () => {
     );
     const [phone, setPhone] = useState("");
     const [profileImage, setProfileImage] = useState<File | null>(null);
+    const authorities = [
+        { key: "1", label: "1 سنة" },
+        { key: "2", label: "سنتين" },
+        { key: "3", label: "3 سنوات" },
+        { key: "4", label: "4 سنوات" },
+        { key: "4", label: "5 سنوات" },
+    ];
 
+    const entities = [
+        { key: "1", label: "جهة حكومية" },
+        { key: "2", label: "جهة خاصة" },
+    ]
+
+        const Workplaces = [
+        { key: "1", label: "جهة حكومية" },
+        { key: "2", label: "جهة خاصة" },
+    ]
 
     return (
         <section>
@@ -68,12 +84,14 @@ const AddBank = () => {
                     />
                     </div>
                 </div>
-                <MobileInput
+                <div className='mt-[15px]'>
+                    <MobileInput
                     selectedCountry={selectedCountry}
                     setSelectedCountry={setSelectedCountry}
                     phone={phone}
                     setPhone={setPhone}
                 />
+                </div>
             </div>
             <div className="flex flex-wrap gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
                 <div>
@@ -96,28 +114,32 @@ const AddBank = () => {
                             size="lg"
                         />
                     </div>
-                    <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                        <p className="text-right text-black text-sm">{t('duration')}</p>
-                        <div className="flex items-center justify-between gap-1">
-                            <span className="text-gray-500 text-sm">3</span>
-                            <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                            <option value="شهر">{t('month')}</option>
-                            <option value="أيام">{t('day')}</option>
-                            <option value="سنوات">{t('years')}</option>
-                            </select>
-                        </div>
-                    </div>
-                        <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                        <p className="text-right text-black text-sm">{t('Workplace')}</p>
-                        <div className="flex items-center justify-between gap-1">
-                            <span className="text-gray-500 text-sm">{t('GovernmentEntity')}</span>
-                            <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                            <option value="1">{t('GovernmentEntity')}</option>
-                            <option value="2">{t('GovernmentEntity')}</option>
-                            <option value="3">{t('GovernmentEntity')}</option>
-                            </select>
-                        </div>
-                    </div>
+                    <Select
+                        label={t('duration')}
+                        variant="bordered"
+                        placeholder="1 سنة"
+                        classNames={{ label: "mb-2 text-base !text-[#080808]" }}
+                        size="lg"
+                        >
+                        {authorities.map((authority) => (
+                            <SelectItem key={authority.key} textValue={authority.label}>
+                            {authority.label}
+                            </SelectItem>
+                        ))}
+                    </Select>
+                    <Select
+                        label={t('Workplace')}
+                        variant="bordered"
+                        placeholder="جهة حكومية"
+                        classNames={{ label: "mb-2 text-base !text-[#080808]" }}
+                        size="lg"
+                        >
+                        {entities.map((entitiy) => (
+                            <SelectItem key={entitiy.key} textValue={entitiy.label}>
+                            {entitiy.label}
+                            </SelectItem>
+                        ))}
+                    </Select>
                     <Input
                         label={t('InterestAmount')}
                         variant="bordered"
@@ -151,28 +173,32 @@ const AddBank = () => {
                             size="lg"
                         />
                     </div>
-                    <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                        <p className="text-right text-black text-sm">{t('duration')}</p>
-                        <div className="flex items-center justify-between gap-1">
-                            <span className="text-gray-500 text-sm">3</span>
-                            <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                            <option value="شهر">{t('month')}</option>
-                            <option value="أيام">{t('day')}</option>
-                            <option value="سنوات">{t('year')}</option>
-                            </select>
-                        </div>
-                    </div>
-                        <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                        <p className="text-right text-black text-sm">{t('Workplace')}</p>
-                        <div className="flex items-center justify-between gap-1">
-                            <span className="text-gray-500 text-sm">{t('GovernmentEntity')}</span>
-                            <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                            <option value="1">{t('GovernmentEntity')}</option>
-                            <option value="2">{t('GovernmentEntity')}</option>
-                            <option value="3">{t('GovernmentEntity')}</option>
-                            </select>
-                        </div>
-                    </div>
+                    <Select
+                        label={t('duration')}
+                        variant="bordered"
+                        placeholder="1 سنة"
+                        classNames={{ label: "mb-2 text-base !text-[#080808]" }}
+                        size="lg"
+                        >
+                        {authorities.map((authority) => (
+                            <SelectItem key={authority.key} textValue={authority.label}>
+                            {authority.label}
+                            </SelectItem>
+                        ))}
+                    </Select>
+                    <Select
+                        label={t('Workplace')}
+                        variant="bordered"
+                        placeholder="جهة حكومية"
+                        classNames={{ label: "mb-2 text-base !text-[#080808]" }}
+                        size="lg"
+                        >
+                        {Workplaces.map((workplace) => (
+                            <SelectItem key={workplace.key} textValue={workplace.label}>
+                            {workplace.label}
+                            </SelectItem>
+                        ))}
+                    </Select>
                     <Input
                         label={t('InterestAmount')}
                         variant="bordered"
@@ -208,28 +234,32 @@ const AddBank = () => {
                         size="lg"
                     />
                 </div>
-                <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                    <p className="text-right text-black text-sm">{t('duration')}</p>
-                    <div className="flex items-center justify-between gap-1">
-                        <span className="text-gray-500 text-sm">3</span>
-                        <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                        <option value="شهر">{t('month')}</option>
-                        <option value="أيام">{t('day')}</option>
-                        <option value="سنوات">{t('year')}</option>
-                        </select>
-                    </div>
-                </div>
-                    <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-                    <p className="text-right text-black text-sm">{t('Workplace')}</p>
-                    <div className="flex items-center justify-between gap-1">
-                        <span className="text-gray-500 text-sm">{t('GovernmentEntity')}</span>
-                        <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                        <option value="1">{t('GovernmentEntity')}</option>
-                        <option value="2">{t('GovernmentEntity')}</option>
-                        <option value="3">{t('GovernmentEntity')}</option>
-                        </select>
-                    </div>
-                </div>
+                    <Select
+                        label={t('duration')}
+                        variant="bordered"
+                        placeholder="1 سنة"
+                        classNames={{ label: "mb-2 text-base !text-[#080808]" }}
+                        size="lg"
+                        >
+                        {authorities.map((authority) => (
+                            <SelectItem key={authority.key} textValue={authority.label}>
+                            {authority.label}
+                            </SelectItem>
+                        ))}
+                    </Select>
+                    <Select
+                        label={t('Workplace')}
+                        variant="bordered"
+                        placeholder="جهة حكومية"
+                        classNames={{ label: "mb-2 text-base !text-[#080808]" }}
+                        size="lg"
+                        >
+                        {Workplaces.map((workplace) => (
+                            <SelectItem key={workplace.key} textValue={workplace.label}>
+                            {workplace.label}
+                            </SelectItem>
+                        ))}
+                    </Select>
                 <Input
                     label={t('InterestAmount')}
                     variant="bordered"
