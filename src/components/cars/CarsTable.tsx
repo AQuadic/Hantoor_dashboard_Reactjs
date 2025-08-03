@@ -138,9 +138,9 @@ const CarsTable = () => {
                   <button onClick={() => setOpenChatId(chat.id)}>
                     <ChatIcon />
                   </button>
-                  <div className="">
+                  <Link to={`/cars/${chat.id}`} className="">
                     <ViewIcon />
-                  </div>
+                  </Link>
                   <Link to={`/cars/edit/${chat.id}`} className="mt-2">
                     <TableEditButton />
                   </Link>

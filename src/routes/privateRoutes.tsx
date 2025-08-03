@@ -70,6 +70,7 @@ import AgentsDetailsPage from "@/pages/agents/AgentsDetailsPage";
 import NotificationPage from "@/pages/notification/NotificationPage";
 import NotificationDetails from "@/pages/notification/NotificationDetails";
 import AddNotification from "@/pages/notification/AddNotification";
+import ViewCars from "@/pages/cars/ViewCars";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -388,6 +389,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/cars/edit/:id",
     element: <AddCars />,
+  },
+  {
+    path: "/cars/:id",
+    element: <ViewCars />,
   },
 
   // Notification route
