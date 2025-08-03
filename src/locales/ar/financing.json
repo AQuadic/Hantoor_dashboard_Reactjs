@@ -13,5 +13,8 @@
     "year": "سنة",
     "Workplace": "جهة العمل",
     "GovernmentEntity": "جهة حكومية",
-    "InterestAmount": "قيمة الفائدة"
+    "InterestAmount": "قيمة الفائدة",
+    "citizenData": "بيانات المواطن",
+    "addMoreData": "اضافة بيانات اخرى",
+    "bankName": "بنك أبوظبي الأول"
 }

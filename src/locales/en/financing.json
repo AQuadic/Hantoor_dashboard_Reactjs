@@ -1,3 +1,20 @@
 {
-    
+    "bankLogo": "Bank Logo Image",
+    "arbankName": "Bank Name (in Arabic)",
+    "enbankName": "Bank Name (in English)",
+    "writeHere": "Write Here",
+    "visitorData": "Visitor Data",
+    "salaryRang": "Salary Range",
+    "salaryFrom": "Salary From",
+    "salaryTo": "Salary To",
+    "duration": "Duration",
+    "month": "Month",
+    "day": "Day",
+    "year": "Year",
+    "Workplace": "Workplace",
+    "GovernmentEntity": "Government Entity",
+    "InterestAmount": "Interest Amount",
+    "citizenData": "Citizen Data",
+    "addMoreData": "Add more data",
+    "bankName": "First Abu Dhabi Bank"
 }
