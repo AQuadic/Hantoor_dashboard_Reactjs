@@ -1,0 +1,19 @@
+{
+    "arText": "Text Title (in Arabic)",
+    "enText": "Text Title (in English)",
+    "writeHere": "Write Here",
+    "arDescription": "Description (in Arabic)",
+    "enDescription": "Description (in English)",
+    "lorem": "Lorem Ipsum is a method of writing texts in publishing and graphic design, commonly used to illustrate the visual form of a document or font without relying on meaningful content. Lorem Ipsum can be used before publishing the final version. Lorem Ipsum is a method of writing texts in publishing and graphic design, commonly used to illustrate the visual form of a document or font without relying on meaningful content. Lorem Ipsum can be used before publishing the final version.",
+    "country": "Country",
+    "choose": "Choose",
+    "selectReciver": "Select Receiver",
+    "image": "Image",
+    "name": "Name",
+    "phone": "Mobile Number",
+
+    "thecountry": "Country :",
+    "UAE": "Emirates",
+    "saveData": "Data Protection",
+    "clients": "Receiving Clients"
+}
