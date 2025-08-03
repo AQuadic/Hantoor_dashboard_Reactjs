@@ -2,7 +2,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import accessoriesImg from '/images/accessories.png';
 import accessoriesImg2 from '/images/accessories2.png';
 import { Switch } from "@heroui/react";
-import DeleteModal from "@/components/general/DeleteModal";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 
 const Accessories = () => {
