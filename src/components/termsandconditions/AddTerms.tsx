@@ -3,8 +3,10 @@ import { Input } from '@heroui/react';
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
+import { useTranslation } from 'react-i18next';
 
 const AddTerms = () => {
+    const { t } = useTranslation("setting");
     
     return (
         <div>
@@ -19,7 +21,7 @@ const AddTerms = () => {
                     ]}
                 />
                 </div>
-                        <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
+            <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                 {/* Country */}
                 <div className="md:w-1/2 w-full">
@@ -28,7 +30,7 @@ const AddTerms = () => {
                     className="w-full !h-16 rounded-[12px] mt-4"
                     dir="rtl"
                     >
-                    <SelectValue placeholder="البلد" />
+                    <SelectValue placeholder={t('country')} />
                     </SelectTrigger>
                     <SelectContent dir="rtl">
                     <SelectItem value="1">الامارات</SelectItem>
@@ -42,9 +44,9 @@ const AddTerms = () => {
                 {/* Arabic Question */}
                 <div className="relative w-full">
                 <Input
-                    label="عنوان النص ( باللغة العربية )"
+                    label={t('arText')}
                     variant="bordered"
-                    placeholder="سياسة الأسعار"
+                    placeholder={t('pricingPolicy')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                     />
@@ -52,9 +54,9 @@ const AddTerms = () => {
                 {/* English Question */}
                 <div className="relative w-full">
                 <Input
-                    label="عنوان النص ( باللغة الانجليزية )"
+                    label={t('enText')}
                     variant="bordered"
-                    placeholder="price policy"
+                    placeholder={t('pricingPolicy')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                 />
