@@ -303,33 +303,22 @@ const MobileInput = ({
 
   return (
     <div
-      className={`relative md:w-[540px] mt-3 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2.5 p-2 border-2 dark:border-neutral-700 rounded-[8px] focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
+      className={`relative w-full h-[53px] mt-[15px] px-4 pt-4 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2.5 p-2 border-2 dark:border-neutral-700 rounded-[8px] focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
+
     >
-      <button
-        disabled={disabled}
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
-      </button>
-      <img
-        src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry.iso2}.svg`}
-        alt={`${selectedCountry} flag`}
-        draggable={false}
-        width={24}
-        height={16}
-      />
-      <p className="dark:text-neutral-200">+{selectedCountry.phone[0]}</p>
-      <div className="bg-[#AAAAAA] w-[1px] h-5"></div>
+
       <input
         disabled={disabled}
         placeholder={t("phone")}
         type="number"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
-        className="w-full bg-transparent dark:text-neutral-200 focus:outline-none rtl:text-right py-2.5"
+        className="w-full bg-transparent dark:text-neutral-200 focus:outline-none rtl:text-right py-2"
       />
-      <label htmlFor="phone" className="text-[#080808] font-normal text-sm absolute top-1 rtl:right-28">رقم الجوال</label>
+      <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-0 ltr:top-4 rtl:right-4 ltr:left-4">
+        رقم الجوال
+      </h2>
+      <label htmlFor="phone" className="text-[#080808] font-normal text-sm absolute top-1.5 rtl:right-2"></label>
       {isOpen && (
         <div className="flex flex-col gap-2 border shadow-sm p-3 z-30 absolute left-0 top-11 max-h-[200px] min-w-full overflow-y-auto bg-white dark:bg-darkBg dark:text-neutral-200 rounded-[4px]">
           <Input
@@ -363,6 +352,21 @@ const MobileInput = ({
           ))}
         </div>
       )}
+      <button
+        disabled={disabled}
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+      </button>
+      <p className="text-[#2A32F8]">+{selectedCountry.phone[0]}</p>
+      <img
+        src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry.iso2}.svg`}
+        alt={`${selectedCountry} flag`}
+        draggable={false}
+        width={24}
+        height={16}
+      />
     </div>
   );
 };
