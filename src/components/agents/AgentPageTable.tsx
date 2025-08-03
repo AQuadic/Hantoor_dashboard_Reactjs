@@ -1,11 +1,12 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Switch } from "@heroui/react";
+import Copy from "../icons/agents/Copy";
+import View from "../icons/general/View";
 
 const AgentPageTable = () => {
-    const navigate = useNavigate();
     const agents = [
     {
         id: 1,
@@ -44,12 +45,6 @@ const AgentPageTable = () => {
             {agents.map((agent, index) => (
             <TableRow
                 key={agent.id}
-                onClick={() =>
-                navigate(`/agent/details/${agent.id}`, {
-                    state: { country: agent.country },
-                })
-                }
-                className="cursor-pointer"
             >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{agent.name}</TableCell>
@@ -60,6 +55,10 @@ const AgentPageTable = () => {
                     onClick={(e) => e.stopPropagation()}
                 >
                 <Switch />
+                <Copy />
+                <Link to={`/agent/details/${agent.id}`}>
+                    <View />
+                </Link>
                 <Link to={`/agent/edit/${agent.id}`}>
                     <Edit />
                 </Link>
