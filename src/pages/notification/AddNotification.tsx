@@ -4,8 +4,10 @@ import ImageInput from '@/components/general/ImageInput';
 import SuccessPopup from '@/components/general/SuccessPopup';
 import { Checkbox, Input, Select, SelectItem } from "@heroui/react";
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next';
 
 const AddNotification = () => {
+    const { t } = useTranslation("notifications");
     const [profileImage, setProfileImage] = React.useState<File | null>(null);
     const [showPopup, setShowPopup] = useState(false);
 
@@ -57,9 +59,9 @@ const AddNotification = () => {
                         {/* Arabic Question */}
                         <div className="relative w-full">
                         <Input
-                            label="عنوان النص ( باللغة العربية )"
+                            label={t('arText')}
                             variant="bordered"
-                            placeholder="اكتب هنا"
+                            placeholder={t('writeHere')}
                             classNames={{ label: "mb-2 text-base" }}
                             size="lg"
                             />
@@ -67,9 +69,9 @@ const AddNotification = () => {
                         {/* English Question */}
                         <div className="relative w-full">
                         <Input
-                            label="عنوان النص ( باللغة الانجليزية )"
+                            label={t('enText')}
                             variant="bordered"
-                            placeholder="اكتب هنا"
+                            placeholder={t('writeHere')}
                             classNames={{ label: "mb-2 text-base" }}
                             size="lg"
                         />
@@ -81,37 +83,37 @@ const AddNotification = () => {
                             <textarea
                                 id="arabic-description"
                                 name="arabic-description"
-                                placeholder='لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي تستخدم بشكل شائع لتوضيح الشكل المرئي للمستند أو الخط دون الاعتماد على محتوى ذي معنى. يمكن استخدام لوريم إيبسوم قبل نشر النسخة النهائية'
+                                placeholder={t('lorem')}
                                 className="peer w-full h-[191px] rounded-[12px] border border-[#E2E2E2] p-4 pt-8 focus:outline-none"
                             />
                             <label
                                 htmlFor="arabic-description"
                                 className="absolute right-4 top-3 text-[#606C7E] text-sm transition-all duration-200 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#000000] peer-focus:top-3 peer-focus:text-sm peer-focus:text-[#606C7E]"
                             >
-                                الوصف (بالعربية)
+                                {t('arDescription')}
                             </label>
                         </div>
                         <div className="relative w-full">
                             <textarea
                                 id="english-description"
                                 name="english-description"
-                                placeholder='لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي تستخدم بشكل شائع لتوضيح الشكل المرئي للمستند أو الخط دون الاعتماد على محتوى ذي معنى. يمكن استخدام لوريم إيبسوم قبل نشر النسخة النهائية'
+                                placeholder={t('lorem')}
                                 className="peer w-full h-[191px] rounded-[12px] border border-[#E2E2E2] p-4 pt-8 focus:outline-none"
                             />
                             <label
                                 htmlFor="english-description"
                                 className="absolute right-4 top-3 text-[#606C7E] text-sm transition-all duration-200 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#000000] peer-focus:top-3 peer-focus:text-sm peer-focus:text-[#606C7E]"
                             >
-                                الوصف ( بالانجليزي )
+                                {t('enDescription')}
                             </label>
                         </div>
                     </div>
 
                     <div className='flex xl:flex-row flex-col items-center gap-3 mt-3'>
                         <Select
-                        label="البلد"
+                        label={t('country')}
                         variant="bordered"
-                        placeholder="اختر"
+                        placeholder={t('choose')}
                         classNames={{ label: "mb-2 text-base" }}
                         size="lg"
                         >
@@ -123,9 +125,9 @@ const AddNotification = () => {
                         </Select>
                         
                         <Select
-                        label="حدد المستلم"
+                        label={t('selectReciver')}
                         variant="bordered"
-                        placeholder="اختر"
+                        placeholder={t('choose')}
                         classNames={{ label: "mb-2 text-base" }}
                         size="lg"
                         >
@@ -165,9 +167,9 @@ const AddNotification = () => {
                         <thead>
                         <tr className='bg-[#F0F4F7] h-9 rounded-[8px] text-right'>
                             <th className='w-[24px]'></th>
-                            <th className='pr-2 text-[#2A32F8] text-sm font-bold'>الصورة</th>
-                            <th className='pr-2 text-[#2A32F8] text-sm font-bold'>الاسم</th>
-                            <th className='pr-2 text-[#2A32F8] text-sm font-bold'>رقم الجوال</th>
+                            <th className='pr-2 text-[#2A32F8] text-sm font-bold'>{t('image')}</th>
+                            <th className='pr-2 text-[#2A32F8] text-sm font-bold'>{t('name')}</th>
+                            <th className='pr-2 text-[#2A32F8] text-sm font-bold'>{t('phone')}</th>
                         </tr>
                         </thead>
 
@@ -178,7 +180,7 @@ const AddNotification = () => {
                             className='bg-white border-b border-[#E3E8EF] text-sm text-right'
                             >
                             <td className='align-middle'>
-                                <Checkbox defaultSelected>Option</Checkbox>
+                                <Checkbox defaultSelected></Checkbox>
                             </td>
 
                             <td className='py-3 pr-2'>

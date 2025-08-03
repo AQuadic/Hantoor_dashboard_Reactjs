@@ -1,7 +1,9 @@
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 
 const NotificationDetails = () => {
+    const { t } = useTranslation("notifications");
     const data = [
         { name: "ابراهيم محمود", phone: "+966 123456 789" },
         { name: "مصطفي محمد", phone: "+966 123456 789" },
@@ -25,7 +27,9 @@ const NotificationDetails = () => {
             <div className='md:px-8 px-2 mt-1 flex xl:flex-row flex-col gap-[33px]'>
                 <div className='flex-1'>
                     <img src="/images/carDetails.png" alt="Car" />
-                    <h1 className='text-[#2A32F8] text-2xl font-bold mt-[13px]'>البلد: الامارات</h1>
+                    <h1 className='text-[#2A32F8] text-2xl font-bold mt-[13px]'>
+                        {t('thecountry')} <span>{t('UAE')}</span>
+                    </h1>
                     <h1 className='text-[#071739] text-xl leading-6 font-bold mt-2.5'>حماية البيانات</h1>
                     <p className='text-[#071739] text-base font-normal mt-[11px] xl:w-[725px] w-full'>أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ عليها أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ عليها.</p>
                     <hr className='my-4'/>
@@ -35,7 +39,7 @@ const NotificationDetails = () => {
                     </div>
                 </div>
                 <div className='xl:w-[506px] w-full h-full bg-[#FFFFFF] rounded-[15px] p-[17px]'>
-                    <h1 className='text-[#2A32F8] text-xl font-bold'>العملاء المستلمين</h1>
+                    <h1 className='text-[#2A32F8] text-xl font-bold'>{t('clients')}</h1>
                     {data.map((item, index) => (
                         <div key={index} className='mt-2'>
                             <div className='flex items-center gap-2.5'>
