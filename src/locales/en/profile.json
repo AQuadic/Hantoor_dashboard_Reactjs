@@ -1,0 +1,10 @@
+{
+    "profileImage": "Profile Image",
+    "mainData": "Main Data",
+    "name": "Name",
+    "email": "Email",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "password": "Password"
+}

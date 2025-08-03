@@ -4,6 +4,7 @@ import ImageInput from "../general/ImageInput";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import { countries } from "countries-list";
 import MobileInput from "../general/MobileInput";
+import { useTranslation } from "react-i18next";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -23,6 +24,7 @@ const EditProfileForm = ({
   profileImage,
   setProfileImage,
 }: EditProfileFormProps) => {
+  const { t } = useTranslation("profile");
     const [selectedCountry, setSelectedCountry] = useState(
         getCountryByIso2("EG")
     );
@@ -30,21 +32,21 @@ const EditProfileForm = ({
   return (
     <form className="p-8">
       <div className="p-8 bg-white rounded-2xl ">
-        <h3 className="mb-4 text-lg font-bold">الصورة الشخصية</h3>
+        <h3 className="mb-4 text-lg font-bold">{t('profileImage')}</h3>
         <ImageInput image={profileImage} setImage={setProfileImage} />
       </div>
       <div className="flex gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
         <div className="flex flex-col flex-1 gap-4">
-          <h3 className="mb-2 text-lg font-bold "> البيانات الاساسية</h3>
+          <h3 className="mb-2 text-lg font-bold ">{t('mainData')}</h3>
           <Input
-            label="الاسم"
+            label={t('name')}
             variant="bordered"
             placeholder="محمد احمد"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <Input
-            label="البريد الالكتروني"
+            label={t('email')}
             variant="bordered"
             placeholder="username@mail.com"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
@@ -59,23 +61,23 @@ const EditProfileForm = ({
           <DashboardButton titleAr=" حفظ" titleEn="Save"/>
         </div>
         <div className="flex flex-col flex-1 gap-4">
-          <h3 className="mb-2 text-lg font-bold"> كلمة المرور</h3>
+          <h3 className="mb-2 text-lg font-bold">{t('password')}</h3>
           <Input
-            label="كلمة المرور الحالية"
+            label={t('currentPassword')}
             variant="bordered"
             placeholder="********"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <Input
-            label="كلمة المرور الجديدة"
+            label={t('newPassword')}
             variant="bordered"
             placeholder="********"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <Input
-            label="تأكيد كلمة المرور"
+            label={t('confirmPassword')}
             variant="bordered"
             placeholder="********"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
