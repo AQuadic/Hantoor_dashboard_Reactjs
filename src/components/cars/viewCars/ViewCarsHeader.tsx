@@ -12,81 +12,42 @@ const ViewCarsHeader: React.FC<SubordinatesHeaderProps> = ({
 }) => {
   const filtersData = [
     {
-      titleAr: "الموديلات",
-      titleEn: "Models",
-      addTextAr: "اضافة موديل جديد",
-      addTextEn: "Add New Model",
-      link: "/models/add",
+      titleAr: "عن السيارة",
+      titleEn: "About Car",
     },
     {
-      titleAr: "انواع الهيكل",
-      titleEn: "Structure Types",
-      addTextAr: "اضافة نوع هيكل جديد",
-      addTextEn: "Add New Structure Type",
-      link: "/structure-types/add",
+      titleAr: "المواصفات",
+      titleEn: "Specifications",
     },
     {
-      titleAr: "انواع السيارة",
-      titleEn: "Car Types",
-      addTextAr: "اضافة نوع سيارة جديد",
-      addTextEn: "Add New Car Type",
-      link: "/car-types/add",
+      titleAr: "باقات الصيانة",
+      titleEn: "Maintenance Packages",
     },
     {
-      titleAr: "الفئات",
-      titleEn: "Categories",
-      addTextAr: "اضافة فئة جديدة",
-      addTextEn: "Add New Category",
-      link: "/categories/add",
+      titleAr: "الاكسسوارات",
+      titleEn: "Accessories",
     },
     {
-      titleAr: "منشأ الماركة",
-      titleEn: "Brand Origin",
-      addTextAr: "اضافة منشأ ماركة جديد",
-      addTextEn: "Add New Brand Origin",
-      link: "/brand-origins/add",
+      titleAr: "العروض",
+      titleEn: "Offers",
     },
     {
-      titleAr: "عدد المقاعد",
-      titleEn: "Number of Seats",
-      addTextAr: "اضافة عدد مقاعد جديد",
-      addTextEn: "Add New Number of Seats",
-      link: "/seat-numbers/add",
+      titleAr: "إيجار منتهي بالتمليك",
+      titleEn: "Lease to Own",
     },
     {
-      titleAr: "انواع الماكينة",
-      titleEn: "Engine Types",
-      addTextAr: "اضافة نوع ماكينة جديد",
-      addTextEn: "Add New Engine Type",
-      link: "/engine-types/add",
+      titleAr: "الصور الاضافية",
+      titleEn: "Additional Images",
     },
     {
-      titleAr: "احجام الماكينة",
-      titleEn: "Engine Sizes",
-      addTextAr: "اضافة حجم ماكينة جديد",
-      addTextEn: "Add New Engine Size",
-      link: "/engine-sizes/add",
+      titleAr: "الفيديوهات",
+      titleEn: "Videos",
     },
     {
-      titleAr: "السعر من",
-      titleEn: "Price From",
-      addTextAr: "اضافة سعر من جديد",
-      addTextEn: "Add New Price From",
-      link: "/price-from/add",
-    },
-    {
-      titleAr: "السعر الى",
-      titleEn: "Price To",
-      addTextAr: "اضافة سعر الى جديد",
-      addTextEn: "Add New Price To",
-      link: "/price-to/add",
+      titleAr: "الصور الاعلانية",
+      titleEn: "Ad Images",
     },
   ];
-
-  // Get the current filter data
-  const currentFilter =
-    filtersData.find((filter) => filter.titleEn === selectedFilter) ||
-    filtersData[0];
 
   return (
     <div className="pt-2  bg-white border-b border-[#E1E1E1]">

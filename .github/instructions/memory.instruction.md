@@ -32,11 +32,6 @@ applyTo: "**"
 
 ## Conversation History
 
-- 2025-08-03: Added mb-8 at the end of every page from the layout to ensure consistent bottom spacing for all pages rendered via Outlet in Layout.tsx
-- 2025-08-03: Task: Fix errors in DashboardSidebar, close on outside click (mobile), make mobile sidebar scrollable. File: src/components/general/DashboardSidebar.tsx
-
-## Notes
-
 - Sidebar must close on outside click (mobile)
 - Mobile sidebar must be scrollable
 - Fix any errors in the file
