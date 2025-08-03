@@ -3,8 +3,10 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@heroui/react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 const AddFaq = () => {
+    const { t } = useTranslation("questions");
     return (
         <section>
             <DashboardHeader
@@ -26,7 +28,7 @@ const AddFaq = () => {
                     className="w-full !h-16 rounded-[12px] mt-4"
                     dir="rtl"
                     >
-                    <SelectValue placeholder="البلد" />
+                    <SelectValue placeholder={t('country')} />
                     </SelectTrigger>
                     <SelectContent dir="rtl">
                     <SelectItem value="1">الامارات</SelectItem>
@@ -40,9 +42,9 @@ const AddFaq = () => {
                 {/* Arabic Question */}
                 <div className="relative w-full">
                 <Input
-                    label="السؤال ( باللغة العربية )"
+                    label={t('arQuestion')}
                     variant="bordered"
-                    placeholder="اكتب هنا"
+                    placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                     />
@@ -50,9 +52,9 @@ const AddFaq = () => {
                 {/* English Question */}
                 <div className="relative w-full">
                 <Input
-                    label="السؤال ( باللغة الانجليزية )"
+                    label={t('enQuestion')}
                     variant="bordered"
-                    placeholder="اكتب هنا"
+                    placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                 />
@@ -63,9 +65,9 @@ const AddFaq = () => {
                 {/* Arabic Question */}
                 <div className="relative w-full">
                 <Input
-                    label="الاجابة ( باللغة العربية )"
+                    label={t('arAnswer')}
                     variant="bordered"
-                    placeholder="اكتب هنا"
+                    placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                     />
@@ -73,9 +75,9 @@ const AddFaq = () => {
                 {/* English Question */}
                 <div className="relative w-full">
                 <Input
-                    label="الاجابة ( باللغة الانجليزية )"
+                    label={t('enAnswer')}
                     variant="bordered"
-                    placeholder="اكتب هنا"
+                    placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                 />

@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { Switch } from "@heroui/react";
 import View from "../icons/general/View";
 import FaqDetails from "@/pages/faqs/FaqDetails";
+import { Link } from "react-router";
 
 const FAQsTable = () => {
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
@@ -66,7 +67,9 @@ const FAQsTable = () => {
                   <button onClick={() => setOpenFaqId(question.id)}>
                     <View />
                   </button>
-                  <Edit />
+                  <Link to={`/faq/edit/${question.id}`}>
+                    <Edit />
+                  </Link>
                   <div className="mt-2">
                     <TableDeleteButton handleDelete={() => {}} />
                   </div>
