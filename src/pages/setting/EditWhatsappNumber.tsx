@@ -1,9 +1,11 @@
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
 import {Input, Select, SelectItem} from "@heroui/react";
+import { useTranslation } from 'react-i18next';
 
 
 const EditWhatsappNumber = () => {
+    const { t } = useTranslation("setting");
     const countries = [
         {key: "مصر", label: "مصر"},
         {key: "مصر", label: "مصر"},
@@ -30,7 +32,7 @@ const EditWhatsappNumber = () => {
                     <div className="w-full">
                         <Select
                             items={countries}
-                            label="البلد"
+                            label={t('country')}
                             placeholder="الامارات"
                             classNames={{
                                 trigger: '!h-[57px] bg-white border py-7.5',
@@ -38,20 +40,20 @@ const EditWhatsappNumber = () => {
                                 listbox: 'bg-white shadow-md',
                             }}
                             >
-                            {(country) => <SelectItem>{country.label}</SelectItem>}
+                            {(animal) => <SelectItem>{animal.label}</SelectItem>}
                         </Select>
                     </div>
                     <div className="w-full">
                         <Input
-                            label="اسم مركز الصيانة ( باللغة العربية )"
+                            label={t('maintenanceCenter')}
                             variant="bordered"
-                            placeholder=" المركز الدولي لصيانة السيارات"
+                            placeholder={t('centerName')}
                             classNames={{ label: "mb-2 text-base" }}
                             size="lg"
                         />
                     </div>
                 </div>
-                    <DashboardButton titleAr="حفظ" titleEn="Save" />
+            <DashboardButton titleAr="اضافة" titleEn="Add" />
             </div>
         </section>
     )

@@ -29,8 +29,8 @@ const InsuranceTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">البلد</TableHead>
             <TableHead className="text-right">رقم الواتساب</TableHead>
+            <TableHead className="text-right">البلد</TableHead>
             <TableHead className="text-right">الحالة</TableHead>
             </TableRow>
         </TableHeader>
@@ -39,7 +39,7 @@ const InsuranceTable = () => {
             <TableRow key={country.id}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{country.Whatsapp}</TableCell>
-                <TableCell>{country.country}</TableCell>
+                <TableCell className="w-full">{country.country}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <ActiveStatus />
                 <Link to="/setting/edit-whatsapp/:id">

@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 
 interface VideoInputProps {
   width?: number;
@@ -22,6 +23,7 @@ const VideoInput: React.FC<VideoInputProps> = ({
   setVideo,
   isRounded = false,
 }) => {
+  const { t } = useTranslation("setting");
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -227,7 +229,7 @@ const VideoInput: React.FC<VideoInputProps> = ({
               alt="Add Video"
               className="w-[36px] h-[36px]"
             />
-            <p className="text-lg text-primary underline">اضافة فيديو</p>
+            <p className="text-lg text-primary underline">{t('addVideo')}</p>
           </div>
         )}
       </div>

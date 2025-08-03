@@ -4,8 +4,10 @@ import { Input } from '@heroui/react';
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
+import { useTranslation } from 'react-i18next';
 
 const AddProfile = () => {
+    const { t } = useTranslation("setting");
     const [profileImage, setProfileImage] = React.useState<File | null>(null);
     
     return (
@@ -22,10 +24,10 @@ const AddProfile = () => {
                 />
                 </div>
             <div className='h-full bg-[#FFFFFF] rounded-[15px] mx-8 px-[29px] py-5 mt-[11px]'>
-                <h2 className='text-[#2A32F8] text-[17px] font-bold mb-3'>صورة الصفحة التعريفية</h2>
+                <h2 className='text-[#2A32F8] text-[17px] font-bold mb-3'>{t('profileImage')}</h2>
                 <ImageInput image={profileImage} setImage={setProfileImage} />
             </div> 
-                        <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
+            <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                 {/* Country */}
                 <div className="md:w-1/2 w-full">
@@ -34,7 +36,7 @@ const AddProfile = () => {
                     className="w-full !h-16 rounded-[12px] mt-4"
                     dir="rtl"
                     >
-                    <SelectValue placeholder="البلد" />
+                    <SelectValue placeholder={t('country')} />
                     </SelectTrigger>
                     <SelectContent dir="rtl">
                     <SelectItem value="1">الامارات</SelectItem>
@@ -48,9 +50,9 @@ const AddProfile = () => {
                 {/* Arabic Question */}
                 <div className="relative w-full">
                 <Input
-                    label="عنوان النص ( باللغة العربية )"
+                    label={t('arText')}
                     variant="bordered"
-                    placeholder="ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك"
+                    placeholder={t('arTextDesc')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                     />
@@ -58,9 +60,9 @@ const AddProfile = () => {
                 {/* English Question */}
                 <div className="relative w-full">
                 <Input
-                    label="عنوان النص ( باللغة الانجليزية )"
+                    label={t('enText')}
                     variant="bordered"
-                    placeholder="اكتب هنا"
+                    placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                 />

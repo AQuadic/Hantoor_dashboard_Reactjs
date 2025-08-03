@@ -1,0 +1,29 @@
+{
+    "noVideos": "Number of Videos",
+    "writeHere": "Write Here",
+    "chooseImage": "Image of Language and Country Selection Page",
+    "textFeatures": "App Features Text on Homepage",
+    "arText": "Text (in Arabic)",
+    "enText": "Text (in English)",
+    "advancedSearch": "Advanced Search Text on Homepage",
+    "financingText": "Financing Text on Car Details Page",
+    "appLinks": "App Links",
+    "androidLink": "App Link for Android",
+    "androidVersion": "Android App Version",
+    "publishDate": "Android App Publish Date",
+    "iphoneLink": "App Link for iPhone",
+    "iphoneVersion": "iPhone App Version",
+    "iphoneDate": "iPhone App Publish Date",
+
+    "country": "Country",
+    "maintenanceCenter": "Maintenance Center Name (in Arabic)",
+    "centerName": "The International Car Maintenance Center",
+
+    "profileImage": "Profile Page Image",
+    "arTextDesc": "Say goodbye to traditional ways of searching for cars and save your time and effort",
+
+    "advertisingImages": "Advertising Images on the Homepage",
+    "videoBeforeChat": "Video Before Entering the Chat",
+    "addPhoto": "Add photo",
+    "addVideo": "Add video"
+}

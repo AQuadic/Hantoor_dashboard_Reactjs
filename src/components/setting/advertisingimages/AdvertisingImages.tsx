@@ -3,8 +3,10 @@ import VideoInput from "@/components/general/VideoInput";
 import Delete from "@/components/icons/advertise/Delete";
 import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const AdvertisingImages = () => {
+    const { t } = useTranslation("setting");
     const [profileImage, setProfileImage] = React.useState<File | null>(null);
     const [video, setVideo] = useState<File | null>(null);
 
@@ -16,7 +18,7 @@ const AdvertisingImages = () => {
                     className="w-[160px] !h-[53px] rounded-[12px] mt-4 bg-white"
                     dir="rtl"
                 >
-                    <SelectValue placeholder="البلد" />
+                    <SelectValue placeholder={t('country')} />
                 </SelectTrigger>
                 <SelectContent dir="rtl">
                     <SelectItem value="1">الجميع</SelectItem>
@@ -26,7 +28,7 @@ const AdvertisingImages = () => {
                 </Select>
             </div>
             <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
-                <h1 className="text-[17px] text-[#2A32F8] font-bold">الصور الاعلانية في الصفحة الرئيسية</h1>
+                <h1 className="text-[17px] text-[#2A32F8] font-bold">{t('advertisingImages')}</h1>
                 <div className="mt-[14px] flex flex-wrap items-center gap-[14px]">
                     <ImageInput image={profileImage} setImage={setProfileImage} />
                     <div className="relative">
@@ -57,7 +59,7 @@ const AdvertisingImages = () => {
             </div>
 
                 <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
-                <h1 className="text-[17px] text-[#2A32F8] font-bold">فيديو قبل الدخول للمحادثة</h1>
+                <h1 className="text-[17px] text-[#2A32F8] font-bold">{t('videoBeforeChat')}</h1>
                 <div className="mt-[14px] flex flex-wrap items-center gap-[14px]">
                     <VideoInput video={video} setVideo={setVideo} />
 

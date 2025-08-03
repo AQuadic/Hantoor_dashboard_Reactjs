@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ImageInputProps {
   width?: number;
@@ -24,6 +25,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
   isRounded = false,
   placeholderText,
 }) => {
+  const { t } = useTranslation("setting");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -143,7 +145,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
             />
             {/* Only show text when not in icon mode */}
             {!isIconMode && (
-              <p className="text-lg text-primary underline">{placeholderText || "اضافة صورة"}</p>
+              <p className="text-lg text-primary underline">{placeholderText || t('addPhoto')}</p>
             )}
           </>
         )}
