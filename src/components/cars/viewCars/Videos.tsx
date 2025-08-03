@@ -1,3 +1,11 @@
-const Videos = () => <div className="p-8 text-center">Videos Placeholder</div>;
+import React from 'react'
 
-export default Videos;
+const Videos = () => {
+    return (
+        <section className="mt-4 flex flex-wrap gap-4 md:mx-8 mx-0">
+            <img src="../../../../public/images/carVideo.png" alt="Video" />
+        </section>
+    )
+}
+
+export default Videos
