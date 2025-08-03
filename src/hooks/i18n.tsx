@@ -24,6 +24,9 @@ import modelsEn from "../locales/en/models.json";
 import financingAr from "../locales/ar/financing.json";
 import financingEn from "../locales/en/financing.json";
 
+import questionsAr from "../locales/ar/questions.json";
+import questionsEn from "../locales/en/questions.json";
+
 // Ensure we're in browser environment
 const savedLang =
   typeof window !== "undefined"
@@ -47,6 +50,7 @@ i18n.use(initReactI18next).init({
       agents: agentsEn,
       models: modelsEn,
       financing: financingEn,
+      questions: questionsEn,
     },
     ar: {
       header: headerAr,
@@ -57,6 +61,7 @@ i18n.use(initReactI18next).init({
       agents: agentsAr,
       models: modelsAr,
       financing: financingAr,
+      questions: questionsAr,
     },
   },
 });

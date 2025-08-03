@@ -3,5 +3,7 @@
     "NumofCars": "عدد السيارات",
     "NumofUsers": "عدد المستخدمين",
     "confirmDeletion": "تأكيد الحذف",
-    "areYouSure": "هل أنت متأكد من الحذف؟"
+    "areYouSure": "هل أنت متأكد من الحذف؟",
+
+    "conversation": "المحادثة"
 }
