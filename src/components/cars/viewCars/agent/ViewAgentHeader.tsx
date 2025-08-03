@@ -12,7 +12,7 @@ const ViewAgentHeader = ({
   setSelectedFilter,
 }: ViewAgentHeaderProps) => {
   return (
-    <div className="bg-white">
+    <div className="bg-white rounded-b-2xl">
       <DashboardHeader
         titleAr="تفاصيل الوكيل"
         titleEn="Agent details"
