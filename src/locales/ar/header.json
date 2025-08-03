@@ -5,5 +5,8 @@
     "confirmDeletion": "تأكيد الحذف",
     "areYouSure": "هل أنت متأكد من الحذف؟",
 
-    "conversation": "المحادثة"
+    "conversation": "المحادثة",
+
+    "notes": "الملاحظات",
+    "clientData": "بيانات العميل"
 }

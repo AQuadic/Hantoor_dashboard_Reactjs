@@ -5,6 +5,9 @@
     "confirmDeletion": "Confirm deletion",
     "areYouSure": "Are you sure you want to delete?",
 
-    "conversation": "Conversation"
+    "conversation": "Conversation",
+
+    "notes": "Notes",
+    "clientData": "Client Data"
 
 }
