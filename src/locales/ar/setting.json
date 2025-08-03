@@ -36,5 +36,11 @@
     "tiktokLink": "رابط التيك توك",
     "snapchatLink": "رابط السناب شات",
     "xLink": "رابط اكس",
-    "linkedinLink": "رابط لينكدإن"
+    "linkedinLink": "رابط لينكدإن",
+
+    "image": "الصورة",
+    "addGIF": "اضافة GIF",
+    "arDescription": "الوصف ( باللغة العربية )",
+    "enDescription": "الوصف ( باللغة الانجليزية )",
+    "exploreNewCars": "تصفح السيارات الجديدة من مكانك"
 }
