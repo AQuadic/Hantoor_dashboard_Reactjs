@@ -99,11 +99,11 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
       data-slot="table-row"
       className={cn(
         "border-b-0 overflow-hidden transition-colors",
-        "[&>td]:bg-white [&>td]:border-0",
-        // Consistent horizontal padding for all
+        "[&>td:not(:last-child)]:bg-white",
+        "[&>td]:border-0",
         "[&>td]:px-6",
         // Logical border radius for first/last cell in both LTR and RTL
-        "[&>td:first-child]:rounded-s-full [&>td:last-child]:rounded-e-full",
+        "[&>td:first-child]:rounded-s-full [&>td:nth-last-child(2)]:rounded-e-full",
         // Logical padding for first/last cell in both LTR and RTL
         "[&>td:first-child]:ps-6 [&>td:last-child]:pe-6",
         "[&>td]:h-[58px]",
