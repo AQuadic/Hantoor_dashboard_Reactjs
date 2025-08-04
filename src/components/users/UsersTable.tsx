@@ -37,7 +37,7 @@ export function UserTable() {
   return (
     <Table>
       <TableHeader>
-        <TableRow>
+        <TableRow >
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">الصورة</TableHead>
           <TableHead className="text-right">الاسم</TableHead>
@@ -57,9 +57,9 @@ export function UserTable() {
 
         </TableRow>
       </TableHeader>
-      <TableBody>
+      <TableBody >
         {users.map((user, index) => (
-          <TableRow key={user.id}>
+<TableRow key={user.id} noBackgroundColumns={2}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               <img src={user.image} alt="user" className="w-[52.3px] h-[51px] rounded-full" />

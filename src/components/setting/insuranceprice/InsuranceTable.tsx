@@ -36,7 +36,7 @@ const InsuranceTable = () => {
         </TableHeader>
         <TableBody>
             {countries.map((country, index) => (
-            <TableRow key={country.id}>
+            <TableRow key={country.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{country.Whatsapp}</TableCell>
                 <TableCell className="w-full">{country.country}</TableCell>

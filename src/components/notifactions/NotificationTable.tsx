@@ -45,6 +45,7 @@ const NotificationTable = () => {
             {notifications.map((notification, index) => (
             <TableRow
                 key={notification.id}
+                noBackgroundColumns={1}
             >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>

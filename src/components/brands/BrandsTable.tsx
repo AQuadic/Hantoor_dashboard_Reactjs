@@ -56,7 +56,7 @@ export function BrandsTable() {
       </TableHeader>
       <TableBody>
         {brands.map((brand, index) => (
-          <TableRow key={brand.id}>
+          <TableRow key={brand.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               <img src={brand.image} alt="brand" />

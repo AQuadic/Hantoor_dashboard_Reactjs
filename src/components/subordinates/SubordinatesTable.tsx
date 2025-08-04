@@ -81,7 +81,7 @@ export function SubordinatesTable() {
       </TableHeader>
       <TableBody>
         {subordinates.map((subordinate, index) => (
-          <TableRow key={subordinate.id}>
+          <TableRow key={subordinate.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               <img src={subordinate.image} alt="admin" />

@@ -43,7 +43,7 @@ const TechnicalSupportTable = () => {
         </TableHeader>
         <TableBody>
             {technicalsupport.map((question, index) => (
-            <TableRow key={question.id}>
+            <TableRow key={question.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{question.question}</TableCell>
                 <TableCell>{question.country}</TableCell>

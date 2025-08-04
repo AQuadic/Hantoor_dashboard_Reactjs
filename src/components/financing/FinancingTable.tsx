@@ -41,8 +41,7 @@ const FinancingTable = () => {
             {technicalsupport.map((question, index) => (
             <TableRow
                 key={question.id}
-                onClick={() => navigate(`/financing/details/${question.id}`, { state: { country: question.country } })}
-                className="cursor-pointe"
+                noBackgroundColumns={1}
             >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{question.country}</TableCell>

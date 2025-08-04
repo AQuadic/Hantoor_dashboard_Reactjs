@@ -109,7 +109,7 @@ const CarsTable = () => {
           </TableHeader>
           <TableBody>
             {chats.map((chat, index) => (
-              <TableRow key={chat.id}>
+              <TableRow key={chat.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
                   <img

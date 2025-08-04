@@ -44,6 +44,7 @@ const BanksTable = () => {
             {bank.map((bank, index) => (
             <TableRow
                 key={bank.id}
+                noBackgroundColumns={1}
                 // onClick={() => navigate(`/faq/details/${bank.id}`)}
                 // className="cursor-pointer hover:bg-gray-100"
             >

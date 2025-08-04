@@ -53,7 +53,7 @@ const ContactUsTable = () => {
         </TableHeader>
             <TableBody>
                 {messages.map((message, index) => (
-                <TableRow key={message.id}>
+                <TableRow key={message.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{message.name}</TableCell>
                 <TableCell>{message.phone}</TableCell>

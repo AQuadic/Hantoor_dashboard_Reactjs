@@ -93,21 +93,42 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
   );
 }
 
-function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
+interface TableRowProps extends React.ComponentProps<"tr"> {
+  noBackgroundColumns?: number;
+}
+
+function TableRow({
+  className,
+  children,
+  noBackgroundColumns = 0,
+  ...props
+}: TableRowProps) {
+  const totalColumns = React.Children.count(children);
+  const bgColumns = totalColumns - noBackgroundColumns;
+
+  const updatedChildren = React.Children.map(children, (child, index) => {
+    if (!React.isValidElement(child)) return child;
+
+    // Apply bg-muted class conditionally based on column index
+    const isBgColumn = index < bgColumns;
+    const additionalClass = isBgColumn ? "bg-white" : "";
+
+    return React.cloneElement(child, {
+      className: cn(child.props.className, additionalClass),
+    });
+  });
+
   return (
     <tr
       data-slot="table-row"
       className={cn(
         "border-b-0 overflow-hidden transition-colors",
-        "[&>td:not(:last-child)]:bg-white",
+        
         "[&>td]:border-0",
         "[&>td]:px-6",
-        // Logical border radius for first/last cell in both LTR and RTL
         "[&>td:first-child]:rounded-s-full [&>td:nth-last-child(2)]:rounded-e-full",
-        // Logical padding for first/last cell in both LTR and RTL
         "[&>td:first-child]:ps-6 [&>td:last-child]:pe-6",
         "[&>td]:h-[58px]",
-        "data-[state=selected]:[&>td:not(:last-child)]:bg-muted",
         "ltr:[&>td]:text-left rtl:[&>td]:text-right",
         "before:content-[''] before:block before:h-4",
         "after:content-[''] after:block after:h-4",
@@ -115,7 +136,7 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
       )}
       {...props}
     >
-      {props.children}
+      {updatedChildren}
     </tr>
   );
 }

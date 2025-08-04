@@ -51,7 +51,7 @@ const SupportMessagesTable = () => {
             </TableHeader>
             <TableBody>
                 {supportMessages.map((message, index) => (
-                <TableRow key={message.id}>
+                <TableRow key={message.id} noBackgroundColumns={1}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{message.number}</TableCell>
                     <TableCell>{message.country}</TableCell>

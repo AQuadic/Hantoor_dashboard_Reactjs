@@ -45,6 +45,7 @@ const AgentPageTable = () => {
             {agents.map((agent, index) => (
             <TableRow
                 key={agent.id}
+                noBackgroundColumns={1}
             >
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{agent.name}</TableCell>

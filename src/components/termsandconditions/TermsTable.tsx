@@ -38,7 +38,7 @@ const TermsTable = () => {
         </TableHeader>
         <TableBody>
             {profile.map((profie, index) => (
-            <TableRow key={profie.id}>
+            <TableRow key={profie.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{profie.title}</TableCell>
                 <TableCell>{profie.country}</TableCell>
