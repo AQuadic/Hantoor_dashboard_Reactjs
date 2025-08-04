@@ -111,7 +111,13 @@ function TableRow({
 
     // Apply bg-muted class conditionally based on column index
     const isBgColumn = index < bgColumns;
-    const additionalClass = isBgColumn ? "bg-white" : "";
+    const isLastBgCell = index === bgColumns - 1;
+
+    const additionalClass = cn(
+      isBgColumn && "bg-white",
+      isLastBgCell && "rounded-e-full",
+      index === 0 && "rounded-s-full"
+    );
 
     return React.cloneElement(child, {
       className: cn(child.props.className, additionalClass),
