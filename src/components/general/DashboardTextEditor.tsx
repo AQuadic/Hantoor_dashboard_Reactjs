@@ -134,7 +134,7 @@ const ToolbarButton: React.FC<{
       border: none;
       margin: 0 2px;
       padding: 0 6px;
-      border-radius: 4px;
+      border-radius: 12px;
       &:hover {
         background: #f3f4f6;
       }
@@ -546,6 +546,8 @@ const DashboardTextEditor = ({
   const fontSize = (marks?.fontSize as string) || "16px";
   const color = (marks?.color as string) || "#1f2937";
   return (
+    <div>
+      <h2 className="text-[#000000] text-[15px] font-normal">{title}</h2>
     <div
       className={css`
         direction: rtl;
@@ -569,7 +571,6 @@ const DashboardTextEditor = ({
           text-align: right;
         `}
       >
-        {title}
       </div>
       <Toolbar editor={editor} />
       <Slate
@@ -624,6 +625,8 @@ const DashboardTextEditor = ({
         />
       </Slate>
     </div>
+    </div>
+
   );
 };
 

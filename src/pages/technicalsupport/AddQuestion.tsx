@@ -1,5 +1,6 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
+import DashboardTextEditor from "@/components/general/DashboardTextEditor";
 import {
   Select,
   SelectContent,
@@ -13,6 +14,8 @@ import { useTranslation } from "react-i18next";
 
 const AddQuestions = () => {
   const { t } = useTranslation("questions");
+  const [arBody, setArBody] = React.useState("");
+  const [enBody, setEnBody] = React.useState("");
   return (
     <section>
       <DashboardHeader
@@ -65,6 +68,25 @@ const AddQuestions = () => {
               placeholder={t("writeHere")}
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
+            />
+          </div>
+        </div>
+
+    <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
+          {/* Arabic Question */}
+          <div className="relative w-full">
+            <DashboardTextEditor
+              title={t("arQuestion")}
+              body={arBody}
+              setBody={setArBody}
+            />
+          </div>
+          {/* English Question */}
+          <div className="relative w-full">
+            <DashboardTextEditor
+              title={t("arQuestion")}
+              body={enBody}
+              setBody={setEnBody}
             />
           </div>
         </div>

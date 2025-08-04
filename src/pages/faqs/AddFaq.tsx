@@ -80,12 +80,10 @@ const AddFaq = () => {
           </div>
           {/* English Question */}
           <div className="relative w-full">
-            <Input
-              label={t("enAnswer")}
-              variant="bordered"
-              placeholder={t("writeHere")}
-              classNames={{ label: "mb-2 text-base" }}
-              size="lg"
+            <DashboardTextEditor
+              title={t("arQuestion")}
+              body={enBody}
+              setBody={setEnBody}
             />
           </div>
         </div>
