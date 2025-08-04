@@ -132,7 +132,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <CountriesPage />,
   },
   {
-    path: "/countries/edit",
+    path: "/countries/edit/:id",
     element: <EditCountries />,
   },
   {

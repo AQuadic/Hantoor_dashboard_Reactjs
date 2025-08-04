@@ -54,7 +54,7 @@ const CountriesTable = () => {
                 <TableCell className="w-full">{country.date}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <Switch />
-                <Link to="/countries/edit">
+                <Link to={`/countries/edit/${country.id}`}>
                     <Edit />
                 </Link>
 
