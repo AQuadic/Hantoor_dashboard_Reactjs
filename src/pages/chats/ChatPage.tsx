@@ -10,7 +10,7 @@ const ChatPage = () => {
             <div className="px-2 md:px-8">
                 <ChatTable />
                 <TablePagination
-                    currentPage={0}
+                    currentPage={1}
                     setCurrentPage={function (): void {
                         throw new Error("Function not implemented.");
                     }}

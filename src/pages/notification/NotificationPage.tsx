@@ -10,7 +10,7 @@ const NotificationPage = () => {
             <div className='md:px-8 px-2'>
                 <NotificationTable />
                     <TablePagination
-                    currentPage={0}
+                    currentPage={1}
                     setCurrentPage={function (): void {
                         throw new Error("Function not implemented.");
                     }}

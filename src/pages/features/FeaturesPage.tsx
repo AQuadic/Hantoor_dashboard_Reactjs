@@ -8,7 +8,7 @@ const FeaturesPage = () => {
             <FeaturesHeader />
             <FeaturesTable />
             <TablePagination
-                currentPage={0}
+                currentPage={1}
                 setCurrentPage={function (): void {
                     throw new Error("Function not implemented.");
                 }}
