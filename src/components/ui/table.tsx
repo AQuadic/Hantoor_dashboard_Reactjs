@@ -109,6 +109,7 @@ function TableRow({
   const updatedChildren = React.Children.map(children, (child, index) => {
     if (!React.isValidElement(child)) return child;
 
+  const element = child as React.ReactElement<{ className?: string }>;
     // Apply bg-muted class conditionally based on column index
     const isBgColumn = index < bgColumns;
     const isLastBgCell = index === bgColumns - 1;
@@ -119,8 +120,8 @@ function TableRow({
       index === 0 && "rounded-s-full"
     );
 
-    return React.cloneElement(child, {
-      className: cn(child.props.className, additionalClass),
+    return React.cloneElement(element, {
+      className: cn(element.props.className, additionalClass),
     });
   });
 
