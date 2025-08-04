@@ -41,6 +41,20 @@
 - 2025-08-03: Updated AboutCar table headers and data to match provided screenshot, reflecting correct Arabic column names and sample data, no buttons included, no Context7 research required for this change.
 - 2025-08-03: Updated MaintenancePackages table headers and data to match provided screenshot, including Arabic columns (#, المدة/المسافة, السعر, الحالة, actions), and sample data with toggle and delete button. No Context7 research required for this change.
 
+## Current Task - Adding Missing Permissions
+
+**Task Type**: Feature Implementation - Adding missing permissions from design
+
+**Todo List**:
+
+- [x] Analyze current permissions structure vs design image
+- [x] Add missing sections: النماذج (Models), السيارات (Cars), أقسام السيارات (Car Departments), التجارة والاحصاء (Trade & Statistics), الدعم التقني (Technical Support), سياسة الخصوصية وشروط الخدمة (Privacy Policy & Terms of Service), وسائل التواصل الاجتماعي (Social Media), التحكم والاحكام (Control & Governance), المحادثات (Chats), تطبيق الجوال (Mobile App), الدعم (Support), الشكاوي (Complaints), etc.
+- [x] Update permission groups structure to match design exactly
+- [x] Add all missing permission types for each section
+- [x] Ensure proper Arabic and English labels
+- [ ] Test the implementation
+- [ ] Validate all permissions are present and functional
+
 ## Conversation History
 
 - Sidebar must close on outside click (mobile)
