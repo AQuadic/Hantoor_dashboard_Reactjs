@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { useTranslation } from "react-i18next";
 import Email from "../icons/login/Email";
-import Password from "../icons/login/Password";
+import { Eye, EyeOff } from 'lucide-react';
 import { Link } from "react-router";
 import {Checkbox} from "@heroui/react";
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -8,6 +9,7 @@ import DashboardButton from "../general/dashboard/DashboardButton";
 
 const Login = () => {
     const { t } = useTranslation("login");
+    const [showPassword, setShowPassword] = useState(false);
     return (
         <section className='flex items-center justify-between gap-4 !bg-white'>
             <img src="/images/loginIMG.png" className='lg:flex hidden h-screen' alt="Login image" />
@@ -30,20 +32,23 @@ const Login = () => {
 
                 <div className="relative">
                     <input 
-                        type="email" 
-                        name="email" 
-                        id="email" 
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        id="password"
                         className="md:w-[404px] w-[300px] h-[57px] border border-[#E2E2E2] rounded-[12px] mt-[18px] px-4 pt-4"
                         placeholder="******************************"
                     />
                     <h2 className="text-[#000000] text-[15px] absolute top-5 right-4">{t('password')}</h2>
-                    <div className="absolute top-9 left-5">
-                        <Password />
+                    <div
+                        className="absolute top-9 left-5 cursor-pointer text-gray-500"
+                        onClick={() => setShowPassword((prev) => !prev)}
+                    >
+                        {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                     </div>
                 </div>
 
                 <div className="mt-4 flex items-center">
-                    <Checkbox defaultSelected size="md"></Checkbox>
+                    <Checkbox defaultSelected size="md" />
                     <p className="text-[#2A32F8] text-[14px] font-normal">{t('rememberMe')}</p>
                 </div>
 
