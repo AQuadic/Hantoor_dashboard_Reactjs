@@ -9,23 +9,41 @@ interface TablePaginationProps {
   itemsPerPage: number;
 }
 
-const generateSteps = (current: number, last: number): (number | string)[] => {
-  const steps: (number | string)[] = [];
-  const lastStepsStart = Math.max(last - 2, current + 3);
+const generateSteps = (current: number, total: number): (number | string)[] => {
+  const pages: (number | string)[] = [];
 
-  for (let i = current; i <= Math.min(current + 2, lastStepsStart - 1); i++) {
-    steps.push(i);
+  pages.push(1);
+  if (total >= 2) pages.push(2);
+
+  if (current <= 2) {
+    if (total > 4) pages.push("...");
   }
 
-  if (current + 2 < lastStepsStart - 1) {
-    steps.push("...");
+  else if (current === 3 || current === 4) {
+    pages.push("...");
+    pages.push(current);
+    pages.push("...");
   }
 
-  for (let i = lastStepsStart; i <= last; i++) {
-    steps.push(i);
+  else if (current > 4 && current < total - 3) {
+    pages.push("...");
+    pages.push(current);
+    pages.push("...");
   }
 
-  return steps;
+  else if (current >= total - 3) {
+    pages.push("...");
+    for (let i = total - 4; i <= total - 2; i++) {
+      if (i > 2) pages.push(i);
+    }
+  }
+
+  if (total >= 2) pages.push(total - 1);
+  if (total >= 1) pages.push(total);
+
+  return [...new Set(pages)].sort((a, b) =>
+    typeof a === "number" && typeof b === "number" ? a - b : 0
+  );
 };
 
 const TablePagination: React.FC<TablePaginationProps> = ({
