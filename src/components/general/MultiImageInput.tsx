@@ -6,6 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ImageInputProps {
   width?: number;
@@ -28,6 +29,7 @@ const MultiImageInput: React.FC<ImageInputProps> = ({
 }) => {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { t } = useTranslation("cars");
 
   // Create previews when images change
 
@@ -123,7 +125,7 @@ const MultiImageInput: React.FC<ImageInputProps> = ({
             className="w-[36px] h-[36px]"
           />
           <p className="text-lg text-primary underline">
-            {title ? title : "اضافة صور"}
+            {title ? title : t('addPhotos')}
           </p>
         </div>
       </div>

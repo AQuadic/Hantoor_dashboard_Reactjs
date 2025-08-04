@@ -2,10 +2,11 @@ import { Input, Select, SelectItem } from "@heroui/react";
 import React from "react";
 import CarDetailsField from "@/components/cars/addcars/CarDetailsField";
 import { CarDetailsFieldsTypes } from "@/types/CarTypes";
-import { Plus } from "lucide-react";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
+import { useTranslation } from "react-i18next";
 
 const CarDetails = () => {
+  const { t } = useTranslation("cars");
   const [carDetailsFields, setCarDetailsFields] = React.useState<
     CarDetailsFieldsTypes[]
   >([
@@ -36,22 +37,22 @@ const CarDetails = () => {
   };
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] ">
-      <h1 className="text-lg text-[#2A32F8] font-bold mb-2">بيانات السيارة</h1>
+      <h1 className="text-lg text-[#2A32F8] font-bold mb-2">{t('carDetails')}</h1>
       <div className="flex flex-col md:flex-row gap-[15px] ">
         <div className="w-full">
           <Input
-            label="اسم السيارة (باللغة العربية)"
+            label={t('arCarName')}
             variant="bordered"
-            placeholder="اكتب هنا"
+            placeholder={t('writeHere')}
             classNames={{ label: "mb-2 text-base" }}
             size="lg"
           />
         </div>
         <div className="w-full">
           <Input
-            label="اسم السيارة (باللغة الانجليزية)"
+            label={t('enCarName')}
             variant="bordered"
-            placeholder="اكتب هنا"
+            placeholder={t('writeHere')}
             classNames={{ label: "mb-2 text-base" }}
             size="lg"
           />
@@ -59,99 +60,99 @@ const CarDetails = () => {
       </div>
       <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-[15px]">
         <Select
-          label="البلد"
+          label={t('country')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="الماركة"
+          label={t('brand')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="الوكيل"
+          label={t('agent')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="الموديل"
+          label={t('model')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="نوع الهيكل"
+          label={t('structureType')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="النوع"
+          label={t('type')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="الفئة"
+          label={t('category')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="منشأ الماركة"
+          label={t('brandOrigin')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="عدد المقاعد"
+          label={t('seats')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="نوع الماكينة"
+          label={t('engineType')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label="حجم الماكينة"
+          label={t('engineSize')}
           variant="bordered"
-          placeholder=" اختر"
+          placeholder={t('choose')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
