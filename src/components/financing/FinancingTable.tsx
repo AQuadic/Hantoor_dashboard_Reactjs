@@ -53,6 +53,7 @@ const FinancingTable = () => {
                 <Switch />
                 <div 
                 onClick={() => navigate(`/financing/details/${question.id}`, { state: { country: question.country } })}
+                className="cursor-pointer"
                 >
                     <View />
                 </div>

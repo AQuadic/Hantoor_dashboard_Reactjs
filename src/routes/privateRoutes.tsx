@@ -122,7 +122,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <AddQuestions />,
   },
   {
-    path: "/technical-support/edit",
+    path: "/technical-support/edit/:id",
     element: <EditQuestion />,
   },
 

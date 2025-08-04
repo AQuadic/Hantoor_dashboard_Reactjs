@@ -51,7 +51,7 @@ const TechnicalSupportTable = () => {
                 <TableCell className="w-full">{question.date}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <Switch />
-                <Link to="/technical-support/edit">
+                <Link to={`/technical-support/edit/${question.id}`}>
                     <Edit />
                 </Link>
 
