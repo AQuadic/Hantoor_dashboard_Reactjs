@@ -4,23 +4,32 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 import Edit from "../icons/general/Edit";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { Switch } from "@heroui/react";
+import feature1 from '/images/features/feature1.svg'
+import feature2 from '/images/features/feature2.svg'
+import feature3 from '/images/features/feature3.svg'
+import feature4 from '/images/features/feature4.svg'
 
 const FeaturesTable = () => {
     const profile = [
     {
         id: 1,
-        image: '/',
-        text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
+        image: feature1,
+        text:'تصفح السيارات الجديدة من مكانك',
     },
     {
         id: 2,
-        image: '/',
-        text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
+        image: feature2,
+        text:'اختيار السيارات حسب ميزانيتك',
     },
     {
         id: 3,
-        image: '/',
-        text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
+        image: feature3,
+        text:'التواصل المباشر مع الوكلاء',
+    },
+    {
+        id: 4,
+        image: feature4,
+        text:'أسعار باقات صيانة الأنسب لسيارتك',
     },
     ];
     return (
@@ -37,7 +46,9 @@ const FeaturesTable = () => {
             {profile.map((profie, index) => (
             <TableRow key={profie.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{profie.image}</TableCell>
+                <TableCell>
+                    <img src={profie.image} className="w-[52.36px] h-[51px] rounded-[7px]" alt="feature" />
+                </TableCell>
                 <TableCell className="w-full">{profie.text}</TableCell>
                 <TableCell className="flex gap-[7px] items-center w-full">
                 <Switch />
