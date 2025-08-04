@@ -97,7 +97,7 @@ export function UserTable() {
             </TableCell>
             <TableCell className="flex items-center gap-[7px]">
                 <Switch />
-              <Link to='/users/edit'><Edit /></Link>
+              <Link to={`/users/edit/${user.id}`}><Edit /></Link>
               <Link to='change-password'><Password /></Link>
               <TableDeleteButton handleDelete={() => {}} />
             </TableCell>

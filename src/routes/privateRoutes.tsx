@@ -87,7 +87,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <AddUsers />,
   },
   {
-    path: "/users/edit",
+    path: "/users/edit/:id",
     element: <EditUsers />,
   },
   {
