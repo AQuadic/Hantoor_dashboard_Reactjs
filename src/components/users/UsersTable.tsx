@@ -59,7 +59,7 @@ export function UserTable() {
       </TableHeader>
       <TableBody >
         {users.map((user, index) => (
-<TableRow key={user.id} noBackgroundColumns={2}>
+        <TableRow key={user.id} noBackgroundColumns={2}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               <img src={user.image} alt="user" className="w-[52.3px] h-[51px] rounded-full" />
@@ -95,7 +95,7 @@ export function UserTable() {
                 user.SuspensionPeriod
               )}
             </TableCell>
-            <TableCell className="flex gap-[7px]">
+            <TableCell className="flex items-center gap-[7px]">
                 <Switch />
               <Link to='/users/edit'><Edit /></Link>
               <Link to='change-password'><Password /></Link>
