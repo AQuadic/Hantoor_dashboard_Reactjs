@@ -1,8 +1,8 @@
 import { useState } from "react";
 import DashboardButton from "../general/dashboard/DashboardButton"
 import DashboardHeader from "../general/dashboard/DashboardHeader"
-import { Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Eye, EyeOff } from "lucide-react";
 
 const ChangePassword = () => {
     const { t } = useTranslation("users");
@@ -20,7 +20,7 @@ const ChangePassword = () => {
             />
 
             <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
-                <div className="flex items-center gap-[15px]">
+                <div className="flex md:flex-row flex-col items-center gap-[15px]">
                     {/* Password */}
                     <div className="relative w-full">
                         <input
@@ -55,11 +55,11 @@ const ChangePassword = () => {
                     </div>
                     </div>
                 </div>
-                </div>
 
                 <div className="mt-4">
                     <DashboardButton titleAr={"حفظ"} titleEn={"Save"} />
                 </div>
+            </div>
         </section>
     )
 }
