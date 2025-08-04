@@ -3,27 +3,22 @@ import TableDeleteButton from "../../general/dashboard/table/TableDeleteButton";
 import Edit from "../../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../../ui/table";
+import profileImg from '/images/profileImg.png'
+import profileImg2 from '/images/profileImg2.png'
 
 const ProfileTable = () => {
     const profile = [
     {
         id: 1,
-        image: '/',
+        image: profileImg,
         text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
-        country: 'مصر',
+        country: 'السعودية',
         description: 'Hantoor , حيث تلتقي التكنولوجيا بالتميز لتبسيط رحلتك نحو امتلاك السياره التي طالما حلمت بها...'
     },
     {
         id: 2,
-        image: '/',
-        text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
-        country: 'مصر',
-        description: 'Hantoor , حيث تلتقي التكنولوجيا بالتميز لتبسيط رحلتك نحو امتلاك السياره التي طالما حلمت بها...'
-    },
-    {
-        id: 3,
-        image: '/',
-        text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
+        image: profileImg2,
+        text:'استكشف ، قارن و اختار',
         country: 'مصر',
         description: 'Hantoor , حيث تلتقي التكنولوجيا بالتميز لتبسيط رحلتك نحو امتلاك السياره التي طالما حلمت بها...'
     },
@@ -44,7 +39,9 @@ const ProfileTable = () => {
             {profile.map((profie, index) => (
             <TableRow key={profie.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{profie.image}</TableCell>
+                <TableCell>
+                    <img src={profie.image} alt="car" />
+                </TableCell>
                 <TableCell>{profie.text}</TableCell>
                 <TableCell>{profie.country}</TableCell>
                 <TableCell className="w-full">{profie.description}</TableCell>
