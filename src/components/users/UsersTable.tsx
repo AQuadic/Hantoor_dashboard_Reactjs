@@ -15,6 +15,7 @@ import user1 from '/images/users/user1.svg'
 import user2 from '/images/users/user2.svg'
 import user3 from '/images/users/user3.svg'
 import user4 from '/images/users/user4.svg'
+import { Select, SelectItem} from "@heroui/react";
 
 export function UserTable() {
   const users = [
@@ -22,6 +23,15 @@ export function UserTable() {
     { id: 2, image: user2, name: "مصطفي خالد", phone: "+966 123456 789", date: "22/03/2024- 08:30 PM", way:"فيس بوك", country: "مصر",  email: "john@example.com", advancedCount: "14", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", isActive: true, statusTwo: 'Icon' },
     { id: 3, image: user3, name: "ابراهيم محمود", phone: "+966 123456 789", date: "22/03/2024- 08:30 PM", way:"جيميل", country: "الامارات",  email: "jane@example.com", advancedCount: "8", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", isActive: true, statusTwo: 'Icon' },
     { id: 4, image: user4, name: "محمد احمد", phone: "+966 123456 789", date: "22/03/2024- 08:30 PM", way:"البريد الالكتروني", country: "المغرب",  email: "jane@example.com", advancedCount: "11", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", isActive: true, statusTwo: 'Icon' },
+  ];
+
+  const countries = [
+    {key: "1", label: "1"},
+    {key: "2", label: "2"},
+    {key: "3", label: "3"},
+    {key: "4", label: "4"},
+    {key: "5", label: "5"},
+    {key: "6", label: "6"},
   ];
 
   return (
@@ -66,7 +76,25 @@ export function UserTable() {
             <TableCell>{user.noCars}</TableCell>
             <TableCell>{user.currency}</TableCell>
             <TableCell>{user.status}</TableCell>
-            <TableCell>{user.SuspensionPeriod}</TableCell>
+            <TableCell>
+              {user.SuspensionPeriod === "حدد المدة" ? (
+                  <div className="w-[160px]">
+                      <Select
+                          items={countries}
+                          label='حدد المدة'
+                          classNames={{
+                              trigger: 'h-9 !h-9 min-h-9 bg-white border !py-5 rounded-[5px]',
+                              label: 'text-sm text-gray-700',
+                              listbox: 'bg-white shadow-md',
+                          }}
+                          >
+                          {(country) => <SelectItem>{country.label}</SelectItem>}
+                      </Select>
+                  </div>
+              ) : (
+                user.SuspensionPeriod
+              )}
+            </TableCell>
             <TableCell className="flex gap-[7px]">
                 <Switch />
               <Link to='/users/edit'><Edit /></Link>
