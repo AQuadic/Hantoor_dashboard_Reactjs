@@ -1,11 +1,15 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
+import DashboardTextEditor from "@/components/general/DashboardTextEditor";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@heroui/react";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 const EditQuestion = () => {
     const { t } = useTranslation("questions");
+    const [arBody, setArBody] = React.useState("");
+    const [enBody, setEnBody] = React.useState("");
     return (
             <section>
             <DashboardHeader
@@ -58,6 +62,25 @@ const EditQuestion = () => {
                     size="lg"
                 />
                 </div>
+            </div>
+
+            <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
+            {/* Arabic Question */}
+            <div className="relative w-full">
+                <DashboardTextEditor
+                title={t("arQuestion")}
+                body={arBody}
+                setBody={setArBody}
+                />
+            </div>
+            {/* English Question */}
+            <div className="relative w-full">
+                <DashboardTextEditor
+                title={t("arQuestion")}
+                body={enBody}
+                setBody={setEnBody}
+                />
+            </div>
             </div>
     
             <div className="mt-4">
