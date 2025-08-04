@@ -1,8 +1,9 @@
 import React from "react";
 import { CarPackageFieldsTypes } from "@/types/CarTypes";
-import ImageInput from "@/components/general/ImageInput";
+// import ImageInput from "@/components/general/ImageInput";
 import { Input } from "@heroui/react";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
+import { useTranslation } from "react-i18next";
 
 interface CarPackageFieldProps {
   index: number;
@@ -12,14 +13,15 @@ interface CarPackageFieldProps {
 
 const CarPackageField = ({
   index,
-  pkg,
+  // pkg,
   handleDelete,
 }: CarPackageFieldProps) => {
+  const { t } = useTranslation("cars");
   return (
     <div className="mt-4 flex items-center  gap-4 ">
       <div className="min-w-1/4">
         <Input
-          label="المدة/المسافة (باللغة العربية)"
+          label={t('arDistance')}
           variant="bordered"
           placeholder="1 سنة او 20.000 كم"
           classNames={{ label: "mb-2 text-base" }}
@@ -28,7 +30,7 @@ const CarPackageField = ({
       </div>
       <div className="min-w-1/4">
         <Input
-          label="المدة/المسافة (باللغة الانجليزية)"
+          label={t('enDistance')}
           variant="bordered"
           placeholder="اكتب هنا"
           classNames={{ label: "mb-2 text-base" }}
@@ -37,7 +39,7 @@ const CarPackageField = ({
       </div>{" "}
       <div className="w-full">
         <Input
-          label="السعر"
+          label={t('price')}
           variant="bordered"
           placeholder="1000 درهم"
           classNames={{ label: "mb-2 text-base" }}

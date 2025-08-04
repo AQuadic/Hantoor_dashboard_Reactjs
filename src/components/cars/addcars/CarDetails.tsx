@@ -170,7 +170,7 @@ const CarDetails = () => {
         ))}
       </div>
       <AddFieldButton
-        title={" اضافة بيانات اخرى"}
+        title={t('addMoreData')}
         onClick={addCarDetailsField}
       />
     </div>

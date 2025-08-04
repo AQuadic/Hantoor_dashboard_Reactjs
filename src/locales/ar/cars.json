@@ -26,5 +26,35 @@
     "arName": "الاسم (باللغة العربية)",
     "enName": "الاسم  (باللغة الانجليزية)",
     "arDescription": "الوصف  (باللغة العربية)",
-    "enDescription": "الوصف  (باللغة الانجليزية)"
+    "enDescription": "الوصف  (باللغة الانجليزية)",
+
+    "carPrice": "سعر السيارة",
+    "price": "السعر",
+    "priceWithUAE": "السعر بالدرهم الاماراتي",
+    "priceDiscount": "يوجد خصم على السعر",
+    "discountPercentage": "نسبة الخصم",
+    "date": "التاريخ",
+    "priceAfterDiscount": "السعر بعد الخصم",
+    "taxIncluded": "شامل الضرائب",
+    "warrantyIncluded": "شامل الضمان",
+    "insuranceIncluded": "شامل التأمين",
+
+    "maintenancePackages": "باقات الصيانة",
+    "arDistance": "المدة/المسافة (باللغة العربية)",
+    "enDistance": "المدة/المسافة (باللغة الانجليزية)",
+
+    "accessories": "الاكسسوارات",
+
+    "offers": "العروض",
+    "arDetails": "تفاصيل ان وجد (باللغة العربية)",
+    "enDetails": "تفاصيل ان وجد (باللغة الانجليزية)",
+
+    "rentToOwn": "إيجار منتهي بالتملك",
+    "arDuration": "المدة (باللغة العربية)",
+    "enDuration": "المدة (باللغة الانجليزية)",
+    "whatsappNumber": "رقم الواتساب",
+
+    "advertisingImages": "الصور الاعلانية في اخر الصفحة",
+
+    "addMoreData": " اضافة بيانات اخرى"
 }

@@ -4,6 +4,7 @@ import { CarDetailsFieldsTypes } from "@/types/CarTypes";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import ImageInput from "@/components/general/ImageInput";
+import { useTranslation } from "react-i18next";
 
 interface CarDetailsFieldProps {
   field: CarDetailsFieldsTypes;
@@ -11,6 +12,7 @@ interface CarDetailsFieldProps {
 }
 
 const CarOffers = ({ handleDelete }: CarDetailsFieldProps) => {
+  const { t } = useTranslation("cars");
   const [carDetailsFields, setCarDetailsFields] = React.useState<
     CarDetailsFieldsTypes[]
   >([
@@ -37,7 +39,7 @@ const CarOffers = ({ handleDelete }: CarDetailsFieldProps) => {
   };
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] ">
-      <h1 className="text-lg text-[#2A32F8] font-bold mb-2">العروض</h1>
+      <h1 className="text-lg text-[#2A32F8] font-bold mb-2">{t('offers')}</h1>
     <div className="mt-4 flex items-center  gap-4 pt-4">
       <span className="min-w-[65px]">
         {" "}
@@ -45,36 +47,36 @@ const CarOffers = ({ handleDelete }: CarDetailsFieldProps) => {
       </span>
       <div className="w-full">
         <Input
-          label="الاسم (باللغة العربية)"
+          label={t('arName')}
           variant="bordered"
-          placeholder="اكتب هنا"
+          placeholder={t('writeHere')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         />
       </div>
       <div className="w-full">
         <Input
-          label="الاسم  (باللغة الانجليزية)"
+          label={t('enName')}
           variant="bordered"
-          placeholder="اكتب هنا"
+          placeholder={t('writeHere')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         />
       </div>{" "}
       <div className="w-full">
         <Input
-          label="تفاصيل ان وجد (باللغة العربية)"
+          label={t('arDetails')}
           variant="bordered"
-          placeholder="اكتب هنا"
+          placeholder={t('writeHere')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         />
       </div>{" "}
       <div className="w-full">
         <Input
-          label="تفاصيل ان وجد (باللغة الانجليزية)"
+          label={t('enDetails')}
           variant="bordered"
-          placeholder="اكتب هنا"
+          placeholder={t('writeHere')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         />
@@ -84,7 +86,7 @@ const CarOffers = ({ handleDelete }: CarDetailsFieldProps) => {
       </span>
     </div>
       <AddFieldButton
-        title={" اضافة بيانات اخرى"}
+        title={t('addMoreData')}
         onClick={addCarDetailsField}
       />
     </div>

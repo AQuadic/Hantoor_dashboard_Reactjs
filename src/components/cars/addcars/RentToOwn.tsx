@@ -3,8 +3,10 @@ import React from "react";
 import { CarDetailsFieldsTypes } from "@/types/CarTypes";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import ImageInput from "@/components/general/ImageInput";
+import { useTranslation } from "react-i18next";
 
 const RentToOwn = ( ) => {
+  const { t } = useTranslation("cars");
   const [carDetailsFields, setCarDetailsFields] = React.useState<
     CarDetailsFieldsTypes[]
   >([
@@ -31,7 +33,7 @@ const RentToOwn = ( ) => {
   };
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] ">
-      <h1 className="text-lg text-[#2A32F8] font-bold mb-2">إيجار منتهي بالتملك</h1>
+      <h1 className="text-lg text-[#2A32F8] font-bold mb-2">{t('rentToOwn')}</h1>
     <div className="mt-4 flex items-center  gap-4 pt-4">
       <span className="min-w-[65px]">
         {" "}
@@ -39,7 +41,7 @@ const RentToOwn = ( ) => {
       </span>
       <div className="w-full">
         <Input
-          label="المدة (باللغة العربية)"
+          label={t('arDuration')}
           variant="bordered"
           placeholder="3 سنوات"
           classNames={{ label: "mb-2 text-base" }}
@@ -48,16 +50,16 @@ const RentToOwn = ( ) => {
       </div>
       <div className="w-full">
         <Input
-          label="المدة (باللغة الانجليزية)"
+          label={t('enDuration')}
           variant="bordered"
-          placeholder="اكتب هنا"
+          placeholder={t('writeHere')}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         />
       </div>{" "}
       <div className="w-full">
         <Input
-          label="رقم الواتساب"
+          label={t('whatsappNumber')}
           variant="bordered"
           placeholder="123456789"
           classNames={{ label: "mb-2 text-base" }}
@@ -66,7 +68,7 @@ const RentToOwn = ( ) => {
       </div>{" "}
       <div className="w-full">
         <Input
-          label="السعر"
+          label={t('price')}
           variant="bordered"
           placeholder="100.000 درهم"
           classNames={{ label: "mb-2 text-base" }}
@@ -75,7 +77,7 @@ const RentToOwn = ( ) => {
       </div>
     </div>
       <AddFieldButton
-        title={" اضافة بيانات اخرى"}
+        title={t('addMoreData')}
         onClick={addCarDetailsField}
       />
     </div>
