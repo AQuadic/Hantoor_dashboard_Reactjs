@@ -4,6 +4,8 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import TabsFilter from "../general/dashboard/TabsFilter";
+import { Select, SelectItem} from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
@@ -14,6 +16,8 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
 }) => {
+  const { t } = useTranslation("users");
+  
 const filtersData = [
   {
     titleAr: "الموديلات",
@@ -87,8 +91,14 @@ const filtersData = [
   },
 ];
 
-
-  // Get the current filter data
+  const countries = [
+    {key: "1", label: "مصر"},
+    {key: "2", label: "مصر"},
+    {key: "3", label: "مصر"},
+    {key: "4", label: "مصر"},
+    {key: "5", label: "مصر"},
+    {key: "6", label: "مصر"},
+];
   const currentFilter =
     filtersData.find((filter) => filter.titleEn === selectedFilter) ||
     filtersData[0];
@@ -126,6 +136,23 @@ const filtersData = [
           <DashboardButton titleAr={currentFilter.addTextAr} titleEn={currentFilter.addTextEn} variant="add" />
         </Link>
       </div>
+
+      {(selectedFilter === "Price From" || selectedFilter === "Price To") && (
+            <div className="w-[160px] mt-3 md:mx-8 mx-0">
+                <Select
+                    items={countries}
+                    label={t('country')}
+                    placeholder={t('all')}
+                    classNames={{
+                        trigger: 'h-[46px] !h-[46px] min-h-[46px] bg-white border !py-6',
+                        label: 'text-sm text-gray-700',
+                        listbox: 'bg-white shadow-md',
+                    }}
+                    >
+                    {(country) => <SelectItem>{country.label}</SelectItem>}
+                </Select>
+            </div>
+      )}
     </div>
   );
 };
