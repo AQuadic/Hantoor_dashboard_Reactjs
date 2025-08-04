@@ -3,6 +3,7 @@ import { Input } from "@heroui/react";
 import React from "react";
 import { useParams } from "react-router";
 import PermissionsCard from "@/components/subordinates/PermissionsCard";
+import DashboardButton from "@/components/general/dashboard/DashboardButton";
 
 interface Permission {
   permission: {
@@ -791,7 +792,7 @@ const AddPermissionPage = () => {
         {permissionGroups.map((group, groupIndex) => (
           <div key={groupIndex} className="space-y-4">
             {/* Group Title */}
-            <h2 className="text-xl font-bold text-black text-right">
+            <h2 className="text-xl font-bold text-right text-black">
               {group.groupTitleAr}
             </h2>
 
@@ -821,6 +822,7 @@ const AddPermissionPage = () => {
             </div>
           </div>
         ))}
+        <DashboardButton titleAr="اضافة" titleEn="Add" />
       </div>
     </section>
   );
