@@ -17,7 +17,7 @@ const AddAgent : React.FC<SubordinatesHeaderProps> = ({
     const { t } = useTranslation("agents");
     return (
         <section>
-            <div className="pt-2 pb-6 bg-white ">
+            <div className="pt-0 pb-2 bg-white ">
                 <DashboardHeader
                     titleAr="اضافة وكيل جديد"
                     titleEn="Add new agent"

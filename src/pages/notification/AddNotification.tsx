@@ -38,7 +38,7 @@ const AddNotification = () => {
 
     return (
         <section className="relative">
-            <div className="pt-2 pb-6 bg-white ">
+            <div className="pt-0 pb-2 bg-white ">
                 <DashboardHeader
                     titleAr="اضافة اشعار جديد"
                     titleEn="Add new notification"

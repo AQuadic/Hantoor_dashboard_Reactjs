@@ -10,7 +10,7 @@ const AddFeatures = () => {
     const [profileImage, setProfileImage] = React.useState<File | null>(null);
     return (
         <div>
-            <div className="pt-2 pb-6 bg-white ">
+            <div className="pt-0 pb-2 bg-white ">
                 <DashboardHeader
                     titleAr="اضافة مميزات جديدة"
                     titleEn="Add new features"

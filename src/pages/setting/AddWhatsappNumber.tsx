@@ -16,7 +16,7 @@ const AddWhatsappNumber = () => {
     ];
     return (
         <section>
-            <div className="pt-2 pb-6 bg-white ">
+            <div className=" bg-white ">
             <DashboardHeader
                 titleAr="اضافة رقم واتساب جديد"
                 titleEn="Add a new WhatsApp number"

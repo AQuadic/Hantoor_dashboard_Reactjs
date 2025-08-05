@@ -12,7 +12,7 @@ const AddCarsHeader = ({ isEdit }: AddCarsHeaderProps) => {
     : { titleAr: "اضافة سيارة جديدة", titleEn: "Add new car" };
 
   return (
-    <div className="pt-2 pb-6 bg-white ">
+    <div className="pt-0 pb-2 bg-white ">
       <DashboardHeader
         titleAr={titleAr}
         titleEn={titleEn}

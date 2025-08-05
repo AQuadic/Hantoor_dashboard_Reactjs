@@ -14,7 +14,7 @@ const EditProfile = () => {
     const [enBody, setEnBody] = React.useState("");
     return (
         <div>
-            <div className="pt-2 pb-6 bg-white ">
+            <div className="pt-0 pb-2 bg-white ">
                 <DashboardHeader
                     titleAr="تعديل الصفحة التعريفية"
                     titleEn="Edit profile page"

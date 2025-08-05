@@ -10,7 +10,7 @@ const EditTerms = () => {
     
     return (
         <div>
-            <div className="pt-2 pb-6 bg-white ">
+            <div className="pt-0 pb-2 bg-white ">
                 <DashboardHeader
                     titleAr="تعديل الشروط والاحكام"
                     titleEn="Edit terms and conditions"

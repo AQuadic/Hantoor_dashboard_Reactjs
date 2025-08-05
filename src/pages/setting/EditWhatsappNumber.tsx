@@ -16,7 +16,7 @@ const EditWhatsappNumber = () => {
     ];
     return (
         <section>
-            <div className="pt-2 pb-6 bg-white ">
+            <div className="pt-0 pb-0 bg-white ">
             <DashboardHeader
                 titleAr="تعديل رقم الوتساب"
                 titleEn="Edit WhatsApp number"

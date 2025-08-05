@@ -14,7 +14,7 @@ const SettingPage = () => {
 
     return (
         <div>
-            <div className="pt-2 pb-6 bg-white border-b border-[#E1E1E1]">
+            <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
                 <SettingHeader />
                 <SettingTabs
                     selectedFilter={selectedFilter}
