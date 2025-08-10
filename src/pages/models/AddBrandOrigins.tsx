@@ -1,11 +1,13 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { Input } from "@heroui/react";
-import React from "react";
+import DashboardInput from "@/components/general/DashboardInput";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const AddBrandOrigins = () => {
   const { t } = useTranslation("models");
+  const [arBrandName, setArBrandName] = useState("");
+  const [enBrandName, setEnBrandName] = useState("");
   return (
     <div>
       <DashboardHeader
@@ -33,21 +35,18 @@ const AddBrandOrigins = () => {
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
           <div className="flex gap-4">
             <div className="flex-1">
-              <Input
+              <DashboardInput
                 label={t('arBrandName')}
-                variant="bordered"
+                value={arBrandName}
+                onChange={setArBrandName}
                 placeholder="أوروبا"
-                classNames={{ label: "mb-2 text-base" }}
-                size="lg"
               />
             </div>
-            <Input
+            <DashboardInput
               label={t('enBrandName')}
-              variant="bordered"
+              value={enBrandName}
+              onChange={setEnBrandName}
               placeholder={t('writeHere')}
-              className="flex-1"
-              classNames={{ label: "mb-2 text-base" }}
-              size="lg"
             />
           </div>
 

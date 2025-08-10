@@ -1,7 +1,8 @@
 import DashboardButton from '@/components/general/dashboard/DashboardButton'
 import ImageInput from '@/components/general/ImageInput'
 import MobileInput from '@/components/general/MobileInput';
-import { Input, Select, SelectItem } from "@heroui/react";
+import DashboardInput from '@/components/general/DashboardInput';
+import { Select, SelectItem } from "@heroui/react";
 import React, { useState } from 'react'
 import { countries } from "countries-list";
 import Add from '@/components/icons/banks/Add';
@@ -26,6 +27,25 @@ const EditBank = () => {
     );
     const [phone, setPhone] = useState("");
     const [profileImage, setProfileImage] = useState<File | null>(null);
+    
+    // Bank name states
+    const [arBankName, setArBankName] = useState("");
+    const [enBankName, setEnBankName] = useState("");
+    
+    // Visitor data states
+    const [visitorSalaryFrom, setVisitorSalaryFrom] = useState("");
+    const [visitorSalaryTo, setVisitorSalaryTo] = useState("");
+    const [visitorInterestAmount, setVisitorInterestAmount] = useState("");
+    
+    // Second visitor data states (for duplicated section)
+    const [visitorSalaryFrom2, setVisitorSalaryFrom2] = useState("");
+    const [visitorSalaryTo2, setVisitorSalaryTo2] = useState("");
+    const [visitorInterestAmount2, setVisitorInterestAmount2] = useState("");
+    
+    // Citizen data states
+    const [citizenSalaryFrom, setCitizenSalaryFrom] = useState("");
+    const [citizenSalaryTo, setCitizenSalaryTo] = useState("");
+    const [citizenInterestAmount, setCitizenInterestAmount] = useState("");
     const authorities = [
         { key: "1", label: "1 سنة" },
         { key: "2", label: "سنتين" },
@@ -65,22 +85,20 @@ const EditBank = () => {
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     {/* Arabic bank */}
                     <div className="relative w-full">
-                    <Input
+                    <DashboardInput
                         label={t('arbankName')}
-                        variant="bordered"
+                        value={arBankName}
+                        onChange={setArBankName}
                         placeholder={t('bankName')}
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
-                        />
+                    />
                     </div>
                     {/* English bank */}
                     <div className="relative w-full">
-                    <Input
+                    <DashboardInput
                         label={t('enbankName')}
-                        variant="bordered"
+                        value={enBankName}
+                        onChange={setEnBankName}
                         placeholder={t('writeHere')}
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                     />
                     </div>
                 </div>
@@ -99,19 +117,17 @@ const EditBank = () => {
                     <h3 className=" text-lg font-bold text-[#2A32F8]">{t('visitorData')}</h3>
                     <h2 className="text-[15px] font-bold text-[#1E1B1B]">{t('salaryRang')}</h2>
                     <div className='flex items-center gap-[9px]'>
-                        <Input
+                        <DashboardInput
                             label={t('salaryFrom')}
-                            variant="bordered"
+                            value={visitorSalaryFrom}
+                            onChange={setVisitorSalaryFrom}
                             placeholder="5000 درهم"
-                            classNames={{ label: "mb-2 text-base" }}
-                            size="lg"
                         />
-                        <Input
+                        <DashboardInput
                             label={t('salaryTo')}
-                            variant="bordered"
+                            value={visitorSalaryTo}
+                            onChange={setVisitorSalaryTo}
                             placeholder="5000 درهم"
-                            classNames={{ label: "mb-2 text-base" }}
-                            size="lg"
                         />
                     </div>
                     <Select
@@ -140,12 +156,11 @@ const EditBank = () => {
                             </SelectItem>
                         ))}
                     </Select>
-                    <Input
+                    <DashboardInput
                         label={t('InterestAmount')}
-                        variant="bordered"
+                        value={visitorInterestAmount}
+                        onChange={setVisitorInterestAmount}
                         placeholder="5%"
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                     />
                     </div>
                     <hr className='my-4'/>
@@ -158,19 +173,17 @@ const EditBank = () => {
                     <Delete />
                     </div>
                     <div className='flex items-center gap-[9px]'>
-                        <Input
+                        <DashboardInput
                             label={t('salaryFrom')}
-                            variant="bordered"
+                            value={visitorSalaryFrom2}
+                            onChange={setVisitorSalaryFrom2}
                             placeholder="5000 درهم"
-                            classNames={{ label: "mb-2 text-base" }}
-                            size="lg"
                         />
-                        <Input
+                        <DashboardInput
                             label={t('salaryTo')}
-                            variant="bordered"
+                            value={visitorSalaryTo2}
+                            onChange={setVisitorSalaryTo2}
                             placeholder="5000 درهم"
-                            classNames={{ label: "mb-2 text-base" }}
-                            size="lg"
                         />
                     </div>
                     <Select
@@ -199,12 +212,11 @@ const EditBank = () => {
                             </SelectItem>
                         ))}
                     </Select>
-                    <Input
+                    <DashboardInput
                         label={t('InterestAmount')}
-                        variant="bordered"
+                        value={visitorInterestAmount2}
+                        onChange={setVisitorInterestAmount2}
                         placeholder="5%"
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                     />
 
                     <div className='w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer'>
@@ -219,19 +231,17 @@ const EditBank = () => {
                 <h3 className=" text-lg font-bold text-[#2A32F8]">{t('citizenData')}</h3>
                 <h2 className="text-[15px] font-bold text-[#1E1B1B]">{t('salaryRang')}</h2>
                 <div className='flex items-center gap-[9px]'>
-                    <Input
+                    <DashboardInput
                         label={t('salaryFrom')}
-                        variant="bordered"
+                        value={citizenSalaryFrom}
+                        onChange={setCitizenSalaryFrom}
                         placeholder="5000 درهم"
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                     />
-                    <Input
+                    <DashboardInput
                         label="المرتب الى"
-                        variant="bordered"
+                        value={citizenSalaryTo}
+                        onChange={setCitizenSalaryTo}
                         placeholder="5000 درهم"
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                     />
                 </div>
                     <Select
@@ -260,12 +270,11 @@ const EditBank = () => {
                             </SelectItem>
                         ))}
                     </Select>
-                <Input
+                <DashboardInput
                     label={t('InterestAmount')}
-                    variant="bordered"
+                    value={citizenInterestAmount}
+                    onChange={setCitizenInterestAmount}
                     placeholder="5%"
-                    classNames={{ label: "mb-2 text-base" }}
-                    size="lg"
                 />
                 <div className='w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer'>
                     <Add />

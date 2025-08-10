@@ -1,6 +1,7 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardTextEditor from "@/components/general/DashboardTextEditor";
+import DashboardInput from "@/components/general/DashboardInput";
 import {
   Select,
   SelectContent,
@@ -8,14 +9,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@heroui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const AddFaq = () => {
   const { t } = useTranslation("questions");
   const [arBody, setArBody] = React.useState("");
   const [enBody, setEnBody] = React.useState("");
+  const [arQuestion, setArQuestion] = useState("");
+  const [enQuestion, setEnQuestion] = useState("");
   return (
     <section>
       <DashboardHeader
@@ -49,22 +51,20 @@ const AddFaq = () => {
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Arabic Question */}
           <div className="relative w-full">
-            <Input
+            <DashboardInput
               label={t("arQuestion")}
-              variant="bordered"
+              value={arQuestion}
+              onChange={setArQuestion}
               placeholder={t("writeHere")}
-              classNames={{ label: "mb-2 text-base" }}
-              size="lg"
             />
           </div>
           {/* English Question */}
           <div className="relative w-full">
-            <Input
+            <DashboardInput
               label={t("enQuestion")}
-              variant="bordered"
+              value={enQuestion}
+              onChange={setEnQuestion}
               placeholder={t("writeHere")}
-              classNames={{ label: "mb-2 text-base" }}
-              size="lg"
             />
           </div>
         </div>

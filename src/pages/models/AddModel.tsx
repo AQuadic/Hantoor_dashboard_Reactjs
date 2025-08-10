@@ -1,12 +1,15 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { Input, Select, SelectItem } from "@heroui/react";
-import React from "react";
+import DashboardInput from "@/components/general/DashboardInput";
+import { Select, SelectItem } from "@heroui/react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
 const AddBrand = () => {
   const [, setSelectedAgent] = React.useState("");
+  const [arModelName, setArModelName] = useState("");
+  const [enModelName, setEnModelName] = useState("");
   const params = useParams();
   const brandId = params.id;
 
@@ -47,12 +50,11 @@ const AddBrand = () => {
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
           <div className="flex gap-4">
             <div className="flex-1">
-              <Input
+              <DashboardInput
                 label={t('arModelName')}
-                variant="bordered"
+                value={arModelName}
+                onChange={setArModelName}
                 placeholder=" تويوتا"
-                classNames={{ label: "mb-2 text-base" }}
-                size="lg"
               />
               <Select
                 className="mt-4"
@@ -68,13 +70,11 @@ const AddBrand = () => {
                 ))}
               </Select>
             </div>
-            <Input
+            <DashboardInput
               label={t('enModelName')}
-              variant="bordered"
+              value={enModelName}
+              onChange={setEnModelName}
               placeholder={t('writeHere')}
-              className="flex-1"
-              classNames={{ label: "mb-2 text-base" }}
-              size="lg"
             />
           </div>
 

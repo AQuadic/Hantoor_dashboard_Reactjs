@@ -1,10 +1,16 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton"
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader"
-import { Input } from "@heroui/react"
+import DashboardInput from "@/components/general/DashboardInput"
+import { useState } from "react"
 import { useTranslation } from "react-i18next";
 
 const AddCountries = () => {
     const { t } = useTranslation("country");
+    const [arCountry, setArCountry] = useState("");
+    const [enCountry, setEnCountry] = useState("");
+    const [arCurrency, setArCurrency] = useState("");
+    const [enCurrency, setEnCurrency] = useState("");
+    const [tax, setTax] = useState("");
     return (
         <section>
             <DashboardHeader
@@ -21,22 +27,20 @@ const AddCountries = () => {
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     {/* Arabic country */}
                     <div className="relative w-full ">
-                    <Input
+                    <DashboardInput
                         label={t('arCountry')}
-                        variant="bordered"
+                        value={arCountry}
+                        onChange={setArCountry}
                         placeholder="الامارات"
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                         />
                     </div>
                     {/* English country */}
                     <div className="relative w-full">
-                    <Input
+                    <DashboardInput
                         label={t('enCountry')}
-                        variant="bordered"
+                        value={enCountry}
+                        onChange={setEnCountry}
                         placeholder={t('writeHere')}
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                     />
                     </div>
                 </div>
@@ -44,34 +48,31 @@ const AddCountries = () => {
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     {/* Arabic currency */}
                     <div className="relative w-full">
-                    <Input
+                    <DashboardInput
                         label={t('arCurrency')}
-                        variant="bordered"
+                        value={arCurrency}
+                        onChange={setArCurrency}
                         placeholder="درهم اماراتي"
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                         />
                     </div>
                     {/* English currency */}
                     <div className="relative w-full">
-                    <Input
+                    <DashboardInput
                         label={t('enCurrency')}
-                        variant="bordered"
+                        value={enCurrency}
+                        onChange={setEnCurrency}
                         placeholder={t('writeHere')}
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                     />
                     </div>
                 </div>
 
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     <div className="relative w-full">
-                    <Input
+                    <DashboardInput
                         label={t('tax')}
-                        variant="bordered"
+                        value={tax}
+                        onChange={setTax}
                         placeholder="20 درهم"
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                         />
                     </div>
                     <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">

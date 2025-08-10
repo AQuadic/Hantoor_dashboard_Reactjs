@@ -1,5 +1,5 @@
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { Input } from "@heroui/react";
+import DashboardInput from "@/components/general/DashboardInput";
 import React from "react";
 import { useParams } from "react-router";
 import PermissionsCard from "@/components/subordinates/PermissionsCard";
@@ -21,6 +21,7 @@ const AddPermissionPage = () => {
   const isEdit = Boolean(brandId);
   const { i18n } = useTranslation();
   const currentLang = i18n.language;
+  const [permissionName, setPermissionName] = React.useState("مدير");
   // Control panel permissions (first, without group title)
   const [controlPanelPermissions, setControlPanelPermissions] = React.useState([
     {
@@ -843,13 +844,11 @@ const AddPermissionPage = () => {
         ]}
       />
       <div className="flex flex-col gap-8 p-8 pt-0 bg-white rounded-b-2xl">
-        <Input
+        <DashboardInput
           label="اسم الصلاحية"
-          variant="bordered"
-          value={"مدير"}
-          classNames={{ label: "mb-2 text-base" }}
-          size="lg"
-          className="max-w-[680px]"
+          value={permissionName}
+          onChange={setPermissionName}
+          placeholder="مدير"
         />
       </div>
       <div className="px-8 py-4 space-y-8">

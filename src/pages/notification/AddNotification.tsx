@@ -1,8 +1,9 @@
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
+import DashboardInput from '@/components/general/DashboardInput';
 import ImageInput from '@/components/general/ImageInput';
 import SuccessPopup from '@/components/general/SuccessPopup';
-import { Checkbox, Input, Select, SelectItem } from "@heroui/react";
+import { Checkbox, Select, SelectItem } from "@heroui/react";
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 
@@ -10,6 +11,8 @@ const AddNotification = () => {
     const { t } = useTranslation("notifications");
     const [profileImage, setProfileImage] = React.useState<File | null>(null);
     const [showPopup, setShowPopup] = useState(false);
+    const [arText, setArText] = useState("");
+    const [enText, setEnText] = useState("");
 
     const countries = [
         { key: "ae", label: "الامارات" },
@@ -58,22 +61,20 @@ const AddNotification = () => {
                     <div className="flex xl:flex-row flex-col items-center gap-[15px] mt-4">
                         {/* Arabic Question */}
                         <div className="relative w-full">
-                        <Input
+                        <DashboardInput
                             label={t('arText')}
-                            variant="bordered"
+                            value={arText}
+                            onChange={setArText}
                             placeholder={t('writeHere')}
-                            classNames={{ label: "mb-2 text-base" }}
-                            size="lg"
                             />
                         </div>
                         {/* English Question */}
                         <div className="relative w-full">
-                        <Input
+                        <DashboardInput
                             label={t('enText')}
-                            variant="bordered"
+                            value={enText}
+                            onChange={setEnText}
                             placeholder={t('writeHere')}
-                            classNames={{ label: "mb-2 text-base" }}
-                            size="lg"
                         />
                         </div>
                     </div>

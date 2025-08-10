@@ -44,19 +44,45 @@
 - 2025-08-03: Updated MaintenancePackages table headers and data to match provided screenshot, including Arabic columns (#, المدة/المسافة, السعر, الحالة, actions), and sample data with toggle and delete button. No Context7 research required for this change.
 - 2025-08-10: Completely rewrote font implementation for "Helvetica Neue W23 for SKY" custom font. Moved font files to public directory, updated @font-face declarations with modern best practices (font-display: swap, WOFF2 priority), configured Tailwind CSS with CSS-first approach, added font preloading in HTML head, and fixed table styling issues where numbers appeared bold. Fixed critical issue where English fonts appeared bold by correcting @font-face declarations - discovered we only have the bold variant (Bd) of the custom font, so updated system to use "Helvetica Neue" for normal text and "Helvetica Neue W23 for SKY" only for bold text.
 
-## Current Task - Adding Missing Permissions
+## Current Task - Replace Hero UI Inputs with DashboardInput Component
 
-**Task Type**: Feature Implementation - Adding missing permissions from design
+**Task Type**: Code Enhancement - Replace form inputs throughout the project
+
+**Objective**: Replace all Hero UI Input components in forms with custom DashboardInput component
+- **Include**: Form inputs imported from @heroui/react
+- **Exclude**: Phone/mobile inputs (DashboardPhoneInput, MobileInput), search inputs (SearchBar)
+- **Target**: Only form-related inputs
+
+**Found 57 files with Hero UI Input imports that need to be processed**
+
+**Key exclusions identified**:
+- DashboardPhoneInput.tsx - uses Hero UI Input for phone functionality 
+- SearchBar.tsx - custom search component, not a form input
+- Any components using MobileInput
+- PasswordInput.tsx - may need special handling for password type
 
 **Todo List**:
 
-- [x] Analyze current permissions structure vs design image
-- [x] Add missing sections: النماذج (Models), السيارات (Cars), أقسام السيارات (Car Departments), التجارة والاحصاء (Trade & Statistics), الدعم التقني (Technical Support), سياسة الخصوصية وشروط الخدمة (Privacy Policy & Terms of Service), وسائل التواصل الاجتماعي (Social Media), التحكم والاحكام (Control & Governance), المحادثات (Chats), تطبيق الجوال (Mobile App), الدعم (Support), الشكاوي (Complaints), etc.
-- [x] Update permission groups structure to match design exactly
-- [x] Add all missing permission types for each section
-- [x] Ensure proper Arabic and English labels
-- [ ] Test the implementation
-- [ ] Validate all permissions are present and functional
+- [x] Search codebase and identify all Hero UI Input imports
+- [x] Identify exclusions (phone, mobile, search components)
+- [x] Create systematic replacement plan for each file
+- [x] Replace inputs in technical support pages (2 files)
+- [x] Replace inputs in subordinates pages (2 files)  
+- [x] Replace inputs in settings pages (2 files)
+- [x] Replace inputs in notification pages (1 file)
+- [ ] Replace inputs in models pages (20+ files)
+- [ ] Replace inputs in financing pages (2 files)
+- [ ] Replace inputs in features pages (2 files)
+- [ ] Replace inputs in FAQs pages (2 files)
+- [ ] Replace inputs in countries pages (2 files)
+- [ ] Replace inputs in brands pages (1 file)
+- [ ] Replace inputs in agents pages (2 files)
+- [ ] Replace inputs in terms/profile components (4 files)
+- [ ] Replace inputs in cars components (8 files)
+- [ ] Handle PasswordInput.tsx specially for password type
+- [ ] Test each replacement to ensure functionality
+- [ ] Validate all form inputs work correctly
+- [ ] Remove unused Hero UI Input imports
 
 ## Conversation History
 

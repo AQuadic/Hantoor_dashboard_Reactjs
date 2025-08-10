@@ -1,9 +1,10 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
+import DashboardInput from "@/components/general/DashboardInput";
 // import DashboardPhoneInput from "@/components/general/dashboard/DashboardPhoneInput";
 import ImageInput from "@/components/general/ImageInput";
 import MobileInput from "@/components/general/MobileInput";
-import { Input, Select, SelectItem } from "@heroui/react";
+import { Select, SelectItem } from "@heroui/react";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { countries } from "countries-list";
@@ -28,6 +29,10 @@ const AddSubordinatePage = () => {
         getCountryByIso2("EG")
     );
     const [phone, setPhone] = useState("");
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
   const authorities = [
     { key: "manager", label: "مدير" },
     { key: "secretary", label: "سكرتير" },
@@ -75,12 +80,11 @@ const AddSubordinatePage = () => {
           <h3 className="mb-2 text-lg font-bold">البيانات الأساسية</h3>
 
           <div className="flex gap-4">
-            <Input
+            <DashboardInput
               label="الاسم"
-              variant="bordered"
+              value={name}
+              onChange={setName}
               placeholder="محمد احمد"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
             />
           <MobileInput
               selectedCountry={selectedCountry}
@@ -91,13 +95,11 @@ const AddSubordinatePage = () => {
           </div>
 
           <div className="flex gap-4">
-            <Input
+            <DashboardInput
               label="البريد الإلكتروني"
-              variant="bordered"
+              value={email}
+              onChange={setEmail}
               placeholder="username@mail.com"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-              type="email"
             />
             <Select
               label="الصلاحيات"
@@ -115,21 +117,17 @@ const AddSubordinatePage = () => {
           </div>
 
           <div className="flex gap-4">
-            <Input
+            <DashboardInput
               label="كلمة المرور"
-              variant="bordered"
+              value={password}
+              onChange={setPassword}
               placeholder="••••••••••••••••"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-              type="password"
             />
-            <Input
+            <DashboardInput
               label="تأكيد كلمة المرور"
-              variant="bordered"
+              value={confirmPassword}
+              onChange={setConfirmPassword}
               placeholder="••••••••••••••••"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-              type="password"
             />
           </div>
 

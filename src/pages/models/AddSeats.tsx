@@ -1,11 +1,13 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { Input } from "@heroui/react";
-import React from "react";
+import DashboardInput from "@/components/general/DashboardInput";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const AddSeats = () => {
   const { t } = useTranslation("models");
+  const [arSeatsNumbers, setArSeatsNumbers] = useState("");
+  const [enSeatsNumbers, setEnSeatsNumbers] = useState("");
   return (
     <div>
       <DashboardHeader
@@ -33,21 +35,18 @@ const AddSeats = () => {
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
           <div className="flex gap-4">
             <div className="flex-1">
-              <Input
+              <DashboardInput
                 label={t('arSeatsNumbers')}
-                variant="bordered"
+                value={arSeatsNumbers}
+                onChange={setArSeatsNumbers}
                 placeholder="6"
-                classNames={{ label: "mb-2 text-base" }}
-                size="lg"
               />
             </div>
-            <Input
+            <DashboardInput
               label={t('enSeatsNumbers')}
-              variant="bordered"
+              value={enSeatsNumbers}
+              onChange={setEnSeatsNumbers}
               placeholder={t('writeHere')}
-              className="flex-1"
-              classNames={{ label: "mb-2 text-base" }}
-              size="lg"
             />
           </div>
 

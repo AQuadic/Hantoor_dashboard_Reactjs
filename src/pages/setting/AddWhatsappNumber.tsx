@@ -1,11 +1,14 @@
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
-import {Input, Select, SelectItem} from "@heroui/react";
+import DashboardInput from '@/components/general/DashboardInput';
+import {Select, SelectItem} from "@heroui/react";
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 
 const AddWhatsappNumber = () => {
     const { t } = useTranslation("setting");
+    const [maintenanceCenter, setMaintenanceCenter] = useState("");
     const countries = [
         {key: "مصر", label: "مصر"},
         {key: "مصر", label: "مصر"},
@@ -44,12 +47,11 @@ const AddWhatsappNumber = () => {
                         </Select>
                     </div>
                     <div className="w-full">
-                        <Input
+                        <DashboardInput
                             label={t('maintenanceCenter')}
-                            variant="bordered"
+                            value={maintenanceCenter}
+                            onChange={setMaintenanceCenter}
                             placeholder={t('centerName')}
-                            classNames={{ label: "mb-2 text-base" }}
-                            size="lg"
                         />
                     </div>
                 </div>

@@ -1,14 +1,16 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
+import DashboardInput from "@/components/general/DashboardInput";
 import ImageInput from "@/components/general/ImageInput";
-import { Input } from "@heroui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 
 const AddBrand = () => {
   const { t } = useTranslation("brands");
   const [profileImage, setProfileImage] = React.useState<File | null>(null);
+  const [arBrand, setArBrand] = useState("");
+  const [enBrand, setEnBrand] = useState("");
   const params = useParams();
   const brandId = params.id;
 
@@ -45,25 +47,17 @@ const AddBrand = () => {
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
           <h3 className="mb-2 text-lg font-bold ">{t('mainData')}</h3>
           <div className="flex gap-4">
-            <Input
+            <DashboardInput
               label={t('arBrand')}
-              variant="bordered"
+              value={arBrand}
+              onChange={setArBrand}
               placeholder=" تويوتا"
-                classNames={{
-                  label: "mb-2 text-base",
-                  input: "placeholder:text-sm placeholder:font-normal",
-                }}
-              size="lg"
             />
-            <Input
+            <DashboardInput
               label={t('enBrand')}
-              variant="bordered"
+              value={enBrand}
+              onChange={setEnBrand}
               placeholder={t('writeHere')}
-              classNames={{
-                  label: "mb-2 text-base",
-                  input: "placeholder:text-sm placeholder:font-normal",
-                }}
-              size="lg"
             />
           </div>
 

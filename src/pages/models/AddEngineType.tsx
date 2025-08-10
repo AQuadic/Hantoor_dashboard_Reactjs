@@ -1,11 +1,13 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { Input } from "@heroui/react";
-import React from "react";
+import DashboardInput from "@/components/general/DashboardInput";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 const AddEngineType = () => {
   const { t } = useTranslation("models");
+  const [arEngineType, setArEngineType] = useState("");
+  const [enEngineType, setEnEngineType] = useState("");
   return (
     <div>
       <DashboardHeader
@@ -33,21 +35,18 @@ const AddEngineType = () => {
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
           <div className="flex gap-4">
             <div className="flex-1">
-              <Input
+              <DashboardInput
                 label={t('arEngineType')}
-                variant="bordered"
+                value={arEngineType}
+                onChange={setArEngineType}
                 placeholder={t('gasoline')}
-                classNames={{ label: "mb-2 text-base" }}
-                size="lg"
               />
             </div>
-            <Input
+            <DashboardInput
               label={t('enEngineType')}
-              variant="bordered"
+              value={enEngineType}
+              onChange={setEnEngineType}
               placeholder={t('writeHere')}
-              className="flex-1"
-              classNames={{ label: "mb-2 text-base" }}
-              size="lg"
             />
           </div>
 

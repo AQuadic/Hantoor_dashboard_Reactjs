@@ -1,5 +1,6 @@
-import { Input, Select, SelectItem } from "@heroui/react";
-import React from "react";
+import { Select, SelectItem } from "@heroui/react";
+import DashboardInput from "@/components/general/DashboardInput";
+import React, { useState } from "react";
 import CarDetailsField from "@/components/cars/addcars/CarDetailsField";
 import { CarDetailsFieldsTypes } from "@/types/CarTypes";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
@@ -7,6 +8,9 @@ import { useTranslation } from "react-i18next";
 
 const CarDetails = () => {
   const { t } = useTranslation("cars");
+  const [arCarName, setArCarName] = useState("");
+  const [enCarName, setEnCarName] = useState("");
+  
   const [carDetailsFields, setCarDetailsFields] = React.useState<
     CarDetailsFieldsTypes[]
   >([
@@ -40,21 +44,19 @@ const CarDetails = () => {
       <h1 className="text-lg text-[#2A32F8] font-bold mb-2">{t('carDetails')}</h1>
       <div className="flex flex-col md:flex-row gap-[15px] ">
         <div className="w-full">
-          <Input
+          <DashboardInput
             label={t('arCarName')}
-            variant="bordered"
+            value={arCarName}
+            onChange={setArCarName}
             placeholder={t('writeHere')}
-            classNames={{ label: "mb-2 text-base" }}
-            size="lg"
           />
         </div>
         <div className="w-full">
-          <Input
+          <DashboardInput
             label={t('enCarName')}
-            variant="bordered"
+            value={enCarName}
+            onChange={setEnCarName}
             placeholder={t('writeHere')}
-            classNames={{ label: "mb-2 text-base" }}
-            size="lg"
           />
         </div>
       </div>

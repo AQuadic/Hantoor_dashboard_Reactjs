@@ -1,13 +1,15 @@
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
+import DashboardInput from '@/components/general/DashboardInput';
 import ImageInput from '@/components/general/ImageInput'
-import { Input } from '@heroui/react';
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next';
 
 const AddFeatures = () => {
     const { t } = useTranslation("setting");
     const [profileImage, setProfileImage] = React.useState<File | null>(null);
+    const [arDescription, setArDescription] = useState("");
+    const [enDescription, setEnDescription] = useState("");
     return (
         <div>
             <div className="pt-0 pb-2 bg-white ">
@@ -29,22 +31,20 @@ const AddFeatures = () => {
             <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                 {/* Arabic Question */}
                 <div className="relative w-full">
-                <Input
+                <DashboardInput
                     label={t('arDescription')}
-                    variant="bordered"
+                    value={arDescription}
+                    onChange={setArDescription}
                     placeholder={t('exploreNewCars')}
-                    classNames={{ label: "mb-2 text-base" }}
-                    size="lg"
                     />
                 </div>
                 {/* English Question */}
                 <div className="relative w-full">
-                <Input
+                <DashboardInput
                     label={t('enDescription')}
-                    variant="bordered"
+                    value={enDescription}
+                    onChange={setEnDescription}
                     placeholder={t('writeHere')}
-                    classNames={{ label: "mb-2 text-base" }}
-                    size="lg"
                 />
                 </div>
             </div>

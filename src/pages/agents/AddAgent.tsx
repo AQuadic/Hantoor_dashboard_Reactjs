@@ -1,8 +1,9 @@
 import AddMaintenanceCenter from '@/components/agents/AddMaintenanceCenter';
 import AddSalesShowrooms from '@/components/agents/AddSalesShowrooms';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
+import DashboardInput from '@/components/general/DashboardInput';
 import TabsFilter from '@/components/general/dashboard/TabsFilter'
-import { Input } from '@heroui/react'
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface SubordinatesHeaderProps {
@@ -15,6 +16,9 @@ const AddAgent : React.FC<SubordinatesHeaderProps> = ({
     setSelectedFilter,
 }) => { 
     const { t } = useTranslation("agents");
+    const [arName, setArName] = useState("");
+    const [enName, setEnName] = useState("");
+    const [emailLink, setEmailLink] = useState("");
     return (
         <section>
             <div className="pt-0 pb-2 bg-white ">
@@ -32,22 +36,20 @@ const AddAgent : React.FC<SubordinatesHeaderProps> = ({
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     {/* Arabic name */}
                     <div className="relative w-full">
-                    <Input
+                    <DashboardInput
                         label={t('arName')}
-                        variant="bordered"
+                        value={arName}
+                        onChange={setArName}
                         placeholder="الشركة الدولية التجارية"
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
-                        />
+                    />
                     </div>
                     {/* English name */}
                     <div className="relative w-full">
-                    <Input
+                    <DashboardInput
                         label={t('enName')}
-                        variant="bordered"
+                        value={enName}
+                        onChange={setEnName}
                         placeholder={t('writeHere')}
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
                     />
                     </div>
                 </div>
@@ -55,13 +57,12 @@ const AddAgent : React.FC<SubordinatesHeaderProps> = ({
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                     {/* Link */}
                     <div className="relative w-full">
-                    <Input
+                    <DashboardInput
                         label={t('emailLink')}
-                        variant="bordered"
+                        value={emailLink}
+                        onChange={setEmailLink}
                         placeholder={t('writeHere')}
-                        classNames={{ label: "mb-2 text-base" }}
-                        size="lg"
-                        />
+                    />
                     </div>
 
                     <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">

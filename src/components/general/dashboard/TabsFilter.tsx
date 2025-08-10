@@ -33,7 +33,7 @@ const TabsFilter: React.FC<TabsFilterProps> = ({
           <button
             key={filter.titleEn}
             onClick={() => setSelectedFilter(filter.titleEn)}
-            className={`relative px-5 py-3 border-2 border-[#DBDEE1] rounded-xl overflow-hidden ${
+            className={`relative px-5 py-2 border-2 border-[#DBDEE1] rounded-lg overflow-hidden ${
               isSelected
                 ? "text-white bg-main-black border-none"
                 : "text-[#606060]"
