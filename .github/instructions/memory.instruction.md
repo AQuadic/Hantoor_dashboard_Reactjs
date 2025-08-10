@@ -15,10 +15,11 @@
 
 ## Project Context
 
-- Current project type: web app
+- Current project type: React.js Dashboard
 - Tech stack: React, TypeScript, Vite, TailwindCSS, framer-motion, react-router, i18next
 - Architecture patterns: component-based
 - Key requirements: performance, mobile usability, bug-free UI, consistent use of "Helvetica Neue W23 for SKY" font across all UI
+- Font issue: Custom font not loading properly due to incorrect paths and @font-face implementation
 
 ## Coding Patterns
 
@@ -31,6 +32,7 @@
 ## Context7 Research History
 
 - 2025-08-03: Researched best React/TypeScript rich text editor libraries for 2025. Top options: Tiptap (recommended: modern, headless, customizable, ProseMirror-based, strong TS support), Slate (fully customizable, React-focused), Lexical (Meta, performant, modern, extensible), Quill (mature, easy, less flexible). Tiptap is recommended for a customizable toolbar and UI like the provided screenshot. No direct Context7 docs found, so reputable internet sources were used. Memory updated for future reference.
+- 2025-08-10: Researched modern font loading best practices 2025. Key findings: Use WOFF2 format, font-display: swap for performance, self-host fonts in public directory for Vite projects, inline @font-face rules, configure Tailwind CSS with CSS-first approach (v4) or config file (v3), preload critical fonts with caution. Performance priorities: font-display: optional > swap > block. Place fonts in /public/fonts directory for proper Vite asset handling.
 
 ## Conversation History
 
