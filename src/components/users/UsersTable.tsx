@@ -65,7 +65,7 @@ export function UserTable() {
               <img src={user.image} alt="user" className="w-[52.3px] h-[51px] rounded-full" />
             </TableCell>
             <TableCell>{user.name}</TableCell>
-            <TableCell>{user.phone}</TableCell>
+            <TableCell dir="ltr">{user.phone}</TableCell>
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.date}</TableCell>
             <TableCell>{user.way}</TableCell>
