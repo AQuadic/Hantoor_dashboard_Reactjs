@@ -105,7 +105,10 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "Change password", titleAr: "تغيير كلمة المرور" },
+              permission: {
+                titleEn: "Change password",
+                titleAr: "تغيير كلمة المرور",
+              },
               isSelected: true,
             },
             {
@@ -153,7 +156,10 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "Change password", titleAr: "تغيير كلمة المرور" },
+              permission: {
+                titleEn: "Change password",
+                titleAr: "تغيير كلمة المرور",
+              },
               isSelected: true,
             },
             {
@@ -165,7 +171,10 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "Suspension period", titleAr: "مدة الايقاف" },
+              permission: {
+                titleEn: "Suspension period",
+                titleAr: "مدة الايقاف",
+              },
               isSelected: false,
             },
           ],
@@ -276,7 +285,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "انواع الهيكل",
           titleEn: "Types of structure",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -298,7 +307,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "انواع السيارة",
           titleEn: "Car types",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -320,7 +329,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "الفئات",
           titleEn: "Categories",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -342,7 +351,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "منشأ الماركة",
           titleEn: "Brand Origin",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -364,7 +373,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "عدد المقاعد",
           titleEn: "Number of seats",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -386,7 +395,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "انواع الماكينة",
           titleEn: "Engine types",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -408,7 +417,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "احجام الماكينة",
           titleEn: "Engine sizes",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -430,7 +439,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "السعر من",
           titleEn: "Price from",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -452,7 +461,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "السعر الى",
           titleEn: "Price to",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -481,7 +490,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "السيارات",
           titleEn: "Cars",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -503,7 +512,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "التمويل",
           titleEn: "Financing",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -525,7 +534,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "البنوك",
           titleEn: "Banks",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -591,7 +600,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "رسائل الدعم",
           titleEn: "Support messages",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -613,7 +622,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "الاسئلة الشائعة",
           titleEn: "Frequently Asked Questions",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -635,7 +644,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "الاشعارات",
           titleEn: "Notifications",
-           permissions: [
+          permissions: [
             {
               permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
@@ -754,7 +763,7 @@ const AddPermissionPage = () => {
         {
           titleAr: "الشروط والاحكام",
           titleEn: "Terms and Conditions",
-            permissions: [
+          permissions: [
             {
               permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: true,
@@ -867,7 +876,7 @@ const AddPermissionPage = () => {
           <div key={groupIndex} className="space-y-4 border-b pb-5">
             {/* Group Title */}
             <h2 className="text-xl font-bold rtl:text-right text-black">
-                  {currentLang === "ar" ? group.groupTitleAr : group.groupTitleEn}
+              {currentLang === "ar" ? group.groupTitleAr : group.groupTitleEn}
             </h2>
 
             {/* Permission Cards */}

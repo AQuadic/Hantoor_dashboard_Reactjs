@@ -25,7 +25,7 @@ const EditSeats = () => {
             link: "/models",
           },
           {
-            titleAr:"تعديل عدد المقاعد",
+            titleAr: "تعديل عدد المقاعد",
             titleEn: "Edit number of seats",
             link: "/",
           },
@@ -36,21 +36,21 @@ const EditSeats = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <DashboardInput
-                label={t('arSeatsNumbers')}
+                label={t("arSeatsNumbers")}
                 value={arSeatsNumbers}
                 onChange={setArSeatsNumbers}
                 placeholder="6"
               />
             </div>
             <DashboardInput
-              label={t('enSeatsNumbers')}
+              label={t("enSeatsNumbers")}
               value={enSeatsNumbers}
               onChange={setEnSeatsNumbers}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
 
-            <DashboardButton titleAr="حفظ" titleEn="Save" />
+          <DashboardButton titleAr="حفظ" titleEn="Save" />
         </div>
       </div>
     </div>

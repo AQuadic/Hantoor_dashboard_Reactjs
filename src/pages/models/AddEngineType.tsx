@@ -36,17 +36,17 @@ const AddEngineType = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <DashboardInput
-                label={t('arEngineType')}
+                label={t("arEngineType")}
                 value={arEngineType}
                 onChange={setArEngineType}
-                placeholder={t('gasoline')}
+                placeholder={t("gasoline")}
               />
             </div>
             <DashboardInput
-              label={t('enEngineType')}
+              label={t("enEngineType")}
               value={enEngineType}
               onChange={setEnEngineType}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
 

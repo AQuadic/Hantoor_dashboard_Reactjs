@@ -25,7 +25,7 @@ const AddBrandOrigins = () => {
             link: "/",
           },
           {
-            titleAr:"اضافة منشأ ماركة جديد",
+            titleAr: "اضافة منشأ ماركة جديد",
             titleEn: "Add a new brand origin",
             link: "/",
           },
@@ -36,21 +36,21 @@ const AddBrandOrigins = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <DashboardInput
-                label={t('arBrandName')}
+                label={t("arBrandName")}
                 value={arBrandName}
                 onChange={setArBrandName}
                 placeholder="أوروبا"
               />
             </div>
             <DashboardInput
-              label={t('enBrandName')}
+              label={t("enBrandName")}
               value={enBrandName}
               onChange={setEnBrandName}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
 
-              <DashboardButton titleAr="اضافة" titleEn="Add" />
+          <DashboardButton titleAr="اضافة" titleEn="Add" />
         </div>
       </div>
     </div>

@@ -41,23 +41,25 @@ const AddBrand = () => {
       />
       <div className="flex flex-col gap-8 p-8">
         <div className="p-8 bg-white rounded-2xl ">
-          <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">{t('brandImage')}</h3>
+          <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">
+            {t("brandImage")}
+          </h3>
           <ImageInput image={profileImage} setImage={setProfileImage} />
         </div>
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
-          <h3 className="mb-2 text-lg font-bold ">{t('mainData')}</h3>
+          <h3 className="mb-2 text-lg font-bold ">{t("mainData")}</h3>
           <div className="flex gap-4">
             <DashboardInput
-              label={t('arBrand')}
+              label={t("arBrand")}
               value={arBrand}
               onChange={setArBrand}
               placeholder=" تويوتا"
             />
             <DashboardInput
-              label={t('enBrand')}
+              label={t("enBrand")}
               value={enBrand}
               onChange={setEnBrand}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
 

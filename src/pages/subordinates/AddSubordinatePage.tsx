@@ -19,20 +19,19 @@ const getCountryByIso2 = (iso2: string) => {
   };
 };
 
-
 const AddSubordinatePage = () => {
   const [profileImage, setProfileImage] = React.useState<File | null>(null);
   const params = useParams();
   const managerId = params.id;
   const isEdit = Boolean(managerId);
-    const [selectedCountry, setSelectedCountry] = useState(
-        getCountryByIso2("EG")
-    );
-    const [phone, setPhone] = useState("");
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(
+    getCountryByIso2("EG")
+  );
+  const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const authorities = [
     { key: "manager", label: "مدير" },
     { key: "secretary", label: "سكرتير" },
@@ -86,12 +85,12 @@ const AddSubordinatePage = () => {
               onChange={setName}
               placeholder="محمد احمد"
             />
-          <MobileInput
+            <MobileInput
               selectedCountry={selectedCountry}
               setSelectedCountry={setSelectedCountry}
               phone={phone}
               setPhone={setPhone}
-          />
+            />
           </div>
 
           <div className="flex gap-4">
@@ -131,10 +130,7 @@ const AddSubordinatePage = () => {
             />
           </div>
 
-          <DashboardButton 
-            titleEn={"Add"}
-            titleAr={"اضافة"}  
-          />
+          <DashboardButton titleEn={"Add"} titleAr={"اضافة"} />
         </div>
       </div>
     </div>

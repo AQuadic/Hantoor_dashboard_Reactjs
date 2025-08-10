@@ -51,7 +51,7 @@ const AddBrand = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <DashboardInput
-                label={t('arModelName')}
+                label={t("arModelName")}
                 value={arModelName}
                 onChange={setArModelName}
                 placeholder=" تويوتا"
@@ -60,7 +60,7 @@ const AddBrand = () => {
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
-                label={t('agent')}
+                label={t("agent")}
                 onSelectionChange={(key) => setSelectedAgent(key as string)}
               >
                 {agents.map((agent) => (
@@ -71,10 +71,10 @@ const AddBrand = () => {
               </Select>
             </div>
             <DashboardInput
-              label={t('enModelName')}
+              label={t("enModelName")}
               value={enModelName}
               onChange={setEnModelName}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
 

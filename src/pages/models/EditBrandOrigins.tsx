@@ -25,7 +25,7 @@ const EditBrandOrigins = () => {
             link: "/models",
           },
           {
-            titleAr:"تعديل منشأ الماركة",
+            titleAr: "تعديل منشأ الماركة",
             titleEn: "Edit brand origin",
             link: "/",
           },
@@ -36,17 +36,17 @@ const EditBrandOrigins = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <DashboardInput
-                label={t('arBrandName')}
+                label={t("arBrandName")}
                 value={arBrandName}
                 onChange={setArBrandName}
                 placeholder="أوروبا"
               />
             </div>
             <DashboardInput
-              label={t('enBrandName')}
+              label={t("enBrandName")}
               value={enBrandName}
               onChange={setEnBrandName}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
 

@@ -10,7 +10,7 @@ const CarDetails = () => {
   const { t } = useTranslation("cars");
   const [arCarName, setArCarName] = useState("");
   const [enCarName, setEnCarName] = useState("");
-  
+
   const [carDetailsFields, setCarDetailsFields] = React.useState<
     CarDetailsFieldsTypes[]
   >([
@@ -41,120 +41,122 @@ const CarDetails = () => {
   };
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] ">
-      <h1 className="text-lg text-[#2A32F8] font-bold mb-2">{t('carDetails')}</h1>
+      <h1 className="text-lg text-[#2A32F8] font-bold mb-2">
+        {t("carDetails")}
+      </h1>
       <div className="flex flex-col md:flex-row gap-[15px] ">
         <div className="w-full">
           <DashboardInput
-            label={t('arCarName')}
+            label={t("arCarName")}
             value={arCarName}
             onChange={setArCarName}
-            placeholder={t('writeHere')}
+            placeholder={t("writeHere")}
           />
         </div>
         <div className="w-full">
           <DashboardInput
-            label={t('enCarName')}
+            label={t("enCarName")}
             value={enCarName}
             onChange={setEnCarName}
-            placeholder={t('writeHere')}
+            placeholder={t("writeHere")}
           />
         </div>
       </div>
       <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-[15px]">
         <Select
-          label={t('country')}
+          label={t("country")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('brand')}
+          label={t("brand")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('agent')}
+          label={t("agent")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('model')}
+          label={t("model")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('structureType')}
+          label={t("structureType")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('type')}
+          label={t("type")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('category')}
+          label={t("category")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('brandOrigin')}
+          label={t("brandOrigin")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('seats')}
+          label={t("seats")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('engineType')}
+          label={t("engineType")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
           <SelectItem>test </SelectItem>
         </Select>{" "}
         <Select
-          label={t('engineSize')}
+          label={t("engineSize")}
           variant="bordered"
-          placeholder={t('choose')}
+          placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
         >
@@ -171,10 +173,7 @@ const CarDetails = () => {
           />
         ))}
       </div>
-      <AddFieldButton
-        title={t('addMoreData')}
-        onClick={addCarDetailsField}
-      />
+      <AddFieldButton title={t("addMoreData")} onClick={addCarDetailsField} />
     </div>
   );
 };

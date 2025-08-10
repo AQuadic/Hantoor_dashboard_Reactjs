@@ -25,7 +25,7 @@ const AddSeats = () => {
             link: "/",
           },
           {
-            titleAr:"اضافة عدد مقاعد جديدة",
+            titleAr: "اضافة عدد مقاعد جديدة",
             titleEn: "Add new seats",
             link: "/",
           },
@@ -36,17 +36,17 @@ const AddSeats = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <DashboardInput
-                label={t('arSeatsNumbers')}
+                label={t("arSeatsNumbers")}
                 value={arSeatsNumbers}
                 onChange={setArSeatsNumbers}
                 placeholder="6"
               />
             </div>
             <DashboardInput
-              label={t('enSeatsNumbers')}
+              label={t("enSeatsNumbers")}
               value={enSeatsNumbers}
               onChange={setEnSeatsNumbers}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
 

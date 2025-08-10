@@ -36,17 +36,17 @@ const AddEnginSize = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <DashboardInput
-                label={t('arEngineSize')}
+                label={t("arEngineSize")}
                 value={arEnginSize}
                 onChange={setArEnginSize}
                 placeholder="1200 CC"
               />
             </div>
             <DashboardInput
-              label={t('enEngineSize')}
+              label={t("enEngineSize")}
               value={enEnginSize}
               onChange={setEnEnginSize}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
 

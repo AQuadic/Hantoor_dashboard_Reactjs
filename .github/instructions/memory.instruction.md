@@ -49,6 +49,7 @@
 **Task Type**: Code Enhancement - Replace form inputs throughout the project
 
 **Objective**: Replace all Hero UI Input components in forms with custom DashboardInput component
+
 - **Include**: Form inputs imported from @heroui/react
 - **Exclude**: Phone/mobile inputs (DashboardPhoneInput, MobileInput), search inputs (SearchBar)
 - **Target**: Only form-related inputs
@@ -56,7 +57,8 @@
 **Found 57 files with Hero UI Input imports that need to be processed**
 
 **Key exclusions identified**:
-- DashboardPhoneInput.tsx - uses Hero UI Input for phone functionality 
+
+- DashboardPhoneInput.tsx - uses Hero UI Input for phone functionality
 - SearchBar.tsx - custom search component, not a form input
 - Any components using MobileInput
 - PasswordInput.tsx - may need special handling for password type
@@ -67,7 +69,7 @@
 - [x] Identify exclusions (phone, mobile, search components)
 - [x] Create systematic replacement plan for each file
 - [x] Replace inputs in technical support pages (2 files)
-- [x] Replace inputs in subordinates pages (2 files)  
+- [x] Replace inputs in subordinates pages (2 files)
 - [x] Replace inputs in settings pages (2 files)
 - [x] Replace inputs in notification pages (1 file)
 - [ ] Replace inputs in models pages (20+ files)

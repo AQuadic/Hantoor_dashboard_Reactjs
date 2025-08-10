@@ -72,7 +72,7 @@ const AddQuestions = () => {
           </div>
         </div>
 
-    <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
+        <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Arabic Question */}
           <div className="relative w-full">
             <DashboardTextEditor
