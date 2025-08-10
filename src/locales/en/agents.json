@@ -13,5 +13,7 @@
     "phoneNumber": "Mobile Number",
     "whatsApp": "WhatsApp Number",
     "arServiceCenter": "Sales showroom name (in Arabic)",
-    "enServiceCenter": "Sales showroom name (in English)"
+    "enServiceCenter": "Sales showroom name (in English)",
+    "addMaintenanceCenter": "Add another maintenance center",
+    "addShowroom": "Add another showroom"
 }

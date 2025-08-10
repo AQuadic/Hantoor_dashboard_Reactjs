@@ -101,7 +101,7 @@ const AddMaintenanceCenter = () => {
 
         <div className='w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer mt-5'>
             <Add />
-            <p className='text-[#2A32F8] text-base'>اضافة بيانات اخرى</p>
+            <p className='text-[#2A32F8] text-base'>{t('addMaintenanceCenter')}</p>
         </div>
 
         <div className="mt-6">

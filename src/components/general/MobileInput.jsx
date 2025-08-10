@@ -303,7 +303,7 @@ const MobileInput = ({
 
   return (
     <div
-      className={`relative w-full h-[53px] px-4 py-7.5 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2.5 p-2 border-2 dark:border-neutral-700 rounded-xl focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
+      className={`relative w-full h-[53px] px-4 py-7.5 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2 p-2 border-2 dark:border-neutral-700 rounded-xl focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
 
     >
 
@@ -356,9 +356,9 @@ const MobileInput = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? <ChevronUp size={18} /> : <ChevronDown size={18} />}
+        {isOpen ? <ChevronUp size={14} className="text-[#2A32F8]" /> : <ChevronDown size={14} className="text-[#2A32F8]" />}
       </button>
-      <p className="text-[#2A32F8]">+{selectedCountry.phone[0]}</p>
+      <p className="text-[#2A32F8] text-sm font-normal -mr-1" dir="ltr">+{selectedCountry.phone[0]}</p>
       <img
         src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry.iso2}.svg`}
         alt={`${selectedCountry} flag`}
