@@ -4,10 +4,12 @@ import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
 import { useTranslation } from 'react-i18next';
+import DashboardTextEditor from '../general/DashboardTextEditor';
 
 const EditTerms = () => {
     const { t } = useTranslation("setting");
-    
+    const [arBody, setArBody] = React.useState("");
+    const [enBody, setEnBody] = React.useState("");
     return (
         <div>
             <div className="pt-0 pb-2 bg-white ">
@@ -59,6 +61,25 @@ const EditTerms = () => {
                     placeholder={t('pricingPolicy')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
+                />
+                </div>
+            </div>
+
+            <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
+                {/* Arabic Question */}
+                <div className="relative w-full">
+                <DashboardTextEditor
+                    title={t("arDetails")}
+                    body={arBody}
+                    setBody={setArBody}
+                />
+                </div>
+                {/* English Question */}
+                <div className="relative w-full">
+                <DashboardTextEditor
+                    title={t("enDetails")}
+                    body={enBody}
+                    setBody={setEnBody}
                 />
                 </div>
             </div>
