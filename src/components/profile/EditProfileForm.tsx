@@ -25,59 +25,60 @@ const EditProfileForm = ({
   setProfileImage,
 }: EditProfileFormProps) => {
   const { t } = useTranslation("profile");
-    const [selectedCountry, setSelectedCountry] = useState(
-        getCountryByIso2("EG")
-    );
-    const [phone, setPhone] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(
+    getCountryByIso2("EG")
+  );
+  const [phone, setPhone] = useState("");
   return (
     <form className="p-8">
       <div className="p-8 bg-white rounded-2xl ">
-        <h3 className="mb-4 text-lg font-bold">{t('profileImage')}</h3>
+        <h3 className="mb-4 text-lg font-bold">{t("profileImage")}</h3>
         <ImageInput image={profileImage} setImage={setProfileImage} />
       </div>
       <div className="flex gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
         <div className="flex flex-col flex-1 gap-4">
-          <h3 className="mb-2 text-lg font-bold ">{t('mainData')}</h3>
+          <h3 className="mb-2 text-lg font-bold ">{t("mainData")}</h3>
+
           <Input
-            label={t('name')}
+            label={t("name")}
             variant="bordered"
             placeholder="محمد احمد"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <Input
-            label={t('email')}
+            label={t("email")}
             variant="bordered"
             placeholder="username@mail.com"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <MobileInput
-              selectedCountry={selectedCountry}
-              setSelectedCountry={setSelectedCountry}
-              phone={phone}
-              setPhone={setPhone}
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+            phone={phone}
+            setPhone={setPhone}
           />
-          <DashboardButton titleAr=" حفظ" titleEn="Save"/>
+          <DashboardButton titleAr=" حفظ" titleEn="Save" />
         </div>
         <div className="flex flex-col flex-1 gap-4">
-          <h3 className="mb-2 text-lg font-bold">{t('password')}</h3>
+          <h3 className="mb-2 text-lg font-bold">{t("password")}</h3>
           <Input
-            label={t('currentPassword')}
+            label={t("currentPassword")}
             variant="bordered"
             placeholder="********"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <Input
-            label={t('newPassword')}
+            label={t("newPassword")}
             variant="bordered"
             placeholder="********"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
           />
           <Input
-            label={t('confirmPassword')}
+            label={t("confirmPassword")}
             variant="bordered"
             placeholder="********"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
