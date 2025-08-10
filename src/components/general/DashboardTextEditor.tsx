@@ -548,85 +548,83 @@ const DashboardTextEditor = ({
   return (
     <div>
       <h2 className="text-[#000000] text-[15px] font-normal">{title}</h2>
-    <div
-      className={css`
-        direction: rtl;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #fff;
-        border: 1px solid #d1d5db;
-        border-radius: 6px;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-        padding: 0;
-        width: 100%;
-        max-width: 100%;
-        overflow: hidden;
-      `}
-    >
       <div
         className={css`
-          font-size: 1.1rem;
-          font-weight: 600;
-          color: #222;
-          padding: 16px 16px 0 16px;
-          text-align: right;
+          direction: rtl;
+          font-family: var(--font-primary);
+          background: #fff;
+          border: 1px solid #d1d5db;
+          border-radius: 6px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          padding: 0;
+          width: 100%;
+          max-width: 100%;
+          overflow: hidden;
         `}
       >
-      </div>
-      <Toolbar editor={editor} />
-      <Slate
-        editor={editor}
-        initialValue={initialValue}
-        onChange={handleChange}
-      >
-        <Editable
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          placeholder="لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي يستخدم بشكل شائع لتوضيح الشكل الجرافيكي للمستند أو الخط دون الاعتماد على محتوى ذي معنى. يمكن استخدام لوريم إيبسوم قبل نشر النسخة النهائية"
+        <div
           className={css`
-            min-height: 200px;
-            padding: 16px;
-            font-size: ${fontSize};
-            color: ${color};
-            line-height: 1.6;
-            outline: none;
-            background: #fff;
-            direction: rtl;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #222;
+            padding: 16px 16px 0 16px;
             text-align: right;
-            font-family: inherit;
-            resize: vertical;
-            overflow-y: auto;
-            max-height: 400px;
-            border: none;
-            box-shadow: none;
-            &::placeholder {
-              color: #9ca3af !important;
-              opacity: 1;
-              -webkit-text-fill-color: #9ca3af !important;
-            }
-            &::-webkit-input-placeholder {
-              color: #9ca3af !important;
-            }
-            &::-webkit-scrollbar {
-              width: 6px;
-            }
-            &::-webkit-scrollbar-track {
-              background: #f1f5f9;
-            }
-            &::-webkit-scrollbar-thumb {
-              background: #cbd5e1;
-              border-radius: 3px;
-            }
-            &::-webkit-scrollbar-thumb:hover {
-              background: #94a3b8;
-            }
           `}
-          spellCheck
-          autoFocus={false}
-        />
-      </Slate>
+        ></div>
+        <Toolbar editor={editor} />
+        <Slate
+          editor={editor}
+          initialValue={initialValue}
+          onChange={handleChange}
+        >
+          <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            placeholder="لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي يستخدم بشكل شائع لتوضيح الشكل الجرافيكي للمستند أو الخط دون الاعتماد على محتوى ذي معنى. يمكن استخدام لوريم إيبسوم قبل نشر النسخة النهائية"
+            className={css`
+              min-height: 200px;
+              padding: 16px;
+              font-size: ${fontSize};
+              color: ${color};
+              line-height: 1.6;
+              outline: none;
+              background: #fff;
+              direction: rtl;
+              text-align: right;
+              font-family: inherit;
+              resize: vertical;
+              overflow-y: auto;
+              max-height: 400px;
+              border: none;
+              box-shadow: none;
+              &::placeholder {
+                color: #9ca3af !important;
+                opacity: 1;
+                -webkit-text-fill-color: #9ca3af !important;
+              }
+              &::-webkit-input-placeholder {
+                color: #9ca3af !important;
+              }
+              &::-webkit-scrollbar {
+                width: 6px;
+              }
+              &::-webkit-scrollbar-track {
+                background: #f1f5f9;
+              }
+              &::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 3px;
+              }
+              &::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+              }
+            `}
+            spellCheck
+            autoFocus={false}
+          />
+        </Slate>
+      </div>
     </div>
-    </div>
-
   );
 };
 
