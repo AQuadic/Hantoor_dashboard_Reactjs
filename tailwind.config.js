@@ -12,18 +12,16 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        // Primary custom font with proper fallbacks
-        primary: [
+        // Primary font for normal text (fallback fonts for regular weight)
+        primary: ['"Helvetica Neue"', ...fontFamily.sans],
+        // Custom bold font
+        "primary-bold": [
           '"Helvetica Neue W23 for SKY"',
           '"Helvetica Neue"',
           ...fontFamily.sans,
         ],
-        // Override default sans to use our custom font
-        sans: [
-          '"Helvetica Neue W23 for SKY"',
-          '"Helvetica Neue"',
-          ...fontFamily.sans,
-        ],
+        // Override default sans to use normal fallback for regular text
+        sans: ['"Helvetica Neue"', ...fontFamily.sans],
         // Specific utility classes
         sky: [
           '"Helvetica Neue W23 for SKY"',

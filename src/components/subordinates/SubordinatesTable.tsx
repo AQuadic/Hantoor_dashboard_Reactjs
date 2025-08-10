@@ -11,10 +11,10 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import admin1 from '/images/admin/admin1.svg'
-import admin2 from '/images/admin/admin2.svg'
-import admin3 from '/images/admin/admin3.svg'
-import admin4 from '/images/admin/admin4.svg'
+import admin1 from "/images/admin/admin1.svg";
+import admin2 from "/images/admin/admin2.svg";
+import admin3 from "/images/admin/admin3.svg";
+import admin4 from "/images/admin/admin4.svg";
 
 export function SubordinatesTable() {
   const subordinates = [

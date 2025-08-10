@@ -29,7 +29,7 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
   return (
     <tbody
       data-slot="table-body"
-      className={cn("[&_tr:last-child]:border-0", className)}
+      className={cn("[&_tr:last-child]:border-0 ", className)}
       {...props}
     >
       {props.children}
@@ -109,7 +109,7 @@ function TableRow({
   const updatedChildren = React.Children.map(children, (child, index) => {
     if (!React.isValidElement(child)) return child;
 
-  const element = child as React.ReactElement<{ className?: string }>;
+    const element = child as React.ReactElement<{ className?: string }>;
     // Apply bg-muted class conditionally based on column index
     const isBgColumn = index < bgColumns;
     const isLastBgCell = index === bgColumns - 1;
@@ -130,7 +130,7 @@ function TableRow({
       data-slot="table-row"
       className={cn(
         "border-b-0 overflow-hidden transition-colors",
-        
+
         "[&>td]:border-0",
         "[&>td]:px-6",
         "[&>td:first-child]:rounded-s-full [&>td:nth-last-child(2)]:rounded-e-full",
