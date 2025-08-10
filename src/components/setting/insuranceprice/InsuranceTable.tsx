@@ -38,7 +38,7 @@ const InsuranceTable = () => {
             {countries.map((country, index) => (
             <TableRow key={country.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{country.Whatsapp}</TableCell>
+                <TableCell dir="ltr">{country.Whatsapp}</TableCell>
                 <TableCell className="w-full">{country.country}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <ActiveStatus />
