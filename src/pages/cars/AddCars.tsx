@@ -16,7 +16,6 @@ const AddCars = () => {
   const brandId = params.id;
 
   const isEdit = Boolean(brandId);
-  const handleDelete = () => {};
   return (
     <div>
       <AddCarsHeader isEdit={isEdit} />
@@ -25,26 +24,8 @@ const AddCars = () => {
         <CarDetails />
         <CarPrices />
         <CarPackages />
-        <CarAccessories
-          handleDelete={handleDelete}
-          field={{
-            image: null,
-            titleEn: "",
-            titleAr: "",
-            descriptionEn: "",
-            descriptionAr: "",
-          }}
-        />
-        <CarOffers
-          handleDelete={handleDelete}
-          field={{
-            image: null,
-            titleEn: "",
-            titleAr: "",
-            descriptionEn: "",
-            descriptionAr: "",
-          }}
-        />
+        <CarAccessories />
+        <CarOffers />
         <RentToOwn />
         <CarAdvertisingImages />
         <div className="mt-6">
