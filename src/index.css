@@ -270,3 +270,14 @@ button {
 ::-webkit-scrollbar-thumb:hover {
   background-color: rgba(42, 50, 248, 0.8);
 } */
+
+/* Hide up/down arrows (spinners) from all number inputs - cross-browser */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
