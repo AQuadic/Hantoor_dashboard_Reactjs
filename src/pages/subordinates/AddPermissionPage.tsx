@@ -4,6 +4,7 @@ import React from "react";
 import { useParams } from "react-router";
 import PermissionsCard from "@/components/subordinates/PermissionsCard";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
+import { useTranslation } from "react-i18next";
 
 interface Permission {
   permission: {
@@ -18,7 +19,8 @@ const AddPermissionPage = () => {
   const brandId = params.id;
 
   const isEdit = Boolean(brandId);
-
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
   // Control panel permissions (first, without group title)
   const [controlPanelPermissions, setControlPanelPermissions] = React.useState([
     {
@@ -755,11 +757,11 @@ const AddPermissionPage = () => {
             titleEn: "Home",
             link: "/",
           },
-          {
-            titleAr: " المسؤولين الفرعيين ",
-            titleEn: "Subordinates",
-            link: "/subordinates",
-          },
+          // {
+          //   titleAr: " المسؤولين الفرعيين ",
+          //   titleEn: "Subordinates",
+          //   link: "/subordinates",
+          // },
           {
             titleAr: isEdit ? "تعديل الصلاحية" : "اضافة صلاحية جديدة",
             titleEn: isEdit ? "Edit Permission" : "Add Permission",
@@ -792,8 +794,8 @@ const AddPermissionPage = () => {
         {permissionGroups.map((group, groupIndex) => (
           <div key={groupIndex} className="space-y-4">
             {/* Group Title */}
-            <h2 className="text-xl font-bold text-right text-black">
-              {group.groupTitleAr}
+            <h2 className="text-xl font-bold rtl:text-right text-black">
+                  {currentLang === "ar" ? group.groupTitleAr : group.groupTitleEn}
             </h2>
 
             {/* Permission Cards */}

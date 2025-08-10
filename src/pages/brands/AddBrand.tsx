@@ -39,7 +39,7 @@ const AddBrand = () => {
       />
       <div className="flex flex-col gap-8 p-8">
         <div className="p-8 bg-white rounded-2xl ">
-          <h3 className="mb-4 text-lg font-bold">{t('profileImage')}</h3>
+          <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">{t('brandImage')}</h3>
           <ImageInput image={profileImage} setImage={setProfileImage} />
         </div>
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
@@ -49,14 +49,20 @@ const AddBrand = () => {
               label={t('arBrand')}
               variant="bordered"
               placeholder=" تويوتا"
-              classNames={{ label: "mb-2 text-base" }}
+                classNames={{
+                  label: "mb-2 text-base",
+                  input: "placeholder:text-sm placeholder:font-normal",
+                }}
               size="lg"
             />
             <Input
               label={t('enBrand')}
               variant="bordered"
               placeholder={t('writeHere')}
-              classNames={{ label: "mb-2 text-base" }}
+              classNames={{
+                  label: "mb-2 text-base",
+                  input: "placeholder:text-sm placeholder:font-normal",
+                }}
               size="lg"
             />
           </div>
