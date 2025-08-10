@@ -96,11 +96,7 @@ const AddPermissionPage = () => {
           titleEn: "Subordinates",
           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: true,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
             },
             {
@@ -108,15 +104,16 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
+              permission: { titleEn: "Change password", titleAr: "تغيير كلمة المرور" },
               isSelected: true,
             },
             {
-              permission: {
-                titleEn: "Full Authority",
-                titleAr: "كامل الصلاحية",
-              },
+              permission: { titleEn: "Delete", titleAr: "حذف" },
               isSelected: true,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
             },
           ],
         },
@@ -125,11 +122,7 @@ const AddPermissionPage = () => {
           titleEn: "Permissions",
           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
             },
             {
@@ -137,57 +130,41 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
+              permission: { titleEn: "Delete", titleAr: "حذف" },
               isSelected: true,
             },
             {
-              permission: {
-                titleEn: "Full Authority",
-                titleAr: "كامل الصلاحية",
-              },
-              isSelected: true,
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
             },
           ],
         },
-      ],
-    },
-    {
-      groupTitleAr: "إدارة النظام",
-      groupTitleEn: "System Management",
-      isFullWidth: false,
-      sections: [
         {
           titleAr: "المستخدمين",
           titleEn: "Users",
           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
             },
             {
               permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: false,
             },
             {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
+              permission: { titleEn: "Change password", titleAr: "تغيير كلمة المرور" },
               isSelected: true,
             },
             {
-              permission: {
-                titleEn: "Full Authority",
-                titleAr: "كامل الصلاحية",
-              },
+              permission: { titleEn: "Delete", titleAr: "حذف" },
               isSelected: true,
             },
             {
-              permission: {
-                titleEn: "Application Period",
-                titleAr: "مدة الاشتراك",
-              },
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Suspension period", titleAr: "مدة الايقاف" },
               isSelected: false,
             },
           ],
@@ -197,7 +174,11 @@ const AddPermissionPage = () => {
           titleEn: "Countries",
           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: false,
             },
             {
@@ -205,12 +186,8 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              permission: { titleEn: "Add", titleAr: "اضافة" },
               isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
             },
           ],
         },
@@ -219,7 +196,11 @@ const AddPermissionPage = () => {
           titleEn: "Brands",
           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: false,
             },
             {
@@ -227,12 +208,8 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              permission: { titleEn: "Add", titleAr: "اضافة" },
               isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
             },
           ],
         },
@@ -241,7 +218,19 @@ const AddPermissionPage = () => {
           titleEn: "Agents",
           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Link", titleAr: "الرابط" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "View", titleAr: "رؤية" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: false,
             },
             {
@@ -249,36 +238,28 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              permission: { titleEn: "Add", titleAr: "اضافة" },
               isSelected: false,
-            },
-            {
-              permission: { titleEn: "Read", titleAr: "قراءة" },
-              isSelected: true,
-            },
-            {
-              permission: { titleEn: "Administration", titleAr: "الادارة" },
-              isSelected: true,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
             },
           ],
         },
       ],
     },
     {
-      groupTitleAr: "إدارة المحتوى",
-      groupTitleEn: "Content Management",
+      groupTitleAr: "اقسام السيارات",
+      groupTitleEn: "System Management",
       isFullWidth: false,
       sections: [
         {
-          titleAr: "النماذج",
+          titleAr: "الموديلات",
           titleEn: "Models",
           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: false,
             },
             {
@@ -286,91 +267,17 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-        {
-          titleAr: "السيارات",
-          titleEn: "Cars",
-          permissions: [
-            {
               permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-        {
-          titleAr: "أقسام السيارات",
-          titleEn: "Car Departments",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-        {
-          titleAr: "المديريات",
-          titleEn: "Directorates",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: true,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: true,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
               isSelected: false,
             },
           ],
         },
         {
           titleAr: "انواع الهيكل",
-          titleEn: "Body Types",
-          permissions: [
+          titleEn: "Types of structure",
+           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
             },
             {
@@ -378,17 +285,25 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
               isSelected: false,
             },
           ],
         },
         {
-          titleAr: "المزايا",
-          titleEn: "Features",
-          permissions: [
+          titleAr: "انواع السيارة",
+          titleEn: "Car types",
+           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: false,
             },
             {
@@ -396,21 +311,204 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "الفئات",
+          titleEn: "Categories",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
               permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: false,
             },
             {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "منشأ الماركة",
+          titleEn: "Brand Origin",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "عدد المقاعد",
+          titleEn: "Number of seats",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "انواع الماكينة",
+          titleEn: "Engine types",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "احجام الماكينة",
+          titleEn: "Engine sizes",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "السعر من",
+          titleEn: "Price from",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "السعر الى",
+          titleEn: "Price to",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      groupTitleAr: "",
+      groupTitleEn: "",
+      isFullWidth: false,
+      sections: [
+        {
+          titleAr: "السيارات",
+          titleEn: "Cars",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
             },
           ],
         },
         {
           titleAr: "التمويل",
           titleEn: "Financing",
-          permissions: [
+           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: false,
             },
             {
@@ -418,127 +516,21 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      groupTitleAr: "التجارة والاحصاء",
-      groupTitleEn: "Trade & Statistics",
-      isFullWidth: false,
-      sections: [
-        {
-          titleAr: "التجارة",
-          titleEn: "Trade",
-          permissions: [
-            {
               permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-        {
-          titleAr: "الاحصائيات",
-          titleEn: "Statistics",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      groupTitleAr: "الدعم والشكاوي",
-      groupTitleEn: "Support & Complaints",
-      isFullWidth: false,
-      sections: [
-        {
-          titleAr: "الدعم التقني",
-          titleEn: "Technical Support",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-        {
-          titleAr: "رسائل الدعم",
-          titleEn: "Support Messages",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-            {
-              permission: { titleEn: "Reply", titleAr: "رد" },
               isSelected: false,
             },
           ],
         },
         {
-          titleAr: "الشكاوي",
-          titleEn: "Complaints",
-          permissions: [
+          titleAr: "البنوك",
+          titleEn: "Banks",
+           permissions: [
             {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
               isSelected: false,
             },
             {
@@ -546,168 +538,14 @@ const AddPermissionPage = () => {
               isSelected: false,
             },
             {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-        {
-          titleAr: "تواصل معنا",
-          titleEn: "Contact Us",
-          permissions: [
-            {
               permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-        {
-          titleAr: "الأسئلة الشائعة",
-          titleEn: "FAQs",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      groupTitleAr: "السياسات والأحكام",
-      groupTitleEn: "Policies & Terms",
-      isFullWidth: false,
-      sections: [
-        {
-          titleAr: "سياسة الخصوصية",
-          titleEn: "Privacy Policy",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-        {
-          titleAr: "شروط الخدمة",
-          titleEn: "Terms of Service",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-      ],
-    },
-    {
-      groupTitleAr: "وسائل التواصل والإشعارات",
-      groupTitleEn: "Communication & Notifications",
-      isFullWidth: false,
-      sections: [
-        {
-          titleAr: "وسائل التواصل الاجتماعي",
-          titleEn: "Social Media",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-          ],
-        },
-        {
-          titleAr: "الإشعارات",
-          titleEn: "Notifications",
-          permissions: [
-            {
-              permission: { titleEn: "Add", titleAr: "اضافة" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Delete", titleAr: "حذف" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "Edit", titleAr: "تعديل" },
-              isSelected: false,
-            },
-            {
-              permission: { titleEn: "View", titleAr: "الاطلاع" },
-              isSelected: true,
-            },
-            {
-              permission: { titleEn: "Send", titleAr: "ارسال" },
               isSelected: false,
             },
           ],
         },
         {
           titleAr: "المحادثات",
-          titleEn: "Chats",
+          titleEn: "Conversations",
           permissions: [
             {
               permission: { titleEn: "Add", titleAr: "اضافة" },
@@ -715,7 +553,29 @@ const AddPermissionPage = () => {
             },
             {
               permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "View", titleAr: "الاطلاع" },
               isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "اسئلة الدعم الفني",
+          titleEn: "Technical support questions",
+          permissions: [
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: true,
             },
             {
               permission: { titleEn: "Edit", titleAr: "تعديل" },
@@ -723,10 +583,223 @@ const AddPermissionPage = () => {
             },
             {
               permission: { titleEn: "View", titleAr: "الاطلاع" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "رسائل الدعم",
+          titleEn: "Support messages",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
               isSelected: true,
             },
             {
-              permission: { titleEn: "Moderate", titleAr: "إشراف" },
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "الاسئلة الشائعة",
+          titleEn: "Frequently Asked Questions",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "الاشعارات",
+          titleEn: "Notifications",
+           permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "تواصل معنا",
+          titleEn: "Contact us",
+          permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+      ],
+    },
+    {
+      groupTitleAr: "",
+      groupTitleEn: "",
+      isFullWidth: false,
+      sections: [
+        {
+          titleAr: "اعدادت عامة",
+          titleEn: "General settings",
+          permissions: [
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: true,
+            },
+          ],
+        },
+        {
+          titleAr: "زر طلب تفاصيل سعر التأمين",
+          titleEn: "Request insurance quote details button",
+          permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "الصفحات التعريفية",
+          titleEn: "Profile pages",
+          permissions: [
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "الصور الاعلانية",
+          titleEn: "Advertising images",
+          permissions: [
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: true,
+            },
+          ],
+        },
+        {
+          titleAr: "الشروط والاحكام",
+          titleEn: "Terms and Conditions",
+            permissions: [
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+          ],
+        },
+        {
+          titleAr: "روابط التواصل الاجتماعي",
+          titleEn: "Social media links",
+          permissions: [
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: true,
+            },
+          ],
+        },
+        {
+          titleAr: "مميزات التطبيق",
+          titleEn: "Application features",
+          permissions: [
+            {
+              permission: { titleEn: "Status", titleAr: "الحالة" },
+              isSelected: false,
+            },
+            {
+              permission: { titleEn: "Edit", titleAr: "تعديل" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Delete", titleAr: "حذف" },
+              isSelected: true,
+            },
+            {
+              permission: { titleEn: "Add", titleAr: "اضافة" },
               isSelected: false,
             },
           ],
@@ -792,7 +865,7 @@ const AddPermissionPage = () => {
 
         {/* Grouped Permission Sections */}
         {permissionGroups.map((group, groupIndex) => (
-          <div key={groupIndex} className="space-y-4">
+          <div key={groupIndex} className="space-y-4 border-b pb-5">
             {/* Group Title */}
             <h2 className="text-xl font-bold rtl:text-right text-black">
                   {currentLang === "ar" ? group.groupTitleAr : group.groupTitleEn}
