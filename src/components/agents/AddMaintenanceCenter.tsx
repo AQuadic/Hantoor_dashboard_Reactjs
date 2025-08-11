@@ -23,7 +23,7 @@ const AddMaintenanceCenter = () => {
         );
         const [phone, setPhone] = useState("");
     return (
-        <div className="bg-white mt-6 rounded-[15px]">
+        <div className="bg-white mt-6 rounded-[15px] ">
         <div className="flex flex-col md:flex-row gap-[15px]">
             <div className="w-full">
             <Input
