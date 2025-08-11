@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { postLogin, LoginPayload, LoginResponse } from "@/api/auth/postLogin";
+import Cookies from "js-cookie";
 
 export interface User {
   id: number;
@@ -19,6 +20,7 @@ export interface AuthState {
   error: string | null;
   login: (payload: LoginPayload) => Promise<LoginResponse | null>;
   logout: () => void;
+  initialize: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -33,10 +35,19 @@ export const useAuthStore = create<AuthState>()(
         set({ loading: true, error: null });
         try {
           const data = await postLogin(payload);
-          if (data.success && data.token && data.user) {
+
+          // Extract token from response - handle both 'token' and 'access_token' fields
+          const token = data.token || data.access_token;
+
+          if (token && data.user) {
+            // Store token in cookies for route guards and axios interceptor
+            Cookies.set("hantoor_token", token, {
+              expires: payload.rememberMe ? 30 : 1, // 30 days if remember me, 1 day otherwise
+            });
+
             set({
               user: data.user as unknown as User,
-              token: data.token,
+              token: token,
               isAuthenticated: true,
               loading: false,
               error: null,
@@ -44,7 +55,8 @@ export const useAuthStore = create<AuthState>()(
             return data;
           } else {
             set({
-              error: data.message || "Login failed. Please try again.",
+              error:
+                data.message || "Login failed. Invalid response from server.",
               loading: false,
             });
             return null;
@@ -79,8 +91,18 @@ export const useAuthStore = create<AuthState>()(
           return null;
         }
       },
-      logout: () =>
-        set({ user: null, token: null, isAuthenticated: false, error: null }),
+      logout: () => {
+        // Clear cookie and Zustand state
+        Cookies.remove("hantoor_token");
+        set({ user: null, token: null, isAuthenticated: false, error: null });
+      },
+      initialize: () => {
+        // Check for existing token in cookies on app start
+        const token = Cookies.get("hantoor_token");
+        if (token) {
+          set({ token, isAuthenticated: true });
+        }
+      },
     }),
     {
       name: "auth-storage", // unique name for localStorage

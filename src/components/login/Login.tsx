@@ -61,6 +61,7 @@ const Login = () => {
       e.preventDefault();
     }
     if (!validateForm()) return;
+
     setErrors({});
     const payload: LoginPayload = {
       email,
@@ -68,13 +69,26 @@ const Login = () => {
       rememberMe,
       recaptchaToken,
     };
-    const result = await loginToStore(payload);
-    if (result && result.success) {
-      navigate("/");
-    } else {
+
+    try {
+      const result = await loginToStore(payload);
+      console.log("Login result:", result);
+
+      if (result) {
+        // Login successful - navigate to dashboard
+        navigate("/", { replace: true });
+      } else {
+        // Login failed - error should be in store
+        setErrors({
+          general:
+            storeError || t("loginError") || "Login failed. Please try again.",
+        });
+        resetCaptcha();
+      }
+    } catch (error) {
+      console.error("Login error:", error);
       setErrors({
-        general:
-          storeError || t("loginError") || "Login failed. Please try again.",
+        general: t("loginError") || "Login failed. Please try again.",
       });
       resetCaptcha();
     }
@@ -232,7 +246,7 @@ const Login = () => {
             <DashboardButton
               titleAr={storeLoading ? t("loading") || "Loading..." : t("enter")}
               titleEn={storeLoading ? "جاري التحميل..." : "دخول"}
-              onClick={handleLogin}
+              type="submit"
             />
           </div>
 
