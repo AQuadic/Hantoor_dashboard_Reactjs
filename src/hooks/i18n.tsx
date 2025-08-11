@@ -48,7 +48,7 @@ const savedLang =
 // Initialize i18n
 i18n.use(initReactI18next).init({
   lng: savedLang,
-  fallbackLng: "en",
+  fallbackLng: "ar",
   interpolation: { escapeValue: false },
   ns: ["header", "login"], // Add all namespaces you're using
   defaultNS: "header",
