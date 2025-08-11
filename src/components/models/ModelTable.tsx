@@ -34,7 +34,7 @@ export function ModelTable() {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-right">#</TableHead>
+          <TableHead className="text-right ">#</TableHead>
           <TableHead className="text-right"> الموديل</TableHead>
           <TableHead className="text-right"> الوكيل</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
