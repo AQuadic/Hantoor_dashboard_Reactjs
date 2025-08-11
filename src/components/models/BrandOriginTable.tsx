@@ -13,6 +13,7 @@ import { Switch } from "@heroui/react";
 import { getBrandOrigin } from "@/api/models/brandOrigin/getBrandOrigin";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { deleteBrandOrigin } from "@/api/models/brandOrigin/deleteBrandOrigin";
 
 interface BrandOrigin {
   id: number;
@@ -29,22 +30,22 @@ export function BrandOriginTable() {
   const { i18n } = useTranslation();
   const currentLang = i18n.language;
 
-  const { data } = useQuery<BrandOrigin[]>({
+  const { data, refetch} = useQuery<BrandOrigin[]>({
     queryKey: ["brands"],
     queryFn: getBrandOrigin,
-    select: (data) =>
-      data.map((brand) => ({
-        ...brand,
-        is_active: Boolean(brand.is_active),
-      })),
   });
+
+  const handleDelete = async (id: number) => {
+    await deleteBrandOrigin(id);
+    refetch();
+  };
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> منشأ الماركة</TableHead>
+          <TableHead className="text-right">منشأ الماركة</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
@@ -61,7 +62,9 @@ export function BrandOriginTable() {
                 <Edit />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(brand.id)}
+                />
               </div>
             </TableCell>
           </TableRow>
