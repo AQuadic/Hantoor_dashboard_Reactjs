@@ -1,9 +1,9 @@
 import { Navigate, Outlet } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const useAuth = () => {
-  const token = localStorage.getItem("authToken");
+  const token = Cookies.get("hantoor_token");
   const isAuthenticated = !!token;
-
   return { isAuthenticated };
 };
 
