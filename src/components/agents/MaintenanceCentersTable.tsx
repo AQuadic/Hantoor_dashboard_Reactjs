@@ -20,8 +20,8 @@ return (
         </div>
         <div className="flex items-center gap-4">
         <Location />
-        <img src="../../../public/images/whatsapp.svg" />
-        <img src="../../../public/images/phone.svg" />
+        <img src="/images/whatsapp.svg" />
+        <img src="/images/phone.svg" />
         </div>
     </div>
     </div>

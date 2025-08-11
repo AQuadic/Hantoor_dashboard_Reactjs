@@ -50,7 +50,7 @@ const CountriesTable = () => {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{country.country}</TableCell>
                 <TableCell>{country.currency}</TableCell>
-                <TableCell className="">{country.count}</TableCell>
+                <TableCell style={{textAlign: 'center'}}>{country.count}</TableCell>
                 <TableCell className="w-full">{country.date}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <Switch />

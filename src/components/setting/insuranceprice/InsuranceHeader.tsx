@@ -8,7 +8,7 @@ const InsuranceHeader = () => {
             <div className="w-full">
                 <Select>
                 <SelectTrigger
-                    className="w-[160px] !h-[53px] rounded-[12px] mt-4 bg-white"
+                    className="w-[160px] !h-[53px] rounded-[12px] -mt-2 bg-white"
                     dir="rtl"
                 >
                     <SelectValue placeholder="البلد" />

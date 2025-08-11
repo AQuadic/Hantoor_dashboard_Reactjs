@@ -9,7 +9,7 @@ const ContactUsView = () => {
             <div className='px-8'>
                 <h2 className='text-[#2A32F8] text-[19px] font-bold'>{t('clientData')}</h2>
                 <p className='text-[#071739] text-[19px] font-normal mt-3'>ابراهيم محمود</p>
-                <p className='text-[#606C7E] text-[15px] font-normal mt-2'>+966 123456 789</p>
+                <p className='text-[#606C7E] text-[15px] font-normal mt-2 rtl:text-right' dir='ltr'>+966 123456 789</p>
             </div>
             <hr className='my-4'/>
             <div className='px-8'>

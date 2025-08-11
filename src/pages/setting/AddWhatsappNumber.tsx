@@ -50,10 +50,10 @@ const AddWhatsappNumber = () => {
           </div>
           <div className="w-full">
             <DashboardInput
-              label={t("maintenanceCenter")}
+              label={t("whatsappNumber")}
               value={maintenanceCenter}
               onChange={setMaintenanceCenter}
-              placeholder={t("centerName")}
+              placeholder={t("writeHere")}
             />
           </div>
         </div>

@@ -42,5 +42,9 @@
     "addGIF": "Add GIF",
     "arDescription": "Description (in Arabic)",
     "enDescription": "Description (in English)",
-    "exploreNewCars": "Browse new cars from your location"
+    "exploreNewCars": "Browse new cars from your location",
+
+    "whatsappNumber": "WhatsApp Number",
+    "arDetails": "Details (in Arabic)",
+    "enDetails": "Details (in English)"
 }

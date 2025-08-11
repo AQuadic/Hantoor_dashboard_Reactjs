@@ -55,13 +55,13 @@ const DashboardSidebar = () => {
         <AnimatePresence mode="wait">
           {!isDesktopCollapsed && (
             <motion.img
-              className="flex items-center justify-center h-full"
+              className="flex items-center justify-center mx-auto h-full"
               key="logo"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
               transition={{ duration: 0.2 }}
-              src="/images/dashboard/dashboardLogo.svg"
+              src="/images/hantoorLogo.gif"
               alt="logo"
             />
           )}
