@@ -1,32 +1,40 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "../ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import notificationCar from '/images/notificationCar.png'
 import View from "../icons/general/View";
 const NotificationTable = () => {
+const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
 
-  const notifications = [
+    const toggleExpand = (id: number) => {
+        setExpandedRows((prev) => ({
+        ...prev,
+        [id]: !prev[id]
+        }));
+    };
+
+    const notifications = [
     {
         id: 1,
         image:notificationCar,
         text: "حماية البيانات",
         country: "الامارات",
-        description: "أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ علي...",
+        description: "أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ علي"
     },
     {
         id: 2,
         image:notificationCar,
         text: "القواعد العامه",
         country: "مصر",
-        description: "أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ علي...",
+        description: "أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ علي"
     },
     {
         id: 3,
         image:notificationCar,
         text: "تحذير",
         country: "السعودية",
-        description: "أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ علي...",
+        description: "أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ علي"
     },
     ];
     return (
@@ -42,32 +50,40 @@ const NotificationTable = () => {
             </TableRow>
         </TableHeader>
         <TableBody>
-            {notifications.map((notification, index) => (
-            <TableRow
-                key={notification.id}
-                noBackgroundColumns={1}
-            >
+            {notifications.map((notification, index) => {
+            const isExpanded = expandedRows[notification.id];
+            const shortDescription = notification.description.slice(0, 50) + "";
+
+            return (
+                <TableRow key={notification.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
-                    <img src={notification.image} alt="Car" className="rounded-[8px]"/>
+                    <img src={notification.image} alt="Car" className="rounded-[8px]" />
                 </TableCell>
                 <TableCell>{notification.text}</TableCell>
                 <TableCell>{notification.country}</TableCell>
-                <TableCell className="w-full">{notification.description}</TableCell>
-                <TableCell
-                className="flex gap-[7px] items-center"
-                onClick={(e) => e.stopPropagation()} 
-                >
-                <Link to={`/notifications/details/${notification.id}`}>
-                    <View />
-                </Link>
-
-                <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
-                </div>
+                <TableCell className="w-full">
+                    {isExpanded ? notification.description : shortDescription}
+                    <button
+                    className="text-blue-600 ml-2 hover:underline"
+                    onClick={() => toggleExpand(notification.id)}
+                    >
+                    {isExpanded ? "..." : "..."}
+                    </button>
                 </TableCell>
-            </TableRow>
-            ))}
+                <TableCell
+                    className="flex gap-[7px] items-center"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <Link to={`/notifications/details/${notification.id}`}>
+                    <View />
+                    </Link>
+                    <div className="mt-2">
+                    <TableDeleteButton handleDelete={() => {}} />
+                    </div>
+                </TableCell>
+                </TableRow>
+            )})}
         </TableBody>
         </Table>
     )
