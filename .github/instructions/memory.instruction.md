@@ -4,18 +4,7 @@
 
 ## User Preferences
 
-- Programming languages: javascript/ typescript/ next js
-- Code style preferences: prettier
-- Development environment: vs code
-- Communication style: concise, explain reasoning for changes
-
 ## Project Context
-
-- Current project type: React.js Dashboard
-- Tech stack: React, TypeScript, Vite, TailwindCSS, framer-motion, react-router, i18next
-- Architecture patterns: component-based
-- Key requirements: performance, mobile usability, bug-free UI, consistent use of "Helvetica Neue W23 for SKY" font across all UI
-- Font issue: Custom font not loading properly due to incorrect paths and @font-face implementation
 
 ## Coding Patterns
 
@@ -24,19 +13,13 @@ Use of hooks for state and effects
 Modular code organization
 Testing via manual and automated means
 Documentation via code comments and README
-2025-08-11: Refactored src/lib/axios.ts for best practices: - Renamed axios instance to axiosInstance to avoid naming conflict - Improved SSR/test error handling (window check before redirect) - Enhanced logging clarity and consistency - Ensured correct export and usage of axiosInstance - All compile and type errors resolved - No actionable Context7 docs found, used expert knowledge and verified with internet sources
-Memory updated for future reference.
+2025-08-11: Refactored PublicRouteGuard.tsx and PrivateRouteGuard.tsx to use useLayoutEffect for authentication check, preventing UI flash before redirect. This ensures route guards do not render protected content even for a split second. All changes validated and follow React best practices.
 
 - 2025-08-11: Implemented robust Axios interceptor setup in src/lib/axios.ts. Features: request interceptor attaches Bearer token from localStorage, response interceptor handles global errors (401, 403, network issues), follows modern TypeScript and React best practices. All compile and type errors resolved. Axios and types installed. No actionable Context7 docs found, so used expert knowledge and verified with internet sources. Memory updated for future reference.
 
-## Conversation History
-
-- Sidebar must close on outside click (mobile)
-- Mobile sidebar must be scrollable
 - Fix any errors in the file
 - 2025-08-03: Fixed broken image in DiscountPercentage component by correcting image path to use Vite public directory root-relative path.
 - 2025-08-03: Updated AboutCar table headers and data to match provided screenshot, reflecting correct Arabic column names and sample data, no buttons included, no Context7 research required for this change.
-- 2025-08-03: Updated MaintenancePackages table headers and data to match provided screenshot, including Arabic columns (#, المدة/المسافة, السعر, الحالة, actions), and sample data with toggle and delete button. No Context7 research required for this change.
 - 2025-08-10: Completely rewrote font implementation for "Helvetica Neue W23 for SKY" custom font. Moved font files to public directory, updated @font-face declarations with modern best practices (font-display: swap, WOFF2 priority), configured Tailwind CSS with CSS-first approach, added font preloading in HTML head, and fixed table styling issues where numbers appeared bold. Fixed critical issue where English fonts appeared bold by correcting @font-face declarations - discovered we only have the bold variant (Bd) of the custom font, so updated system to use "Helvetica Neue" for normal text and "Helvetica Neue W23 for SKY" only for bold text.
 
 ## Current Task - Replace Hero UI Inputs with DashboardInput Component
