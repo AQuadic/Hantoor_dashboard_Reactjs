@@ -3,8 +3,9 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import ImageInput from "@/components/general/ImageInput";
 import React, { useState } from "react";
+import { postBrand } from "@/api/models/brand/postBrand";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router-dom";
 
 const AddBrand = () => {
   const { t } = useTranslation("brands");
@@ -13,8 +14,39 @@ const AddBrand = () => {
   const [enBrand, setEnBrand] = useState("");
   const params = useParams();
   const brandId = params.id;
+  const navigate = useNavigate();
 
   const isEdit = Boolean(brandId);
+
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    setError(null);
+    setSuccess(null);
+    try {
+      const response = await postBrand({
+        name: { ar: arBrand, en: enBrand },
+        image: profileImage,
+      });
+      // Accept any valid response, even if response.success is missing
+      if (
+        response &&
+        (response.success === undefined || response.success === true)
+      ) {
+        setSuccess(response.message || "Brand added successfully.");
+        navigate("/brands");
+      } else {
+        setError(response.message || "Failed to add brand.");
+      }
+    } catch (err) {
+      setError((err as Error)?.message || "An error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // const oldValues = {
   //   image: "aaa",
@@ -63,7 +95,14 @@ const AddBrand = () => {
             />
           </div>
 
-          <DashboardButton titleAr=" اضافة" titleEn="Add" />
+          <DashboardButton
+            titleAr=" اضافة"
+            titleEn="Add"
+            onClick={handleSubmit}
+            isLoading={loading}
+          />
+          {error && <div className="text-red-500 mt-2">{error}</div>}
+          {success && <div className="text-green-500 mt-2">{success}</div>}
         </div>
       </div>
     </div>
