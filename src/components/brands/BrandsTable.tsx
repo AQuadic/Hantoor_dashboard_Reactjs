@@ -12,11 +12,34 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 
+interface BrandImage {
+  id: number;
+  model_type: string;
+  model_id: number;
+  uuid: string;
+  collection_name: string;
+  name: string;
+  file_name: string;
+  mime_type: string;
+  disk: string;
+  conversions_disk: string;
+  size: number;
+  manipulations: unknown[];
+  custom_properties: unknown[];
+  generated_conversions: unknown[];
+  responsive_images: unknown[];
+  order_column: number;
+  created_at: string;
+  updated_at: string;
+  original_url: string;
+  preview_url: string;
+}
+
 interface Brand {
   id: number;
   name: { ar: string; en: string };
   is_active: number;
-  image?: string;
+  image?: BrandImage;
   count?: number;
 }
 
@@ -44,9 +67,23 @@ export function BrandsTable({ brands }: BrandsTableProps) {
             <TableRow key={brand.id} noBackgroundColumns={1}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
-                {/* If brand.image exists, show it, else fallback */}
-                {brand.image ? (
-                  <img src={brand.image} alt="brand" />
+                {/* If brand.image.original_url exists, show it, else fallback */}
+                {brand.image && brand.image.original_url ? (
+                  (() => {
+                    // Clean double slashes in URL
+                    const url = brand.image.original_url.replace(
+                      /([^:]\/)\/+/,
+                      "$1/"
+                    );
+                    console.log("Brand image URL:", url);
+                    return (
+                      <img
+                        src={url}
+                        alt="brand"
+                        style={{ maxWidth: 60, maxHeight: 40 }}
+                      />
+                    );
+                  })()
                 ) : (
                   <span>{t("noImage")}</span>
                 )}
