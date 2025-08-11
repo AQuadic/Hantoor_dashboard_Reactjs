@@ -1,13 +1,20 @@
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { postNumberOfSeats } from "@/api/models/seats/postNumOfSeats";
 
 const AddSeats = () => {
   const { t } = useTranslation("models");
+  const navigate = useNavigate();
+
   const [arSeatsNumbers, setArSeatsNumbers] = useState("");
   const [enSeatsNumbers, setEnSeatsNumbers] = useState("");
+  const [loading, setLoading] = useState(false);
+
   return (
     <div>
       <DashboardHeader
@@ -50,7 +57,27 @@ const AddSeats = () => {
             />
           </div>
 
-          <DashboardButton titleAr="اضافة" titleEn="Add" />
+          <DashboardButton
+            titleAr={loading ? "...جاري الإضافة" : "اضافة"}
+            titleEn={loading ? "Adding..." : "Add"}
+            isLoading={loading}
+            onClick={async () => {
+              setLoading(true);
+              try {
+                await postNumberOfSeats({
+                  name: {
+                    ar: arSeatsNumbers,
+                    en: enSeatsNumbers,
+                  },
+                });
+                navigate("/models");
+              } catch {
+                // optionally handle error here (toast, etc)
+              } finally {
+                setLoading(false);
+              }
+            }}
+          />
         </div>
       </div>
     </div>

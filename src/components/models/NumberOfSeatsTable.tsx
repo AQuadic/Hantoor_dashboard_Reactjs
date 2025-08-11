@@ -10,25 +10,17 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import { getSeats, numOfSeats } from "@/api/models/seats/getSeats";
+import { useQuery } from "@tanstack/react-query";
 
 export function NumberOfSeatsTable() {
-  const brands = [
-    {
-      id: 1,
-      model: " 2",
-      owner: "الشركة الدولية التجارية",
-    },
-    {
-      id: 1,
-      model: " 4",
-      owner: "الشركة الدولية التجارية",
-    },
-    {
-      id: 1,
-      model: " 5",
-      owner: "الشركة الدولية التجارية",
-    },
-  ];
+  const { data: seats, isLoading, error } = useQuery<numOfSeats[]>({
+    queryKey: ["seats"],
+    queryFn: getSeats,
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error loading seats.</div>;
 
   return (
     <Table>
@@ -40,13 +32,13 @@ export function NumberOfSeatsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brands.map((brand, index) => (
-          <TableRow key={brand.id} noBackgroundColumns={1}>
+        {seats?.map((seat, index) => (
+          <TableRow key={seat.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell className="w-full">{brand.model}</TableCell>
+            <TableCell className="w-full">{seat.name.ar}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
-              <Link to={`/seats/edit/${brand.id}`}>
+              <Switch isSelected={seat.is_active} />
+              <Link to={`/seats/edit/${seat.id}`}>
                 <Edit />
               </Link>
 
