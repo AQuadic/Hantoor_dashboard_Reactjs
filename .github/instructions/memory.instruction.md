@@ -1,9 +1,5 @@
 # 2025-08-03: Implemented a fully controlled Slate React rich text editor in DashboardTextEditor.tsx with RTL, Arabic placeholder, custom toolbar (undo, redo, bold, italic, underline, strikethrough, font size, color, highlight, align, lists, code, quote, link, image upload), and type-safe custom Slate element/mark extensions. Toolbar is compact, ordered as in screenshot, and uses Lucide icons. File-based image upload (data URL) is supported. All compile and type errors resolved. Toolbar and UI match provided screenshot. Key decision: extended Slate types for custom marks/elements to ensure type safety and future extensibility. All dependencies installed and code follows project conventions. All user-requested features implemented and validated.
 
----
-
-## applyTo: "\*\*"
-
 # User Memory
 
 ## User Preferences
@@ -23,11 +19,13 @@
 
 ## Coding Patterns
 
-- Functional React components
-- Use of hooks for state and effects
-- Modular code organization
-- Testing via manual and automated means
-- Documentation via code comments and README
+Functional React components
+Use of hooks for state and effects
+Modular code organization
+Testing via manual and automated means
+Documentation via code comments and README
+2025-08-11: Refactored src/lib/axios.ts for best practices: - Renamed axios instance to axiosInstance to avoid naming conflict - Improved SSR/test error handling (window check before redirect) - Enhanced logging clarity and consistency - Ensured correct export and usage of axiosInstance - All compile and type errors resolved - No actionable Context7 docs found, used expert knowledge and verified with internet sources
+Memory updated for future reference.
 
 - 2025-08-11: Implemented robust Axios interceptor setup in src/lib/axios.ts. Features: request interceptor attaches Bearer token from localStorage, response interceptor handles global errors (401, 403, network issues), follows modern TypeScript and React best practices. All compile and type errors resolved. Axios and types installed. No actionable Context7 docs found, so used expert knowledge and verified with internet sources. Memory updated for future reference.
 
