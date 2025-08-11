@@ -38,7 +38,7 @@ export function PriceToTable() {
       </TableHeader>
       <TableBody>
         {priceto.map((price, index) => (
-          <TableRow key={price.id}>
+          <TableRow key={price.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{price.price}</TableCell>
             <TableCell className="flex gap-[7px] items-center">

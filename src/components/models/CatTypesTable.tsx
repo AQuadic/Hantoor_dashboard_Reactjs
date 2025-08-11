@@ -45,7 +45,7 @@ export function CarTypesTable() {
       </TableHeader>
       <TableBody>
         {carTypes.map((car, index) => (
-          <TableRow key={car.id}>
+          <TableRow key={car.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>{car.type}</TableCell>
             <TableCell className="w-full">{car.model}</TableCell>

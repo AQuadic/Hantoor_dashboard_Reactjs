@@ -44,7 +44,7 @@ export function CategoriesTable() {
       </TableHeader>
       <TableBody>
         {previousYearModels.map((item, index) => (
-          <TableRow key={item.id}>
+          <TableRow key={item.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>{item.model}</TableCell>
             <TableCell className="w-full">{item.status}</TableCell>

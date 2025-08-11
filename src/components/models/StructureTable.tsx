@@ -44,14 +44,14 @@ export function StructureTable() {
       </TableHeader>
       <TableBody>
         {data.map((item, index) => (
-          <TableRow key={item.id}>
+          <TableRow key={item.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>{item.type}</TableCell>
             <TableCell className="w-full">{item.model}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-            <Link to={`/structure-types/edit/${item.id}`}>
-              <Edit />
-            </Link>
+              <Link to={`/structure-types/edit/${item.id}`}>
+                <Edit />
+              </Link>
               <div className="mt-2">
                 <TableDeleteButton handleDelete={() => {}} />
               </div>

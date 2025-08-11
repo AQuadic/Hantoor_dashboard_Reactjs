@@ -41,7 +41,7 @@ export function BrandOriginTable() {
       </TableHeader>
       <TableBody>
         {brandOrigins.map((brand, index) => (
-          <TableRow key={brand.id}>
+          <TableRow key={brand.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className={"w-full"}>{brand.origin}</TableCell>
             <TableCell className="flex gap-[7px] items-center">

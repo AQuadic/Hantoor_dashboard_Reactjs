@@ -41,7 +41,7 @@ export function NumberOfSeatsTable() {
       </TableHeader>
       <TableBody>
         {brands.map((brand, index) => (
-          <TableRow key={brand.id}>
+          <TableRow key={brand.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{brand.model}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
