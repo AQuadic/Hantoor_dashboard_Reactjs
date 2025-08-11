@@ -10,71 +10,62 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
-import brand1 from '/images/brand/brand1.svg'
-import brand2 from '/images/brand/brand2.svg'
-import brand3 from '/images/brand/brand3.svg'
-import brand4 from '/images/brand/brand4.svg'
+import { useTranslation } from "react-i18next";
 
-export function BrandsTable() {
-  const brands = [
-    {
-      id: 1,
-      image: brand1,
-      name: "محمد احمد",
-      count: 22,
-    },
-    {
-      id: 2,
-      image: brand2,
-      name: "محمد احمد",
-      count: 22,
-    },
-    {
-      id: 3,
-      image: brand3,
-      name: "محمد احمد",
-      count: 22,
-    },
-      {
-      id: 3,
-      image: brand4,
-      name: "محمد احمد",
-      count: 22,
-    },
-  ];
+interface Brand {
+  id: number;
+  name: { ar: string; en: string };
+  is_active: number;
+  image?: string;
+  count?: number;
+}
+
+interface BrandsTableProps {
+  brands?: Brand[];
+}
+
+export function BrandsTable({ brands }: BrandsTableProps) {
+  const { t, i18n } = useTranslation("brands");
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">الصورة</TableHead>
-          <TableHead className="text-right">اسم الماركة</TableHead>
-          <TableHead className="text-right">عدد السيارات</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t("brandImage")}</TableHead>
+          <TableHead className="text-right">{t("brandName")}</TableHead>
+          <TableHead className="text-right">{t("count")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brands.map((brand, index) => (
-          <TableRow key={brand.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
-            <TableCell>
-              <img src={brand.image} alt="brand" />
-            </TableCell>
-            <TableCell>{brand.name}</TableCell>
-            <TableCell className="w-full">{brand.count}</TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch />
-              <Link to="/brands/1">
-                <Edit />
-              </Link>
-
-              <div className="mt-2">
-              <TableDeleteButton handleDelete={() => {}} />
-              </div>
-            </TableCell>
-          </TableRow>
-        ))}
+        {brands &&
+          brands.map((brand, index) => (
+            <TableRow key={brand.id} noBackgroundColumns={1}>
+              <TableCell>{index + 1}</TableCell>
+              <TableCell>
+                {/* If brand.image exists, show it, else fallback */}
+                {brand.image ? (
+                  <img src={brand.image} alt="brand" />
+                ) : (
+                  <span>{t("noImage")}</span>
+                )}
+              </TableCell>
+              <TableCell>
+                {i18n.language === "ar" ? brand.name.ar : brand.name.en}
+              </TableCell>
+              <TableCell className="w-full">{brand.count ?? "-"}</TableCell>
+              <TableCell className="flex gap-[7px] items-center">
+                <Switch checked={!!brand.is_active} />
+                <Link to={`/brands/${brand.id}`}>
+                  <Edit />
+                </Link>
+                <div className="mt-2">
+                  <TableDeleteButton handleDelete={() => {}} />
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
       </TableBody>
     </Table>
   );

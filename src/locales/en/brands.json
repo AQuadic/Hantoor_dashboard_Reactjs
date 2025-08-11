@@ -1,8 +1,10 @@
 {
-    "profileImage": "Profile Image",
-    "mainData": "Main Data",
-    "arBrand": "Brand Name (in Arabic)",
-    "enBrand": "Brand Name (in English)",
-    "writeHere": "Write here",
-    "brandImage": "Brand Image"
+  "profileImage": "Profile Image",
+  "mainData": "Main Data",
+  "arBrand": "Brand Name (in Arabic)",
+  "enBrand": "Brand Name (in English)",
+  "writeHere": "Write here",
+  "brandImage": "Brand Image",
+  "brandName": "Brand Name",
+  "count": "Count"
 }
