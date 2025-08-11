@@ -12,13 +12,18 @@ import {
 import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { EngineType, getEngineType } from "@/api/models/engineTypes/getEngineType";
+import { deleteEngineType } from "@/api/models/engineTypes/deleteEngineType";
 
 export function EngineTypesTable() {
-  const { data: engineTypes } = useQuery<EngineType[]>({
+  const { data: engineTypes, refetch } = useQuery<EngineType[]>({
     queryKey: ["engineTypes"],
     queryFn: getEngineType,
   });
 
+  const handleDelete = async (id: number) => {
+    await deleteEngineType(id);
+    refetch();
+  };
 
   return (
     <Table>
@@ -41,7 +46,7 @@ export function EngineTypesTable() {
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(engine.id)} />
               </div>
             </TableCell>
           </TableRow>
