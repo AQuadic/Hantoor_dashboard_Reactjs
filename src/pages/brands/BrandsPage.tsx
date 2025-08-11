@@ -3,28 +3,22 @@ import { BrandsTable } from "@/components/brands/BrandsTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBrands } from "@/api/models/brand/fetchBrands";
+import { fetchBrands, BrandsApiResponse } from "@/api/models/brand/fetchBrands";
 
 const BrandsPage = () => {
-  const [curentPage, setCurrentPage] = React.useState(1);
-  const [itemsPerPage] = React.useState(10);
-  const [totalItems] = React.useState(100); // Example total items, replace with actual data
-  const [totalPages] = React.useState(Math.ceil(totalItems / itemsPerPage));
+  const [currentPage, setCurrentPage] = React.useState(1);
 
-  const {
-    data: brands,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["brands"],
-    queryFn: fetchBrands,
+  const { data, isLoading, error } = useQuery<BrandsApiResponse>({
+    queryKey: ["brands", currentPage],
+    queryFn: () => fetchBrands(currentPage),
+    placeholderData: undefined,
   });
 
   React.useEffect(() => {
-    if (brands) {
-      console.log("Fetched brands:", brands);
+    if (data) {
+      console.log("Fetched brands:", data.data);
     }
-  }, [brands]);
+  }, [data]);
 
   if (isLoading) {
     return <div>Loading brands...</div>;
@@ -37,13 +31,13 @@ const BrandsPage = () => {
     <section>
       <BrandsHeader />
       <div className="px-2 md:px-8">
-        <BrandsTable brands={brands} />
+        <BrandsTable brands={data?.data ?? []} />
         <TablePagination
-          currentPage={curentPage}
+          currentPage={data?.current_page ?? 1}
           setCurrentPage={setCurrentPage}
-          totalPages={totalPages}
-          totalItems={totalItems}
-          itemsPerPage={itemsPerPage}
+          totalPages={data?.last_page ?? 1}
+          totalItems={data?.total ?? 0}
+          itemsPerPage={data?.per_page ?? 15}
         />
       </div>
     </section>

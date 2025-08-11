@@ -10,7 +10,24 @@ export interface Brand {
   count?: number;
 }
 
-export async function fetchBrands(): Promise<Brand[]> {
-  const response = await axios.get("/admin/brands");
-  return response.data as Brand[];
+export interface BrandsApiResponse {
+  current_page: number;
+  data: Brand[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+}
+
+export async function fetchBrands(
+  page: number = 1
+): Promise<BrandsApiResponse> {
+  const response = await axios.get(`/admin/brands?page=${page}`);
+  return response.data as BrandsApiResponse;
 }
