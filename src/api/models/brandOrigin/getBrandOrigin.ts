@@ -11,7 +11,12 @@ export interface BrandOrigin {
     updated_at: string;
 }
 
+interface BrandOriginResponse {
+    current_page: number;
+    data: BrandOrigin[];
+}
+
 export const getBrandOrigin = async (): Promise<BrandOrigin[]> => {
-    const res = await axios.get<BrandOrigin[]>("/admin/brand-origin");
-    return res.data;
+    const res = await axios.get<BrandOriginResponse>("/admin/brand-origin");
+    return res.data.data;
 };
