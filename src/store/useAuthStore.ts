@@ -58,7 +58,11 @@ export const useAuthStore = create<AuthState>()(
             "response" in error &&
             typeof (error as { response?: unknown }).response === "object"
           ) {
-            const errResp = (error as { response?: { status?: number; data?: { message?: string } } }).response;
+            const errResp = (
+              error as {
+                response?: { status?: number; data?: { message?: string } };
+              }
+            ).response;
             if (errResp?.status === 401) {
               errorMsg = "Invalid email or password";
             } else if (errResp?.status === 429) {
