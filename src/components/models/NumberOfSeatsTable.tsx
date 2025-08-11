@@ -12,15 +12,18 @@ import {
 import { Switch } from "@heroui/react";
 import { getSeats, numOfSeats } from "@/api/models/seats/getSeats";
 import { useQuery } from "@tanstack/react-query";
+import { deleteSeats } from "@/api/models/seats/deleteSeats";
 
 export function NumberOfSeatsTable() {
-  const { data: seats, isLoading, error } = useQuery<numOfSeats[]>({
+  const { data: seats, refetch } = useQuery<numOfSeats[]>({
     queryKey: ["seats"],
     queryFn: getSeats,
   });
 
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error loading seats.</div>;
+    const handleDelete = async (id: number) => {
+      await deleteSeats(id);
+      refetch();
+    };
 
   return (
     <Table>
@@ -43,7 +46,9 @@ export function NumberOfSeatsTable() {
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(seat.id)}
+                />
               </div>
             </TableCell>
           </TableRow>
