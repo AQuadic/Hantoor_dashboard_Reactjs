@@ -41,7 +41,7 @@ const Layout = () => {
               className="absolute inset-0 w-full min-h-full"
             >
               <Outlet />
-              <div className="pb-8" />
+              {!isLoginOrRelatedPage && <div className="pb-8" />}
             </motion.div>
           </AnimatePresence>
         </div>
