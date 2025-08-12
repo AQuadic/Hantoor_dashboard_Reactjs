@@ -49,8 +49,11 @@ export interface BrandsApiResponse {
 }
 
 export async function fetchBrands(
-  page: number = 1
+  page: number = 1,
+  searchTerm: string = ""
 ): Promise<BrandsApiResponse> {
-  const response = await axios.get(`/admin/brands?page=${page}`);
+  const params: Record<string, string | number> = { page };
+  if (searchTerm) params.search = searchTerm;
+  const response = await axios.get(`/admin/brands`, { params });
   return response.data as BrandsApiResponse;
 }

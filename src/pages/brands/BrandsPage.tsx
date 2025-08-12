@@ -4,13 +4,20 @@ import TablePagination from "@/components/general/dashboard/table/TablePaginatio
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBrands, BrandsApiResponse } from "@/api/brand/fetchBrands";
+import { useTranslation } from "react-i18next";
 
 const BrandsPage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchTermAr, setSearchTermAr] = React.useState("");
+  const [searchTermEn, setSearchTermEn] = React.useState("");
+
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+  const searchTerm = isArabic ? searchTermAr : searchTermEn;
 
   const { data, isLoading, error } = useQuery<BrandsApiResponse>({
-    queryKey: ["brands", currentPage],
-    queryFn: () => fetchBrands(currentPage),
+    queryKey: ["brands", currentPage, searchTerm],
+    queryFn: () => fetchBrands(currentPage, searchTerm),
     placeholderData: undefined,
   });
 
@@ -29,7 +36,12 @@ const BrandsPage = () => {
 
   return (
     <section>
-      <BrandsHeader />
+      <BrandsHeader
+        termAr={searchTermAr}
+        termEn={searchTermEn}
+        setTermAr={setSearchTermAr}
+        setTermEn={setSearchTermEn}
+      />
       <div className="px-2 md:px-8">
         <BrandsTable brands={data?.data ?? []} />
         <TablePagination

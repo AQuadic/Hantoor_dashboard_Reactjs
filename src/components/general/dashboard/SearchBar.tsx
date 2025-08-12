@@ -20,14 +20,30 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
 
-  const value = isArabic ? termAr : termEn;
+  // Local state for instant input update
+  const [inputValue, setInputValue] = React.useState(
+    isArabic ? termAr : termEn
+  );
+
+  // Sync local state with parent value if language or parent value changes
+  React.useEffect(() => {
+    setInputValue(isArabic ? termAr : termEn);
+  }, [isArabic, termAr, termEn]);
+
+  // Debounce the search callback only
+  React.useEffect(() => {
+    const handler = setTimeout(() => {
+      if (isArabic) {
+        setTermAr(inputValue);
+      } else {
+        setTermEn(inputValue);
+      }
+    }, 400);
+    return () => clearTimeout(handler);
+  }, [inputValue, isArabic, setTermAr, setTermEn]);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    if (isArabic) {
-      setTermAr(val);
-    } else {
-      setTermEn(val);
-    }
+    setInputValue(e.target.value);
   };
 
   return (
@@ -37,7 +53,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
         type="text"
         placeholder={placeholder}
         className="w-full border-none outline-none ltr:ml-3 rtl:mr-3 text-[#606C7E]"
-        value={value}
+        value={inputValue}
         onChange={onChange}
       />
     </div>
