@@ -124,8 +124,8 @@ const Login = () => {
   };
 
   return (
-    <section className="flex items-center justify-between gap-4 !bg-white">
-      <div className="w-1/2 h-screen bg-[#F4F4FE] flex items-center justify-center">
+    <section className="flex md:flex-row flex-col items-center justify-between gap-4 !bg-white">
+      <div className="md:w-1/2 w-full md:h-screen bg-[#F4F4FE] flex items-center justify-center">
         <img src="/images/login/loginLogo.gif" alt="logo" />
       </div>
 
