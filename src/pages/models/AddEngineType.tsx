@@ -3,6 +3,7 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -71,9 +72,14 @@ const AddEngineType = () => {
                     en: enEngineType,
                   },
                 });
+                toast.success(t("engineTypeAdded"))
                 navigate("/models");
-              } catch {
-                // Optionally handle errors (toast, alert, etc)
+              } catch (error: any) {
+                const errorMsg =
+                  error?.response?.data?.message ||
+                  error?.message ||
+                  t("somethingWentWrong");
+                toast.error(errorMsg);
               } finally {
                 setLoading(false);
               }

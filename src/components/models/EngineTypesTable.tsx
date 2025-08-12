@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { EngineType, getEngineType } from "@/api/models/engineTypes/getEngineType";
 import { deleteEngineType } from "@/api/models/engineTypes/deleteEngineType";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 
 export function EngineTypesTable() {
   const { t } = useTranslation("models");
@@ -24,6 +25,7 @@ export function EngineTypesTable() {
 
   const handleDelete = async (id: number) => {
     await deleteEngineType(id);
+    toast.success(t('engineTypeDeleted'))
     refetch();
   };
 

@@ -14,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import { EngineSize, getEngineSize } from "@/api/models/engineSize/getEnginSize";
 import { deleteEngineSize } from "@/api/models/engineSize/deleteEngineSize";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 
 export function EngineSizesTable() {
   const { t } = useTranslation("models");
@@ -24,6 +25,7 @@ export function EngineSizesTable() {
 
   const handleDelete = async (id: number) => {
     await deleteEngineSize(id);
+    toast.success(t('engineSizeDeleted'))
     refetch();
   };
 

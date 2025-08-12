@@ -5,6 +5,7 @@ import { Input } from "@heroui/react";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { updateEngineSize } from "@/api/models/engineSize/editEngineSize";
+import toast from "react-hot-toast";
 
 const EditEngineSize = () => {
   const { t } = useTranslation("models");
@@ -28,9 +29,14 @@ const EditEngineSize = () => {
       await updateEngineSize(Number(id), {
         name: { ar: arSize, en: enSize },
       });
+      toast.success(t('engineSizeEdited'))
       navigate("/models");
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to update engine size");
+      const errorMsg =
+        err?.response?.data?.message ||
+        err?.message ||
+        t("somethingWentWrong");
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
