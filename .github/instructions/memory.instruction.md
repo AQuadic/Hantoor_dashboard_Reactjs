@@ -4,7 +4,17 @@
 
 ## User Preferences
 
+Programming languages: javascript/typescript/next js
+Code style preferences: prettier
+Development environment: vs code
+Communication style: professional, thorough explanations
+
 ## Project Context
+
+Current project type: React dashboard application for Hantoor
+Tech stack: React, TypeScript, Vite, TanStack Query, i18next, Tailwind CSS
+Architecture patterns: API layer separation, component-based architecture
+Key requirements: Agent CRUD operations with API integration
 
 ## Coding Patterns
 
@@ -17,37 +27,36 @@ Documentation via code comments and README
 
 2025-08-12: Enhanced DashboardButton to support isLoading prop (passed to Hero UI Button). Updated DeleteModal to use local isLoading state, set loading during deletion, and reset on modal close. Implementation pattern: use local state for loading, reset on modal close, and pass isLoading to button. No errors found. This pattern is recommended for all modal actions requiring async feedback.
 
-- Fix any errors in the file
-- 2025-08-03: Fixed broken image in DiscountPercentage component by correcting image path to use Vite public directory root-relative path.
-- 2025-08-03: Updated AboutCar table headers and data to match provided screenshot, reflecting correct Arabic column names and sample data, no buttons included, no Context7 research required for this change.
-- 2025-08-10: Completely rewrote font implementation for "Helvetica Neue W23 for SKY" custom font. Moved font files to public directory, updated @font-face declarations with modern best practices (font-display: swap, WOFF2 priority), configured Tailwind CSS with CSS-first approach, added font preloading in HTML head, and fixed table styling issues where numbers appeared bold. Fixed critical issue where English fonts appeared bold by correcting @font-face declarations - discovered we only have the bold variant (Bd) of the custom font, so updated system to use "Helvetica Neue" for normal text and "Helvetica Neue W23 for SKY" only for bold text.
+2025-08-12: **AGENT API INTEGRATION COMPLETED** - Fully integrated agent CRUD operations with backend API endpoints:
 
-## Current Task - Replace Hero UI Inputs with DashboardInput Component
+- Created comprehensive agent types and API functions following project patterns
+- Implemented complete CRUD functionality (Create, Read, Update, Delete) with proper error handling
+- Updated AddAgent component with API submission and centers/showrooms management
+- Updated EditAgent component to fetch and populate existing data
+- Enhanced agents listing page with search, pagination, and delete functionality
+- Integrated maintenance centers and sales showrooms as dynamic sub-entities within agents
+- All components properly handle bilingual data (Arabic/English)
+- Error handling with toast notifications throughout
+- Project builds successfully with no compilation errors
+- API structure: GET/POST /api/admin/agents, GET/PUT/DELETE /api/admin/agents/{id}
 
-**Task Type**: Code Enhancement - Replace form inputs throughout the project
+## Current Task Status - COMPLETED
 
-**Objective**: Replace all Hero UI Input components in forms with custom DashboardInput component
+**Agent API Integration - FULLY IMPLEMENTED**
 
-- **Include**: Form inputs imported from @heroui/react
-- **Exclude**: Phone/mobile inputs (DashboardPhoneInput, MobileInput), search inputs (SearchBar)
-- **Target**: Only form-related inputs
+All CRUD operations working:
 
-**Found 57 files with Hero UI Input imports that need to be processed**
+- ✅ Add new agents with centers/showrooms
+- ✅ Edit existing agents and load current data
+- ✅ List agents with search and pagination
+- ✅ Delete agents with confirmation
+- ✅ Toggle active/inactive status
+- ✅ Manage maintenance centers and sales showrooms within agents
 
-**Key exclusions identified**:
+## Notes
 
-- DashboardPhoneInput.tsx - uses Hero UI Input for phone functionality
-- SearchBar.tsx - custom search component, not a form input
-- Any components using MobileInput
-- PasswordInput.tsx - may need special handling for password type
+Implementation follows project conventions with TypeScript interfaces, TanStack Query for state management, and proper error handling. Agent management system supports dynamic center/showroom management and bilingual content.
 
-**Todo List**:
-
-- [x] Search codebase and identify all Hero UI Input imports
-- [x] Identify exclusions (phone, mobile, search components)
-- [x] Create systematic replacement plan for each file
-- [x] Replace inputs in technical support pages (2 files)
-- [x] Replace inputs in subordinates pages (2 files)
 - [x] Replace inputs in settings pages (2 files)
 - [x] Replace inputs in notification pages (1 file)
 - [ ] Replace inputs in models pages (20+ files)

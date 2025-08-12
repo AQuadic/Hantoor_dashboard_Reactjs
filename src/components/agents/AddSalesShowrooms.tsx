@@ -1,10 +1,11 @@
-import { Input } from '@heroui/react'
-import Add from '../icons/banks/Add'
-import DashboardButton from '../general/dashboard/DashboardButton'
-import { useTranslation } from 'react-i18next';
-import MobileInput from '../general/MobileInput';
-import { useState } from 'react';
+import DashboardInput from "../general/DashboardInput";
+import Add from "../icons/banks/Add";
+import { useTranslation } from "react-i18next";
+import MobileInput from "../general/MobileInput";
+import { useState } from "react";
 import { countries } from "countries-list";
+import { AgentCenter } from "@/api/agents/fetchAgents";
+import { X } from "lucide-react";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -16,99 +17,155 @@ const getCountryByIso2 = (iso2: string) => {
   };
 };
 
-const AddSalesShowrooms = () => {
-    const { t } = useTranslation("agents");
-        const [selectedCountry, setSelectedCountry] = useState(
-            getCountryByIso2("EG")
-        );
-        const [phone, setPhone] = useState("");
-    return (
-        <div className="bg-white mt-6 rounded-[15px]">
-        <div className="flex flex-col md:flex-row gap-[15px]">
-            <div className="w-full">
-            <Input
-                label={t('arShowRooms')}
-                variant="bordered"
-                placeholder={t('placeholderName')}
-                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
-                size="lg"
-            />
-            </div>
-            <div className="w-full">
-            <Input
-                label={t('enShowRooms')}
-                variant="bordered"
-                placeholder={t('placeholderName')}
-                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
-                size="lg"
-            />
-            </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-[15px] mt-4">
-            <div className="w-full">
-            <Input
-                label={t('arAddress')}
-                variant="bordered"
-                placeholder={t('writeHere')}
-                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
-                size="lg"
-            />
-            </div>
-            <div className="w-full">
-            <Input
-                label={t('enAddress')}
-                variant="bordered"
-                placeholder={t('writeHere')}
-                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
-                size="lg"
-            />
-            </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row gap-[15px] mt-4">
-            <div className="w-full">
-            <Input
-                label={t('linkGoogleMap')}
-                variant="bordered"
-                placeholder={t('writeHere')}
-                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
-                size="lg"
-            />
-            </div>
-            <div className="relative w-full">
-                <MobileInput
-                    selectedCountry={selectedCountry}
-                    setSelectedCountry={setSelectedCountry}
-                    phone={phone}
-                    setPhone={setPhone}
-                />
-                <div className="absolute top-9 left-5"></div>
-            </div>
-        </div>
-
-        <div className='mt-4 w-1/2'>
-            <div className="w-full">
-            <Input
-                label={t('whatsApp')}
-                variant="bordered"
-                placeholder="123456789"
-                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
-                size="lg"
-            />
-            </div>
-        </div>
-
-        <div className='w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer mt-5'>
-            <Add />
-            <p className='text-[#2A32F8] text-base'>{t('addShowroom')}</p>
-        </div>
-
-        <div className="mt-6">
-            <DashboardButton titleAr="حفظ" titleEn="Save" />
-        </div>
-        </div>
-    )
+interface AddSalesShowroomsProps {
+  onAddCenter: (center: AgentCenter) => void;
+  onRemoveCenter: (index: number) => void;
+  centers: AgentCenter[];
+  type: "center" | "show_room";
 }
 
-export default AddSalesShowrooms
+const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
+  onAddCenter,
+  onRemoveCenter,
+  centers,
+  type,
+}) => {
+  const { t } = useTranslation("agents");
+  const [selectedCountry, setSelectedCountry] = useState(
+    getCountryByIso2("EG")
+  );
+  const [phone, setPhone] = useState("");
+  const [arName, setArName] = useState("");
+  const [enName, setEnName] = useState("");
+  const [arDescription, setArDescription] = useState("");
+  const [enDescription, setEnDescription] = useState("");
+  const [whatsapp, setWhatsapp] = useState("");
+
+  const handleAddShowroom = () => {
+    if (!arName || !enName || !phone) {
+      return;
+    }
+
+    const newShowroom: AgentCenter = {
+      name: {
+        ar: arName,
+        en: enName,
+      },
+      description: {
+        ar: arDescription,
+        en: enDescription,
+      },
+      phone,
+      whatsapp,
+      type,
+      is_active: true,
+    };
+
+    onAddCenter(newShowroom);
+
+    // Reset form
+    setArName("");
+    setEnName("");
+    setArDescription("");
+    setEnDescription("");
+    setPhone("");
+    setWhatsapp("");
+  };
+  return (
+    <div className="bg-white mt-6 rounded-[15px]">
+      <div className="flex flex-col md:flex-row gap-[15px]">
+        <div className="w-full">
+          <DashboardInput
+            label={t("arShowRooms")}
+            value={arName}
+            onChange={setArName}
+            placeholder={t("placeholderName")}
+          />
+        </div>
+        <div className="w-full">
+          <DashboardInput
+            label={t("enShowRooms")}
+            value={enName}
+            onChange={setEnName}
+            placeholder={t("placeholderName")}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-[15px] mt-4">
+        <div className="w-full">
+          <DashboardInput
+            label={t("arDescription")}
+            value={arDescription}
+            onChange={setArDescription}
+            placeholder={t("writeHere")}
+          />
+        </div>
+        <div className="w-full">
+          <DashboardInput
+            label={t("enDescription")}
+            value={enDescription}
+            onChange={setEnDescription}
+            placeholder={t("writeHere")}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-[15px] mt-4">
+        <div className="relative w-full">
+          <MobileInput
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+            phone={phone}
+            setPhone={setPhone}
+          />
+          <div className="absolute top-9 left-5"></div>
+        </div>
+        <div className="w-full">
+          <DashboardInput
+            label={t("whatsApp")}
+            value={whatsapp}
+            onChange={setWhatsapp}
+            placeholder="123456789"
+          />
+        </div>
+      </div>
+
+      <div
+        className="w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer mt-5"
+        onClick={handleAddShowroom}
+      >
+        <Add />
+        <p className="text-[#2A32F8] text-base">{t("addShowroom")}</p>
+      </div>
+
+      {/* Display added showrooms */}
+      {centers.length > 0 && (
+        <div className="mt-4 space-y-2">
+          <h4 className="font-semibold">{t("addedShowrooms")}</h4>
+          {centers.map((center, index) => (
+            <div
+              key={index}
+              className="flex items-center justify-between bg-gray-50 p-3 rounded-lg"
+            >
+              <div>
+                <p className="font-medium">
+                  {center.name.ar} / {center.name.en}
+                </p>
+                <p className="text-sm text-gray-600">{center.phone}</p>
+              </div>
+              <button
+                onClick={() => onRemoveCenter(index)}
+                className="text-red-500 hover:text-red-700"
+              >
+                <X size={16} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AddSalesShowrooms;

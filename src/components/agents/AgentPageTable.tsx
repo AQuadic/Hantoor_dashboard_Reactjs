@@ -1,77 +1,78 @@
 import { Link } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import Edit from "../icons/general/Edit";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { Switch } from "@heroui/react";
 import Copy from "../icons/agents/Copy";
 import View from "../icons/general/View";
+import { Agent } from "@/api/agents/fetchAgents";
 
-const AgentPageTable = () => {
-    const agents = [
-    {
-        id: 1,
-        name:"الشركة الدولية التجارية",
-        country: "الامارات",
-        count: 6,
-        date: "22/03/2024- 08:30 PM"
-    },
-    {
-        id: 2,
-        name:"غبور",
-        country: "الامارات",
-        count: 8,
-        date: "22/03/2024- 08:30 PM"
-    },
-    {
-        id: 3,
-        name:"ابو ظبي للسيارات",
-        country: "الامارات",
-        count: 12,
-        date: "22/03/2024- 08:30 PM"
-    },
-    ];
-    return (
-        <Table>
-        <TableHeader>
-            <TableRow>
-            <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">اسم الوكيل</TableHead>
-            <TableHead className="text-right">عدد عناوين مراكز الصيانه</TableHead>
-            <TableHead className="text-right">عدد عناوين معارض البيع</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
-            </TableRow>
-        </TableHeader>
-        <TableBody>
-            {agents.map((agent, index) => (
-            <TableRow
-                key={agent.id}
-                noBackgroundColumns={1}
-            >
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{agent.name}</TableCell>
-                <TableCell className="">{agent.count}</TableCell>
-                <TableCell className="w-full">{agent.count}</TableCell>
-                <TableCell
-                    className="flex gap-[7px] items-center"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                <Switch />
-                <Copy />
-                <Link to={`/agent/details/${agent.id}`}>
-                    <View />
-                </Link>
-                <Link to={`/agent/edit/${agent.id}`}>
-                    <Edit />
-                </Link>
-                <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
-                </div>
-                </TableCell>
-            </TableRow>
-            ))}
-        </TableBody>
-        </Table>
-    )
+interface AgentPageTableProps {
+  agents: Agent[];
+  onDelete: (id: number) => void;
+  onToggleActive?: (id: number, isActive: boolean) => void;
 }
 
-export default AgentPageTable
+const AgentPageTable: React.FC<AgentPageTableProps> = ({
+  agents,
+  onDelete,
+  onToggleActive,
+}) => {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="text-right">#</TableHead>
+          <TableHead className="text-right">اسم الوكيل</TableHead>
+          <TableHead className="text-right">عدد عناوين مراكز الصيانه</TableHead>
+          <TableHead className="text-right">عدد عناوين معارض البيع</TableHead>
+          <TableHead className="text-right">الحالة</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {agents.map((agent, index) => (
+          <TableRow key={agent.id} noBackgroundColumns={1}>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell>{agent.name.ar}</TableCell>
+            <TableCell className="">
+              {agent.centers?.filter((c) => c.type === "center").length || 0}
+            </TableCell>
+            <TableCell className="w-full">
+              {agent.centers?.filter((c) => c.type === "show_room").length || 0}
+            </TableCell>
+            <TableCell
+              className="flex gap-[7px] items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Switch
+                isSelected={!!agent.is_active}
+                onValueChange={(isSelected) =>
+                  onToggleActive?.(agent.id, isSelected)
+                }
+              />
+              <Copy />
+              <Link to={`/agent/details/${agent.id}`}>
+                <View />
+              </Link>
+              <Link to={`/agent/edit/${agent.id}`}>
+                <Edit />
+              </Link>
+              <div className="mt-2">
+                <TableDeleteButton handleDelete={() => onDelete(agent.id)} />
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
+
+export default AgentPageTable;

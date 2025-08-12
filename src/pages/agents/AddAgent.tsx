@@ -5,8 +5,16 @@ import DashboardInput from "@/components/general/DashboardInput";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Brand, BrandsApiResponse, fetchBrands } from "@/api/brand/fetchBrands";
+import {
+  createAgent,
+  CreateAgentPayload,
+  AgentCenter,
+} from "@/api/agents/fetchAgents";
+import DashboardButton from "@/components/general/dashboard/DashboardButton";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
@@ -18,10 +26,14 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
   setSelectedFilter,
 }) => {
   const { t } = useTranslation("agents");
+  const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
   const [emailLink, setEmailLink] = useState("");
   const [selectedBrandId, setSelectedBrandId] = useState<string>("");
+  const [centers, setCenters] = useState<AgentCenter[]>([]);
 
   const page = 1;
   const { data: brands } = useQuery<BrandsApiResponse>({
@@ -32,6 +44,59 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
   const selectedBrand = brands?.data.find(
     (brand: Brand) => brand.id === Number(selectedBrandId)
   );
+
+  const createAgentMutation = useMutation({
+    mutationFn: createAgent,
+    onSuccess: () => {
+      toast.success(t("agentCreatedSuccess"));
+      queryClient.invalidateQueries({ queryKey: ["agents"] });
+      navigate("/agents");
+    },
+    onError: (error: unknown) => {
+      let errorMessage = t("agentCreationError");
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error
+      ) {
+        const responseError = error as {
+          response?: { data?: { message?: string } };
+        };
+        errorMessage = responseError.response?.data?.message || errorMessage;
+      }
+      toast.error(errorMessage);
+    },
+  });
+
+  const handleSubmit = () => {
+    if (!arName || !enName) {
+      toast.error(t("pleaseFilAllFields"));
+      return;
+    }
+
+    const payload: CreateAgentPayload = {
+      name: {
+        ar: arName,
+        en: enName,
+      },
+      is_active: true,
+      link: emailLink,
+      brand_id: selectedBrandId ? Number(selectedBrandId) : undefined,
+      centers: centers.length > 0 ? centers : undefined,
+    };
+
+    createAgentMutation.mutate(payload);
+  };
+
+  const addCenter = (center: AgentCenter) => {
+    setCenters((prev) => [...prev, center]);
+  };
+
+  const removeCenter = (index: number) => {
+    setCenters((prev) => prev.filter((_, i) => i !== index));
+  };
 
   return (
     <section>
@@ -118,10 +183,31 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
           setSelectedFilter={setSelectedFilter}
         />
         {selectedFilter === "Add maintenance centers" && (
-          <AddMaintenanceCenter />
+          <AddMaintenanceCenter
+            onAddCenter={addCenter}
+            onRemoveCenter={removeCenter}
+            centers={centers}
+            type="center"
+          />
         )}
 
-        {selectedFilter === "Add sales Showrooms" && <AddSalesShowrooms />}
+        {selectedFilter === "Add sales Showrooms" && (
+          <AddSalesShowrooms
+            onAddCenter={addCenter}
+            onRemoveCenter={removeCenter}
+            centers={centers}
+            type="show_room"
+          />
+        )}
+
+        <div className="mt-6 flex justify-end">
+          <DashboardButton
+            titleAr="حفظ"
+            titleEn="Save"
+            onClick={handleSubmit}
+            isLoading={createAgentMutation.isPending}
+          />
+        </div>
       </div>
     </section>
   );
