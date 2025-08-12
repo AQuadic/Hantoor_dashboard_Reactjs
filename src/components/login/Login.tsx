@@ -163,10 +163,10 @@ const Login = () => {
               disabled={storeLoading}
               autoComplete="email"
             />
-            <h2 className="text-[#000000] text-[15px] absolute top-5 right-4">
+            <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
               {t("email")}
             </h2>
-            <div className="absolute top-9 left-5">
+            <div className="absolute top-9 rtl:left-5 ltr:right-5">
               <Email />
             </div>
             {errors.email && (
@@ -194,11 +194,11 @@ const Login = () => {
               disabled={storeLoading}
               autoComplete="current-password"
             />
-            <h2 className="text-[#000000] text-[15px] absolute top-5 right-4">
+            <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
               {t("password")}
             </h2>
             <div
-              className="absolute top-9 left-5 cursor-pointer text-gray-500"
+              className="absolute top-9 rtl:left-5 ltr:right-5 cursor-pointer text-gray-500"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
