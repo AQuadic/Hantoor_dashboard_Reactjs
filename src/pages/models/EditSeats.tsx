@@ -5,6 +5,7 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { updateNumberOfSeats } from "@/api/models/seats/editNumOfSeats";
+import toast from "react-hot-toast";
 
 const EditSeats = () => {
   const { t } = useTranslation("models");
@@ -13,23 +14,26 @@ const EditSeats = () => {
 
   const [arSeatsNumbers, setArSeatsNumbers] = useState("");
   const [enSeatsNumbers, setEnSeatsNumbers] = useState("");
-  const [, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
     if (!id) {
-      setError("Invalid seat ID");
+      toast.error(t("invalidSeatId") || "Invalid seat ID");
       return;
     }
     setLoading(true);
-    setError(null);
     try {
       await updateNumberOfSeats(Number(id), {
         name: { ar: arSeatsNumbers, en: enSeatsNumbers },
       });
+      toast.success(t("seatsUpdatedSuccessfully"));
       navigate("/models");
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to update seats number");
+      const errorMsg =
+        err?.response?.data?.message ||
+        err?.message ||
+        t("somethingWentWrong");
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -41,21 +45,9 @@ const EditSeats = () => {
         titleAr="تعديل عدد المقاعد"
         titleEn="Edit number of seats"
         items={[
-          {
-            titleAr: "الصفحة الرئيسية",
-            titleEn: "Home",
-            link: "/",
-          },
-          {
-            titleAr: "اقسام السيارات ",
-            titleEn: " Car Sections",
-            link: "/models",
-          },
-          {
-            titleAr: "تعديل عدد المقاعد",
-            titleEn: "Edit number of seats",
-            link: "/",
-          },
+          { titleAr: "الصفحة الرئيسية", titleEn: "Home", link: "/" },
+          { titleAr: "اقسام السيارات ", titleEn: "Car Sections", link: "/models" },
+          { titleAr: "تعديل عدد المقاعد", titleEn: "Edit number of seats", link: "/" },
         ]}
       />
       <div className="flex flex-col gap-8 md:p-8 p-2">
@@ -65,28 +57,23 @@ const EditSeats = () => {
               <DashboardInput
                 label={t("arSeatsNumbers")}
                 value={arSeatsNumbers}
-                onChange={(val) => {
-                  setArSeatsNumbers(val);
-                  if (error) setError(null);
-                }}
+                onChange={setArSeatsNumbers}
                 placeholder="6"
               />
             </div>
             <DashboardInput
               label={t("enSeatsNumbers")}
               value={enSeatsNumbers}
-              onChange={(val) => {
-                setEnSeatsNumbers(val);
-                if (error) setError(null);
-              }}
+              onChange={setEnSeatsNumbers}
               placeholder={t("writeHere")}
             />
           </div>
 
           <DashboardButton
-            titleAr="حفظ"
-            titleEn="Save"
+            titleAr={loading ? "...جاري الحفظ" : "حفظ"}
+            titleEn={loading ? "Saving..." : "Save"}
             onClick={handleSave}
+            isLoading={loading}
           />
         </div>
       </div>

@@ -31,5 +31,8 @@
     "engineSize": "حجم الماكينة",
     "brandAddedSuccessfully": "تم اضافة منشأ الماركة بنجاح",
     "brandOriginEdited": "تم تعديل منشأ الماركة بنجاح",
-    "brandOriginDeleted": "تم حذف منشأ الماركة بنجاح"
+    "brandOriginDeleted": "تم حذف منشأ الماركة بنجاح",
+    "seatsAddedSuccessfully": "تمت إضافة المقاعد بنجاح",
+    "seatsUpdatedSuccessfully": "نم تعديل المقاعد بنجاح",
+    "seatDeletedSuccessfully": "تم حذف المقعد بنجاح"
 }
