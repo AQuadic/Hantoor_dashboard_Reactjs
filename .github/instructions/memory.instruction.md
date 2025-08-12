@@ -15,7 +15,7 @@ Testing via manual and automated means
 Documentation via code comments and README
 2025-08-11: Refactored PublicRouteGuard.tsx and PrivateRouteGuard.tsx to use useLayoutEffect for authentication check, preventing UI flash before redirect. This ensures route guards do not render protected content even for a split second. All changes validated and follow React best practices.
 
-- 2025-08-11: Implemented robust Axios interceptor setup in src/lib/axios.ts. Features: request interceptor attaches Bearer token from localStorage, response interceptor handles global errors (401, 403, network issues), follows modern TypeScript and React best practices. All compile and type errors resolved. Axios and types installed. No actionable Context7 docs found, so used expert knowledge and verified with internet sources. Memory updated for future reference.
+2025-08-12: Integrated React Hot Toast globally in Layout.tsx. Toasts styled to match Hero UI theme using CSS primary color (oklch(0.5417 0.2204 266.91) via var(--primary)). Modern look: rounded corners, shadow, correct foreground color, border, and padding. No errors found. Toasts can be triggered anywhere in app. Context7 did not provide actionable docs, so used expert knowledge and verified with internet sources. Memory updated for future reference.
 
 - Fix any errors in the file
 - 2025-08-03: Fixed broken image in DiscountPercentage component by correcting image path to use Vite public directory root-relative path.

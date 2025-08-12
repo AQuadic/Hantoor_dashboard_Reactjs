@@ -1,4 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { Toaster } from "react-hot-toast";
 import React, { useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import DashboardSidebar from "./DashboardSidebar";
@@ -21,6 +22,8 @@ const Layout = () => {
 
   return (
     <div className="flex min-h-screen">
+      {/* Global Toaster for notifications */}
+      <Toaster position="top-right" />
       {!isLoginOrRelatedPage && <DashboardSidebar />}
       <div
         ref={(el) => {
