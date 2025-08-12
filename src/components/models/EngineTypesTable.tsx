@@ -13,8 +13,10 @@ import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { EngineType, getEngineType } from "@/api/models/engineTypes/getEngineType";
 import { deleteEngineType } from "@/api/models/engineTypes/deleteEngineType";
+import { useTranslation } from "react-i18next";
 
 export function EngineTypesTable() {
+  const { t } = useTranslation("models");
   const { data: engineTypes, refetch } = useQuery<EngineType[]>({
     queryKey: ["engineTypes"],
     queryFn: getEngineType,
@@ -30,8 +32,8 @@ export function EngineTypesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">نوع الماكينة</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('engineType')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

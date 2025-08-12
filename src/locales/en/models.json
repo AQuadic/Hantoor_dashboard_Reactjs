@@ -26,5 +26,6 @@
     "country": "Country",
     "brandOrigin": "Brand origin",
     "status": "Status",
-    "NOSeats": "Number of seats"
+    "NOSeats": "Number of seats",
+    "engineType": "Engine type"
 }

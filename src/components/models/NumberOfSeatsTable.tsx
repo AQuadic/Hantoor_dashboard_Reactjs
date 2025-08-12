@@ -16,7 +16,7 @@ import { deleteSeats } from "@/api/models/seats/deleteSeats";
 import { useTranslation } from "react-i18next";
 
 export function NumberOfSeatsTable() {
-    const { i18n,t } = useTranslation("models");
+    const { t } = useTranslation("models");
   const { data: seats, refetch } = useQuery<numOfSeats[]>({
     queryKey: ["seats"],
     queryFn: getSeats,
