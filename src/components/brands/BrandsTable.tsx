@@ -93,7 +93,7 @@ export function BrandsTable({ brands }: BrandsTableProps) {
               </TableCell>
               <TableCell className="w-full">{brand.count ?? "-"}</TableCell>
               <TableCell className="flex gap-[7px] items-center">
-                <Switch checked={!!brand.is_active} />
+                <Switch isSelected={brand.is_active === 1} />
                 <Link to={`/brands/${brand.id}`}>
                   <Edit />
                 </Link>
