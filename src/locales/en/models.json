@@ -23,5 +23,7 @@
     "enEngineSize": "Engine size (in English)",
     "arPrice": "Price (in Arabic)",
     "enPrice": "Price (in English)",
-    "country": "Country"
+    "country": "Country",
+    "brandOrigin": "Brand origin",
+    "status": "Status"
 }

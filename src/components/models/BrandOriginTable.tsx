@@ -27,7 +27,7 @@ interface BrandOrigin {
 }
 
 export function BrandOriginTable() {
-  const { i18n } = useTranslation();
+  const { i18n,t } = useTranslation("models");
   const currentLang = i18n.language;
 
   const { data, refetch} = useQuery<BrandOrigin[]>({
@@ -45,8 +45,8 @@ export function BrandOriginTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">منشأ الماركة</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('brandOrigin')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
