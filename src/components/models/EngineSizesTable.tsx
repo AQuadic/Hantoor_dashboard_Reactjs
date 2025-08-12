@@ -41,7 +41,7 @@ export function EngineSizesTable() {
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{engine.name.ar}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
+              <Switch isSelected={engine.is_active} />
               <Link to={`/engine-size/edit/${engine.id}`}>
                 <Edit />
               </Link>
