@@ -97,3 +97,13 @@ Todo List (Table Padding Enhancement):
 ```
 
 Current: All steps complete. Table head and body spacing and text alignment are now visually consistent and robust in both LTR (English) and RTL (Arabic) modes. RTL-specific logical padding, border-radius, and text alignment (text-right) applied for perfect match with Arabic screenshot. Task finished.
+
+2025-08-12: Brands search feature implementation plan:
+
+- Update BrandsPage to manage searchTerm state and pass to BrandsHeader
+- Update BrandsHeader to accept searchTerm/setSearchTerm props and wire to SearchBar
+- Update SearchBar usage to call setSearchTerm on change
+- Update fetchBrands to accept searchTerm and send as query param
+- Update BrandsPage query to refetch on searchTerm change
+- Test integration and validate feature
+  Key decision: SearchBar is used for search input, API updated to accept search param, all state managed in BrandsPage for controlled search experience.

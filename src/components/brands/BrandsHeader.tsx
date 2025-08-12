@@ -5,7 +5,19 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 
-const BrandsHeader = () => {
+interface BrandsHeaderProps {
+  termAr: string;
+  termEn: string;
+  setTermAr: (value: string) => void;
+  setTermEn: (value: string) => void;
+}
+
+const BrandsHeader: React.FC<BrandsHeaderProps> = ({
+  termAr,
+  termEn,
+  setTermAr,
+  setTermEn,
+}) => {
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -19,18 +31,23 @@ const BrandsHeader = () => {
 
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
-            <SearchBar
-            termAr={"ابحث بالاسم"}
-            termEn={"Search by name"}
-            setTermAr={() => {}} 
-            setTermEn={() => {}} 
-            />
+          <SearchBar
+            termAr={termAr}
+            termEn={termEn}
+            setTermAr={setTermAr}
+            setTermEn={setTermEn}
+            placeholder="ابحث بالاسم / Search by name"
+          />
         </div>
         <div className="flex-1">
           <DashboardDatePicker />
         </div>
         <Link to="/brands/add">
-          <DashboardButton titleAr={"اضافة ماركة جديدة"} titleEn={"Add new brand"} variant="add" />
+          <DashboardButton
+            titleAr={"اضافة ماركة جديدة"}
+            titleEn={"Add new brand"}
+            variant="add"
+          />
         </Link>
       </div>
     </div>
