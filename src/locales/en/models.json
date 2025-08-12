@@ -25,5 +25,6 @@
     "enPrice": "Price (in English)",
     "country": "Country",
     "brandOrigin": "Brand origin",
-    "status": "Status"
+    "status": "Status",
+    "NOSeats": "Number of seats"
 }

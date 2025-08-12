@@ -13,8 +13,10 @@ import { Switch } from "@heroui/react";
 import { getSeats, numOfSeats } from "@/api/models/seats/getSeats";
 import { useQuery } from "@tanstack/react-query";
 import { deleteSeats } from "@/api/models/seats/deleteSeats";
+import { useTranslation } from "react-i18next";
 
 export function NumberOfSeatsTable() {
+    const { i18n,t } = useTranslation("models");
   const { data: seats, refetch } = useQuery<numOfSeats[]>({
     queryKey: ["seats"],
     queryFn: getSeats,
@@ -30,8 +32,8 @@ export function NumberOfSeatsTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> عدد المقاعد</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('NOSeats')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
