@@ -13,9 +13,10 @@ import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { EngineSize, getEngineSize } from "@/api/models/engineSize/getEnginSize";
 import { deleteEngineSize } from "@/api/models/engineSize/deleteEngineSize";
+import { useTranslation } from "react-i18next";
 
 export function EngineSizesTable() {
-
+  const { t } = useTranslation("models");
   const { data: engineSize, refetch } = useQuery<EngineSize[]>({
     queryKey: ["engineSize"],
     queryFn: getEngineSize,
@@ -31,8 +32,8 @@ export function EngineSizesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> حجم الماكينة</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('engineSize')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

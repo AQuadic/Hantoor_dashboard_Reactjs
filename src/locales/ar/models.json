@@ -27,5 +27,6 @@
     "brandOrigin": "منشأ الماركة",
     "status": "الحالة",
     "NOSeats": "عدد المقاعد",
-    "engineType": "نوع الماكينة"
+    "engineType": "نوع الماكينة",
+    "engineSize": "حجم الماكينة"
 }
