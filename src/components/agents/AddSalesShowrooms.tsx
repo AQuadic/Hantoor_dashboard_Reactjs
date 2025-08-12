@@ -27,21 +27,21 @@ const AddSalesShowrooms = () => {
         <div className="flex flex-col md:flex-row gap-[15px]">
             <div className="w-full">
             <Input
-                label={t('arCenterName')}
+                label={t('arShowRooms')}
                 variant="bordered"
                 placeholder={t('placeholderName')}
                 classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
                 size="lg"
             />
             </div>
-                <div className="relative w-full">
-                <MobileInput
-                    selectedCountry={selectedCountry}
-                    setSelectedCountry={setSelectedCountry}
-                    phone={phone}
-                    setPhone={setPhone}
-                />
-                <div className="absolute top-9 left-5"></div>
+            <div className="w-full">
+            <Input
+                label={t('enShowRooms')}
+                variant="bordered"
+                placeholder={t('placeholderName')}
+                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
+                size="lg"
+            />
             </div>
         </div>
 
@@ -76,14 +76,14 @@ const AddSalesShowrooms = () => {
                 size="lg"
             />
             </div>
-            <div className="w-full">
-            <Input
-                label={t('phoneNumber')}
-                variant="bordered"
-                placeholder="123456789"
-                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
-                size="lg"
-            />
+            <div className="relative w-full">
+                <MobileInput
+                    selectedCountry={selectedCountry}
+                    setSelectedCountry={setSelectedCountry}
+                    phone={phone}
+                    setPhone={setPhone}
+                />
+                <div className="absolute top-9 left-5"></div>
             </div>
         </div>
 

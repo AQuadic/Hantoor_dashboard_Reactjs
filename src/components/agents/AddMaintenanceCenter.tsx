@@ -34,15 +34,16 @@ const AddMaintenanceCenter = () => {
                 size="lg"
             />
             </div>
-                <div className="relative w-full">
-                <MobileInput
-                    selectedCountry={selectedCountry}
-                    setSelectedCountry={setSelectedCountry}
-                    phone={phone}
-                    setPhone={setPhone}
-                />
-                <div className="absolute top-9 left-5"></div>
+            <div className="w-full">
+            <Input
+                label={t('enCenterName')}
+                variant="bordered"
+                placeholder={t('placeholderName')}
+                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
+                size="lg"
+            />
             </div>
+
         </div>
 
         <div className="flex flex-col md:flex-row gap-[15px] mt-4">
@@ -76,14 +77,14 @@ const AddMaintenanceCenter = () => {
                 size="lg"
             />
             </div>
-            <div className="w-full">
-            <Input
-                label={t('phoneNumber')}
-                variant="bordered"
-                placeholder="123456789"
-                classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
-                size="lg"
-            />
+            <div className="relative w-full">
+                <MobileInput
+                    selectedCountry={selectedCountry}
+                    setSelectedCountry={setSelectedCountry}
+                    phone={phone}
+                    setPhone={setPhone}
+                />
+                <div className="absolute top-9 left-5"></div>
             </div>
         </div>
 
