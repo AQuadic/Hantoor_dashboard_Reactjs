@@ -6,7 +6,7 @@ import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { Brand, fetchBrands } from "@/api/brand/fetchBrands";
+import { Brand, BrandsApiResponse, fetchBrands } from "@/api/brand/fetchBrands";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
@@ -23,15 +23,14 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
   const [emailLink, setEmailLink] = useState("");
   const [selectedBrandId, setSelectedBrandId] = useState<string>("");
 
-  const { data: brands } = useQuery<{
-    data: Brand[];
-  }>({
-    queryKey: ["brands"],
-    queryFn: fetchBrands,
+  const page = 1;
+  const { data: brands } = useQuery<BrandsApiResponse>({
+    queryKey: ["brands", page],
+    queryFn: ({ queryKey }) => fetchBrands(queryKey[1] as number),
   });
 
-  const selectedBrand = brands?.data?.find(
-    (brand) => brand.id === Number(selectedBrandId)
+  const selectedBrand = brands?.data.find(
+    (brand: Brand) => brand.id === Number(selectedBrandId)
   );
 
   return (
