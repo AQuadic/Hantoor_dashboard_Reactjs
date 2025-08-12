@@ -8,7 +8,7 @@ import { fetchBrands, BrandsApiResponse } from "@/api/brand/fetchBrands";
 const BrandsPage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
 
-  const { data, isLoading, error } = useQuery<BrandsApiResponse>({
+  const { data, refetch, isLoading, error } = useQuery<BrandsApiResponse>({
     queryKey: ["brands", currentPage],
     queryFn: () => fetchBrands(currentPage),
     placeholderData: undefined,
@@ -31,7 +31,7 @@ const BrandsPage = () => {
     <section>
       <BrandsHeader />
       <div className="px-2 md:px-8">
-        <BrandsTable brands={data?.data ?? []} />
+        <BrandsTable brands={data?.data ?? []}  refetch={refetch}  />
         <TablePagination
           currentPage={data?.current_page ?? 1}
           setCurrentPage={setCurrentPage}
