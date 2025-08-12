@@ -1,17 +1,33 @@
+// Type definitions
+type BrandData = {
+  id: number;
+  name: { ar: string; en: string };
+  is_active: boolean;
+  image?: string;
+};
+
+type BrandResponse = {
+  success?: boolean;
+  message?: string;
+};
+
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import ImageInput from "@/components/general/ImageInput";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { postBrand } from "@/api/brand/postBrand";
+import { fetchBrandById, updateBrand } from "@/api/brand/updateBrand";
 import { useTranslation } from "react-i18next";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
 
 const AddBrand = () => {
   const { t } = useTranslation("brands");
-  const [profileImage, setProfileImage] = React.useState<File | null>(null);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
   const [arBrand, setArBrand] = useState("");
   const [enBrand, setEnBrand] = useState("");
+  const [isActive, setIsActive] = useState(true); // default active
   const params = useParams();
   const brandId = params.id;
   const navigate = useNavigate();
@@ -22,36 +38,100 @@ const AddBrand = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    setError(null);
-    setSuccess(null);
-    try {
-      const response = await postBrand({
-        name: { ar: arBrand, en: enBrand },
-        image: profileImage,
-      });
-      // Accept any valid response, even if response.success is missing
+  // React Query: fetch brand data if editing
+  const { data: brandData, isLoading: isBrandLoading } = useQuery({
+    queryKey: ["brand", brandId],
+    queryFn: async (): Promise<BrandData | undefined> => {
+      if (isEdit && brandId) {
+        const data = await fetchBrandById(Number(brandId));
+        return data as BrandData;
+      }
+      return undefined;
+    },
+    enabled: isEdit,
+  });
+
+  // Update form fields when brand data is loaded
+  useEffect(() => {
+    if (brandData && isEdit) {
+      setArBrand(brandData.name?.ar || "");
+      setEnBrand(brandData.name?.en || "");
+      setIsActive(brandData.is_active ?? true);
+      // Note: You might need to handle the existing image display separately
+      // since profileImage expects a File object, not a URL string
+    }
+  }, [brandData, isEdit]);
+
+  // React Query: mutation for add/edit
+  const mutation = useMutation<BrandResponse, Error, void>({
+    mutationFn: async () => {
+      if (isEdit && brandId) {
+        return (await updateBrand({
+          id: Number(brandId),
+          name: { ar: arBrand, en: enBrand },
+          image: profileImage,
+          is_active: isActive,
+        })) as BrandResponse;
+      } else {
+        return (await postBrand({
+          name: { ar: arBrand, en: enBrand },
+          image: profileImage,
+        })) as BrandResponse;
+      }
+    },
+    onMutate: () => {
+      setLoading(true);
+      setError(null);
+      setSuccess(null);
+    },
+    onSuccess: (response) => {
       if (
         response &&
         (response.success === undefined || response.success === true)
       ) {
-        setSuccess(response.message || "Brand added successfully.");
-        navigate("/brands");
+        setSuccess(
+          response.message ||
+            (isEdit
+              ? "Brand updated successfully."
+              : "Brand added successfully.")
+        );
+
+        // Only navigate back when editing is done, not when adding
+        if (isEdit) {
+          // Optional: Add a small delay to show the success message
+          setTimeout(() => {
+            navigate("/brands");
+          }, 1500);
+        } else {
+          // For adding, you might want to reset the form instead
+          setArBrand("");
+          setEnBrand("");
+          setProfileImage(null);
+          setIsActive(true);
+        }
       } else {
-        setError(response.message || "Failed to add brand.");
+        setError(
+          response.message ||
+            (isEdit ? "Failed to update brand." : "Failed to add brand.")
+        );
       }
-    } catch (err) {
-      setError((err as Error)?.message || "An error occurred.");
-    } finally {
+    },
+    onError: (err) => {
+      setError(err?.message || "An error occurred.");
+    },
+    onSettled: () => {
       setLoading(false);
-    }
+    },
+  });
+
+  const handleSubmit = () => {
+    mutation.mutate();
   };
 
-  // const oldValues = {
-  //   image: "aaa",
-  //   name: "car name",
-  // };
+  // Show loading state while fetching brand data for edit
+  if (isEdit && isBrandLoading) {
+    return <div>Loading brand data...</div>;
+  }
 
   return (
     <div>
@@ -76,7 +156,12 @@ const AddBrand = () => {
           <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">
             {t("brandImage")}
           </h3>
-          <ImageInput image={profileImage} setImage={setProfileImage} />
+          <ImageInput
+            image={profileImage}
+            setImage={setProfileImage}
+            // If you have an existing image URL, you might need to pass it here
+            // existingImageUrl={brandData?.image}
+          />
         </div>
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
           <h3 className="mb-2 text-lg font-bold ">{t("mainData")}</h3>
@@ -94,12 +179,22 @@ const AddBrand = () => {
               placeholder={t("writeHere")}
             />
           </div>
-
+          {/* Optionally add is_active toggle for edit */}
+          {isEdit && (
+            <div className="flex items-center gap-2 mt-2">
+              <label>{t("isActive") || "Active"}</label>
+              <input
+                type="checkbox"
+                checked={isActive}
+                onChange={(e) => setIsActive(e.target.checked)}
+              />
+            </div>
+          )}
           <DashboardButton
-            titleAr=" اضافة"
-            titleEn="Add"
+            titleAr={isEdit ? "تعديل" : " اضافة"}
+            titleEn={isEdit ? "Edit" : "Add"}
             onClick={handleSubmit}
-            isLoading={loading}
+            isLoading={loading || isBrandLoading}
           />
           {error && <div className="text-red-500 mt-2">{error}</div>}
           {success && <div className="text-green-500 mt-2">{success}</div>}
