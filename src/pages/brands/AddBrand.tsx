@@ -3,7 +3,7 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import ImageInput from "@/components/general/ImageInput";
 import React, { useState } from "react";
-import { postBrand } from "@/api/models/brand/postBrand";
+import { postBrand } from "@/api/brand/postBrand";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 
