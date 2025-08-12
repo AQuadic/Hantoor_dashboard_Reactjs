@@ -14,6 +14,7 @@ import { getBrandOrigin } from "@/api/models/brandOrigin/getBrandOrigin";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { deleteBrandOrigin } from "@/api/models/brandOrigin/deleteBrandOrigin";
+import toast from "react-hot-toast";
 
 interface BrandOrigin {
   id: number;
@@ -37,6 +38,7 @@ export function BrandOriginTable() {
 
   const handleDelete = async (id: number) => {
     await deleteBrandOrigin(id);
+    toast.success(t('brandOriginDeleted'))
     refetch();
   };
 

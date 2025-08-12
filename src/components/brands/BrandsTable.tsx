@@ -11,6 +11,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { deleteBrands } from "@/api/brand/deleteBrands";
 
 interface BrandImage {
   id: number;
@@ -45,10 +46,17 @@ interface Brand {
 
 interface BrandsTableProps {
   brands?: Brand[];
+  refetch: () => void;
 }
 
-export function BrandsTable({ brands }: BrandsTableProps) {
+
+export function BrandsTable({ brands, refetch }: BrandsTableProps) {
   const { t, i18n } = useTranslation("brands");
+
+  const handleDelete = async (id: number) => {
+    await deleteBrands(id);
+    refetch();
+  };
 
   return (
     <Table>
@@ -93,12 +101,12 @@ export function BrandsTable({ brands }: BrandsTableProps) {
               </TableCell>
               <TableCell className="w-full">{brand.count ?? "-"}</TableCell>
               <TableCell className="flex gap-[7px] items-center">
-                <Switch checked={!!brand.is_active} />
+                <Switch isSelected={brand.is_active === 1} />
                 <Link to={`/brands/${brand.id}`}>
                   <Edit />
                 </Link>
                 <div className="mt-2">
-                  <TableDeleteButton handleDelete={() => {}} />
+                  <TableDeleteButton handleDelete={() => handleDelete(brand.id)} />
                 </div>
               </TableCell>
             </TableRow>

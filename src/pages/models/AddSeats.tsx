@@ -6,6 +6,7 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { postNumberOfSeats } from "@/api/models/seats/postNumOfSeats";
+import toast from "react-hot-toast";
 
 const AddSeats = () => {
   const { t } = useTranslation("models");
@@ -70,9 +71,14 @@ const AddSeats = () => {
                     en: enSeatsNumbers,
                   },
                 });
+                toast.success(t("seatsAddedSuccessfully"));
                 navigate("/models");
-              } catch {
-                // optionally handle error here (toast, etc)
+              } catch (error: any) {
+                const errorMsg =
+                  error?.response?.data?.message ||
+                  error?.message ||
+                  t("somethingWentWrong");
+                toast.error(errorMsg);
               } finally {
                 setLoading(false);
               }

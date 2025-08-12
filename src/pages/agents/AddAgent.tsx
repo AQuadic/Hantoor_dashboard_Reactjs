@@ -5,6 +5,8 @@ import DashboardInput from "@/components/general/DashboardInput";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { Brand, BrandsApiResponse, fetchBrands } from "@/api/brand/fetchBrands";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
@@ -19,6 +21,18 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
   const [emailLink, setEmailLink] = useState("");
+  const [selectedBrandId, setSelectedBrandId] = useState<string>("");
+
+  const page = 1;
+  const { data: brands } = useQuery<BrandsApiResponse>({
+    queryKey: ["brands", page],
+    queryFn: ({ queryKey }) => fetchBrands(queryKey[1] as number),
+  });
+
+  const selectedBrand = brands?.data.find(
+    (brand: Brand) => brand.id === Number(selectedBrandId)
+  );
+
   return (
     <section>
       <div className="pt-0 pb-2 bg-white ">
@@ -65,16 +79,24 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
             />
           </div>
 
-          <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
+          <div className="relative w-full border border-gray-300 rounded-lg p-3 text-sm">
             <p className="text-right text-black text-sm">{t("brand")}</p>
             <div className="flex items-center justify-between gap-1">
-              <span className="text-gray-500 text-sm">تويوتا</span>
-              <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                <option value="شهر">تويوتا</option>
-                <option value="أيام">كيا</option>
-                <option value="سنوات">جييب</option>
-                <option value="سنوات">BMW</option>
-                <option value="سنوات">مرسيدس</option>
+              <span className="text-gray-500 text-sm">
+                {selectedBrand?.name?.ar || t("selectBrand")}
+              </span>
+
+              <select
+                className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
+                value={selectedBrandId}
+                onChange={(e) => setSelectedBrandId(e.target.value)}
+              >
+                <option value="">{t("selectBrand")}</option>
+                {brands?.data?.map((brand) => (
+                  <option key={brand.id} value={brand.id}>
+                    {brand.name.ar}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

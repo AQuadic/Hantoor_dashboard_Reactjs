@@ -14,6 +14,7 @@ import { getSeats, numOfSeats } from "@/api/models/seats/getSeats";
 import { useQuery } from "@tanstack/react-query";
 import { deleteSeats } from "@/api/models/seats/deleteSeats";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 
 export function NumberOfSeatsTable() {
     const { t } = useTranslation("models");
@@ -22,10 +23,19 @@ export function NumberOfSeatsTable() {
     queryFn: getSeats,
   });
 
-    const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
+    try {
       await deleteSeats(id);
+      toast.success(t("seatDeletedSuccessfully"));
       refetch();
-    };
+    } catch (error: any) {
+      const errorMsg =
+        error?.response?.data?.message ||
+        error?.message ||
+        t("somethingWentWrong");
+      toast.error(errorMsg);
+    }
+  };
 
   return (
     <Table>

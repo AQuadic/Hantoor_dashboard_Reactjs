@@ -15,9 +15,9 @@ const BrandsPage = () => {
   const isArabic = i18n.language === "ar";
   const searchTerm = isArabic ? searchTermAr : searchTermEn;
 
-  const { data, isLoading, error } = useQuery<BrandsApiResponse>({
-    queryKey: ["brands", currentPage, searchTerm],
-    queryFn: () => fetchBrands(currentPage, searchTerm),
+  const { data, refetch, isLoading, error } = useQuery<BrandsApiResponse>({
+    queryKey: ["brands", currentPage],
+    queryFn: () => fetchBrands(currentPage),
     placeholderData: undefined,
   });
 
@@ -43,7 +43,7 @@ const BrandsPage = () => {
         setTermEn={setSearchTermEn}
       />
       <div className="px-2 md:px-8">
-        <BrandsTable brands={data?.data ?? []} />
+        <BrandsTable brands={data?.data ?? []} refetch={refetch} />
         <TablePagination
           currentPage={data?.current_page ?? 1}
           setCurrentPage={setCurrentPage}
