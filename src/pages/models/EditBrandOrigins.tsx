@@ -1,66 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { updateBrandOrigin } from "@/api/models/brandOrigin/editBrandOrigin";
-import { getBrandOrigin } from "@/api/models/brandOrigin/getBrandOrigin";
 
 const EditBrandOrigins = () => {
   const { t } = useTranslation("models");
-  const { id } = useParams();
-  const brandOriginId = Number(id);
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
   const [arBrandName, setArBrandName] = useState("");
   const [enBrandName, setEnBrandName] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [fetching, setFetching] = useState(true);
-
-  useEffect(() => {
-    if (!brandOriginId) return;
-
-    const fetchBrandOrigin = async () => {
-      setFetching(true);
-      try {
-        const brandOrigins = await getBrandOrigin();
-        const brand = brandOrigins.find((b) => b.id === brandOriginId);
-        if (!brand) {
-          return;
-        }
-        setArBrandName(brand.name.ar);
-        setEnBrandName(brand.name.en);
-        setIsActive(brand.is_active);
-      } catch {
-        // Handle error
-      } finally {
-        setFetching(false);
-      }
-    };
-
-    fetchBrandOrigin();
-  }, [brandOriginId]);
+  const [, setError] = useState<string | null>(null);
 
   const handleSave = async () => {
+    if (!id) {
+      setError("Invalid brand origin ID");
+      return;
+    }
     setLoading(true);
+    setError(null);
     try {
-      await updateBrandOrigin(brandOriginId, {
+      await updateBrandOrigin(Number(id), {
         name: { ar: arBrandName, en: enBrandName },
         is_active: isActive,
       });
       navigate("/models");
-    } catch {
-      // handle error
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to update brand origin");
     } finally {
       setLoading(false);
     }
   };
-
-  if (fetching) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>
