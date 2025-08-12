@@ -1,6 +1,6 @@
 import { axios } from "@/lib/axios";
 
-export interface BrandOrigin {
+export interface EngineType {
     id: number;
     is_active: boolean;
     name: {
@@ -11,12 +11,12 @@ export interface BrandOrigin {
     updated_at: string;
 }
 
-interface BrandOriginResponse {
+interface EngineTypesResponse {
     current_page: number;
-    data: BrandOrigin[];
+    data: EngineType[];
 }
 
-export const getBrandOrigin = async (): Promise<BrandOrigin[]> => {
-    const res = await axios.get<BrandOriginResponse>("/admin/brand-origin");
+export const getEngineType = async (): Promise<EngineType[]> => {
+    const res = await axios.get<EngineTypesResponse>("/admin/engine-types");
     return res.data.data;
 };

@@ -1,13 +1,19 @@
+import { postEngineType } from "@/api/models/engineTypes/postEngineTypes";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const AddEngineType = () => {
   const { t } = useTranslation("models");
+  const navigate = useNavigate();
+
   const [arEngineType, setArEngineType] = useState("");
   const [enEngineType, setEnEngineType] = useState("");
+  const [loading, setLoading] = useState(false);
+
   return (
     <div>
       <DashboardHeader
@@ -42,15 +48,37 @@ const AddEngineType = () => {
                 placeholder={t("gasoline")}
               />
             </div>
-            <DashboardInput
-              label={t("enEngineType")}
-              value={enEngineType}
-              onChange={setEnEngineType}
-              placeholder={t("writeHere")}
-            />
+            <div className="flex-1">
+              <DashboardInput
+                label={t("enEngineType")}
+                value={enEngineType}
+                onChange={setEnEngineType}
+                placeholder={t("writeHere")}
+              />
+            </div>
           </div>
 
-          <DashboardButton titleAr="اضافة" titleEn="Add" />
+          <DashboardButton
+            titleAr={loading ? "...جاري الإضافة" : "اضافة"}
+            titleEn={loading ? "Adding..." : "Add"}
+            isLoading={loading}
+            onClick={async () => {
+              setLoading(true);
+              try {
+                await postEngineType({
+                  name: {
+                    ar: arEngineType,
+                    en: enEngineType,
+                  },
+                });
+                navigate("/models");
+              } catch {
+                // Optionally handle errors (toast, alert, etc)
+              } finally {
+                setLoading(false);
+              }
+            }}
+          />
         </div>
       </div>
     </div>

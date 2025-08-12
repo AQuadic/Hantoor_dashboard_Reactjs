@@ -1,11 +1,40 @@
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
+import { Input } from "@heroui/react";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { Input } from "@heroui/react";
-import React from "react";
-import { useTranslation } from "react-i18next";
+import { updateEngineType } from "@/api/models/engineTypes/editEngineType";
 
 const EditEnginType = () => {
   const { t } = useTranslation("models");
+  const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate();
+
+  const [arName, setArName] = useState("");
+  const [enName, setEnName] = useState("");
+  const [, setLoading] = useState(false);
+  const [, setError] = useState<string | null>(null);
+
+  const handleSave = async () => {
+    if (!id) {
+      setError("Invalid engine type ID");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      await updateEngineType(Number(id), {
+        name: { ar: arName, en: enName },
+      });
+      navigate("/models"); 
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to update engine type");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <DashboardHeader
@@ -29,9 +58,9 @@ const EditEnginType = () => {
           },
         ]}
       />
-      <div className="flex flex-col gap-8 p-8">
-        <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
-          <div className="flex gap-4">
+      <div className="flex flex-col gap-8 md:p-8 p-2">
+        <div className="flex flex-col gap-4 lg:p-8 p-2 bg-white rounded-2xl">
+          <div className="flex md:flex-row flex-col gap-4">
             <div className="flex-1">
               <Input
                 label={t('arEngineType')}
@@ -39,6 +68,8 @@ const EditEnginType = () => {
                 placeholder={t('gasoline')}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
+                value={arName}
+                onChange={(e) => setArName(e.target.value)}
               />
             </div>
             <Input
@@ -48,10 +79,16 @@ const EditEnginType = () => {
               className="flex-1"
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
+              value={enName}
+              onChange={(e) => setEnName(e.target.value)}
             />
           </div>
 
-              <DashboardButton titleAr="حفظ" titleEn="Save" />
+          <DashboardButton
+            titleAr="حفظ"
+            titleEn="Save"
+            onClick={handleSave}
+          />
         </div>
       </div>
     </div>

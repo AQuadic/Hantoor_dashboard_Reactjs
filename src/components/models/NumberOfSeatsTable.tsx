@@ -10,25 +10,20 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import { getSeats, numOfSeats } from "@/api/models/seats/getSeats";
+import { useQuery } from "@tanstack/react-query";
+import { deleteSeats } from "@/api/models/seats/deleteSeats";
 
 export function NumberOfSeatsTable() {
-  const brands = [
-    {
-      id: 1,
-      model: " 2",
-      owner: "الشركة الدولية التجارية",
-    },
-    {
-      id: 1,
-      model: " 4",
-      owner: "الشركة الدولية التجارية",
-    },
-    {
-      id: 1,
-      model: " 5",
-      owner: "الشركة الدولية التجارية",
-    },
-  ];
+  const { data: seats, refetch } = useQuery<numOfSeats[]>({
+    queryKey: ["seats"],
+    queryFn: getSeats,
+  });
+
+    const handleDelete = async (id: number) => {
+      await deleteSeats(id);
+      refetch();
+    };
 
   return (
     <Table>
@@ -40,18 +35,20 @@ export function NumberOfSeatsTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brands.map((brand, index) => (
-          <TableRow key={brand.id} noBackgroundColumns={1}>
+        {seats?.map((seat, index) => (
+          <TableRow key={seat.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell className="w-full">{brand.model}</TableCell>
+            <TableCell className="w-full">{seat.name.ar}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
-              <Link to={`/seats/edit/${brand.id}`}>
+              <Switch isSelected={seat.is_active} />
+              <Link to={`/seats/edit/${seat.id}`}>
                 <Edit />
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(seat.id)}
+                />
               </div>
             </TableCell>
           </TableRow>

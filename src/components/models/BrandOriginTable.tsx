@@ -10,47 +10,61 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import { getBrandOrigin } from "@/api/models/brandOrigin/getBrandOrigin";
+import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
+import { deleteBrandOrigin } from "@/api/models/brandOrigin/deleteBrandOrigin";
+
+interface BrandOrigin {
+  id: number;
+  is_active: boolean;
+  name: {
+    ar: string;
+    en: string;
+  };
+  created_at: string;
+  updated_at: string;
+}
 
 export function BrandOriginTable() {
-  const brandOrigins = [
-    {
-      id: 1,
-      origin: "أوروبا",
-      count: "3 من 5% عنصر",
-    },
-    {
-      id: 2,
-      origin: "السين",
-      count: "3 من 5% عنصر",
-    },
-    {
-      id: 3,
-      origin: "كوريا",
-      count: "3 من 5% عنصر",
-    },
-  ];
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+
+  const { data, refetch} = useQuery<BrandOrigin[]>({
+    queryKey: ["brands"],
+    queryFn: getBrandOrigin,
+  });
+
+  const handleDelete = async (id: number) => {
+    await deleteBrandOrigin(id);
+    refetch();
+  };
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> منشأ الماركة</TableHead>
+          <TableHead className="text-right">منشأ الماركة</TableHead>
           <TableHead className="text-right">الحالة</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brandOrigins.map((brand, index) => (
+        {data?.map((brand, index) => (
           <TableRow key={brand.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell className={"w-full"}>{brand.origin}</TableCell>
+            <TableCell className="w-full">
+              {currentLang === "ar" ? brand.name.ar : brand.name.en}
+            </TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
+              <Switch isSelected={brand.is_active} />
               <Link to={`/brand-origins/${brand.id}`}>
                 <Edit />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(brand.id)}
+                />
               </div>
             </TableCell>
           </TableRow>
