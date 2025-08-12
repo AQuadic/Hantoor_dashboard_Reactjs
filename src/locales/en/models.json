@@ -34,5 +34,8 @@
     "brandOriginDeleted": "Brand origin deleted successfully",
     "seatsAddedSuccessfully": "Seats added successfully",
     "seatsUpdatedSuccessfully": "Seats edited successfully",
-    "seatDeletedSuccessfully": "Seat deleted successfully"
+    "seatDeletedSuccessfully": "Seat deleted successfully",
+    "engineTypeAdded": "Engine type added successfully",
+    "engineTypeEdited": "Engine type edited successfully",
+    "engineTypeDeleted": "Engine type deleted successfully"
 }

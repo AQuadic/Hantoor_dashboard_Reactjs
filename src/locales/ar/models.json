@@ -33,6 +33,9 @@
     "brandOriginEdited": "تم تعديل منشأ الماركة بنجاح",
     "brandOriginDeleted": "تم حذف منشأ الماركة بنجاح",
     "seatsAddedSuccessfully": "تمت إضافة المقاعد بنجاح",
-    "seatsUpdatedSuccessfully": "نم تعديل المقاعد بنجاح",
-    "seatDeletedSuccessfully": "تم حذف المقعد بنجاح"
+    "seatsUpdatedSuccessfully": "تم تعديل المقاعد بنجاح",
+    "seatDeletedSuccessfully": "تم حذف المقعد بنجاح",
+    "engineTypeAdded": "تم اضافة نوع الماكينة بنجاح",
+    "engineTypeEdited": "تم تعديل نوع الماكينة بنجاح",
+    "engineTypeDeleted": "تم حذف نوع الماكينة بنجاح"
 }

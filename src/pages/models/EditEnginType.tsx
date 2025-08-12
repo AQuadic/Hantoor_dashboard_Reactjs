@@ -5,6 +5,7 @@ import { Input } from "@heroui/react";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { updateEngineType } from "@/api/models/engineTypes/editEngineType";
+import toast from "react-hot-toast";
 
 const EditEnginType = () => {
   const { t } = useTranslation("models");
@@ -27,9 +28,14 @@ const EditEnginType = () => {
       await updateEngineType(Number(id), {
         name: { ar: arName, en: enName },
       });
+      toast.success(t('engineTypeEdited'))
       navigate("/models"); 
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to update engine type");
+      const errorMsg =
+        err?.response?.data?.message ||
+        err?.message ||
+        t("somethingWentWrong");
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
