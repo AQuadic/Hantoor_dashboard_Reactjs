@@ -5,8 +5,8 @@ import DashboardInput from "@/components/general/DashboardInput";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Brand, fetchBrands } from "@/api/models/brand/fetchBrands";
 import { useQuery } from "@tanstack/react-query";
+import { Brand, fetchBrands } from "@/api/brand/fetchBrands";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
