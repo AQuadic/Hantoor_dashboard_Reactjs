@@ -1,13 +1,18 @@
+import { postEngineSize } from "@/api/models/engineSize/postEngineSize";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
 
 const AddEnginSize = () => {
   const { t } = useTranslation("models");
+  const navigate = useNavigate();
   const [arEnginSize, setArEnginSize] = useState("");
   const [enEnginSize, setEnEnginSize] = useState("");
+    const [loading, setLoading] = useState(false);
+  
   return (
     <div>
       <DashboardHeader
@@ -50,7 +55,27 @@ const AddEnginSize = () => {
             />
           </div>
 
-          <DashboardButton titleAr="اضافة" titleEn="Add" />
+          <DashboardButton 
+            titleAr={loading ? "...جاري الإضافة" : "اضافة"}
+              titleEn={loading ? "Adding..." : "Add"}
+              isLoading={loading}
+              onClick={async () => {
+                setLoading(true);
+                try {
+                  await postEngineSize({
+                    name: {
+                      ar: arEnginSize,
+                      en: enEnginSize,
+                    },
+                  });
+                  navigate("/models");
+                } catch {
+                  // Optionally handle errors (toast, alert, etc)
+                } finally {
+                  setLoading(false);
+                }
+              }}
+          />
         </div>
       </div>
     </div>
