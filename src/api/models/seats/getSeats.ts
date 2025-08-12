@@ -11,12 +11,7 @@ export interface numOfSeats {
     updated_at: string;
 }
 
-interface SeatsResponse {
-    current_page: number;
-    data: numOfSeats[];
-}
-
 export const getSeats = async (): Promise<numOfSeats[]> => {
-    const res = await axios.get<SeatsResponse>("/admin/seats");
-    return res.data.data;
+    const res = await axios.get<numOfSeats[]>("/admin/seats");
+    return res.data;
 };
