@@ -15,7 +15,7 @@ Testing via manual and automated means
 Documentation via code comments and README
 2025-08-11: Refactored PublicRouteGuard.tsx and PrivateRouteGuard.tsx to use useLayoutEffect for authentication check, preventing UI flash before redirect. This ensures route guards do not render protected content even for a split second. All changes validated and follow React best practices.
 
-2025-08-12: Integrated React Hot Toast globally in Layout.tsx. Toasts styled to match Hero UI theme using CSS primary color (oklch(0.5417 0.2204 266.91) via var(--primary)). Modern look: rounded corners, shadow, correct foreground color, border, and padding. No errors found. Toasts can be triggered anywhere in app. Context7 did not provide actionable docs, so used expert knowledge and verified with internet sources. Memory updated for future reference.
+2025-08-12: Enhanced DashboardButton to support isLoading prop (passed to Hero UI Button). Updated DeleteModal to use local isLoading state, set loading during deletion, and reset on modal close. Implementation pattern: use local state for loading, reset on modal close, and pass isLoading to button. No errors found. This pattern is recommended for all modal actions requiring async feedback.
 
 - Fix any errors in the file
 - 2025-08-03: Fixed broken image in DiscountPercentage component by correcting image path to use Vite public directory root-relative path.

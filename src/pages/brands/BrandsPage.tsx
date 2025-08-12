@@ -3,7 +3,7 @@ import { BrandsTable } from "@/components/brands/BrandsTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchBrands, BrandsApiResponse } from "@/api/models/brand/fetchBrands";
+import { fetchBrands, BrandsApiResponse } from "@/api/brand/fetchBrands";
 
 const BrandsPage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);

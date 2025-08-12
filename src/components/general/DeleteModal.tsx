@@ -1,6 +1,7 @@
 import { Modal, ModalBody, ModalContent } from "@heroui/react";
 import DashboardButton from "./dashboard/DashboardButton";
 import { useTranslation } from "react-i18next";
+import React, { useState, useEffect } from "react";
 
 interface DeleteModalProps {
   isOpen: boolean;
@@ -14,6 +15,25 @@ export default function DeleteModal({
   handleDelete,
 }: DeleteModalProps) {
   const { t } = useTranslation("header");
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setIsLoading(false);
+    }
+  }, [isOpen]);
+
+  const onDelete = async () => {
+    setIsLoading(true);
+    try {
+      if (handleDelete) {
+        await Promise.resolve(handleDelete());
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       <Modal
@@ -30,9 +50,14 @@ export default function DeleteModal({
                   alt="Warning"
                   className="w-[90px] h-[110px] mb-4"
                 />
-                <h4 className="font-bold text-2xl">{t('confirmDeletion')}</h4>
-                <p className="opacity-60 mb-4">{t('areYouSure')}</p>
-                <DashboardButton titleAr="تأكيد" titleEn="Confirm" onClick={handleDelete} />
+                <h4 className="font-bold text-2xl">{t("confirmDeletion")}</h4>
+                <p className="opacity-60 mb-4">{t("areYouSure")}</p>
+                <DashboardButton
+                  titleAr="تأكيد"
+                  titleEn="Confirm"
+                  onClick={onDelete}
+                  isLoading={isLoading}
+                />
               </ModalBody>
             </>
           )}
