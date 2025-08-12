@@ -1,11 +1,41 @@
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useNavigate, useParams } from "react-router-dom";
+import { Input } from "@heroui/react";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { Input } from "@heroui/react";
-import React from "react";
-import { useTranslation } from "react-i18next";
+import { updateEngineSize } from "@/api/models/engineSize/editEngineSize";
 
 const EditEngineSize = () => {
   const { t } = useTranslation("models");
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  const [arSize, setArSize] = useState("");
+  const [enSize, setEnSize] = useState("");
+  const [, setLoading] = useState(false);
+  const [, setError] = useState<string | null>(null);
+
+  const handleSave = async () => {
+    if (!id) {
+      setError("Invalid engine size ID");
+      return;
+    }
+    setLoading(true);
+    setError(null);
+
+    try {
+      await updateEngineSize(Number(id), {
+        name: { ar: arSize, en: enSize },
+      });
+      navigate("/models");
+    } catch (err: any) {
+      setError(err?.response?.data?.message || "Failed to update engine size");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <DashboardHeader
@@ -39,6 +69,8 @@ const EditEngineSize = () => {
                 placeholder="1200 CC"
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
+                value={arSize}
+                onChange={(e) => setArSize(e.target.value)}
               />
             </div>
             <Input
@@ -48,10 +80,16 @@ const EditEngineSize = () => {
               className="flex-1"
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
+              value={enSize}
+              onChange={(e) => setEnSize(e.target.value)}
             />
           </div>
 
-              <DashboardButton titleAr="حفظ" titleEn="Save" />
+          <DashboardButton
+            titleAr="حفظ"
+            titleEn="Save"
+            onClick={handleSave}
+          />
         </div>
       </div>
     </div>
