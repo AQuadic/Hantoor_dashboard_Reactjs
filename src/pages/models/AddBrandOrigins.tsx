@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { postBrandOrigin } from "@/api/models/brandOrigin/postBrandOrigin";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 
 const AddBrandOrigins = () => {
   const { t } = useTranslation("models");
@@ -12,6 +13,7 @@ const AddBrandOrigins = () => {
   const [enBrandName, setEnBrandName] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
   return (
     <div>
       <DashboardHeader
@@ -69,9 +71,14 @@ const AddBrandOrigins = () => {
                     en: enBrandName,
                   },
                 });
+                toast.success(t("brandAddedSuccessfully"));
                 navigate("/models");
-              } catch {
-                // Optionally handle error, e.g. show toast
+              } catch (error: any) {
+                const errorMsg =
+                  error?.response?.data?.message ||
+                  error?.message ||
+                  t("somethingWentWrong");
+                toast.error(errorMsg);
               } finally {
                 setLoading(false);
               }

@@ -28,5 +28,8 @@
     "status": "Status",
     "NOSeats": "Number of seats",
     "engineType": "Engine type",
-    "engineSize": "Engine size"
+    "engineSize": "Engine size",
+    "brandAddedSuccessfully": "Brand origin added successfully",
+    "brandOriginEdited": "Brand origin edited successfully",
+    "brandOriginDeleted": "Brand origin deleted successfully"
 }

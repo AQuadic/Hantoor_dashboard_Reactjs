@@ -5,6 +5,7 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { updateBrandOrigin } from "@/api/models/brandOrigin/editBrandOrigin";
+import toast from "react-hot-toast";
 
 const EditBrandOrigins = () => {
   const { t } = useTranslation("models");
@@ -15,23 +16,26 @@ const EditBrandOrigins = () => {
   const [enBrandName, setEnBrandName] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [, setError] = useState<string | null>(null);
 
   const handleSave = async () => {
     if (!id) {
-      setError("Invalid brand origin ID");
+      toast.error(t("invalidBrandOriginId") || "Invalid brand origin ID");
       return;
     }
     setLoading(true);
-    setError(null);
     try {
       await updateBrandOrigin(Number(id), {
         name: { ar: arBrandName, en: enBrandName },
         is_active: isActive,
       });
+      toast.success(t("brandOriginEdited"));
       navigate("/models");
     } catch (err: any) {
-      setError(err?.response?.data?.message || "Failed to update brand origin");
+      const errorMsg =
+        err?.response?.data?.message ||
+        err?.message ||
+        t("somethingWentWrong");
+      toast.error(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -42,7 +46,7 @@ const EditBrandOrigins = () => {
       <DashboardHeader
         titleAr="تعديل منشأ الماركة"
         titleEn="Edit brand origin"
-        items={[
+items={[
           {
             titleAr: "الصفحة الرئيسية",
             titleEn: "Home",
