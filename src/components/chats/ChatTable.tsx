@@ -5,8 +5,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import ChatIcon from "../icons/chats/ChatIcon";
 import ConversationPage from "@/pages/chats/ConversationPage";
 import { Switch } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 const ChatTable = () => {
+    const { t } = useTranslation("chats");
     const [openChatId, setOpenChatId] = useState<number | null>(null);
 
     const chats = [
@@ -36,10 +38,10 @@ const ChatTable = () => {
             <TableHeader>
                 <TableRow>
                 <TableHead className="text-right">#</TableHead>
-                <TableHead className="text-right">اسم السيارة</TableHead>
-                <TableHead className="text-right">اسم الماركة</TableHead>
-                <TableHead className="text-right">المستخدمين داخل المحادثة</TableHead>
-                <TableHead className="text-right">الحالة</TableHead>
+                <TableHead className="text-right">{t('carName')}</TableHead>
+                <TableHead className="text-right">{t('brandName')}</TableHead>
+                <TableHead className="text-right">{t('usersNumber')}</TableHead>
+                <TableHead className="text-right">{t('status')}</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
