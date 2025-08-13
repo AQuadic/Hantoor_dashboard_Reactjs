@@ -1,14 +1,45 @@
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useParams } from "react-router-dom";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import Delete from "@/components/icons/setting/Delete";
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
+import { editFeature } from "@/api/featuresApp/editFeatures";
+import toast from "react-hot-toast";
 
 const EditFeatures = () => {
   const { t } = useTranslation("setting");
+  const { id } = useParams();
   const [arDescription, setArDescription] = useState("");
   const [enDescription, setEnDescription] = useState("");
+  const [isActive, ] = useState(true);
+
+  const handleSave = async () => {
+    if (!id) {
+      console.error("Feature ID is missing");
+      return;
+    }
+
+    try {
+      const payload = {
+        description: {
+          ar: arDescription,
+          en: enDescription,
+        },
+        is_active: isActive,
+      };
+      const data = await editFeature(Number(id), payload);
+      toast.success(t('featuedUpdated'), data);
+      } catch (error: any) {
+        const errorMessage =
+          error?.response?.data?.message ||
+          error?.response?.data?.error ||
+          "Error";
+        toast.error(errorMessage);
+      }
+  };
+
   return (
     <div>
       <div className="pt-0 pb-2 bg-white ">
@@ -53,7 +84,7 @@ const EditFeatures = () => {
           </div>
         </div>
         <div className="mt-5">
-          <DashboardButton titleAr="حفظ" titleEn="Save" />
+          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
         </div>
       </div>
     </div>
