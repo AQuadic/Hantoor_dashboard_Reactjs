@@ -22,5 +22,8 @@
     "supportStatus": "حالة الدعم",
     "working": "جاري العمل",
     "done": "تم الانتهاء",
-    "yourNotes": "ملاحظاتك"
+    "yourNotes": "ملاحظاتك",
+
+    "NOUses": "عدد مرات الاستفادة",
+    "NONotBenefited": "عدد مرات عدم الاستفادة"
 }

@@ -7,8 +7,10 @@ import { Switch } from "@heroui/react";
 import View from "../icons/general/View";
 import FaqDetails from "@/pages/faqs/FaqDetails";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const FAQsTable = () => {
+  const { t } = useTranslation("questions");
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
 
   const technicalsupport = [
@@ -42,12 +44,12 @@ const FAQsTable = () => {
           <TableHeader>
             <TableRow>
               <TableHead className="text-right">#</TableHead>
-              <TableHead className="text-right">السؤال</TableHead>
-              <TableHead className="text-right">البلد</TableHead>
-              <TableHead className="text-right">عدد مرات الاستفادة</TableHead>
-              <TableHead className="text-right">عدد مرات عدم الاستفادة</TableHead>
-              <TableHead className="text-right">تاريخ ووقت الانشاء</TableHead>
-              <TableHead className="text-right">الحالة</TableHead>
+              <TableHead className="text-right">{t('question')}</TableHead>
+              <TableHead className="text-right">{t('country')}</TableHead>
+              <TableHead className="text-right">{t("NOUses")}</TableHead>
+              <TableHead className="text-right">{t("NONotBenefited")}</TableHead>
+              <TableHead className="text-right">{t("dateAndTime")}</TableHead>
+              <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

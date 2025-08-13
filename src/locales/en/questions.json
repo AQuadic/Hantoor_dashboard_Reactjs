@@ -21,5 +21,8 @@
     "supportStatus": "Support status",
     "working": "In progress",
     "done": "Completed",
-    "yourNotes": "Your notes"
+    "yourNotes": "Your notes",
+
+    "NOUses": "Number of Uses",
+    "NONotBenefited": "Number of Unused Opportunities"
 }
