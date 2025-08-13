@@ -7,5 +7,17 @@
     "phone": "Phone number",
     "password": "Password",
     "confirmPassword": "Confirm password",
-    "selectAll": "Select all"
+    "selectAll": "Select all",
+
+    "image": "Image",
+    "dateAndTime": "Registration date & time",
+    "registrationMethod": "Registration method",
+    "NOSearches": "Number of advanced searches",
+    "paymentMethod": "Payment method",
+    "numberOfInsurance": "Number of insurance price detail requests",
+    "carNumbers": "Number of cars in favorites",
+    "currency": "Currency",
+    "active": "Active since",
+    "suspensionDuration": "Suspension duration",
+    "status": "Status"
 }

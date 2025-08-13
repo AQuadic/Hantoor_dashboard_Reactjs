@@ -16,8 +16,10 @@ import user2 from '/images/users/user2.svg'
 import user3 from '/images/users/user3.svg'
 import user4 from '/images/users/user4.svg'
 import { Select, SelectItem} from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 export function UserTable() {
+  const { t } = useTranslation("users");
   const users = [
     { id: 1, image: user1, name: "محمد احمد", phone: "+966 123456 789", date: "22/03/2024- 08:30 PM", way:"رقم الجوال", country: "الامارات",  email: "asmaa@example.com", advancedCount: "22", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", isActive: true, statusTwo: 'Icon' },
     { id: 2, image: user2, name: "مصطفي خالد", phone: "+966 123456 789", date: "22/03/2024- 08:30 PM", way:"فيس بوك", country: "مصر",  email: "john@example.com", advancedCount: "14", paymentMethod: "بطاقة ائتمانية", noTimes: "10", noCars: "5", currency: "درهم اماراتي", status: "22/03/2024- 08:30 PM", SuspensionPeriod: "حدد المدة", isActive: true, statusTwo: 'Icon' },
@@ -39,21 +41,21 @@ export function UserTable() {
       <TableHeader>
         <TableRow >
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">الصورة</TableHead>
-          <TableHead className="text-right">الاسم</TableHead>
-          <TableHead className="text-right">رقم الجوال</TableHead>
-          <TableHead className="text-right">البريد الالكتروني</TableHead>
-          <TableHead className="text-right">تاريخ ووقت التسجيل</TableHead>
-          <TableHead className="text-right">طريقة التسجيل</TableHead>
-          <TableHead className="text-right">الدولة</TableHead>
-          <TableHead className="text-right">عدد مرات البحث المتقدم</TableHead>
-          <TableHead className="text-right">طريقة الدفع</TableHead>
-          <TableHead className="text-right">عدد مرات طلب تفاصيل سعر التأمين</TableHead>
-          <TableHead className="text-right">عدد السيارات في المفضلة</TableHead>
-          <TableHead className="text-right">العملة</TableHead>
-          <TableHead className="text-right">نشط منذ</TableHead>
-          <TableHead className="text-right">مدة الايقاف</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('image')}</TableHead>
+          <TableHead className="text-right">{t('name')}</TableHead>
+          <TableHead className="text-right">{t('phone')}</TableHead>
+          <TableHead className="text-right">{t('email')}</TableHead>
+          <TableHead className="text-right">{t('dateAndTime')}</TableHead>
+          <TableHead className="text-right">{t('registrationMethod')}</TableHead>
+          <TableHead className="text-right">{t('country')}</TableHead>
+          <TableHead className="text-right">{t('NOSearches')}</TableHead>
+          <TableHead className="text-right">{t('paymentMethod')}</TableHead>
+          <TableHead className="text-right">{t('numberOfInsurance')}</TableHead>
+          <TableHead className="text-right">{t('carNumbers')}</TableHead>
+          <TableHead className="text-right">{t('currency')}</TableHead>
+          <TableHead className="text-right">{t('active')}</TableHead>
+          <TableHead className="text-right">{t('suspensionDuration')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
 
         </TableRow>
       </TableHeader>
