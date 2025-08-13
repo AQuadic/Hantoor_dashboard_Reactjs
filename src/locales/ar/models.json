@@ -42,5 +42,7 @@
     "engineSizeEdited": "تم تعديل حجم الماكينة بنجاح",
     "engineSizeDeleted": "تم حذف حجم الماكينة بنجاح",
 
-    "structureType": "نوع الهيكل"
+    "structureType": "نوع الهيكل",
+
+    "categoryName": "اسم الفئة"
 }

@@ -42,5 +42,7 @@
     "engineSizeEdited": "Engine size edited successfully",
     "engineSizeDeleted": "Engine size deleted successfully",
 
-    "structureType": "Structure type"
+    "structureType": "Structure type",
+
+    "categoryName": "Category name"
 }

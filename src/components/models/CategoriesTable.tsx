@@ -10,8 +10,10 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 export function CategoriesTable() {
+  const { t } = useTranslation("models");
   const previousYearModels = [
     {
       id: 1,
@@ -38,8 +40,9 @@ export function CategoriesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> اسم الفئة</TableHead>
-          <TableHead className="text-right">النوع</TableHead>
+          <TableHead className="text-right">{t('categoryName')}</TableHead>
+          <TableHead className="text-right">{t('type')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
