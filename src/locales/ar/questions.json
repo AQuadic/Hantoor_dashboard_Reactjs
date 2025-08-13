@@ -14,5 +14,13 @@
 
     "NOMessages": "عدد الرسائل",
     "dateAndTime": "تاريخ ووقت الانشاء",
-    "status": "الحالة"
+    "status": "الحالة",
+
+    "supportNumber": "رقم الدعم",
+    "username": "اسم المستخدم",
+    "phoneNumber": "رقم الجوال",
+    "supportStatus": "حالة الدعم",
+    "working": "جاري العمل",
+    "done": "تم الانتهاء",
+    "yourNotes": "ملاحظاتك"
 }

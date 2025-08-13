@@ -13,5 +13,13 @@
 
     "NOMessages": "Number of Messages",
     "dateAndTime": "Creation Date & Time",
-    "status": "Status"
+    "status": "Status",
+
+    "supportNumber": "Support number",
+    "username": "Username",
+    "phoneNumber": "Phone number",
+    "supportStatus": "Support status",
+    "working": "In progress",
+    "done": "Completed",
+    "yourNotes": "Your notes"
 }

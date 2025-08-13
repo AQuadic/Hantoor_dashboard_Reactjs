@@ -4,8 +4,10 @@ import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import View from "../icons/general/View";
 import SupportMsgsConversation from "@/pages/supportmessages/SupportMsgsConversation";
+import { useTranslation } from "react-i18next";
 
 const SupportMessagesTable = () => {
+    const { t } = useTranslation("questions");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
 
     const supportMessages = [
@@ -41,12 +43,12 @@ const SupportMessagesTable = () => {
             <TableHeader>
                 <TableRow>
                 <TableHead className="text-right">#</TableHead>
-                <TableHead className="text-right">رقم الدعم</TableHead>
-                <TableHead className="text-right">البلد</TableHead>
-                <TableHead className="text-right">السؤال</TableHead>
-                <TableHead className="text-right">اسم المستخدم</TableHead>
-                <TableHead className="text-right">رقم الجوال</TableHead>
-                <TableHead className="text-right">حالة الدعم</TableHead>
+                <TableHead className="text-right">{t('supportNumber')}</TableHead>
+                <TableHead className="text-right">{t('country')}</TableHead>
+                <TableHead className="text-right">{t('question')}</TableHead>
+                <TableHead className="text-right">{t('username')}</TableHead>
+                <TableHead className="text-right">{t('phoneNumber')}</TableHead>
+                <TableHead className="text-right">{t('supportStatus')}</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -64,17 +66,17 @@ const SupportMessagesTable = () => {
                     >
                     <div className="flex items-center gap-[10px]">
                         <button className="w-[78px] h-[37px] bg-[#2A32F8] rounded-[8.15px] text-[#FFFFFF] font-bold text-[13px]">
-                        جاري العمل
+                            {t('working')}
                         </button>
                         <button className="w-[78px] h-[37px] bg-[#FFFFFF] rounded-[8.15px] text-[#A1A1A1] font-normal text-[13px]">
-                        تم الانتهاء
+                            {t('done')}
                         </button>
                         <input
                         type="text"
                         name="notes"
                         id="notes"
                         className="w-[195px] h-[37px] bg-[#FFFFFF] border border-[#D8D8D8] rounded-[10px] focus:outline-none px-3 placeholder:text-[13px]"
-                        placeholder="ملاحظاتك"
+                        placeholder={t('yourNotes')}
                         />
                     </div>
 
