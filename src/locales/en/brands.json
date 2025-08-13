@@ -6,5 +6,7 @@
   "writeHere": "Write here",
   "brandImage": "Brand Image",
   "brandName": "Brand Name",
-  "count": "Count"
+  "count": "Number of cars",
+  "status": "Status",
+  "brandDeletedsuccessfully": "Brand deleted successfully"
 }

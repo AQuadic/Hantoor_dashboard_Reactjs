@@ -6,5 +6,7 @@
   "writeHere": "اكتب هنا",
   "brandImage": "صورة الماركة",
   "brandName": "اسم الماركة",
-  "count": "عدد السيارات"
+  "count": "عدد السيارات",
+  "status": "الحالة",
+  "brandDeletedsuccessfully": "تم حذف الماركة بنجاح"
 }

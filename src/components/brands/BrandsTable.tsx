@@ -12,6 +12,7 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { deleteBrands } from "@/api/brand/deleteBrands";
+import toast from "react-hot-toast";
 
 interface BrandImage {
   id: number;
@@ -56,6 +57,7 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
 
   const handleDelete = async (id: number) => {
     await deleteBrands(id);
+    toast.success(t('brandDeletedsuccessfully'))
     refetch();
   };
 
