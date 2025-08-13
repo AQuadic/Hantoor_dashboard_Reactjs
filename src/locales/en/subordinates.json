@@ -1,0 +1,20 @@
+{
+    "image": "Image",
+    "name": "Name",
+    "phoneNumber": "Phone number",
+    "email": "Email",
+    "dateTime": "Creation date & time",
+    "administrativePositions": "Administrative positions",
+    "lastLogin": "Last login",
+    "status": "Status",
+
+    "newPassword": "New password",
+    "confirmNewPassword": "Confirm new password",
+
+    "personalImage": "Profile Image",
+    "mainData": "Basic Information",
+    "permissions": "Permissions",
+    "choosePermission": "Select Permission",
+    "password": "Password",
+    "confirmPassword": "Confirm Password"
+}

@@ -1,8 +1,10 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import PasswordInput from "@/components/general/PasswordInput";
+import { useTranslation } from "react-i18next";
 
 const SubordinatesChangePassword = () => {
+  const { t } = useTranslation("subordinates");
   return (
     <section>
       <DashboardHeader
@@ -28,12 +30,12 @@ const SubordinatesChangePassword = () => {
           <PasswordInput
             value=""
             setValue={() => {}}
-            label="كلمة المرور الجديدة "
+            label={t('newPassword')}
           />
           <PasswordInput
             value=""
             setValue={() => {}}
-            label="  تأكيد كلمة المرور الجديدة "
+            label={t('confirmNewPassword')}
           />
         </div>
 

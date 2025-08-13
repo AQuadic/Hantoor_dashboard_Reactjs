@@ -8,6 +8,7 @@ import { Select, SelectItem } from "@heroui/react";
 import React, { useState } from "react";
 import { useParams } from "react-router";
 import { countries } from "countries-list";
+import { useTranslation } from "react-i18next";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -27,6 +28,7 @@ const AddSubordinatePage = () => {
   const [selectedCountry, setSelectedCountry] = useState(
     getCountryByIso2("EG")
   );
+  const { t } = useTranslation("subordinates");
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -71,39 +73,46 @@ const AddSubordinatePage = () => {
       />
       <div className="flex flex-col gap-8 p-8">
         <div className="p-8 bg-white rounded-2xl">
-          <h3 className="mb-4 text-lg font-bold">الصورة الشخصية</h3>
+          <h3 className="mb-4 text-lg font-bold">{t('personalImage')}</h3>
           <ImageInput image={profileImage} setImage={setProfileImage} />
         </div>
 
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
-          <h3 className="mb-2 text-lg font-bold">البيانات الأساسية</h3>
+          <h3 className="mb-2 text-lg font-bold">{t('mainData')}</h3>
 
-          <div className="flex gap-4">
+          <div className="flex md:flex-row flex-col gap-4">
+            <div className="w-full">
             <DashboardInput
-              label="الاسم"
+              label={t('name')}
               value={name}
               onChange={setName}
               placeholder="محمد احمد"
             />
+            </div>
+            <div className="w-full">
             <MobileInput
               selectedCountry={selectedCountry}
               setSelectedCountry={setSelectedCountry}
               phone={phone}
               setPhone={setPhone}
             />
+            </div>
           </div>
 
-          <div className="flex gap-4">
-            <DashboardInput
-              label="البريد الإلكتروني"
+          <div className="flex md:flex-row flex-col gap-4">
+            <div className="w-full">
+              <DashboardInput
+              label={t('email')}
               value={email}
               onChange={setEmail}
               placeholder="username@mail.com"
             />
-            <Select
-              label="الصلاحيات"
+            </div>
+            <div className="w-full">
+              <Select
+              label={t('permissions')}
               variant="bordered"
-              placeholder="اختر الصلاحية"
+              placeholder={t('choosePermission')}
               classNames={{ label: "mb-2 text-base !text-[#080808]" }}
               size="lg"
             >
@@ -113,17 +122,18 @@ const AddSubordinatePage = () => {
                 </SelectItem>
               ))}
             </Select>
+            </div>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex md:flex-row flex-col gap-4">
             <DashboardInput
-              label="كلمة المرور"
+              label={t('password')}
               value={password}
               onChange={setPassword}
               placeholder="••••••••••••••••"
             />
             <DashboardInput
-              label="تأكيد كلمة المرور"
+              label={t('confirmPassword')}
               value={confirmPassword}
               onChange={setConfirmPassword}
               placeholder="••••••••••••••••"

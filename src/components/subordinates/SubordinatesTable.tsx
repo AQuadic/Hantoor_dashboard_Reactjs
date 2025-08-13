@@ -15,8 +15,10 @@ import admin1 from "/images/admin/admin1.svg";
 import admin2 from "/images/admin/admin2.svg";
 import admin3 from "/images/admin/admin3.svg";
 import admin4 from "/images/admin/admin4.svg";
+import { useTranslation } from "react-i18next";
 
 export function SubordinatesTable() {
+  const { t } = useTranslation("subordinates");
   const subordinates = [
     {
       id: 1,
@@ -69,14 +71,14 @@ export function SubordinatesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">الصورة</TableHead>
-          <TableHead className="text-right">الاسم</TableHead>
-          <TableHead className="text-right">رقم الجوال</TableHead>
-          <TableHead className="text-right">البريد الإلكتروني</TableHead>
-          <TableHead className="text-right">تاريخ ووقت الإنشاء</TableHead>
-          <TableHead className="text-right">المصلحية</TableHead>
-          <TableHead className="text-right">آخر تسجيل دخول</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('image')}</TableHead>
+          <TableHead className="text-right">{t('name')}</TableHead>
+          <TableHead className="text-right">{t('phoneNumber')}</TableHead>
+          <TableHead className="text-right">{t('email')}</TableHead>
+          <TableHead className="text-right">{t('dateTime')}</TableHead>
+          <TableHead className="text-right">{t('administrativePositions')}</TableHead>
+          <TableHead className="text-right">{t('lastLogin')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
