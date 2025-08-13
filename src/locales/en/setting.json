@@ -46,5 +46,7 @@
 
     "whatsappNumber": "WhatsApp Number",
     "arDetails": "Details (in Arabic)",
-    "enDetails": "Details (in English)"
+    "enDetails": "Details (in English)",
+
+    "featureAddedSuccessfully": "Feature added successfully"
 }

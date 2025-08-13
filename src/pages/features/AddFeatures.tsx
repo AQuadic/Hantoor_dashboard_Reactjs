@@ -1,15 +1,52 @@
+import { createFeatureApp, FeatureAppBody } from "@/api/featuresApp/postFeatures";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import ImageInput from "@/components/general/ImageInput";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
 
 const AddFeatures = () => {
   const { t } = useTranslation("setting");
-  const [profileImage, setProfileImage] = React.useState<File | null>(null);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
   const [arDescription, setArDescription] = useState("");
   const [enDescription, setEnDescription] = useState("");
+  const [, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+const handleSubmit = async () => {
+  setIsSubmitting(true);
+
+  const body: FeatureAppBody = {
+    description: {
+      ar: arDescription,
+      en: enDescription,
+    },
+    is_active: true,
+  };
+
+  try {
+    const response = await createFeatureApp(body);
+    console.log("Feature created:", response);
+    setArDescription("");
+    setEnDescription("");
+    setProfileImage(null);
+    toast.success(t("featureAddedSuccessfully"));
+    navigate("/settings");
+  } catch (error: any) {
+    const message =
+      error.response?.data?.message ||
+      error.response?.data?.error ||
+      error.message ||
+      t("somethingWentWrong");
+    toast.error(message);
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+
   return (
     <div>
       <div className="pt-0 pb-2 bg-white ">
@@ -53,7 +90,7 @@ const AddFeatures = () => {
           </div>
         </div>
         <div className="mt-5">
-          <DashboardButton titleAr="اضافة" titleEn="Add" />
+          <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit}/>
         </div>
       </div>
     </div>
