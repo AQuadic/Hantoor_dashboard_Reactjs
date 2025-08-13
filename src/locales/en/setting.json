@@ -57,6 +57,5 @@
     "textTitle": "Text title",
     "description": "Description",
 
-    "arabicText": "Arabic Text",
-    "englishText": "English Text"
+    "text": "Text"
 }

@@ -12,7 +12,7 @@ import { deleteFeature } from "@/api/featuresApp/deleteFeature";
 import { useTranslation } from "react-i18next";
 
 const FeaturesTable = () => {
-    const { t } = useTranslation("setting");
+    const { t, i18n } = useTranslation("setting");
     const { data: features = [], isLoading, refetch } = useQuery<Feature[]>({
         queryKey: ["features"],
         queryFn: getFeatures,
@@ -32,8 +32,7 @@ const FeaturesTable = () => {
             <TableRow>
             <TableHead className="text-right">#</TableHead>
             <TableHead className="text-right">{t('image')}</TableHead>
-            <TableHead className="text-right">{t('arabicText')}</TableHead>
-            <TableHead className="text-right">{t('englishText')}</TableHead>
+            <TableHead className="text-right w-full">{t('text')}</TableHead>
             <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
@@ -53,8 +52,7 @@ const FeaturesTable = () => {
                     <span className="text-gray-400">No Image</span>
                     )}
                 </TableCell>
-                <TableCell>{feature.description.ar}</TableCell>
-                <TableCell>{feature.description.en}</TableCell>
+                <TableCell>{feature.description[i18n.language as "ar" | "en"]}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                     <Switch isSelected={feature.is_active} />
                     <Link to={`/features/edit/${feature.id}`}>
