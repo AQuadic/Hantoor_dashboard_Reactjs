@@ -40,5 +40,7 @@
     "engineTypeDeleted": "Engine type deleted successfully",
     "enginSizeAdded": "Engine size added successfully",
     "engineSizeEdited": "Engine size edited successfully",
-    "engineSizeDeleted": "Engine size deleted successfully"
+    "engineSizeDeleted": "Engine size deleted successfully",
+
+    "structureType": "Structure type"
 }

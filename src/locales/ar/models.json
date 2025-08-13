@@ -40,5 +40,7 @@
     "engineTypeDeleted": "تم حذف نوع الماكينة بنجاح",
     "enginSizeAdded": "تم اضافة حجم الماكينة بنجاح",
     "engineSizeEdited": "تم تعديل حجم الماكينة بنجاح",
-    "engineSizeDeleted": "تم حذف حجم الماكينة بنجاح"
+    "engineSizeDeleted": "تم حذف حجم الماكينة بنجاح",
+
+    "structureType": "نوع الهيكل"
 }

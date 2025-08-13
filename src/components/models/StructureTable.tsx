@@ -9,8 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { useTranslation } from "react-i18next";
 
 export function StructureTable() {
+  const { t } = useTranslation("models");
   const data = [
     {
       id: 1,
@@ -37,9 +39,9 @@ export function StructureTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">نوع الهيكل</TableHead>
-          <TableHead className="text-right">الموديل</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('structureType')}</TableHead>
+          <TableHead className="text-right">{t('model')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
