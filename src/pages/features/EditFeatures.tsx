@@ -30,7 +30,7 @@ const EditFeatures = () => {
         is_active: isActive,
       };
       const data = await editFeature(Number(id), payload);
-      toast.success(t('featuedUpdated'), data);
+      toast.success(t('featuedUpdated'));
       } catch (error: any) {
         const errorMessage =
           error?.response?.data?.message ||
