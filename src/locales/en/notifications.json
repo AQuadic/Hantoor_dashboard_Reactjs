@@ -15,5 +15,9 @@
     "thecountry": "Country :",
     "UAE": "Emirates",
     "saveData": "Data Protection",
-    "clients": "Receiving Clients"
+    "clients": "Receiving Clients",
+
+    "textTitle": "Text Title",
+    "description": "Description",
+    "status": "Status"
 }

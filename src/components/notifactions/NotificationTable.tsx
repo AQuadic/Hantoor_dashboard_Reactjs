@@ -4,7 +4,9 @@ import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import notificationCar from '/images/notificationCar.png'
 import View from "../icons/general/View";
+import { useTranslation } from "react-i18next";
 const NotificationTable = () => {
+    const { t } = useTranslation("notifications");
 const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
 
     const toggleExpand = (id: number) => {
@@ -42,11 +44,11 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">الصورة</TableHead>
-            <TableHead className="text-right">عنوان النص</TableHead>
-            <TableHead className="text-right">البلد</TableHead>
-            <TableHead className="text-right">الوصف</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
+            <TableHead className="text-right">{t('image')}</TableHead>
+            <TableHead className="text-right">{t('textTitle')}</TableHead>
+            <TableHead className="text-right">{t('country')}</TableHead>
+            <TableHead className="text-right">{t('description')}</TableHead>
+            <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
