@@ -15,10 +15,11 @@ import { EngineSize, getEngineSize } from "@/api/models/engineSize/getEnginSize"
 import { deleteEngineSize } from "@/api/models/engineSize/deleteEngineSize";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import Loading from "../general/Loading";
 
 export function EngineSizesTable() {
   const { t } = useTranslation("models");
-  const { data: engineSize, refetch } = useQuery<EngineSize[]>({
+  const { data: engineSize, isLoading, refetch } = useQuery<EngineSize[]>({
     queryKey: ["engineSize"],
     queryFn: getEngineSize,
   });
@@ -28,6 +29,10 @@ export function EngineSizesTable() {
     toast.success(t('engineSizeDeleted'))
     refetch();
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Table>

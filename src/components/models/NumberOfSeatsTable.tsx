@@ -15,10 +15,11 @@ import { useQuery } from "@tanstack/react-query";
 import { deleteSeats } from "@/api/models/seats/deleteSeats";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import Loading from "../general/Loading";
 
 export function NumberOfSeatsTable() {
     const { t } = useTranslation("models");
-  const { data: seats, refetch } = useQuery<numOfSeats[]>({
+  const { data: seats,isLoading, refetch } = useQuery<numOfSeats[]>({
     queryKey: ["seats"],
     queryFn: getSeats,
   });
@@ -36,6 +37,10 @@ export function NumberOfSeatsTable() {
       toast.error(errorMsg);
     }
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Table>

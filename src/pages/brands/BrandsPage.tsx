@@ -5,6 +5,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBrands, BrandsApiResponse } from "@/api/brand/fetchBrands";
 import { useTranslation } from "react-i18next";
+import Loading from "@/components/general/Loading";
 
 const BrandsPage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -28,7 +29,7 @@ const BrandsPage = () => {
   }, [data]);
 
   if (isLoading) {
-    return <div>Loading brands...</div>;
+    return <Loading />
   }
   if (error) {
     return <div>Error loading brands: {String(error)}</div>;

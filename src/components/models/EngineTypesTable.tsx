@@ -15,10 +15,11 @@ import { EngineType, getEngineType } from "@/api/models/engineTypes/getEngineTyp
 import { deleteEngineType } from "@/api/models/engineTypes/deleteEngineType";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import Loading from "../general/Loading";
 
 export function EngineTypesTable() {
   const { t } = useTranslation("models");
-  const { data: engineTypes, refetch } = useQuery<EngineType[]>({
+  const { data: engineTypes, isLoading, refetch } = useQuery<EngineType[]>({
     queryKey: ["engineTypes"],
     queryFn: getEngineType,
   });
@@ -28,6 +29,10 @@ export function EngineTypesTable() {
     toast.success(t('engineTypeDeleted'))
     refetch();
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Table>

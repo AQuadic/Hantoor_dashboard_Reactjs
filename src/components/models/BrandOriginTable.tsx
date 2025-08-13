@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { deleteBrandOrigin } from "@/api/models/brandOrigin/deleteBrandOrigin";
 import toast from "react-hot-toast";
+import Loading from "../general/Loading";
 
 interface BrandOrigin {
   id: number;
@@ -31,7 +32,7 @@ export function BrandOriginTable() {
   const { i18n,t } = useTranslation("models");
   const currentLang = i18n.language;
 
-  const { data, refetch} = useQuery<BrandOrigin[]>({
+  const { data,isLoading, refetch} = useQuery<BrandOrigin[]>({
     queryKey: ["brands"],
     queryFn: getBrandOrigin,
   });
@@ -41,6 +42,10 @@ export function BrandOriginTable() {
     toast.success(t('brandOriginDeleted'))
     refetch();
   };
+
+  if (isLoading) {
+    return <Loading />;
+  }
 
   return (
     <Table>
