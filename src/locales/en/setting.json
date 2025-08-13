@@ -50,5 +50,7 @@
 
     "featureAddedSuccessfully": "Feature added successfully",
     "faetureDeletedSuccessfully": "Feature deleted successfully",
-    "featuedUpdated": "Feature updated successfully"
+    "featuedUpdated": "Feature updated successfully",
+
+    "status": "Status"
 }

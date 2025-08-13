@@ -50,5 +50,7 @@
 
     "featureAddedSuccessfully": "تمت إضافة الميزة بنجاح",
     "faetureDeletedSuccessfully": "تم حذف الميزة بنجاح",
-    "featuedUpdated": "تم تحديث الميزة بنجاح"
+    "featuedUpdated": "تم تحديث الميزة بنجاح",
+
+    "status": "الحالة"
 }

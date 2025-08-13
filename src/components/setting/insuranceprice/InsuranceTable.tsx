@@ -3,10 +3,12 @@ import { Link } from "react-router";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
-import ActiveStatus from "@/components/icons/general/ActiveStatus";
 import Edit from "@/components/icons/general/Edit";
+import { useTranslation } from "react-i18next";
+import { Switch } from "@heroui/react";
 
 const InsuranceTable = () => {
+    const { t } = useTranslation("setting");
     const countries = [
     {
         id: 1,
@@ -29,9 +31,9 @@ const InsuranceTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">رقم الواتساب</TableHead>
-            <TableHead className="text-right">البلد</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
+            <TableHead className="text-right">{t('whatsappNumber')}</TableHead>
+            <TableHead className="text-right">{t('country')}</TableHead>
+            <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
@@ -41,7 +43,7 @@ const InsuranceTable = () => {
                 <TableCell dir="ltr">{country.Whatsapp}</TableCell>
                 <TableCell className="w-full">{country.country}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                <ActiveStatus />
+                <Switch />
                 <Link to="/setting/edit-whatsapp/:id">
                     <Edit />
                 </Link>
