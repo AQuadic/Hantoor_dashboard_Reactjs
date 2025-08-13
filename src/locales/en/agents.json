@@ -23,5 +23,10 @@
     "agentName": "Agent Name",
     "NOMaintenance": "Number of Maintenance Center Addresses",
     "NOShowrooms": "Number of Showroom Addresses",
-    "status": "Status"
+    "status": "Status",
+
+    "addedShowrooms": "Showrooms added",
+    "addedCenters": "Maintenance Centers added",
+    "pleaseFillAllFields": "Please fill all fields",
+    "pleaseSelectBrand": "Please select a brand"
 }

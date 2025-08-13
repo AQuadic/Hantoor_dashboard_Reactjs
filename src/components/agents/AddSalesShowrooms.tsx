@@ -97,7 +97,7 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
       <div className="flex flex-col md:flex-row gap-[15px] mt-4">
         <div className="w-full">
           <DashboardInput
-            label={t("arDescription")}
+            label={t("arAddress")}
             value={arDescription}
             onChange={setArDescription}
             placeholder={t("writeHere")}
@@ -105,7 +105,7 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
         </div>
         <div className="w-full">
           <DashboardInput
-            label={t("enDescription")}
+            label={t("enAddress")}
             value={enDescription}
             onChange={setEnDescription}
             placeholder={t("writeHere")}

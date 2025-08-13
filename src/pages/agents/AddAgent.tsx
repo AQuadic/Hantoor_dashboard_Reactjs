@@ -72,7 +72,12 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
 
   const handleSubmit = () => {
     if (!arName || !enName) {
-      toast.error(t("pleaseFilAllFields"));
+      toast.error(t("pleaseFillAllFields"));
+      return;
+    }
+
+    if (!selectedBrandId) {
+      toast.error(t("pleaseSelectBrand"));
       return;
     }
 
@@ -98,9 +103,9 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         ar: arName,
         en: enName,
       },
-      is_active: "1",
+      is_active: true,
       link: emailLink,
-      brand_id: selectedBrandId ? Number(selectedBrandId) : undefined,
+      brand_id: Number(selectedBrandId),
       centers: {
         name: {
           ar: centerToSave.name.ar,

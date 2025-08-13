@@ -23,5 +23,10 @@
     "agentName": "اسم الوكيل",
     "NOMaintenance": "عدد عناوين مراكز الصيانه",
     "NOShowrooms": "عدد عناوين معارض البيع",
-    "status": "الحالة"
+    "status": "الحالة",
+
+    "addedShowrooms": "تم اضافة معارض البيع",
+    "addedCenters": "تم اضافة مراكز الصيانة",
+    "pleaseFillAllFields": "يرجى ملء جميع الحقول",
+    "pleaseSelectBrand": "يرجى اختيار الماركة"
 }
