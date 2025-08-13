@@ -57,5 +57,18 @@
 
     "advertisingImages": "Advertising Images at the Bottom of the Page",
 
-    "addMoreData": "Add additional data"
+    "addMoreData": "Add additional data",
+
+    "image": "Image",
+    "carName": "Car name",
+    "brandName": "Brand name",
+    "agentName": "Agent name",
+    "discount": "Discount",
+    "pricetaxIncluded": "Price (Tax Included)",
+    "pricewarrantyIncluded": "Price (Warranty Included)",
+    "priceinsuranceIncluded": "Price (Insurance Included)",
+    "leaseToOwn": "Lease-to-Own",
+    "favTimes": "Number of times added to favorites",
+    "dateAndTime": "Date & time added",
+    "status": "Status"
 }

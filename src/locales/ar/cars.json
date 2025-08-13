@@ -57,5 +57,18 @@
 
     "advertisingImages": "الصور الاعلانية في اخر الصفحة",
 
-    "addMoreData": " اضافة بيانات اخرى"
+    "addMoreData": " اضافة بيانات اخرى",
+
+    "image": "الصورة",
+    "carName": "اسم السيارة",
+    "brandName": "اسم الماركة",
+    "agentName": "اسم الوكيل",
+    "discount": "الخصم",
+    "pricetaxIncluded": "السعر شامل الضريبة",
+    "pricewarrantyIncluded": "السعر شامل الضمان",
+    "priceinsuranceIncluded": "السعر شامل التأمين",
+    "leaseToOwn": "ايجار منتهي بالتملك",
+    "favTimes": "عدد مرات الاضاف للمفضلة",
+    "dateAndTime": "تاريخ ووقت الاضافة",
+    "status": "الحالة"
 }

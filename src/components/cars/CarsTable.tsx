@@ -16,8 +16,10 @@ import carImage from "/images/cartable.png";
 import TableEditButton from "@/components/general/dashboard/table/TableEditButton";
 import ViewIcon from "@/components/icons/dashboard/ViewIcon";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const CarsTable = () => {
+  const { t } = useTranslation("cars");
   const [openChatId, setOpenChatId] = useState<number | null>(null);
 
   const chats = [
@@ -86,25 +88,25 @@ const CarsTable = () => {
           <TableHeader>
             <TableRow>
               <TableHead className="text-right">#</TableHead>
-              <TableHead className="text-right">الصورة</TableHead>
-              <TableHead className="text-right">اسم السيارة</TableHead>
-              <TableHead className="text-right">اسم الماركة</TableHead>
-              <TableHead className="text-right">اسم الوكيل</TableHead>
-              <TableHead className="text-right">النوع</TableHead>
-              <TableHead className="text-right">الموديل</TableHead>
-              <TableHead className="text-right">السعر</TableHead>
-              <TableHead className="text-right">الخصم</TableHead>
-              <TableHead className="text-right">نسبة الخصم</TableHead>
-              <TableHead className="text-right">العروض</TableHead>
-              <TableHead className="text-right">السعر شامل الضريبة</TableHead>
-              <TableHead className="text-right">السعر شامل الضمان</TableHead>
-              <TableHead className="text-right">السعر شامل التأمين</TableHead>
-              <TableHead className="text-right">ايجار منتهي بالتملك</TableHead>
+              <TableHead className="text-right">{t('image')}</TableHead>
+              <TableHead className="text-right">{t('carName')}</TableHead>
+              <TableHead className="text-right">{t('brandName')}</TableHead>
+              <TableHead className="text-right">{t('agentName')}</TableHead>
+              <TableHead className="text-right">{t('type')}</TableHead>
+              <TableHead className="text-right">{t('model')}</TableHead>
+              <TableHead className="text-right">{t('price')}</TableHead>
+              <TableHead className="text-right">{t('discount')}</TableHead>
+              <TableHead className="text-right">{t('discountPercentage')}</TableHead>
+              <TableHead className="text-right">{t('offers')}</TableHead>
+              <TableHead className="text-right">{t('pricetaxIncluded')}</TableHead>
+              <TableHead className="text-right">{t('pricewarrantyIncluded')}</TableHead>
+              <TableHead className="text-right">{t('priceinsuranceIncluded')}</TableHead>
+              <TableHead className="text-right">{t('leaseToOwn')}</TableHead>
               <TableHead className="text-right">
-                عدد مرات الاضاف للمفضلة
+                {t('favTimes')}
               </TableHead>
-              <TableHead className="text-right">تاريخ ووقت الاضافة</TableHead>
-              <TableHead className="text-right">الحالة</TableHead>
+              <TableHead className="text-right">{t('dateAndTime')}</TableHead>
+              <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
