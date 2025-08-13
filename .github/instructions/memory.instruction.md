@@ -57,7 +57,8 @@ All CRUD operations working:
 
 Implementation follows project conventions with TypeScript interfaces, TanStack Query for state management, and proper error handling. Agent management system supports dynamic center/showroom management and bilingual content.
 
-- [x] Replace inputs in settings pages (2 files)
+2025-08-13: Fixed brand image rendering in BrandsTable.tsx. Updated BrandImage interface to include 'url' and 'responsive_urls' properties to match backend data. Image now displays using the correct URL, with double slashes cleaned. All compile and lint errors resolved. Pattern: always align frontend types with backend API response for robust rendering.
+
 - [x] Replace inputs in notification pages (1 file)
 - [ ] Replace inputs in models pages (20+ files)
 - [ ] Replace inputs in financing pages (2 files)

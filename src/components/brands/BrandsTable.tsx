@@ -34,6 +34,8 @@ interface BrandImage {
   updated_at: string;
   original_url: string;
   preview_url: string;
+  url?: string;
+  responsive_urls?: string[];
 }
 
 interface Brand {
@@ -48,7 +50,6 @@ interface BrandsTableProps {
   brands?: Brand[];
   refetch: () => void;
 }
-
 
 export function BrandsTable({ brands, refetch }: BrandsTableProps) {
   const { t, i18n } = useTranslation("brands");
@@ -75,20 +76,23 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
             <TableRow key={brand.id} noBackgroundColumns={1}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
-                {/* If brand.image.original_url exists, show it, else fallback */}
-                {brand.image && brand.image.original_url ? (
+                {brand.image &&
+                (brand.image.url ||
+                  (brand.image.responsive_urls &&
+                    brand.image.responsive_urls[0])) ? (
                   (() => {
-                    // Clean double slashes in URL
-                    const url = brand.image.original_url.replace(
-                      /([^:]\/)\/+/,
-                      "$1/"
-                    );
-                    console.log("Brand image URL:", url);
+                    const rawUrl =
+                      brand.image.url ||
+                      (Array.isArray(brand.image.responsive_urls)
+                        ? brand.image.responsive_urls[0]
+                        : undefined);
+                    if (!rawUrl) return <span>{t("noImage")}</span>;
+                    const url = rawUrl.replace(/([^:]\/)\/+/, "$1/");
                     return (
                       <img
                         src={url}
                         alt="brand"
-                        style={{ maxWidth: 60, maxHeight: 40 }}
+                        className="w-10 h-10 rounded-full object-cover"
                       />
                     );
                   })()
@@ -106,7 +110,9 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
                   <Edit />
                 </Link>
                 <div className="mt-2">
-                  <TableDeleteButton handleDelete={() => handleDelete(brand.id)} />
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(brand.id)}
+                  />
                 </div>
               </TableCell>
             </TableRow>
