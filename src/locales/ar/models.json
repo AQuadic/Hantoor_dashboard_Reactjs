@@ -44,5 +44,9 @@
 
     "structureType": "نوع الهيكل",
 
-    "categoryName": "اسم الفئة"
+    "categoryName": "اسم الفئة",
+
+    "priceFrom": "السعر من",
+
+    "priceTo" :"السعر الى"
 }

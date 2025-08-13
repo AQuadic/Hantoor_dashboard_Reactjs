@@ -10,8 +10,10 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 export function PriceFromTable() {
+  const { t } = useTranslation("models");
   const pricefrom = [
     {
       id: 1,
@@ -32,8 +34,8 @@ export function PriceFromTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right"> السعر من</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('priceFrom')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

@@ -44,5 +44,9 @@
 
     "structureType": "Structure type",
 
-    "categoryName": "Category name"
+    "categoryName": "Category name",
+
+    "priceFrom": "Price from",
+
+    "priceTo" :"Price to"
 }
