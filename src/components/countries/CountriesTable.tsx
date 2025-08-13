@@ -4,8 +4,10 @@ import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 const CountriesTable = () => {
+    const { t } = useTranslation("country");
     const countries = [
     {
         id: 1,
@@ -37,11 +39,11 @@ const CountriesTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">اسم البلد</TableHead>
-            <TableHead className="text-right">العملة</TableHead>
-            <TableHead className="text-right">عدد المشتركين من المستخدمين</TableHead>
-            <TableHead className="text-right">تاريخ ووقت الاضافة</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
+            <TableHead className="text-right">{t('countryName')}</TableHead>
+            <TableHead className="text-right">{t('currency')}</TableHead>
+            <TableHead className="text-right">{t("NOUsers")}</TableHead>
+            <TableHead className="text-right">{t('dateAndTime')}</TableHead>
+            <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>

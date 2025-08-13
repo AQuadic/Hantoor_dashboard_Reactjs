@@ -8,5 +8,11 @@
     "month": "Month",
     "day": "Day",
     "year": "Year",
-    "writeHere": "Write here"
+    "writeHere": "Write here",
+
+    "countryName": "Country name",
+    "currency": "Currency",
+    "NOUsers": "Number of users",
+    "dateAndTime": "Date & time added",
+    "status": "Status"
 }

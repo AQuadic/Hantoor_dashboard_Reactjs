@@ -8,5 +8,11 @@
     "month": "شهر",
     "day": "يوم",
     "year": "سنة",
-    "writeHere": "اكتب هنا"
+    "writeHere": "اكتب هنا",
+    
+    "countryName": "اسم البلد",
+    "currency": "العملة",
+    "NOUsers": "عدد المشتركين من المستخدمين",
+    "dateAndTime": "تاريخ ووقت الاضافة",
+    "status": "الحالة"
 }
