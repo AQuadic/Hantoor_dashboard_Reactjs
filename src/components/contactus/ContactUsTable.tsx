@@ -6,8 +6,10 @@ import View from "../icons/general/View";
 import ContactUsView from "@/pages/contactus/ContactUsView";
 import Email from "../icons/contactus/Email";
 import Star from "../icons/contactus/Star";
+import { useTranslation } from "react-i18next";
 
 const ContactUsTable = () => {
+    const { t } = useTranslation("contactUs");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
 
     const messages = [
@@ -43,10 +45,10 @@ const ContactUsTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">اسم العميل</TableHead>
-            <TableHead className="text-right">رقم الجوال</TableHead>
-            <TableHead className="text-right">البريد الالكتروني</TableHead>
-            <TableHead className="text-right">البلد</TableHead>
+            <TableHead className="text-right">{t('clientName')}</TableHead>
+            <TableHead className="text-right">{t('phoneNumber')}</TableHead>
+            <TableHead className="text-right">{t('email')}</TableHead>
+            <TableHead className="text-right">{t('country')}</TableHead>
             <TableHead className="text-right"></TableHead>
 
             </TableRow>
@@ -66,7 +68,7 @@ const ContactUsTable = () => {
                     >
                     <div className="flex items-center justify-center gap-[10px] w-[160px] h-[37px] bg-[#1E1B1B] rounded-[8.15px]">
                         <Email />
-                        <button className=" text-[#FFFFFF] font-bold text-sm">الرد عن طريق البريد</button>
+                        <button className=" text-[#FFFFFF] font-bold text-sm">{t('replayViaEmail')}</button>
                     </div>
                 </TableCell>
                     <button onClick={() => setOpenMessageId(message.id)}>

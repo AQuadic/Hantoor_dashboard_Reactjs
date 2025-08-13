@@ -45,6 +45,9 @@ import subordinatesEn from "../locales/en/subordinates.json";
 import chatsAr from "../locales/ar/chats.json";
 import chatsEn from "../locales/en/chats.json";
 
+import contactUsAr from "../locales/ar/contactUs.json";
+import contactUsEn from "../locales/en/contactUs.json";
+
 // Ensure we're in browser environment
 const savedLang =
   typeof window !== "undefined"
@@ -75,6 +78,7 @@ i18n.use(initReactI18next).init({
       cars: carsEn,
       subordinates: subordinatesEn,
       chats: chatsEn,
+      contactUs: contactUsEn,
     },
     ar: {
       header: headerAr,
@@ -92,6 +96,7 @@ i18n.use(initReactI18next).init({
       cars: carsAr,
       subordinates: subordinatesAr,
       chats: chatsAr,
+      contactUs: contactUsAr,
     },
   },
 });
