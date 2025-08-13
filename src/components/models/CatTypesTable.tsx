@@ -10,8 +10,10 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 export function CarTypesTable() {
+  const { t } = useTranslation("models");
   const carTypes = [
     {
       id: 1,
@@ -38,9 +40,9 @@ export function CarTypesTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">النوع</TableHead>
-          <TableHead className="text-right">الهيكل</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('type')}</TableHead>
+          <TableHead className="text-right">{t('structure')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
