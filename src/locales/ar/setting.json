@@ -52,5 +52,8 @@
     "faetureDeletedSuccessfully": "تم حذف الميزة بنجاح",
     "featuedUpdated": "تم تحديث الميزة بنجاح",
 
-    "status": "الحالة"
+    "status": "الحالة",
+
+    "textTitle": "عنوان النص",
+    "description": "الوصف"
 }

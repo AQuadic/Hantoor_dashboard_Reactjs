@@ -5,8 +5,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../../ui/table";
 import profileImg from '/images/profileImg.png'
 import profileImg2 from '/images/profileImg2.png'
+import { useTranslation } from "react-i18next";
 
 const ProfileTable = () => {
+    const { t } = useTranslation("setting");
     const profile = [
     {
         id: 1,
@@ -28,11 +30,11 @@ const ProfileTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">الصورة</TableHead>
-            <TableHead className="text-right">عنوان النص</TableHead>
-            <TableHead className="text-right">البلد</TableHead>
-            <TableHead className="text-right">الوصف</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
+            <TableHead className="text-right">{t('image')}</TableHead>
+            <TableHead className="text-right">{t('textTitle')}</TableHead>
+            <TableHead className="text-right">{t('country')}</TableHead>
+            <TableHead className="text-right">{t('description')}</TableHead>
+            <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>

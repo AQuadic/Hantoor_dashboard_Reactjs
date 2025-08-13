@@ -52,5 +52,8 @@
     "faetureDeletedSuccessfully": "Feature deleted successfully",
     "featuedUpdated": "Feature updated successfully",
 
-    "status": "Status"
+    "status": "Status",
+
+    "textTitle": "Text Title",
+    "description": "Description"
 }
