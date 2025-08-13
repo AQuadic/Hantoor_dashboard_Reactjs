@@ -25,7 +25,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
 }) => {
-  const { t } = useTranslation("agents");
+  const { t, i18n } = useTranslation("agents");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -145,10 +145,10 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
           </div>
 
           <div className="relative w-full border border-gray-300 rounded-lg p-3 text-sm">
-            <p className="text-right text-black text-sm">{t("brand")}</p>
+            <p className="rtl:text-right text-black text-sm">{t("brand")}</p>
             <div className="flex items-center justify-between gap-1">
               <span className="text-gray-500 text-sm">
-                {selectedBrand?.name?.ar || t("selectBrand")}
+              {selectedBrand ? i18n.language === "ar" ? selectedBrand.name.ar : selectedBrand.name.en : t("selectBrand")}
               </span>
 
               <select
@@ -159,7 +159,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
                 <option value="">{t("selectBrand")}</option>
                 {brands?.data?.map((brand) => (
                   <option key={brand.id} value={brand.id}>
-                    {brand.name.ar}
+                    {i18n.language === "ar" ? brand.name.ar : brand.name.en}
                   </option>
                 ))}
               </select>
