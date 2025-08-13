@@ -6,8 +6,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import View from "../icons/general/View";
+import { useTranslation } from "react-i18next";
 
 const FinancingTable = () => {
+  const { t } = useTranslation("financing");
   const navigate = useNavigate();
 
   const technicalsupport = [
@@ -32,9 +34,9 @@ const FinancingTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">البلد</TableHead>
-            <TableHead className="text-right">عدد البنوك</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
+            <TableHead className="text-right">{t('country')}</TableHead>
+            <TableHead className="text-right">{t('NOBanks')}</TableHead>
+            <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>

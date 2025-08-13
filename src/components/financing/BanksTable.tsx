@@ -5,9 +5,12 @@ import ActiveStatus from "../icons/general/ActiveStatus";
 import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
+import { useTranslation } from "react-i18next";
+import { Switch } from "@heroui/react";
 
 const BanksTable = () => {
     // const navigate = useNavigate();
+    const { t } = useTranslation("financing");
 
     const bank = [
     {
@@ -34,10 +37,10 @@ const BanksTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">الصورة</TableHead>
-            <TableHead className="text-right">اسم البنك</TableHead>
-            <TableHead className="text-right">قيمة الفائدة</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
+            <TableHead className="text-right">{t('image')}</TableHead>
+            <TableHead className="text-right">{t('bankNameTitle')}</TableHead>
+            <TableHead className="text-right">{t('interestValue')}</TableHead>
+            <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
@@ -56,7 +59,7 @@ const BanksTable = () => {
                 className="flex gap-[7px] items-center"
                 // onClick={(e) => e.stopPropagation()} 
                 >
-                <ActiveStatus />
+                <Switch />
                 <Link to={`/bank/edit/${bank.id}`}>
                     <Edit />
                 </Link>

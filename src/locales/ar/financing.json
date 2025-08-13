@@ -16,5 +16,13 @@
     "InterestAmount": "قيمة الفائدة",
     "citizenData": "بيانات المواطن",
     "addMoreData": "اضافة بيانات اخرى",
-    "bankName": "بنك أبوظبي الأول"
+    "bankName": "بنك أبوظبي الأول",
+
+    "country": "البلد",
+    "NOBanks": "عدد البنوك",
+    "status": "الحالة",
+
+    "image": "الصورة",
+    "bankNameTitle": "اسم البنك",
+    "interestValue": "قيمة الفائدة"
 }

@@ -16,5 +16,13 @@
     "InterestAmount": "Interest Amount",
     "citizenData": "Citizen Data",
     "addMoreData": "Add more data",
-    "bankName": "First Abu Dhabi Bank"
+    "bankName": "First Abu Dhabi Bank",
+
+    "country": "Country",
+    "NOBanks": "Number of banks",
+    "status": "Status",
+
+    "image": "Image",
+    "bankNameTitle": "Bank name",
+    "interestValue": "Interest value"
 }
