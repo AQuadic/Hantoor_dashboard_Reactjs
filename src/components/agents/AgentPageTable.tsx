@@ -13,6 +13,7 @@ import { Switch } from "@heroui/react";
 import Copy from "../icons/agents/Copy";
 import View from "../icons/general/View";
 import { Agent } from "@/api/agents/fetchAgents";
+import { useTranslation } from "react-i18next";
 
 interface AgentPageTableProps {
   agents: Agent[];
@@ -25,15 +26,16 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
   onDelete,
   onToggleActive,
 }) => {
+  const { t } = useTranslation("agents");
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">اسم الوكيل</TableHead>
-          <TableHead className="text-right">عدد عناوين مراكز الصيانه</TableHead>
-          <TableHead className="text-right">عدد عناوين معارض البيع</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
+          <TableHead className="text-right">{t('agentName')}</TableHead>
+          <TableHead className="text-right">{t('NOMaintenance')}</TableHead>
+          <TableHead className="text-right">{t('NOShowrooms')}</TableHead>
+          <TableHead className="text-right">{t('status')}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>

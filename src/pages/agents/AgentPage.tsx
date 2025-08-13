@@ -6,6 +6,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchAgents, deleteAgent } from "@/api/agents/fetchAgents";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import Loading from "@/components/general/Loading";
 
 const AgentPage = () => {
   const { t } = useTranslation("agents");
@@ -50,9 +51,7 @@ const AgentPage = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-64">
-        {t("loading")}
-      </div>
+      <Loading />
     );
   }
   return (

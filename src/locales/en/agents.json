@@ -18,5 +18,10 @@
     "addShowroom": "Add another showroom",
     "arShowRooms": "Showroom Name (in Arabic)",
     "enShowRooms": "Showroom Name (in English)",
-    "selectBrand": "Select brand"
+    "selectBrand": "Select brand",
+
+    "agentName": "Agent Name",
+    "NOMaintenance": "Number of Maintenance Center Addresses",
+    "NOShowrooms": "Number of Showroom Addresses",
+    "status": "Status"
 }
