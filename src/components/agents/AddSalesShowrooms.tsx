@@ -6,6 +6,7 @@ import { useState } from "react";
 import { countries } from "countries-list";
 import { AgentCenter } from "@/api/agents/fetchAgents";
 import { X } from "lucide-react";
+import toast from "react-hot-toast";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -42,7 +43,8 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
   const [whatsapp, setWhatsapp] = useState("");
 
   const handleAddShowroom = () => {
-    if (!arName || !enName || !phone) {
+    if (!arName || !enName || !phone || !arDescription || !enDescription) {
+      toast.error(t("pleaseCompleteAllFields"));
       return;
     }
 
@@ -56,9 +58,9 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
         en: enDescription,
       },
       phone,
-      whatsapp,
+      whatsapp: whatsapp || phone,
       type,
-      is_active: true,
+      is_active: "1",
     };
 
     onAddCenter(newShowroom);

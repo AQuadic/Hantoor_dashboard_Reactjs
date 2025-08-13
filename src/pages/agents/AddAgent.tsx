@@ -76,15 +76,45 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       return;
     }
 
+    if (centers.length === 0) {
+      toast.error(t("pleaseAddAtLeastOneCenter"));
+      return;
+    }
+
+    const centerToSave = centers[0];
+
+    if (!centerToSave.name?.ar || 
+        !centerToSave.name?.en || 
+        !centerToSave.phone || 
+        !centerToSave.whatsapp ||
+        !centerToSave.description?.ar ||
+        !centerToSave.description?.en) {
+      toast.error(t("centerMissingRequiredFields"));
+      return;
+    }
+
     const payload: CreateAgentPayload = {
       name: {
         ar: arName,
         en: enName,
       },
-      is_active: true,
+      is_active: "1",
       link: emailLink,
       brand_id: selectedBrandId ? Number(selectedBrandId) : undefined,
-      centers: centers.length > 0 ? centers : undefined,
+      centers: {
+        name: {
+          ar: centerToSave.name.ar,
+          en: centerToSave.name.en,
+        },
+        description: {
+          ar: centerToSave.description.ar,
+          en: centerToSave.description.en,
+        },
+        phone: centerToSave.phone,
+        whatsapp: centerToSave.whatsapp,
+        type: centerToSave.type,
+        is_active: "1",
+      },
     };
 
     createAgentMutation.mutate(payload);
