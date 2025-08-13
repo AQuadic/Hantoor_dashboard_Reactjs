@@ -4,8 +4,10 @@ import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
+import { useTranslation } from "react-i18next";
 
 const TechnicalSupportTable = () => {
+    const { t } = useTranslation("questions");
     const technicalsupport = [
     {
         id: 1,
@@ -34,11 +36,11 @@ const TechnicalSupportTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">السؤال</TableHead>
-            <TableHead className="text-right">البلد</TableHead>
-            <TableHead className="text-right">عدد الرسائل</TableHead>
-            <TableHead className="text-right">تاريخ ووقت الانشاء</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
+            <TableHead className="text-right">{t('question')}</TableHead>
+            <TableHead className="text-right">{t('country')}</TableHead>
+            <TableHead className="text-right">{t('NOMessages')}</TableHead>
+            <TableHead className="text-right">{t("dateAndTime")}</TableHead>
+            <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
