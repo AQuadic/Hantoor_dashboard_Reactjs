@@ -33,7 +33,7 @@ export async function updateBrand({
   const response = await axios.put(`/admin/brands/${id}`, formData, {
     headers: {
       Accept: "application/json",
-      // Do NOT set Content-Type for multipart/form-data; browser will set boundary automatically
+      "Content-Type": "multipart/form-data",
     },
   });
   return response.data;
