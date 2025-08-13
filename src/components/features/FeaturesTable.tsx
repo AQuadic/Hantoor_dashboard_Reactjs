@@ -12,7 +12,7 @@ import { deleteFeature } from "@/api/featuresApp/deleteFeature";
 import { useTranslation } from "react-i18next";
 
 const FeaturesTable = () => {
-    const { t } = useTranslation("settings");
+    const { t } = useTranslation("setting");
     const { data: features = [], isLoading, refetch } = useQuery<Feature[]>({
         queryKey: ["features"],
         queryFn: getFeatures,
@@ -31,10 +31,10 @@ const FeaturesTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">الصورة</TableHead>
-            <TableHead className="text-right">النص بالعربية</TableHead>
-            <TableHead className="text-right">النص بالإنجليزية</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
+            <TableHead className="text-right">{t('image')}</TableHead>
+            <TableHead className="text-right">{t('arabicText')}</TableHead>
+            <TableHead className="text-right">{t('englishText')}</TableHead>
+            <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>

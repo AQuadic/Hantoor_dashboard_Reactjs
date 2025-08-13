@@ -55,5 +55,8 @@
     "status": "Status",
 
     "textTitle": "Text title",
-    "description": "Description"
+    "description": "Description",
+
+    "arabicText": "Arabic Text",
+    "englishText": "English Text"
 }

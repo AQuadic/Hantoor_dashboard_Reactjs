@@ -55,5 +55,8 @@
     "status": "الحالة",
 
     "textTitle": "عنوان النص",
-    "description": "الوصف"
+    "description": "الوصف",
+
+    "arabicText": "النص بالعربية",
+    "englishText": "النص بالإنجليزية"
 }
