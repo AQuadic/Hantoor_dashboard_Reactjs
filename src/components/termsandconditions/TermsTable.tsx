@@ -3,8 +3,10 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
 import Edit from "../icons/general/Edit";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
+import { useTranslation } from "react-i18next";
 
 const TermsTable = () => {
+    const { t } = useTranslation("setting")
     const profile = [
     {
         id: 1,
@@ -30,10 +32,10 @@ const TermsTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">عنوان النص</TableHead>
-            <TableHead className="text-right">البلد</TableHead>
-            <TableHead className="text-right">الوصف</TableHead>
-            <TableHead className="text-right">الحالة</TableHead>
+            <TableHead className="text-right">{t('textTitle')}</TableHead>
+            <TableHead className="text-right">{t('country')}</TableHead>
+            <TableHead className="text-right">{t('description')}</TableHead>
+            <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
