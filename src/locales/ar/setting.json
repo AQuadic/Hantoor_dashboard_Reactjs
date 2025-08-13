@@ -48,5 +48,6 @@
     "arDetails": "التفاصيل ( باللغة العربية )",
     "enDetails": "التفاصيل ( باللغة الانجليزية )",
 
-    "featureAddedSuccessfully": "تمت إضافة الميزة بنجاح"
+    "featureAddedSuccessfully": "تمت إضافة الميزة بنجاح",
+    "faetureDeletedSuccessfully": "تم حذف الميزة بنجاح"
 }

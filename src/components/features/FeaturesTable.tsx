@@ -7,12 +7,22 @@ import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { getFeatures, Feature } from "@/api/featuresApp/getFeatures";
 import Loading from "../general/Loading";
+import toast from "react-hot-toast";
+import { deleteFeature } from "@/api/featuresApp/deleteFeature";
+import { useTranslation } from "react-i18next";
 
 const FeaturesTable = () => {
-    const { data: features = [], isLoading } = useQuery<Feature[]>({
+    const { t } = useTranslation("settings");
+    const { data: features = [], isLoading, refetch } = useQuery<Feature[]>({
         queryKey: ["features"],
         queryFn: getFeatures,
     });
+
+    const handleDelete = async (id: number) => {
+        await deleteFeature(id);
+        toast.success(t('faetureDeletedSuccessfully'))
+        refetch();
+    };
 
     if (isLoading) return <Loading />;
 
@@ -51,7 +61,7 @@ const FeaturesTable = () => {
                     <Edit />
                     </Link>
                     <div className="mt-2">
-                    <TableDeleteButton handleDelete={() => {}} />
+                    <TableDeleteButton handleDelete={() => handleDelete(feature.id)} />
                     </div>
                 </TableCell>
                 </TableRow>

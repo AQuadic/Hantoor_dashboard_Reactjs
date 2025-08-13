@@ -48,5 +48,6 @@
     "arDetails": "Details (in Arabic)",
     "enDetails": "Details (in English)",
 
-    "featureAddedSuccessfully": "Feature added successfully"
+    "featureAddedSuccessfully": "Feature added successfully",
+    "faetureDeletedSuccessfully": "Feature deleted successfully"
 }
