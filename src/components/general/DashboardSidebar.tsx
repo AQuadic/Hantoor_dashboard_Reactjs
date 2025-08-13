@@ -100,7 +100,7 @@ const DashboardSidebar = () => {
       </div>
 
       {/* Mobile menu toggle */}
-      <div className="block px-4 pt-4 lg:hidden ">
+      <div className="block px-4 pt-4 lg:hidden">
         <button onClick={toggleSidebar}>
           {isOpen ? (
             <svg
