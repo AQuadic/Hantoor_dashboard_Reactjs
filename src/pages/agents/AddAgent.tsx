@@ -183,7 +183,11 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
             <p className="rtl:text-right text-black text-sm">{t("brand")}</p>
             <div className="flex items-center justify-between gap-1">
               <span className="text-gray-500 text-sm">
-              {selectedBrand ? i18n.language === "ar" ? selectedBrand.name.ar : selectedBrand.name.en : t("selectBrand")}
+                {selectedBrand
+                  ? i18n.language === "ar"
+                    ? selectedBrand.name.ar
+                    : selectedBrand.name.en
+                  : t("selectBrand")}
               </span>
 
               <select
@@ -204,6 +208,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         <hr className="my-[11px]" />
 
         <TabsFilter
+          classNames="!px-0"
           filters={[
             {
               titleAr: "اضافة مراكز الصيانة",
