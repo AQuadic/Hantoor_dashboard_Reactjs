@@ -33,7 +33,24 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
   const [enName, setEnName] = useState("");
   const [emailLink, setEmailLink] = useState("");
   const [selectedBrandId, setSelectedBrandId] = useState<string>("");
-  const [centers, setCenters] = useState<AgentCenter[]>([]);
+  const [centers, setCenters] = useState<AgentCenter[]>([
+    {
+      name: { ar: "", en: "" },
+      description: { ar: "", en: "" },
+      phone: "",
+      whatsapp: "",
+      type: "center",
+      is_active: true,
+    },
+    {
+      name: { ar: "", en: "" },
+      description: { ar: "", en: "" },
+      phone: "",
+      whatsapp: "",
+      type: "show_room",
+      is_active: true,
+    },
+  ]);
 
   const page = 1;
   const { data: brands } = useQuery<BrandsApiResponse>({
@@ -88,12 +105,14 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
 
     const centerToSave = centers[0];
 
-    if (!centerToSave.name?.ar || 
-        !centerToSave.name?.en || 
-        !centerToSave.phone || 
-        !centerToSave.whatsapp ||
-        !centerToSave.description?.ar ||
-        !centerToSave.description?.en) {
+    if (
+      !centerToSave.name?.ar ||
+      !centerToSave.name?.en ||
+      !centerToSave.phone ||
+      !centerToSave.whatsapp ||
+      !centerToSave.description?.ar ||
+      !centerToSave.description?.en
+    ) {
       toast.error(t("centerMissingRequiredFields"));
       return;
     }
@@ -125,13 +144,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
     createAgentMutation.mutate(payload);
   };
 
-  const addCenter = (center: AgentCenter) => {
-    setCenters((prev) => [...prev, center]);
-  };
-
-  const removeCenter = (index: number) => {
-    setCenters((prev) => prev.filter((_, i) => i !== index));
-  };
+  // No longer needed: addCenter/removeCenter. All state is managed in centers/setCenters and handled in child components.
 
   return (
     <section>
@@ -224,18 +237,28 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         />
         {selectedFilter === "Add maintenance centers" && (
           <AddMaintenanceCenter
-            onAddCenter={addCenter}
-            onRemoveCenter={removeCenter}
-            centers={centers}
+            centers={centers.filter((c) => c.type === "center")}
+            setCenters={(newCenters) => {
+              // Merge with any show_room centers
+              setCenters([
+                ...newCenters,
+                ...centers.filter((c) => c.type === "show_room"),
+              ]);
+            }}
             type="center"
           />
         )}
 
         {selectedFilter === "Add sales Showrooms" && (
           <AddSalesShowrooms
-            onAddCenter={addCenter}
-            onRemoveCenter={removeCenter}
-            centers={centers}
+            centers={centers.filter((c) => c.type === "show_room")}
+            setCenters={(newShowrooms) => {
+              // Merge with any center centers
+              setCenters([
+                ...centers.filter((c) => c.type === "center"),
+                ...newShowrooms,
+              ]);
+            }}
             type="show_room"
           />
         )}

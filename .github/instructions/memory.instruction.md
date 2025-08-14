@@ -59,6 +59,8 @@ Implementation follows project conventions with TypeScript interfaces, TanStack 
 
 2025-08-13: Fixed brand image rendering in BrandsTable.tsx. Updated BrandImage interface to include 'url' and 'responsive_urls' properties to match backend data. Image now displays using the correct URL, with double slashes cleaned. All compile and lint errors resolved. Pattern: always align frontend types with backend API response for robust rendering.
 
+2025-08-14: Refactor in progress for AddMaintenanceCenter and AddSalesShowrooms: unify state as a centers array (each item is a center/showroom object with all required fields), render a form for each item in the array, and update the array on input change. "Add" button appends a new form. Parent manages the centers array and passes it down. This enables dynamic addition and editing of multiple centers/showrooms in a single agent. All changes will follow project conventions and maintain type safety.
+
 - [x] Replace inputs in notification pages (1 file)
 - [ ] Replace inputs in models pages (20+ files)
 - [ ] Replace inputs in financing pages (2 files)
