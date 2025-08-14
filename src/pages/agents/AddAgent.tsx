@@ -51,7 +51,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       is_active: true,
     },
   ]);
-
+  console.log(centers);
   const page = 1;
   const { data: brands } = useQuery<BrandsApiResponse>({
     queryKey: ["brands", page],

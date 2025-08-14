@@ -2,10 +2,9 @@ import DashboardInput from "../general/DashboardInput";
 import Add from "../icons/banks/Add";
 import { useTranslation } from "react-i18next";
 import MobileInput from "../general/MobileInput";
-// ...existing code...
 import { AgentCenter } from "@/api/agents/fetchAgents";
+import { useState } from "react";
 import { X } from "lucide-react";
-// ...existing code...
 
 interface AddSalesShowroomsProps {
   centers: AgentCenter[];
@@ -20,6 +19,12 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
 }) => {
   const { t } = useTranslation("agents");
 
+  // Country state for WhatsApp input per showroom
+  const defaultCountry = { iso2: "EG", name: "Egypt", phone: ["20"] };
+  const [whatsappCountries, setWhatsappCountries] = useState(
+    centers.map(() => defaultCountry)
+  );
+
   // Add a new empty showroom form
   const handleAddShowroom = () => {
     setCenters([
@@ -33,6 +38,7 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
         is_active: true,
       },
     ]);
+    setWhatsappCountries([...whatsappCountries, defaultCountry]);
   };
 
   // Update a field in a specific showroom
@@ -65,6 +71,7 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
   // Remove a showroom
   const handleRemoveShowroom = (index: number) => {
     setCenters(centers.filter((_, i) => i !== index));
+    setWhatsappCountries(whatsappCountries.filter((_, i) => i !== index));
   };
 
   return (
@@ -127,6 +134,11 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
             <div className="flex flex-col md:flex-row gap-[15px] mt-4">
               <div className="relative w-full">
                 <MobileInput
+                  label={t("phoneNumber", {
+                    ns: "agents",
+                    defaultValue: "رقم الجوال",
+                  })}
+                  labelClassName="font-normal"
                   selectedCountry={{ iso2: "EG", name: "Egypt", phone: ["20"] }}
                   setSelectedCountry={() => {}}
                   phone={center.phone}
@@ -137,13 +149,44 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
                 <div className="absolute top-9 left-5"></div>
               </div>
               <div className="w-full">
-                <DashboardInput
-                  label={t("whatsApp")}
-                  value={center.whatsapp}
-                  onChange={(val) =>
-                    handleShowroomChange(index, "whatsapp", val)
+                <MobileInput
+                  label={t("whatsApp", {
+                    ns: "agents",
+                    defaultValue: "رقم الواتساب",
+                  })}
+                  labelClassName="font-normal"
+                  selectedCountry={whatsappCountries[index] || defaultCountry}
+                  setSelectedCountry={(country: {
+                    iso2: string;
+                    name: string;
+                    phone: string[];
+                  }) => {
+                    const newCountries = [...whatsappCountries];
+                    newCountries[index] = country;
+                    setWhatsappCountries(newCountries);
+                    // If a number is already present, update the value with new country code
+                    if (centers[index].whatsapp) {
+                      const number = centers[index].whatsapp.replace(
+                        /^\d+\s*/,
+                        ""
+                      );
+                      handleShowroomChange(
+                        index,
+                        "whatsapp",
+                        `${country.phone[0]} ${number}`
+                      );
+                    }
+                  }}
+                  phone={center.whatsapp.replace(/^\d+\s*/, "")}
+                  setPhone={(val: string) =>
+                    handleShowroomChange(
+                      index,
+                      "whatsapp",
+                      `${
+                        (whatsappCountries[index] || defaultCountry).phone[0]
+                      } ${val}`
+                    )
                   }
-                  placeholder="123456789"
                 />
               </div>
             </div>

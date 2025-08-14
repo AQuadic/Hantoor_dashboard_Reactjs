@@ -3,6 +3,7 @@ import Add from "../icons/banks/Add";
 import { useTranslation } from "react-i18next";
 import MobileInput from "../general/MobileInput";
 import { AgentCenter } from "@/api/agents/fetchAgents";
+import { useState } from "react";
 import { X } from "lucide-react";
 
 interface AddMaintenanceCenterProps {
@@ -18,6 +19,12 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
 }) => {
   const { t } = useTranslation("agents");
 
+  // Country state for WhatsApp input per center
+  const defaultCountry = { iso2: "EG", name: "Egypt", phone: ["20"] };
+  const [whatsappCountries, setWhatsappCountries] = useState(
+    centers.map(() => defaultCountry)
+  );
+
   // Add a new empty center form
   const handleAddCenter = () => {
     setCenters([
@@ -31,6 +38,7 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
         is_active: true,
       },
     ]);
+    setWhatsappCountries([...whatsappCountries, defaultCountry]);
   };
 
   // Update a field in a specific center
@@ -63,6 +71,7 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
   // Remove a center
   const handleRemoveCenter = (index: number) => {
     setCenters(centers.filter((_, i) => i !== index));
+    setWhatsappCountries(whatsappCountries.filter((_, i) => i !== index));
   };
 
   return (
@@ -125,6 +134,11 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
             <div className="flex flex-col md:flex-row gap-[15px] mt-4">
               <div className="relative w-full">
                 <MobileInput
+                  label={t("phoneNumber", {
+                    ns: "agents",
+                    defaultValue: "رقم الجوال",
+                  })}
+                  labelClassName="font-normal"
                   selectedCountry={{ iso2: "EG", name: "Egypt", phone: ["20"] }}
                   setSelectedCountry={() => {}}
                   phone={center.phone}
@@ -135,11 +149,44 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
                 <div className="absolute top-9 left-5"></div>
               </div>
               <div className="w-full">
-                <DashboardInput
-                  label={t("whatsApp")}
-                  value={center.whatsapp}
-                  onChange={(val) => handleCenterChange(index, "whatsapp", val)}
-                  placeholder="123456789"
+                <MobileInput
+                  label={t("whatsApp", {
+                    ns: "agents",
+                    defaultValue: "رقم الواتساب",
+                  })}
+                  labelClassName="font-normal"
+                  selectedCountry={whatsappCountries[index] || defaultCountry}
+                  setSelectedCountry={(country: {
+                    iso2: string;
+                    name: string;
+                    phone: string[];
+                  }) => {
+                    const newCountries = [...whatsappCountries];
+                    newCountries[index] = country;
+                    setWhatsappCountries(newCountries);
+                    // If a number is already present, update the value with new country code
+                    if (centers[index].whatsapp) {
+                      const number = centers[index].whatsapp.replace(
+                        /^\d+\s*/,
+                        ""
+                      );
+                      handleCenterChange(
+                        index,
+                        "whatsapp",
+                        `${country.phone[0]} ${number}`
+                      );
+                    }
+                  }}
+                  phone={center.whatsapp.replace(/^\d+\s*/, "")}
+                  setPhone={(val: string) =>
+                    handleCenterChange(
+                      index,
+                      "whatsapp",
+                      `${
+                        (whatsappCountries[index] || defaultCountry).phone[0]
+                      } ${val}`
+                    )
+                  }
                 />
               </div>
             </div>

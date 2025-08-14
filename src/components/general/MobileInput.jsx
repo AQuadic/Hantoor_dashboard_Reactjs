@@ -3,12 +3,15 @@ import { getCountryDataList } from "countries-list";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Label } from "../ui/label";
 
 const MobileInput = ({
   selectedCountry,
   setSelectedCountry,
   phone,
   setPhone,
+  label,
+  labelClassName = "",
   inputClassName = "",
   disabled = false,
 }) => {
@@ -304,20 +307,20 @@ const MobileInput = ({
   return (
     <div
       className={`relative w-full h-[53px] px-4 py-7.5 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2 p-2 border-2 dark:border-neutral-700 rounded-xl focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
-
     >
-
       <input
         disabled={disabled}
-        placeholder='123456789'
+        placeholder="123456789"
         type="number"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
         className="w-full bg-transparent dark:text-neutral-200 focus:outline-none rtl:text-right py-2 mt-3"
       />
-      <h2 className="text-[#000000] text-[15px] font-normal absolute top-0.5 rtl:right-4 ltr:left-4">
-        {t('phone')}
-      </h2>
+      <Label
+        className={`text-[#000000] dark:text-neutral-200 text-[15px] !font-normal absolute top-0.5 rtl:right-4 ltr:left-4 ${labelClassName}`}
+      >
+        {label || t("phone")}
+      </Label>
       {isOpen && (
         <div className="flex flex-col gap-2 border shadow-sm p-3 z-30 absolute left-0 top-11 max-h-[200px] min-w-full overflow-y-auto bg-white dark:bg-darkBg dark:text-neutral-200 rounded-[4px]">
           <Input
@@ -356,9 +359,15 @@ const MobileInput = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? <ChevronUp size={14} className="text-[#2A32F8]" /> : <ChevronDown size={14} className="text-[#2A32F8]" />}
+        {isOpen ? (
+          <ChevronUp size={14} className="text-[#2A32F8]" />
+        ) : (
+          <ChevronDown size={14} className="text-[#2A32F8]" />
+        )}
       </button>
-      <p className="text-[#2A32F8] text-sm font-normal -mr-1" dir="ltr">+{selectedCountry.phone[0]}</p>
+      <p className="text-[#2A32F8] text-sm font-normal -mr-1" dir="ltr">
+        +{selectedCountry.phone[0]}
+      </p>
       <img
         src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry.iso2}.svg`}
         alt={`${selectedCountry} flag`}
