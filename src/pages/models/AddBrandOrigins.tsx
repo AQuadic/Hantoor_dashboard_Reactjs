@@ -72,7 +72,7 @@ const AddBrandOrigins = () => {
                   },
                 });
                 toast.success(t("brandAddedSuccessfully"));
-                navigate("/models");
+                navigate("/models?section=Brand Origin");
               } catch (error: any) {
                 const errorMsg =
                   error?.response?.data?.message ||

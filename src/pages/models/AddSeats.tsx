@@ -72,7 +72,7 @@ const AddSeats = () => {
                   },
                 });
                 toast.success(t("seatsAddedSuccessfully"));
-                navigate("/models");
+                navigate("/models?section=Number of Seats");
               } catch (error: any) {
                 const errorMsg =
                   error?.response?.data?.message ||

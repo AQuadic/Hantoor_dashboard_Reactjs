@@ -73,7 +73,7 @@ const AddEngineType = () => {
                   },
                 });
                 toast.success(t("engineTypeAdded"))
-                navigate("/models");
+                navigate("/models?section=Engine Types");
               } catch (error: any) {
                 const errorMsg =
                   error?.response?.data?.message ||

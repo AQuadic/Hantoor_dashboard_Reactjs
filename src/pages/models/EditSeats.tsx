@@ -44,7 +44,7 @@ const EditSeats = () => {
         name: { ar: arSeatsNumbers, en: enSeatsNumbers },
       });
       toast.success(t("seatsUpdatedSuccessfully"));
-      navigate("/models");
+      navigate("/models?section=Number of Seats");
     } catch (err: any) {
       const errorMsg =
         err?.response?.data?.message ||

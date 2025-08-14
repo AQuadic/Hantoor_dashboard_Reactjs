@@ -47,7 +47,7 @@ const EditEngineSize = () => {
         name: { ar: arSize, en: enSize },
       });
       toast.success(t('engineSizeEdited'))
-      navigate("/models");
+      navigate("/models?section=Engine Sizes");
     } catch (err: any) {
       const errorMsg =
         err?.response?.data?.message ||

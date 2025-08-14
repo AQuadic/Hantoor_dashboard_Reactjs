@@ -47,7 +47,7 @@ const EditBrandOrigins = () => {
         is_active: isActive,
       });
       toast.success(t("brandOriginEdited"));
-      navigate("/models");
+      navigate("/models?section=Brand Origin");
     } catch (err: any) {
       const errorMsg =
         err?.response?.data?.message ||

@@ -47,7 +47,7 @@ const EditEnginType = () => {
         name: { ar: arName, en: enName },
       });
       toast.success(t('engineTypeEdited'))
-      navigate("/models"); 
+      navigate("/models?section=Engine Types");
     } catch (err: any) {
       const errorMsg =
         err?.response?.data?.message ||
