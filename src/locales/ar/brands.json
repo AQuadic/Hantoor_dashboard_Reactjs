@@ -8,5 +8,7 @@
   "brandName": "اسم الماركة",
   "count": "عدد السيارات",
   "status": "الحالة",
-  "brandDeletedsuccessfully": "تم حذف الماركة بنجاح"
+  "brandDeletedsuccessfully": "تم حذف الماركة بنجاح",
+  "brandAddedSucccessfully": "تم اضافة الماركة بنجاح",
+  "brandUpdatedSucccessfully": "تم تعديل الماركة بنجاح"
 }

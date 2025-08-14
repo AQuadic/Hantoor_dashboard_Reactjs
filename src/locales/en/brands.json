@@ -8,5 +8,7 @@
   "brandName": "Brand Name",
   "count": "Number of cars",
   "status": "Status",
-  "brandDeletedsuccessfully": "Brand deleted successfully"
+  "brandDeletedsuccessfully": "Brand deleted successfully",
+  "brandAddedSucccessfully": "Brand Added successfully.",
+  "brandUpdatedSucccessfully": "Brand updated successfully."
 }

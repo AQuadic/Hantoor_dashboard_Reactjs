@@ -21,6 +21,7 @@ import { fetchBrandById, updateBrand } from "@/api/brand/updateBrand";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const AddBrand = () => {
   const { t } = useTranslation("brands");
@@ -35,8 +36,6 @@ const AddBrand = () => {
   const isEdit = Boolean(brandId);
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   // React Query: fetch brand data if editing
   const { data: brandData, isLoading: isBrandLoading } = useQuery({
@@ -81,20 +80,20 @@ const AddBrand = () => {
     },
     onMutate: () => {
       setLoading(true);
-      setError(null);
-      setSuccess(null);
     },
     onSuccess: (response) => {
       if (
         response &&
         (response.success === undefined || response.success === true)
       ) {
-        setSuccess(
+        toast.success(
           response.message ||
             (isEdit
-              ? "Brand updated successfully."
-              : "Brand added successfully.")
+              ? t('brandUpdatedSucccessfully')
+              : t('brandAddedSucccessfully'))
         );
+
+        navigate("/brands");
 
         // Only navigate back when editing is done, not when adding
         if (isEdit) {
@@ -110,15 +109,17 @@ const AddBrand = () => {
           setIsActive(true);
         }
       } else {
-        setError(
+        toast.error(
           response.message ||
             (isEdit ? "Failed to update brand." : "Failed to add brand.")
         );
       }
     },
-    onError: (err) => {
-      setError(err?.message || "An error occurred.");
-    },
+      onError: (err: any) => {
+        const errorMsg =
+          err?.response?.data?.message || err?.message || "حدث خطأ ما";
+        toast.error(errorMsg);
+      },
     onSettled: () => {
       setLoading(false);
     },
@@ -134,7 +135,7 @@ const AddBrand = () => {
   }
 
   return (
-    <div>
+     <div>
       <DashboardHeader
         titleAr={isEdit ? "تعديل ماركة" : "اضافة ماركة جديدة"}
         titleEn={isEdit ? "Edit Brand" : "Add Brand"}
@@ -196,8 +197,6 @@ const AddBrand = () => {
             onClick={handleSubmit}
             isLoading={loading || isBrandLoading}
           />
-          {error && <div className="text-red-500 mt-2">{error}</div>}
-          {success && <div className="text-green-500 mt-2">{success}</div>}
         </div>
       </div>
     </div>
