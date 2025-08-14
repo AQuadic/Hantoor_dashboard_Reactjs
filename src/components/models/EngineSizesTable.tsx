@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 
 export function EngineSizesTable() {
-  const { t } = useTranslation("models");
+  const { t, i18n } = useTranslation("models");
   const { data: engineSize, isLoading, refetch } = useQuery<EngineSize[]>({
     queryKey: ["engineSize"],
     queryFn: getEngineSize,
@@ -47,7 +47,11 @@ export function EngineSizesTable() {
         {engineSize?.map((engine, index) => (
           <TableRow key={engine.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell className="w-full">{engine.name.ar}</TableCell>
+            <TableCell className="w-full">
+              {i18n.language === "ar"
+                ? engine.name.ar.slice(0, 7)
+                : engine.name.en.slice(0, 7)}
+            </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch isSelected={engine.is_active} />
               <Link to={`/engine-size/edit/${engine.id}`}>
