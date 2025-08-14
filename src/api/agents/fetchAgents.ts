@@ -58,8 +58,15 @@ export interface CreateAgentPayload {
   is_active?: boolean;
   link?: string;
   brand_id?: number;
-  centers?: Omit<AgentCenter, "id" | "created_at" | "updated_at">[];
-}
+  centers?: {
+    name: AgentName;
+    description: CenterDescription;
+    phone: string;
+    whatsapp: string;
+    type: "center" | "show_room";
+    is_active: string;
+  };
+};
 
 export interface UpdateAgentPayload extends CreateAgentPayload {
   centers?: AgentCenter[];

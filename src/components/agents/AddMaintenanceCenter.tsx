@@ -6,6 +6,7 @@ import { useState } from "react";
 import { countries } from "countries-list";
 import { AgentCenter } from "@/api/agents/fetchAgents";
 import { X } from "lucide-react";
+import toast from "react-hot-toast";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -42,7 +43,8 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
   const [whatsapp, setWhatsapp] = useState("");
 
   const handleAddCenter = () => {
-    if (!arName || !enName || !phone) {
+    if (!arName || !enName || !phone || !arDescription || !enDescription) {
+      toast.error(t("pleaseCompleteAllFields"));
       return;
     }
 
@@ -56,9 +58,9 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
         en: enDescription,
       },
       phone,
-      whatsapp,
+      whatsapp: whatsapp || phone,
       type,
-      is_active: true,
+      is_active: "1",
     };
 
     onAddCenter(newCenter);
@@ -95,7 +97,7 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
       <div className="flex flex-col md:flex-row gap-[15px] mt-4">
         <div className="w-full">
           <DashboardInput
-            label={t("arDescription")}
+            label={t("arAddress")}
             value={arDescription}
             onChange={setArDescription}
             placeholder={t("writeHere")}
@@ -103,7 +105,7 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
         </div>
         <div className="w-full">
           <DashboardInput
-            label={t("enDescription")}
+            label={t("enAddress")}
             value={enDescription}
             onChange={setEnDescription}
             placeholder={t("writeHere")}

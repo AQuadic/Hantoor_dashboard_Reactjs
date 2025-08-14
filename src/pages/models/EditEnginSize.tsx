@@ -1,21 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "@heroui/react";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { updateEngineSize } from "@/api/models/engineSize/editEngineSize";
+import { getEngineSizeById, EngineSize } from "@/api/models/engineSize/getEngineSizeById";
+import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import Loading from "@/components/general/Loading";
 
 const EditEngineSize = () => {
   const { t } = useTranslation("models");
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  const { data: engineSize, isLoading, error } = useQuery<EngineSize>({
+    queryKey: ["engineSize", id],
+    queryFn: () => getEngineSizeById(Number(id)),
+    enabled: !!id,
+    retry: false,
+  });
+
   const [arSize, setArSize] = useState("");
   const [enSize, setEnSize] = useState("");
   const [, setLoading] = useState(false);
   const [, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (engineSize) {
+      setArSize(engineSize.name.ar);
+      setEnSize(engineSize.name.en);
+    }
+  }, [engineSize]);
 
   const handleSave = async () => {
     if (!id) {
@@ -24,13 +41,13 @@ const EditEngineSize = () => {
     }
     setLoading(true);
     setError(null);
-
+    setLoading(true);
     try {
       await updateEngineSize(Number(id), {
         name: { ar: arSize, en: enSize },
       });
       toast.success(t('engineSizeEdited'))
-      navigate("/models");
+      navigate("/models?section=Engine Sizes");
     } catch (err: any) {
       const errorMsg =
         err?.response?.data?.message ||
@@ -41,6 +58,8 @@ const EditEngineSize = () => {
       setLoading(false);
     }
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div>

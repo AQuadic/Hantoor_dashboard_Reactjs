@@ -57,6 +57,5 @@
     "textTitle": "عنوان النص",
     "description": "الوصف",
 
-    "arabicText": "النص بالعربية",
-    "englishText": "النص بالإنجليزية"
+    "text": "النص"
 }

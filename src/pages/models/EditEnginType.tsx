@@ -1,21 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
 import { Input } from "@heroui/react";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { updateEngineType } from "@/api/models/engineTypes/editEngineType";
+import { getEngineTypeById, EngineType } from "@/api/models/engineTypes/getEngineTypeById";
+import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import Loading from "@/components/general/Loading";
 
 const EditEnginType = () => {
   const { t } = useTranslation("models");
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate();
 
+  const { data: engineType, isLoading, error } = useQuery<EngineType>({
+    queryKey: ["engineType", id],
+    queryFn: () => getEngineTypeById(Number(id)),
+    enabled: !!id,
+    retry: false,
+  });
+
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
   const [, setLoading] = useState(false);
   const [, setError] = useState<string | null>(null);
+
+
+  useEffect(() => {
+    if (engineType) {
+      setArName(engineType.name.ar);
+      setEnName(engineType.name.en);
+    }
+  }, [engineType]);
 
   const handleSave = async () => {
     if (!id) {
@@ -29,7 +47,7 @@ const EditEnginType = () => {
         name: { ar: arName, en: enName },
       });
       toast.success(t('engineTypeEdited'))
-      navigate("/models"); 
+      navigate("/models?section=Engine Types");
     } catch (err: any) {
       const errorMsg =
         err?.response?.data?.message ||
@@ -40,6 +58,8 @@ const EditEnginType = () => {
       setLoading(false);
     }
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div>

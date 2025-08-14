@@ -70,7 +70,7 @@ const AddEnginSize = () => {
                     },
                   });
                   toast.success(t('enginSizeAdded'))
-                  navigate("/models");
+                  navigate("/models?section=Engine Sizes");
                 } catch (error: any) {
                 const errorMsg =
                   error?.response?.data?.message ||
