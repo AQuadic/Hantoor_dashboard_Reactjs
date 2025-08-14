@@ -14,7 +14,7 @@ export interface CenterDescription {
 // Center/Showroom interface
 export interface AgentCenter {
   id?: number;
-  is_active: boolean;
+  is_active: string;
   phone: string;
   type: "center" | "show_room";
   whatsapp: string;
@@ -55,20 +55,23 @@ export interface AgentsApiResponse {
 // Request payload for creating/updating agents
 export interface CreateAgentPayload {
   name: AgentName;
-  is_active?: boolean;
+  is_active?: string;
   link?: string;
   brand_id?: number;
   centers?: {
-    name: AgentName;
-    description: CenterDescription;
-    phone: string;
-    whatsapp: string;
-    type: "center" | "show_room";
-    is_active: string;
+    [key: number]: {
+      name: AgentName;
+      description: CenterDescription;
+      phone: string;
+      whatsapp: string;
+      type: "center" | "show_room";
+      is_active: string;
+    };
   };
-};
+}
 
-export interface UpdateAgentPayload extends CreateAgentPayload {
+export interface UpdateAgentPayload
+  extends Omit<CreateAgentPayload, "centers"> {
   centers?: AgentCenter[];
 }
 

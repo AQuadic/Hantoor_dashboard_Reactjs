@@ -40,7 +40,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       phone: "",
       whatsapp: "",
       type: "center",
-      is_active: true,
+      is_active: "1",
     },
     {
       name: { ar: "", en: "" },
@@ -48,7 +48,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       phone: "",
       whatsapp: "",
       type: "show_room",
-      is_active: true,
+      is_active: "1",
     },
   ]);
   console.log(centers);
@@ -103,42 +103,49 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       return;
     }
 
-    const centerToSave = centers[0];
-
-    if (
-      !centerToSave.name?.ar ||
-      !centerToSave.name?.en ||
-      !centerToSave.phone ||
-      !centerToSave.whatsapp ||
-      !centerToSave.description?.ar ||
-      !centerToSave.description?.en
-    ) {
-      toast.error(t("centerMissingRequiredFields"));
-      return;
+    // Validate all centers
+    for (const center of centers) {
+      if (
+        !center.name?.ar ||
+        !center.name?.en ||
+        !center.phone ||
+        !center.whatsapp ||
+        !center.description?.ar ||
+        !center.description?.en
+      ) {
+        toast.error(t("centerMissingRequiredFields"));
+        return;
+      }
     }
+
+    // Map centers to object with numeric keys for API
+    const centersPayload = {};
+    centers.forEach((center, idx) => {
+      centersPayload[idx] = {
+        name: {
+          ar: center.name.ar,
+          en: center.name.en,
+        },
+        description: {
+          ar: center.description.ar,
+          en: center.description.en,
+        },
+        phone: center.phone,
+        whatsapp: center.whatsapp,
+        type: center.type,
+        is_active: center.is_active ? "1" : "0",
+      };
+    });
 
     const payload: CreateAgentPayload = {
       name: {
         ar: arName,
         en: enName,
       },
-      is_active: true,
+      is_active: "1", // Always send as string "1"
       link: emailLink,
       brand_id: Number(selectedBrandId),
-      centers: {
-        name: {
-          ar: centerToSave.name.ar,
-          en: centerToSave.name.en,
-        },
-        description: {
-          ar: centerToSave.description.ar,
-          en: centerToSave.description.en,
-        },
-        phone: centerToSave.phone,
-        whatsapp: centerToSave.whatsapp,
-        type: centerToSave.type,
-        is_active: "1",
-      },
+      centers: centersPayload,
     };
 
     createAgentMutation.mutate(payload);
