@@ -10,6 +10,7 @@ import { editFeature } from "@/api/featuresApp/editFeatures";
 import toast from "react-hot-toast";
 import Loading from "@/components/general/Loading";
 import { Feature, getFeatureById } from "@/api/featuresApp/getFeatureById";
+import ImageInput from "@/components/general/ImageInput";
 
 const EditFeatures = () => {
   const { t } = useTranslation("setting");
@@ -27,6 +28,7 @@ const EditFeatures = () => {
   const [enDescription, setEnDescription] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [, setLoading] = useState(false);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
 
   useEffect(() => {
     if (feature) {
@@ -80,12 +82,11 @@ const EditFeatures = () => {
       </div>
       <div className="p-8 bg-white rounded-2xl mt-[18px] mx-8">
         <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">{t("image")}</h3>
-        <div className="relative w-[180px] h-[180px] border border-dashed rounded-[10px] flex items-center justify-center">
-          <img src="/images/editfeatures.svg" alt="" />
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <Delete />
-          </div>
-        </div>
+        <ImageInput
+          image={profileImage}
+          setImage={setProfileImage}
+          // placeholderText={t("addGIF")}
+        />
       </div>
       <div className="p-8 bg-white rounded-2xl mt-[18px] mx-8">
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
