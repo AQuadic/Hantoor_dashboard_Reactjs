@@ -1,47 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import Delete from "@/components/icons/setting/Delete";
 import { editFeature } from "@/api/featuresApp/editFeatures";
 import toast from "react-hot-toast";
+import Loading from "@/components/general/Loading";
+import { Feature, getFeatureById } from "@/api/featuresApp/getFeatureById";
 
 const EditFeatures = () => {
   const { t } = useTranslation("setting");
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  const { data: feature, isLoading } = useQuery<Feature>({
+    queryKey: ["feature", id],
+    queryFn: () => getFeatureById(Number(id)),
+    enabled: !!id,
+    retry: false,
+  });
+
   const [arDescription, setArDescription] = useState("");
   const [enDescription, setEnDescription] = useState("");
-  const [isActive, ] = useState(true);
+  const [isActive, setIsActive] = useState(true);
+  const [, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (feature) {
+      setArDescription(feature.description.ar);
+      setEnDescription(feature.description.en);
+      setIsActive(feature.is_active);
+    }
+  }, [feature]);
 
   const handleSave = async () => {
     if (!id) {
-      console.error("Feature ID is missing");
+      toast.error(t("invalidFeatureId") || "Invalid feature ID");
       return;
     }
-
+    setLoading(true);
     try {
-      const payload = {
+      await editFeature(Number(id), {
         description: {
           ar: arDescription,
           en: enDescription,
         },
         is_active: isActive,
-      };
-      const data = await editFeature(Number(id), payload);
-      toast.success(t('featuedUpdated'));
-      } catch (error: any) {
-        const errorMessage =
-          error?.response?.data?.message ||
-          error?.response?.data?.error ||
-          "Error";
-        toast.error(errorMessage);
-      }
+      });
+      toast.success(t("featuedUpdated"));
+      navigate("/settings");
+    } catch (err: any) {
+      const errorMsg =
+        err?.response?.data?.message ||
+        err?.message ||
+        t("somethingWentWrong");
+      toast.error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
   };
 
+  if (isLoading) return <Loading />;
+
   return (
-    <div>
+      <div>
       <div className="pt-0 pb-2 bg-white ">
         <DashboardHeader
           titleAr="تعديل المميزات"
