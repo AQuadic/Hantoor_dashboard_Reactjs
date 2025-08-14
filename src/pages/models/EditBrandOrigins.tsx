@@ -1,21 +1,39 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { updateBrandOrigin } from "@/api/models/brandOrigin/editBrandOrigin";
+import { getBrandOriginById, BrandOrigin } from "@/api/models/brandOrigin/getBrandOriginById";
 import toast from "react-hot-toast";
+import Loading from "@/components/general/Loading";
 
 const EditBrandOrigins = () => {
   const { t } = useTranslation("models");
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  const { data: brandOrigin, isLoading } = useQuery<BrandOrigin>({
+    queryKey: ["brandOrigin", id],
+    queryFn: () => getBrandOriginById(Number(id)),
+    enabled: !!id,
+    retry: false,
+  });
+
   const [arBrandName, setArBrandName] = useState("");
   const [enBrandName, setEnBrandName] = useState("");
   const [isActive, setIsActive] = useState(true);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (brandOrigin) {
+      setArBrandName(brandOrigin.name.ar);
+      setEnBrandName(brandOrigin.name.en);
+      setIsActive(brandOrigin.is_active);
+    }
+  }, [brandOrigin]);
 
   const handleSave = async () => {
     if (!id) {
@@ -41,8 +59,10 @@ const EditBrandOrigins = () => {
     }
   };
 
+  if (isLoading) return <Loading />;
+
   return (
-    <div>
+     <div>
       <DashboardHeader
         titleAr="تعديل منشأ الماركة"
         titleEn="Edit brand origin"
