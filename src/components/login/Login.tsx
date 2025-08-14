@@ -15,7 +15,6 @@ import { LoginPayload } from "@/api/auth/postLogin";
 const Login = () => {
   const loginToStore = useAuthStore((state) => state.login);
   const storeLoading = useAuthStore((state) => state.loading);
-  const storeError = useAuthStore((state) => state.error);
   const { t } = useTranslation("login");
   const navigate = useNavigate();
   const recaptchaRef = useRef<ReCAPTCHA>(null);
@@ -80,15 +79,14 @@ const Login = () => {
       } else {
         // Login failed - error should be in store
         setErrors({
-          general:
-            storeError || t("loginError") || "Login failed. Please try again.",
+          general: "Invalid email or password",
         });
         resetCaptcha();
       }
     } catch (error) {
       console.error("Login error:", error);
       setErrors({
-        general: t("loginError") || "Login failed. Please try again.",
+        general: "Invalid email or password",
       });
       resetCaptcha();
     }
@@ -137,9 +135,9 @@ const Login = () => {
 
         <form onSubmit={handleLogin} noValidate>
           {/* General error message */}
-          {(errors.general || storeError) && (
+          {errors.general && (
             <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-              {errors.general || storeError}
+              {errors.general}
             </div>
           )}
 
