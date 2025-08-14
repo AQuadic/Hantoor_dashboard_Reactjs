@@ -10,12 +10,14 @@ interface TabsFilterProps {
   filters: filterType[];
   selectedFilter: string;
   setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
+  classNames?: string;
 }
 
 const TabsFilter: React.FC<TabsFilterProps> = ({
   filters = [],
   selectedFilter = "",
   setSelectedFilter,
+  classNames,
 }) => {
   const {
     i18n: { language },
@@ -26,7 +28,7 @@ const TabsFilter: React.FC<TabsFilterProps> = ({
   }
 
   return (
-    <div className="relative flex flex-wrap gap-3 px-8 pb-4">
+    <div className={`relative flex flex-wrap gap-3 px-8 pb-4 ${classNames}`}>
       {filters.map((filter) => {
         const isSelected = filter.titleEn === selectedFilter;
         return (
