@@ -12,5 +12,8 @@
     "resend": "إعادة ارسال الرمز",
     "newPassword": "قم بادخال كلمة المرور الجديدة",
     "confirmPassword": "تأكيد كلمة المرور",
-    "saveAndEnter": "حفظ ودخول"
+    "saveAndEnter": "حفظ ودخول",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "recaptchaRequired": "مطلوب إعادة التحقق"
 }

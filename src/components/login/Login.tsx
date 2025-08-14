@@ -244,8 +244,8 @@ const Login = () => {
           {/* Login button */}
           <div className="flex items-center justify-center mt-[17px]">
             <DashboardButton
-              titleAr={storeLoading ? t("loading") || "Loading..." : t("enter")}
-              titleEn={storeLoading ? "جاري التحميل..." : "دخول"}
+              titleEn={storeLoading ? t("loading") || "Loading..." : t("enter")}
+              titleAr={storeLoading ? "جاري التحميل..." : "دخول"}
               type="submit"
             />
           </div>
