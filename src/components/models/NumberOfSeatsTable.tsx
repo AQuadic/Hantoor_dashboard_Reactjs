@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 
 export function NumberOfSeatsTable() {
-    const { t } = useTranslation("models");
+    const { t, i18n } = useTranslation("models");
   const { data: seats,isLoading, refetch } = useQuery<numOfSeats[]>({
     queryKey: ["seats"],
     queryFn: getSeats,
@@ -55,7 +55,9 @@ export function NumberOfSeatsTable() {
         {seats?.map((seat, index) => (
           <TableRow key={seat.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell className="w-full">{seat.name.ar}</TableCell>
+            <TableCell className="w-full">
+              {(i18n.language === "ar" ? seat.name.ar : seat.name.en).replace(/^0+/, '')}
+            </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch isSelected={seat.is_active} />
               <Link to={`/seats/edit/${seat.id}`}>

@@ -1,20 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { updateNumberOfSeats } from "@/api/models/seats/editNumOfSeats";
+import { getSeatById, Seat } from "@/api/models/seats/getSeatById";
 import toast from "react-hot-toast";
+import Loading from "@/components/general/Loading";
 
 const EditSeats = () => {
   const { t } = useTranslation("models");
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  const { data: seat, isLoading, error } = useQuery<Seat>({
+    queryKey: ["seat", id],
+    queryFn: () => getSeatById(Number(id)),
+    enabled: !!id,
+    retry: false,
+  });
+
   const [arSeatsNumbers, setArSeatsNumbers] = useState("");
   const [enSeatsNumbers, setEnSeatsNumbers] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (seat) {
+      setArSeatsNumbers(seat.name.ar);
+      setEnSeatsNumbers(seat.name.en);
+    }
+  }, [seat]);
 
   const handleSave = async () => {
     if (!id) {
@@ -38,6 +55,8 @@ const EditSeats = () => {
       setLoading(false);
     }
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div>
