@@ -53,7 +53,7 @@ const EditFeatures = () => {
         is_active: isActive,
       });
       toast.success(t("featuedUpdated"));
-      navigate("/settings");
+      navigate("/settings?section=App Features");
     } catch (err: any) {
       const errorMsg =
         err?.response?.data?.message ||
