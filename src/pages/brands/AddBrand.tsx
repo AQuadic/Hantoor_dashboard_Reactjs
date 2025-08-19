@@ -25,11 +25,11 @@ import { useParams, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 const AddBrand = () => {
-  const { t } = useTranslation("brands");
+  const { t, i18n } = useTranslation("brands");
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [arBrand, setArBrand] = useState("");
   const [enBrand, setEnBrand] = useState("");
-  const [isActive, setIsActive] = useState(true); // default active
+  // Removed isActive state
   const [existingImageUrl, setExistingImageUrl] = useState<string | undefined>(
     undefined
   );
@@ -59,7 +59,7 @@ const AddBrand = () => {
     if (brandData && isEdit) {
       setArBrand(brandData.name?.ar || "");
       setEnBrand(brandData.name?.en || "");
-      setIsActive(!!brandData.is_active);
+      // Removed isActive update
       // Set existing image URL for edit mode
       if (
         brandData.media &&
@@ -82,7 +82,7 @@ const AddBrand = () => {
           id: Number(brandId),
           name: { ar: arBrand, en: enBrand },
           image: profileImage,
-          is_active: isActive,
+          // is_active removed
         })) as BrandResponse;
       } else {
         return (await postBrand({
@@ -119,7 +119,7 @@ const AddBrand = () => {
           setArBrand("");
           setEnBrand("");
           setProfileImage(null);
-          setIsActive(true);
+          // setIsActive removed
         }
       } else {
         toast.error(
@@ -139,6 +139,18 @@ const AddBrand = () => {
   });
 
   const handleSubmit = () => {
+    // Validation: require Arabic name, English name, and image (for add)
+    if (!arBrand.trim() || !enBrand.trim() || (!isEdit && !profileImage)) {
+      toast.error(
+        t(
+          "brandFieldsRequired",
+          i18n.language === "ar"
+            ? "يرجى تعبئة جميع الحقول المطلوبة."
+            : "Please fill all required fields."
+        )
+      );
+      return;
+    }
     mutation.mutate();
   };
 
@@ -157,13 +169,13 @@ const AddBrand = () => {
           id: Number(brandId),
           name: { ar: arBrand, en: enBrand },
           image: null,
-          is_active: isActive,
+          // is_active removed
         });
         setProfileImage(null);
         setExistingImageUrl(undefined);
-  toast.success(t("brandImageDeleted", "Image deleted successfully"));
+        toast.success(t("brandImageDeleted", "Image deleted successfully"));
       } catch {
-  toast.error(t("brandImageDeleteFailed", "Failed to delete image"));
+        toast.error(t("brandImageDeleteFailed", "Failed to delete image"));
       }
     } else {
       setProfileImage(null);
@@ -223,16 +235,7 @@ const AddBrand = () => {
             />
           </div>
           {/* Optionally add is_active toggle for edit */}
-          {isEdit && (
-            <div className="flex items-center gap-2 mt-2">
-              <label>{t("isActive") || "Active"}</label>
-              <input
-                type="checkbox"
-                checked={isActive}
-                onChange={(e) => setIsActive(e.target.checked)}
-              />
-            </div>
-          )}
+          {/* isActive checkbox removed */}
           <DashboardButton
             titleAr={isEdit ? "تعديل" : " اضافة"}
             titleEn={isEdit ? "Edit" : "Add"}
