@@ -106,6 +106,7 @@ const AddBank = () => {
           </div>
           <div className="mt-[15px]">
             <MobileInput
+              label={t("phone")}
               selectedCountry={selectedCountry}
               setSelectedCountry={setSelectedCountry}
               phone={phone}

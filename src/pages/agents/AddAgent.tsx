@@ -119,7 +119,16 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
     }
 
     // Map centers to object with numeric keys for API
-    const centersPayload = {};
+    const centersPayload: {
+      [key: number]: {
+        name: { ar: string; en: string };
+        description: { ar: string; en: string };
+        phone: string;
+        whatsapp: string;
+        type: "center" | "show_room";
+        is_active: string;
+      };
+    } = {};
     centers.forEach((center, idx) => {
       centersPayload[idx] = {
         name: {

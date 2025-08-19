@@ -35,7 +35,7 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
         phone: "",
         whatsapp: "",
         type,
-        is_active: true,
+        is_active: "1", // Changed from boolean to string
       },
     ]);
     setWhatsappCountries([...whatsappCountries, defaultCountry]);

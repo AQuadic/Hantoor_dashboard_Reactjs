@@ -30,23 +30,37 @@ const BrandsPage = () => {
 
   const renderTable = () => {
     switch (selectedTab) {
-      case "Models": return <ModelTable />;
-      case "Structure Types": return <StructureTable />;
-      case "Car Types": return <CarTypesTable />;
-      case "Categories": return <CategoriesTable />;
-      case "Brand Origin": return <BrandOriginTable />;
-      case "Number of Seats": return <NumberOfSeatsTable />;
-      case "Engine Types": return <EngineTypesTable />;
-      case "Engine Sizes": return <EngineSizesTable />;
-      case "Price From": return <PriceFromTable />;
-      case "Price To": return <PriceToTable />;
-      default: return <ModelTable />;
+      case "Models":
+        return <ModelTable />;
+      case "Structure Types":
+        return <StructureTable />;
+      case "Car Types":
+        return <CarTypesTable />;
+      case "Categories":
+        return <CategoriesTable />;
+      case "Brand Origin":
+        return <BrandOriginTable />;
+      case "Number of Seats":
+        return <NumberOfSeatsTable />;
+      case "Engine Types":
+        return <EngineTypesTable />;
+      case "Engine Sizes":
+        return <EngineSizesTable />;
+      case "Price From":
+        return <PriceFromTable />;
+      case "Price To":
+        return <PriceToTable />;
+      default:
+        return <ModelTable />;
     }
   };
 
   return (
     <section>
-      <ModelHeader selectedFilter={selectedTab} setSelectedFilter={setSelectedTab} />
+      <ModelHeader
+        selectedFilter={selectedTab}
+        setSelectedFilter={setSelectedTab}
+      />
       <div className="px-2 md:px-8 relative min-h-[300px]">
         <AnimatePresence mode="wait">
           <motion.div
@@ -63,6 +77,8 @@ const BrandsPage = () => {
               totalPages={12}
               totalItems={50}
               itemsPerPage={10}
+              from={1}
+              to={10}
             />
           </motion.div>
         </AnimatePresence>

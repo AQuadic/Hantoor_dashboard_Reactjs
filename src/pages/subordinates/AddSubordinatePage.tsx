@@ -73,67 +73,68 @@ const AddSubordinatePage = () => {
       />
       <div className="flex flex-col gap-8 p-8">
         <div className="p-8 bg-white rounded-2xl">
-          <h3 className="mb-4 text-lg font-bold">{t('personalImage')}</h3>
+          <h3 className="mb-4 text-lg font-bold">{t("personalImage")}</h3>
           <ImageInput image={profileImage} setImage={setProfileImage} />
         </div>
 
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
-          <h3 className="mb-2 text-lg font-bold">{t('mainData')}</h3>
+          <h3 className="mb-2 text-lg font-bold">{t("mainData")}</h3>
 
           <div className="flex md:flex-row flex-col gap-4">
             <div className="w-full">
-            <DashboardInput
-              label={t('name')}
-              value={name}
-              onChange={setName}
-              placeholder="محمد احمد"
-            />
+              <DashboardInput
+                label={t("name")}
+                value={name}
+                onChange={setName}
+                placeholder="محمد احمد"
+              />
             </div>
             <div className="w-full">
-            <MobileInput
-              selectedCountry={selectedCountry}
-              setSelectedCountry={setSelectedCountry}
-              phone={phone}
-              setPhone={setPhone}
-            />
+              <MobileInput
+                label={t("phone")}
+                selectedCountry={selectedCountry}
+                setSelectedCountry={setSelectedCountry}
+                phone={phone}
+                setPhone={setPhone}
+              />
             </div>
           </div>
 
           <div className="flex md:flex-row flex-col gap-4">
             <div className="w-full">
               <DashboardInput
-              label={t('email')}
-              value={email}
-              onChange={setEmail}
-              placeholder="username@mail.com"
-            />
+                label={t("email")}
+                value={email}
+                onChange={setEmail}
+                placeholder="username@mail.com"
+              />
             </div>
             <div className="w-full">
               <Select
-              label={t('permissions')}
-              variant="bordered"
-              placeholder={t('choosePermission')}
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-            >
-              {authorities.map((authority) => (
-                <SelectItem key={authority.key} textValue={authority.label}>
-                  {authority.label}
-                </SelectItem>
-              ))}
-            </Select>
+                label={t("permissions")}
+                variant="bordered"
+                placeholder={t("choosePermission")}
+                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
+                size="lg"
+              >
+                {authorities.map((authority) => (
+                  <SelectItem key={authority.key} textValue={authority.label}>
+                    {authority.label}
+                  </SelectItem>
+                ))}
+              </Select>
             </div>
           </div>
 
           <div className="flex md:flex-row flex-col gap-4">
             <DashboardInput
-              label={t('password')}
+              label={t("password")}
               value={password}
               onChange={setPassword}
               placeholder="••••••••••••••••"
             />
             <DashboardInput
-              label={t('confirmPassword')}
+              label={t("confirmPassword")}
               value={confirmPassword}
               onChange={setConfirmPassword}
               placeholder="••••••••••••••••"

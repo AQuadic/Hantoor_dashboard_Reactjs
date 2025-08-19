@@ -50,9 +50,7 @@ const AgentPage = () => {
   };
 
   if (isLoading) {
-    return (
-      <Loading />
-    );
+    return <Loading />;
   }
   return (
     <div>
@@ -68,6 +66,8 @@ const AgentPage = () => {
           totalPages={agentsData?.last_page || 1}
           totalItems={agentsData?.total || 0}
           itemsPerPage={agentsData?.per_page || 10}
+          from={agentsData?.from || 0}
+          to={agentsData?.to || 0}
         />
       </div>
     </div>

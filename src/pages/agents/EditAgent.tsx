@@ -100,21 +100,13 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
         ar: arName,
         en: enName,
       },
-      is_active: true,
+      is_active: "1", // Changed from boolean to string
       link: emailLink,
       brand_id: selectedBrandId ? Number(selectedBrandId) : undefined,
       centers: centers.length > 0 ? centers : undefined,
     };
 
     updateAgentMutation.mutate(payload);
-  };
-
-  const addCenter = (center: AgentCenter) => {
-    setCenters((prev) => [...prev, center]);
-  };
-
-  const removeCenter = (index: number) => {
-    setCenters((prev) => prev.filter((_, i) => i !== index));
   };
 
   if (isLoadingAgent) {
@@ -174,7 +166,11 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
             <p className="rtl:text-right text-black text-sm">{t("brand")}</p>
             <div className="flex items-center justify-between gap-1">
               <span className="text-gray-500 text-sm">
-              {selectedBrand ? i18n.language === "ar" ? selectedBrand.name.ar : selectedBrand.name.en : t("selectBrand")}
+                {selectedBrand
+                  ? i18n.language === "ar"
+                    ? selectedBrand.name.ar
+                    : selectedBrand.name.en
+                  : t("selectBrand")}
               </span>
 
               <select
@@ -210,18 +206,26 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
         />
         {selectedFilter === "Add maintenance centers" && (
           <AddMaintenanceCenter
-            onAddCenter={addCenter}
-            onRemoveCenter={removeCenter}
             centers={centers.filter((c) => c.type === "center")}
+            setCenters={(newCenters) => {
+              setCenters([
+                ...centers.filter((c) => c.type !== "center"),
+                ...newCenters,
+              ]);
+            }}
             type="center"
           />
         )}
 
         {selectedFilter === "Add sales Showrooms" && (
           <AddSalesShowrooms
-            onAddCenter={addCenter}
-            onRemoveCenter={removeCenter}
             centers={centers.filter((c) => c.type === "show_room")}
+            setCenters={(newCenters) => {
+              setCenters([
+                ...centers.filter((c) => c.type !== "show_room"),
+                ...newCenters,
+              ]);
+            }}
             type="show_room"
           />
         )}

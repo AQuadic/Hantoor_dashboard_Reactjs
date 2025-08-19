@@ -1,4 +1,4 @@
-import { Select, SelectItem} from "@heroui/react";
+import { Select, SelectItem } from "@heroui/react";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import { useTranslation } from "react-i18next";
@@ -19,30 +19,35 @@ const getCountryByIso2 = (iso2: string) => {
 
 const AddUsers = () => {
   const { t } = useTranslation("users");
-      const [selectedCountry, setSelectedCountry] = useState(
-          getCountryByIso2("EG")
-      );
-      const [phone, setPhone] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(
+    getCountryByIso2("EG")
+  );
+  const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-    const countries = [
-      {key: "1", label: "مصر"},
-      {key: "2", label: "مصر"},
-      {key: "3", label: "مصر"},
-      {key: "4", label: "مصر"},
-      {key: "5", label: "مصر"},
-      {key: "6", label: "مصر"},
+  const countries = [
+    { key: "1", label: "مصر" },
+    { key: "2", label: "مصر" },
+    { key: "3", label: "مصر" },
+    { key: "4", label: "مصر" },
+    { key: "5", label: "مصر" },
+    { key: "6", label: "مصر" },
   ];
   return (
     <section>
-      <DashboardHeader 
-        titleAr={"إضافة مستخدم جدبد"} titleEn={"Add a new user"} 
+      <DashboardHeader
+        titleAr={"إضافة مستخدم جدبد"}
+        titleEn={"Add a new user"}
         items={[
           { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
           { titleAr: "المستخدمين", titleEn: "Users", link: "/users" },
-          { titleAr: "إضافة مستخدم جدبد", titleEn: "Add a new user", link: "/dashboard/addUsers" },
-        ]} 
+          {
+            titleAr: "إضافة مستخدم جدبد",
+            titleEn: "Add a new user",
+            link: "/dashboard/addUsers",
+          },
+        ]}
       />
 
       <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
@@ -56,7 +61,7 @@ const AddUsers = () => {
             placeholder="username@mail.com"
           />
           <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
-            {t('name')}
+            {t("name")}
           </h2>
         </div>
         <div className="flex md:flex-row flex-col items-center gap-[15px]">
@@ -70,18 +75,19 @@ const AddUsers = () => {
               placeholder="username@mail.com"
             />
             <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
-              {t('email')}
+              {t("email")}
             </h2>
             <div className="absolute top-9 left-5"></div>
           </div>
           {/* Phone */}
           <div className="relative w-full mt-[15px]">
-              <MobileInput
-                  selectedCountry={selectedCountry}
-                  setSelectedCountry={setSelectedCountry}
-                  phone={phone}
-                  setPhone={setPhone}
-              />
+            <MobileInput
+              label={t("phone")}
+              selectedCountry={selectedCountry}
+              setSelectedCountry={setSelectedCountry}
+              phone={phone}
+              setPhone={setPhone}
+            />
             <div className="absolute top-9 left-5"></div>
           </div>
         </div>
@@ -90,12 +96,12 @@ const AddUsers = () => {
           <div className="relative w-full mt-[18px]">
             <Select
               items={countries}
-              label={t('country')}
-              placeholder={t('all')}
+              label={t("country")}
+              placeholder={t("all")}
               classNames={{
-                trigger: 'h-[64px] !h-[64px] min-h-[64px] bg-white border',
-                label: '!text-[15px] !text-[#000000]',
-                listbox: 'bg-white shadow-md',
+                trigger: "h-[64px] !h-[64px] min-h-[64px] bg-white border",
+                label: "!text-[15px] !text-[#000000]",
+                listbox: "bg-white shadow-md",
               }}
             >
               {(country) => <SelectItem>{country.label}</SelectItem>}
@@ -112,9 +118,12 @@ const AddUsers = () => {
               placeholder="********************"
             />
             <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
-              {t('password')}
+              {t("password")}
             </h2>
-            <div className="absolute top-9.5 rtl:left-5 ltr:right-5 cursor-pointer" onClick={() => setShowPassword((prev) => !prev)}>
+            <div
+              className="absolute top-9.5 rtl:left-5 ltr:right-5 cursor-pointer"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
               {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
             </div>
           </div>
@@ -130,18 +139,18 @@ const AddUsers = () => {
             placeholder="********************"
           />
           <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
-            {t('confirmPassword')}
+            {t("confirmPassword")}
           </h2>
-          <div className="absolute top-9.5 rtl:left-5 ltr:right-5 cursor-pointer" onClick={() => setShowConfirmPassword((prev) => !prev)}>
+          <div
+            className="absolute top-9.5 rtl:left-5 ltr:right-5 cursor-pointer"
+            onClick={() => setShowConfirmPassword((prev) => !prev)}
+          >
             {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
           </div>
         </div>
 
         <div className="mt-4">
-          <DashboardButton 
-            titleAr={"اضافة"} 
-            titleEn={"Save"} 
-          />
+          <DashboardButton titleAr={"اضافة"} titleEn={"Save"} />
         </div>
       </div>
     </section>

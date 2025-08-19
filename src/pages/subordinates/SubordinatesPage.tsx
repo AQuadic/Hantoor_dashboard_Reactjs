@@ -31,6 +31,8 @@ const SubordinatesPage = () => {
                 totalPages={5}
                 totalItems={100}
                 itemsPerPage={20}
+                from={1}
+                to={20}
               />
             </motion.div>
           ) : (
@@ -48,6 +50,8 @@ const SubordinatesPage = () => {
                 totalPages={5}
                 totalItems={100}
                 itemsPerPage={20}
+                from={1}
+                to={20}
               />
             </motion.div>
           )}

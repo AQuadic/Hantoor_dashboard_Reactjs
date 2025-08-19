@@ -54,6 +54,7 @@ const EditProfileForm = ({
             size="lg"
           />
           <MobileInput
+            label={t("phone")}
             selectedCountry={selectedCountry}
             setSelectedCountry={setSelectedCountry}
             phone={phone}

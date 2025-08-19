@@ -10,34 +10,37 @@ const DashboardUsers = () => {
   return (
     <section>
       <div className="py-2 bg-white border-b border-[#E1E1E1]">
-        <DashboardHeader 
-          titleAr={"المستخدمين"} titleEn={"Users"} 
-          items={[{
-            titleAr: "لوحة التحكم", link: "/",
-            titleEn: "Dashboard"
-          }, 
-          { titleAr: "المستخدمين", link: "/",
-            titleEn: "Users"
-          },]}
+        <DashboardHeader
+          titleAr={"المستخدمين"}
+          titleEn={"Users"}
+          items={[
+            {
+              titleAr: "لوحة التحكم",
+              link: "/",
+              titleEn: "Dashboard",
+            },
+            { titleAr: "المستخدمين", link: "/", titleEn: "Users" },
+          ]}
         />
 
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
           <div className="flex-1">
             <SearchBar
-            termAr={"ابحث بالاسم, رقم الجوال, البريد الالكتروني"}
-            termEn={"Search by name, mobile number, email"}
-            setTermAr={() => {}} 
-            setTermEn={() => {}} 
+              termAr={"ابحث بالاسم, رقم الجوال, البريد الالكتروني"}
+              termEn={"Search by name, mobile number, email"}
+              setTermAr={() => {}}
+              setTermEn={() => {}}
             />
           </div>
           <div className="flex-1">
             <DashboardDatePicker />
           </div>
           <Link to="/users/add">
-            <DashboardButton 
-              titleAr={"إضافة مستخدم جديد"} 
+            <DashboardButton
+              titleAr={"إضافة مستخدم جديد"}
               titleEn={"Add new user"}
-              variant="add" />
+              variant="add"
+            />
           </Link>
         </div>
 
@@ -54,6 +57,8 @@ const DashboardUsers = () => {
           totalPages={100}
           totalItems={100}
           itemsPerPage={5}
+          from={1}
+          to={5}
         />
       </div>
     </section>
