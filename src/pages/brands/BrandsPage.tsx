@@ -17,8 +17,8 @@ const BrandsPage = () => {
   const searchTerm = isArabic ? searchTermAr : searchTermEn;
 
   const { data, refetch, isLoading, error } = useQuery<BrandsApiResponse>({
-    queryKey: ["brands", currentPage],
-    queryFn: () => fetchBrands(currentPage),
+    queryKey: ["brands", currentPage, searchTerm],
+    queryFn: () => fetchBrands(currentPage, searchTerm),
     placeholderData: undefined,
   });
 
@@ -29,7 +29,7 @@ const BrandsPage = () => {
   }, [data]);
 
   if (isLoading) {
-    return <Loading />
+    return <Loading />;
   }
   if (error) {
     return <div>Error loading brands: {String(error)}</div>;
