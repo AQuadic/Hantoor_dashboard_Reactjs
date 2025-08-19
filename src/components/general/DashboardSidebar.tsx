@@ -1,7 +1,8 @@
 import { SidebarLinks } from "@/constants/SidebarLinks";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 
 const DashboardSidebar = () => {
@@ -24,6 +25,58 @@ const DashboardSidebar = () => {
     return currentLang === "ar" ? link.linkAr : link.linkEn;
   };
   const toggleDesktopSidebar = () => setIsDesktopCollapsed(!isDesktopCollapsed);
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Remove common auth keys from both storages
+    const keys = [
+      "token",
+      "accessToken",
+      "refreshToken",
+      "user",
+      "userData",
+      "auth",
+      "authToken",
+    ];
+    keys.forEach((k) => {
+      try {
+        localStorage.removeItem(k);
+      } catch {
+        void 0;
+      }
+      try {
+        sessionStorage.removeItem(k);
+      } catch {
+        void 0;
+      }
+    });
+    // As a fallback, remove any possible persisted auth state prefixes
+    try {
+      Object.keys(localStorage).forEach((k) => {
+        if (
+          k.toLowerCase().includes("auth") ||
+          k.toLowerCase().includes("token") ||
+          k.toLowerCase().includes("user")
+        ) {
+          localStorage.removeItem(k);
+        }
+      });
+    } catch {
+      void 0;
+    }
+
+    // Remove cookie-based tokens (used by axios.ts)
+    try {
+      Cookies.remove("hantoor_token");
+      Cookies.remove("hantoorToken");
+      Cookies.remove("hantoor-token");
+    } catch {
+      void 0;
+    }
+
+    navigate("/login");
+  };
 
   // Close mobile sidebar when clicking outside
   useEffect(() => {
@@ -195,29 +248,44 @@ const DashboardSidebar = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
                 >
-                  <NavLink
-                    to={link.path}
-                    end={link.path === "/dashboard"}
-                    className={({ isActive }) =>
-                      `flex items-center gap-4 mt-6 px-2 py-2 rounded-md ${
-                        isActive ? "bg-[#2A32F8] text-white" : "text-gray-600"
-                      }`
-                    }
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {({ isActive }) => (
-                      <>
-                        {isActive && link.activeIcon ? (
-                          <link.activeIcon />
-                        ) : (
-                          <link.icons />
-                        )}
-                        <h1 className="text-sm font-normal">
-                          {getLinkLabel(link)}
-                        </h1>
-                      </>
-                    )}
-                  </NavLink>
+                  {link.linkEn === "Logout" ? (
+                    <button
+                      onClick={() => {
+                        setIsOpen(false);
+                        handleLogout();
+                      }}
+                      className={`flex items-center gap-4 mt-6 px-2 py-2 rounded-md text-gray-600 w-full text-left`}
+                    >
+                      {link.icons && <link.icons />}
+                      <h1 className="text-sm font-normal">
+                        {getLinkLabel(link)}
+                      </h1>
+                    </button>
+                  ) : (
+                    <NavLink
+                      to={link.path}
+                      end={link.path === "/dashboard"}
+                      className={({ isActive }) =>
+                        `flex items-center gap-4 mt-6 px-2 py-2 rounded-md ${
+                          isActive ? "bg-[#2A32F8] text-white" : "text-gray-600"
+                        }`
+                      }
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {({ isActive }) => (
+                        <>
+                          {isActive && link.activeIcon ? (
+                            <link.activeIcon />
+                          ) : (
+                            <link.icons />
+                          )}
+                          <h1 className="text-sm font-normal">
+                            {getLinkLabel(link)}
+                          </h1>
+                        </>
+                      )}
+                    </NavLink>
+                  )}
                 </motion.div>
               ))}
             </motion.div>
@@ -235,36 +303,27 @@ const DashboardSidebar = () => {
           className="py-4"
           style={{ boxShadow: "10.27px 10.27px 51.33px 0px #64748B0A" }}
         >
-          {SidebarLinks.map((link, index) => (
-            <NavLink
-              to={link.path}
-              end={link.path === "/dashboard"}
-              key={index}
-              className={({ isActive }) =>
-                `block mt-4 rounded-md ${
-                  isActive
-                    ? "bg-[#2A32F8] text-white mx-4"
-                    : "hover:bg-blue-100 text-[#606060] mx-4"
-                } ${
+          {SidebarLinks.map((link, index) =>
+            link.linkEn === "Logout" ? (
+              <div
+                key={index}
+                className={`block mt-4 rounded-md ${
                   isDesktopCollapsed
                     ? "px-0 py-2 flex justify-center"
                     : "px-4 py-2"
-                }`
-              }
-              title={isDesktopCollapsed ? getLinkLabel(link) : ""}
-            >
-              {({ isActive }) => (
-                <div
-                  className={`flex items-center ${
-                    isDesktopCollapsed ? "justify-center" : "gap-[5px]"
-                  }`}
+                }`}
+                title={isDesktopCollapsed ? getLinkLabel(link) : ""}
+              >
+                <button
+                  onClick={handleLogout}
+                  className={`w-full text-left ${
+                    isDesktopCollapsed
+                      ? "flex justify-center"
+                      : "flex items-center gap-[5px]"
+                  } text-[#606060] px-0 py-2 rounded-md hover:bg-blue-100`}
                 >
                   <div className="flex-shrink-0">
-                    {isActive && link.activeIcon ? (
-                      <link.activeIcon />
-                    ) : (
-                      <link.icons />
-                    )}
+                    {link.icons && <link.icons />}
                   </div>
                   <AnimatePresence mode="wait">
                     {!isDesktopCollapsed && (
@@ -288,10 +347,66 @@ const DashboardSidebar = () => {
                       </motion.h1>
                     )}
                   </AnimatePresence>
-                </div>
-              )}
-            </NavLink>
-          ))}
+                </button>
+              </div>
+            ) : (
+              <NavLink
+                to={link.path}
+                end={link.path === "/dashboard"}
+                key={index}
+                className={({ isActive }) =>
+                  `block mt-4 rounded-md ${
+                    isActive
+                      ? "bg-[#2A32F8] text-white mx-4"
+                      : "hover:bg-blue-100 text-[#606060] mx-4"
+                  } ${
+                    isDesktopCollapsed
+                      ? "px-0 py-2 flex justify-center"
+                      : "px-4 py-2"
+                  }`
+                }
+                title={isDesktopCollapsed ? getLinkLabel(link) : ""}
+              >
+                {({ isActive }) => (
+                  <div
+                    className={`flex items-center ${
+                      isDesktopCollapsed ? "justify-center" : "gap-[5px]"
+                    }`}
+                  >
+                    <div className="flex-shrink-0">
+                      {isActive && link.activeIcon ? (
+                        <link.activeIcon />
+                      ) : (
+                        <link.icons />
+                      )}
+                    </div>
+                    <AnimatePresence mode="wait">
+                      {!isDesktopCollapsed && (
+                        <motion.h1
+                          key="text"
+                          initial={{ opacity: 0, width: 0 }}
+                          animate={{ opacity: 1, width: "auto" }}
+                          exit={{ opacity: 0, width: 0 }}
+                          transition={{
+                            duration: 0.3,
+                            ease: "easeInOut",
+                            width: { duration: 0.3, ease: "easeInOut" },
+                            opacity: {
+                              duration: 0.2,
+                              delay: isDesktopCollapsed ? 0 : 0.1,
+                            },
+                          }}
+                          className="text-[15px] font-normal whitespace-nowrap overflow-hidden"
+                        >
+                          {getLinkLabel(link)}
+                        </motion.h1>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
+              </NavLink>
+            )
+          )}
         </motion.div>
       </div>
     </section>
