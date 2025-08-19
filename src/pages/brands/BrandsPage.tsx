@@ -46,11 +46,13 @@ const BrandsPage = () => {
       <div className="px-2 md:px-8">
         <BrandsTable brands={data?.data ?? []} refetch={refetch} />
         <TablePagination
-          currentPage={data?.current_page ?? 1}
+          currentPage={data?.current_page ?? currentPage}
           setCurrentPage={setCurrentPage}
           totalPages={data?.last_page ?? 1}
           totalItems={data?.total ?? 0}
           itemsPerPage={data?.per_page ?? 15}
+          from={data?.from ?? 0}
+          to={data?.to ?? 0}
         />
       </div>
     </section>

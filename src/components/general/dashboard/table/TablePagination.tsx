@@ -7,6 +7,8 @@ interface TablePaginationProps {
   totalPages: number;
   totalItems: number;
   itemsPerPage: number;
+  from: number;
+  to: number;
 }
 
 const generateSteps = (current: number, total: number): (number | string)[] => {
@@ -17,21 +19,15 @@ const generateSteps = (current: number, total: number): (number | string)[] => {
 
   if (current <= 2) {
     if (total > 4) pages.push("...");
-  }
-
-  else if (current === 3 || current === 4) {
+  } else if (current === 3 || current === 4) {
     pages.push("...");
     pages.push(current);
     pages.push("...");
-  }
-
-  else if (current > 4 && current < total - 3) {
+  } else if (current > 4 && current < total - 3) {
     pages.push("...");
     pages.push(current);
     pages.push("...");
-  }
-
-  else if (current >= total - 3) {
+  } else if (current >= total - 3) {
     pages.push("...");
     for (let i = total - 4; i <= total - 2; i++) {
       if (i > 2) pages.push(i);
@@ -52,6 +48,8 @@ const TablePagination: React.FC<TablePaginationProps> = ({
   totalPages,
   totalItems,
   itemsPerPage,
+  from,
+  to,
 }) => {
   const steps = generateSteps(currentPage, totalPages);
 
@@ -77,9 +75,15 @@ const TablePagination: React.FC<TablePaginationProps> = ({
     <div>
       <hr className="border-gray-200" />
       <div className="flex flex-wrap items-center justify-between mt-4 mx-8">
-        <p className="text-center text-[#808080]">
-          العدد {itemsPerPage} من {totalItems} عنصر
-        </p>
+        {to > 0 ? (
+          <p className="text-center text-[#808080]">
+            من {from} إلى{" "}
+            {currentPage < totalPages ? currentPage * itemsPerPage : to} من{" "}
+            {totalItems || to} عنصر
+          </p>
+        ) : (
+          <p className="text-center text-[#808080]">لا يوجد عناصر</p>
+        )}
         <div className="flex items-center">
           {/* Previous Button */}
           <button
