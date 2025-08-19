@@ -82,7 +82,8 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
     try {
       await updateBrand({
         id: brand.id,
-        is_active: !(brand.is_active === 1),
+        // send numeric value 0/1
+        is_active: brand.is_active === 1 ? 0 : 1,
       });
       toast.success(
         brand.is_active === 1 ? t("brandDeactivated") : t("brandActivated")

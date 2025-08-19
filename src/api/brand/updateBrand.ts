@@ -19,7 +19,7 @@ export async function updateBrand({
   id: number;
   name?: { ar?: string; en?: string };
   image?: File | null;
-  is_active?: boolean;
+  is_active?: boolean | number;
 }) {
   const formData = new FormData();
   if (name) {
@@ -28,6 +28,8 @@ export async function updateBrand({
   }
   if (typeof is_active === "boolean")
     formData.append("is_active", is_active ? "1" : "0");
+  if (typeof is_active === "number")
+    formData.append("is_active", String(is_active));
   if (image) formData.append("image", image);
 
   const response = await axios.put(`/admin/brands/${id}`, formData, {
