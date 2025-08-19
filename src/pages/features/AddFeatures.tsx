@@ -1,4 +1,7 @@
-import { createFeatureApp, FeatureAppBody } from "@/api/featuresApp/postFeatures";
+import {
+  createFeatureApp,
+  FeatureAppBody,
+} from "@/api/featuresApp/postFeatures";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
@@ -15,37 +18,58 @@ const AddFeatures = () => {
   const [enDescription, setEnDescription] = useState("");
   const [, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-const handleSubmit = async () => {
-  setIsSubmitting(true);
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    // Validate: require all fields (image, Arabic and English descriptions)
+    if (!profileImage || !arDescription.trim() || !enDescription.trim()) {
+      toast.error(
+        t("pleaseFillAllFields", {
+          defaultValue:
+            "Please fill all fields (image, Arabic and English description)",
+        })
+      );
+      setIsSubmitting(false);
+      return;
+    }
 
-  const body: FeatureAppBody = {
-    description: {
-      ar: arDescription,
-      en: enDescription,
-    },
-    is_active: true,
+    const body: FeatureAppBody = {
+      description: {
+        ar: arDescription,
+        en: enDescription,
+      },
+      is_active: true,
+    };
+
+    try {
+      const response = await createFeatureApp(body);
+      console.log("Feature created:", response);
+      setArDescription("");
+      setEnDescription("");
+      setProfileImage(null);
+      toast.success(t("featureAddedSuccessfully"));
+      navigate("/settings?section=App Features");
+    } catch (error: unknown) {
+      const msg = (() => {
+        try {
+          const e = error as {
+            response?: { data?: Record<string, unknown> };
+            message?: string;
+          };
+          const data = e.response?.data;
+          return (
+            (data && (String(data["message"]) || String(data["error"]))) ||
+            e.message ||
+            t("somethingWentWrong")
+          );
+        } catch {
+          return t("somethingWentWrong");
+        }
+      })();
+      toast.error(msg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-
-  try {
-    const response = await createFeatureApp(body);
-    console.log("Feature created:", response);
-    setArDescription("");
-    setEnDescription("");
-    setProfileImage(null);
-    toast.success(t("featureAddedSuccessfully"));
-    navigate("/settings?section=App Features");
-  } catch (error: any) {
-    const message =
-      error.response?.data?.message ||
-      error.response?.data?.error ||
-      error.message ||
-      t("somethingWentWrong");
-    toast.error(message);
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
 
   return (
     <div>
@@ -90,7 +114,11 @@ const handleSubmit = async () => {
           </div>
         </div>
         <div className="mt-5">
-          <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit}/>
+          <DashboardButton
+            titleAr="اضافة"
+            titleEn="Add"
+            onClick={handleSubmit}
+          />
         </div>
       </div>
     </div>
