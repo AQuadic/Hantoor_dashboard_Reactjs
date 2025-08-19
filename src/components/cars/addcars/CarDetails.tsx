@@ -1,44 +1,25 @@
 import { Select, SelectItem } from "@heroui/react";
 import DashboardInput from "@/components/general/DashboardInput";
-import React, { useState } from "react";
+import React from "react";
 import CarDetailsField from "@/components/cars/addcars/CarDetailsField";
-import { CarDetailsFieldsTypes } from "@/types/CarTypes";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import { useTranslation } from "react-i18next";
+import { useVehicleForm } from "@/contexts/VehicleFormContext";
+import { VehicleFeature } from "@/api/vehicles/fetchVehicles";
 
 const CarDetails = () => {
   const { t } = useTranslation("cars");
-  const [arCarName, setArCarName] = useState("");
-  const [enCarName, setEnCarName] = useState("");
-
-  const [carDetailsFields, setCarDetailsFields] = React.useState<
-    CarDetailsFieldsTypes[]
-  >([
-    {
-      image: null,
-      titleEn: "",
-      titleAr: "",
-      descriptionEn: "",
-      descriptionAr: "",
-    },
-  ]);
+  const { formData, updateField, features, addFeature, removeFeature } =
+    useVehicleForm();
 
   const addCarDetailsField = () => {
-    setCarDetailsFields([
-      ...carDetailsFields,
-      {
-        image: null,
-        titleEn: "",
-        titleAr: "",
-        descriptionEn: "",
-        descriptionAr: "",
-      },
-    ]);
+    addFeature?.();
   };
+
   const removeCarDetailsField = (index: number) => {
-    const updatedFields = carDetailsFields.filter((_, i) => i !== index);
-    setCarDetailsFields(updatedFields);
+    removeFeature?.(index);
   };
+
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] ">
       <h1 className="text-lg text-[#2A32F8] font-bold mb-2">
@@ -48,16 +29,16 @@ const CarDetails = () => {
         <div className="w-full">
           <DashboardInput
             label={t("arCarName")}
-            value={arCarName}
-            onChange={setArCarName}
+            value={formData?.nameAr || ""}
+            onChange={(value) => updateField?.("nameAr", value)}
             placeholder={t("writeHere")}
           />
         </div>
         <div className="w-full">
           <DashboardInput
             label={t("enCarName")}
-            value={enCarName}
-            onChange={setEnCarName}
+            value={formData?.nameEn || ""}
+            onChange={(value) => updateField?.("nameEn", value)}
             placeholder={t("writeHere")}
           />
         </div>
@@ -165,10 +146,16 @@ const CarDetails = () => {
       </div>
 
       <div>
-        {carDetailsFields.map((field, index) => (
+        {features?.map((feature: VehicleFeature, index: number) => (
           <CarDetailsField
             handleDelete={() => removeCarDetailsField(index)}
-            field={field}
+            field={{
+              image: feature.image as File | null,
+              titleEn: feature.name?.en || "",
+              titleAr: feature.name?.ar || "",
+              descriptionEn: feature.description?.en || "",
+              descriptionAr: feature.description?.ar || "",
+            }}
             key={index}
           />
         ))}

@@ -100,20 +100,39 @@ const FeaturesTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {features.length > 0 ? (
-          features.map((feature, index) => (
+        {(localFeatures && localFeatures.length > 0 ? localFeatures : features)
+          .length > 0 ? (
+          (localFeatures ?? features).map((feature, index) => (
             <TableRow key={feature.id} noBackgroundColumns={1}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
-                {feature.image?.url ? (
-                  <img
-                    src={feature.image.url}
-                    alt="feature"
-                    className="w-[52.36px] h-[51px] rounded-[7px] object-cover"
-                  />
-                ) : (
-                  <span className="text-gray-400">No Image</span>
-                )}
+                {(() => {
+                  // feature may contain nested image object or top-level url/responsive_urls
+                  const top = feature as unknown as Record<string, unknown>;
+                  const topUrl =
+                    typeof top["url"] === "string"
+                      ? (top["url"] as string)
+                      : undefined;
+                  const topResponsive = Array.isArray(top["responsive_urls"])
+                    ? (top["responsive_urls"] as string[])[0]
+                    : undefined;
+                  const rawUrl =
+                    feature.image?.url ||
+                    topUrl ||
+                    feature.image?.responsive_urls?.[0] ||
+                    topResponsive;
+                  if (rawUrl) {
+                    const url = String(rawUrl).replace(/([^:]\/)\/+/, "$1/");
+                    return (
+                      <img
+                        src={url}
+                        alt="feature"
+                        className="w-[52.36px] h-[51px] rounded-[7px] object-cover"
+                      />
+                    );
+                  }
+                  return <span className="text-gray-400">No Image</span>;
+                })()}
               </TableCell>
               <TableCell>
                 {feature.description[i18n.language as "ar" | "en"]}

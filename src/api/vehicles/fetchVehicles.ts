@@ -1,0 +1,619 @@
+import { axios } from "@/lib/axios";
+
+// Base interfaces for vehicle data
+export interface VehicleName {
+  ar: string;
+  en: string;
+}
+
+export interface VehicleDescription {
+  ar: string;
+  en: string;
+}
+export type UpdateVehiclePayload = CreateVehiclePayload & {
+  id: number;
+}; // Vehicle sub-entities interfaces
+export interface VehicleFeature {
+  id?: number;
+  vehicle_id?: number;
+  name: VehicleName;
+  description: VehicleDescription;
+  is_active: boolean;
+  image?: File | string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface VehicleOffer {
+  id?: number;
+  vehicle_id?: number;
+  name: VehicleName;
+  description: VehicleDescription;
+  is_active: boolean;
+  image?: File | string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface VehicleAccessory {
+  id?: number;
+  vehicle_id?: number;
+  name: VehicleName;
+  price: string;
+  is_active: boolean;
+  image?: File | string | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface VehiclePackage {
+  id?: number;
+  vehicle_id?: number;
+  name: VehicleName;
+  price: string;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface VehicleImage {
+  id?: number;
+  image: File | string;
+}
+
+export interface VehicleBrand {
+  id: number;
+  name: VehicleName;
+  is_active: number;
+  created_at: string;
+  updated_at: string;
+  image: string | null;
+}
+
+export interface VehicleAgent {
+  id: number;
+  name: VehicleName;
+  is_active: boolean;
+  link?: string;
+  brand_id?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface VehicleModel {
+  id: number;
+  name: VehicleName;
+  agent_id: number;
+  is_active: number;
+  created_at: string;
+  updated_at: string;
+}
+
+// Main Vehicle interface
+export interface Vehicle {
+  id: number;
+  name: VehicleName;
+  country_id?: number;
+  brand_id?: number;
+  agent_id?: number;
+  vehicle_model_id?: number;
+  vehicle_body_type_id?: number;
+  vehicle_type_id?: number;
+  vehicle_class_id?: number;
+  brand_origin_id?: number;
+  number_of_seat_id?: number;
+  engine_type_id?: number;
+  engine_volume_id?: number;
+  price: string;
+  is_discount: boolean;
+  discount_value?: string;
+  discount_date?: string;
+  is_include_tax: boolean;
+  is_Insurance_warranty: boolean;
+  is_include_warranty: boolean;
+  views?: number;
+  is_rent_to_own: boolean;
+  rent_to_own_duration?: string;
+  rent_to_own_whatsapp?: string;
+  rent_to_own_price?: string;
+  is_active?: boolean; // Status field for vehicle activation
+  status?: number; // Backend status field (1 for active, 0 for inactive)
+  created_at: string;
+  updated_at: string;
+
+  // Related data
+  additional_images: VehicleImage[];
+  image: string | null;
+  images_ads: VehicleImage[];
+  video: string[];
+  images: VehicleImage[];
+  features: VehicleFeature[];
+  offers: VehicleOffer[];
+  accessories: VehicleAccessory[];
+  packages: VehiclePackage[];
+  brand?: VehicleBrand;
+  agent?: VehicleAgent;
+  vehicle_model?: VehicleModel;
+  vehicle_body_type?: unknown;
+  vehicle_type?: unknown;
+  vehicle_class?: unknown;
+  brand_origin?: unknown;
+  number_of_seat?: unknown;
+  engine_type?: unknown;
+}
+
+// API Response interface for paginated results
+export interface VehiclesApiResponse {
+  current_page: number;
+  data: Vehicle[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+}
+
+// Filters interface for GET requests
+export interface VehicleFilters {
+  country_id?: number;
+  brand_id?: number[];
+  seats?: number[];
+  agent_id?: number[];
+  vehicle_type_id?: number[];
+  engine_volume_id?: number;
+  vehicle_model_id?: number[];
+  vehicle_body_type_id?: number[];
+  price_from?: number;
+  price_to?: number;
+  price_range?: "under_500" | "500_to_800" | "above_800";
+  vehicle_class_id?: number[];
+  sort_by?: "price" | "vehicle_model_id" | "created_at" | "brand_id";
+  sort_order?: "asc" | "desc";
+  per_page?: number;
+  search?: string;
+}
+
+// Request payload for creating vehicles (using FormData for file uploads)
+export interface CreateVehiclePayload {
+  name: VehicleName;
+  country_id?: string;
+  brand_id?: string;
+  agent_id?: string;
+  vehicle_model_id?: string;
+  vehicle_body_type_id?: string;
+  vehicle_type_id?: string;
+  vehicle_class_id?: string;
+  brand_origin_id?: string;
+  number_of_seat_id?: string;
+  engine_type_id?: string;
+  engine_volume_id?: string;
+  price?: string;
+  is_discount?: boolean;
+  discount_value?: string;
+  discount_date?: string;
+  is_include_tax?: boolean;
+  is_Insurance_warranty?: boolean;
+  is_include_warranty?: boolean;
+  is_rent_to_own?: boolean;
+  rent_to_own_duration?: string;
+  rent_to_own_whatsapp?: string;
+  rent_to_own_price?: string;
+  is_active?: boolean;
+  status?: string; // Status field as string for FormData
+
+  // Files
+  image?: File;
+  video?: File;
+  images?: VehicleImage[];
+  additional_images?: VehicleImage[];
+  ads_images?: VehicleImage[];
+
+  // Sub-entities
+  offers?: VehicleOffer[];
+  packages?: VehiclePackage[];
+  features?: VehicleFeature[];
+  accessories?: VehicleAccessory[];
+}
+
+// Fetch all vehicles with optional filters
+export async function fetchVehicles(
+  page: number = 1,
+  filters: VehicleFilters = {}
+): Promise<VehiclesApiResponse> {
+  const params: Record<
+    string,
+    string | number | boolean | (string | number)[]
+  > = {
+    page,
+    per_page: filters.per_page || 10,
+    ...filters,
+  };
+
+  // Handle array parameters
+  if (filters.brand_id?.length) {
+    params.brand_id = filters.brand_id;
+  }
+  if (filters.seats?.length) {
+    params.seats = filters.seats;
+  }
+  if (filters.agent_id?.length) {
+    params.agent_id = filters.agent_id;
+  }
+  if (filters.vehicle_type_id?.length) {
+    params.vehicle_type_id = filters.vehicle_type_id;
+  }
+  if (filters.vehicle_model_id?.length) {
+    params.vehicle_model_id = filters.vehicle_model_id;
+  }
+  if (filters.vehicle_body_type_id?.length) {
+    params.vehicle_body_type_id = filters.vehicle_body_type_id;
+  }
+  if (filters.vehicle_class_id?.length) {
+    params.vehicle_class_id = filters.vehicle_class_id;
+  }
+
+  const response = await axios.get("/admin/vehicle", { params });
+  return response.data as VehiclesApiResponse;
+}
+
+// Fetch single vehicle by ID
+export async function fetchVehicleById(id: number): Promise<Vehicle> {
+  const response = await axios.get(`/admin/vehicle/${id}`);
+  return response.data as Vehicle;
+}
+
+// Create new vehicle
+export async function createVehicle(
+  data: CreateVehiclePayload
+): Promise<Vehicle> {
+  const formData = new FormData();
+
+  // Add basic vehicle data
+  if (data.name) {
+    formData.append("name[ar]", data.name.ar);
+    formData.append("name[en]", data.name.en);
+  }
+
+  // Add all scalar fields
+  const scalarFields = [
+    "country_id",
+    "brand_id",
+    "agent_id",
+    "vehicle_model_id",
+    "vehicle_body_type_id",
+    "vehicle_type_id",
+    "vehicle_class_id",
+    "brand_origin_id",
+    "number_of_seat_id",
+    "engine_type_id",
+    "engine_volume_id",
+    "price",
+    "discount_value",
+    "discount_date",
+    "rent_to_own_duration",
+    "rent_to_own_whatsapp",
+    "rent_to_own_price",
+  ];
+
+  scalarFields.forEach((field) => {
+    const value = data[field as keyof CreateVehiclePayload];
+    if (value !== undefined && value !== null && value !== "") {
+      formData.append(field, String(value));
+    }
+  });
+
+  // Add boolean fields
+  if (data.is_discount !== undefined) {
+    formData.append("is_discount", data.is_discount ? "1" : "0");
+  }
+  if (data.is_include_tax !== undefined) {
+    formData.append("is_include_tax", data.is_include_tax ? "1" : "0");
+  }
+  if (data.is_Insurance_warranty !== undefined) {
+    formData.append(
+      "is_Insurance_warranty",
+      data.is_Insurance_warranty ? "1" : "0"
+    );
+  }
+  if (data.is_include_warranty !== undefined) {
+    formData.append(
+      "is_include_warranty",
+      data.is_include_warranty ? "1" : "0"
+    );
+  }
+  if (data.is_rent_to_own !== undefined) {
+    formData.append("is_rent_to_own", data.is_rent_to_own ? "1" : "0");
+  }
+
+  // Add files
+  if (data.image) {
+    formData.append("image", data.image);
+  }
+  if (data.video) {
+    formData.append("video", data.video);
+  }
+
+  // Add image arrays
+  if (data.images?.length) {
+    data.images.forEach((img, index) => {
+      if (img.image instanceof File) {
+        formData.append(`images[${index}][image]`, img.image);
+      }
+    });
+  }
+
+  if (data.additional_images?.length) {
+    data.additional_images.forEach((img, index) => {
+      if (img.image instanceof File) {
+        formData.append(`additional_images[${index}][image]`, img.image);
+      }
+    });
+  }
+
+  if (data.ads_images?.length) {
+    data.ads_images.forEach((img, index) => {
+      if (img.image instanceof File) {
+        formData.append(`ads_images[${index}][image]`, img.image);
+      }
+    });
+  }
+
+  // Add offers
+  if (data.offers?.length) {
+    data.offers.forEach((offer, index) => {
+      formData.append(`offers[${index}][name][ar]`, offer.name.ar);
+      formData.append(`offers[${index}][name][en]`, offer.name.en);
+      formData.append(
+        `offers[${index}][description][ar]`,
+        offer.description.ar
+      );
+      formData.append(
+        `offers[${index}][description][en]`,
+        offer.description.en
+      );
+      formData.append(
+        `offers[${index}][is_active]`,
+        offer.is_active ? "1" : "0"
+      );
+      if (offer.image instanceof File) {
+        formData.append(`offers[${index}][image]`, offer.image);
+      }
+    });
+  }
+
+  // Add packages
+  if (data.packages?.length) {
+    data.packages.forEach((pkg, index) => {
+      formData.append(`packages[${index}][name][ar]`, pkg.name.ar);
+      formData.append(`packages[${index}][name][en]`, pkg.name.en);
+      formData.append(`packages[${index}][price]`, pkg.price);
+      formData.append(
+        `packages[${index}][is_active]`,
+        pkg.is_active ? "1" : "0"
+      );
+    });
+  }
+
+  // Add features
+  if (data.features?.length) {
+    data.features.forEach((feature, index) => {
+      formData.append(`features[${index}][name][ar]`, feature.name.ar);
+      formData.append(`features[${index}][name][en]`, feature.name.en);
+      formData.append(
+        `features[${index}][description][ar]`,
+        feature.description.ar
+      );
+      formData.append(
+        `features[${index}][description][en]`,
+        feature.description.en
+      );
+      formData.append(
+        `features[${index}][is_active]`,
+        feature.is_active ? "1" : "0"
+      );
+      if (feature.image instanceof File) {
+        formData.append(`features[${index}][image]`, feature.image);
+      }
+    });
+  }
+
+  // Add accessories
+  if (data.accessories?.length) {
+    data.accessories.forEach((accessory, index) => {
+      formData.append(`accessories[${index}][name][ar]`, accessory.name.ar);
+      formData.append(`accessories[${index}][name][en]`, accessory.name.en);
+      formData.append(`accessories[${index}][price]`, accessory.price);
+      formData.append(
+        `accessories[${index}][is_active]`,
+        accessory.is_active ? "1" : "0"
+      );
+      if (accessory.image instanceof File) {
+        formData.append(`accessories[${index}][image]`, accessory.image);
+      }
+    });
+  }
+
+  const response = await axios.post("/admin/vehicle", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data as Vehicle;
+}
+
+// Update existing vehicle
+export async function updateVehicle(
+  id: number,
+  data: UpdateVehiclePayload
+): Promise<Vehicle> {
+  const formData = new FormData();
+
+  // Add method override for PUT
+  formData.append("_method", "PUT");
+
+  // Add basic vehicle data
+  if (data.name) {
+    formData.append("name[ar]", data.name.ar);
+    formData.append("name[en]", data.name.en);
+  }
+
+  // Add all scalar fields
+  const scalarFields = [
+    "country_id",
+    "brand_id",
+    "agent_id",
+    "vehicle_model_id",
+    "vehicle_body_type_id",
+    "vehicle_type_id",
+    "vehicle_class_id",
+    "brand_origin_id",
+    "number_of_seat_id",
+    "engine_type_id",
+    "engine_volume_id",
+    "price",
+    "discount_value",
+    "discount_date",
+    "rent_to_own_duration",
+    "rent_to_own_whatsapp",
+    "rent_to_own_price",
+  ];
+
+  scalarFields.forEach((field) => {
+    const value = data[field as keyof UpdateVehiclePayload];
+    if (value !== undefined && value !== null && value !== "") {
+      formData.append(field, String(value));
+    }
+  });
+
+  // Add boolean fields
+  if (data.is_discount !== undefined) {
+    formData.append("is_discount", data.is_discount ? "1" : "0");
+  }
+  if (data.is_include_tax !== undefined) {
+    formData.append("is_include_tax", data.is_include_tax ? "1" : "0");
+  }
+  if (data.is_Insurance_warranty !== undefined) {
+    formData.append(
+      "is_Insurance_warranty",
+      data.is_Insurance_warranty ? "1" : "0"
+    );
+  }
+  if (data.is_include_warranty !== undefined) {
+    formData.append(
+      "is_include_warranty",
+      data.is_include_warranty ? "1" : "0"
+    );
+  }
+  if (data.is_rent_to_own !== undefined) {
+    formData.append("is_rent_to_own", data.is_rent_to_own ? "1" : "0");
+  }
+
+  // Add offers
+  if (data.offers?.length) {
+    data.offers.forEach((offer, index) => {
+      formData.append(`offers[${index}][name][ar]`, offer.name.ar);
+      formData.append(`offers[${index}][name][en]`, offer.name.en);
+      formData.append(
+        `offers[${index}][description][ar]`,
+        offer.description.ar
+      );
+      formData.append(
+        `offers[${index}][description][en]`,
+        offer.description.en
+      );
+      formData.append(
+        `offers[${index}][is_active]`,
+        offer.is_active ? "1" : "0"
+      );
+      if (offer.image instanceof File) {
+        formData.append(`offers[${index}][image]`, offer.image);
+      }
+    });
+  }
+
+  // Add packages
+  if (data.packages?.length) {
+    data.packages.forEach((pkg, index) => {
+      formData.append(`packages[${index}][name][ar]`, pkg.name.ar);
+      formData.append(`packages[${index}][name][en]`, pkg.name.en);
+      formData.append(`packages[${index}][price]`, pkg.price);
+      formData.append(
+        `packages[${index}][is_active]`,
+        pkg.is_active ? "1" : "0"
+      );
+    });
+  }
+
+  // Add features
+  if (data.features?.length) {
+    data.features.forEach((feature, index) => {
+      formData.append(`features[${index}][name][ar]`, feature.name.ar);
+      formData.append(`features[${index}][name][en]`, feature.name.en);
+      formData.append(
+        `features[${index}][description][ar]`,
+        feature.description.ar
+      );
+      formData.append(
+        `features[${index}][description][en]`,
+        feature.description.en
+      );
+      formData.append(
+        `features[${index}][is_active]`,
+        feature.is_active ? "1" : "0"
+      );
+      if (feature.image instanceof File) {
+        formData.append(`features[${index}][image]`, feature.image);
+      }
+    });
+  }
+
+  // Add accessories
+  if (data.accessories?.length) {
+    data.accessories.forEach((accessory, index) => {
+      formData.append(`accessories[${index}][name][ar]`, accessory.name.ar);
+      formData.append(`accessories[${index}][name][en]`, accessory.name.en);
+      formData.append(`accessories[${index}][price]`, accessory.price);
+      formData.append(
+        `accessories[${index}][is_active]`,
+        accessory.is_active ? "1" : "0"
+      );
+      if (accessory.image instanceof File) {
+        formData.append(`accessories[${index}][image]`, accessory.image);
+      }
+    });
+  }
+
+  const response = await axios.post(`/admin/vehicle/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data as Vehicle;
+}
+
+// Delete vehicle
+export async function deleteVehicle(id: number): Promise<void> {
+  await axios.delete(`/admin/vehicle/${id}`);
+}
+
+// Toggle vehicle status (if needed)
+export async function toggleVehicleStatus(
+  id: number,
+  isActive: boolean
+): Promise<Vehicle> {
+  const formData = new FormData();
+  formData.append("_method", "PUT");
+  formData.append("is_active", isActive ? "1" : "0");
+
+  const response = await axios.post(`/admin/vehicle/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data as Vehicle;
+}

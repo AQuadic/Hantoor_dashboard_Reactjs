@@ -37,7 +37,9 @@ const AddFeatures = () => {
         ar: arDescription,
         en: enDescription,
       },
-      is_active: true,
+      // send numeric 1 for active
+      is_active: 1,
+      image: profileImage,
     };
 
     try {

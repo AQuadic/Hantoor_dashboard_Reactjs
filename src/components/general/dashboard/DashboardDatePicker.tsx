@@ -8,6 +8,8 @@ const DashboardDatePicker = () => {
     <div dir={"ltr"} className="max-w-fit ">
       <DateRangePicker
         variant={"bordered"}
+        aria-label="Select date range"
+        label="Date Range"
         startContent={
           <span className="pl-3 flex items-center">
             <CalenderArrow />

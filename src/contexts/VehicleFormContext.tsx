@@ -1,0 +1,421 @@
+import React, { createContext, useState, ReactNode, useContext } from "react";
+import {
+  type CreateVehiclePayload,
+  type UpdateVehiclePayload,
+  type VehicleFeature,
+  type VehicleOffer,
+  type VehicleAccessory,
+  type VehiclePackage,
+  type VehicleImage,
+} from "@/api/vehicles";
+
+interface VehicleFormState extends Omit<CreateVehiclePayload, "name"> {
+  id?: number;
+  nameAr: string;
+  nameEn: string;
+  mainImage?: File | string | null;
+  videoFile?: File | string | null;
+  carImages: VehicleImage[];
+  additionalImages: VehicleImage[];
+  adsImages: VehicleImage[];
+}
+
+interface VehicleFormContextType {
+  formData: VehicleFormState;
+  setFormData: (data: Partial<VehicleFormState>) => void;
+  updateField: <K extends keyof VehicleFormState>(
+    field: K,
+    value: VehicleFormState[K]
+  ) => void;
+  features: VehicleFeature[];
+  addFeature: () => void;
+  updateFeature: (index: number, feature: Partial<VehicleFeature>) => void;
+  removeFeature: (index: number) => void;
+  offers: VehicleOffer[];
+  addOffer: () => void;
+  updateOffer: (index: number, offer: Partial<VehicleOffer>) => void;
+  removeOffer: (index: number) => void;
+  accessories: VehicleAccessory[];
+  addAccessory: () => void;
+  updateAccessory: (
+    index: number,
+    accessory: Partial<VehicleAccessory>
+  ) => void;
+  removeAccessory: (index: number) => void;
+  packages: VehiclePackage[];
+  addPackage: () => void;
+  updatePackage: (index: number, pkg: Partial<VehiclePackage>) => void;
+  removePackage: (index: number) => void;
+  addCarImage: () => void;
+  updateCarImage: (index: number, image: VehicleImage) => void;
+  removeCarImage: (index: number) => void;
+  addAdditionalImage: () => void;
+  updateAdditionalImage: (index: number, image: VehicleImage) => void;
+  removeAdditionalImage: (index: number) => void;
+  addAdsImage: () => void;
+  updateAdsImage: (index: number, image: VehicleImage) => void;
+  removeAdsImage: (index: number) => void;
+  resetForm: () => void;
+  getCreatePayload: () => CreateVehiclePayload;
+  getUpdatePayload: () => UpdateVehiclePayload;
+}
+
+const initialFormState: VehicleFormState = {
+  nameAr: "",
+  nameEn: "",
+  price: "",
+  is_discount: false,
+  discount_value: "",
+  discount_date: "",
+  is_include_tax: false,
+  is_Insurance_warranty: false,
+  is_include_warranty: false,
+  is_rent_to_own: false,
+  rent_to_own_duration: "",
+  rent_to_own_whatsapp: "",
+  rent_to_own_price: "",
+  country_id: "",
+  brand_id: "",
+  agent_id: "",
+  vehicle_model_id: "",
+  vehicle_body_type_id: "",
+  vehicle_type_id: "",
+  vehicle_class_id: "",
+  brand_origin_id: "",
+  number_of_seat_id: "",
+  engine_type_id: "",
+  engine_volume_id: "",
+  mainImage: null,
+  videoFile: null,
+  carImages: [],
+  additionalImages: [],
+  adsImages: [],
+  offers: [],
+  packages: [],
+  features: [],
+  accessories: [],
+};
+
+const VehicleFormContext = createContext<VehicleFormContextType | null>(null);
+
+export { VehicleFormContext };
+
+interface VehicleFormProviderProps {
+  children: ReactNode;
+  initialData?: Partial<VehicleFormState>;
+}
+
+export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
+  children,
+  initialData,
+}) => {
+  const [formData, setFormDataState] = useState<VehicleFormState>({
+    ...initialFormState,
+    ...initialData,
+  });
+
+  const setFormData = (data: Partial<VehicleFormState>) => {
+    setFormDataState((prev) => ({ ...prev, ...data }));
+  };
+
+  const updateField = <K extends keyof VehicleFormState>(
+    field: K,
+    value: VehicleFormState[K]
+  ) => {
+    setFormDataState((prev) => ({ ...prev, [field]: value }));
+  };
+
+  // Features management
+  const addFeature = () => {
+    const newFeature: VehicleFeature = {
+      name: { ar: "", en: "" },
+      description: { ar: "", en: "" },
+      is_active: true,
+      image: null,
+    };
+    setFormDataState((prev) => ({
+      ...prev,
+      features: [...(prev.features || []), newFeature],
+    }));
+  };
+
+  const updateFeature = (index: number, feature: Partial<VehicleFeature>) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      features:
+        prev.features?.map((f, i) =>
+          i === index ? { ...f, ...feature } : f
+        ) || [],
+    }));
+  };
+
+  const removeFeature = (index: number) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      features: prev.features?.filter((_, i) => i !== index) || [],
+    }));
+  };
+
+  // Offers management
+  const addOffer = () => {
+    const newOffer: VehicleOffer = {
+      name: { ar: "", en: "" },
+      description: { ar: "", en: "" },
+      is_active: true,
+      image: null,
+    };
+    setFormDataState((prev) => ({
+      ...prev,
+      offers: [...(prev.offers || []), newOffer],
+    }));
+  };
+
+  const updateOffer = (index: number, offer: Partial<VehicleOffer>) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      offers:
+        prev.offers?.map((o, i) => (i === index ? { ...o, ...offer } : o)) ||
+        [],
+    }));
+  };
+
+  const removeOffer = (index: number) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      offers: prev.offers?.filter((_, i) => i !== index) || [],
+    }));
+  };
+
+  // Accessories management
+  const addAccessory = () => {
+    const newAccessory: VehicleAccessory = {
+      name: { ar: "", en: "" },
+      price: "",
+      is_active: true,
+      image: null,
+    };
+    setFormDataState((prev) => ({
+      ...prev,
+      accessories: [...(prev.accessories || []), newAccessory],
+    }));
+  };
+
+  const updateAccessory = (
+    index: number,
+    accessory: Partial<VehicleAccessory>
+  ) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      accessories:
+        prev.accessories?.map((a, i) =>
+          i === index ? { ...a, ...accessory } : a
+        ) || [],
+    }));
+  };
+
+  const removeAccessory = (index: number) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      accessories: prev.accessories?.filter((_, i) => i !== index) || [],
+    }));
+  };
+
+  // Packages management
+  const addPackage = () => {
+    const newPackage: VehiclePackage = {
+      name: { ar: "", en: "" },
+      price: "",
+      is_active: true,
+    };
+    setFormDataState((prev) => ({
+      ...prev,
+      packages: [...(prev.packages || []), newPackage],
+    }));
+  };
+
+  const updatePackage = (index: number, pkg: Partial<VehiclePackage>) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      packages:
+        prev.packages?.map((p, i) => (i === index ? { ...p, ...pkg } : p)) ||
+        [],
+    }));
+  };
+
+  const removePackage = (index: number) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      packages: prev.packages?.filter((_, i) => i !== index) || [],
+    }));
+  };
+
+  // Car images management
+  const addCarImage = () => {
+    const newImage: VehicleImage = { image: "" };
+    setFormDataState((prev) => ({
+      ...prev,
+      carImages: [...prev.carImages, newImage],
+    }));
+  };
+
+  const updateCarImage = (index: number, image: VehicleImage) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      carImages: prev.carImages.map((img, i) => (i === index ? image : img)),
+    }));
+  };
+
+  const removeCarImage = (index: number) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      carImages: prev.carImages.filter((_, i) => i !== index),
+    }));
+  };
+
+  // Additional images management
+  const addAdditionalImage = () => {
+    const newImage: VehicleImage = { image: "" };
+    setFormDataState((prev) => ({
+      ...prev,
+      additionalImages: [...prev.additionalImages, newImage],
+    }));
+  };
+
+  const updateAdditionalImage = (index: number, image: VehicleImage) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      additionalImages: prev.additionalImages.map((img, i) =>
+        i === index ? image : img
+      ),
+    }));
+  };
+
+  const removeAdditionalImage = (index: number) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      additionalImages: prev.additionalImages.filter((_, i) => i !== index),
+    }));
+  };
+
+  // Ads images management
+  const addAdsImage = () => {
+    const newImage: VehicleImage = { image: "" };
+    setFormDataState((prev) => ({
+      ...prev,
+      adsImages: [...prev.adsImages, newImage],
+    }));
+  };
+
+  const updateAdsImage = (index: number, image: VehicleImage) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      adsImages: prev.adsImages.map((img, i) => (i === index ? image : img)),
+    }));
+  };
+
+  const removeAdsImage = (index: number) => {
+    setFormDataState((prev) => ({
+      ...prev,
+      adsImages: prev.adsImages.filter((_, i) => i !== index),
+    }));
+  };
+
+  const resetForm = () => {
+    setFormDataState(initialFormState);
+  };
+
+  const getCreatePayload = (): CreateVehiclePayload => {
+    return {
+      name: { ar: formData.nameAr, en: formData.nameEn },
+      country_id: formData.country_id,
+      brand_id: formData.brand_id,
+      agent_id: formData.agent_id,
+      vehicle_model_id: formData.vehicle_model_id,
+      vehicle_body_type_id: formData.vehicle_body_type_id,
+      vehicle_type_id: formData.vehicle_type_id,
+      vehicle_class_id: formData.vehicle_class_id,
+      brand_origin_id: formData.brand_origin_id,
+      number_of_seat_id: formData.number_of_seat_id,
+      engine_type_id: formData.engine_type_id,
+      engine_volume_id: formData.engine_volume_id,
+      price: formData.price,
+      is_discount: formData.is_discount,
+      discount_value: formData.discount_value,
+      discount_date: formData.discount_date,
+      is_include_tax: formData.is_include_tax,
+      is_Insurance_warranty: formData.is_Insurance_warranty,
+      is_include_warranty: formData.is_include_warranty,
+      is_rent_to_own: formData.is_rent_to_own,
+      rent_to_own_duration: formData.rent_to_own_duration,
+      rent_to_own_whatsapp: formData.rent_to_own_whatsapp,
+      rent_to_own_price: formData.rent_to_own_price,
+      image:
+        formData.mainImage instanceof File ? formData.mainImage : undefined,
+      video:
+        formData.videoFile instanceof File ? formData.videoFile : undefined,
+      images: formData.carImages,
+      additional_images: formData.additionalImages,
+      ads_images: formData.adsImages,
+      offers: formData.offers,
+      packages: formData.packages,
+      features: formData.features,
+      accessories: formData.accessories,
+    };
+  };
+
+  const getUpdatePayload = (): UpdateVehiclePayload => {
+    return {
+      ...getCreatePayload(),
+      id: formData.id || 0,
+    };
+  };
+
+  const value: VehicleFormContextType = {
+    formData,
+    setFormData,
+    updateField,
+    features: formData.features || [],
+    addFeature,
+    updateFeature,
+    removeFeature,
+    offers: formData.offers || [],
+    addOffer,
+    updateOffer,
+    removeOffer,
+    accessories: formData.accessories || [],
+    addAccessory,
+    updateAccessory,
+    removeAccessory,
+    packages: formData.packages || [],
+    addPackage,
+    updatePackage,
+    removePackage,
+    addCarImage,
+    updateCarImage,
+    removeCarImage,
+    addAdditionalImage,
+    updateAdditionalImage,
+    removeAdditionalImage,
+    addAdsImage,
+    updateAdsImage,
+    removeAdsImage,
+    resetForm,
+    getCreatePayload,
+    getUpdatePayload,
+  };
+
+  return (
+    <VehicleFormContext.Provider value={value}>
+      {children}
+    </VehicleFormContext.Provider>
+  );
+};
+
+// Custom hook to use the vehicle form context
+export const useVehicleForm = () => {
+  const context = useContext(VehicleFormContext);
+  if (context === null) {
+    throw new Error("useVehicleForm must be used within a VehicleFormProvider");
+  }
+  return context;
+};
