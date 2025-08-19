@@ -57,7 +57,7 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
 
   const handleDelete = async (id: number) => {
     await deleteBrands(id);
-    toast.success(t('brandDeletedsuccessfully'))
+    toast.success(t("brandDeletedsuccessfully"));
     refetch();
   };
 
@@ -94,7 +94,7 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
                       <img
                         src={url}
                         alt="brand"
-                        className="w-10 h-10 rounded-full object-cover"
+                        className="w-10 h-10 rounded-lg object-cover"
                       />
                     );
                   })()
