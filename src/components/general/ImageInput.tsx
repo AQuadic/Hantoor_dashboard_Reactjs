@@ -15,6 +15,7 @@ interface ImageInputProps {
   setImage: React.Dispatch<React.SetStateAction<File | null>>;
   isRounded?: boolean;
   placeholderText?: string;
+  existingImageUrl?: string;
 }
 
 const ImageInput: React.FC<ImageInputProps> = ({
@@ -24,6 +25,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
   setImage,
   isRounded = false,
   placeholderText,
+  existingImageUrl,
 }) => {
   const { t } = useTranslation("setting");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -40,10 +42,12 @@ const ImageInput: React.FC<ImageInputProps> = ({
         setImagePreview(e.target?.result as string);
       };
       reader.readAsDataURL(image);
+    } else if (existingImageUrl) {
+      setImagePreview(existingImageUrl);
     } else {
       setImagePreview(null);
     }
-  }, [image]);
+  }, [image, existingImageUrl]);
 
   // Handle file selection
   const handleFileSelect = (file: File) => {
@@ -91,6 +95,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
+    // Note: existingImageUrl is controlled by parent, so it will persist unless parent clears it
   };
 
   return (
@@ -115,11 +120,13 @@ const ImageInput: React.FC<ImageInputProps> = ({
           className="hidden"
         />
 
-        {/* Remove button - only show when image is present */}
-        {image && (
+        {/* Remove button - show when image or existingImageUrl is present */}
+        {(image || (existingImageUrl && imagePreview)) && (
           <button
             onClick={handleRemoveImage}
-            className={`absolute ${isIconMode ? "top-1 right-1" : "top-2 right-2"} 
+            className={`absolute ${
+              isIconMode ? "top-1 right-1" : "top-2 right-2"
+            } 
                        bg-black text-white rounded-full p-1 transition-colors duration-200 z-10 hover:bg-gray-800`}
             aria-label="Remove image"
           >
@@ -128,7 +135,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
         )}
 
         {/* Content */}
-        {image && imagePreview ? (
+        {imagePreview ? (
           <img
             src={imagePreview}
             alt="Uploaded preview"
@@ -145,7 +152,9 @@ const ImageInput: React.FC<ImageInputProps> = ({
             />
             {/* Only show text when not in icon mode */}
             {!isIconMode && (
-              <p className="text-lg text-primary underline">{placeholderText || t('addPhoto')}</p>
+              <p className="text-lg text-primary underline">
+                {placeholderText || t("addPhoto")}
+              </p>
             )}
           </>
         )}

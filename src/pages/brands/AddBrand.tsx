@@ -40,10 +40,10 @@ const AddBrand = () => {
   // React Query: fetch brand data if editing
   const { data: brandData, isLoading: isBrandLoading } = useQuery({
     queryKey: ["brand", brandId],
-    queryFn: async (): Promise<BrandData | undefined> => {
+    queryFn: async (): Promise<any | undefined> => {
       if (isEdit && brandId) {
         const data = await fetchBrandById(Number(brandId));
-        return data as BrandData;
+        return data;
       }
       return undefined;
     },
@@ -55,9 +55,8 @@ const AddBrand = () => {
     if (brandData && isEdit) {
       setArBrand(brandData.name?.ar || "");
       setEnBrand(brandData.name?.en || "");
-      setIsActive(brandData.is_active ?? true);
-      // Note: You might need to handle the existing image display separately
-      // since profileImage expects a File object, not a URL string
+      setIsActive(!!brandData.is_active);
+      // profileImage remains null unless user uploads a new one
     }
   }, [brandData, isEdit]);
 
@@ -89,8 +88,8 @@ const AddBrand = () => {
         toast.success(
           response.message ||
             (isEdit
-              ? t('brandUpdatedSucccessfully')
-              : t('brandAddedSucccessfully'))
+              ? t("brandUpdatedSucccessfully")
+              : t("brandAddedSucccessfully"))
         );
 
         navigate("/brands");
@@ -115,11 +114,11 @@ const AddBrand = () => {
         );
       }
     },
-      onError: (err: any) => {
-        const errorMsg =
-          err?.response?.data?.message || err?.message || "حدث خطأ ما";
-        toast.error(errorMsg);
-      },
+    onError: (err: any) => {
+      const errorMsg =
+        err?.response?.data?.message || err?.message || "حدث خطأ ما";
+      toast.error(errorMsg);
+    },
     onSettled: () => {
       setLoading(false);
     },
@@ -134,8 +133,17 @@ const AddBrand = () => {
     return <div>Loading brand data...</div>;
   }
 
+  // Get the existing image URL if editing and media exists
+  const existingImageUrl =
+    isEdit &&
+    brandData?.media &&
+    Array.isArray(brandData.media) &&
+    brandData.media.length > 0
+      ? brandData.media[0].url
+      : undefined;
+
   return (
-     <div>
+    <div>
       <DashboardHeader
         titleAr={isEdit ? "تعديل ماركة" : "اضافة ماركة جديدة"}
         titleEn={isEdit ? "Edit Brand" : "Add Brand"}
@@ -160,8 +168,7 @@ const AddBrand = () => {
           <ImageInput
             image={profileImage}
             setImage={setProfileImage}
-            // If you have an existing image URL, you might need to pass it here
-            // existingImageUrl={brandData?.image}
+            existingImageUrl={existingImageUrl}
           />
         </div>
         <div className="flex flex-col gap-4 md:p-8 p-2 bg-white rounded-2xl">
