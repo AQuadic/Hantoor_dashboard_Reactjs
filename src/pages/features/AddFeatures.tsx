@@ -33,7 +33,7 @@ const handleSubmit = async () => {
     setEnDescription("");
     setProfileImage(null);
     toast.success(t("featureAddedSuccessfully"));
-    navigate("/settings");
+    navigate("/settings?section=App Features");
   } catch (error: any) {
     const message =
       error.response?.data?.message ||

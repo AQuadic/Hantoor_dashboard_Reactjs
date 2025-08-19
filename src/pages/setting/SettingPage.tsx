@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import SettingHeader from "@/components/setting/SettingHeader";
 import SettingTabs from "@/components/setting/SettingTabs";
 import GeneralSettings from "@/components/setting/GeneralSettings";
@@ -10,7 +11,14 @@ import SocialMediaPage from "../socialmedia/SocialMediaPage";
 import FeaturesPage from "../features/FeaturesPage";
 
 const SettingPage = () => {
-    const [selectedFilter, setSelectedFilter] = useState("General Settings");
+  const [searchParams] = useSearchParams();
+  const sectionParam = searchParams.get("section") || "General Settings";
+
+  const [selectedFilter, setSelectedFilter] = useState(sectionParam);
+
+  useEffect(() => {
+    setSelectedFilter(sectionParam);
+  }, [sectionParam]);
 
     return (
         <div>
