@@ -18,6 +18,7 @@ import ImageInput from "@/components/general/ImageInput";
 import React, { useState, useEffect } from "react";
 import { postBrand } from "@/api/brand/postBrand";
 import { fetchBrandById, updateBrand } from "@/api/brand/updateBrand";
+import { deleteBrandImage } from "@/api/brand/deleteBrandImage";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
@@ -29,6 +30,9 @@ const AddBrand = () => {
   const [arBrand, setArBrand] = useState("");
   const [enBrand, setEnBrand] = useState("");
   const [isActive, setIsActive] = useState(true); // default active
+  const [existingImageUrl, setExistingImageUrl] = useState<string | undefined>(
+    undefined
+  );
   const params = useParams();
   const brandId = params.id;
   const navigate = useNavigate();
@@ -56,6 +60,16 @@ const AddBrand = () => {
       setArBrand(brandData.name?.ar || "");
       setEnBrand(brandData.name?.en || "");
       setIsActive(!!brandData.is_active);
+      // Set existing image URL for edit mode
+      if (
+        brandData.media &&
+        Array.isArray(brandData.media) &&
+        brandData.media.length > 0
+      ) {
+        setExistingImageUrl(brandData.media[0].url);
+      } else {
+        setExistingImageUrl(undefined);
+      }
       // profileImage remains null unless user uploads a new one
     }
   }, [brandData, isEdit]);
@@ -133,14 +147,29 @@ const AddBrand = () => {
     return <div>Loading brand data...</div>;
   }
 
-  // Get the existing image URL if editing and media exists
-  const existingImageUrl =
-    isEdit &&
-    brandData?.media &&
-    Array.isArray(brandData.media) &&
-    brandData.media.length > 0
-      ? brandData.media[0].url
-      : undefined;
+  // Remove image handler for X icon (used by ImageInput)
+  const handleRemoveImage = async (e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    // If editing and there is an existing image, send updateBrand with image: null
+    if (isEdit && existingImageUrl && brandId) {
+      try {
+        await updateBrand({
+          id: Number(brandId),
+          name: { ar: arBrand, en: enBrand },
+          image: null,
+          is_active: isActive,
+        });
+        setProfileImage(null);
+        setExistingImageUrl(undefined);
+  toast.success(t("brandImageDeleted", "Image deleted successfully"));
+      } catch {
+  toast.error(t("brandImageDeleteFailed", "Failed to delete image"));
+      }
+    } else {
+      setProfileImage(null);
+      setExistingImageUrl(undefined);
+    }
+  };
 
   return (
     <div>
@@ -165,11 +194,17 @@ const AddBrand = () => {
           <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">
             {t("brandImage")}
           </h3>
-          <ImageInput
-            image={profileImage}
-            setImage={setProfileImage}
-            existingImageUrl={existingImageUrl}
-          />
+          <div className="relative">
+            <ImageInput
+              image={profileImage}
+              setImage={setProfileImage}
+              existingImageUrl={existingImageUrl}
+              // Override the X icon's remove handler for edit mode
+              // @ts-ignore
+              onRemoveImage={handleRemoveImage}
+            />
+            {/* No spinner overlay needed since we removed the delete logic */}
+          </div>
         </div>
         <div className="flex flex-col gap-4 md:p-8 p-2 bg-white rounded-2xl">
           <h3 className="mb-2 text-lg font-bold ">{t("mainData")}</h3>

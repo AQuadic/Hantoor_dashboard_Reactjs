@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import Edit from "../icons/general/Edit";
@@ -12,6 +13,7 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { deleteBrands } from "@/api/brand/deleteBrands";
+import { updateBrand } from "@/api/brand/updateBrand";
 import toast from "react-hot-toast";
 
 interface BrandImage {
@@ -54,11 +56,49 @@ interface BrandsTableProps {
 
 export function BrandsTable({ brands, refetch }: BrandsTableProps) {
   const { t, i18n } = useTranslation("brands");
+  const [updatingId, setUpdatingId] = React.useState<number | null>(null);
+  const [localBrands, setLocalBrands] = React.useState<Brand[] | undefined>(
+    brands
+  );
+
+  React.useEffect(() => {
+    setLocalBrands(brands);
+  }, [brands]);
 
   const handleDelete = async (id: number) => {
     await deleteBrands(id);
-    toast.success(t("brandDeletedsuccessfully"));
+    toast.success(t("brandDeleted"));
     refetch();
+  };
+
+  const handleToggleActive = async (brand: Brand) => {
+    setUpdatingId(brand.id);
+    // Optimistically update UI
+    setLocalBrands((prev) =>
+      prev?.map((b) =>
+        b.id === brand.id ? { ...b, is_active: b.is_active === 1 ? 0 : 1 } : b
+      )
+    );
+    try {
+      await updateBrand({
+        id: brand.id,
+        is_active: !(brand.is_active === 1),
+      });
+      toast.success(
+        brand.is_active === 1 ? t("brandDeactivated") : t("brandActivated")
+      );
+      refetch();
+    } catch {
+      // Revert UI on error
+      setLocalBrands((prev) =>
+        prev?.map((b) =>
+          b.id === brand.id ? { ...b, is_active: brand.is_active } : b
+        )
+      );
+      toast.error(t("brandStatusUpdateFailed"));
+    } finally {
+      setUpdatingId(null);
+    }
   };
 
   return (
@@ -73,8 +113,8 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brands &&
-          brands.map((brand, index) => (
+        {localBrands &&
+          localBrands.map((brand, index) => (
             <TableRow key={brand.id} noBackgroundColumns={1}>
               <TableCell>{index + 1}</TableCell>
               <TableCell>
@@ -89,7 +129,7 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
                         ? brand.image.responsive_urls[0]
                         : undefined);
                     if (!rawUrl) return <span>{t("noImage")}</span>;
-                    const url = rawUrl.replace(/([^:]\/)\/+/, "$1/");
+                    const url = rawUrl.replace(/([^:]\/)\/+/g, "$1/");
                     return (
                       <img
                         src={url}
@@ -107,7 +147,11 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
               </TableCell>
               <TableCell className="w-full">{brand.count ?? "-"}</TableCell>
               <TableCell className="flex gap-[7px] items-center">
-                <Switch isSelected={brand.is_active === 1} />
+                <Switch
+                  isSelected={brand.is_active === 1}
+                  isDisabled={updatingId === brand.id}
+                  onChange={() => handleToggleActive(brand)}
+                />
                 <Link to={`/brands/${brand.id}`}>
                   <Edit />
                 </Link>

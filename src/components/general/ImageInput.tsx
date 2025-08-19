@@ -16,6 +16,7 @@ interface ImageInputProps {
   isRounded?: boolean;
   placeholderText?: string;
   existingImageUrl?: string;
+  onRemoveImage?: (e?: React.MouseEvent) => void;
 }
 
 const ImageInput: React.FC<ImageInputProps> = ({
@@ -26,6 +27,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
   isRounded = false,
   placeholderText,
   existingImageUrl,
+  onRemoveImage,
 }) => {
   const { t } = useTranslation("setting");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -90,10 +92,14 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   // Handle remove image
   const handleRemoveImage = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setImage(null);
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+    if (onRemoveImage) {
+      onRemoveImage(e);
+    } else {
+      e.stopPropagation();
+      setImage(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
     // Note: existingImageUrl is controlled by parent, so it will persist unless parent clears it
   };
