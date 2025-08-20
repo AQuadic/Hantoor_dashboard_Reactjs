@@ -14,6 +14,7 @@ import { EngineTypesTable } from "@/components/models/EngineTypesTable";
 import { EngineSizesTable } from "@/components/models/EngineSizesTable";
 import { PriceFromTable } from "@/components/models/PriceFromTable";
 import { PriceToTable } from "@/components/models/PriceToTable";
+import { DebouncedSearchInput } from "@/components/general/DebouncedSearchInput";
 
 const BrandsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,10 +27,62 @@ const BrandsPage = () => {
 
   useEffect(() => {
     setSearchParams({ section: selectedTab, page: currentPage.toString() });
-  }, [selectedTab, currentPage]);
+  }, [selectedTab, currentPage, setSearchParams]);
+
+  const [search, setSearch] = useState("");
 
   const renderTable = () => {
     switch (selectedTab) {
+      case "Brand Origin":
+        return (
+          <>
+            <DebouncedSearchInput
+              placeholder="Search Brand Origin..."
+              onSearch={setSearch}
+            />
+            <BrandOriginTable search={search} />
+          </>
+        );
+      case "Number of Seats":
+        return (
+          <>
+            <DebouncedSearchInput
+              placeholder="Search Number of Seats..."
+              onSearch={setSearch}
+            />
+            <NumberOfSeatsTable search={search} />
+          </>
+        );
+      case "Engine Types":
+        return (
+          <>
+            <DebouncedSearchInput
+              placeholder="Search Engine Types..."
+              onSearch={setSearch}
+            />
+            <EngineTypesTable search={search} />
+          </>
+        );
+      case "Engine Sizes":
+        return (
+          <>
+            <DebouncedSearchInput
+              placeholder="Search Engine Sizes..."
+              onSearch={setSearch}
+            />
+            <EngineSizesTable search={search} />
+          </>
+        );
+      case "Price From":
+        return (
+          <>
+            <DebouncedSearchInput
+              placeholder="Search Price From..."
+              onSearch={setSearch}
+            />
+            <PriceFromTable search={search} />
+          </>
+        );
       case "Models":
         return <ModelTable />;
       case "Structure Types":
@@ -38,16 +91,6 @@ const BrandsPage = () => {
         return <CarTypesTable />;
       case "Categories":
         return <CategoriesTable />;
-      case "Brand Origin":
-        return <BrandOriginTable />;
-      case "Number of Seats":
-        return <NumberOfSeatsTable />;
-      case "Engine Types":
-        return <EngineTypesTable />;
-      case "Engine Sizes":
-        return <EngineSizesTable />;
-      case "Price From":
-        return <PriceFromTable />;
       case "Price To":
         return <PriceToTable />;
       default:

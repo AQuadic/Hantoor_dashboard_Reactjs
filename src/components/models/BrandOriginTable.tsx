@@ -28,18 +28,22 @@ interface BrandOrigin {
   updated_at: string;
 }
 
-export function BrandOriginTable() {
-  const { i18n,t } = useTranslation("models");
+interface BrandOriginTableProps {
+  search?: string;
+}
+
+export function BrandOriginTable({ search = "" }: BrandOriginTableProps) {
+  const { i18n, t } = useTranslation("models");
   const currentLang = i18n.language;
 
-  const { data,isLoading, refetch} = useQuery<BrandOrigin[]>({
+  const { data, isLoading, refetch } = useQuery<BrandOrigin[]>({
     queryKey: ["brands"],
     queryFn: getBrandOrigin,
   });
 
   const handleDelete = async (id: number) => {
     await deleteBrandOrigin(id);
-    toast.success(t('brandOriginDeleted'))
+    toast.success(t("brandOriginDeleted"));
     refetch();
   };
 
@@ -47,17 +51,22 @@ export function BrandOriginTable() {
     return <Loading />;
   }
 
+  const filtered = data?.filter((brand) => {
+    const name = currentLang === "ar" ? brand.name.ar : brand.name.en;
+    return name.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('brandOrigin')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("brandOrigin")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data?.map((brand, index) => (
+        {filtered?.map((brand, index) => (
           <TableRow key={brand.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">

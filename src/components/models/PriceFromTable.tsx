@@ -12,7 +12,11 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 
-export function PriceFromTable() {
+interface PriceFromTableProps {
+  search?: string;
+}
+
+export function PriceFromTable({ search = "" }: PriceFromTableProps) {
   const { t } = useTranslation("models");
   const pricefrom = [
     {
@@ -29,17 +33,21 @@ export function PriceFromTable() {
     },
   ];
 
+  const filtered = pricefrom.filter((item) =>
+    item.price.toLowerCase().includes(search.toLowerCase())
+  );
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('priceFrom')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("priceFrom")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {pricefrom.map((price, index) => (
+        {filtered.map((price, index) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{price.price}</TableCell>

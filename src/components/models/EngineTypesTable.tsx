@@ -11,22 +11,33 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { EngineType, getEngineType } from "@/api/models/engineTypes/getEngineType";
+import {
+  EngineType,
+  getEngineType,
+} from "@/api/models/engineTypes/getEngineType";
 import { deleteEngineType } from "@/api/models/engineTypes/deleteEngineType";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 
-export function EngineTypesTable() {
+interface EngineTypesTableProps {
+  search?: string;
+}
+
+export function EngineTypesTable({ search = "" }: EngineTypesTableProps) {
   const { t } = useTranslation("models");
-  const { data: engineTypes, isLoading, refetch } = useQuery<EngineType[]>({
+  const {
+    data: engineTypes,
+    isLoading,
+    refetch,
+  } = useQuery<EngineType[]>({
     queryKey: ["engineTypes"],
     queryFn: getEngineType,
   });
 
   const handleDelete = async (id: number) => {
     await deleteEngineType(id);
-    toast.success(t('engineTypeDeleted'))
+    toast.success(t("engineTypeDeleted"));
     refetch();
   };
 
@@ -34,17 +45,22 @@ export function EngineTypesTable() {
     return <Loading />;
   }
 
+  const filtered = engineTypes?.filter((engine) => {
+    // Only ar name is used in table, so filter by that
+    return engine.name.ar.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('engineType')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("engineType")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {engineTypes?.map((engine, index) => (
+        {filtered?.map((engine, index) => (
           <TableRow key={engine.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{engine.name.ar}</TableCell>
@@ -55,7 +71,9 @@ export function EngineTypesTable() {
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(engine.id)} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(engine.id)}
+                />
               </div>
             </TableCell>
           </TableRow>

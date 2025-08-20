@@ -11,22 +11,33 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { EngineSize, getEngineSize } from "@/api/models/engineSize/getEnginSize";
+import {
+  EngineSize,
+  getEngineSize,
+} from "@/api/models/engineSize/getEnginSize";
 import { deleteEngineSize } from "@/api/models/engineSize/deleteEngineSize";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 
-export function EngineSizesTable() {
+interface EngineSizesTableProps {
+  search?: string;
+}
+
+export function EngineSizesTable({ search = "" }: EngineSizesTableProps) {
   const { t, i18n } = useTranslation("models");
-  const { data: engineSize, isLoading, refetch } = useQuery<EngineSize[]>({
+  const {
+    data: engineSize,
+    isLoading,
+    refetch,
+  } = useQuery<EngineSize[]>({
     queryKey: ["engineSize"],
     queryFn: getEngineSize,
   });
 
   const handleDelete = async (id: number) => {
     await deleteEngineSize(id);
-    toast.success(t('engineSizeDeleted'))
+    toast.success(t("engineSizeDeleted"));
     refetch();
   };
 
@@ -34,17 +45,25 @@ export function EngineSizesTable() {
     return <Loading />;
   }
 
+  const filtered = engineSize?.filter((engine) => {
+    const name =
+      i18n.language === "ar"
+        ? engine.name.ar.slice(0, 7)
+        : engine.name.en.slice(0, 7);
+    return name.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('engineSize')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("engineSize")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {engineSize?.map((engine, index) => (
+        {filtered?.map((engine, index) => (
           <TableRow key={engine.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">
@@ -59,7 +78,9 @@ export function EngineSizesTable() {
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(engine.id)} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(engine.id)}
+                />
               </div>
             </TableCell>
           </TableRow>

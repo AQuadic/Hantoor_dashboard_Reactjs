@@ -17,9 +17,17 @@ import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 
-export function NumberOfSeatsTable() {
-    const { t, i18n } = useTranslation("models");
-  const { data: seats,isLoading, refetch } = useQuery<numOfSeats[]>({
+interface NumberOfSeatsTableProps {
+  search?: string;
+}
+
+export function NumberOfSeatsTable({ search = "" }: NumberOfSeatsTableProps) {
+  const { t, i18n } = useTranslation("models");
+  const {
+    data: seats,
+    isLoading,
+    refetch,
+  } = useQuery<numOfSeats[]>({
     queryKey: ["seats"],
     queryFn: getSeats,
   });
@@ -29,11 +37,12 @@ export function NumberOfSeatsTable() {
       await deleteSeats(id);
       toast.success(t("seatDeletedSuccessfully"));
       refetch();
-    } catch (error: any) {
-      const errorMsg =
-        error?.response?.data?.message ||
-        error?.message ||
-        t("somethingWentWrong");
+    } catch (error: unknown) {
+      let errorMsg = t("somethingWentWrong");
+      if (typeof error === "object" && error !== null) {
+        // @ts-expect-error: error may have response/message properties from axios or JS Error
+        errorMsg = error?.response?.data?.message || error?.message || errorMsg;
+      }
       toast.error(errorMsg);
     }
   };
@@ -42,21 +51,32 @@ export function NumberOfSeatsTable() {
     return <Loading />;
   }
 
+  const filtered = seats?.filter((seat) => {
+    const name = (i18n.language === "ar" ? seat.name.ar : seat.name.en).replace(
+      /^0+/,
+      ""
+    );
+    return name.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('NOSeats')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("NOSeats")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {seats?.map((seat, index) => (
+        {filtered?.map((seat, index) => (
           <TableRow key={seat.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">
-              {(i18n.language === "ar" ? seat.name.ar : seat.name.en).replace(/^0+/, '')}
+              {(i18n.language === "ar" ? seat.name.ar : seat.name.en).replace(
+                /^0+/,
+                ""
+              )}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch isSelected={seat.is_active} />
@@ -65,9 +85,7 @@ export function NumberOfSeatsTable() {
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(seat.id)}
-                />
+                <TableDeleteButton handleDelete={() => handleDelete(seat.id)} />
               </div>
             </TableCell>
           </TableRow>
