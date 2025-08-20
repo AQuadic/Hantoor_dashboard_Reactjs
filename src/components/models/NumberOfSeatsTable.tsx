@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
-import { getSeats, numOfSeats } from "@/api/models/seats/getSeats";
+import { getSeatsPaginated, numOfSeats } from "@/api/models/seats/getSeats";
 import { useQuery } from "@tanstack/react-query";
 import { deleteSeats } from "@/api/models/seats/deleteSeats";
 import { useTranslation } from "react-i18next";
@@ -19,17 +19,44 @@ import Loading from "../general/Loading";
 
 interface NumberOfSeatsTableProps {
   search?: string;
+  page?: number;
+  setPagination?: (meta: {
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    from: number;
+    to: number;
+  }) => void;
 }
 
-export function NumberOfSeatsTable({ search = "" }: NumberOfSeatsTableProps) {
+export function NumberOfSeatsTable({
+  search = "",
+  page = 1,
+  setPagination,
+}: NumberOfSeatsTableProps) {
   const { t, i18n } = useTranslation("models");
   const {
     data: seats,
     isLoading,
     refetch,
   } = useQuery<numOfSeats[]>({
-    queryKey: ["seats"],
-    queryFn: getSeats,
+    queryKey: ["seats", page, search],
+    queryFn: async () => {
+      const r = await getSeatsPaginated({ page, search });
+      if (setPagination) {
+        const total = r.total ?? 0;
+        const per_page = r.per_page ?? (r.data?.length || 10);
+        const totalPages = per_page ? Math.ceil(total / per_page) : 1;
+        setPagination({
+          totalPages,
+          totalItems: total,
+          itemsPerPage: per_page,
+          from: r.from ?? 0,
+          to: r.to ?? r.data?.length ?? 0,
+        });
+      }
+      return r.data;
+    },
   });
 
   const handleDelete = async (id: number) => {

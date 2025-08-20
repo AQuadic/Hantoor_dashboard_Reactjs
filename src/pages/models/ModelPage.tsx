@@ -30,6 +30,13 @@ const BrandsPage = () => {
   }, [selectedTab, currentPage, setSearchParams]);
 
   const [search, setSearch] = useState("");
+  const [paginationMeta, setPaginationMeta] = useState({
+    totalPages: 1,
+    totalItems: 0,
+    itemsPerPage: 10,
+    from: 0,
+    to: 0,
+  });
 
   const renderTable = () => {
     switch (selectedTab) {
@@ -40,7 +47,11 @@ const BrandsPage = () => {
               placeholder="Search Brand Origin..."
               onSearch={setSearch}
             />
-            <BrandOriginTable search={search} />
+            <BrandOriginTable
+              search={search}
+              page={currentPage}
+              setPagination={(m) => setPaginationMeta(m)}
+            />
           </>
         );
       case "Number of Seats":
@@ -50,7 +61,11 @@ const BrandsPage = () => {
               placeholder="Search Number of Seats..."
               onSearch={setSearch}
             />
-            <NumberOfSeatsTable search={search} />
+            <NumberOfSeatsTable
+              search={search}
+              page={currentPage}
+              setPagination={(m) => setPaginationMeta(m)}
+            />
           </>
         );
       case "Engine Types":
@@ -60,7 +75,11 @@ const BrandsPage = () => {
               placeholder="Search Engine Types..."
               onSearch={setSearch}
             />
-            <EngineTypesTable search={search} />
+            <EngineTypesTable
+              search={search}
+              page={currentPage}
+              setPagination={(m) => setPaginationMeta(m)}
+            />
           </>
         );
       case "Engine Sizes":
@@ -70,7 +89,11 @@ const BrandsPage = () => {
               placeholder="Search Engine Sizes..."
               onSearch={setSearch}
             />
-            <EngineSizesTable search={search} />
+            <EngineSizesTable
+              search={search}
+              page={currentPage}
+              setPagination={(m) => setPaginationMeta(m)}
+            />
           </>
         );
       case "Price From":
@@ -117,11 +140,11 @@ const BrandsPage = () => {
             <TablePagination
               currentPage={currentPage}
               setCurrentPage={setCurrentPage}
-              totalPages={12}
-              totalItems={50}
-              itemsPerPage={10}
-              from={1}
-              to={10}
+              totalPages={paginationMeta.totalPages}
+              totalItems={paginationMeta.totalItems}
+              itemsPerPage={paginationMeta.itemsPerPage}
+              from={paginationMeta.from}
+              to={paginationMeta.to}
             />
           </motion.div>
         </AnimatePresence>

@@ -10,37 +10,56 @@ import {
   TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
-import { getBrandOrigin } from "@/api/models/brandOrigin/getBrandOrigin";
+import {
+  getBrandOriginPaginated,
+  BrandOrigin as BrandOriginType,
+} from "@/api/models/brandOrigin/getBrandOrigin";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { deleteBrandOrigin } from "@/api/models/brandOrigin/deleteBrandOrigin";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 
-interface BrandOrigin {
-  id: number;
-  is_active: boolean;
-  name: {
-    ar: string;
-    en: string;
-  };
-  created_at: string;
-  updated_at: string;
-}
-
 interface BrandOriginTableProps {
   search?: string;
+  page?: number;
+  setPagination?: (meta: {
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    from: number;
+    to: number;
+  }) => void;
 }
 
-export function BrandOriginTable({ search = "" }: BrandOriginTableProps) {
+export function BrandOriginTable({
+  search = "",
+  page = 1,
+  setPagination,
+}: BrandOriginTableProps) {
   const { i18n, t } = useTranslation("models");
   const currentLang = i18n.language;
 
-  const { data, isLoading, refetch } = useQuery<BrandOrigin[]>({
-    queryKey: ["brands"],
-    queryFn: getBrandOrigin,
+  const { data, isLoading, refetch } = useQuery<BrandOriginType[]>({
+    queryKey: ["brandOrigins", page, search],
+    queryFn: async () => {
+      const r = await getBrandOriginPaginated({ page, search });
+      // propagate pagination metadata to parent
+      if (setPagination) {
+        const total = r.total ?? 0;
+        const per_page = r.per_page ?? (r.data?.length || 10);
+        const totalPages = per_page ? Math.ceil(total / per_page) : 1;
+        setPagination({
+          totalPages,
+          totalItems: total,
+          itemsPerPage: per_page,
+          from: r.from ?? 0,
+          to: r.to ?? r.data?.length ?? 0,
+        });
+      }
+      return r.data;
+    },
   });
-
   const handleDelete = async (id: number) => {
     await deleteBrandOrigin(id);
     toast.success(t("brandOriginDeleted"));

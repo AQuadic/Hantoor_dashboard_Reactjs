@@ -13,7 +13,7 @@ import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import {
   EngineType,
-  getEngineType,
+  getEngineTypePaginated,
 } from "@/api/models/engineTypes/getEngineType";
 import { deleteEngineType } from "@/api/models/engineTypes/deleteEngineType";
 import { useTranslation } from "react-i18next";
@@ -22,17 +22,44 @@ import Loading from "../general/Loading";
 
 interface EngineTypesTableProps {
   search?: string;
+  page?: number;
+  setPagination?: (meta: {
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    from: number;
+    to: number;
+  }) => void;
 }
 
-export function EngineTypesTable({ search = "" }: EngineTypesTableProps) {
+export function EngineTypesTable({
+  search = "",
+  page = 1,
+  setPagination,
+}: EngineTypesTableProps) {
   const { t } = useTranslation("models");
   const {
     data: engineTypes,
     isLoading,
     refetch,
   } = useQuery<EngineType[]>({
-    queryKey: ["engineTypes"],
-    queryFn: getEngineType,
+    queryKey: ["engineTypes", page, search],
+    queryFn: async () => {
+      const r = await getEngineTypePaginated({ page, search });
+      if (setPagination) {
+        const total = r.total ?? 0;
+        const per_page = r.per_page ?? (r.data?.length || 10);
+        const totalPages = per_page ? Math.ceil(total / per_page) : 1;
+        setPagination({
+          totalPages,
+          totalItems: total,
+          itemsPerPage: per_page,
+          from: r.from ?? 0,
+          to: r.to ?? r.data?.length ?? 0,
+        });
+      }
+      return r.data;
+    },
   });
 
   const handleDelete = async (id: number) => {
