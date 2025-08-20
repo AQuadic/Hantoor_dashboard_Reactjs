@@ -9,6 +9,7 @@ const DashboardDatePicker = () => {
       <DateRangePicker
         variant={"bordered"}
         aria-label="Select date range"
+        label="Date Range"
         startContent={
           <span className="pl-3 flex items-center">
             <CalenderArrow />

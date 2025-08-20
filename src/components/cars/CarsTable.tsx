@@ -47,7 +47,11 @@ const CarsTable = ({
   const [openChatId, setOpenChatId] = useState<number | null>(null);
 
   // Fetch vehicles with filters
-  const { data: vehiclesData, isLoading, error } = useQuery({
+  const {
+    data: vehiclesData,
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["vehicles", currentPage, searchTerm, filters],
     queryFn: () =>
       fetchVehicles(currentPage, {
@@ -192,15 +196,22 @@ const CarsTable = ({
   // Debug logging
   console.log("vehiclesData:", vehiclesData);
   if (vehiclesData) {
-    console.log("vehiclesData.data:", (vehiclesData as VehiclesApiResponse).data);
-    console.log("isArray:", Array.isArray((vehiclesData as VehiclesApiResponse).data));
+    console.log(
+      "vehiclesData.data:",
+      (vehiclesData as VehiclesApiResponse).data
+    );
+    console.log(
+      "isArray:",
+      Array.isArray((vehiclesData as VehiclesApiResponse).data)
+    );
   }
 
   // Ensure vehicles is always an array
-  const vehicles: Vehicle[] = vehiclesData && Array.isArray((vehiclesData as VehiclesApiResponse).data) 
-    ? (vehiclesData as VehiclesApiResponse).data 
-    : [];
-  
+  const vehicles: Vehicle[] =
+    vehiclesData && Array.isArray((vehiclesData as VehiclesApiResponse).data)
+      ? (vehiclesData as VehiclesApiResponse).data
+      : [];
+
   return (
     <div className="relative flex">
       <div className="w-full">
