@@ -32,10 +32,10 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('agentName')}</TableHead>
-          <TableHead className="text-right">{t('NOMaintenance')}</TableHead>
-          <TableHead className="text-right">{t('NOShowrooms')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("agentName")}</TableHead>
+          <TableHead className="text-right">{t("NOMaintenance")}</TableHead>
+          <TableHead className="text-right">{t("NOShowrooms")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -44,10 +44,18 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
             <TableCell>{index + 1}</TableCell>
             <TableCell>{agent.name.ar}</TableCell>
             <TableCell className="">
-              {agent.centers?.filter((c) => c.type === "center").length || 0}
+              {typeof agent.centers_count === "number"
+                ? agent.centers_count
+                : agent.centers
+                ? agent.centers.filter((c) => c.type === "center").length
+                : 0}
             </TableCell>
             <TableCell className="w-full">
-              {agent.centers?.filter((c) => c.type === "show_room").length || 0}
+              {typeof agent.show_rooms_count === "number"
+                ? agent.show_rooms_count
+                : agent.centers
+                ? agent.centers.filter((c) => c.type === "show_room").length
+                : 0}
             </TableCell>
             <TableCell
               className="flex gap-[7px] items-center"

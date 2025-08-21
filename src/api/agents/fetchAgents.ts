@@ -28,10 +28,14 @@ export interface AgentCenter {
 export interface Agent {
   id: number;
   name: AgentName;
-  is_active: boolean;
+  // backend may return 1/0 or boolean; accept both
+  is_active: boolean | number;
   link?: string;
   brand_id?: number;
   centers?: AgentCenter[];
+  // list endpoint may return counts instead of full centers array
+  centers_count?: number;
+  show_rooms_count?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -64,7 +68,8 @@ export interface CreateAgentPayload {
       description: CenterDescription;
       phone: string;
       whatsapp: string;
-      type: "center" | "show_room";
+      // Backend accepts either the descriptive type or numeric codes ("1" for center, "2" for show_room)
+      type: "center" | "show_room" | "1" | "2";
       is_active: string;
     };
   };
@@ -92,13 +97,122 @@ export async function fetchAgents(
   }
 
   const response = await axios.get("/admin/agents", { params });
-  return response.data as AgentsApiResponse;
+
+  const raw = response.data as any;
+
+  // helper to normalize a single agent item coming from backend
+  const normalizeAgent = (item: any): Agent => {
+    const name =
+      typeof item.name === "string"
+        ? { ar: item.name, en: item.name }
+        : item.name ?? { ar: "", en: "" };
+
+    const centers = Array.isArray(item.centers)
+      ? item.centers.map((c: any) => ({
+          ...c,
+          name:
+            typeof c.name === "string"
+              ? { ar: c.name, en: c.name }
+              : c.name ?? { ar: "", en: "" },
+          description:
+            typeof c.description === "string"
+              ? { ar: c.description, en: c.description }
+              : c.description ?? { ar: "", en: "" },
+          // normalize numeric/string codes to descriptive values when possible
+          type:
+            c.type === 1 || c.type === "1"
+              ? "center"
+              : c.type === 2 || c.type === "2"
+              ? "show_room"
+              : c.type,
+        }))
+      : undefined;
+
+    const is_active =
+      item.is_active === 1 || item.is_active === true
+        ? true
+        : item.is_active === 0 || item.is_active === false
+        ? false
+        : item.is_active;
+
+    return {
+      id: item.id,
+      name,
+      is_active,
+      link: item.link,
+      brand_id: item.brand_id,
+      centers,
+      centers_count: item.centers_count,
+      show_rooms_count: item.show_rooms_count,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+    } as Agent;
+  };
+
+  const normalized: AgentsApiResponse = {
+    ...raw,
+    data: Array.isArray(raw.data)
+      ? raw.data.map((it: any) => normalizeAgent(it))
+      : [],
+  };
+
+  return normalized;
 }
 
 // Fetch single agent by ID
 export async function fetchAgentById(id: number): Promise<Agent> {
   const response = await axios.get(`/admin/agents/${id}`);
-  return response.data as Agent;
+  const raw = response.data as any;
+
+  // reuse normalization logic for single agent
+  const normalized = ((): Agent => {
+    const name =
+      typeof raw.name === "string"
+        ? { ar: raw.name, en: raw.name }
+        : raw.name ?? { ar: "", en: "" };
+
+    const centers = Array.isArray(raw.centers)
+      ? raw.centers.map((c: any) => ({
+          ...c,
+          name:
+            typeof c.name === "string"
+              ? { ar: c.name, en: c.name }
+              : c.name ?? { ar: "", en: "" },
+          description:
+            typeof c.description === "string"
+              ? { ar: c.description, en: c.description }
+              : c.description ?? { ar: "", en: "" },
+          type:
+            c.type === 1 || c.type === "1"
+              ? "center"
+              : c.type === 2 || c.type === "2"
+              ? "show_room"
+              : c.type,
+        }))
+      : undefined;
+
+    const is_active =
+      raw.is_active === 1 || raw.is_active === true
+        ? true
+        : raw.is_active === 0 || raw.is_active === false
+        ? false
+        : raw.is_active;
+
+    return {
+      id: raw.id,
+      name,
+      is_active,
+      link: raw.link,
+      brand_id: raw.brand_id,
+      centers,
+      centers_count: raw.centers_count,
+      show_rooms_count: raw.show_rooms_count,
+      created_at: raw.created_at,
+      updated_at: raw.updated_at,
+    } as Agent;
+  })();
+
+  return normalized;
 }
 
 // Create new agent

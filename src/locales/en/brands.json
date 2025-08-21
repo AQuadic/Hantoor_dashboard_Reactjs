@@ -10,5 +10,10 @@
   "status": "Status",
   "brandDeletedsuccessfully": "Brand deleted successfully",
   "brandAddedSucccessfully": "Brand Added successfully.",
-  "brandUpdatedSucccessfully": "Brand updated successfully."
+  "brandUpdatedSucccessfully": "Brand updated successfully.",
+  "brandDeleted": "Brand deleted successfully",
+  "brandActivated": "Brand activated successfully",
+  "brandDeactivated": "Brand deactivated successfully",
+  "brandStatusUpdateFailed": "Failed to update brand status. Please try again later.",
+  "noImage": "No image"
 }

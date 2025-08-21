@@ -118,18 +118,11 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       }
     }
 
-    // Map centers to object with numeric keys for API
-    const centersPayload: {
-      [key: number]: {
-        name: { ar: string; en: string };
-        description: { ar: string; en: string };
-        phone: string;
-        whatsapp: string;
-        type: "center" | "show_room";
-        is_active: string;
-      };
-    } = {};
+    // Map centers to object with numeric keys for API (use any for inner shape so we can send numeric type codes)
+    const centersPayload: Record<number, any> = {};
     centers.forEach((center, idx) => {
+      // Map local type (center | show_room) to backend numeric codes: "1" = center, "2" = show_room
+      const typeCode = center.type === "center" ? "1" : "2";
       centersPayload[idx] = {
         name: {
           ar: center.name.ar,
@@ -141,7 +134,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         },
         phone: center.phone,
         whatsapp: center.whatsapp,
-        type: center.type,
+        type: typeCode,
         is_active: center.is_active ? "1" : "0",
       };
     });
@@ -154,7 +147,8 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       is_active: "1", // Always send as string "1"
       link: emailLink,
       brand_id: Number(selectedBrandId),
-      centers: centersPayload,
+      // centersPayload uses numeric-string type codes ("1" | "2"); cast to match CreateAgentPayload
+      centers: centersPayload as unknown as CreateAgentPayload["centers"],
     };
 
     createAgentMutation.mutate(payload);

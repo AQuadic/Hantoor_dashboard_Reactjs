@@ -10,5 +10,10 @@
   "status": "الحالة",
   "brandDeletedsuccessfully": "تم حذف الماركة بنجاح",
   "brandAddedSucccessfully": "تم اضافة الماركة بنجاح",
-  "brandUpdatedSucccessfully": "تم تعديل الماركة بنجاح"
+  "brandUpdatedSucccessfully": "تم تعديل الماركة بنجاح",
+  "brandDeleted": "تم حذف الماركة بنجاح",
+  "brandActivated": "تم تفعيل الماركة بنجاح",
+  "brandDeactivated": "تم تعطيل الماركة بنجاح",
+  "brandStatusUpdateFailed": "فشل تحديث حالة الماركة. حاول مرة أخرى لاحقًا.",
+  "noImage": "لا توجد صورة"
 }

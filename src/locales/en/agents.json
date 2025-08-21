@@ -21,6 +21,7 @@
   "selectBrand": "Select brand",
 
   "agentName": "Agent Name",
+  "searchPlaceholder": "Search by name",
   "NOMaintenance": "Number of Maintenance Center Addresses",
   "NOShowrooms": "Number of Showroom Addresses",
   "status": "Status",

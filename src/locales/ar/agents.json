@@ -21,6 +21,7 @@
   "selectBrand": "اختر الماركة",
 
   "agentName": "اسم الوكيل",
+  "searchPlaceholder": "ابحث بالاسم",
   "NOMaintenance": "عدد عناوين مراكز الصيانه",
   "NOShowrooms": "عدد عناوين معارض البيع",
   "status": "الحالة",
