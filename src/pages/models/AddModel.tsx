@@ -5,23 +5,63 @@ import { Select, SelectItem } from "@heroui/react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { fetchAgents } from "@/api/agents/fetchAgents";
+import Loading from "@/components/general/Loading";
+import { postVehicleModel } from "@/api/models/models/addModels";
+import toast from "react-hot-toast";
 
 const AddBrand = () => {
-  const [, setSelectedAgent] = React.useState("");
+  const [selectedAgent, setSelectedAgent] = useState<string>("");
   const [arModelName, setArModelName] = useState("");
   const [enModelName, setEnModelName] = useState("");
+  const [, setIsSubmitting] = useState(false);
+
   const params = useParams();
   const brandId = params.id;
 
   const isEdit = Boolean(brandId);
 
-  const agents = [
-    { label: "وكيل 1", value: "agent1" },
-    { label: "وكيل 2", value: "agent2" },
-    { label: "وكيل 3", value: "agent3" },
-  ];
+  const { t, i18n } = useTranslation("models");
+  const language = i18n.language || "en";
 
-  const { t } = useTranslation("models");
+  const { data: agentsData, isLoading } = useQuery({
+    queryKey: ["agents-list"],
+    queryFn: () => fetchAgents(1, ""), 
+  });
+
+  const handleSubmit = async () => {
+    if (!arModelName || !enModelName || !selectedAgent) {
+      toast.error(t("fillAllFields") || "Please fill all fields");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      const response = await postVehicleModel({
+        name: {
+          ar: arModelName,
+          en: enModelName,
+        },
+        is_active: true,
+        agent_id: selectedAgent,
+      });
+
+      if (response.success) {
+        toast.success(response.message || "Model added successfully");
+        setArModelName("");
+        setEnModelName("");
+        setSelectedAgent("");
+      } else {
+        toast.error(response.message || "Something went wrong");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Error submitting model");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div>
@@ -56,19 +96,30 @@ const AddBrand = () => {
                 onChange={setArModelName}
                 placeholder=" تويوتا"
               />
-              <Select
-                className="mt-4"
-                size={"lg"}
-                variant="bordered"
-                label={t("agent")}
-                onSelectionChange={(key) => setSelectedAgent(key as string)}
-              >
-                {agents.map((agent) => (
-                  <SelectItem key={agent.value} textValue={agent.label}>
-                    {agent.label}
-                  </SelectItem>
-                ))}
-              </Select>
+
+              {isLoading ? (
+                <Loading />
+              ) : (
+                <Select
+                  className="mt-4"
+                  size={"lg"}
+                  variant="bordered"
+                  label={t("agent")}
+                  selectedKeys={selectedAgent ? [selectedAgent] : []}
+                  onSelectionChange={(keys) =>
+                    setSelectedAgent(Array.from(keys)[0] as string)
+                  }
+                >
+                  {(agentsData?.data || []).map((agent: any) => (
+                    <SelectItem
+                      key={agent.id}
+                      textValue={agent.name?.[language]}
+                    >
+                      {agent.name?.[language]}
+                    </SelectItem>
+                  ))}
+                </Select>
+              )}
             </div>
             <DashboardInput
               label={t("enModelName")}
@@ -78,7 +129,7 @@ const AddBrand = () => {
             />
           </div>
 
-          <DashboardButton titleAr="اضافة" titleEn="Add" />
+          <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit}/>
         </div>
       </div>
     </div>
