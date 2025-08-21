@@ -48,5 +48,7 @@
 
     "priceFrom": "Price from",
 
-    "priceTo" :"Price to"
+    "priceTo" :"Price to",
+
+    "modelDeletedSuccessfully": "Model deleted successfully"
 }

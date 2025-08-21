@@ -13,14 +13,22 @@ import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getModels } from "@/api/models/models/getModels";
+import toast from "react-hot-toast";
+import { deleteModel } from "@/api/models/models/deleteModel";
 
 export function ModelTable() {
   const { t } = useTranslation("models");
 
-  const { data: models = [] } = useQuery({
+  const { data: models = [], refetch } = useQuery({
     queryKey: ["models-list"],
     queryFn: getModels,
   });
+
+      const handleDelete = async (id: number) => {
+      await deleteModel(id);
+      toast.success(t("modelDeletedSuccessfully"));
+      refetch();
+    };
 
   return (
     <Table>
@@ -44,7 +52,9 @@ export function ModelTable() {
                 <Edit />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(model.id)}
+                  />
               </div>
             </TableCell>
           </TableRow>
