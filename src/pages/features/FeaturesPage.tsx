@@ -1,22 +1,37 @@
 import FeaturesHeader from "@/components/features/FeaturesHeader";
 import FeaturesTable from "@/components/features/FeaturesTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getFeatures, FeaturesResponse } from "@/api/featuresApp/getFeatures";
+import Loading from "@/components/general/Loading";
 
 const FeaturesPage = () => {
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const perPage = 15;
+
+  const { data, isLoading, error, refetch } = useQuery<FeaturesResponse>({
+    queryKey: ["features", currentPage, perPage],
+    queryFn: () => getFeatures(currentPage, perPage),
+    keepPreviousData: true,
+  });
+
+
+  if (isLoading) return <Loading />;
+  if (error) return <div>Error loading features: {String(error)}</div>;
+
   return (
     <div className="md:px-8 px-2">
       <FeaturesHeader />
-      <FeaturesTable />
+      <FeaturesTable features={data?.data ?? []} refetch={refetch} />
       <TablePagination
-        currentPage={1}
-        setCurrentPage={function (): void {
-          throw new Error("Function not implemented.");
-        }}
-        totalPages={10}
-        totalItems={10}
-        itemsPerPage={5}
-        from={1}
-        to={5}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalPages={data?.last_page ?? 1}
+        totalItems={data?.total ?? 0}
+        itemsPerPage={data?.per_page ?? perPage}
+        from={data?.from ?? 0}
+        to={data?.to ?? 0}
       />
     </div>
   );
