@@ -50,5 +50,6 @@
 
     "priceTo" :"Price to",
 
-    "modelDeletedSuccessfully": "Model deleted successfully"
+    "modelDeletedSuccessfully": "Model deleted successfully",
+    "modelUpdatedSuccessfully": "Model updated successfully"
 }

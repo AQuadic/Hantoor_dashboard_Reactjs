@@ -47,7 +47,7 @@ const AddBrand = () => {
         agent_id: selectedAgent,
       });
 
-      if (response.success) {
+      if (response.data) {
         toast.success(response.message || "Model added successfully");
         setArModelName("");
         setEnModelName("");
