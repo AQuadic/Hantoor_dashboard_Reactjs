@@ -12,9 +12,15 @@ export interface GetModelsResponse {
 }
 
 export const getModels = async (): Promise<Model[]> => {
-  const res = await axios.get<GetModelsResponse>("/admin/vehicle/model", {
-    params: { pagination: false },
-  });
+  try {
+    const res = await axios.get<Model[]>("/admin/vehicle/model", {
+      params: { pagination: false },
+    });
 
-  return res.data.data;
+    console.log("API Response:", res.data);
+    return res.data;
+  } catch (error) {
+    console.error("Failed to fetch models:", error);
+    return [];
+  }
 };
