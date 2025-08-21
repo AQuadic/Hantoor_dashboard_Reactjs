@@ -51,5 +51,6 @@
     "priceTo" :"السعر الى",
     
     "modelDeletedSuccessfully": "تم حذف الموديل بنجاح",
-    "modelUpdatedSuccessfully": "تم تحديث الموديل بنجاح"
+    "modelUpdatedSuccessfully": "تم تحديث الموديل بنجاح",
+    "modelAddedSuccessfully": "تم اضافة الموديل بنجاح"
 }

@@ -4,7 +4,7 @@ import DashboardInput from "@/components/general/DashboardInput";
 import { Select, SelectItem } from "@heroui/react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAgents } from "@/api/agents/fetchAgents";
 import Loading from "@/components/general/Loading";
@@ -16,6 +16,7 @@ const AddBrand = () => {
   const [arModelName, setArModelName] = useState("");
   const [enModelName, setEnModelName] = useState("");
   const [, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const params = useParams();
   const brandId = params.id;
@@ -30,38 +31,34 @@ const AddBrand = () => {
     queryFn: () => fetchAgents(1, ""), 
   });
 
-  const handleSubmit = async () => {
-    if (!arModelName || !enModelName || !selectedAgent) {
-      toast.error(t("fillAllFields") || "Please fill all fields");
-      return;
-    }
+const handleSubmit = async () => {
+  if (!arModelName || !enModelName || !selectedAgent) {
+    toast.error(t("fillAllFields") || "Please fill all fields");
+    return;
+  }
 
-    try {
-      setIsSubmitting(true);
-      const response = await postVehicleModel({
-        name: {
-          ar: arModelName,
-          en: enModelName,
-        },
-        is_active: true,
-        agent_id: selectedAgent,
-      });
+  try {
+    setIsSubmitting(true);
 
-      if (response.data) {
-        toast.success(response.message || "Model added successfully");
-        setArModelName("");
-        setEnModelName("");
-        setSelectedAgent("");
-      } else {
-        toast.error(response.message || "Something went wrong");
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Error submitting model");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+    await postVehicleModel({
+      name: { ar: arModelName, en: enModelName },
+      is_active: true,
+      agent_id: selectedAgent,
+    });
+
+    toast.success(t('modelAddedSuccessfully'));
+    navigate("/models");
+    setArModelName("");
+    setEnModelName("");
+    setSelectedAgent("");
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   return (
     <div>
