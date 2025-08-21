@@ -103,7 +103,7 @@ const SocialMediaPage = () => {
             await updateSocials(socialValues);
             toast.success(t('socialUpdatedSuccessfully'));
             queryClient.invalidateQueries({ queryKey: ["socials"] });
-        } catch (error) {
+        } catch {
             toast.error(t('errorUpdateLink'));
         } finally {
             setIsSaving(false);
@@ -139,7 +139,6 @@ const SocialMediaPage = () => {
                 titleAr={isSaving ? "جارٍ الحفظ..." : "حفظ"} 
                 titleEn={isSaving ? "Saving..." : "Save"} 
                 onClick={handleSave} 
-                disabled={isSaving}
             />
         </div>
     )
