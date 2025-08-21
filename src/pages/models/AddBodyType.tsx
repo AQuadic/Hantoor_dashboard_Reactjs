@@ -87,8 +87,8 @@ const AddBodyType = () => {
                 {isLoading
                   ? [<SelectItem key="loading">Loading...</SelectItem>]
                   : modelsData.map((model) => (
-                      <SelectItem key={model.id} textValue={model.name[language]}>
-                        {model.name[language]}
+                      <SelectItem key={model.id} textValue={model.name[language as "ar" | "en"]}>
+                        {model.name[language as "ar" | "en"]}
                       </SelectItem>
                     ))}
               </Select>
