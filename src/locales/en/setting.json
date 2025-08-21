@@ -60,5 +60,7 @@
   "textTitle": "Text title",
   "description": "Description",
 
-  "text": "Text"
+  "text": "Text",
+  "socialUpdatedSuccessfully": "Link updated successfully",
+  "errorUpdateLink": "Failed to update the link"
 }

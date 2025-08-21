@@ -60,5 +60,7 @@
   "textTitle": "عنوان النص",
   "description": "الوصف",
 
-  "text": "النص"
+  "text": "النص",
+  "socialUpdatedSuccessfully": "تم تحديث الرابط بنجاح",
+  "errorUpdateLink": "فشل تحديث الرابط"
 }
