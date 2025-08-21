@@ -28,6 +28,8 @@ export interface FeaturesResponse {
   per_page: number;
   prev_page_url: string | null;
   to: number;
+  last_page: number;
+  total: number;
 }
 
 export const getFeatures = async (page: number, perPage: number) => {
