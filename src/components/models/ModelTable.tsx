@@ -11,26 +11,16 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getModels } from "@/api/models/models/getModels";
 
 export function ModelTable() {
   const { t } = useTranslation("models");
-  const brands = [
-    {
-      id: 1,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
-    },
-    {
-      id: 2,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
-    },
-    {
-      id: 3,
-      model: " 2024",
-      owner: "الشركة الدولية التجارية",
-    },
-  ];
+
+  const { data: models = [] } = useQuery({
+    queryKey: ["models-list"],
+    queryFn: getModels,
+  });
 
   return (
     <Table>
@@ -43,14 +33,14 @@ export function ModelTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {brands.map((brand, index) => (
-          <TableRow key={brand.id} noBackgroundColumns={1}>
+        {models.map((model, index) => (
+          <TableRow key={model.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{brand.model}</TableCell>
-            <TableCell className="w-full">{brand.owner}</TableCell>
+            <TableCell>{model.name.ar} / {model.name.en}</TableCell>
+            <TableCell className="w-full">{model.agent_id}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
-              <Link to={`/models/edit/${brand.id}`}>
+              <Switch isSelected={model.is_active} />
+              <Link to={`/models/edit/${model.id}`}>
                 <Edit />
               </Link>
               <div className="mt-2">
