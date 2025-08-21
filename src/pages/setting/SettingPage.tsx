@@ -11,14 +11,35 @@ import SocialMediaPage from "../socialmedia/SocialMediaPage";
 import FeaturesPage from "../features/FeaturesPage";
 
 const SettingPage = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const sectionParam = searchParams.get("section") || "General Settings";
 
   const [selectedFilter, setSelectedFilter] = useState(sectionParam);
 
   useEffect(() => {
-    setSelectedFilter(sectionParam);
-  }, [sectionParam]);
+    setSearchParams({ section: selectedFilter });
+  }, [selectedFilter]);
+
+  const renderSection = () => {
+    switch (selectedFilter) {
+      case "General Settings":
+        return <GeneralSettings />;
+      case "Insurance Price Request Button":
+        return <InsurancePage />;
+      case "Informational Pages":
+        return <ProfileSetting />;
+      case "Advertising Images":
+        return <AdvertisingImages />;
+      case "Terms and Conditions":
+        return <TermsAndConditions />;
+      case "Social Media Links":
+        return <SocialMediaPage />;
+      case "App Features":
+        return <FeaturesPage />;
+      default:
+        return <GeneralSettings />;
+    }
+  };
 
     return (
         <div>
@@ -30,15 +51,7 @@ const SettingPage = () => {
                 />
             </div>
 
-            <div className="mt-4">
-                {selectedFilter === "General Settings" && <GeneralSettings />}
-                {selectedFilter === "Insurance Price Request Button" && <InsurancePage />}
-                {selectedFilter === "Informational Pages" && <ProfileSetting />}
-                {selectedFilter === "Advertising Images" && <AdvertisingImages />}
-                {selectedFilter === "Terms and Conditions" && <TermsAndConditions />}
-                {selectedFilter === "Social Media Links" && <SocialMediaPage />}
-                {selectedFilter === "App Features" && <FeaturesPage />}
-            </div>
+        <div className="mt-4">{renderSection()}</div>
         </div>
     );
 };

@@ -67,7 +67,7 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
 
   const handleDelete = async (id: number) => {
     await deleteBrands(id);
-    toast.success(t("brandDeleted"));
+    toast.success(t("brandDeletedsuccessfully"));
     refetch();
   };
 
