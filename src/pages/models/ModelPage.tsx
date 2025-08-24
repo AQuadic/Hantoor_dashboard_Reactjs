@@ -45,12 +45,15 @@ const BrandsPage = () => {
           <>
             <DebouncedSearchInput
               placeholder="Search Brand Origin..."
-              onSearch={setSearch}
+              onSearch={(value) => {
+                setSearch(value);
+                setCurrentPage(1);
+              }}
             />
             <BrandOriginTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={setPaginationMeta}
             />
           </>
         );
@@ -59,12 +62,15 @@ const BrandsPage = () => {
           <>
             <DebouncedSearchInput
               placeholder="Search Number of Seats..."
-              onSearch={setSearch}
+              onSearch={(value) => {
+                setSearch(value);
+                setCurrentPage(1);
+              }}
             />
             <NumberOfSeatsTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={setPaginationMeta}
             />
           </>
         );
@@ -73,12 +79,15 @@ const BrandsPage = () => {
           <>
             <DebouncedSearchInput
               placeholder="Search Engine Types..."
-              onSearch={setSearch}
+              onSearch={(value) => {
+                setSearch(value);
+                setCurrentPage(1);
+              }}
             />
             <EngineTypesTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={setPaginationMeta}
             />
           </>
         );
@@ -87,12 +96,15 @@ const BrandsPage = () => {
           <>
             <DebouncedSearchInput
               placeholder="Search Engine Sizes..."
-              onSearch={setSearch}
+              onSearch={(value) => {
+                setSearch(value);
+                setCurrentPage(1);
+              }}
             />
             <EngineSizesTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={setPaginationMeta}
             />
           </>
         );
@@ -107,7 +119,22 @@ const BrandsPage = () => {
           </>
         );
       case "Models":
-        return <ModelTable />;
+        return (
+          <>
+            <DebouncedSearchInput
+              placeholder="Search Models..."
+              onSearch={(value) => {
+                setSearch(value);
+                setCurrentPage(1);
+              }}
+            />
+            <ModelTable
+              page={currentPage}
+              search={search}
+              setPagination={setPaginationMeta}
+            />
+          </>
+        );
       case "Structure Types":
         return <StructureTable />;
       case "Car Types":
@@ -117,7 +144,22 @@ const BrandsPage = () => {
       case "Price To":
         return <PriceToTable />;
       default:
-        return <ModelTable />;
+        return (
+          <>
+            <DebouncedSearchInput
+              placeholder="Search Models..."
+              onSearch={(value) => {
+                setSearch(value);
+                setCurrentPage(1);
+              }}
+            />
+            <ModelTable
+              page={currentPage}
+              search={search}
+              setPagination={setPaginationMeta}
+            />
+          </>
+        );
     }
   };
 

@@ -7,20 +7,39 @@ export interface Model {
   is_active: boolean;
 }
 
-export interface GetModelsResponse {
-  data: Model[];
+export interface PaginationMeta {
+  totalItems: number;
+  totalPages: number;
+  itemsPerPage: number;
+  currentPage: number;
 }
 
-export const getModels = async (): Promise<Model[]> => {
+export interface GetModelsResponse {
+  data: Model[];
+  meta: PaginationMeta;
+}
+
+export const getModels = async (
+  page: number = 1,
+  perPage: number = 10,
+  search: string = ""
+): Promise<GetModelsResponse> => {
   try {
-    const res = await axios.get<Model[]>("/admin/vehicle/model", {
-      params: { pagination: false },
+    const res = await axios.get<GetModelsResponse>("/admin/vehicle/model", {
+      params: {
+        page,
+        per_page: perPage,
+        search,
+      },
     });
 
     console.log("API Response:", res.data);
     return res.data;
   } catch (error) {
     console.error("Failed to fetch models:", error);
-    return [];
+    return {
+      data: [],
+      meta: { totalItems: 0, totalPages: 1, itemsPerPage: perPage, currentPage: page },
+    };
   }
 };

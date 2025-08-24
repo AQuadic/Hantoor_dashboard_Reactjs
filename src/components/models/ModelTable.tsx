@@ -12,22 +12,51 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { getModels } from "@/api/models/models/getModels";
+import { getModels, Model, GetModelsResponse } from "@/api/models/models/getModels";
 import toast from "react-hot-toast";
 import { deleteModel } from "@/api/models/models/deleteModel";
 import { fetchAgents } from "@/api/agents/fetchAgents";
+import { useEffect } from "react";
+import Loading from "../general/Loading";
 
-export function ModelTable() {
+interface ModelTableProps {
+  page: number;
+  search: string;
+  setPagination: (meta: {
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    from: number;
+    to: number;
+  }) => void;
+}
+
+export function ModelTable({ page, search, setPagination }: ModelTableProps) {
   const { t, i18n } = useTranslation("models");
 
-  const { data: models = [], refetch } = useQuery({
-    queryKey: ["models-list"],
-    queryFn: getModels,
+  const { data: modelsResponse, isLoading, refetch } = useQuery<GetModelsResponse>({
+    queryKey: ["models-list", page, search],
+    queryFn: () => getModels(page, 10, search),
+    keepPreviousData: true,
   });
+
+  // Provide defaults if undefined
+  const totalItems = modelsResponse?.meta?.totalItems ?? 0;
+  const itemsPerPage = modelsResponse?.meta?.itemsPerPage ?? 10;
+  const totalPages = modelsResponse?.meta?.totalPages ?? 1;
+  const currentPage = modelsResponse?.meta?.currentPage ?? page;
+  const models: Model[] = modelsResponse?.data ?? [];
+
+  const from = models.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0;
+  const to = models.length > 0 ? from + models.length - 1 : 0;
+
+  useEffect(() => {
+    setPagination({ totalPages, totalItems, itemsPerPage, from, to });
+  }, [totalPages, totalItems, itemsPerPage, from, to, setPagination]);
 
   const { data: agentsData } = useQuery({
     queryKey: ["agents-list"],
-    queryFn: () => fetchAgents(1, ""), 
+    queryFn: () => fetchAgents(1, ""),
   });
 
       const handleDelete = async (id: number) => {
@@ -35,6 +64,8 @@ export function ModelTable() {
       toast.success(t("modelDeletedSuccessfully"));
       refetch();
     };
+
+  if (isLoading) return <Loading />; 
 
   return (
     <Table>
@@ -49,13 +80,17 @@ export function ModelTable() {
       <TableBody>
         {models.map((model, index) => (
           <TableRow key={model.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{from + index}</TableCell>
             <TableCell>
-              {i18n.language === "ar" ? model.name.ar : model.name.en || model.name.ar}
+              {i18n.language === "ar"
+                ? model.name.ar
+                : model.name.en || model.name.ar}
             </TableCell>
             <TableCell className="w-full">
               {(() => {
-                const agent = agentsData?.data.find((a: any) => a.id === model.agent_id);
+                const agent = agentsData?.data.find(
+                  (a: any) => a.id === model.agent_id
+                );
                 if (!agent) return "—";
 
                 if (typeof agent.name === "string") return agent.name;
