@@ -116,7 +116,7 @@ const AddCarTypes = () => {
                   is_active: true,
                 });
                 toast.success(t("carTypeAdded"));
-                navigate("/models?section=Engine Sizes");
+                navigate("/models?section=Car Types");
               } catch (error: any) {
                 const errorMsg =
                   error?.response?.data?.message ||
