@@ -55,5 +55,7 @@
     "modelAddedSuccessfully": "تم اضافة الموديل بنجاح",
 
     "bodyTypeAdded": "تمت إضافة نوع الهيكل بنجاح",
-    "bodyTypeDeleted": "تم حذف نوع الهيكل بنجاح"
+    "bodyTypeDeleted": "تم حذف نوع الهيكل بنجاح",
+
+    "carTypeAdded": "تمت إضافة نوع السيارة بنجاح"
 }
