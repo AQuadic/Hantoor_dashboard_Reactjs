@@ -14,11 +14,13 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getVehicleClasses, VehicleClass } from "@/api/categories/getCategory";
 import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
+import { deleteCategory } from "@/api/categories/deleteCategory";
+import toast from "react-hot-toast";
 
 export function CategoriesTable() {
   const { t, i18n } = useTranslation("models");
 
-  const { data: classes } = useQuery<VehicleClass[]>({
+  const { data: classes, refetch } = useQuery<VehicleClass[]>({
     queryKey: ["vehicleClasses"],
     queryFn: () => getVehicleClasses(),
   });
@@ -28,6 +30,12 @@ export function CategoriesTable() {
     queryFn: () => getVehicleTypes({ pagination: false }),
   });
 
+  const handleDelete = async (id: number) => {
+    await deleteCategory(id);
+    toast.success(t("categoryDeleted"));
+    refetch();
+  };
+  
 
   const typeMap: Record<number, string> = {};
   (types || []).forEach((type) => {
@@ -56,7 +64,7 @@ export function CategoriesTable() {
                 <Edit />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => console.log("delete", item.id)} />
+                <TableDeleteButton handleDelete={() => handleDelete(item.id)} />
               </div>
             </TableCell>
           </TableRow>
