@@ -12,7 +12,7 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import Loading from "../general/Loading";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
 import { useVehicleBodies, VehicleBody } from "@/api/models/structureType/getStructure";
@@ -21,13 +21,14 @@ import toast from "react-hot-toast";
 
 export function CarTypesTable() {
   const { t, i18n } = useTranslation("models");
+  const queryClient = useQueryClient();
 
   const { data: carTypes, isLoading: isLoadingTypes, error: errorTypes } = useQuery<VehicleType[], Error>({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
   });
 
-  const { data: bodyTypesResponse, isLoading: isLoadingBodies, error: errorBodies, refetch } = useVehicleBodies();
+  const { data: bodyTypesResponse, isLoading: isLoadingBodies, error: errorBodies } = useVehicleBodies();
 
   const isLoading = isLoadingTypes || isLoadingBodies;
   const error = errorTypes || errorBodies;
@@ -49,7 +50,9 @@ export function CarTypesTable() {
     const handleDelete = async (id: number) => {
       await deleteCarType(id);
       toast.success(t("carTypeDeleted"));
-      refetch();
+      queryClient.setQueryData<VehicleType[]>(["vehicleTypes"], old =>
+        old?.filter(car => car.id !== id)
+      );
     };
 
   return (
