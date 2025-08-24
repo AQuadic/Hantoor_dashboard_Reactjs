@@ -14,12 +14,14 @@ import { Switch } from "@heroui/react";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { useQuery } from "@tanstack/react-query";
 import { getModels } from "@/api/models/models/getModels";
+import { deleteBodyType } from "@/api/models/structureType/deleteStructure";
+import toast from "react-hot-toast";
 
 export function StructureTable() {
   const { t, i18n } = useTranslation("models");
   const language = i18n.language as "ar" | "en";
 
-  const { data: bodies, isLoading, isError } = useVehicleBodies({
+  const { data: bodies, isLoading, isError, refetch } = useVehicleBodies({
     pagination: false,
   });
 
@@ -27,6 +29,12 @@ export function StructureTable() {
     queryKey: ["models-list"],
     queryFn: getModels,
   });
+
+    const handleDelete = async (id: number) => {
+      await deleteBodyType(id);
+      toast.success(t("bodyTypeDeleted"));
+      refetch();
+    };
 
   if (isLoading) return <div>{t("loading")}</div>;
   if (isError) return <div>{t("errorLoadingData")}</div>;
@@ -60,7 +68,7 @@ export function StructureTable() {
                     <Edit />
                   </Link>
                   <div className="mt-2">
-                    <TableDeleteButton handleDelete={() => {}} />
+                    <TableDeleteButton handleDelete={() => handleDelete(item.id)} />
                   </div>
                 </TableCell>
               </TableRow>

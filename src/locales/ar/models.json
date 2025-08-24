@@ -54,5 +54,6 @@
     "modelUpdatedSuccessfully": "تم تحديث الموديل بنجاح",
     "modelAddedSuccessfully": "تم اضافة الموديل بنجاح",
 
-    "bodyTypeAdded": "تمت إضافة نوع الهيكل بنجاح"
+    "bodyTypeAdded": "تمت إضافة نوع الهيكل بنجاح",
+    "bodyTypeDeleted": "تم حذف نوع الهيكل بنجاح"
 }
