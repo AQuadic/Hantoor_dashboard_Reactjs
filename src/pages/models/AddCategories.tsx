@@ -12,7 +12,7 @@ import {
   VehicleType,
 } from "@/api/models/carTypes/getCarTypes";
 import toast from "react-hot-toast";
-import { addCarClass, AddCarClassPayload } from "@/api/categories/addcategory";
+import { addCarClass, AddCarClassPayload } from "@/api/categories/addCategory";
 
 const AddCategories = () => {
   const { t, i18n } = useTranslation("models");
@@ -95,26 +95,22 @@ const AddCategories = () => {
               variant="bordered"
               label={t("type")}
               onSelectionChange={(key) => {
-                // onSelectionChange may provide a string, number, array or Set depending on the component internals.
-                // Normalize to the first value and store as number so the payload always has a numeric id.
                 let parsed: number | undefined;
                 if (typeof key === "string" || typeof key === "number")
                   parsed = Number(key);
                 else if (Array.isArray(key)) parsed = Number(key[0]);
-                else if (key instanceof Set)
-                  parsed = Number(Array.from(key)[0]);
+                else if (key instanceof Set) parsed = Number(Array.from(key)[0]);
                 else parsed = undefined;
 
                 if (!isNaN(parsed as number)) setSelectedCarType(parsed);
                 else setSelectedCarType(undefined);
               }}
-              value={selectedCarType?.toString()}
+              selectedKeys={selectedCarType ? [selectedCarType.toString()] : []}
               disabled={!carTypes || isLoading}
             >
               {(carTypes || []).map((type) => (
                 <SelectItem
                   key={type.id}
-                  value={type.id.toString()}
                   textValue={
                     i18n.language === "ar" ? type.name.ar : type.name.en
                   }
@@ -123,6 +119,7 @@ const AddCategories = () => {
                 </SelectItem>
               ))}
             </Select>
+
           </div>
 
           <DashboardButton

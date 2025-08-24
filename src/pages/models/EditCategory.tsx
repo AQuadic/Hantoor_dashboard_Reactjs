@@ -29,9 +29,13 @@ const EditCategory = () => {
     const fetchClass = async () => {
       try {
         const data = await getVehicleClassById(Number(id));
-        setArName(data.name.ar);
-        setEnName(data.name.en);
-        setSelectedCarType(Number(data.vehicle_type_id));
+        const classData = data as {
+          name: { ar: string; en: string };
+          vehicle_type_id: number | string;
+        };
+        setArName(classData.name.ar);
+        setEnName(classData.name.en);
+        setSelectedCarType(Number(classData.vehicle_type_id));
       } catch (error: any) {
         toast.error(error.message || "Failed to load category");
       }
@@ -100,7 +104,6 @@ const EditCategory = () => {
                         {(carTypes || []).map((type) => (
                         <SelectItem
                             key={type.id}
-                            value={type.id.toString()}
                             textValue={i18n.language === "ar" ? type.name.ar : type.name.en}
                         >
                             {i18n.language === "ar" ? type.name.ar : type.name.en}

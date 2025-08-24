@@ -28,8 +28,8 @@ const EditModel = () => {
     useEffect(() => {
         if (!id) return;
         const fetchModel = async () => {
-        const models = await getModels();
-        const model = models.find((m) => m.id === Number(id));
+        const response = await getModels();
+        const model = response.data.find((m) => m.id === Number(id));
         if (model) {
             setNameAr(model.name.ar);
             setNameEn(model.name.en || "");
