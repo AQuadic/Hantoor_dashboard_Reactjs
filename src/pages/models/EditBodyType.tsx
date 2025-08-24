@@ -1,14 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { getModels, Model } from "@/api/models/models/getModels";
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
-import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
 import { Input, Select, SelectItem} from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from 'react-i18next';
 import { updateBodyType } from "@/api/models/structureType/editStructure";
 import toast from "react-hot-toast";
-import { getStructureById } from "@/api/models/structureType/getStructureById";
+// import { getStructureById } from "@/api/models/structureType/getStructureById";
+import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 
 const EditBodyType = () => {
   const { t, i18n } = useTranslation("models");
@@ -18,10 +18,14 @@ const EditBodyType = () => {
   const [nameEn, setNameEn] = useState("");
   const [agentId, setAgentId] = useState<string>("");
 
-  const { data: models = [], isLoading } = useQuery<Model[]>({
-    queryKey: ["models-list"],
-    queryFn: getModels,
-  });
+const { data: models = [], isLoading } = useQuery<Model[]>({
+  queryKey: ["models-list"],
+  queryFn: async () => {
+    const response = await getModels();
+    return response.data; 
+  },
+});
+
 
 //   const { data: bodyType } = useQuery({
 //   queryKey: ["body-type", id],
@@ -95,22 +99,22 @@ const EditBodyType = () => {
                 </div>
                 <div className="md:w-1/2 md:rtl:pl-2 md:ltr:pr-2 mt-4">
                     <Select
-                        items={models}
-                        label={t("model")}
-                        placeholder={isLoading ? t("loading") : t("selectModel")}
-                        selectedKeys={agentId ? [agentId] : []}
-                        onSelectionChange={(keys) => setAgentId(Array.from(keys)[0] as string)}
-                        classNames={{
-                            trigger: 'h-[53px] !h-[53px] min-h-[53px] bg-white border py-0',
-                            label: 'text-sm text-gray-700',
-                            listbox: 'bg-white shadow-md',
-                        }}
+                    items={models as Model[]}
+                    label={t("model")}
+                    placeholder={isLoading ? t("loading") : t("selectModel")}
+                    selectedKeys={agentId ? [agentId] : []}
+                    onSelectionChange={(keys) => setAgentId(Array.from(keys)[0] as string)}
+                    classNames={{
+                        trigger: 'h-[53px] !h-[53px] min-h-[53px] bg-white border py-0',
+                        label: 'text-sm text-gray-700',
+                        listbox: 'bg-white shadow-md',
+                    }}
                     >
-                        {(model) => (
+                    {(model) => (
                         <SelectItem key={String(model.id)}>
-                            {model.name[i18n.language as "ar" | "en"]}
+                        {model.name[i18n.language as "ar" | "en"]}
                         </SelectItem>
-                        )}
+                    )}
                     </Select>
                 </div>
                 <div className='mt-4'>

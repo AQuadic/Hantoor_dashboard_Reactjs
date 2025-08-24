@@ -6,7 +6,7 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { getModels } from "@/api/models/models/getModels";
+import { getModels, GetModelsResponse } from "@/api/models/models/getModels";
 import { postVehicleBody } from "@/api/models/structureType/postStructure";
 
 const AddBodyType = () => {
@@ -24,10 +24,14 @@ const AddBodyType = () => {
   const [selectedModel, setSelectedModel] = useState<string>("");
 
   // Fetch models for the select dropdown
-  const { data: modelsData = [], isLoading } = useQuery({
-    queryKey: ["models-list"],
-    queryFn: getModels,
+  const { data: modelsResponse = { data: [], meta: { totalItems: 0, totalPages: 1, itemsPerPage: 10, currentPage: 1 } }, isLoading } = useQuery<GetModelsResponse, Error>({
+    queryKey: ["models-list", 1, ""],
+    queryFn: ({ queryKey }) => {
+      const [_key, page = 1, search = ""] = queryKey as [string, number, string];
+      return getModels(page, 10, search);
+    },
   });
+  const modelsData = modelsResponse.data ?? [];
 
   const handleSubmit = async () => {
     if (!arName || !enName || !selectedModel) {
