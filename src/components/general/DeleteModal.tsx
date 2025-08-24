@@ -28,6 +28,8 @@ export default function DeleteModal({
     try {
       if (handleDelete) {
         await Promise.resolve(handleDelete());
+        // Close the modal after successful deletion
+        onOpenChange(false);
       }
     } finally {
       setIsLoading(false);
