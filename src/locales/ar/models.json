@@ -63,5 +63,6 @@
 
     "fillAllFields": "يرجى ملء جميع الحقول",
 
-    "categoryAddedSuccessfully": "تمت إضافة الفئة بنجاح"
+    "categoryAddedSuccessfully": "تمت إضافة الفئة بنجاح",
+    "categoryUpdated": "تم تحديث الفئة بنجاح"
 }

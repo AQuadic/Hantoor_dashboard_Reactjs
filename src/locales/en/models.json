@@ -63,5 +63,6 @@
 
     "fillAllFields": "Please fill all fields",
 
-    "categoryAddedSuccessfully": "Category added successfully"
+    "categoryAddedSuccessfully": "Category added successfully",
+    "categoryUpdated": "Category updated successfully"
 }
