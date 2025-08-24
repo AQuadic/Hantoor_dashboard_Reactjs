@@ -23,19 +23,19 @@ const EditBodyType = () => {
     queryFn: getModels,
   });
 
-  const { data: bodyType } = useQuery({
-  queryKey: ["body-type", id],
-  queryFn: () => getStructureById(Number(id)),
-  enabled: !!id,
-});
+//   const { data: bodyType } = useQuery({
+//   queryKey: ["body-type", id],
+//   queryFn: () => getStructureById(Number(id)),
+//   enabled: !!id,
+// });
 
-    useEffect(() => {
-    if (bodyType) {
-        setNameAr(bodyType.name.ar);
-        setNameEn(bodyType.name.en);
-        setAgentId(String(bodyType.agent_id));
-    }
-    }, [bodyType]);
+    // useEffect(() => {
+    // if (bodyType) {
+    //     setNameAr(bodyType.name.ar);
+    //     setNameEn(bodyType.name.en);
+    //     setAgentId(String(bodyType.agent_id));
+    // }
+    // }, [bodyType]);
 
     const handleSave = async () => {
     if (!id) return;
