@@ -34,10 +34,9 @@ interface ModelTableProps {
 export function ModelTable({ page, search, setPagination }: ModelTableProps) {
   const { t, i18n } = useTranslation("models");
 
-  const { data: modelsResponse, isLoading, refetch } = useQuery<GetModelsResponse>({
+  const { data: modelsResponse, isLoading, refetch } = useQuery<GetModelsResponse, Error>({
     queryKey: ["models-list", page, search],
     queryFn: () => getModels(page, 10, search),
-    keepPreviousData: true,
   });
 
   // Provide defaults if undefined

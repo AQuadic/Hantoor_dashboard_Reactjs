@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { Switch } from "@heroui/react";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { useQuery } from "@tanstack/react-query";
-import { getModels } from "@/api/models/models/getModels";
+import { getModels, GetModelsResponse } from "@/api/models/models/getModels";
 import { deleteBodyType } from "@/api/models/structureType/deleteStructure";
 import toast from "react-hot-toast";
 
@@ -25,10 +25,16 @@ export function StructureTable() {
     pagination: false,
   });
 
-  const { data: modelsData = [] } = useQuery({
-    queryKey: ["models-list"],
-    queryFn: getModels,
-  });
+const { data: modelsResponse } = useQuery<GetModelsResponse, Error>({
+  queryKey: ["models-list", 1, ""], 
+  queryFn: ({ queryKey }) => {
+    const [_key, page = 1, search = ""] = queryKey as [string, number, string];
+    return getModels(page, 10, search);
+  },
+});
+
+
+  const modelsData = modelsResponse?.data ?? [];
 
     const handleDelete = async (id: number) => {
       await deleteBodyType(id);
@@ -51,9 +57,7 @@ export function StructureTable() {
       </TableHeader>
       <TableBody>
           {(Array.isArray(bodies) ? bodies : bodies?.data ?? []).map((item, index) => {
-            const model = modelsData.find(
-              (m: any) => m.id === item.vehicle_model_id
-            );
+            const model = modelsData.find((m: any) => m.id === item.vehicle_model_id);
 
             return (
               <TableRow key={item.id} noBackgroundColumns={1}>
