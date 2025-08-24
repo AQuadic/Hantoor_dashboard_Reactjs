@@ -93,7 +93,7 @@ const EditModel = () => {
                     />
                     </div>
                 </div>
-                <div className="w-1/2 rtl:pl-2 ltr:pr-2 mt-4">
+                <div className="md:w-1/2 md:rtl:pl-2 md:ltr:pr-2 mt-4">
                     <Select
                         items={agentsData?.data || []}
                         label={t("agent")}

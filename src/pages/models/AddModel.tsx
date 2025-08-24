@@ -83,9 +83,9 @@ const handleSubmit = async () => {
           },
         ]}
       />
-      <div className="flex flex-col gap-8 p-8">
-        <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
-          <div className="flex gap-4">
+      <div className="flex flex-col gap-8 md:p-8 p-2">
+        <div className="flex flex-col gap-4 md:p-8 p-2 bg-white rounded-2xl">
+          <div className="flex md:flex-row flex-col gap-4">
             <div className="flex-1">
               <DashboardInput
                 label={t("arModelName")}

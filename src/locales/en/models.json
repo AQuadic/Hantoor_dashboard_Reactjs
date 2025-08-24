@@ -53,6 +53,7 @@
     "modelDeletedSuccessfully": "Model deleted successfully",
     "modelUpdatedSuccessfully": "Model updated successfully",
     "modelAddedSuccessfully": "Model added successfully",
+    "selectModel": "Select model",
 
     "bodyTypeAdded": "Body type added successfully",
     "bodyTypeDeleted": "Structure type deleted successfully",
