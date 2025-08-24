@@ -112,7 +112,7 @@ const AddCarTypes = () => {
                     ar: arType,
                     en: enType,
                   },
-                  vehicle_body_type_id: Number(selectedStructure),
+                  body_type_id: Number(selectedStructure),
                   is_active: true,
                 });
                 toast.success(t("carTypeAdded"));

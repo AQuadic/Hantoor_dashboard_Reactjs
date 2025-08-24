@@ -5,7 +5,7 @@ export interface AddVehicleTypeDTO {
     ar: string;
     en: string;
   };
-  vehicle_body_type_id: number; 
+  body_type_id: number; 
   is_active: boolean;
 }
 
