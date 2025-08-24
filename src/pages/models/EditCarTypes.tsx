@@ -1,45 +1,60 @@
-// import { CarType, getCarTypeById } from '@/api/models/carTypes/getCarById';
-import DashboardButton from '@/components/general/dashboard/DashboardButton';
-import DashboardHeader from '@/components/general/dashboard/DashboardHeader'
-import { Input } from '@heroui/react'
-import { Select, SelectItem} from "@heroui/react";
-import React from 'react';
-// import { useQuery } from '@tanstack/react-query';
-// import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-// import { useParams } from 'react-router';
+import { Input, Select, SelectItem } from '@heroui/react';
+import { useVehicleBodies } from '@/api/models/structureType/getStructure';
+import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
+import DashboardButton from '@/components/general/dashboard/DashboardButton';
+import toast from 'react-hot-toast';
+import { updateCarType, UpdateCarTypePayload } from '@/api/models/carTypes/editCarType';
+import { useNavigate } from 'react-router';
 
-const EditCarTypes = () => {
-    const { t } = useTranslation("models");
-    const [, setSelectedAgent] = React.useState("");
-    // const { id } = useParams<{ id: string }>();
-    const agents = [
-        { label: "SUV", value: "model1" },
-        { label: "SUV", value: "model2" },
-        { label: "SUV", value: "model3" },
-    ];
+interface EditCarTypesProps {
+  typeId: number;
+  initialData?: {
+    name: { ar: string; en: string };
+    vehicle_body_type_id: string;
+  };
+}
 
-    // const { data: carType } = useQuery<CarType>({
-    //     queryKey: ["carType", id],
-    //     queryFn: () => getCarTypeById(Number(id)),
-    //     enabled: !!id,
-    //     retry: false,
-    // });
+const EditCarTypes: React.FC<EditCarTypesProps> = ({ typeId, initialData }) => {
+  const { t, i18n } = useTranslation("models");
+  
+  const [arName, setArName] = useState(initialData?.name.ar || '');
+  const [enName, setEnName] = useState(initialData?.name.en || '');
+  const [selectedBody, setSelectedBody] = useState(initialData?.vehicle_body_type_id || '');
+  const [, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
-    
-    // const [arCarType, setArCarType] = useState("");
-    // const [enCarType, setEnCarType] = useState("");
+  const { data: vehicleBodies, isLoading: loadingBodies, error: loadError } = useVehicleBodies();
 
-    // useEffect(() => {
-    // if (carType) {
-    //     setArCarType(carType.name.ar);
-    //     setEnCarType(carType.name.en);
-    // }
-    // }, [carType]);
+  const handleSave = async () => {
+    const payload: UpdateCarTypePayload = {
+      name: { ar: arName, en: enName },
+      vehicle_body_type_id: selectedBody,
+    };
+
+    try {
+      setIsSubmitting(true);
+      await updateCarType(typeId, payload);
+      toast.success(t('bodyTypeUpdated'));
+      navigate("/models?section=Car Types");
+    } catch (err: any) {
+      if (err.response?.data?.errors) {
+        const errors = err.response.data.errors;
+        Object.values(errors).forEach((msgArr: any) => {
+          msgArr.forEach((msg: string) => toast.error(msg));
+        });
+      } else {
+        toast.error(t('somethingWentWrong'));
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
     return (
         <div>
-            <div className="pt-0 pb-2 bg-white ">
+            <div className="pt-0 pb-2 bg-white">
                 <DashboardHeader
                     titleAr="تعديل النوع"
                     titleEn="Edit the type"
@@ -58,7 +73,8 @@ const EditCarTypes = () => {
                         label={t('arType')}
                         variant="bordered"
                         placeholder=" SUV"
-                        // value={arCarType}
+                        value={arName}
+                        onChange={(e) => setArName(e.target.value)}
                         classNames={{ label: "mb-2 text-base" }}
                         size="lg"
                     />
@@ -67,11 +83,13 @@ const EditCarTypes = () => {
                         size={"lg"}
                         variant="bordered"
                         label={t('structure')}
-                        onSelectionChange={(key) => setSelectedAgent(key as string)}
+                        onSelectionChange={(key) => setSelectedBody(key as string)}
+                        value={selectedBody}
+                        disabled={loadingBodies || !!loadError}
                     >
-                        {agents.map((agent) => (
-                        <SelectItem key={agent.value} textValue={agent.label}>
-                            {agent.label}
+                        {(vehicleBodies?.data ?? []).map((body) => (
+                        <SelectItem key={body.id} textValue={body.name[i18n.language as 'ar' | 'en']}>
+                            {body.name[i18n.language as 'ar' | 'en']}
                         </SelectItem>
                         ))}
                     </Select>
@@ -79,15 +97,20 @@ const EditCarTypes = () => {
                     <Input
                     label={t('enType')}
                     variant="bordered"
-                    placeholder="اكتب هنا"
-                        // value={enCarType}
+                    placeholder={t('writeHere')}
+                    value={enName}
+                    onChange={(e) => setEnName(e.target.value)}
                     className="flex-1"
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
                     />
                 </div>
 
-                <DashboardButton titleAr="حفظ" titleEn="Save" />
+                <DashboardButton
+                    titleAr="حفظ"
+                    titleEn="Save"
+                    onClick={handleSave}
+                />
                 </div>
             </div>
             </div>
