@@ -59,5 +59,9 @@
     "bodyTypeDeleted": "Structure type deleted successfully",
 
     "carTypeAdded": "Car type added successfully",
-    "carTypeDeleted": "Car type deleted successfully"
+    "carTypeDeleted": "Car type deleted successfully",
+
+    "fillAllFields": "Please fill all fields",
+
+    "categoryAddedSuccessfully": "Category added successfully"
 }
