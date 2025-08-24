@@ -6,6 +6,7 @@ export interface CarType {
   is_active: boolean;
   created_at?: string;
   updated_at?: string;
+  vehicle_body_type_id: string;
 }
 
 export const getCarTypeById = async (id: number): Promise<CarType> => {

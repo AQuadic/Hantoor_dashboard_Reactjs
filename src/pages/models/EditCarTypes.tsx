@@ -1,31 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Input, Select, SelectItem } from '@heroui/react';
-import { useVehicleBodies } from '@/api/models/structureType/getStructure';
+import { useQuery } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
-import toast from 'react-hot-toast';
+import { useVehicleBodies } from '@/api/models/structureType/getStructure';
 import { updateCarType, UpdateCarTypePayload } from '@/api/models/carTypes/editCarType';
-import { useNavigate } from 'react-router';
+import { getCarTypeById } from '@/api/models/carTypes/getCarById';
 
-interface EditCarTypesProps {
-  typeId: number;
-  initialData?: {
-    name: { ar: string; en: string };
-    vehicle_body_type_id: string;
-  };
-}
-
-const EditCarTypes: React.FC<EditCarTypesProps> = ({ typeId, initialData }) => {
-  const { t, i18n } = useTranslation("models");
-  
-  const [arName, setArName] = useState(initialData?.name.ar || '');
-  const [enName, setEnName] = useState(initialData?.name.en || '');
-  const [selectedBody, setSelectedBody] = useState(initialData?.vehicle_body_type_id || '');
-  const [, setIsSubmitting] = useState(false);
+const EditCarTypes: React.FC = () => {
+  const { t, i18n } = useTranslation('models');
+  const { id } = useParams<{ id: string }>();
+  const typeId = Number(id);
   const navigate = useNavigate();
 
+  const [arName, setArName] = useState('');
+  const [enName, setEnName] = useState('');
+  const [selectedBody, setSelectedBody] = useState('');
+  const [, setIsSubmitting] = useState(false);
+
   const { data: vehicleBodies, isLoading: loadingBodies, error: loadError } = useVehicleBodies();
+
+const { data: carType } = useQuery({
+  queryKey: ['carType', typeId],
+  queryFn: () => getCarTypeById(typeId),
+  enabled: !!typeId,
+});
+
+  useEffect(() => {
+    if (carType) {
+      setArName(carType.name.ar);
+      setEnName(carType.name.en);
+      setSelectedBody(carType.vehicle_body_type_id);
+    }
+  }, [carType]);
 
   const handleSave = async () => {
     const payload: UpdateCarTypePayload = {

@@ -49,7 +49,7 @@ const { data: models = [], isLoading } = useQuery<Model[]>({
         name: { ar: nameAr, en: nameEn },
         agent_id: Number(agentId),
         });
-        toast.success("Body type updated successfully!");
+        toast.success(t('bodyTypeUpdated'));
         navigate("/models?section=Structure+Types&page=1");
     } catch (err: any) {
         console.error(err);
