@@ -1,6 +1,14 @@
 {
-    "carName": "اسم السيارة",
-    "brandName": "اسم الماركة",
-    "usersNumber": "المستخدمين داخل المحادثة",
-    "status": "الحالة"
+  "carName": "اسم السيارة",
+  "brandName": "اسم الماركة",
+  "usersNumber": "المستخدمين داخل المحادثة",
+  "status": "الحالة",
+  "noConversationsFound": "لا توجد محادثات",
+  "statusUpdatedSuccess": "تم تحديث الحالة بنجاح",
+  "statusUpdateFailed": "فشل في تحديث الحالة",
+  "conversationDeletedSuccess": "تم حذف المحادثة بنجاح",
+  "conversationDeleteFailed": "فشل في حذف المحادثة",
+  "conversationDeleteError": "فشل في حذف المحادثة",
+  "confirmDeleteConversation": "هل أنت متأكد من حذف هذه المحادثة؟",
+  "errorLoadingConversations": "خطأ في تحميل المحادثات"
 }

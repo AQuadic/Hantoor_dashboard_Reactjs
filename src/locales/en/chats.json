@@ -1,6 +1,14 @@
 {
-    "carName": "Car name",
-    "brandName": "Brand name",
-    "usersNumber": "Users in conversation",
-    "status": "Status"
+  "carName": "Car name",
+  "brandName": "Brand name",
+  "usersNumber": "Users in conversation",
+  "status": "Status",
+  "noConversationsFound": "No conversations found",
+  "statusUpdatedSuccess": "Status updated successfully",
+  "statusUpdateFailed": "Failed to update status",
+  "conversationDeletedSuccess": "Conversation deleted successfully",
+  "conversationDeleteFailed": "Failed to delete conversation",
+  "conversationDeleteError": "Failed to delete conversation",
+  "confirmDeleteConversation": "Are you sure you want to delete this conversation?",
+  "errorLoadingConversations": "Error loading conversations"
 }

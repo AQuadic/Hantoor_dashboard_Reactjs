@@ -1,24 +1,106 @@
 import ChatHeader from "@/components/chats/ChatHeader";
 import ChatTable from "@/components/chats/ChatTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
-import React from "react";
+import Loading from "@/components/general/Loading";
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  fetchConversations,
+  deleteConversation,
+  type ConversationsApiResponse,
+} from "@/api/chats/fetchConversations";
+import { toast } from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 const ChatPage = () => {
+  const { t } = useTranslation("chats");
+  const queryClient = useQueryClient();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const {
+    data: conversationsData,
+    isLoading,
+    error,
+  } = useQuery<ConversationsApiResponse>({
+    queryKey: ["conversations", currentPage, searchTerm],
+    queryFn: () => fetchConversations(currentPage, searchTerm),
+    placeholderData: (previousData) => previousData, // Keep previous data while fetching new page
+  });
+
+  const deleteConversationMutation = useMutation({
+    mutationFn: deleteConversation,
+    onSuccess: () => {
+      toast.success(
+        t("conversationDeletedSuccess") || "Conversation deleted successfully"
+      );
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
+    },
+    onError: (error: unknown) => {
+      let errorMessage =
+        t("conversationDeleteError") || "Failed to delete conversation";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "response" in error
+      ) {
+        const responseError = error as {
+          response?: { data?: { message?: string } };
+        };
+        errorMessage = responseError.response?.data?.message || errorMessage;
+      }
+      toast.error(errorMessage);
+    },
+  });
+
+  const handleDelete = (id: number) => {
+    if (
+      window.confirm(
+        t("confirmDeleteConversation") ||
+          "Are you sure you want to delete this conversation?"
+      )
+    ) {
+      deleteConversationMutation.mutate(id);
+    }
+  };
+
+  if (isLoading && !conversationsData) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-red-500 text-center">
+          <p>
+            {t("errorLoadingConversations") || "Error loading conversations"}
+          </p>
+          <p className="text-sm mt-2">
+            {error instanceof Error ? error.message : "Unknown error occurred"}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div>
-      <ChatHeader />
+      <ChatHeader setSearchTerm={setSearchTerm} />
       <div className="px-2 md:px-8">
-        <ChatTable />
+        <ChatTable
+          conversations={conversationsData?.data || []}
+          onDelete={handleDelete}
+        />
         <TablePagination
-          currentPage={1}
-          setCurrentPage={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-          totalPages={20}
-          totalItems={20}
-          itemsPerPage={5}
-          from={1}
-          to={5}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={conversationsData?.last_page || 1}
+          totalItems={conversationsData?.total || 0}
+          itemsPerPage={conversationsData?.per_page || 15}
+          from={conversationsData?.from || 0}
+          to={conversationsData?.to || 0}
         />
       </div>
     </div>
