@@ -11,29 +11,28 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getVehicleClasses, VehicleClass } from "@/api/categories/getCategory";
+import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
 
 export function CategoriesTable() {
-  const { t } = useTranslation("models");
-  const previousYearModels = [
-    {
-      id: 1,
-      model: "Extreme 4 Runner",
-      status: "Extreme",
-      count: "المعدة من 50 عنصر",
-    },
-    {
-      id: 2,
-      model: "580 CLE",
-      status: "Extreme",
-      count: "المعدة من 50 عنصر",
-    },
-    {
-      id: 3,
-      model: "300 أبوطان",
-      status: "Extreme",
-      count: "المعدة من 50 عنصر",
-    },
-  ];
+  const { t, i18n } = useTranslation("models");
+
+  const { data: classes } = useQuery<VehicleClass[]>({
+    queryKey: ["vehicleClasses"],
+    queryFn: () => getVehicleClasses(),
+  });
+
+  const { data: types} = useQuery<VehicleType[]>({
+    queryKey: ["vehicleTypes"],
+    queryFn: () => getVehicleTypes({ pagination: false }),
+  });
+
+
+  const typeMap: Record<number, string> = {};
+  (types || []).forEach((type) => {
+    typeMap[type.id] = i18n.language === "ar" ? type.name.ar : type.name.en;
+  });
 
   return (
     <Table>
@@ -46,18 +45,18 @@ export function CategoriesTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {previousYearModels.map((item, index) => (
+        {(classes || []).map((item, index) => (
           <TableRow key={item.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{item.model}</TableCell>
-            <TableCell className="w-full">{item.status}</TableCell>
+            <TableCell>{i18n.language === "ar" ? item.name.ar : item.name.en}</TableCell>
+            <TableCell className="w-full">{typeMap[item.vehicle_type_id] || item.vehicle_type_id}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
+              <Switch isSelected={item.is_active} />
               <Link to={`/categories/${item.id}`}>
                 <Edit />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => console.log("delete", item.id)} />
               </div>
             </TableCell>
           </TableRow>
