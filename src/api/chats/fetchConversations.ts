@@ -9,10 +9,42 @@ export interface Conversation {
   is_followed: boolean;
   followers_count: number;
   vehicle?: {
-    name?: string;
-    brand?: {
-      name?: string;
+    id: number;
+    name: {
+      ar: string;
+      en: string;
     };
+    price: string;
+    is_discount: boolean;
+    discount_value: string | null;
+    discount_date: string | null;
+    is_include_tax: boolean;
+    is_Insurance_warranty: boolean;
+    is_include_warranty: boolean;
+    views: number | null;
+    is_rent_to_own: boolean;
+    rent_to_own_duration: string | null;
+    rent_to_own_whatsapp: string | null;
+    rent_to_own_price: string | null;
+    created_at: string;
+    updated_at: string;
+    brand: {
+      id: number;
+      name: {
+        ar: string;
+        en: string;
+      };
+    } | null;
+    brand_id: number | null;
+    agent_id: number | null;
+    vehicle_model_id: number | null;
+    vehicle_body_type_id: number | null;
+    vehicle_type_id: number | null;
+    vehicle_class_id: number | null;
+    brand_origin_id: number | null;
+    number_of_seat_id: number | null;
+    engine_type_id: number | null;
+    country_id: number | null;
   };
   users_count?: number;
 }
@@ -37,20 +69,6 @@ export interface ConversationsApiResponse {
     prev: string | null;
     next: string | null;
   };
-  meta: {
-    current_page: number;
-    from: number;
-    last_page: number;
-    links: Array<{
-      url: string | null;
-      label: string;
-      active: boolean;
-    }>;
-    path: string;
-    per_page: number;
-    to: number;
-    total: number;
-  };
 }
 
 // Fetch all conversations with optional filters
@@ -63,7 +81,7 @@ export async function fetchConversations(
   if (searchTerm) {
     params.search = searchTerm;
   }
-  params.with_vehicle = true;
+  params.with_vehicle = 1;
   const response = await axios.get("/admin/vehicle/conversation", { params });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -114,16 +132,6 @@ export async function fetchConversations(
       last: raw.last_page_url || "",
       prev: raw.prev_page_url || null,
       next: raw.next_page_url || null,
-    },
-    meta: raw.meta || {
-      current_page: raw.current_page || 1,
-      from: raw.from || 0,
-      last_page: raw.last_page || 1,
-      links: raw.meta?.links || [],
-      path: raw.path || "",
-      per_page: raw.per_page || 15,
-      to: raw.to || 0,
-      total: raw.total || 0,
     },
   };
 }
