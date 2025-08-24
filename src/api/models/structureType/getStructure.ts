@@ -19,12 +19,26 @@ export interface VehicleBody {
   vehicle_model_id: number;
 }
 
-export type VehicleBodiesResponse = VehicleBody[];
+export interface VehicleBodiesPaginated {
+  current_page: number;
+  data: VehicleBody[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: unknown[];
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+}
 
 export const getVehicleBodies = async (
   params?: GetVehicleBodiesParams
-): Promise<VehicleBodiesResponse> => {
-  const response = await axios.get<VehicleBodiesResponse>(
+): Promise<VehicleBodiesPaginated> => {
+  const response = await axios.get<VehicleBodiesPaginated>(
     "/admin/vehicle/body",
     {
       headers: {
@@ -38,7 +52,7 @@ export const getVehicleBodies = async (
 };
 
 export const useVehicleBodies = (params?: GetVehicleBodiesParams) => {
-  return useQuery({
+  return useQuery<VehicleBodiesPaginated>({
     queryKey: ["vehicleBodies", params],
     queryFn: () => getVehicleBodies(params),
   });

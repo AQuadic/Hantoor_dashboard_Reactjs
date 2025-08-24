@@ -11,29 +11,38 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import Loading from "../general/Loading";
+import { useQuery } from "@tanstack/react-query";
+
+import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
+import { useVehicleBodies, VehicleBody } from "@/api/models/structureType/getStructure";
 
 export function CarTypesTable() {
-  const { t } = useTranslation("models");
-  const carTypes = [
-    {
-      id: 1,
-      type: "SUV",
-      model: "Extreme",
-      count: "3 من 50",
-    },
-    {
-      id: 2,
-      type: "سيدان",
-      model: "560",
-      count: "3 من 50",
-    },
-    {
-      id: 3,
-      type: "كوبية",
-      model: "300",
-      count: "3 من 50",
-    },
-  ];
+  const { t, i18n } = useTranslation("models");
+
+  const { data: carTypes, isLoading: isLoadingTypes, error: errorTypes } = useQuery<VehicleType[], Error>({
+    queryKey: ["vehicleTypes"],
+    queryFn: () => getVehicleTypes({ pagination: false }),
+  });
+
+  const { data: bodyTypesResponse, isLoading: isLoadingBodies, error: errorBodies } = useVehicleBodies();
+
+  const isLoading = isLoadingTypes || isLoadingBodies;
+  const error = errorTypes || errorBodies;
+
+  if (isLoading) return <Loading />;
+  if (error) return <div>{t("error")}: {error.message}</div>;
+
+  const getBodyTypeName = (id: number | string) => {
+    const bodies = bodyTypesResponse?.data;
+    if (!Array.isArray(bodies)) return "-";
+    const body = bodies.find((b: VehicleBody) => b.id == id);
+    return body ? (i18n.language === "ar" ? body.name.ar : body.name.en) : "-";
+  };
+
+  const getTypeName = (car: VehicleType) => {
+    return i18n.language === "ar" ? car.name.ar : car.name.en;
+  };
 
   return (
     <Table>
@@ -46,18 +55,18 @@ export function CarTypesTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {carTypes.map((car, index) => (
+        {carTypes?.map((car, index) => (
           <TableRow key={car.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{car.type}</TableCell>
-            <TableCell className="w-full">{car.model}</TableCell>
+            <TableCell>{getTypeName(car)}</TableCell>
+            <TableCell className="w-full">{getBodyTypeName(car.body_type_id)}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
+              <Switch isSelected={car.is_active} />
               <Link to={`/car-types/${car.id}`}>
                 <Edit />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => { }} />
               </div>
             </TableCell>
           </TableRow>
