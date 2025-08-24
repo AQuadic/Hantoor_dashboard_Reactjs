@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import {
   Table,
@@ -20,6 +19,7 @@ import {
   type Conversation,
 } from "@/api/chats/fetchConversations";
 import { toast } from "react-hot-toast";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface ChatTableProps {
   conversations: Conversation[];
@@ -27,9 +27,21 @@ interface ChatTableProps {
 }
 
 const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
-  const { t } = useTranslation("chats");
+  const { t, i18n } = useTranslation("chats");
   const queryClient = useQueryClient();
-  const [openChatId, setOpenChatId] = useState<number | null>(null);
+  const [openConversationId, setOpenConversationId] = useState<number | null>(
+    null
+  );
+  const isArabic = i18n.language === "ar";
+
+  // Helper function to get localized name
+  const getLocalizedName = (
+    name: { ar: string; en: string } | string | undefined
+  ): string => {
+    if (!name) return "-";
+    if (typeof name === "string") return name;
+    return isArabic ? name.ar : name.en;
+  };
 
   // Mutation for updating conversation status
   const updateStatusMutation = useMutation({
@@ -78,6 +90,11 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
     }
   };
 
+  // Handle opening chat slider
+  const handleOpenChat = (conversationId: number) => {
+    setOpenConversationId(conversationId);
+  };
+
   return (
     <div className="relative flex">
       <div className="w-full">
@@ -102,9 +119,11 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
               conversations.map((conversation, index) => (
                 <TableRow key={conversation.id} noBackgroundColumns={1}>
                   <TableCell>{index + 1}</TableCell>
-                  <TableCell>{conversation.vehicle?.name || "-"}</TableCell>
                   <TableCell>
-                    {conversation.vehicle?.brand?.name || "-"}
+                    {getLocalizedName(conversation.vehicle?.name)}
+                  </TableCell>
+                  <TableCell>
+                    {getLocalizedName(conversation.vehicle?.brand?.name)}
                   </TableCell>
                   <TableCell className="w-full">
                     {conversation.users_count ||
@@ -119,7 +138,7 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
                       }
                       disabled={updateStatusMutation.isPending}
                     />
-                    <button onClick={() => setOpenChatId(conversation.id)}>
+                    <button onClick={() => handleOpenChat(conversation.id)}>
                       <ChatIcon />
                     </button>
                     <div className="mt-2">
@@ -136,7 +155,7 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
       </div>
 
       <AnimatePresence>
-        {openChatId !== null && (
+        {openConversationId !== null && (
           <>
             <motion.div
               key="overlay"
@@ -144,7 +163,7 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
               animate={{ opacity: 0.5 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              onClick={() => setOpenChatId(null)}
+              onClick={() => setOpenConversationId(null)}
               className="fixed inset-0 bg-black z-40"
             />
 
@@ -156,7 +175,7 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
               transition={{ duration: 0.3 }}
               className="fixed top-0 right-0 h-full md:w-[493px] w-[300px] bg-white shadow-lg z-50 overflow-y-auto"
             >
-              <ConversationPage />
+              <ConversationPage conversationId={openConversationId} />
             </motion.div>
           </>
         )}
