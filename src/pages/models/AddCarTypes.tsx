@@ -73,7 +73,7 @@ const AddCarTypes = () => {
                   setSelectedStructure(key);
                 }}
               >
-                {(structures ?? []).map((structure) => (
+                {(Array.isArray(structures) ? structures : (structures?.data ?? [])).map((structure) => (
                   <SelectItem
                     key={structure.id.toString()}
                     textValue={structure.name[i18n.language as "ar" | "en"]}

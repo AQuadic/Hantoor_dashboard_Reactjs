@@ -50,7 +50,7 @@ export function StructureTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-          {(bodies ?? []).map((item, index) => {
+          {(Array.isArray(bodies) ? bodies : bodies?.data ?? []).map((item, index) => {
             const model = modelsData.find(
               (m: any) => m.id === item.vehicle_model_id
             );

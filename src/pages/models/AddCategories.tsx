@@ -7,9 +7,9 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { Select, SelectItem } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { addCarClass, AddCarClassPayload } from "@/api/categories/addcategory";
 import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
 import toast from "react-hot-toast";
+import { addCarClass, AddCarClassPayload } from "@/api/categories/addCategory";
 
 const AddCategories = () => {
   const { t, i18n } = useTranslation("models");
@@ -54,7 +54,7 @@ const AddCategories = () => {
             />
           </div>
 
-          <div className="mt-4">
+          <div className="mt-4 md:w-1/2 md:rtl:pl-2 md:ltr:pr-2 mt-4">
             <Select
               size="lg"
               variant="bordered"
@@ -67,7 +67,7 @@ const AddCategories = () => {
                 <SelectItem
                   key={type.id}
                   textValue={i18n.language === "ar" ? type.name.ar : type.name.en}
-                  value={type.id}
+                  // value={type.id}
                 >
                   {i18n.language === "ar" ? type.name.ar : type.name.en}
                 </SelectItem>
