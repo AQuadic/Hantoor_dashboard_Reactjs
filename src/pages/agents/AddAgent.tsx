@@ -6,7 +6,7 @@ import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Brand, BrandsApiResponse, fetchBrands } from "@/api/brand/fetchBrands";
+import { BrandsApiResponse, fetchBrands } from "@/api/brand/fetchBrands";
 import {
   createAgent,
   CreateAgentPayload,
@@ -58,10 +58,6 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
     queryFn: ({ queryKey }) => fetchBrands(queryKey[1] as number),
   });
 
-  const selectedBrand = brands?.data.find(
-    (brand: Brand) => brand.id === Number(selectedBrandId)
-  );
-
   const createAgentMutation = useMutation({
     mutationFn: createAgent,
     onSuccess: () => {
@@ -98,29 +94,48 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       return;
     }
 
-    if (centers.length === 0) {
-      toast.error(t("pleaseAddAtLeastOneCenter"));
+    // Check if at least one center OR showroom is present and filled
+    const validCenters = centers.filter(
+      (center) =>
+        center.name?.ar &&
+        center.name?.en &&
+        center.phone &&
+        center.whatsapp &&
+        center.description?.ar &&
+        center.description?.en
+    );
+
+    if (validCenters.length === 0) {
+      toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
       return;
     }
 
-    // Validate all centers
-    for (const center of centers) {
-      if (
-        !center.name?.ar ||
-        !center.name?.en ||
-        !center.phone ||
-        !center.whatsapp ||
-        !center.description?.ar ||
-        !center.description?.en
-      ) {
-        toast.error(t("centerMissingRequiredFields"));
-        return;
-      }
+    // Check if at least one center OR one showroom exists
+    const hasValidCenter = validCenters.some(
+      (center) => center.type === "center"
+    );
+    const hasValidShowroom = validCenters.some(
+      (center) => center.type === "show_room"
+    );
+
+    if (!hasValidCenter && !hasValidShowroom) {
+      toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
+      return;
     }
 
-    // Map centers to object with numeric keys for API (use any for inner shape so we can send numeric type codes)
-    const centersPayload: Record<number, any> = {};
-    centers.forEach((center, idx) => {
+    // Map centers to object with numeric keys for API
+    const centersPayload: Record<
+      number,
+      {
+        name: { ar: string; en: string };
+        description: { ar: string; en: string };
+        phone: string;
+        whatsapp: string;
+        type: string;
+        is_active: string;
+      }
+    > = {};
+    validCenters.forEach((center, idx) => {
       // Map local type (center | show_room) to backend numeric codes: "1" = center, "2" = show_room
       const typeCode = center.type === "center" ? "1" : "2";
       centersPayload[idx] = {
@@ -202,30 +217,22 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
             />
           </div>
 
-          <div className="relative w-full border border-gray-300 rounded-lg p-3 text-sm">
-            <p className="rtl:text-right text-black text-sm">{t("brand")}</p>
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-gray-500 text-sm">
-                {selectedBrand
-                  ? i18n.language === "ar"
-                    ? selectedBrand.name.ar
-                    : selectedBrand.name.en
-                  : t("selectBrand")}
-              </span>
-
-              <select
-                className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
-                value={selectedBrandId}
-                onChange={(e) => setSelectedBrandId(e.target.value)}
-              >
-                <option value="">{t("selectBrand")}</option>
-                {brands?.data?.map((brand) => (
-                  <option key={brand.id} value={brand.id}>
-                    {i18n.language === "ar" ? brand.name.ar : brand.name.en}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className="relative w-full">
+            <label className="block text-sm text-black mb-2">
+              {t("brand")}
+            </label>
+            <select
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={selectedBrandId}
+              onChange={(e) => setSelectedBrandId(e.target.value)}
+            >
+              <option value="">{t("selectBrand")}</option>
+              {brands?.data?.map((brand) => (
+                <option key={brand.id} value={brand.id}>
+                  {i18n.language === "ar" ? brand.name.ar : brand.name.en}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <hr className="my-[11px]" />
