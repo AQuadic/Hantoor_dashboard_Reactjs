@@ -7,7 +7,10 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { Select, SelectItem } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
+import {
+  getVehicleTypes,
+  VehicleType,
+} from "@/api/models/carTypes/getCarTypes";
 import toast from "react-hot-toast";
 import { addCarClass, AddCarClassPayload } from "@/api/categories/addcategory";
 
@@ -17,7 +20,7 @@ const AddCategories = () => {
 
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
-  const [selectedCarType, setSelectedCarType] = useState<string | undefined>();
+  const [selectedCarType, setSelectedCarType] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
 
   const { data: carTypes, isLoading } = useQuery<VehicleType[], Error>({
@@ -44,7 +47,9 @@ const AddCategories = () => {
       navigate("/models?section=Categories");
     } catch (error: any) {
       const errorMsg =
-        error?.response?.data?.message || error?.message || t("somethingWentWrong");
+        error?.response?.data?.message ||
+        error?.message ||
+        t("somethingWentWrong");
       toast.error(errorMsg);
     } finally {
       setLoading(false);
@@ -59,7 +64,11 @@ const AddCategories = () => {
         items={[
           { titleAr: "الصفحة الرئيسية", titleEn: "Home", link: "/" },
           { titleAr: "اقسام السيارات", titleEn: "Car Sections", link: "/" },
-          { titleAr: "اضافة فئة جديدة", titleEn: "Add a new category", link: "/" },
+          {
+            titleAr: "اضافة فئة جديدة",
+            titleEn: "Add a new category",
+            link: "/",
+          },
         ]}
       />
 
@@ -85,15 +94,30 @@ const AddCategories = () => {
               size="lg"
               variant="bordered"
               label={t("type")}
-              onSelectionChange={(key) => setSelectedCarType(key as string)}
-              value={selectedCarType}
+              onSelectionChange={(key) => {
+                // onSelectionChange may provide a string, number, array or Set depending on the component internals.
+                // Normalize to the first value and store as number so the payload always has a numeric id.
+                let parsed: number | undefined;
+                if (typeof key === "string" || typeof key === "number")
+                  parsed = Number(key);
+                else if (Array.isArray(key)) parsed = Number(key[0]);
+                else if (key instanceof Set)
+                  parsed = Number(Array.from(key)[0]);
+                else parsed = undefined;
+
+                if (!isNaN(parsed as number)) setSelectedCarType(parsed);
+                else setSelectedCarType(undefined);
+              }}
+              value={selectedCarType?.toString()}
               disabled={!carTypes || isLoading}
             >
               {(carTypes || []).map((type) => (
                 <SelectItem
                   key={type.id}
                   value={type.id.toString()}
-                  textValue={i18n.language === "ar" ? type.name.ar : type.name.en}
+                  textValue={
+                    i18n.language === "ar" ? type.name.ar : type.name.en
+                  }
                 >
                   {i18n.language === "ar" ? type.name.ar : type.name.en}
                 </SelectItem>

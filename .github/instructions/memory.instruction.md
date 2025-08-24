@@ -145,6 +145,14 @@ Tasks completed during this session:
 - ✅ Added proper error handling and empty data validation
 - ✅ Project running successfully on localhost:5175
 
+2025-08-24: Fixed models/AddCategories.tsx to ensure selected vehicle type id is sent as a numeric value in the create payload. Change summary:
+
+- Converted `selectedCarType` state from string to number
+- Normalized `Select` component's `onSelectionChange` to parse and store a numeric id
+- Ensured `vehicle_type_id` in the payload is a number when calling the API
+
+This change was validated with a quick TypeScript check on the edited file.
+
 **FIXED ISSUES:**
 
 - Runtime error: "vehicles.map is not a function" - Added Array.isArray validation
