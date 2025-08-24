@@ -9,7 +9,7 @@ import { Select, SelectItem } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
 import toast from "react-hot-toast";
-import { addCarClass, AddCarClassPayload } from "@/api/categories/addCategory";
+import { addCarClass, AddCarClassPayload } from "@/api/categories/addcategory";
 
 const AddCategories = () => {
   const { t, i18n } = useTranslation("models");
@@ -17,13 +17,39 @@ const AddCategories = () => {
 
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
-  const [selectedCarType, setSelectedCarType] = useState("");
+  const [selectedCarType, setSelectedCarType] = useState<string | undefined>();
   const [loading, setLoading] = useState(false);
 
   const { data: carTypes, isLoading } = useQuery<VehicleType[], Error>({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
   });
+
+  const handleAddCategory = async () => {
+    if (!arName || !enName || !selectedCarType) {
+      toast.error(t("fillAllFields"));
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const payload: AddCarClassPayload = {
+        name: { ar: arName, en: enName },
+        vehicle_type_id: Number(selectedCarType),
+        is_active: true,
+      };
+
+      await addCarClass(payload);
+      toast.success(t("categoryAddedSuccessfully"));
+      navigate("/models?section=Categories");
+    } catch (error: any) {
+      const errorMsg =
+        error?.response?.data?.message || error?.message || t("somethingWentWrong");
+      toast.error(errorMsg);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div>
@@ -54,20 +80,20 @@ const AddCategories = () => {
             />
           </div>
 
-          <div className="mt-4 md:w-1/2 md:rtl:pl-2 md:ltr:pr-2 mt-4">
+          <div className="mt-4 md:w-1/2 md:rtl:pl-2 md:ltr:pr-2">
             <Select
               size="lg"
               variant="bordered"
               label={t("type")}
               onSelectionChange={(key) => setSelectedCarType(key as string)}
-              disabled={!carTypes || isLoading}
               value={selectedCarType}
+              disabled={!carTypes || isLoading}
             >
               {(carTypes || []).map((type) => (
                 <SelectItem
                   key={type.id}
+                  value={type.id.toString()}
                   textValue={i18n.language === "ar" ? type.name.ar : type.name.en}
-                  // value={type.id}
                 >
                   {i18n.language === "ar" ? type.name.ar : type.name.en}
                 </SelectItem>
@@ -79,32 +105,7 @@ const AddCategories = () => {
             titleAr={loading ? "...جاري الإضافة" : "اضافة"}
             titleEn={loading ? "Adding..." : "Add"}
             isLoading={loading}
-            onClick={async () => {
-              if (!arName || !enName || !selectedCarType) {
-                toast.error(t("fillAllFields"));
-                return;
-              }
-
-              setLoading(true);
-              try {
-                const payload: AddCarClassPayload = {
-                  name: { ar: arName, en: enName },
-                  vehicle_type_id: selectedCarType,
-                  is_active: true,
-                };
-                await addCarClass(payload);
-                toast.success(t("categoryAddedSuccessfully"));
-                navigate("/models?section=Categories");
-              } catch (error: any) {
-                const errorMsg =
-                  error?.response?.data?.message ||
-                  error?.message ||
-                  t("somethingWentWrong");
-                toast.error(errorMsg);
-              } finally {
-                setLoading(false);
-              }
-            }}
+            onClick={handleAddCategory}
           />
         </div>
       </div>

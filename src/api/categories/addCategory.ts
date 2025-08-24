@@ -6,7 +6,7 @@ export interface AddCarClassPayload {
     en: string;
   };
   is_active?: boolean;
-  vehicle_type_id: string;
+  vehicle_type_id: number;
 }
 
 export interface AddCarClassResponse {
@@ -16,7 +16,7 @@ export interface AddCarClassResponse {
     en: string;
   };
   is_active: boolean;
-  vehicle_type_id: string;
+  vehicle_type_id: number;
   created_at: string;
   updated_at: string;
 }
