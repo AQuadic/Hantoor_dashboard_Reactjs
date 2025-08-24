@@ -48,5 +48,11 @@
 
     "priceFrom": "Price from",
 
-    "priceTo" :"Price to"
+    "priceTo" :"Price to",
+
+    "modelDeletedSuccessfully": "Model deleted successfully",
+    "modelUpdatedSuccessfully": "Model updated successfully",
+    "modelAddedSuccessfully": "Model added successfully",
+
+    "bodyTypeAdded": "Body type added successfully"
 }

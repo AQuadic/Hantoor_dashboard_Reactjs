@@ -48,5 +48,11 @@
 
     "priceFrom": "السعر من",
 
-    "priceTo" :"السعر الى"
+    "priceTo" :"السعر الى",
+    
+    "modelDeletedSuccessfully": "تم حذف الموديل بنجاح",
+    "modelUpdatedSuccessfully": "تم تحديث الموديل بنجاح",
+    "modelAddedSuccessfully": "تم اضافة الموديل بنجاح",
+
+    "bodyTypeAdded": "تمت إضافة نوع الهيكل بنجاح"
 }
