@@ -57,5 +57,6 @@
     "bodyTypeAdded": "Body type added successfully",
     "bodyTypeDeleted": "Structure type deleted successfully",
 
-    "carTypeAdded": "Car type added successfully"
+    "carTypeAdded": "Car type added successfully",
+    "carTypeDeleted": "Car type deleted successfully"
 }

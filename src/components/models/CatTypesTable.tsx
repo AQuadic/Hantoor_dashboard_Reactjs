@@ -16,6 +16,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
 import { useVehicleBodies, VehicleBody } from "@/api/models/structureType/getStructure";
+import { deleteCarType } from "@/api/models/carTypes/deleteCarType";
+import toast from "react-hot-toast";
 
 export function CarTypesTable() {
   const { t, i18n } = useTranslation("models");
@@ -25,7 +27,7 @@ export function CarTypesTable() {
     queryFn: () => getVehicleTypes({ pagination: false }),
   });
 
-  const { data: bodyTypesResponse, isLoading: isLoadingBodies, error: errorBodies } = useVehicleBodies();
+  const { data: bodyTypesResponse, isLoading: isLoadingBodies, error: errorBodies, refetch } = useVehicleBodies();
 
   const isLoading = isLoadingTypes || isLoadingBodies;
   const error = errorTypes || errorBodies;
@@ -43,6 +45,12 @@ export function CarTypesTable() {
   const getTypeName = (car: VehicleType) => {
     return i18n.language === "ar" ? car.name.ar : car.name.en;
   };
+
+    const handleDelete = async (id: number) => {
+      await deleteCarType(id);
+      toast.success(t("carTypeDeleted"));
+      refetch();
+    };
 
   return (
     <Table>
@@ -66,7 +74,7 @@ export function CarTypesTable() {
                 <Edit />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => { }} />
+                <TableDeleteButton handleDelete={() => handleDelete(car.id)} />
               </div>
             </TableCell>
           </TableRow>
