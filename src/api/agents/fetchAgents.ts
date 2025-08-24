@@ -234,3 +234,14 @@ export async function updateAgent(
 export async function deleteAgent(id: number): Promise<void> {
   await axios.delete(`/admin/agents/${id}`);
 }
+
+// Toggle agent active status
+export async function toggleAgentStatus(
+  id: number,
+  isActive: boolean
+): Promise<Agent> {
+  const response = await axios.patch(`/admin/agents/${id}`, {
+    is_active: isActive,
+  });
+  return response.data as Agent;
+}

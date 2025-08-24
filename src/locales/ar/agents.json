@@ -30,5 +30,17 @@
   "addedCenters": "تم اضافة مراكز الصيانة",
   "pleaseFillAllFields": "يرجى ملء جميع الحقول",
   "pleaseSelectBrand": "يرجى اختيار الماركة",
-  "centerMissingRequiredFields": "يرجى ملء جميع الحقول المطلوبة لمركز الصيانة أو المعرض"
+  "centerMissingRequiredFields": "يرجى ملء جميع الحقول المطلوبة لمركز الصيانة أو المعرض",
+  "pleaseAddAtLeastOneCenterOrShowroom": "يرجى إضافة مركز صيانة واحد على الأقل أو معرض بيع",
+  "agentCreatedSuccess": "تم إنشاء الوكيل بنجاح",
+  "agentCreationError": "خطأ في إنشاء الوكيل",
+  "agentUpdatedSuccess": "تم تحديث الوكيل بنجاح",
+  "agentUpdateError": "خطأ في تحديث الوكيل",
+  "agentDeletedSuccess": "تم حذف الوكيل بنجاح",
+  "agentDeleteError": "خطأ في حذف الوكيل",
+  "confirmDeleteAgent": "هل أنت متأكد من حذف هذا الوكيل؟",
+  "loading": "جاري التحميل...",
+  "removeCenter": "إزالة المركز",
+  "agentStatusUpdated": "تم تحديث حالة الوكيل بنجاح",
+  "agentStatusUpdateError": "خطأ في تحديث حالة الوكيل"
 }

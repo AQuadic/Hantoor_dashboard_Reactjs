@@ -6,7 +6,7 @@ import DashboardInput from "@/components/general/DashboardInput";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Brand, BrandsApiResponse, fetchBrands } from "@/api/brand/fetchBrands";
+import { BrandsApiResponse, fetchBrands } from "@/api/brand/fetchBrands";
 import {
   fetchAgentById,
   updateAgent,
@@ -55,13 +55,41 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       setEnName(agent.name.en);
       setEmailLink(agent.link || "");
       setSelectedBrandId(agent.brand_id?.toString() || "");
-      setCenters(agent.centers || []);
+
+      // Initialize centers with at least one center and one showroom if none exist
+      const existingCenters = agent.centers || [];
+      const hasCenter = existingCenters.some((c) => c.type === "center");
+      const hasShowroom = existingCenters.some((c) => c.type === "show_room");
+
+      const initialCenters = [...existingCenters];
+
+      // Add empty center if none exists
+      if (!hasCenter) {
+        initialCenters.push({
+          name: { ar: "", en: "" },
+          description: { ar: "", en: "" },
+          phone: "",
+          whatsapp: "",
+          type: "center",
+          is_active: "1",
+        });
+      }
+
+      // Add empty showroom if none exists
+      if (!hasShowroom) {
+        initialCenters.push({
+          name: { ar: "", en: "" },
+          description: { ar: "", en: "" },
+          phone: "",
+          whatsapp: "",
+          type: "show_room",
+          is_active: "1",
+        });
+      }
+
+      setCenters(initialCenters);
     }
   }, [agent]);
-
-  const selectedBrand = brands?.data.find(
-    (brand: Brand) => brand.id === Number(selectedBrandId)
-  );
 
   const updateAgentMutation = useMutation({
     mutationFn: (data: UpdateAgentPayload) => updateAgent(Number(id), data),
@@ -95,6 +123,35 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       return;
     }
 
+    // Check if at least one center OR showroom is present and filled
+    const validCenters = centers.filter(
+      (center) =>
+        center.name?.ar &&
+        center.name?.en &&
+        center.phone &&
+        center.whatsapp &&
+        center.description?.ar &&
+        center.description?.en
+    );
+
+    if (validCenters.length === 0) {
+      toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
+      return;
+    }
+
+    // Check if at least one center OR one showroom exists
+    const hasValidCenter = validCenters.some(
+      (center) => center.type === "center"
+    );
+    const hasValidShowroom = validCenters.some(
+      (center) => center.type === "show_room"
+    );
+
+    if (!hasValidCenter && !hasValidShowroom) {
+      toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
+      return;
+    }
+
     const payload: UpdateAgentPayload = {
       name: {
         ar: arName,
@@ -103,7 +160,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       is_active: "1", // Changed from boolean to string
       link: emailLink,
       brand_id: selectedBrandId ? Number(selectedBrandId) : undefined,
-      centers: centers.length > 0 ? centers : undefined,
+      centers: validCenters.length > 0 ? validCenters : undefined,
     };
 
     updateAgentMutation.mutate(payload);
@@ -162,30 +219,22 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
             />
           </div>
 
-          <div className="relative w-full border border-gray-300 rounded-lg p-3 text-sm">
-            <p className="rtl:text-right text-black text-sm">{t("brand")}</p>
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-gray-500 text-sm">
-                {selectedBrand
-                  ? i18n.language === "ar"
-                    ? selectedBrand.name.ar
-                    : selectedBrand.name.en
-                  : t("selectBrand")}
-              </span>
-
-              <select
-                className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
-                value={selectedBrandId}
-                onChange={(e) => setSelectedBrandId(e.target.value)}
-              >
-                <option value="">{t("selectBrand")}</option>
-                {brands?.data?.map((brand) => (
-                  <option key={brand.id} value={brand.id}>
-                    {i18n.language === "ar" ? brand.name.ar : brand.name.en}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <div className="relative w-full">
+            <label className="block text-sm text-black mb-2">
+              {t("brand")}
+            </label>
+            <select
+              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              value={selectedBrandId}
+              onChange={(e) => setSelectedBrandId(e.target.value)}
+            >
+              <option value="">{t("selectBrand")}</option>
+              {brands?.data?.map((brand) => (
+                <option key={brand.id} value={brand.id}>
+                  {i18n.language === "ar" ? brand.name.ar : brand.name.en}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
         <hr className="my-[11px]" />
@@ -208,9 +257,10 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
           <AddMaintenanceCenter
             centers={centers.filter((c) => c.type === "center")}
             setCenters={(newCenters) => {
+              // Merge with any show_room centers
               setCenters([
-                ...centers.filter((c) => c.type !== "center"),
                 ...newCenters,
+                ...centers.filter((c) => c.type === "show_room"),
               ]);
             }}
             type="center"
@@ -220,10 +270,11 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
         {selectedFilter === "Add sales Showrooms" && (
           <AddSalesShowrooms
             centers={centers.filter((c) => c.type === "show_room")}
-            setCenters={(newCenters) => {
+            setCenters={(newShowrooms) => {
+              // Merge with any center centers
               setCenters([
-                ...centers.filter((c) => c.type !== "show_room"),
-                ...newCenters,
+                ...centers.filter((c) => c.type === "center"),
+                ...newShowrooms,
               ]);
             }}
             type="show_room"
