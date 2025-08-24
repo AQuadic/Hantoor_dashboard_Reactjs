@@ -59,6 +59,7 @@
     "bodyTypeDeleted": "تم حذف نوع الهيكل بنجاح",
 
     "carTypeAdded": "تمت إضافة نوع السيارة بنجاح",
+    "bodyTypeUpdated": "تم تحديث نوع الهيكل بنجاح",
     "carTypeDeleted": "تم حذف نوع السيارة بنجاح",
 
     "fillAllFields": "يرجى ملء جميع الحقول",

@@ -50,7 +50,7 @@ const EditCategory = () => {
 
     try {
       setLoading(true);
-      await updateVehicleClass(Number(id), payload); // ✅ call API function only
+      await updateVehicleClass(Number(id), payload);
       toast.success(t("categoryUpdated"));
       navigate("/models?section=Categories");
     } catch (error: any) {
@@ -76,7 +76,7 @@ const EditCategory = () => {
             <div className="flex flex-col gap-8 md:p-8 p-2">
                 <div className="flex flex-col gap-4 md:p-8 p-2 bg-white rounded-2xl">
                 <div className="flex md:flex-row flex-col gap-4">
-                    <div className="flex-1">
+                    <div className="w-full">
                     <Input
                         label={t('arcategoryName')} 
                         value={arName}
