@@ -6,20 +6,27 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { Country, getCountries } from "@/api/countries/getCountry";
+import { getCountries } from "@/api/countries/getCountry";
 import Loading from "../general/Loading";
 import { deleteCountry } from "@/api/countries/deleteCountry";
 import toast from "react-hot-toast";
 
-const CountriesTable = () => {
-    const { t, i18n } = useTranslation("country");
+interface CountriesTableProps {
+  currentPage: number;
+  itemsPerPage: number;
+}
 
-  const { data: countries = [], isLoading, refetch } = useQuery<Country[]>({
-    queryKey: ["countries"],
-    queryFn: getCountries,
+const CountriesTable = ({ currentPage, itemsPerPage }: CountriesTableProps) => {
+  const { t, i18n } = useTranslation("country");
+
+  const { data: countriesResponse, isLoading, refetch } = useQuery({
+    queryKey: ["countries", currentPage, itemsPerPage],
+    queryFn: () => getCountries({ page: currentPage, per_page: itemsPerPage }),
   });
 
-    const handleDelete = async (id: number) => {
+  const countries = countriesResponse?.data || [];
+
+  const handleDelete = async (id: number) => {
     await deleteCountry(id);
     toast.success(t("countryDeleted"));
     refetch();
@@ -40,7 +47,8 @@ const CountriesTable = () => {
             </TableRow>
         </TableHeader>
         <TableBody>
-            {countries.map((country, index) => (
+            {countries.map((country, index) => {            
+            return (
             <TableRow key={country.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
@@ -66,7 +74,7 @@ const CountriesTable = () => {
                 </div>
                 </TableCell>
             </TableRow>
-            ))}
+            )})}
         </TableBody>
         </Table>
     )
