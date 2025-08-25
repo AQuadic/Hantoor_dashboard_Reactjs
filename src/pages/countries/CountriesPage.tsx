@@ -1,53 +1,55 @@
-import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import CountriesHeader from "@/components/countries/CountriesHeader";
 import CountriesTable from "@/components/countries/CountriesTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
-import { getCountries } from "@/api/countries/getCountry";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getCountries, CountriesResponse } from "@/api/countries/getCountry";
+import { useTranslation } from "react-i18next";
 import Loading from "@/components/general/Loading";
 
 const CountriesPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; 
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const [searchTermAr, setSearchTermAr] = React.useState("");
+  const [searchTermEn, setSearchTermEn] = React.useState("");
 
-  const { data: countriesResponse, isLoading } = useQuery({
-    queryKey: ["countries", currentPage, itemsPerPage],
-    queryFn: () => getCountries({ page: currentPage, per_page: itemsPerPage }),
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+  const searchTerm = isArabic ? searchTermAr : searchTermEn;
+
+  const { data, refetch, isLoading, error } = useQuery<CountriesResponse>({
+    queryKey: ["countries", currentPage, searchTerm],
+    queryFn: () => getCountries(currentPage, searchTerm),
+    placeholderData: undefined,
   });
 
   if (isLoading) {
-    return (
-      <div>
-        <CountriesHeader />
-        <div className="px-2 md:px-8">
-          <Loading />
-        </div>
-      </div>
-    );
+    return <Loading />;
+  }
+  if (error) {
+    return <div>Error loading countries: {String(error)}</div>;
   }
 
   return (
-    <div>
-      <CountriesHeader />
+    <section>
+      <CountriesHeader
+        termAr={searchTermAr}
+        termEn={searchTermEn}
+        setTermAr={setSearchTermAr}
+        setTermEn={setSearchTermEn}
+      />
       <div className="px-2 md:px-8">
-        <CountriesTable 
-          currentPage={currentPage}
-          itemsPerPage={itemsPerPage}
+        <CountriesTable countries={data?.data ?? []} refetch={refetch} />
+        <TablePagination
+          currentPage={data?.meta.current_page ?? currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={data?.meta.last_page ?? 1}
+          totalItems={data?.meta.total ?? data?.data.length ?? 0}
+          itemsPerPage={data?.meta.per_page ?? 15}
+          from={data?.meta.from ?? 0}
+          to={data?.meta.to ?? 0}
         />
-        
-        {countriesResponse && countriesResponse.data.length > 0 && (
-          <TablePagination
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            totalPages={countriesResponse.meta.last_page || 1}
-            totalItems={countriesResponse.meta.total || countriesResponse.data.length}
-            itemsPerPage={itemsPerPage}
-            from={countriesResponse.meta.from || 0}
-            to={countriesResponse.meta.to || 0}
-          />
-        )}
       </div>
-    </div>
+    </section>
   );
 };
 
