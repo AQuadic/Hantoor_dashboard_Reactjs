@@ -16,17 +16,26 @@ import { useQuery } from "@tanstack/react-query";
 import { getModels, GetModelsResponse } from "@/api/models/models/getModels";
 import { deleteBodyType } from "@/api/models/structureType/deleteStructure";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
 interface StructureTableProps {
   search: string;
+  page: number;
+  setPagination: (meta: {
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    from: number;
+    to: number;
+  }) => void;
 }
 
-export function StructureTable({ search }: StructureTableProps) {
+export function StructureTable({ search, page, setPagination }: StructureTableProps) {
   const { t, i18n } = useTranslation("models");
   const language = i18n.language as "ar" | "en";
 
-  const { data: bodies, isLoading, isError, refetch } = useVehicleBodies({
-    pagination: false,
+  const { data: bodiesResponse, isLoading, isError, refetch } = useVehicleBodies({
+    pagination: true,
     search,
   });
 
@@ -41,6 +50,18 @@ const { data: modelsResponse } = useQuery<GetModelsResponse, Error>({
 
   const modelsData = modelsResponse?.data ?? [];
 
+  useEffect(() => {
+    if (bodiesResponse && typeof bodiesResponse === 'object' && 'current_page' in bodiesResponse) {
+      setPagination({
+        totalPages: bodiesResponse.last_page,
+        totalItems: bodiesResponse.total,
+        itemsPerPage: bodiesResponse.per_page,
+        from: bodiesResponse.from,
+        to: bodiesResponse.to,
+      });
+    }
+  }, [bodiesResponse, setPagination]);
+
     const handleDelete = async (id: number) => {
       await deleteBodyType(id);
       toast.success(t("bodyTypeDeleted"));
@@ -49,6 +70,10 @@ const { data: modelsResponse } = useQuery<GetModelsResponse, Error>({
 
   if (isLoading) return <div>{t("loading")}</div>;
   if (isError) return <div>{t("errorLoadingData")}</div>;
+
+  const bodies = Array.isArray(bodiesResponse) 
+    ? bodiesResponse 
+    : bodiesResponse?.data ?? [];
 
   return (
     <Table>
@@ -61,12 +86,16 @@ const { data: modelsResponse } = useQuery<GetModelsResponse, Error>({
         </TableRow>
       </TableHeader>
       <TableBody>
-       {(Array.isArray(bodies) ? bodies : bodies?.data ?? []).map((item, index) => {
-            const model = modelsData.find((m: any) => m.id === item.vehicle_model_id);
+        {bodies.map((item, index) => {
+          const model = modelsData.find((m: any) => m.id === item.vehicle_model_id);
+          
+          const displayIndex = bodiesResponse && typeof bodiesResponse === 'object' && 'from' in bodiesResponse
+            ? (bodiesResponse.from || 0) + index
+            : index + 1;
 
             return (
               <TableRow key={item.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>{displayIndex}</TableCell>
                 <TableCell>{item.name[language]}</TableCell>
                 <TableCell className="w-full">
                   {model ? model.name[language] : t("noModel")}

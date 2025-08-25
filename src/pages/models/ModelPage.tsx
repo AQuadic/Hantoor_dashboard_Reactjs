@@ -44,8 +44,8 @@ const BrandsPage = () => {
           <>
             <StructureTable
               search={search}
-              // page={currentPage}
-              // setPagination={(m) => setPaginationMeta(m)}
+              page={currentPage}
+              setPagination={(m) => setPaginationMeta(m)}
             />
           </>
         );
