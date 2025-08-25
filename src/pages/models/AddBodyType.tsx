@@ -101,7 +101,7 @@ const AddBodyType = () => {
             <Input
               label={t("enStructureName")}
               variant="bordered"
-              placeholder="Write here"
+              placeholder={t('writeHere')}
               value={enName}
               onChange={(e) => setEnName(e.target.value)}
               className="flex-1"

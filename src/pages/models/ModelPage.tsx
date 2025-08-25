@@ -39,7 +39,7 @@ const BrandsPage = () => {
 
   const renderTable = () => {
     switch (selectedTab) {
-      case "Structure Type":
+      case "Structure Types":
         return (
           <>
             <StructureTable
