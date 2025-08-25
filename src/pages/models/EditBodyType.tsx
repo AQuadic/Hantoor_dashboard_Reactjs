@@ -1,13 +1,13 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { getModels, Model } from "@/api/models/models/getModels";
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import { Input, Select, SelectItem} from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useTranslation } from 'react-i18next';
-import { updateBodyType } from "@/api/models/structureType/editStructure";
+import { updateBodyType, BodyType } from "@/api/models/structureType/editStructure";
+import { getStructureById } from "@/api/models/structureType/getStructureById";
 import toast from "react-hot-toast";
-// import { getStructureById } from "@/api/models/structureType/getStructureById";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 
 const EditBodyType = () => {
@@ -22,24 +22,23 @@ const { data: models = [], isLoading } = useQuery<Model[]>({
   queryKey: ["models-list"],
   queryFn: async () => {
     const response = await getModels();
-    return response.data; 
+    return response.data;
   },
 });
 
+const { data: bodyType } = useQuery<BodyType>({
+    queryKey: ["body-type", id],
+    queryFn: () => getStructureById(Number(id)),
+    enabled: !!id,
+  });
 
-//   const { data: bodyType } = useQuery({
-//   queryKey: ["body-type", id],
-//   queryFn: () => getStructureById(Number(id)),
-//   enabled: !!id,
-// });
-
-    // useEffect(() => {
-    // if (bodyType) {
-    //     setNameAr(bodyType.name.ar);
-    //     setNameEn(bodyType.name.en);
-    //     setAgentId(String(bodyType.agent_id));
-    // }
-    // }, [bodyType]);
+  useEffect(() => {
+    if (bodyType) {
+      setNameAr(bodyType.name.ar);
+      setNameEn(bodyType.name.en);
+      setAgentId(String(bodyType.agent_id));
+    }
+  }, [bodyType]);
 
     const handleSave = async () => {
     if (!id) return;
@@ -89,7 +88,7 @@ const { data: models = [], isLoading } = useQuery<Model[]>({
                     <Input
                         label={t('encategoryName')}
                         variant="bordered"
-                        placeholder="اكتب هنا"
+                        placeholder={t('writeHere')}
                         value={nameEn}
                         onChange={(e) => setNameEn(e.target.value)}
                         classNames={{ label: "mb-2 text-base" }}
