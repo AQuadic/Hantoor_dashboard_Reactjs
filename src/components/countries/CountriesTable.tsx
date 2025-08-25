@@ -8,14 +8,22 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { Country, getCountries } from "@/api/countries/getCountry";
 import Loading from "../general/Loading";
+import { deleteCountry } from "@/api/countries/deleteCountry";
+import toast from "react-hot-toast";
 
 const CountriesTable = () => {
     const { t, i18n } = useTranslation("country");
 
-  const { data: countries = [], isLoading } = useQuery<Country[]>({
+  const { data: countries = [], isLoading, refetch } = useQuery<Country[]>({
     queryKey: ["countries"],
     queryFn: getCountries,
   });
+
+    const handleDelete = async (id: number) => {
+    await deleteCountry(id);
+    toast.success(t("countryDeleted"));
+    refetch();
+  };
 
   if (isLoading) return <Loading />;
 
@@ -54,7 +62,7 @@ const CountriesTable = () => {
                 </Link>
 
                 <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(country.id)} />
                 </div>
                 </TableCell>
             </TableRow>

@@ -16,5 +16,6 @@
     "dateAndTime": "تاريخ ووقت الاضافة",
     "status": "الحالة",
     "countryCode": "كود البلد",
-    "countryAddedSuccessfully": "تم اضافة البلد بنجاح"
+    "countryAddedSuccessfully": "تم اضافة البلد بنجاح",
+    "countryDeleted": "تم حذف البلد بنجاح"
 }

@@ -16,5 +16,6 @@
     "dateAndTime": "Date & time added",
     "status": "Status",
     "countryCode": "Country code",
-    "countryAddedSuccessfully": "Country added successfully"
+    "countryAddedSuccessfully": "Country added successfully",
+    "countryDeleted": "Country deleted successfully"
 }
