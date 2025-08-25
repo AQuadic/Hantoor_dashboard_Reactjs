@@ -59,7 +59,11 @@ const SupportMessagesTable = () => {
                     <TableCell>{message.country}</TableCell>
                     <TableCell>{message.question}</TableCell>
                     <TableCell>{message.name}</TableCell>
-                    <TableCell className="w-full">{message.phone}</TableCell>
+                    <TableCell className="w-full">
+                        <div dir="ltr">
+                            {message.phone}
+                        </div>
+                    </TableCell>
                     <TableCell
                     className="flex gap-[7px] items-center"
                     onClick={(e) => e.stopPropagation()}

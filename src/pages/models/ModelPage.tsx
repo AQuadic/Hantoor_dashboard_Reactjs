@@ -14,7 +14,6 @@ import { EngineTypesTable } from "@/components/models/EngineTypesTable";
 import { EngineSizesTable } from "@/components/models/EngineSizesTable";
 import { PriceFromTable } from "@/components/models/PriceFromTable";
 import { PriceToTable } from "@/components/models/PriceToTable";
-import { DebouncedSearchInput } from "@/components/general/DebouncedSearchInput";
 
 const BrandsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -40,13 +39,19 @@ const BrandsPage = () => {
 
   const renderTable = () => {
     switch (selectedTab) {
+      case "Structure Types":
+        return (
+          <>
+            <StructureTable
+              search={search}
+              page={currentPage}
+              setPagination={(m) => setPaginationMeta(m)}
+            />
+          </>
+        );
       case "Brand Origin":
         return (
           <>
-            <DebouncedSearchInput
-              placeholder="Search Brand Origin..."
-              onSearch={setSearch}
-            />
             <BrandOriginTable
               search={search}
               page={currentPage}
@@ -57,10 +62,6 @@ const BrandsPage = () => {
       case "Number of Seats":
         return (
           <>
-            <DebouncedSearchInput
-              placeholder="Search Number of Seats..."
-              onSearch={setSearch}
-            />
             <NumberOfSeatsTable
               search={search}
               page={currentPage}
@@ -71,10 +72,6 @@ const BrandsPage = () => {
       case "Engine Types":
         return (
           <>
-            <DebouncedSearchInput
-              placeholder="Search Engine Types..."
-              onSearch={setSearch}
-            />
             <EngineTypesTable
               search={search}
               page={currentPage}
@@ -85,10 +82,6 @@ const BrandsPage = () => {
       case "Engine Sizes":
         return (
           <>
-            <DebouncedSearchInput
-              placeholder="Search Engine Sizes..."
-              onSearch={setSearch}
-            />
             <EngineSizesTable
               search={search}
               page={currentPage}
@@ -99,20 +92,12 @@ const BrandsPage = () => {
       case "Price From":
         return (
           <>
-            <DebouncedSearchInput
-              placeholder="Search Price From..."
-              onSearch={setSearch}
-            />
             <PriceFromTable search={search} />
           </>
         );
       case "Models":
         return (
           <>
-            <DebouncedSearchInput
-              placeholder="Search Models..."
-              onSearch={setSearch}
-            />
             <ModelTable
               page={currentPage}
               search={search}
@@ -120,24 +105,27 @@ const BrandsPage = () => {
             />
           </>
         );
-      case "Structure Types":
-        return <StructureTable />;
       case "Car Types":
-        return <CarTypesTable />;
+        return (
+          <CarTypesTable 
+            search={search}
+            page={currentPage}
+            setPagination={(m) => setPaginationMeta(m)}
+          />
+        );
       case "Categories":
-        return <CategoriesTable />;
+        return (
+          <CategoriesTable 
+            search={search}
+            page={currentPage}
+            setPagination={(m) => setPaginationMeta(m)}
+          />
+        );
       case "Price To":
         return <PriceToTable />;
       default:
         return (
           <>
-            <DebouncedSearchInput
-              placeholder="Search Models..."
-              onSearch={(value) => {
-                setSearch(value);
-                setCurrentPage(1);
-              }}
-            />
             <ModelTable
               page={currentPage}
               search={search}
@@ -153,6 +141,8 @@ const BrandsPage = () => {
       <ModelHeader
         selectedFilter={selectedTab}
         setSelectedFilter={setSelectedTab}
+        search={search}
+        setSearch={setSearch}
       />
       <div className="px-2 md:px-8 relative min-h-[300px]">
         <AnimatePresence mode="wait">

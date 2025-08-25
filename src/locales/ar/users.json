@@ -20,5 +20,6 @@
   "active": "نشط منذ",
   "suspensionDuration": "مدة الايقاف",
   "status": "الحالة",
-  "searchCountryOrPhoneCode": "البحث عن البلد أو رمز الهاتف"
+  "searchCountryOrPhoneCode": "البحث عن البلد أو رمز الهاتف",
+  "searchByName": "ابحث بالاسم"
 }
