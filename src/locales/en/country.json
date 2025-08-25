@@ -17,5 +17,6 @@
     "status": "Status",
     "countryCode": "Country code",
     "countryAddedSuccessfully": "Country added successfully",
-    "countryDeleted": "Country deleted successfully"
+    "countryDeleted": "Country deleted successfully",
+    "searchByName": "Search by name"
 }
