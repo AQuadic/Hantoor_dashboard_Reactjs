@@ -14,18 +14,35 @@ import { useTranslation } from "react-i18next";
 import Loading from "../general/Loading";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
+import { getVehicleTypes, VehicleType, GetVehicleTypesPaginated } from "@/api/models/carTypes/getCarTypes";
 import { useVehicleBodies, VehicleBody } from "@/api/models/structureType/getStructure";
 import { deleteCarType } from "@/api/models/carTypes/deleteCarType";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
-export function CarTypesTable({ search }: { search?: string }) {
+interface CarTypesTableProps {
+  search?: string;
+  page: number;
+  setPagination: (meta: {
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    from: number;
+    to: number;
+  }) => void;
+}
+
+export function CarTypesTable({ search, page, setPagination }: CarTypesTableProps) {
   const { t, i18n } = useTranslation("models");
   const queryClient = useQueryClient();
 
-  const { data: carTypes, isLoading: isLoadingTypes, error: errorTypes } = useQuery<VehicleType[], Error>({
-    queryKey: ["vehicleTypes", search],
-    queryFn: () => getVehicleTypes({ pagination: false, search }),
+  const { data: carTypesResponse, isLoading: isLoadingTypes, error: errorTypes } = useQuery<GetVehicleTypesPaginated | VehicleType[], Error>({
+    queryKey: ["vehicleTypes", search, page],
+    queryFn: () => getVehicleTypes({ 
+      pagination: true, 
+      search,
+      page
+    }),
   });
 
   const { data: bodyTypesResponse, isLoading: isLoadingBodies, error: errorBodies } = useVehicleBodies();
@@ -33,11 +50,34 @@ export function CarTypesTable({ search }: { search?: string }) {
   const isLoading = isLoadingTypes || isLoadingBodies;
   const error = errorTypes || errorBodies;
 
+  useEffect(() => {
+    if (carTypesResponse) {
+      if (!Array.isArray(carTypesResponse) && 'current_page' in carTypesResponse) {
+        setPagination({
+          totalPages: carTypesResponse.last_page,
+          totalItems: carTypesResponse.total,
+          itemsPerPage: carTypesResponse.per_page,
+          from: carTypesResponse.from,
+          to: carTypesResponse.to,
+        });
+      } else {
+        const dataArray = Array.isArray(carTypesResponse) ? carTypesResponse : [];
+        setPagination({
+          totalPages: 1,
+          totalItems: dataArray.length,
+          itemsPerPage: dataArray.length,
+          from: dataArray.length > 0 ? 1 : 0,
+          to: dataArray.length,
+        });
+      }
+    }
+  }, [carTypesResponse, setPagination]);
+
   if (isLoading) return <Loading />;
   if (error) return <div>{t("error")}: {error.message}</div>;
 
   const getBodyTypeName = (id: number | string) => {
-    const bodies = bodyTypesResponse?.data;
+    const bodies = Array.isArray(bodyTypesResponse) ? bodyTypesResponse : bodyTypesResponse?.data;
     if (!Array.isArray(bodies)) return "-";
     const body = bodies.find((b: VehicleBody) => b.id == id);
     return body ? (i18n.language === "ar" ? body.name.ar : body.name.en) : "-";
@@ -50,10 +90,18 @@ export function CarTypesTable({ search }: { search?: string }) {
     const handleDelete = async (id: number) => {
       await deleteCarType(id);
       toast.success(t("carTypeDeleted"));
-      queryClient.setQueryData<VehicleType[]>(["vehicleTypes", search], old =>
-        old?.filter(car => car.id !== id)
-      );
+      queryClient.invalidateQueries({
+        queryKey: ["vehicleTypes"]
+      });
     };
+
+  const carTypes = Array.isArray(carTypesResponse) 
+    ? carTypesResponse 
+    : carTypesResponse?.data || [];
+  
+  const from = !Array.isArray(carTypesResponse) && carTypesResponse?.from 
+    ? carTypesResponse.from 
+    : ((page - 1) * 10) + 1;
 
   return (
     <Table>
@@ -66,9 +114,9 @@ export function CarTypesTable({ search }: { search?: string }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {carTypes?.map((car, index) => (
+        {carTypes.map((car, index) => (
           <TableRow key={car.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{from + index}</TableCell>
             <TableCell>{getTypeName(car)}</TableCell>
             <TableCell className="w-full">{getBodyTypeName(car.body_type_id)}</TableCell>
             <TableCell className="flex gap-[7px] items-center">

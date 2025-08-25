@@ -106,7 +106,13 @@ const BrandsPage = () => {
           </>
         );
       case "Car Types":
-        return <CarTypesTable search={search} />;
+        return (
+          <CarTypesTable 
+            search={search}
+            page={currentPage}
+            setPagination={(m) => setPaginationMeta(m)}
+          />
+        );
       case "Categories":
         return <CategoriesTable search={search} />;
       case "Price To":
