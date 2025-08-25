@@ -7,10 +7,7 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { Select, SelectItem } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  getVehicleTypes,
-  VehicleType,
-} from "@/api/models/carTypes/getCarTypes";
+import { getVehicleTypes, VehicleType, GetVehicleTypesResponse as GetVehicleTypesResponseAPI } from "@/api/models/carTypes/getCarTypes";
 import toast from "react-hot-toast";
 import { addCarClass, AddCarClassPayload } from "@/api/categories/addCategory";
 
@@ -23,9 +20,14 @@ const AddCategories = () => {
   const [selectedCarType, setSelectedCarType] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
 
-  const { data: carTypes, isLoading } = useQuery<VehicleType[], Error>({
+  const { data: carTypes = [], isLoading } = useQuery<
+    GetVehicleTypesResponseAPI,
+    Error,
+    VehicleType[]
+  >({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
+    select: (response) => (Array.isArray(response) ? response : response.data || []),
   });
 
   const handleAddCategory = async () => {
@@ -45,11 +47,12 @@ const AddCategories = () => {
       await addCarClass(payload);
       toast.success(t("categoryAddedSuccessfully"));
       navigate("/models?section=Categories");
-    } catch (error: any) {
-      const errorMsg =
-        error?.response?.data?.message ||
-        error?.message ||
-        t("somethingWentWrong");
+    } catch (error: unknown) {
+      let errorMsg = t("somethingWentWrong");
+      if (error && typeof error === "object") {
+        const e = error as { response?: { data?: { message?: string } }; message?: string };
+        errorMsg = e.response?.data?.message || e.message || errorMsg;
+      }
       toast.error(errorMsg);
     } finally {
       setLoading(false);
@@ -108,7 +111,7 @@ const AddCategories = () => {
               selectedKeys={selectedCarType ? [selectedCarType.toString()] : []}
               disabled={!carTypes || isLoading}
             >
-              {(carTypes || []).map((type) => (
+              {carTypes.map((type: VehicleType) => (
                 <SelectItem
                   key={type.id}
                   textValue={

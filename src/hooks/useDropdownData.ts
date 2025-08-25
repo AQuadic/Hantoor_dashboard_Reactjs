@@ -3,8 +3,8 @@ import { fetchBrands } from "@/api/brand/fetchBrands";
 import { fetchAgents } from "@/api/agents/fetchAgents";
 import { getModels } from "@/api/models/models/getModels";
 import { getVehicleBodies } from "@/api/models/structureType/getStructure";
-import { getVehicleTypes } from "@/api/models/carTypes/getCarTypes";
-import { getVehicleClasses } from "@/api/categories/getCategory";
+import { getVehicleTypes, GetVehicleTypesResponse as GetVehicleTypesResponseAPI } from "@/api/models/carTypes/getCarTypes";
+import { getVehicleClasses, GetVehicleClassesPaginated as GetVehicleClassesPaginatedAPI } from "@/api/categories/getCategory";
 import { getBrandOrigin } from "@/api/models/brandOrigin/getBrandOrigin";
 import { getSeats } from "@/api/models/seats/getSeats";
 import { getEngineType } from "@/api/models/engineTypes/getEngineType";
@@ -112,9 +112,10 @@ export const useVehicleBodies = (): UseDropdownData<VehicleBody> => {
 
 // Vehicle Types hook
 export const useVehicleTypes = (): UseDropdownData<VehicleType> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery<GetVehicleTypesResponseAPI, Error, VehicleType[]>({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
+    select: (response) => (Array.isArray(response) ? response : response.data || []),
   });
 
   return {
@@ -127,9 +128,10 @@ export const useVehicleTypes = (): UseDropdownData<VehicleType> => {
 
 // Vehicle Classes (Categories) hook
 export const useVehicleClasses = (): UseDropdownData<VehicleClass> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery<GetVehicleClassesPaginatedAPI | VehicleClass[], Error, VehicleClass[]>({
     queryKey: ["vehicleClasses"],
     queryFn: () => getVehicleClasses(),
+    select: (response) => (Array.isArray(response) ? response : response.data || []),
   });
 
   return {

@@ -40,13 +40,14 @@ const AddCountries = () => {
     setEnCurrency("");
     setTax("");
     setTimeType("month");
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Failed to create country:", error);
 
-    const message =
-      error?.response?.data?.message ||
-      error?.message ||
-      t("failedToAdd");
+    let message = t("failedToAdd");
+    if (error && typeof error === "object") {
+      const e = error as { response?: { data?: { message?: string } }; message?: string };
+      message = e.response?.data?.message || e.message || message;
+    }
 
     toast.error(message);
   } finally {
@@ -125,7 +126,7 @@ const AddCountries = () => {
               <select
                 className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
                 value={timeType}
-                onChange={(e) => setTimeType(e.target.value)}
+                onChange={(e) => setTimeType(e.target.value as "month" | "day" | "year")}
               >
                 <option value="month">{t("month")}</option>
                 <option value="day">{t("day")}</option>

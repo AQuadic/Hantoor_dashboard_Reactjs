@@ -13,7 +13,7 @@ import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getVehicleClasses, VehicleClass, GetVehicleClassesPaginated } from "@/api/categories/getCategory";
-import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
+import { getVehicleTypes, VehicleType, GetVehicleTypesResponse as GetVehicleTypesResponseAPI } from "@/api/models/carTypes/getCarTypes";
 import { deleteCategory } from "@/api/categories/deleteCategory";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
@@ -42,9 +42,10 @@ export function CategoriesTable({ search, page, setPagination }: CategoriesTable
     }),
   });
 
-  const { data: typesResponse } = useQuery<GetVehicleClassesPaginated | VehicleType[]>({
+  const { data: types = [] } = useQuery<GetVehicleTypesResponseAPI, Error, VehicleType[]>({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
+    select: (response) => (Array.isArray(response) ? response : response.data || []),
   });
 
   useEffect(() => {
@@ -80,12 +81,8 @@ export function CategoriesTable({ search, page, setPagination }: CategoriesTable
     ? classesResponse 
     : classesResponse?.data || [];
 
-  const types = Array.isArray(typesResponse) 
-    ? typesResponse 
-    : typesResponse?.data || [];
-
   const typeMap: Record<number, string> = {};
-  types.forEach((type) => {
+  types.forEach((type: VehicleType) => {
     typeMap[type.id] = i18n.language === "ar" ? type.name.ar : type.name.en;
   });
 

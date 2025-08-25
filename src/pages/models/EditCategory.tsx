@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { getVehicleTypes, VehicleType } from '@/api/models/carTypes/getCarTypes';
+import { getVehicleTypes, VehicleType, GetVehicleTypesResponse as GetVehicleTypesResponseAPI } from '@/api/models/carTypes/getCarTypes';
 import { updateVehicleClass, getVehicleClassById, UpdateVehicleClassPayload } from '@/api/categories/editCategory';
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
@@ -19,9 +19,10 @@ const EditCategory = () => {
   const [selectedCarType, setSelectedCarType] = useState<number | undefined>(undefined);
   const [, setLoading] = useState(false);
 
-  const { data: carTypes } = useQuery<VehicleType[], Error>({
+  const { data: carTypes = [] } = useQuery<GetVehicleTypesResponseAPI, Error, VehicleType[]>({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
+    select: (response) => (Array.isArray(response) ? response : response.data || []),
   });
 
   useEffect(() => {
@@ -36,9 +37,10 @@ const EditCategory = () => {
         setArName(classData.name.ar);
         setEnName(classData.name.en);
         setSelectedCarType(Number(classData.vehicle_type_id));
-      } catch (error: any) {
-        toast.error(error.message || "Failed to load category");
-      }
+      } catch (error: unknown) {
+          const err = error as { message?: string };
+          toast.error(err.message || "Failed to load category");
+        }
     };
     fetchClass();
   }, [id]);
@@ -57,8 +59,9 @@ const EditCategory = () => {
       await updateVehicleClass(Number(id), payload);
       toast.success(t("categoryUpdated"));
       navigate("/models?section=Categories");
-    } catch (error: any) {
-      toast.error(error.message || t("Failed to update category"));
+    } catch (error: unknown) {
+      const err = error as { message?: string };
+      toast.error(err.message || t("Failed to update category"));
     } finally {
       setLoading(false);
     }
@@ -96,12 +99,16 @@ const EditCategory = () => {
                         variant="bordered"
                         value={selectedCarType?.toString()}
                         onSelectionChange={(key) => {
-                        const parsed = Number(typeof key === "string" ? key : Array.from(key as any)[0]);
-                        setSelectedCarType(!isNaN(parsed) ? parsed : undefined);
+                        let parsed: number | undefined;
+                        if (typeof key === "string" || typeof key === "number") parsed = Number(key);
+                        else if (key instanceof Set) parsed = Number(Array.from(key)[0]);
+                        else if (Array.isArray(key)) parsed = Number((key as unknown[])[0]);
+                        else parsed = undefined;
+                        setSelectedCarType(!isNaN(parsed as number) ? (parsed as number) : undefined);
                         }}
                         disabled={!carTypes}
                     >
-                        {(carTypes || []).map((type) => (
+                        {carTypes.map((type: VehicleType) => (
                         <SelectItem
                             key={type.id}
                             textValue={i18n.language === "ar" ? type.name.ar : type.name.en}
