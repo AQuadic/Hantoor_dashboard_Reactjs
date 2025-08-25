@@ -7,7 +7,11 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import { Select, SelectItem } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { getVehicleTypes, VehicleType, GetVehicleTypesResponse as GetVehicleTypesResponseAPI } from "@/api/models/carTypes/getCarTypes";
+import {
+  getVehicleTypes,
+  VehicleType,
+  GetVehicleTypesResponse as GetVehicleTypesResponseAPI,
+} from "@/api/models/carTypes/getCarTypes";
 import toast from "react-hot-toast";
 import { addCarClass, AddCarClassPayload } from "@/api/categories/addCategory";
 
@@ -27,7 +31,8 @@ const AddCategories = () => {
   >({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
-    select: (response) => (Array.isArray(response) ? response : response.data || []),
+    select: (response) =>
+      Array.isArray(response) ? response : response.data || [],
   });
 
   const handleAddCategory = async () => {
@@ -50,7 +55,10 @@ const AddCategories = () => {
     } catch (error: unknown) {
       let errorMsg = t("somethingWentWrong");
       if (error && typeof error === "object") {
-        const e = error as { response?: { data?: { message?: string } }; message?: string };
+        const e = error as {
+          response?: { data?: { message?: string } };
+          message?: string;
+        };
         errorMsg = e.response?.data?.message || e.message || errorMsg;
       }
       toast.error(errorMsg);
@@ -102,7 +110,8 @@ const AddCategories = () => {
                 if (typeof key === "string" || typeof key === "number")
                   parsed = Number(key);
                 else if (Array.isArray(key)) parsed = Number(key[0]);
-                else if (key instanceof Set) parsed = Number(Array.from(key)[0]);
+                else if (key instanceof Set)
+                  parsed = Number(Array.from(key)[0]);
                 else parsed = undefined;
 
                 if (!isNaN(parsed as number)) setSelectedCarType(parsed);
@@ -122,7 +131,6 @@ const AddCategories = () => {
                 </SelectItem>
               ))}
             </Select>
-
           </div>
 
           <DashboardButton

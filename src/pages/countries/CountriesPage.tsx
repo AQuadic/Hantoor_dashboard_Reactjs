@@ -38,7 +38,11 @@ const CountriesPage = () => {
         setTermEn={setSearchTermEn}
       />
       <div className="px-2 md:px-8">
-        <CountriesTable countries={data?.data ?? []} refetch={refetch} />
+        <CountriesTable
+          countries={data?.data ?? []}
+          refetch={refetch}
+          isLoading={isLoading}
+        />
         <TablePagination
           currentPage={data?.meta.current_page ?? currentPage}
           setCurrentPage={setCurrentPage}

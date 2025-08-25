@@ -20,40 +20,43 @@ const AddCountries = () => {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-  try {
-    setLoading(true);
-    await storeCountry({
-      name: { ar: arCountry, en: enCountry },
-      code,
-      currency: { ar: arCurrency, en: enCurrency },
-      tax,
-      time_type: timeType,
-      is_active: true,
-    });
+    try {
+      setLoading(true);
+      await storeCountry({
+        name: { ar: arCountry, en: enCountry },
+        code,
+        currency: { ar: arCurrency, en: enCurrency },
+        tax,
+        time_type: timeType,
+        is_active: true,
+      });
 
-    toast.success(t("countryAddedSuccessfully"));
-    navigate("/countries");
-    setArCountry("");
-    setEnCountry("");
-    setCode("");
-    setArCurrency("");
-    setEnCurrency("");
-    setTax("");
-    setTimeType("month");
-  } catch (error: unknown) {
-    console.error("Failed to create country:", error);
+      toast.success(t("countryAddedSuccessfully"));
+      navigate("/countries");
+      setArCountry("");
+      setEnCountry("");
+      setCode("");
+      setArCurrency("");
+      setEnCurrency("");
+      setTax("");
+      setTimeType("month");
+    } catch (error: unknown) {
+      console.error("Failed to create country:", error);
 
-    let message = t("failedToAdd");
-    if (error && typeof error === "object") {
-      const e = error as { response?: { data?: { message?: string } }; message?: string };
-      message = e.response?.data?.message || e.message || message;
+      let message = t("failedToAdd");
+      if (error && typeof error === "object") {
+        const e = error as {
+          response?: { data?: { message?: string } };
+          message?: string;
+        };
+        message = e.response?.data?.message || e.message || message;
+      }
+
+      toast.error(message);
+    } finally {
+      setLoading(false);
     }
-
-    toast.error(message);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
     <section>
@@ -126,7 +129,9 @@ const AddCountries = () => {
               <select
                 className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
                 value={timeType}
-                onChange={(e) => setTimeType(e.target.value as "month" | "day" | "year")}
+                onChange={(e) =>
+                  setTimeType(e.target.value as "month" | "day" | "year")
+                }
               >
                 <option value="month">{t("month")}</option>
                 <option value="day">{t("day")}</option>
@@ -144,7 +149,6 @@ const AddCountries = () => {
             placeholder="EG"
           />
         </div>
-
 
         <div className="mt-4">
           <DashboardButton

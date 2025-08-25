@@ -1,28 +1,43 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { getVehicleTypes, VehicleType, GetVehicleTypesResponse as GetVehicleTypesResponseAPI } from '@/api/models/carTypes/getCarTypes';
-import { updateVehicleClass, getVehicleClassById, UpdateVehicleClassPayload } from '@/api/categories/editCategory';
-import DashboardButton from '@/components/general/dashboard/DashboardButton';
-import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
-import { Input, Select, SelectItem } from '@heroui/react';
-import { useQuery } from '@tanstack/react-query';
-import React, { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import toast from 'react-hot-toast';
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  getVehicleTypes,
+  VehicleType,
+  GetVehicleTypesResponse as GetVehicleTypesResponseAPI,
+} from "@/api/models/carTypes/getCarTypes";
+import {
+  updateVehicleClass,
+  getVehicleClassById,
+  UpdateVehicleClassPayload,
+} from "@/api/categories/editCategory";
+import DashboardButton from "@/components/general/dashboard/DashboardButton";
+import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
+import { Input, Select, SelectItem } from "@heroui/react";
+import { useQuery } from "@tanstack/react-query";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
 
 const EditCategory = () => {
   const { t, i18n } = useTranslation("models");
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [arName, setArName] = useState('');
-  const [enName, setEnName] = useState('');
-  const [selectedCarType, setSelectedCarType] = useState<number | undefined>(undefined);
+  const [arName, setArName] = useState("");
+  const [enName, setEnName] = useState("");
+  const [selectedCarType, setSelectedCarType] = useState<number | undefined>(
+    undefined
+  );
   const [, setLoading] = useState(false);
 
-  const { data: carTypes = [] } = useQuery<GetVehicleTypesResponseAPI, Error, VehicleType[]>({
+  const { data: carTypes = [] } = useQuery<
+    GetVehicleTypesResponseAPI,
+    Error,
+    VehicleType[]
+  >({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
-    select: (response) => (Array.isArray(response) ? response : response.data || []),
+    select: (response) =>
+      Array.isArray(response) ? response : response.data || [],
   });
 
   useEffect(() => {
@@ -38,9 +53,9 @@ const EditCategory = () => {
         setEnName(classData.name.en);
         setSelectedCarType(Number(classData.vehicle_type_id));
       } catch (error: unknown) {
-          const err = error as { message?: string };
-          toast.error(err.message || "Failed to load category");
-        }
+        const err = error as { message?: string };
+        toast.error(err.message || "Failed to load category");
+      }
     };
     fetchClass();
   }, [id]);
@@ -67,76 +82,83 @@ const EditCategory = () => {
     }
   };
 
-    return (
-        <div>
-            <div className="pt-0 pb-2 bg-white ">
-                <DashboardHeader
-                    titleAr="تعديل الفئة"
-                    titleEn="Edit category"
-                    items={[
-                    { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
-                    { titleAr: " اقسام السيارات", titleEn: "Car sections", link: "/models" },
-                    { titleAr: "تعديل الفئة", titleEn: "Edit category" },
-                    ]}
-                />
+  return (
+    <div>
+      <div className="pt-0 pb-2 bg-white ">
+        <DashboardHeader
+          titleAr="تعديل الفئة"
+          titleEn="Edit category"
+          items={[
+            { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
+            {
+              titleAr: " اقسام السيارات",
+              titleEn: "Car sections",
+              link: "/models",
+            },
+            { titleAr: "تعديل الفئة", titleEn: "Edit category" },
+          ]}
+        />
+      </div>
+      <div className="flex flex-col gap-8 md:p-8 p-2">
+        <div className="flex flex-col gap-4 md:p-8 p-2 bg-white rounded-2xl">
+          <div className="flex md:flex-row flex-col gap-4">
+            <div className="w-full">
+              <Input
+                label={t("arcategoryName")}
+                value={arName}
+                onChange={(e) => setArName(e.target.value)}
+                variant="bordered"
+                size="lg"
+                classNames={{ label: "mb-2 text-base" }}
+              />
+              <Select
+                className="mt-4"
+                label={t("type")}
+                size="lg"
+                variant="bordered"
+                value={selectedCarType?.toString()}
+                onSelectionChange={(key) => {
+                  let parsed: number | undefined;
+                  if (typeof key === "string" || typeof key === "number")
+                    parsed = Number(key);
+                  else if (key instanceof Set)
+                    parsed = Number(Array.from(key)[0]);
+                  else if (Array.isArray(key))
+                    parsed = Number((key as unknown[])[0]);
+                  else parsed = undefined;
+                  setSelectedCarType(
+                    !isNaN(parsed as number) ? (parsed as number) : undefined
+                  );
+                }}
+                disabled={!carTypes}
+              >
+                {carTypes.map((type: VehicleType) => (
+                  <SelectItem
+                    key={type.id}
+                    textValue={
+                      i18n.language === "ar" ? type.name.ar : type.name.en
+                    }
+                  >
+                    {i18n.language === "ar" ? type.name.ar : type.name.en}
+                  </SelectItem>
+                ))}
+              </Select>
             </div>
-            <div className="flex flex-col gap-8 md:p-8 p-2">
-                <div className="flex flex-col gap-4 md:p-8 p-2 bg-white rounded-2xl">
-                <div className="flex md:flex-row flex-col gap-4">
-                    <div className="w-full">
-                    <Input
-                        label={t('arcategoryName')} 
-                        value={arName}
-                        onChange={(e) => setArName(e.target.value)}
-                        variant="bordered"
-                        size="lg"
-                        classNames={{ label: "mb-2 text-base" }}
-                    />
-                    <Select
-                    className="mt-4"
-                        label={t("type")}
-                        size="lg"
-                        variant="bordered"
-                        value={selectedCarType?.toString()}
-                        onSelectionChange={(key) => {
-                        let parsed: number | undefined;
-                        if (typeof key === "string" || typeof key === "number") parsed = Number(key);
-                        else if (key instanceof Set) parsed = Number(Array.from(key)[0]);
-                        else if (Array.isArray(key)) parsed = Number((key as unknown[])[0]);
-                        else parsed = undefined;
-                        setSelectedCarType(!isNaN(parsed as number) ? (parsed as number) : undefined);
-                        }}
-                        disabled={!carTypes}
-                    >
-                        {carTypes.map((type: VehicleType) => (
-                        <SelectItem
-                            key={type.id}
-                            textValue={i18n.language === "ar" ? type.name.ar : type.name.en}
-                        >
-                            {i18n.language === "ar" ? type.name.ar : type.name.en}
-                        </SelectItem>
-                        ))}
-                    </Select>
-                    </div>
-                    <Input
-                    label={t('encategoryName')} 
-                    value={enName}
-                    onChange={(e) => setEnName(e.target.value)}
-                    variant="bordered"
-                    size="lg"
-                    classNames={{ label: "mb-2 text-base" }}
-                    />
-                </div>
+            <Input
+              label={t("encategoryName")}
+              value={enName}
+              onChange={(e) => setEnName(e.target.value)}
+              variant="bordered"
+              size="lg"
+              classNames={{ label: "mb-2 text-base" }}
+            />
+          </div>
 
-                <DashboardButton
-                    titleAr="حفظ"
-                    titleEn="Save"
-                    onClick={handleSave}
-                />
-                </div>
-            </div>
-            </div>
-        )
-}
+          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
+        </div>
+      </div>
+    </div>
+  );
+};
 
-export default EditCategory
+export default EditCategory;

@@ -12,8 +12,16 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { getVehicleClasses, VehicleClass, GetVehicleClassesPaginated } from "@/api/categories/getCategory";
-import { getVehicleTypes, VehicleType, GetVehicleTypesResponse as GetVehicleTypesResponseAPI } from "@/api/models/carTypes/getCarTypes";
+import {
+  getVehicleClasses,
+  VehicleClass,
+  GetVehicleClassesPaginated,
+} from "@/api/categories/getCategory";
+import {
+  getVehicleTypes,
+  VehicleType,
+  GetVehicleTypesResponse as GetVehicleTypesResponseAPI,
+} from "@/api/models/carTypes/getCarTypes";
 import { deleteCategory } from "@/api/categories/deleteCategory";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
@@ -30,27 +38,42 @@ interface CategoriesTableProps {
   }) => void;
 }
 
-export function CategoriesTable({ search, page, setPagination }: CategoriesTableProps) {
+export function CategoriesTable({
+  search,
+  page,
+  setPagination,
+}: CategoriesTableProps) {
   const { t, i18n } = useTranslation("models");
 
-  const { data: classesResponse, refetch } = useQuery<GetVehicleClassesPaginated | VehicleClass[]>({
+  const { data: classesResponse, refetch } = useQuery<
+    GetVehicleClassesPaginated | VehicleClass[]
+  >({
     queryKey: ["vehicleClasses", search, page],
-    queryFn: () => getVehicleClasses({
-      search,
-      pagination: true,
-      page
-    }),
+    queryFn: () =>
+      getVehicleClasses({
+        search,
+        pagination: true,
+        page,
+      }),
   });
 
-  const { data: types = [] } = useQuery<GetVehicleTypesResponseAPI, Error, VehicleType[]>({
+  const { data: types = [] } = useQuery<
+    GetVehicleTypesResponseAPI,
+    Error,
+    VehicleType[]
+  >({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
-    select: (response) => (Array.isArray(response) ? response : response.data || []),
+    select: (response) =>
+      Array.isArray(response) ? response : response.data || [],
   });
 
   useEffect(() => {
     if (classesResponse) {
-      if (!Array.isArray(classesResponse) && 'current_page' in classesResponse) {
+      if (
+        !Array.isArray(classesResponse) &&
+        "current_page" in classesResponse
+      ) {
         setPagination({
           totalPages: classesResponse.last_page,
           totalItems: classesResponse.total,
@@ -77,8 +100,8 @@ export function CategoriesTable({ search, page, setPagination }: CategoriesTable
     refetch();
   };
 
-  const classes = Array.isArray(classesResponse) 
-    ? classesResponse 
+  const classes = Array.isArray(classesResponse)
+    ? classesResponse
     : classesResponse?.data || [];
 
   const typeMap: Record<number, string> = {};
@@ -86,26 +109,31 @@ export function CategoriesTable({ search, page, setPagination }: CategoriesTable
     typeMap[type.id] = i18n.language === "ar" ? type.name.ar : type.name.en;
   });
 
-  const from = !Array.isArray(classesResponse) && classesResponse?.from 
-    ? classesResponse.from 
-    : ((page - 1) * 10) + 1;
+  const from =
+    !Array.isArray(classesResponse) && classesResponse?.from
+      ? classesResponse.from
+      : (page - 1) * 10 + 1;
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('categoryName')}</TableHead>
-          <TableHead className="text-right">{t('type')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("categoryName")}</TableHead>
+          <TableHead className="text-right">{t("type")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {classes.map((item, index) => (
           <TableRow key={item.id} noBackgroundColumns={1}>
             <TableCell>{from + index}</TableCell>
-            <TableCell>{i18n.language === "ar" ? item.name.ar : item.name.en}</TableCell>
-            <TableCell className="w-full">{typeMap[item.vehicle_type_id] || item.vehicle_type_id}</TableCell>
+            <TableCell>
+              {i18n.language === "ar" ? item.name.ar : item.name.en}
+            </TableCell>
+            <TableCell className="w-full">
+              {typeMap[item.vehicle_type_id] || item.vehicle_type_id}
+            </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch isSelected={item.is_active} />
               <Link to={`/categories/${item.id}`}>
