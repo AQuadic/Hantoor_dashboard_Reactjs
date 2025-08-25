@@ -17,12 +17,17 @@ import { getModels, GetModelsResponse } from "@/api/models/models/getModels";
 import { deleteBodyType } from "@/api/models/structureType/deleteStructure";
 import toast from "react-hot-toast";
 
-export function StructureTable() {
+interface StructureTableProps {
+  search: string;
+}
+
+export function StructureTable({ search }: StructureTableProps) {
   const { t, i18n } = useTranslation("models");
   const language = i18n.language as "ar" | "en";
 
   const { data: bodies, isLoading, isError, refetch } = useVehicleBodies({
     pagination: false,
+    search,
   });
 
 const { data: modelsResponse } = useQuery<GetModelsResponse, Error>({
@@ -56,7 +61,7 @@ const { data: modelsResponse } = useQuery<GetModelsResponse, Error>({
         </TableRow>
       </TableHeader>
       <TableBody>
-          {(Array.isArray(bodies) ? bodies : bodies?.data ?? []).map((item, index) => {
+       {(Array.isArray(bodies) ? bodies : bodies?.data ?? []).map((item, index) => {
             const model = modelsData.find((m: any) => m.id === item.vehicle_model_id);
 
             return (

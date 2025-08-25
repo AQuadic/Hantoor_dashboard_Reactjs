@@ -10,11 +10,14 @@ import { useTranslation } from "react-i18next";
 interface SubordinatesHeaderProps {
   selectedFilter: string;
   setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
+  search: string;
+  setSearch: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
+  setSearch,
 }) => {
   const { t } = useTranslation("users");
   
@@ -125,8 +128,8 @@ const filtersData = [
             <SearchBar
             termAr={"ابحث بالاسم"}
             termEn={"Search by name"}
-            setTermAr={() => {}} 
-            setTermEn={() => {}} 
+            setTermAr={setSearch} 
+            setTermEn={setSearch}
             />
         </div>
         <div className="flex-1">
