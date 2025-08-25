@@ -281,7 +281,7 @@ export const privateRoutes: RouteTypes[] = [
   },
   {
     path: "/car-types/:id",
-    element: <EditCarTypes typeId={0} />,
+    element: <EditCarTypes />,
   },
   {
     path: "/categories/add",
