@@ -108,7 +108,7 @@ const BrandsPage = () => {
       case "Car Types":
         return <CarTypesTable search={search} />;
       case "Categories":
-        return <CategoriesTable />;
+        return <CategoriesTable search={search} />;
       case "Price To":
         return <PriceToTable />;
       default:

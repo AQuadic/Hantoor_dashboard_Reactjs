@@ -10,9 +10,18 @@ export interface VehicleClass {
   is_active: boolean;
 }
 
-export const getVehicleClasses = async (): Promise<VehicleClass[]> => {
+export const getVehicleClasses = async (
+  search?: string
+): Promise<VehicleClass[]> => {
   try {
-    const response = await axios.get<{ data: VehicleClass[] } | VehicleClass[]>("/admin/vehicle/class");
+    const response = await axios.get<{ data: VehicleClass[] } | VehicleClass[]>(
+      "/admin/vehicle/class",
+      {
+        params: {
+          search: search || undefined,
+        },
+      }
+    );
 
     return Array.isArray(response.data) ? response.data : response.data.data ?? [];
   } catch (error: any) {

@@ -17,15 +17,19 @@ import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes"
 import { deleteCategory } from "@/api/categories/deleteCategory";
 import toast from "react-hot-toast";
 
-export function CategoriesTable() {
+type Props = {
+  search?: string;
+};
+
+export function CategoriesTable({ search }: Props) {
   const { t, i18n } = useTranslation("models");
 
   const { data: classes, refetch } = useQuery<VehicleClass[]>({
-    queryKey: ["vehicleClasses"],
-    queryFn: () => getVehicleClasses(),
+    queryKey: ["vehicleClasses", search],
+    queryFn: () => getVehicleClasses(search),
   });
 
-  const { data: types} = useQuery<VehicleType[]>({
+  const { data: types } = useQuery<VehicleType[]>({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
   });
@@ -35,7 +39,7 @@ export function CategoriesTable() {
     toast.success(t("categoryDeleted"));
     refetch();
   };
-  
+
 
   const typeMap: Record<number, string> = {};
   (types || []).forEach((type) => {
