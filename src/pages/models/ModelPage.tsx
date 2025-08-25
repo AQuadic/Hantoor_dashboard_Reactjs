@@ -106,7 +106,7 @@ const BrandsPage = () => {
           </>
         );
       case "Car Types":
-        return <CarTypesTable />;
+        return <CarTypesTable search={search} />;
       case "Categories":
         return <CategoriesTable />;
       case "Price To":

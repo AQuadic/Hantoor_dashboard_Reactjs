@@ -19,13 +19,13 @@ import { useVehicleBodies, VehicleBody } from "@/api/models/structureType/getStr
 import { deleteCarType } from "@/api/models/carTypes/deleteCarType";
 import toast from "react-hot-toast";
 
-export function CarTypesTable() {
+export function CarTypesTable({ search }: { search?: string }) {
   const { t, i18n } = useTranslation("models");
   const queryClient = useQueryClient();
 
   const { data: carTypes, isLoading: isLoadingTypes, error: errorTypes } = useQuery<VehicleType[], Error>({
-    queryKey: ["vehicleTypes"],
-    queryFn: () => getVehicleTypes({ pagination: false }),
+    queryKey: ["vehicleTypes", search],
+    queryFn: () => getVehicleTypes({ pagination: false, search }),
   });
 
   const { data: bodyTypesResponse, isLoading: isLoadingBodies, error: errorBodies } = useVehicleBodies();
@@ -50,7 +50,7 @@ export function CarTypesTable() {
     const handleDelete = async (id: number) => {
       await deleteCarType(id);
       toast.success(t("carTypeDeleted"));
-      queryClient.setQueryData<VehicleType[]>(["vehicleTypes"], old =>
+      queryClient.setQueryData<VehicleType[]>(["vehicleTypes", search], old =>
         old?.filter(car => car.id !== id)
       );
     };
