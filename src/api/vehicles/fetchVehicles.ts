@@ -255,8 +255,33 @@ export async function fetchVehicles(
   > = {
     page,
     per_page: filters.per_page || 10,
-    ...filters,
   };
+
+  // Add individual filter parameters only if they have values
+  if (filters.country_id !== undefined) {
+    params.country_id = filters.country_id;
+  }
+  if (filters.engine_volume_id !== undefined) {
+    params.engine_volume_id = filters.engine_volume_id;
+  }
+  if (filters.price_from !== undefined) {
+    params.price_from = filters.price_from;
+  }
+  if (filters.price_to !== undefined) {
+    params.price_to = filters.price_to;
+  }
+  if (filters.price_range) {
+    params.price_range = filters.price_range;
+  }
+  if (filters.sort_by) {
+    params.sort_by = filters.sort_by;
+  }
+  if (filters.sort_order) {
+    params.sort_order = filters.sort_order;
+  }
+  if (filters.search && filters.search.trim() !== "") {
+    params.search = filters.search.trim();
+  }
 
   // Handle array parameters
   if (filters.brand_id?.length) {

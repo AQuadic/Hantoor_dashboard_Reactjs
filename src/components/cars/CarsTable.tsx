@@ -53,12 +53,19 @@ const CarsTable = ({
     error,
   } = useQuery({
     queryKey: ["vehicles", currentPage, searchTerm, filters],
-    queryFn: () =>
-      fetchVehicles(currentPage, {
-        ...filters,
-        search: searchTerm,
+    queryFn: () => {
+      const queryFilters = { ...filters };
+
+      // Only add search if it has a meaningful value
+      if (searchTerm && searchTerm.trim() !== "") {
+        queryFilters.search = searchTerm.trim();
+      }
+
+      return fetchVehicles(currentPage, {
+        ...queryFilters,
         per_page: 10,
-      }),
+      });
+    },
   });
 
   // Handle error
