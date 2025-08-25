@@ -2,7 +2,7 @@ import { axios } from "@/lib/axios";
 
 export interface numOfSeats {
   id: number;
-  is_active: boolean;
+  is_active: boolean | number;
   name: {
     ar: string;
     en: string;
@@ -11,22 +11,21 @@ export interface numOfSeats {
   updated_at: string;
 }
 
-interface SeatsResponse {
+export interface SeatsResponse {
   current_page: number;
   data: numOfSeats[];
-  total?: number;
-  per_page?: number;
-  from?: number;
-  to?: number;
+  total: number;
+  per_page: number;
+  from: number;
+  to: number;
 }
 
 export const getSeats = async (): Promise<numOfSeats[]> => {
-  const res = await axios.get<SeatsResponse>("/admin/seats");
-  // Some legacy uses expect the array directly
-  return (
-    (res.data as unknown as SeatsResponse).data ||
-    (res.data as unknown as numOfSeats[])
-  );
+  const res = await axios.get("/admin/seats");
+  if (Array.isArray(res.data)) {
+    return res.data as numOfSeats[];
+  }
+  return (res.data as SeatsResponse).data || [];
 };
 
 export const getSeatsPaginated = async (params?: {
@@ -37,6 +36,23 @@ export const getSeatsPaginated = async (params?: {
   if (params?.page) query.page = params.page;
   if (params?.search) query.search = params.search;
 
-  const res = await axios.get<SeatsResponse>("/admin/seats", { params: query });
-  return res.data as SeatsResponse;
+  const res = await axios.get("/admin/seats", { params: query });
+
+  if (res.data && Array.isArray((res.data as SeatsResponse).data)) {
+    return res.data as SeatsResponse;
+  }
+
+  if (Array.isArray(res.data)) {
+    const arr = res.data as numOfSeats[];
+    return {
+      current_page: params?.page ?? 1,
+      data: arr,
+      total: arr.length,
+      per_page: arr.length,
+      from: 1,
+      to: arr.length,
+    };
+  }
+
+  throw new Error("Unexpected response format from /admin/seats");
 };

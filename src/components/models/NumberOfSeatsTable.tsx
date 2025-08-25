@@ -78,14 +78,6 @@ export function NumberOfSeatsTable({
     return <Loading />;
   }
 
-  const filtered = seats?.filter((seat) => {
-    const name = (i18n.language === "ar" ? seat.name.ar : seat.name.en).replace(
-      /^0+/,
-      ""
-    );
-    return name.toLowerCase().includes(search.toLowerCase());
-  });
-
   return (
     <Table>
       <TableHeader>
@@ -96,7 +88,7 @@ export function NumberOfSeatsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {filtered?.map((seat, index) => (
+        {seats?.map((seat, index) => (
           <TableRow key={seat.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">
@@ -106,7 +98,7 @@ export function NumberOfSeatsTable({
               )}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch isSelected={seat.is_active} />
+              <Switch isSelected={!!seat.is_active} />
               <Link to={`/seats/edit/${seat.id}`}>
                 <Edit />
               </Link>
