@@ -5,35 +5,20 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { Country, getCountries } from "@/api/countries/getCountry";
+import Loading from "../general/Loading";
 
 const CountriesTable = () => {
-    const { t } = useTranslation("country");
-    const countries = [
-    {
-        id: 1,
-        question: "مشكلة في عرض السيارات أو البيانات",
-        country: "الامارات",
-        currency: "درهم اماراتي",
-        count: 23,
-        date: "22/03/2024- 08:30 PM"
-    },
-    {
-        id: 2,
-        question: "مشكلة في عرض السيارات أو البيانات",
-        country: "مصر",
-        currency: "جنية مصري",
-        count: 15,
-        date: "22/03/2024- 08:30 PM"
-    },
-    {
-        id: 3,
-        question: "مشكلة في عرض السيارات أو البيانات",
-        country: "السعودية",
-        currency: "ريال سعودي",
-        count: 13,
-        date: "22/03/2024- 08:30 PM"
-    },
-    ];
+    const { t, i18n } = useTranslation("country");
+
+  const { data: countries = [], isLoading } = useQuery<Country[]>({
+    queryKey: ["countries"],
+    queryFn: getCountries,
+  });
+
+  if (isLoading) return <Loading />;
+
     return (
         <Table>
         <TableHeader>
@@ -50,12 +35,20 @@ const CountriesTable = () => {
             {countries.map((country, index) => (
             <TableRow key={country.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{country.country}</TableCell>
-                <TableCell>{country.currency}</TableCell>
-                <TableCell style={{textAlign: 'center'}}>{country.count}</TableCell>
-                <TableCell className="w-full">{country.date}</TableCell>
+                <TableCell>
+                    {i18n.language === "ar" ? country.name.ar : country.name.en}
+                </TableCell>
+                    <TableCell>
+                    {i18n.language === "ar" ? country.currency?.ar || "-" : country.currency?.en || "-"}
+                </TableCell>
+                <TableCell style={{ textAlign: "center" }}>
+                0
+                </TableCell>
+                <TableCell className="w-full">
+                {new Date(country.created_at).toLocaleString()}
+                </TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                <Switch />
+                <Switch isSelected={!country.is_active} />
                 <Link to={`/countries/edit/${country.id}`}>
                     <Edit />
                 </Link>
