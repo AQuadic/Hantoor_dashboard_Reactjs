@@ -11,7 +11,7 @@ import EditAgentWrapper from "@/pages/agents/EditAgentWrapper";
 import AddBrand from "@/pages/brands/AddBrand";
 import BrandsPage from "@/pages/brands/BrandsPage";
 import ChatPage from "@/pages/chats/ChatPage";
-import ConversationPage from "@/pages/chats/ConversationPage";
+import ConversationPageWrapper from "@/components/chats/ConversationPageWrapper";
 import ContactUsPage from "@/pages/contactus/ContactUsPage";
 import ContactUsView from "@/pages/contactus/ContactUsView";
 import AddCountries from "@/pages/countries/AddCountries";
@@ -247,7 +247,7 @@ export const privateRoutes: RouteTypes[] = [
   },
   {
     path: "/chats/:id",
-    element: <ConversationPage />,
+    element: <ConversationPageWrapper />,
   },
 
   // Models route
@@ -281,7 +281,7 @@ export const privateRoutes: RouteTypes[] = [
   },
   {
     path: "/car-types/:id",
-    element: <EditCarTypes typeId={0} />,
+    element: <EditCarTypes />,
   },
   {
     path: "/categories/add",

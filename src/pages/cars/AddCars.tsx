@@ -43,21 +43,40 @@ const AddCarsForm = () => {
   // Load vehicle data into form when editing
   React.useEffect(() => {
     if (vehicle && isEdit) {
+      // Helper function to safely extract vehicle name
+      const getVehicleNameValue = (
+        name: string | { ar: string; en: string }
+      ) => {
+        if (typeof name === "string") {
+          return name;
+        } else if (name && typeof name === "object") {
+          return name.ar || name.en || "";
+        }
+        return "";
+      };
+
       setFormData({
         id: vehicle.id,
-        nameAr: vehicle.name.ar,
-        nameEn: vehicle.name.en,
+        nameAr:
+          typeof vehicle.name === "object"
+            ? vehicle.name.ar || ""
+            : getVehicleNameValue(vehicle.name),
+        nameEn:
+          typeof vehicle.name === "object"
+            ? vehicle.name.en || ""
+            : getVehicleNameValue(vehicle.name),
         price: vehicle.price,
-        is_discount: vehicle.is_discount,
-        discount_value: vehicle.discount_value,
-        discount_date: vehicle.discount_date,
+        is_discount: vehicle.is_discount || false,
+        discount_value: vehicle.discount_value || undefined,
+        discount_date: vehicle.discount_date || undefined,
         is_include_tax: vehicle.is_include_tax,
         is_Insurance_warranty: vehicle.is_Insurance_warranty,
         is_include_warranty: vehicle.is_include_warranty,
         is_rent_to_own: vehicle.is_rent_to_own,
-        rent_to_own_duration: vehicle.rent_to_own_duration,
-        rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp,
-        rent_to_own_price: vehicle.rent_to_own_price,
+        rent_to_own_duration:
+          vehicle.rent_to_own_duration?.toString() || undefined,
+        rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp || undefined,
+        rent_to_own_price: vehicle.rent_to_own_price || undefined,
         country_id: vehicle.country_id?.toString(),
         brand_id: vehicle.brand_id?.toString(),
         agent_id: vehicle.agent_id?.toString(),

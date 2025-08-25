@@ -179,6 +179,17 @@ const CarsTable = ({
     return vehicle.image || carImage;
   };
 
+  // Helper function to safely get vehicle name (handles both string and object formats)
+  const getVehicleName = (vehicle: Vehicle) => {
+    if (typeof vehicle.name === "string") {
+      return vehicle.name;
+    } else if (vehicle.name && typeof vehicle.name === "object") {
+      // Handle VehicleName object format
+      return vehicle.name.ar || vehicle.name.en || "-";
+    }
+    return "-";
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -253,14 +264,14 @@ const CarsTable = ({
                 <TableCell>
                   <img
                     src={getVehicleImage(vehicle)}
-                    alt={vehicle.name.en}
+                    alt={getVehicleName(vehicle)}
                     className="w-[93px] h-[60px] object-cover rounded"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = carImage;
                     }}
                   />
                 </TableCell>
-                <TableCell>{vehicle.name.ar || vehicle.name.en}</TableCell>
+                <TableCell>{getVehicleName(vehicle)}</TableCell>
                 <TableCell>
                   {vehicle.brand?.name?.ar || vehicle.brand?.name?.en || "-"}
                 </TableCell>
@@ -300,7 +311,9 @@ const CarsTable = ({
                   {vehicle.is_rent_to_own ? t("yes") || "نعم" : t("no") || "لا"}
                 </TableCell>
                 <TableCell>{vehicle.views || 0}</TableCell>
-                <TableCell>{formatDate(vehicle.created_at)}</TableCell>
+                <TableCell>
+                  {vehicle.created_at ? formatDate(vehicle.created_at) : "-"}
+                </TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                   <Switch
                     isSelected={
@@ -353,7 +366,7 @@ const CarsTable = ({
               transition={{ duration: 0.3 }}
               className="fixed top-0 right-0 h-full md:w-[493px] w-[300px] bg-white shadow-lg z-50 overflow-y-auto"
             >
-              <ConversationPage />
+              <ConversationPage conversationId={openChatId} />
             </motion.div>
           </>
         )}

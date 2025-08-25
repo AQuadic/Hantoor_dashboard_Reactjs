@@ -61,23 +61,32 @@ export interface VehicleImage {
   image: File | string;
 }
 
+export interface VehicleImageObject {
+  id: number;
+  uuid: string;
+  size: number;
+  url: string;
+  responsive_urls: string[];
+}
+
 export interface VehicleBrand {
   id: number;
   name: VehicleName;
   is_active: number;
   created_at: string;
   updated_at: string;
-  image: string | null;
+  image: VehicleImageObject | null;
 }
 
 export interface VehicleAgent {
   id: number;
   name: VehicleName;
-  is_active: boolean;
+  website: string | null;
+  brand_id: number;
+  is_active: number;
   link?: string;
-  brand_id?: number;
-  created_at?: string;
-  updated_at?: string;
+  created_at: string | null;
+  updated_at: string;
 }
 
 export interface VehicleModel {
@@ -92,7 +101,7 @@ export interface VehicleModel {
 // Main Vehicle interface
 export interface Vehicle {
   id: number;
-  name: VehicleName;
+  name: string | VehicleName; // API can return either string or VehicleName object
   country_id?: number;
   brand_id?: number;
   agent_id?: number;
@@ -103,23 +112,23 @@ export interface Vehicle {
   brand_origin_id?: number;
   number_of_seat_id?: number;
   engine_type_id?: number;
-  engine_volume_id?: number;
+  engine_volume_id?: number; // Added as it might be present in some responses
   price: string;
-  is_discount: boolean;
-  discount_value?: string;
-  discount_date?: string;
+  is_discount: boolean | null;
+  discount_value?: string | null;
+  discount_date?: string | null;
   is_include_tax: boolean;
   is_Insurance_warranty: boolean;
   is_include_warranty: boolean;
   views?: number;
   is_rent_to_own: boolean;
-  rent_to_own_duration?: string;
-  rent_to_own_whatsapp?: string;
-  rent_to_own_price?: string;
+  rent_to_own_duration?: string | number | null;
+  rent_to_own_whatsapp?: string | null;
+  rent_to_own_price?: string | null;
   is_active?: boolean; // Status field for vehicle activation
   status?: number; // Backend status field (1 for active, 0 for inactive)
-  created_at: string;
-  updated_at: string;
+  created_at: string | null;
+  updated_at: string | null;
 
   // Related data
   additional_images: VehicleImage[];
@@ -150,12 +159,27 @@ export interface VehiclesApiResponse {
   from: number;
   last_page: number;
   last_page_url: string;
+  links?: Array<{
+    url: string | null;
+    label: string;
+    active: boolean;
+  }>;
   next_page_url: string | null;
   path: string;
   per_page: number;
   prev_page_url: string | null;
   to: number;
   total: number;
+  filters_applied?: Record<
+    string,
+    string | number | boolean | string[] | number[]
+  >;
+}
+
+// Wrapper interface for the actual API response with success field
+export interface VehiclesApiResponseWrapper {
+  success: boolean;
+  data: VehiclesApiResponse;
 }
 
 // Filters interface for GET requests
@@ -258,13 +282,25 @@ export async function fetchVehicles(
   }
 
   const response = await axios.get("/admin/vehicle", { params });
-  return response.data as VehiclesApiResponse;
+  const responseData = response.data as VehiclesApiResponseWrapper;
+
+  // Extract the nested data from the wrapper
+  return responseData.data;
+}
+
+// Wrapper interface for single vehicle response
+export interface VehicleApiResponseWrapper {
+  success: boolean;
+  data: Vehicle;
 }
 
 // Fetch single vehicle by ID
 export async function fetchVehicleById(id: number): Promise<Vehicle> {
   const response = await axios.get(`/admin/vehicle/${id}`);
-  return response.data as Vehicle;
+  const responseData = response.data as VehicleApiResponseWrapper;
+
+  // Extract the nested data from the wrapper
+  return responseData.data;
 }
 
 // Create new vehicle
@@ -443,7 +479,8 @@ export async function createVehicle(
       "Content-Type": "multipart/form-data",
     },
   });
-  return response.data as Vehicle;
+  const responseData = response.data as VehicleApiResponseWrapper;
+  return responseData.data;
 }
 
 // Update existing vehicle
@@ -593,7 +630,8 @@ export async function updateVehicle(
       "Content-Type": "multipart/form-data",
     },
   });
-  return response.data as Vehicle;
+  const responseData = response.data as VehicleApiResponseWrapper;
+  return responseData.data;
 }
 
 // Delete vehicle
@@ -615,5 +653,6 @@ export async function toggleVehicleStatus(
       "Content-Type": "multipart/form-data",
     },
   });
-  return response.data as Vehicle;
+  const responseData = response.data as VehicleApiResponseWrapper;
+  return responseData.data;
 }
