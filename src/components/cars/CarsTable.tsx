@@ -42,7 +42,7 @@ const CarsTable = ({
   filters = {},
   onDataChange,
 }: CarsTableProps) => {
-  const { t } = useTranslation("cars");
+  const { t, i18n } = useTranslation("cars");
   const queryClient = useQueryClient();
   const [openChatId, setOpenChatId] = useState<number | null>(null);
 
@@ -167,7 +167,20 @@ const CarsTable = ({
   };
 
   const formatPrice = (price: string) => {
-    return `${price} ${t("currency") || "درهم"}`;
+    try {
+      const amount = Number(price);
+      if (!Number.isFinite(amount))
+        return `${price} ${t("currency") || "درهم"}`;
+      // Use i18n locale for number formatting when available
+      const locale = i18n?.language || undefined;
+      const formatted = new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }).format(amount);
+      return formatted;
+    } catch {
+      return String(price);
+    }
   };
 
   const getVehicleImage = (vehicle: Vehicle) => {
@@ -188,6 +201,12 @@ const CarsTable = ({
       return vehicle.name.ar || vehicle.name.en || "-";
     }
     return "-";
+  };
+
+  // Translate boolean-ish values to localized Yes/No
+  const translateYesNo = (val: unknown) => {
+    const isTrue = Boolean(val);
+    return isTrue ? t("yes") || "نعم" : t("no") || "لا";
   };
 
   if (isLoading) {
@@ -281,35 +300,23 @@ const CarsTable = ({
                 <TableCell>-</TableCell>
                 <TableCell>{vehicle.vehicle_model?.name?.ar || "-"}</TableCell>
                 <TableCell>{formatPrice(vehicle.price)}</TableCell>
-                <TableCell>
-                  {vehicle.is_discount ? t("yes") || "نعم" : t("no") || "لا"}
-                </TableCell>
+                <TableCell>{translateYesNo(vehicle.is_discount)}</TableCell>
                 <TableCell>
                   {vehicle.is_discount && vehicle.discount_value
                     ? `${vehicle.discount_value}%`
                     : "-"}
                 </TableCell>
                 <TableCell>
-                  {vehicle.offers && vehicle.offers.length > 0
-                    ? t("yes") || "نعم"
-                    : t("no") || "لا"}
+                  {translateYesNo(vehicle.offers && vehicle.offers.length > 0)}
+                </TableCell>
+                <TableCell>{translateYesNo(vehicle.is_include_tax)}</TableCell>
+                <TableCell>
+                  {translateYesNo(vehicle.is_include_warranty)}
                 </TableCell>
                 <TableCell>
-                  {vehicle.is_include_tax ? t("yes") || "نعم" : t("no") || "لا"}
+                  {translateYesNo(vehicle.is_Insurance_warranty)}
                 </TableCell>
-                <TableCell>
-                  {vehicle.is_include_warranty
-                    ? t("yes") || "نعم"
-                    : t("no") || "لا"}
-                </TableCell>
-                <TableCell>
-                  {vehicle.is_Insurance_warranty
-                    ? t("yes") || "نعم"
-                    : t("no") || "لا"}
-                </TableCell>
-                <TableCell>
-                  {vehicle.is_rent_to_own ? t("yes") || "نعم" : t("no") || "لا"}
-                </TableCell>
+                <TableCell>{translateYesNo(vehicle.is_rent_to_own)}</TableCell>
                 <TableCell>{vehicle.views || 0}</TableCell>
                 <TableCell>
                   {vehicle.created_at ? formatDate(vehicle.created_at) : "-"}
