@@ -49,10 +49,17 @@ const EditModel = () => {
         });
         toast.success(t("modelUpdatedSuccessfully"));
         navigate("/models");
-        } catch (err) {
-        console.error(err);
-        toast.error(t("failedToUpdateModel"));
+        } catch (error: any) {
+
+        if (error.response && error.response.data && error.response.data.message) {
+            toast.error(error.response.data.message);
+        } else if (error.message) {
+            toast.error(error.message);
+        } else {
+            toast.error("Something went wrong");
         }
+        }
+
     };
 
     return (
