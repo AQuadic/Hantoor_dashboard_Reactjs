@@ -10,20 +10,46 @@ export interface VehicleClass {
   is_active: boolean;
 }
 
+export interface GetVehicleClassesParams {
+  search?: string;
+  vehicle_type_id?: number;
+  pagination?: boolean;
+  page?: number;
+  per_page?: number;
+}
+
+export interface GetVehicleClassesPaginated {
+  current_page: number;
+  data: VehicleClass[];
+  first_page_url: string;
+  from: number;
+  last_page: number;
+  last_page_url: string;
+  links: unknown[];
+  next_page_url: string | null;
+  path: string;
+  per_page: number;
+  prev_page_url: string | null;
+  to: number;
+  total: number;
+}
+
 export const getVehicleClasses = async (
-  search?: string
-): Promise<VehicleClass[]> => {
+  params?: GetVehicleClassesParams
+): Promise<GetVehicleClassesPaginated | VehicleClass[]> => {
   try {
-    const response = await axios.get<{ data: VehicleClass[] } | VehicleClass[]>(
+    const response = await axios.get<GetVehicleClassesPaginated | VehicleClass[]>(
       "/admin/vehicle/class",
       {
-        params: {
-          search: search || undefined,
+        params,
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
         },
       }
     );
 
-    return Array.isArray(response.data) ? response.data : response.data.data ?? [];
+    return response.data;
   } catch (error: any) {
     console.error("Error fetching vehicle classes:", error);
     throw error;

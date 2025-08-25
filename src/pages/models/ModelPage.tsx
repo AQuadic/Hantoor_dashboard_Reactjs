@@ -114,7 +114,13 @@ const BrandsPage = () => {
           />
         );
       case "Categories":
-        return <CategoriesTable search={search} />;
+        return (
+          <CategoriesTable 
+            search={search}
+            page={currentPage}
+            setPagination={(m) => setPaginationMeta(m)}
+          />
+        );
       case "Price To":
         return <PriceToTable />;
       default:

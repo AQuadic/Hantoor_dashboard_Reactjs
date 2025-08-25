@@ -12,27 +12,63 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { getVehicleClasses, VehicleClass } from "@/api/categories/getCategory";
+import { getVehicleClasses, VehicleClass, GetVehicleClassesPaginated } from "@/api/categories/getCategory";
 import { getVehicleTypes, VehicleType } from "@/api/models/carTypes/getCarTypes";
 import { deleteCategory } from "@/api/categories/deleteCategory";
 import toast from "react-hot-toast";
+import { useEffect } from "react";
 
-type Props = {
+interface CategoriesTableProps {
   search?: string;
-};
+  page: number;
+  setPagination: (meta: {
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    from: number;
+    to: number;
+  }) => void;
+}
 
-export function CategoriesTable({ search }: Props) {
+export function CategoriesTable({ search, page, setPagination }: CategoriesTableProps) {
   const { t, i18n } = useTranslation("models");
 
-  const { data: classes, refetch } = useQuery<VehicleClass[]>({
-    queryKey: ["vehicleClasses", search],
-    queryFn: () => getVehicleClasses(search),
+  const { data: classesResponse, refetch } = useQuery<GetVehicleClassesPaginated | VehicleClass[]>({
+    queryKey: ["vehicleClasses", search, page],
+    queryFn: () => getVehicleClasses({
+      search,
+      pagination: true,
+      page
+    }),
   });
 
-  const { data: types } = useQuery<VehicleType[]>({
+  const { data: typesResponse } = useQuery<GetVehicleClassesPaginated | VehicleType[]>({
     queryKey: ["vehicleTypes"],
     queryFn: () => getVehicleTypes({ pagination: false }),
   });
+
+  useEffect(() => {
+    if (classesResponse) {
+      if (!Array.isArray(classesResponse) && 'current_page' in classesResponse) {
+        setPagination({
+          totalPages: classesResponse.last_page,
+          totalItems: classesResponse.total,
+          itemsPerPage: classesResponse.per_page,
+          from: classesResponse.from,
+          to: classesResponse.to,
+        });
+      } else {
+        const dataArray = Array.isArray(classesResponse) ? classesResponse : [];
+        setPagination({
+          totalPages: 1,
+          totalItems: dataArray.length,
+          itemsPerPage: dataArray.length,
+          from: dataArray.length > 0 ? 1 : 0,
+          to: dataArray.length,
+        });
+      }
+    }
+  }, [classesResponse, setPagination]);
 
   const handleDelete = async (id: number) => {
     await deleteCategory(id);
@@ -40,11 +76,22 @@ export function CategoriesTable({ search }: Props) {
     refetch();
   };
 
+  const classes = Array.isArray(classesResponse) 
+    ? classesResponse 
+    : classesResponse?.data || [];
+
+  const types = Array.isArray(typesResponse) 
+    ? typesResponse 
+    : typesResponse?.data || [];
 
   const typeMap: Record<number, string> = {};
-  (types || []).forEach((type) => {
+  types.forEach((type) => {
     typeMap[type.id] = i18n.language === "ar" ? type.name.ar : type.name.en;
   });
+
+  const from = !Array.isArray(classesResponse) && classesResponse?.from 
+    ? classesResponse.from 
+    : ((page - 1) * 10) + 1;
 
   return (
     <Table>
@@ -57,9 +104,9 @@ export function CategoriesTable({ search }: Props) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {(classes || []).map((item, index) => (
+        {classes.map((item, index) => (
           <TableRow key={item.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{from + index}</TableCell>
             <TableCell>{i18n.language === "ar" ? item.name.ar : item.name.en}</TableCell>
             <TableCell className="w-full">{typeMap[item.vehicle_type_id] || item.vehicle_type_id}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
