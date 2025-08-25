@@ -38,19 +38,20 @@ export interface CountriesResponse {
   };
 }
 
-export interface CountriesParams {
-  page?: number;
-  per_page?: number;
-}
-
-export async function getCountries(params: CountriesParams = {}): Promise<CountriesResponse> {
-  const { page = 1, per_page = 10 } = params;
+export async function getCountries(page: number = 1, searchTerm: string = ""): Promise<CountriesResponse> {
+  const pageNum = Number(page);
+  
+  const params: any = {
+    page: pageNum,
+    per_page: 15,
+  };
+  
+  if (searchTerm && searchTerm.trim()) {
+    params.search = searchTerm.trim();
+  }
   
   const response = await axios.get<CountriesResponse>("/admin/country", {
-    params: {
-      page,
-      per_page,
-    },
+    params,
   });
   
   return response.data;

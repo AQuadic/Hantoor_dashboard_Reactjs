@@ -1,3 +1,4 @@
+import React from "react";
 import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
@@ -5,7 +6,19 @@ import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import { useTranslation } from "react-i18next";
 
-const CountriesHeader = () => {
+interface CountriesHeaderProps {
+  termAr: string;
+  termEn: string;
+  setTermAr: (value: string) => void;
+  setTermEn: (value: string) => void;
+}
+
+const CountriesHeader: React.FC<CountriesHeaderProps> = ({
+  termAr,
+  termEn,
+  setTermAr,
+  setTermEn,
+}) => {
     const { t } = useTranslation("country");
     return (
         <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
@@ -21,10 +34,10 @@ const CountriesHeader = () => {
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
             <div className="flex-1">
                 <SearchBar
-                    termAr={""}
-                    termEn={" "}
-                    setTermAr={() => {}} 
-                    setTermEn={() => {}} 
+                    termAr={termAr}
+                    termEn={termEn}
+                    setTermAr={setTermAr}
+                    setTermEn={setTermEn}
                     placeholder={t('searchByName')}
                 />
             </div>
@@ -32,7 +45,7 @@ const CountriesHeader = () => {
             <DashboardDatePicker />
             </div>
             <Link to="/countries/add">
-            <DashboardButton titleAr={"اضافة بلد جديدة"} titleEn={"Add new country"} variant="add" />
+            <DashboardButton titleAr={"اضافة بلد جديدة"} titleEn={"Add new country"} variant="add"/>
             </Link>
         </div>
         </div>
