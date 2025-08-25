@@ -42,7 +42,7 @@ const CarsTable = ({
   filters = {},
   onDataChange,
 }: CarsTableProps) => {
-  const { t } = useTranslation("cars");
+  const { t, i18n } = useTranslation("cars");
   const queryClient = useQueryClient();
   const [openChatId, setOpenChatId] = useState<number | null>(null);
 
@@ -53,12 +53,19 @@ const CarsTable = ({
     error,
   } = useQuery({
     queryKey: ["vehicles", currentPage, searchTerm, filters],
-    queryFn: () =>
-      fetchVehicles(currentPage, {
-        ...filters,
-        search: searchTerm,
+    queryFn: () => {
+      const queryFilters = { ...filters };
+
+      // Only add search if it has a meaningful value
+      if (searchTerm && searchTerm.trim() !== "") {
+        queryFilters.search = searchTerm.trim();
+      }
+
+      return fetchVehicles(currentPage, {
+        ...queryFilters,
         per_page: 10,
-      }),
+      });
+    },
   });
 
   // Handle error
@@ -167,7 +174,20 @@ const CarsTable = ({
   };
 
   const formatPrice = (price: string) => {
-    return `${price} ${t("currency") || "درهم"}`;
+    try {
+      const amount = Number(price);
+      if (!Number.isFinite(amount))
+        return `${price} ${t("currency") || "درهم"}`;
+      // Use i18n locale for number formatting when available
+      const locale = i18n?.language || undefined;
+      const formatted = new Intl.NumberFormat(locale, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      }).format(amount);
+      return formatted;
+    } catch {
+      return String(price);
+    }
   };
 
   const getVehicleImage = (vehicle: Vehicle) => {
@@ -177,6 +197,23 @@ const CarsTable = ({
       return cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`;
     }
     return vehicle.image || carImage;
+  };
+
+  // Helper function to safely get vehicle name (handles both string and object formats)
+  const getVehicleName = (vehicle: Vehicle) => {
+    if (typeof vehicle.name === "string") {
+      return vehicle.name;
+    } else if (vehicle.name && typeof vehicle.name === "object") {
+      // Handle VehicleName object format
+      return vehicle.name.ar || vehicle.name.en || "-";
+    }
+    return "-";
+  };
+
+  // Translate boolean-ish values to localized Yes/No
+  const translateYesNo = (val: unknown) => {
+    const isTrue = Boolean(val);
+    return isTrue ? t("yes") || "نعم" : t("no") || "لا";
   };
 
   if (isLoading) {
@@ -253,14 +290,14 @@ const CarsTable = ({
                 <TableCell>
                   <img
                     src={getVehicleImage(vehicle)}
-                    alt={vehicle.name.en}
+                    alt={getVehicleName(vehicle)}
                     className="w-[93px] h-[60px] object-cover rounded"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = carImage;
                     }}
                   />
                 </TableCell>
-                <TableCell>{vehicle.name.ar || vehicle.name.en}</TableCell>
+                <TableCell>{getVehicleName(vehicle)}</TableCell>
                 <TableCell>
                   {vehicle.brand?.name?.ar || vehicle.brand?.name?.en || "-"}
                 </TableCell>
@@ -270,37 +307,27 @@ const CarsTable = ({
                 <TableCell>-</TableCell>
                 <TableCell>{vehicle.vehicle_model?.name?.ar || "-"}</TableCell>
                 <TableCell>{formatPrice(vehicle.price)}</TableCell>
-                <TableCell>
-                  {vehicle.is_discount ? t("yes") || "نعم" : t("no") || "لا"}
-                </TableCell>
+                <TableCell>{translateYesNo(vehicle.is_discount)}</TableCell>
                 <TableCell>
                   {vehicle.is_discount && vehicle.discount_value
                     ? `${vehicle.discount_value}%`
                     : "-"}
                 </TableCell>
                 <TableCell>
-                  {vehicle.offers && vehicle.offers.length > 0
-                    ? t("yes") || "نعم"
-                    : t("no") || "لا"}
+                  {translateYesNo(vehicle.offers && vehicle.offers.length > 0)}
+                </TableCell>
+                <TableCell>{translateYesNo(vehicle.is_include_tax)}</TableCell>
+                <TableCell>
+                  {translateYesNo(vehicle.is_include_warranty)}
                 </TableCell>
                 <TableCell>
-                  {vehicle.is_include_tax ? t("yes") || "نعم" : t("no") || "لا"}
+                  {translateYesNo(vehicle.is_Insurance_warranty)}
                 </TableCell>
-                <TableCell>
-                  {vehicle.is_include_warranty
-                    ? t("yes") || "نعم"
-                    : t("no") || "لا"}
-                </TableCell>
-                <TableCell>
-                  {vehicle.is_Insurance_warranty
-                    ? t("yes") || "نعم"
-                    : t("no") || "لا"}
-                </TableCell>
-                <TableCell>
-                  {vehicle.is_rent_to_own ? t("yes") || "نعم" : t("no") || "لا"}
-                </TableCell>
+                <TableCell>{translateYesNo(vehicle.is_rent_to_own)}</TableCell>
                 <TableCell>{vehicle.views || 0}</TableCell>
-                <TableCell>{formatDate(vehicle.created_at)}</TableCell>
+                <TableCell>
+                  {vehicle.created_at ? formatDate(vehicle.created_at) : "-"}
+                </TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                   <Switch
                     isSelected={
@@ -353,7 +380,7 @@ const CarsTable = ({
               transition={{ duration: 0.3 }}
               className="fixed top-0 right-0 h-full md:w-[493px] w-[300px] bg-white shadow-lg z-50 overflow-y-auto"
             >
-              <ConversationPage />
+              <ConversationPage conversationId={openChatId} />
             </motion.div>
           </>
         )}
