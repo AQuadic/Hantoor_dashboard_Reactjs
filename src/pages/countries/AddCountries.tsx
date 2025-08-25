@@ -1,6 +1,9 @@
+import toast from "react-hot-toast";
+import { storeCountry } from "@/api/countries/addCountry";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
+import { useNavigate } from "react-router";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -8,9 +11,49 @@ const AddCountries = () => {
   const { t } = useTranslation("country");
   const [arCountry, setArCountry] = useState("");
   const [enCountry, setEnCountry] = useState("");
+  const [code, setCode] = useState("");
   const [arCurrency, setArCurrency] = useState("");
   const [enCurrency, setEnCurrency] = useState("");
   const [tax, setTax] = useState("");
+  const [timeType, setTimeType] = useState<"month" | "day" | "year">("month");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async () => {
+  try {
+    setLoading(true);
+    await storeCountry({
+      name: { ar: arCountry, en: enCountry },
+      code,
+      currency: { ar: arCurrency, en: enCurrency },
+      tax,
+      time_type: timeType,
+      is_active: true,
+    });
+
+    toast.success(t("countryAddedSuccessfully"));
+    navigate("/countries");
+    setArCountry("");
+    setEnCountry("");
+    setCode("");
+    setArCurrency("");
+    setEnCurrency("");
+    setTax("");
+    setTimeType("month");
+  } catch (error: any) {
+    console.error("Failed to create country:", error);
+
+    const message =
+      error?.response?.data?.message ||
+      error?.message ||
+      t("failedToAdd");
+
+    toast.error(message);
+  } finally {
+    setLoading(false);
+  }
+};
+
   return (
     <section>
       <DashboardHeader
@@ -23,7 +66,7 @@ const AddCountries = () => {
         ]}
       />
 
-      <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
+      <div className=" bg-white mt-3 rounded-[15px] py-[19px] md:px-[29px] px-2 md:mx-8 mx-2">
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Arabic country */}
           <div className="relative w-full ">
@@ -79,17 +122,35 @@ const AddCountries = () => {
             <p className="text-right text-black text-sm">{t("time")}</p>
             <div className="flex items-center justify-between gap-1">
               <span className="text-gray-500 text-sm">3</span>
-              <select className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer">
-                <option value="شهر">{t("month")}</option>
-                <option value="أيام">{t("day")}</option>
-                <option value="سنوات">{t("year")}</option>
+              <select
+                className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
+                value={timeType}
+                onChange={(e) => setTimeType(e.target.value)}
+              >
+                <option value="month">{t("month")}</option>
+                <option value="day">{t("day")}</option>
+                <option value="year">{t("year")}</option>
               </select>
             </div>
           </div>
         </div>
 
+        <div className="relative w-full mt-4">
+          <DashboardInput
+            label={t("countryCode")}
+            value={code}
+            onChange={setCode}
+            placeholder="EG"
+          />
+        </div>
+
+
         <div className="mt-4">
-          <DashboardButton titleAr={"اضافة"} titleEn={"Add"} />
+          <DashboardButton
+            titleAr={loading ? "جاري الاضافة..." : "اضافة"}
+            titleEn={loading ? "Adding..." : "Add"}
+            onClick={handleSubmit}
+          />
         </div>
       </div>
     </section>

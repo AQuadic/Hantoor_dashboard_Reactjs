@@ -14,5 +14,7 @@
     "currency": "Currency",
     "NOUsers": "Number of users",
     "dateAndTime": "Date & time added",
-    "status": "Status"
+    "status": "Status",
+    "countryCode": "Country code",
+    "countryAddedSuccessfully": "Country added successfully"
 }

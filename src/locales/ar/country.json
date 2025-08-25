@@ -14,5 +14,7 @@
     "currency": "العملة",
     "NOUsers": "عدد المشتركين من المستخدمين",
     "dateAndTime": "تاريخ ووقت الاضافة",
-    "status": "الحالة"
+    "status": "الحالة",
+    "countryCode": "كود البلد",
+    "countryAddedSuccessfully": "تم اضافة البلد بنجاح"
 }
