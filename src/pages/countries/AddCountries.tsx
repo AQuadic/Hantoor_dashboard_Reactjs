@@ -12,6 +12,7 @@ const AddCountries = () => {
   const [arCountry, setArCountry] = useState("");
   const [enCountry, setEnCountry] = useState("");
   const [code, setCode] = useState("");
+  const [currencyCode, setCurrencyCode] = useState("");
   const [arCurrency, setArCurrency] = useState("");
   const [enCurrency, setEnCurrency] = useState("");
   const [tax, setTax] = useState("");
@@ -26,6 +27,7 @@ const AddCountries = () => {
         name: { ar: arCountry, en: enCountry },
         code,
         currency: { ar: arCurrency, en: enCurrency },
+        currency_code: currencyCode,
         tax,
         time_type: timeType,
         is_active: true,
@@ -38,6 +40,7 @@ const AddCountries = () => {
       setCode("");
       setArCurrency("");
       setEnCurrency("");
+      setCurrencyCode("");
       setTax("");
       setTimeType("month");
     } catch (error: unknown) {
@@ -141,13 +144,23 @@ const AddCountries = () => {
           </div>
         </div>
 
-        <div className="relative w-full mt-4">
+        <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
+        <div className="relative w-full">
           <DashboardInput
             label={t("countryCode")}
             value={code}
             onChange={setCode}
             placeholder="EG"
           />
+        </div>
+        <div className="relative w-full">
+          <DashboardInput
+            label={t("currencyCode")}
+            value={currencyCode}
+            onChange={setCurrencyCode}
+            placeholder="AED"
+          />
+        </div>
         </div>
 
         <div className="mt-4">

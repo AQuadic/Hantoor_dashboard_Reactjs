@@ -18,5 +18,6 @@
     "countryCode": "Country code",
     "countryAddedSuccessfully": "Country added successfully",
     "countryDeleted": "Country deleted successfully",
-    "searchByName": "Search by name"
+    "searchByName": "Search by name",
+    "currencyCode": "Currency code"
 }

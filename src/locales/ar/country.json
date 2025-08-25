@@ -18,5 +18,6 @@
     "countryCode": "كود البلد",
     "countryAddedSuccessfully": "تم اضافة البلد بنجاح",
     "countryDeleted": "تم حذف البلد بنجاح",
-    "searchByName": "ابحث بالاسم"
+    "searchByName": "ابحث بالاسم",
+    "currencyCode": "كود العملة"
 }

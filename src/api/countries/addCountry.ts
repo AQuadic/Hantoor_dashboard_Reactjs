@@ -10,6 +10,7 @@ export interface CountryPayload {
     ar: string;
     en: string;
   };
+  currency_code?: string;
   tax?: string;
   time_type?: "day" | "month" | "year";
   is_active?: boolean;
