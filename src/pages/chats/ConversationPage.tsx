@@ -57,7 +57,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     error: messagesError,
   } = useQuery({
     queryKey: ["messages", conversationId],
-    queryFn: () => fetchMessages(conversationId!, 1, 20),
+    queryFn: () => fetchMessages(conversationId!, 1, 3),
     enabled: !!conversationId,
   });
 

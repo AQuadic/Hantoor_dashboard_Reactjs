@@ -6,9 +6,13 @@ import { useTranslation } from "react-i18next";
 
 interface ChatHeaderProps {
   setSearchTerm?: (term: string) => void;
+  searchTerm?: string;
 }
 
-const ChatHeader: React.FC<ChatHeaderProps> = ({ setSearchTerm }) => {
+const ChatHeader: React.FC<ChatHeaderProps> = ({
+  setSearchTerm,
+  searchTerm,
+}) => {
   const { t } = useTranslation("chats");
 
   return (
@@ -25,8 +29,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ setSearchTerm }) => {
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
           <SearchBar
-            termAr=""
-            termEn=""
+            termAr={searchTerm || ""}
+            termEn={searchTerm || ""}
             setTermAr={setSearchTerm || (() => {})}
             setTermEn={setSearchTerm || (() => {})}
             placeholder={t("searchByName") || "Search by name"}

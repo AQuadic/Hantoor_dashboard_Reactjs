@@ -87,7 +87,7 @@ const ChatPage = () => {
 
   return (
     <div>
-      <ChatHeader setSearchTerm={setSearchTerm} />
+      <ChatHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
       <div className="px-2 md:px-8">
         <ChatTable
           conversations={conversationsData?.data || []}
