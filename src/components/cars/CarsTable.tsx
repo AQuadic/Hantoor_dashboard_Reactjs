@@ -24,6 +24,7 @@ import {
   fetchVehicles,
   deleteVehicle,
   toggleVehicleStatus,
+  getVehicleName,
   type Vehicle,
   type VehicleFilters,
   type VehiclesApiResponse,
@@ -232,9 +233,9 @@ const CarsTable = ({
     return vehicle.image || carImage;
   };
 
-  // Helper function to safely get vehicle name (API returns name as string)
-  const getVehicleName = (vehicle: Vehicle) => {
-    return vehicle.name || "-";
+  // Helper function to safely get vehicle name (API returns name as string or VehicleName object)
+  const getVehicleDisplayName = (vehicle: Vehicle) => {
+    return getVehicleName(vehicle.name) || "-";
   };
 
   // Translate boolean-ish values to localized Yes/No
@@ -317,14 +318,14 @@ const CarsTable = ({
                 <TableCell>
                   <img
                     src={getVehicleImage(vehicle)}
-                    alt={getVehicleName(vehicle)}
+                    alt={getVehicleDisplayName(vehicle)}
                     className="w-[93px] h-[60px] object-cover rounded"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = carImage;
                     }}
                   />
                 </TableCell>
-                <TableCell>{getVehicleName(vehicle)}</TableCell>
+                <TableCell>{getVehicleDisplayName(vehicle)}</TableCell>
                 <TableCell>
                   {vehicle.brand?.name?.ar || vehicle.brand?.name?.en || "-"}
                 </TableCell>

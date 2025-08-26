@@ -14,6 +14,14 @@ export interface VehicleName {
   en: string;
 }
 
+// Helper function to get vehicle name from string or VehicleName object
+export function getVehicleName(name: string | VehicleName): string {
+  if (typeof name === "string") {
+    return name;
+  }
+  return name.ar || name.en || "";
+}
+
 export interface VehicleDescription {
   ar: string;
   en: string;
@@ -109,7 +117,7 @@ export interface VehicleModel {
 // Main Vehicle interface
 export interface Vehicle {
   id: number;
-  name: string; // API returns name as string, not VehicleName object
+  name: string | VehicleName; // API returns name as string OR VehicleName object
   country_id: number;
   brand_id: number;
   agent_id: number;

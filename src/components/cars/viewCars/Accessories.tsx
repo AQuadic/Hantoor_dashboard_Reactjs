@@ -1,6 +1,13 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import accessoriesImg from '/images/accessories.png';
-import accessoriesImg2 from '/images/accessories2.png';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import accessoriesImg from "/images/accessories.png";
+import accessoriesImg2 from "/images/accessories2.png";
 import { Switch } from "@heroui/react";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 
@@ -15,7 +22,7 @@ const Accessories = () => {
       image: accessoriesImg2,
       name: "سيراميك",
       price: "500 درهم",
-    }
+    },
   ];
 
   return (
@@ -36,8 +43,25 @@ const Accessories = () => {
             {accessories.map((accessory, index) => (
               <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell><img src={accessory.image} alt={accessory.name} /></TableCell>
-                <TableCell>{accessory.name}</TableCell>
+                <TableCell>
+                  <img
+                    src={accessory.image}
+                    alt={
+                      typeof accessory.name === "string"
+                        ? accessory.name
+                        : (accessory.name as { ar: string; en: string })?.ar ||
+                          (accessory.name as { ar: string; en: string })?.en ||
+                          "accessory"
+                    }
+                  />
+                </TableCell>
+                <TableCell>
+                  {typeof accessory.name === "string"
+                    ? accessory.name
+                    : (accessory.name as { ar: string; en: string })?.ar ||
+                      (accessory.name as { ar: string; en: string })?.en ||
+                      "-"}
+                </TableCell>
                 <TableCell className="w-full">{accessory.price}</TableCell>
                 <TableCell className="flex items-center gap-[7px]">
                   <Switch />
