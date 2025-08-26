@@ -1,11 +1,12 @@
 import { axios } from "@/lib/axios";
 
 export interface UpdateBodyTypePayload {
-  name: {
+  name?: {
     ar: string;
     en: string;
   };
-  agent_id: number;
+  agent_id?: number;
+   vehicle_model_id?: number;
   is_active?: boolean;
 }
 
