@@ -4,39 +4,39 @@ import VideoInput from "@/components/general/VideoInput";
 import MultiImageInput from "@/components/general/MultiImageInput";
 import { Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useVehicleForm } from "@/contexts/VehicleFormContext";
 
 const PhotosAndVideos = () => {
   const { t } = useTranslation("cars");
-  const [mainImage, setMainImage] = React.useState<File | null>(null);
-  const [images, setImages] = React.useState<File[] | null>(null);
+  const { formData, updateField } = useVehicleForm();
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
-
-  const [video, setVideo] = React.useState<File | null>(null);
 
   const handleRemoveImage = (indexToRemove: number, e?: React.MouseEvent) => {
     if (e) {
       e.stopPropagation();
     }
-
-    if (images) {
-      const updatedImages = images.filter(
-        (_, index) => index !== indexToRemove,
-      );
-      setImages(updatedImages.length > 0 ? updatedImages : null);
-    }
+    const updatedImages =
+      formData?.carImages?.filter((_, index) => index !== indexToRemove) || [];
+    updateField?.("carImages", updatedImages);
   };
 
+  // Convert carImages (VehicleImage[]) to File[] for MultiImageInput
+  const convertedImages =
+    (formData?.carImages
+      ?.map((img) => img.image)
+      .filter((img) => img instanceof File) as File[]) || null;
+
   useEffect(() => {
-    if (images && images.length > 0) {
+    if (convertedImages && convertedImages.length > 0) {
       const previews: string[] = [];
       let loadedCount = 0;
 
-      images.forEach((file, index) => {
+      convertedImages.forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = (e) => {
           previews[index] = e.target?.result as string;
           loadedCount++;
-          if (loadedCount === images.length) {
+          if (loadedCount === convertedImages.length) {
             setImagePreviews([...previews]);
           }
         };
@@ -45,32 +45,59 @@ const PhotosAndVideos = () => {
     } else {
       setImagePreviews([]);
     }
-  }, [images]);
+  }, [convertedImages]);
 
   return (
     <section>
       <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
         <h1 className="text-lg text-primary font-bold mb-2">
-          {t('photosAndVideos')}
+          {t("photosAndVideos")}
         </h1>
         <div className="flex md:flex-row flex-col gap-4">
           <ImageInput
-            image={mainImage}
-            setImage={setMainImage}
+            image={formData?.mainImage as File | null}
+            setImage={(value) => {
+              const newImage =
+                typeof value === "function"
+                  ? value(formData?.mainImage as File | null)
+                  : value;
+              updateField?.("mainImage", newImage);
+            }}
             width={555}
             height={231}
           />
           <div className="flex md:flex-col flex-row gap-[11px]">
             <MultiImageInput
-              images={images}
-              setImages={setImages}
+              images={convertedImages}
+              setImages={(value) => {
+                const newImages =
+                  typeof value === "function" ? value(convertedImages) : value;
+                if (newImages) {
+                  const vehicleImages = newImages.map((img) => ({
+                    image: img,
+                  }));
+                  updateField?.("carImages", vehicleImages);
+                } else {
+                  updateField?.("carImages", []);
+                }
+              }}
               height={110}
             />
-            <VideoInput video={video} setVideo={setVideo} height={110} />
+            <VideoInput
+              video={formData?.videoFile as File | null}
+              setVideo={(value) => {
+                const newVideo =
+                  typeof value === "function"
+                    ? value(formData?.videoFile as File | null)
+                    : value;
+                updateField?.("videoFile", newVideo);
+              }}
+              height={110}
+            />
           </div>
         </div>
       </div>
-      {images?.length && (
+      {convertedImages?.length && convertedImages.length > 0 && (
         <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
           <h1 className="text-lg text-primary font-bold mb-2">
             الصور الاضافية
@@ -84,20 +111,17 @@ const PhotosAndVideos = () => {
                 relative overflow-hidden border border-gray-200 w-[210px]
            h-[160px]`}
               >
-                {/* Image */}
                 <img
                   src={preview}
-                  alt={`Uploaded preview ${index + 1}`}
-                  className={`w-full h-full object-cover ${"rounded-lg"}`}
+                  alt={`Preview ${index + 1}`}
+                  className="w-full h-full object-cover"
                 />
-
-                {/* Remove button - always visible in center */}
                 <button
                   onClick={(e) => handleRemoveImage(index, e)}
-                  className="absolute inset-0 m-auto bg-black/70 text-white rounded-full p-2 w-10 h-10 flex items-center justify-center transition-colors duration-200 z-10 hover:bg-black/90"
+                  className="absolute top-2 right-2 bg-black text-white rounded-full p-1 transition-colors duration-200 z-10 hover:bg-gray-800"
                   aria-label="Remove image"
                 >
-                  <Trash2 size={20} />
+                  <Trash2 size={16} />
                 </button>
               </div>
             ))}

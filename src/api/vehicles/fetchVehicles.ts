@@ -1,5 +1,13 @@
 import { axios } from "@/lib/axios";
 
+// Import existing types to avoid conflicts
+import { VehicleType } from "@/api/models/carTypes/getCarTypes";
+import { VehicleClass } from "@/api/categories/getCategory";
+import { BrandOrigin } from "@/api/models/brandOrigin/getBrandOrigin";
+import { EngineType } from "@/api/models/engineTypes/getEngineType";
+import { VehicleBody as VehicleBodyType } from "@/api/models/structureType/getStructure";
+import { numOfSeats as NumberOfSeat } from "@/api/models/seats/getSeats";
+
 // Base interfaces for vehicle data
 export interface VehicleName {
   ar: string;
@@ -101,30 +109,30 @@ export interface VehicleModel {
 // Main Vehicle interface
 export interface Vehicle {
   id: number;
-  name: string | VehicleName; // API can return either string or VehicleName object
-  country_id?: number;
-  brand_id?: number;
-  agent_id?: number;
-  vehicle_model_id?: number;
-  vehicle_body_type_id?: number;
-  vehicle_type_id?: number;
-  vehicle_class_id?: number;
-  brand_origin_id?: number;
-  number_of_seat_id?: number;
-  engine_type_id?: number;
+  name: string; // API returns name as string, not VehicleName object
+  country_id: number;
+  brand_id: number;
+  agent_id: number;
+  vehicle_model_id: number;
+  vehicle_body_type_id: number;
+  vehicle_type_id: number;
+  vehicle_class_id: number;
+  brand_origin_id: number;
+  number_of_seat_id: number;
+  engine_type_id: number;
   engine_volume_id?: number; // Added as it might be present in some responses
   price: string;
   is_discount: boolean | null;
-  discount_value?: string | null;
-  discount_date?: string | null;
+  discount_value: string | null;
+  discount_date: string | null;
   is_include_tax: boolean;
   is_Insurance_warranty: boolean;
   is_include_warranty: boolean;
-  views?: number;
+  views: number;
   is_rent_to_own: boolean;
-  rent_to_own_duration?: string | number | null;
-  rent_to_own_whatsapp?: string | null;
-  rent_to_own_price?: string | null;
+  rent_to_own_duration: number | null;
+  rent_to_own_whatsapp: string | null;
+  rent_to_own_price: string | null;
   is_active?: boolean; // Status field for vehicle activation
   status?: number; // Backend status field (1 for active, 0 for inactive)
   created_at: string | null;
@@ -140,15 +148,15 @@ export interface Vehicle {
   offers: VehicleOffer[];
   accessories: VehicleAccessory[];
   packages: VehiclePackage[];
-  brand?: VehicleBrand;
-  agent?: VehicleAgent;
-  vehicle_model?: VehicleModel;
-  vehicle_body_type?: unknown;
-  vehicle_type?: unknown;
-  vehicle_class?: unknown;
-  brand_origin?: unknown;
-  number_of_seat?: unknown;
-  engine_type?: unknown;
+  brand: VehicleBrand | null;
+  agent: VehicleAgent | null;
+  vehicle_model: VehicleModel | null;
+  vehicle_body_type: VehicleBodyType | null;
+  vehicle_type: VehicleType | null;
+  vehicle_class: VehicleClass | null;
+  brand_origin: BrandOrigin | null;
+  number_of_seat: NumberOfSeat | null;
+  engine_type: EngineType | null;
 }
 
 // API Response interface for paginated results
@@ -576,6 +584,39 @@ export async function updateVehicle(
     formData.append("is_rent_to_own", data.is_rent_to_own ? "1" : "0");
   }
 
+  // Add files
+  if (data.image) {
+    formData.append("image", data.image);
+  }
+  if (data.video) {
+    formData.append("video", data.video);
+  }
+
+  // Add image arrays
+  if (data.images?.length) {
+    data.images.forEach((img, index) => {
+      if (img.image instanceof File) {
+        formData.append(`images[${index}][image]`, img.image);
+      }
+    });
+  }
+
+  if (data.additional_images?.length) {
+    data.additional_images.forEach((img, index) => {
+      if (img.image instanceof File) {
+        formData.append(`additional_images[${index}][image]`, img.image);
+      }
+    });
+  }
+
+  if (data.ads_images?.length) {
+    data.ads_images.forEach((img, index) => {
+      if (img.image instanceof File) {
+        formData.append(`ads_images[${index}][image]`, img.image);
+      }
+    });
+  }
+
   // Add offers
   if (data.offers?.length) {
     data.offers.forEach((offer, index) => {
@@ -670,15 +711,10 @@ export async function toggleVehicleStatus(
   id: number,
   isActive: boolean
 ): Promise<Vehicle> {
-  const formData = new FormData();
-  formData.append("_method", "PUT");
-  formData.append("is_active", isActive ? "1" : "0");
+  // Send a PATCH request with JSON payload (is_active as numeric 1/0)
+  const payload = { is_active: isActive ? 1 : 0 };
 
-  const response = await axios.post(`/admin/vehicle/${id}`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  const response = await axios.patch(`/admin/vehicle/${id}`, payload);
   const responseData = response.data as VehicleApiResponseWrapper;
   return responseData.data;
 }
