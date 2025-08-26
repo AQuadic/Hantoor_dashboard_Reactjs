@@ -53,7 +53,7 @@ const AboutCar = () => {
           </TableHeader>
           <TableBody>
             {insuranceData.map((row, idx) => (
-              <TableRow key={idx}>
+              <TableRow key={idx} noBackgroundColumns={1}>
                 <TableCell className="min-w-[15%]">{row.taxIncluded}</TableCell>
                 <TableCell className="min-w-[15%]">
                   {row.warrantyIncluded}
