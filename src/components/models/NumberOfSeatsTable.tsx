@@ -16,6 +16,7 @@ import { deleteSeats } from "@/api/models/seats/deleteSeats";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
+import { updateNumberOfSeats } from "@/api/models/seats/editNumOfSeats";
 
 interface NumberOfSeatsTableProps {
   search?: string;
@@ -74,6 +75,21 @@ export function NumberOfSeatsTable({
     }
   };
 
+  const handleToggleStatus = async (id: number, current: boolean) => {
+    try {
+      await updateNumberOfSeats(id, { is_active: !current });
+      toast.success(!current ? t("seatActivated") : t("seatDeactivated"));
+      refetch();
+    } catch (error: unknown) {
+      let errorMsg = t("somethingWentWrong");
+      if (typeof error === "object" && error !== null) {
+        // @ts-expect-error: error may have response/message properties from axios or JS Error
+        errorMsg = error?.response?.data?.message || error?.message || errorMsg;
+      }
+      toast.error(errorMsg);
+    }
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -98,7 +114,10 @@ export function NumberOfSeatsTable({
               )}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch isSelected={!!seat.is_active} />
+              <Switch
+                isSelected={!!seat.is_active}
+                onChange={() => handleToggleStatus(seat.id, !!seat.is_active)}
+              />
               <Link to={`/seats/edit/${seat.id}`}>
                 <Edit />
               </Link>

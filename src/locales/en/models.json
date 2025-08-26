@@ -74,5 +74,7 @@
     "carTypeActivated": "Car type activated successfully",
     "carTypeDeactivated": "Car type deactivated successfully",
     "brandOriginActivated": "Brand origin activated successfully",
-    "brandOriginDeactivated": "Brand origin deactivated successfully"
+    "brandOriginDeactivated": "Brand origin deactivated successfully",
+    "seatActivated": "Seat activated successfully",
+    "seatDeactivated": "Seat deactivated successfully"
 }
