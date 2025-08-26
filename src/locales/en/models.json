@@ -65,7 +65,8 @@
     "fillAllFields": "Please fill all fields",
 
     "categoryAddedSuccessfully": "Category added successfully",
-    "categoryUpdated": "Category updated successfully",
+    "countryActivated": "Country activated successfully",
+    "countryDeactivated": "Country deactivated successfully",
     "modelActivated": "Model activated successfully",
     "modelDeactivated": "Model deactivated successfully",
     "bodyTypeActivated": "Body type activated successfully",

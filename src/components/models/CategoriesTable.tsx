@@ -25,6 +25,7 @@ import {
 import { deleteCategory } from "@/api/categories/deleteCategory";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
+import { updateVehicleClass } from "@/api/categories/editCategory";
 
 interface CategoriesTableProps {
   search?: string;
@@ -100,6 +101,16 @@ export function CategoriesTable({
     refetch();
   };
 
+  const handleToggleStatus = async (id: number, current: boolean) => {
+    try {
+      await updateVehicleClass(id, { is_active: !current });
+      toast.success(!current ? t("countryActivated") : t("countryDeactivated"));
+      refetch();
+    } catch (error: any) {
+      toast.error(error.message || t("error"));
+    }
+  };
+
   const classes = Array.isArray(classesResponse)
     ? classesResponse
     : classesResponse?.data || [];
@@ -135,7 +146,10 @@ export function CategoriesTable({
               {typeMap[item.vehicle_type_id] || item.vehicle_type_id}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch isSelected={item.is_active} />
+              <Switch
+                  isSelected={item.is_active}
+                  onChange={() => handleToggleStatus(item.id, item.is_active)}
+                />
               <Link to={`/categories/${item.id}`}>
                 <Edit />
               </Link>
