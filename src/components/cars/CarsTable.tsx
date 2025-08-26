@@ -161,7 +161,15 @@ const CarsTable = ({
   const formatDate = (dateString: string) => {
     try {
       const date = new Date(dateString);
-      return date.toLocaleDateString("ar-EG", {
+      // Use the current i18n language but force Latin numerals for Arabic locales
+      const baseLocale = i18n?.language || "en-US";
+      const locale = baseLocale.startsWith("ar")
+        ? // Use Unicode locale extension to force Latin digits (nu=latn)
+          `${baseLocale}-u-nu-latn`
+        : baseLocale;
+
+      // Use toLocaleString so date and time are both included
+      return date.toLocaleString(locale, {
         year: "numeric",
         month: "2-digit",
         day: "2-digit",
