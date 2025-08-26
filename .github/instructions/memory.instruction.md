@@ -432,3 +432,6 @@ The API response has two data layers - outer wrapper with success field, inner p
 
 **Solution:**
 Created wrapper interfaces and modified all API functions to extract nested data correctly.
+2025-08-26: UI fix - CarsTable date formatting
+
+- ✅ Updated `src/components/cars/CarsTable.tsx` `formatDate` to force Latin numerals for Arabic locales using the Unicode extension `-u-nu-latn` so "تاريخ ووقت الاضافة" displays numbers in English/Latin digits while keeping Arabic locale formatting for month/day order.
