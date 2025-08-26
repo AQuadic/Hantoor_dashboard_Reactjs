@@ -1,49 +1,42 @@
 import { Checkbox, Input } from "@heroui/react";
-import React, { useState } from "react";
-import { CarDetailsFieldsTypes } from "@/types/CarTypes";
+import React from "react";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import ImageInput from "@/components/general/ImageInput";
 import { useTranslation } from "react-i18next";
+import { useVehicleForm } from "@/contexts/VehicleFormContext";
 
 const CarOffers = () => {
   const { t } = useTranslation("cars");
-  const [carDetailsFields, setCarDetailsFields] = useState<CarDetailsFieldsTypes[]>([
-    {
-      image: null,
-      titleEn: "",
-      titleAr: "",
-      descriptionEn: "",
-      descriptionAr: "",
-    },
-  ]);
+  const { offers, addOffer, updateOffer, removeOffer } = useVehicleForm();
 
   const addCarDetailsField = () => {
-    setCarDetailsFields([
-      ...carDetailsFields,
-      {
-        image: null,
-        titleEn: "",
-        titleAr: "",
-        descriptionEn: "",
-        descriptionAr: "",
-      },
-    ]);
+    addOffer();
   };
 
   const removeCarDetailsField = (index: number) => {
-    const updatedFields = carDetailsFields.filter((_, i) => i !== index);
-    setCarDetailsFields(updatedFields);
+    removeOffer(index);
   };
 
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] ">
       <h1 className="text-lg text-[#2A32F8] font-bold mb-2">{t("offers")}</h1>
 
-      {carDetailsFields.map((field, index) => (
+      {offers.map((offer, index) => (
         <div key={index} className="mt-4 flex items-center gap-4 pt-4">
           <span className="min-w-[65px]">
-            <ImageInput image={field.image} setImage={() => {}} width={65} height={65} />
+            <ImageInput
+              image={offer.image as File | null}
+              setImage={(value) => {
+                const newImage =
+                  typeof value === "function"
+                    ? value(offer.image as File | null)
+                    : value;
+                updateOffer(index, { image: newImage });
+              }}
+              width={65}
+              height={65}
+            />
           </span>
 
           <div className="w-full">
@@ -53,8 +46,12 @@ const CarOffers = () => {
               placeholder={t("writeHere")}
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
-              value={field.titleAr}
-              onChange={() => {}}
+              value={offer.name?.ar || ""}
+              onChange={(e) =>
+                updateOffer(index, {
+                  name: { ...offer.name, ar: e.target.value },
+                })
+              }
             />
           </div>
 
@@ -65,8 +62,12 @@ const CarOffers = () => {
               placeholder={t("writeHere")}
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
-              value={field.titleEn}
-              onChange={() => {}}
+              value={offer.name?.en || ""}
+              onChange={(e) =>
+                updateOffer(index, {
+                  name: { ...offer.name, en: e.target.value },
+                })
+              }
             />
           </div>
 
@@ -77,8 +78,12 @@ const CarOffers = () => {
               placeholder={t("writeHere")}
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
-              value={field.descriptionAr}
-              onChange={() => {}}
+              value={offer.description?.ar || ""}
+              onChange={(e) =>
+                updateOffer(index, {
+                  description: { ...offer.description, ar: e.target.value },
+                })
+              }
             />
           </div>
 
@@ -89,18 +94,29 @@ const CarOffers = () => {
               placeholder={t("writeHere")}
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
-              value={field.descriptionEn}
-              onChange={() => {}}
+              value={offer.description?.en || ""}
+              onChange={(e) =>
+                updateOffer(index, {
+                  description: { ...offer.description, en: e.target.value },
+                })
+              }
             />
           </div>
 
-          <Checkbox>
-            <option value="appear">{t('appear')}</option>
+          <Checkbox
+            isSelected={offer.is_active}
+            onValueChange={(checked) =>
+              updateOffer(index, { is_active: checked })
+            }
+          >
+            {t("appear")}
           </Checkbox>
 
           {index !== 0 && (
             <span>
-              <TableDeleteButton handleDelete={() => removeCarDetailsField(index)} />
+              <TableDeleteButton
+                handleDelete={() => removeCarDetailsField(index)}
+              />
             </span>
           )}
         </div>

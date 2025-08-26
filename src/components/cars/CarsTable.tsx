@@ -146,14 +146,8 @@ const CarsTable = ({
   });
 
   const handleDelete = (id: number) => {
-    if (
-      window.confirm(
-        t("confirmDeleteVehicle") ||
-          "Are you sure you want to delete this vehicle?"
-      )
-    ) {
-      deleteVehicleMutation.mutate(id);
-    }
+    // Directly delete without showing a confirmation popup per UX requirement
+    deleteVehicleMutation.mutate(id);
   };
 
   const handleToggleStatus = (vehicle: Vehicle) => {
@@ -238,15 +232,9 @@ const CarsTable = ({
     return vehicle.image || carImage;
   };
 
-  // Helper function to safely get vehicle name (handles both string and object formats)
+  // Helper function to safely get vehicle name (API returns name as string)
   const getVehicleName = (vehicle: Vehicle) => {
-    if (typeof vehicle.name === "string") {
-      return vehicle.name;
-    } else if (vehicle.name && typeof vehicle.name === "object") {
-      // Handle VehicleName object format
-      return vehicle.name.ar || vehicle.name.en || "-";
-    }
-    return "-";
+    return vehicle.name || "-";
   };
 
   // Translate boolean-ish values to localized Yes/No

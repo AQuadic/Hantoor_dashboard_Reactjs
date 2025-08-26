@@ -1,3 +1,15 @@
+# ---
+
+applyTo: "\*\*"
+
+# ---
+
+# 2025-08-26: Removed confirmation dialog from CarsTable delete
+
+- File changed: src/components/cars/CarsTable.tsx
+- Change: Removed window.confirm and now delete runs immediately without popup.
+- Verified: Edit applied in workspace.
+
 # 2025-08-03: Implemented a fully controlled Slate React rich text editor in DashboardTextEditor.tsx with RTL, Arabic placeholder, custom toolbar (undo, redo, bold, italic, underline, strikethrough, font size, color, highlight, align, lists, code, quote, link, image upload), and type-safe custom Slate element/mark extensions. Toolbar is compact, ordered as in screenshot, and uses Lucide icons. File-based image upload (data URL) is supported. All compile and type errors resolved. Toolbar and UI match provided screenshot. Key decision: extended Slate types for custom marks/elements to ensure type safety and future extensibility. All dependencies installed and code follows project conventions. All user-requested features implemented and validated.
 
 # User Memory
@@ -36,6 +48,13 @@ Documentation via code comments and README
 - Enhanced agents listing page with search, pagination, and delete functionality
 - Integrated maintenance centers and sales showrooms as dynamic sub-entities within agents
 - All components properly handle bilingual data (Arabic/English)
+
+2025-08-26: **VEHICLE TYPE FIXING TASK** - Identified type mismatches in Vehicle interface:
+
+- API returns `name` as string, not VehicleName object
+- Related entities (brand, agent, vehicle_model, etc.) can be null or objects
+- Need to fix Vehicle interface to match actual API response structure
+- Sample response shows proper field types that interface should reflect
 - Error handling with toast notifications throughout
 - Project builds successfully with no compilation errors
 - API structure: GET/POST /api/admin/agents, GET/PUT/DELETE /api/admin/agents/{id}
@@ -86,6 +105,19 @@ Successfully replaced all test data in car form "بيانات السيارة" (C
 - Implemented proper TypeScript types for all API responses
 - Created reusable hooks pattern for future dropdown integrations
 - Maintained existing form architecture and context patterns
+
+## Current Task - Edit Car Form Data Loading Issue
+
+**Issue**: When accessing `/cars/edit/:id`, the form doesn't populate with existing vehicle data
+**Status**: Investigating
+
+### Investigation Plan:
+
+- [ ] Check vehicle data fetching and loading states
+- [ ] Examine VehicleFormContext and useVehicleForm hook
+- [ ] Verify API response structure and mapping logic
+- [ ] Test form component data binding
+- [ ] Debug useEffect dependencies and timing issues
 - All dropdowns use proper Hero UI Select component syntax
 - Error handling with fallback data implemented
 

@@ -20,6 +20,7 @@ import {
   updateVehicle,
   fetchVehicleById,
   type UpdateVehiclePayload,
+  type VehicleImage,
 } from "@/api/vehicles";
 
 const AddCarsForm = () => {
@@ -39,64 +40,114 @@ const AddCarsForm = () => {
     queryFn: () => fetchVehicleById(Number(vehicleId)),
     enabled: isEdit && !!vehicleId,
   });
+  console.log("vehicle", vehicle);
 
   // Load vehicle data into form when editing
   React.useEffect(() => {
     if (vehicle && isEdit) {
-      // Helper function to safely extract vehicle name
-      const getVehicleNameValue = (
-        name: string | { ar: string; en: string }
-      ) => {
-        if (typeof name === "string") {
-          return name;
-        } else if (name && typeof name === "object") {
-          return name.ar || name.en || "";
-        }
-        return "";
+      console.log("Loading vehicle data:", vehicle); // Debug log
+
+      // Helper function to convert string URL to VehicleImage array
+      const convertToVehicleImages = (images: unknown[]): VehicleImage[] => {
+        if (!Array.isArray(images)) return [];
+        return images.map((img, index) => ({
+          id: (img as { id?: number }).id || index,
+          image:
+            (img as { url?: string; image?: string }).url ||
+            (img as { url?: string; image?: string }).image ||
+            String(img),
+        }));
       };
 
-      setFormData({
+      // Helper function to handle video array (API returns array, we need first item)
+      const getVideoFile = (videoArray: string[]): string | null => {
+        if (Array.isArray(videoArray) && videoArray.length > 0) {
+          return videoArray[0];
+        }
+        return null;
+      };
+
+      // Helper function to safely convert to string
+      const safeToString = (value: unknown): string => {
+        if (value === null || value === undefined) return "";
+        return String(value);
+      };
+
+      // Handle name field - API returns name as string
+      let nameAr = "";
+      let nameEn = "";
+
+      // Based on API response, vehicle.name is always a string
+      nameAr = vehicle.name || "";
+      nameEn = ""; // English name is not provided in the API response
+
+      const formDataToSet = {
         id: vehicle.id,
-        nameAr:
-          typeof vehicle.name === "object"
-            ? vehicle.name.ar || ""
-            : getVehicleNameValue(vehicle.name),
-        nameEn:
-          typeof vehicle.name === "object"
-            ? vehicle.name.en || ""
-            : getVehicleNameValue(vehicle.name),
-        price: vehicle.price,
-        is_discount: vehicle.is_discount || false,
-        discount_value: vehicle.discount_value || undefined,
-        discount_date: vehicle.discount_date || undefined,
-        is_include_tax: vehicle.is_include_tax,
-        is_Insurance_warranty: vehicle.is_Insurance_warranty,
-        is_include_warranty: vehicle.is_include_warranty,
-        is_rent_to_own: vehicle.is_rent_to_own,
-        rent_to_own_duration:
-          vehicle.rent_to_own_duration?.toString() || undefined,
-        rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp || undefined,
-        rent_to_own_price: vehicle.rent_to_own_price || undefined,
-        country_id: vehicle.country_id?.toString(),
-        brand_id: vehicle.brand_id?.toString(),
-        agent_id: vehicle.agent_id?.toString(),
-        vehicle_model_id: vehicle.vehicle_model_id?.toString(),
-        vehicle_body_type_id: vehicle.vehicle_body_type_id?.toString(),
-        vehicle_type_id: vehicle.vehicle_type_id?.toString(),
-        vehicle_class_id: vehicle.vehicle_class_id?.toString(),
-        brand_origin_id: vehicle.brand_origin_id?.toString(),
-        number_of_seat_id: vehicle.number_of_seat_id?.toString(),
-        engine_type_id: vehicle.engine_type_id?.toString(),
-        engine_volume_id: vehicle.engine_volume_id?.toString(),
+        nameAr,
+        nameEn,
+        price: safeToString(vehicle.price),
+        is_discount: Boolean(vehicle.is_discount),
+        discount_value: vehicle.discount_value
+          ? safeToString(vehicle.discount_value)
+          : "",
+        discount_date: vehicle.discount_date
+          ? safeToString(vehicle.discount_date)
+          : "",
+        is_include_tax: Boolean(vehicle.is_include_tax),
+        is_Insurance_warranty: Boolean(vehicle.is_Insurance_warranty),
+        is_include_warranty: Boolean(vehicle.is_include_warranty),
+        is_rent_to_own: Boolean(vehicle.is_rent_to_own),
+        rent_to_own_duration: vehicle.rent_to_own_duration
+          ? safeToString(vehicle.rent_to_own_duration)
+          : "",
+        rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp
+          ? safeToString(vehicle.rent_to_own_whatsapp)
+          : "",
+        rent_to_own_price: vehicle.rent_to_own_price
+          ? safeToString(vehicle.rent_to_own_price)
+          : "",
+        country_id: vehicle.country_id ? safeToString(vehicle.country_id) : "",
+        brand_id: vehicle.brand_id ? safeToString(vehicle.brand_id) : "",
+        agent_id: vehicle.agent_id ? safeToString(vehicle.agent_id) : "",
+        vehicle_model_id: vehicle.vehicle_model_id
+          ? safeToString(vehicle.vehicle_model_id)
+          : "",
+        vehicle_body_type_id: vehicle.vehicle_body_type_id
+          ? safeToString(vehicle.vehicle_body_type_id)
+          : "",
+        vehicle_type_id: vehicle.vehicle_type_id
+          ? safeToString(vehicle.vehicle_type_id)
+          : "",
+        vehicle_class_id: vehicle.vehicle_class_id
+          ? safeToString(vehicle.vehicle_class_id)
+          : "",
+        brand_origin_id: vehicle.brand_origin_id
+          ? safeToString(vehicle.brand_origin_id)
+          : "",
+        number_of_seat_id: vehicle.number_of_seat_id
+          ? safeToString(vehicle.number_of_seat_id)
+          : "",
+        engine_type_id: vehicle.engine_type_id
+          ? safeToString(vehicle.engine_type_id)
+          : "",
+        engine_volume_id: vehicle.engine_volume_id
+          ? safeToString(vehicle.engine_volume_id)
+          : "",
         mainImage: vehicle.image,
+        videoFile: getVideoFile(vehicle.video),
         offers: vehicle.offers || [],
         packages: vehicle.packages || [],
         features: vehicle.features || [],
         accessories: vehicle.accessories || [],
-        carImages: vehicle.images || [],
-        additionalImages: vehicle.additional_images || [],
-        adsImages: vehicle.images_ads || [],
-      });
+        carImages: convertToVehicleImages(vehicle.images || []),
+        additionalImages: convertToVehicleImages(
+          vehicle.additional_images || []
+        ),
+        adsImages: convertToVehicleImages(vehicle.images_ads || []),
+      };
+
+      console.log("Setting form data:", formDataToSet); // Debug log
+      setFormData(formDataToSet);
     }
   }, [vehicle, isEdit, setFormData]);
 
