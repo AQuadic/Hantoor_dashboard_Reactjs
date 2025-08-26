@@ -67,5 +67,7 @@
     "categoryAddedSuccessfully": "تمت إضافة الفئة بنجاح",
     "categoryUpdated": "تم تحديث الفئة بنجاح",
     "modelActivated": "تم تفعيل الموديل بنجاح",
-    "modelDeactivated": "تم إلغاء تفعيل الموديل بنجاح"
+    "modelDeactivated": "تم إلغاء تفعيل الموديل بنجاح",
+    "bodyTypeActivated": "تم تفعيل نوع الهيكل بنجاح",
+    "bodyTypeDeactivated": "تم إلغاء تفعيل نوع الهيكل بنجاح"
 }

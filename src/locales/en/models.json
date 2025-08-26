@@ -67,5 +67,7 @@
     "categoryAddedSuccessfully": "Category added successfully",
     "categoryUpdated": "Category updated successfully",
     "modelActivated": "Model activated successfully",
-    "modelDeactivated": "Model deactivated successfully"
+    "modelDeactivated": "Model deactivated successfully",
+    "bodyTypeActivated": "Body type activated successfully",
+    "bodyTypeDeactivated": "Body type deactivated successfully"
 }
