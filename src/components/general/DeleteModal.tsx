@@ -48,9 +48,9 @@ export default function DeleteModal({
             <>
               <ModalBody className="flex flex-col items-center gap-3 py-8 ">
                 <img
-                  src="/images/deleteModal.png"
+                  src="/images/deleteIcon.gif"
                   alt="Warning"
-                  className="w-[90px] h-[110px] mb-4"
+                  className="w-[100px] h-[110px] mb-4"
                 />
                 <h4 className="font-bold text-2xl">{t("confirmDeletion")}</h4>
                 <p className="opacity-60 mb-4">{t("areYouSure")}</p>
