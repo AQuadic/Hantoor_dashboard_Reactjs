@@ -78,5 +78,7 @@
     "seatActivated": "تم تفعيل عدد المقاعد بنجاح",
     "seatDeactivated": "تم إلغاء تفعيل عدد المقاعد بنجاح",
     "engineTypeActivated": "تم تفعيل نوع الماكينة بنجاح",
-    "engineTypeDeactivated": "تم إلغاء تفعيل نوع الماكينة بنجاح"
+    "engineTypeDeactivated": "تم إلغاء تفعيل نوع الماكينة بنجاح",
+    "engineSizeActivated": "تم تفعيل حجم الماكينة بنجاح",
+    "engineSizeDeactivated": "تم إلغاء تفعيل حجم الماكينة بنجاح"
 }

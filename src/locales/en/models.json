@@ -78,5 +78,7 @@
     "seatActivated": "Seat activated successfully",
     "seatDeactivated": "Seat deactivated successfully",
     "engineTypeActivated": "Engine type activated successfully",
-    "engineTypeDeactivated": "Engine type deactivated successfully"
+    "engineTypeDeactivated": "Engine type deactivated successfully",
+    "engineSizeActivated": "Engine size activated successfully",
+    "engineSizeDeactivated": "Engine size deactivated successfully"
 }
