@@ -71,5 +71,7 @@
     "bodyTypeActivated": "Body type activated successfully",
     "bodyTypeDeactivated": "Body type deactivated successfully",
     "carTypeActivated": "Car type activated successfully",
-    "carTypeDeactivated": "Car type deactivated successfully"
+    "carTypeDeactivated": "Car type deactivated successfully",
+    "brandOriginActivated": "Brand origin activated successfully",
+    "brandOriginDeactivated": "Brand origin deactivated successfully"
 }
