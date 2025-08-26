@@ -65,5 +65,7 @@
     "fillAllFields": "يرجى ملء جميع الحقول",
 
     "categoryAddedSuccessfully": "تمت إضافة الفئة بنجاح",
-    "categoryUpdated": "تم تحديث الفئة بنجاح"
+    "categoryUpdated": "تم تحديث الفئة بنجاح",
+    "modelActivated": "تم تفعيل الموديل بنجاح",
+    "modelDeactivated": "تم إلغاء تفعيل الموديل بنجاح"
 }

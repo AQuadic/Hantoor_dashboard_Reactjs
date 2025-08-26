@@ -65,5 +65,7 @@
     "fillAllFields": "Please fill all fields",
 
     "categoryAddedSuccessfully": "Category added successfully",
-    "categoryUpdated": "Category updated successfully"
+    "categoryUpdated": "Category updated successfully",
+    "modelActivated": "Model activated successfully",
+    "modelDeactivated": "Model deactivated successfully"
 }
