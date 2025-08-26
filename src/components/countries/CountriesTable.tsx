@@ -62,8 +62,8 @@ const CountriesTable = ({
               </TableCell>
               <TableCell>
                 {i18n.language === "ar"
-                  ? country.currency?.ar || "-"
-                  : country.currency?.en || "-"}
+                  ? country.currency_text?.ar || "-"
+                  : country.currency_text?.en || "-"}
               </TableCell>
               <TableCell style={{ textAlign: "center" }}>0</TableCell>
               <TableCell className="w-full">

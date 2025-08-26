@@ -7,7 +7,7 @@ export interface Country {
     en: string;
   };
   code: string;
-  currency: {
+  currency_text: {
     ar: string;
     en: string;
   } | null;
