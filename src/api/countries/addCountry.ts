@@ -6,7 +6,7 @@ export interface CountryPayload {
     en: string;
   };
   code: string;
-  currency?: {
+  currency_text?: {
     ar: string;
     en: string;
   };
@@ -23,7 +23,7 @@ export interface CountryResponse {
     en: string;
   };
   code: string;
-  currency: {
+  currency_text: {
     ar: string;
     en: string;
   } | null;

@@ -26,7 +26,7 @@ const AddCountries = () => {
       await storeCountry({
         name: { ar: arCountry, en: enCountry },
         code,
-        currency: { ar: arCurrency, en: enCurrency },
+        currency_text: { ar: arCurrency, en: enCurrency },
         currency_code: currencyCode,
         tax,
         time_type: timeType,
