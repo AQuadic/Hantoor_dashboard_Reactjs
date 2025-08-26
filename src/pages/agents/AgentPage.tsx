@@ -136,15 +136,17 @@ const AgentPage = () => {
           onDelete={handleDelete}
           onToggleActive={handleToggleActive}
         />
-        <TablePagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={agentsData?.last_page || 1}
-          totalItems={agentsData?.total || 0}
-          itemsPerPage={agentsData?.per_page || 10}
-          from={agentsData?.from || 0}
-          to={agentsData?.to || 0}
-        />
+        {agentsData?.data && agentsData.data.length > 0 && (
+          <TablePagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={agentsData?.last_page || 1}
+            totalItems={agentsData?.total || 0}
+            itemsPerPage={agentsData?.per_page || 10}
+            from={agentsData?.from || 0}
+            to={agentsData?.to || 0}
+          />
+        )}
       </div>
     </div>
   );

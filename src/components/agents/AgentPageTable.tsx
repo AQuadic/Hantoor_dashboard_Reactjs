@@ -14,6 +14,7 @@ import Copy from "../icons/agents/Copy";
 import View from "../icons/general/View";
 import { Agent } from "@/api/agents/fetchAgents";
 import { useTranslation } from "react-i18next";
+import NoData from "../general/NoData";
 
 interface AgentPageTableProps {
   agents: Agent[];
@@ -27,6 +28,8 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
   onToggleActive,
 }) => {
   const { t } = useTranslation("agents");
+  if (!agents || agents.length === 0) return <NoData />;
+
   return (
     <Table>
       <TableHeader>
