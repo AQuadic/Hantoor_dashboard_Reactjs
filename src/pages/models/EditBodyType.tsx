@@ -16,7 +16,7 @@ const EditBodyType = () => {
   const navigate = useNavigate();
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
-  const [agentId, setAgentId] = useState<string>("");
+  const [modelId, setModelId] = useState<string>(""); // renamed from agentId
 
 const { data: models = [], isLoading } = useQuery<Model[]>({
   queryKey: ["models-list"],
@@ -36,7 +36,7 @@ const { data: bodyType } = useQuery<BodyType>({
     if (bodyType) {
       setNameAr(bodyType.name.ar);
       setNameEn(bodyType.name.en);
-      setAgentId(String(bodyType.agent_id));
+      setModelId(String(bodyType.vehicle_model_id));
     }
   }, [bodyType]);
 
@@ -46,7 +46,7 @@ const { data: bodyType } = useQuery<BodyType>({
     try {
         await updateBodyType(Number(id), {
         name: { ar: nameAr, en: nameEn },
-        agent_id: Number(agentId),
+        vehicle_model_id: Number(modelId),
         });
         toast.success(t('bodyTypeUpdated'));
         navigate("/models?section=Structure+Types&page=1");
@@ -101,8 +101,8 @@ const { data: bodyType } = useQuery<BodyType>({
                     items={models as Model[]}
                     label={t("model")}
                     placeholder={isLoading ? t("loading") : t("selectModel")}
-                    selectedKeys={agentId ? [agentId] : []}
-                    onSelectionChange={(keys) => setAgentId(Array.from(keys)[0] as string)}
+                    selectedKeys={modelId ? [modelId] : []} // ✅ updated
+                    onSelectionChange={(keys) => setModelId(Array.from(keys)[0] as string)} // ✅ updated
                     classNames={{
                         trigger: 'h-[53px] !h-[53px] min-h-[53px] bg-white border py-0',
                         label: 'text-sm text-gray-700',

@@ -16,6 +16,7 @@ export interface BodyType {
     en: string;
   };
   agent_id: number;
+  vehicle_model_id: number;
   is_active: boolean;
   created_at: string;
   updated_at: string;
