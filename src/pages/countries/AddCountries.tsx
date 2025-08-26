@@ -81,7 +81,7 @@ const AddCountries = () => {
               label={t("arCountry")}
               value={arCountry}
               onChange={setArCountry}
-              placeholder="الامارات"
+              placeholder={t('writeHere')}
             />
           </div>
           {/* English country */}
@@ -102,7 +102,7 @@ const AddCountries = () => {
               label={t("arCurrency")}
               value={arCurrency}
               onChange={setArCurrency}
-              placeholder="درهم اماراتي"
+              placeholder={t("writeHere")}
             />
           </div>
           {/* English currency */}

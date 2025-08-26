@@ -16,6 +16,7 @@ import {
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
+import DropdownArrow from "@/components/icons/dashboard/DropdownArrow";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
@@ -220,13 +221,11 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
           </div>
 
           <div className="relative w-full">
-            <label className="block text-sm text-black mb-2">
-              {t("brand")}
-            </label>
             <select
-              className="w-full border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              id="brand"
               value={selectedBrandId}
               onChange={(e) => setSelectedBrandId(e.target.value)}
+              className="peer block w-full rounded-2xl border border-gray-300 bg-transparent px-3 pt-5 pb-2 text-sm text-black h-[62px] appearance-none"
             >
               <option value="">{t("selectBrand")}</option>
               {brands?.data?.map((brand) => (
@@ -235,6 +234,15 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
                 </option>
               ))}
             </select>
+            <label
+              htmlFor="brand"
+              className="absolute ltr:left-3 rtl:right-3 top-2 text-gray-500 text-sm transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-gray-700 peer-focus:text-sm"
+            >
+              {t("brand")}
+            </label>
+            <div className="pointer-events-none absolute ltr:right-5 rtl:left-5 top-1/2 -translate-y-1/2 text-gray-400">
+              <DropdownArrow />
+          </div>
           </div>
         </div>
         <hr className="my-[11px]" />

@@ -225,7 +225,7 @@ const AddBrand = () => {
               label={t("arBrand")}
               value={arBrand}
               onChange={setArBrand}
-              placeholder=" تويوتا"
+              placeholder={t("writeHere")}
             />
             <DashboardInput
               label={t("enBrand")}
