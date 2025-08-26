@@ -3,10 +3,69 @@ import React from 'react'
 import DashboardButton from '../general/dashboard/DashboardButton'
 import ImageInput from '../general/ImageInput'
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-hot-toast';
+import { updateSettings } from '@/api/setting/updateSetting';
 
 const GeneralSettings = () => {
     const { t } = useTranslation("setting");
     const [profileImage, setProfileImage] = React.useState<File | null>(null);
+    const [ ,setLoading] = React.useState(false);
+    const [fields, setFields] = React.useState({
+        no_videos: '',
+        text_features_ar: '',
+        text_features_en: '',
+        advanced_search_ar: '',
+        advanced_search_en: '',
+        financing_text_ar: '',
+        financing_text_en: '',
+        android_link: '',
+        android_version: '',
+        publish_date: '',
+        iphone_link: '',
+        iphone_version: '',
+        iphone_date: '',
+    });
+
+    const handleInputChange = (key: string, value: string) => {
+        setFields(prev => ({ ...prev, [key]: value }));
+    };
+
+const handleSave = async (keys: string[]) => {
+    // Check if any required field is empty
+    const emptyFields = keys.filter(key => {
+        if (key === 'profile_image') {
+            return !profileImage;
+        }
+        return !fields[key as keyof typeof fields]?.trim();
+    });
+
+    if (emptyFields.length > 0) {
+        toast.error(t('pleaseFillTheField'));
+        return;
+    }
+
+    // Build payload
+    const payload: Record<string, any> = {};
+    keys.forEach(key => {
+        if (key === 'profile_image') {
+            payload[key] = profileImage;
+        } else {
+            payload[key] = fields[key as keyof typeof fields];
+        }
+    });
+
+    try {
+        setLoading(true);
+        const response = await updateSettings(payload);
+        toast.success(response.message || t('savedSuccessfully'));
+    } catch (error: any) {
+        toast.error(error.message || t('somethingWentWrong'));
+    } finally {
+        setLoading(false);
+    }
+};
+
+
     return (
         <section>
             {/* 1 */}
@@ -18,9 +77,11 @@ const GeneralSettings = () => {
                     placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
+                    value={fields.no_videos}
+                    onChange={(e) => handleInputChange('no_videos', e.target.value)}
                 />
                 <div className='mt-4'>
-                    <DashboardButton titleAr="حفظ" titleEn="Save" />
+                    <DashboardButton titleAr="حفظ" titleEn="Save" onClick={() => handleSave(['no_videos'])} />
                 </div>
                 </div>
             </div>
@@ -29,6 +90,9 @@ const GeneralSettings = () => {
             <div className='h-full bg-[#FFFFFF] rounded-[15px] mx-8 px-[29px] py-5 mt-[11px]'>
                 <h2 className='text-[#2A32F8] text-[17px] font-bold mb-3'>{t('chooseImage')}</h2>
                 <ImageInput image={profileImage} setImage={setProfileImage} />
+                <div className='mt-4'>
+                <DashboardButton titleAr="حفظ" titleEn="Save" onClick={() => handleSave(['profile_image'])}/>
+                </div>
             </div> 
 
             {/* 3 */}
@@ -40,16 +104,20 @@ const GeneralSettings = () => {
                         <textarea
                         className='w-full h-32 border border-[#E2E2E2] rounded-[12px] px-5 py-8'
                         placeholder={t('writeHere')}
+                        value={fields.text_features_ar}
+                        onChange={(e) => handleInputChange('text_features_ar', e.target.value)}
                         ></textarea>
-                        <DashboardButton titleAr="حفظ" titleEn="Save" />
+                        <DashboardButton titleAr="حفظ" titleEn="Save" onClick={() => handleSave(['text_features_ar'])}/>
                     </div>
                     <div className='w-full relative'>
                         <h2 className='absolute top-[11px] rtl:right-5 text-[#000000] text-[15px] font-normal'>{t('enText')}</h2>
                         <textarea
-                        className='w-full h-32 border border-[#E2E2E2] rounded-[12px] px-5 py-8'
-                        placeholder={t('writeHere')}
+                            className='w-full h-32 border border-[#E2E2E2] rounded-[12px] px-5 py-8'
+                            placeholder={t('writeHere')}
+                            value={fields.text_features_en}
+                            onChange={(e) => handleInputChange('text_features_en', e.target.value)}
                         ></textarea>
-                        <DashboardButton titleAr="حفظ" titleEn="Save" />
+                        <DashboardButton titleAr="حفظ" titleEn="Save" onClick={() => handleSave(['text_features_en'])}/>
                     </div>
                 </div>
             </div>
@@ -63,16 +131,20 @@ const GeneralSettings = () => {
                         <textarea
                         className='w-full h-32 border border-[#E2E2E2] rounded-[12px] px-5 py-8'
                         placeholder={t('writeHere')}
+                        value={fields.advanced_search_ar}
+                        onChange={(e) => handleInputChange('advanced_search_ar', e.target.value)}
                         ></textarea>
-                        <DashboardButton titleAr="حفظ" titleEn="Save" />
+                        <DashboardButton titleAr="حفظ" titleEn="Save" onClick={() => handleSave(['advanced_search_ar'])} />
                     </div>
                     <div className='w-full relative'>
                         <h2 className='absolute top-[11px] rtl:right-5 text-[#000000] text-[15px] font-normal'>{t('enText')}</h2>
                         <textarea
                         className='w-full h-32 border border-[#E2E2E2] rounded-[12px] px-5 py-8'
                         placeholder={t('writeHere')}
+                        value={fields.advanced_search_en}
+                        onChange={(e) => handleInputChange('advanced_search_en', e.target.value)}
                         ></textarea>
-                        <DashboardButton titleAr="حفظ" titleEn="Save" />
+                        <DashboardButton titleAr="حفظ" titleEn="Save" onClick={() => handleSave(['advanced_search_en'])} />
                     </div>
                 </div>
             </div> 
@@ -86,16 +158,20 @@ const GeneralSettings = () => {
                         <textarea
                         className='w-full h-32 border border-[#E2E2E2] rounded-[12px] px-5 py-8'
                         placeholder={t('writeHere')}
+                        value={fields.financing_text_ar}
+                        onChange={(e) => handleInputChange('financing_text_ar', e.target.value)}
                         ></textarea>
-                        <DashboardButton titleAr="حفظ" titleEn="Save" />
+                        <DashboardButton titleAr="حفظ" titleEn="Save" onClick={() => handleSave(['financing_text_ar'])}/>
                     </div>
                     <div className='w-full relative'>
                         <h2 className='absolute top-[11px] rtl:right-5 text-[#000000] text-[15px] font-normal'>{t('enText')}</h2>
                         <textarea
                         className='w-full h-32 border border-[#E2E2E2] rounded-[12px] px-5 py-8'
                         placeholder={t('writeHere')}
+                        value={fields.financing_text_en}
+                        onChange={(e) => handleInputChange('financing_text_en', e.target.value)}
                         ></textarea>
-                        <DashboardButton titleAr="حفظ" titleEn="Save" />
+                        <DashboardButton titleAr="حفظ" titleEn="Save" onClick={() => handleSave(['financing_text_en'])}/>
                     </div>
                 </div>
             </div>
@@ -110,6 +186,8 @@ const GeneralSettings = () => {
                     placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
+                    value={fields.android_link}
+                    onChange={(e) => handleInputChange('android_link', e.target.value)}
                 />
                 <Input
                     label={t('androidVersion')}
@@ -117,6 +195,8 @@ const GeneralSettings = () => {
                     placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
+                    value={fields.android_version}
+                    onChange={(e) => handleInputChange('android_version', e.target.value)}
                 />
                 <Input
                     type="date"
@@ -125,6 +205,8 @@ const GeneralSettings = () => {
                     placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
+                    value={fields.publish_date}
+                    onChange={(e) => handleInputChange('publish_date', e.target.value)}
                 />
                 <Input
                     label={t('iphoneLink')}
@@ -132,6 +214,8 @@ const GeneralSettings = () => {
                     placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
+                    value={fields.iphone_link}
+                    onChange={(e) => handleInputChange('iphone_link', e.target.value)}
                 />
                 <Input
                     label={t('iphoneVersion')}
@@ -139,6 +223,8 @@ const GeneralSettings = () => {
                     placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
+                    value={fields.iphone_version}
+                    onChange={(e) => handleInputChange('iphone_version', e.target.value)}
                 />
                 <Input
                     type="date"
@@ -147,7 +233,12 @@ const GeneralSettings = () => {
                     placeholder={t('writeHere')}
                     classNames={{ label: "mb-2 text-base"}}
                     size="lg"
+                    value={fields.iphone_date}
+                    onChange={(e) => handleInputChange('iphone_date', e.target.value)}
                 />
+                </div>
+                <div className='mt-4'>
+                <DashboardButton titleAr="حفظ" titleEn="Save" onClick={() => handleSave(['android_link', 'android_version', 'publish_date', 'iphone_link', 'iphone_version', 'iphone_date'])}/>
                 </div>
             </div>
         </section>

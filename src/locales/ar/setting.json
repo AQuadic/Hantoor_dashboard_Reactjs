@@ -62,5 +62,8 @@
 
   "text": "النص",
   "socialUpdatedSuccessfully": "تم تحديث الرابط بنجاح",
-  "errorUpdateLink": "فشل تحديث الرابط"
+  "errorUpdateLink": "فشل تحديث الرابط",
+
+  "savedSuccessfully": "تم الحفظ بنجاح",
+  "pleaseFillTheField": "الرجاء ملء هذا الحقل"
 }
