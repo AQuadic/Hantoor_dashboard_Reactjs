@@ -16,7 +16,7 @@ const EditBodyType = () => {
   const navigate = useNavigate();
   const [nameAr, setNameAr] = useState("");
   const [nameEn, setNameEn] = useState("");
-  const [modelId, setModelId] = useState<string>(""); // renamed from agentId
+  const [modelId, setModelId] = useState<string>("");
 
 const { data: models = [], isLoading } = useQuery<Model[]>({
   queryKey: ["models-list"],
@@ -75,7 +75,7 @@ const { data: bodyType } = useQuery<BodyType>({
                 <div className="flex flex-col md:flex-row gap-[15px]">
                     <div className="w-full">
                     <Input
-                        label={t('arcategoryName')}
+                        label={t('arStructureName')}
                         variant="bordered"
                         placeholder="SUV"
                         value={nameAr}
@@ -86,7 +86,7 @@ const { data: bodyType } = useQuery<BodyType>({
                     </div>
                     <div className="w-full">
                     <Input
-                        label={t('encategoryName')}
+                        label={t('enStructureName')}
                         variant="bordered"
                         placeholder={t('writeHere')}
                         value={nameEn}
