@@ -19,6 +19,7 @@ import { useVehicleBodies, VehicleBody } from "@/api/models/structureType/getStr
 import { deleteCarType } from "@/api/models/carTypes/deleteCarType";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
+import { updateCarType } from "@/api/models/carTypes/editCarType";
 
 interface CarTypesTableProps {
   search?: string;
@@ -95,10 +96,25 @@ export function CarTypesTable({ search, page, setPagination }: CarTypesTableProp
       });
     };
 
-  const carTypes = Array.isArray(carTypesResponse) 
+  const handleToggleStatus = async (car: VehicleType) => {
+    try {
+      await updateCarType(car.id, {
+        is_active: !car.is_active,
+      });
+      toast.success(!car.is_active ? t("carTypeActivated") : t("carTypeDeactivated"));
+      queryClient.invalidateQueries({
+        queryKey: ["vehicleTypes"],
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error(t("somethingWentWrong"));
+    }
+    };
+
+  const carTypes = Array.isArray(carTypesResponse)
     ? carTypesResponse 
     : carTypesResponse?.data || [];
-  
+
   const from = !Array.isArray(carTypesResponse) && carTypesResponse?.from 
     ? carTypesResponse.from 
     : ((page - 1) * 10) + 1;
@@ -120,7 +136,10 @@ export function CarTypesTable({ search, page, setPagination }: CarTypesTableProp
             <TableCell>{getTypeName(car)}</TableCell>
             <TableCell className="w-full">{getBodyTypeName(car.body_type_id)}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch isSelected={car.is_active} />
+              <Switch
+                isSelected={car.is_active}
+                onChange={() => handleToggleStatus(car)}
+              />
               <Link to={`/car-types/${car.id}`}>
                 <Edit />
               </Link>

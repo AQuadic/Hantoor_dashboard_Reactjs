@@ -69,5 +69,7 @@
     "modelActivated": "تم تفعيل الموديل بنجاح",
     "modelDeactivated": "تم إلغاء تفعيل الموديل بنجاح",
     "bodyTypeActivated": "تم تفعيل نوع الهيكل بنجاح",
-    "bodyTypeDeactivated": "تم إلغاء تفعيل نوع الهيكل بنجاح"
+    "bodyTypeDeactivated": "تم إلغاء تفعيل نوع الهيكل بنجاح",
+    "carTypeActivated": "تم تفعيل نوع السيارة بنجاح",
+    "carTypeDeactivated": "تم إلغاء تفعيل نوع السيارة بنجاح"
 }
