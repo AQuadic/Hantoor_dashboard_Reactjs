@@ -8,5 +8,7 @@
     "conversation": "المحادثة",
 
     "notes": "الملاحظات",
-    "clientData": "بيانات العميل"
+    "clientData": "بيانات العميل",
+
+    "noDataAvailable": "لا توجد بيانات متاحة"
 }

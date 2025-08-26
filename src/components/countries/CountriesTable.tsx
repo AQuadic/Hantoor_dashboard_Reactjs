@@ -17,6 +17,7 @@ import Loading from "../general/Loading";
 import { deleteCountry } from "@/api/countries/deleteCountry";
 import toast from "react-hot-toast";
 import { updateCountry } from "@/api/countries/editCountry";
+import NoData from "../general/NoData";
 
 interface CountriesTableProps {
   countries: Country[];
@@ -55,6 +56,7 @@ const CountriesTable = ({
   };
 
   if (isLoading) return <Loading />;
+  if (countries.length === 0) return <NoData />;
 
   return (
     <Table>

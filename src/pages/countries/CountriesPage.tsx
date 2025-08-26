@@ -43,6 +43,7 @@ const CountriesPage = () => {
           refetch={refetch}
           isLoading={isLoading}
         />
+      {data?.data && data.data.length > 0 && (
         <TablePagination
           currentPage={data?.meta.current_page ?? currentPage}
           setCurrentPage={setCurrentPage}
@@ -52,6 +53,7 @@ const CountriesPage = () => {
           from={data?.meta.from ?? 0}
           to={data?.meta.to ?? 0}
         />
+      )}
       </div>
     </section>
   );

@@ -8,6 +8,7 @@
     "conversation": "Conversation",
 
     "notes": "Notes",
-    "clientData": "Client Data"
+    "clientData": "Client Data",
 
+    "noDataAvailable": "No data available"
 }
