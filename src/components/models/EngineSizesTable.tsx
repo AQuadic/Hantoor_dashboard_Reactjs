@@ -19,6 +19,7 @@ import { deleteEngineSize } from "@/api/models/engineSize/deleteEngineSize";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
+import { updateEngineSize } from "@/api/models/engineSize/editEngineSize";
 
 interface EngineSizesTableProps {
   search?: string;
@@ -68,6 +69,16 @@ export function EngineSizesTable({
     refetch();
   };
 
+  const handleToggleStatus = async (id: number, current: boolean) => {
+    try {
+      await updateEngineSize(id, { is_active: !current });
+      toast.success(!current ? t("engineSizeActivated") : t("engineSizeDeactivated"));
+      refetch();
+    } catch {
+      toast.error(t("error"));
+    }
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -99,7 +110,10 @@ export function EngineSizesTable({
                 : engine.name.en.slice(0, 7)}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch isSelected={engine.is_active} />
+              <Switch
+                isSelected={engine.is_active}
+                onChange={() => handleToggleStatus(engine.id, engine.is_active)}
+              />
               <Link to={`/engine-size/edit/${engine.id}`}>
                 <Edit />
               </Link>

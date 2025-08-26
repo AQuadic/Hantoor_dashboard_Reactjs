@@ -19,6 +19,7 @@ import { deleteEngineType } from "@/api/models/engineTypes/deleteEngineType";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
+import { updateEngineType } from "@/api/models/engineTypes/editEngineType";
 
 interface EngineTypesTableProps {
   search?: string;
@@ -68,6 +69,19 @@ export function EngineTypesTable({
     refetch();
   };
 
+  const handleToggleStatus = async (id: number, current: boolean) => {
+    try {
+      await updateEngineType(id, { is_active: !current });
+      toast.success(
+        !current ? t("engineTypeActivated") : t("engineTypeDeactivated")
+      );
+      refetch();
+    } catch (error) {
+      toast.error(t("somethingWentWrong"));
+      console.error(error);
+    }
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -92,7 +106,10 @@ export function EngineTypesTable({
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{engine.name.ar}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch isSelected={engine.is_active} />
+              <Switch
+                isSelected={engine.is_active}
+                onChange={() => handleToggleStatus(engine.id, engine.is_active)}
+              />
               <Link to={`/engin-type/edit/${engine.id}`}>
                 <Edit />
               </Link>

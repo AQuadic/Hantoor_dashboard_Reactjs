@@ -16,6 +16,7 @@ import { Country, CountriesResponse } from "@/api/countries/getCountry";
 import Loading from "../general/Loading";
 import { deleteCountry } from "@/api/countries/deleteCountry";
 import toast from "react-hot-toast";
+import { updateCountry } from "@/api/countries/editCountry";
 
 interface CountriesTableProps {
   countries: Country[];
@@ -36,6 +37,21 @@ const CountriesTable = ({
     await deleteCountry(id);
     toast.success(t("countryDeleted"));
     refetch();
+  };
+
+  const handleToggleStatus = async (country: Country) => {
+    try {
+      await updateCountry(country.id, {
+        is_active: !country.is_active,
+      });
+      toast.success(
+        !country.is_active ? t("countryActivated") : t("countryDeactivated")
+      );
+      refetch();
+    } catch (error) {
+      console.error(error);
+      toast.error(t("somethingWentWrong"));
+    }
   };
 
   if (isLoading) return <Loading />;
@@ -70,7 +86,10 @@ const CountriesTable = ({
                 {new Date(country.created_at).toLocaleString()}
               </TableCell>
               <TableCell className="flex gap-[7px] items-center">
-                <Switch isSelected={!country.is_active} />
+                <Switch
+                  isSelected={country.is_active}
+                  onChange={() => handleToggleStatus(country)}
+                />
                 <Link to={`/countries/edit/${country.id}`}>
                   <Edit />
                 </Link>

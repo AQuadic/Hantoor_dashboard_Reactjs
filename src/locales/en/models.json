@@ -65,5 +65,20 @@
     "fillAllFields": "Please fill all fields",
 
     "categoryAddedSuccessfully": "Category added successfully",
-    "categoryUpdated": "Category updated successfully"
+    "countryActivated": "Country activated successfully",
+    "countryDeactivated": "Country deactivated successfully",
+    "modelActivated": "Model activated successfully",
+    "modelDeactivated": "Model deactivated successfully",
+    "bodyTypeActivated": "Body type activated successfully",
+    "bodyTypeDeactivated": "Body type deactivated successfully",
+    "carTypeActivated": "Car type activated successfully",
+    "carTypeDeactivated": "Car type deactivated successfully",
+    "brandOriginActivated": "Brand origin activated successfully",
+    "brandOriginDeactivated": "Brand origin deactivated successfully",
+    "seatActivated": "Seat activated successfully",
+    "seatDeactivated": "Seat deactivated successfully",
+    "engineTypeActivated": "Engine type activated successfully",
+    "engineTypeDeactivated": "Engine type deactivated successfully",
+    "engineSizeActivated": "Engine size activated successfully",
+    "engineSizeDeactivated": "Engine size deactivated successfully"
 }

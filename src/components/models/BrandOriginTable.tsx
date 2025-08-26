@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import { deleteBrandOrigin } from "@/api/models/brandOrigin/deleteBrandOrigin";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
+import { updateBrandOrigin } from "@/api/models/brandOrigin/editBrandOrigin";
 
 interface BrandOriginTableProps {
   search?: string;
@@ -66,6 +67,17 @@ export function BrandOriginTable({
     refetch();
   };
 
+  const handleToggle = async (id: number, current: boolean) => {
+    try {
+      await updateBrandOrigin(id, { is_active: !current });
+      toast.success(!current ? t("brandOriginActivated") : t("brandOriginDeactivated"));
+      refetch();
+    } catch (error) {
+      toast.error(t("errorOccurred"));
+      console.error(error);
+    }
+  };
+
   if (isLoading) {
     return <Loading />;
   }
@@ -92,7 +104,10 @@ export function BrandOriginTable({
               {currentLang === "ar" ? brand.name.ar : brand.name.en}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch isSelected={brand.is_active} />
+              <Switch
+                isSelected={brand.is_active}
+                onChange={() => handleToggle(brand.id, brand.is_active)}
+              />
               <Link to={`/brand-origins/${brand.id}`}>
                 <Edit />
               </Link>

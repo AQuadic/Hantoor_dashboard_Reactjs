@@ -65,5 +65,20 @@
     "fillAllFields": "يرجى ملء جميع الحقول",
 
     "categoryAddedSuccessfully": "تمت إضافة الفئة بنجاح",
-    "categoryUpdated": "تم تحديث الفئة بنجاح"
+    "countryActivated": "تم تفعيل الدولة بنجاح",
+    "countryDeactivated": "تم إلغاء تفعيل الدولة بنجاح",
+    "modelActivated": "تم تفعيل الموديل بنجاح",
+    "modelDeactivated": "تم إلغاء تفعيل الموديل بنجاح",
+    "bodyTypeActivated": "تم تفعيل نوع الهيكل بنجاح",
+    "bodyTypeDeactivated": "تم إلغاء تفعيل نوع الهيكل بنجاح",
+    "carTypeActivated": "تم تفعيل نوع السيارة بنجاح",
+    "carTypeDeactivated": "تم إلغاء تفعيل نوع السيارة بنجاح",
+    "brandOriginActivated": "تم تفعيل منشأ الماركة بنجاح",
+    "brandOriginDeactivated": "تم إلغاء تفعيل منشأ الماركة بنجاح",
+    "seatActivated": "تم تفعيل عدد المقاعد بنجاح",
+    "seatDeactivated": "تم إلغاء تفعيل عدد المقاعد بنجاح",
+    "engineTypeActivated": "تم تفعيل نوع الماكينة بنجاح",
+    "engineTypeDeactivated": "تم إلغاء تفعيل نوع الماكينة بنجاح",
+    "engineSizeActivated": "تم تفعيل حجم الماكينة بنجاح",
+    "engineSizeDeactivated": "تم إلغاء تفعيل حجم الماكينة بنجاح"
 }

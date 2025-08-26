@@ -17,6 +17,8 @@ import { getModels, GetModelsResponse } from "@/api/models/models/getModels";
 import { deleteBodyType } from "@/api/models/structureType/deleteStructure";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
+import { BodyType, updateBodyType } from "@/api/models/structureType/editStructure";
+import Loading from "../general/Loading";
 
 interface StructureTableProps {
   search: string;
@@ -34,7 +36,7 @@ export function StructureTable({ search, page, setPagination }: StructureTablePr
   const { t, i18n } = useTranslation("models");
   const language = i18n.language as "ar" | "en";
 
-  const { data: bodiesResponse, isLoading, isError, refetch } = useVehicleBodies({
+  const { data: bodiesResponse, isLoading, refetch } = useVehicleBodies({
     pagination: true,
     search,
   });
@@ -68,8 +70,21 @@ const { data: modelsResponse } = useQuery<GetModelsResponse, Error>({
       refetch();
     };
 
-  if (isLoading) return <div>{t("loading")}</div>;
-  if (isError) return <div>{t("errorLoadingData")}</div>;
+  const handleToggleStatus = async (body: BodyType) => {
+    try {
+      await updateBodyType(body.id, {
+        name: body.name,
+        agent_id: body.agent_id,
+        is_active: !body.is_active,
+      });
+      toast.success(!body.is_active ? t("bodyTypeActivated") : t("bodyTypeDeactivated"));
+      refetch();
+    } catch (error) {
+      console.error(error);
+      toast.error(t("somethingWentWrong"));
+    }
+    };
+  if (isLoading) return <Loading />;
 
   const bodies = Array.isArray(bodiesResponse) 
     ? bodiesResponse 
@@ -101,7 +116,10 @@ const { data: modelsResponse } = useQuery<GetModelsResponse, Error>({
                   {model ? model.name[language] : t("noModel")}
                 </TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                  <Switch isSelected={!!item.is_active} />
+                  <Switch
+                    isSelected={!!item.is_active}
+                    onChange={() => handleToggleStatus(item)}
+                  />
                   <Link to={`/structure-types/edit/${item.id}`}>
                     <Edit />
                   </Link>

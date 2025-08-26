@@ -18,6 +18,7 @@ import { deleteModel } from "@/api/models/models/deleteModel";
 import { fetchAgents } from "@/api/agents/fetchAgents";
 import { useEffect } from "react";
 import Loading from "../general/Loading";
+import { editVehicleModel } from "@/api/models/models/editModel";
 
 interface ModelTableProps {
   page: number;
@@ -64,6 +65,19 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
       refetch();
     };
 
+  const handleToggleStatus = async (model: Model) => {
+    try {
+      await editVehicleModel(model.id, { is_active: !model.is_active });
+      toast.success(
+        !model.is_active ? t("modelActivated") : t("modelDeactivated")
+      );
+      refetch();
+    } catch (error) {
+      console.error(error);
+      toast.error(t("somethingWentWrong"));
+    }
+    };
+
   if (isLoading) return <Loading />; 
 
   return (
@@ -99,7 +113,10 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
               })()}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch isSelected={model.is_active} />
+              <Switch
+                isSelected={model.is_active}
+                onChange={() => handleToggleStatus(model)}
+              />
               <Link to={`/models/edit/${model.id}`}>
                 <Edit />
               </Link>

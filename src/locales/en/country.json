@@ -19,5 +19,7 @@
     "countryAddedSuccessfully": "Country added successfully",
     "countryDeleted": "Country deleted successfully",
     "searchByName": "Search by name",
-    "currencyCode": "Currency code"
+    "currencyCode": "Currency code",
+    "countryActivated": "Country activated successfully",
+    "countryDeactivated": "Country deactivated successfully"
 }

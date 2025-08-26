@@ -62,5 +62,8 @@
 
   "text": "Text",
   "socialUpdatedSuccessfully": "Link updated successfully",
-  "errorUpdateLink": "Failed to update the link"
+  "errorUpdateLink": "Failed to update the link",
+
+  "savedSuccessfully": "Saved successfully",
+  "pleaseFillTheField": "Please fill this field"
 }
