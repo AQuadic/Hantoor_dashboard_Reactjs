@@ -76,5 +76,7 @@
     "brandOriginActivated": "Brand origin activated successfully",
     "brandOriginDeactivated": "Brand origin deactivated successfully",
     "seatActivated": "Seat activated successfully",
-    "seatDeactivated": "Seat deactivated successfully"
+    "seatDeactivated": "Seat deactivated successfully",
+    "engineTypeActivated": "Engine type activated successfully",
+    "engineTypeDeactivated": "Engine type deactivated successfully"
 }

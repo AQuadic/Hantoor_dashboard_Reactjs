@@ -76,5 +76,7 @@
     "brandOriginActivated": "تم تفعيل منشأ الماركة بنجاح",
     "brandOriginDeactivated": "تم إلغاء تفعيل منشأ الماركة بنجاح",
     "seatActivated": "تم تفعيل عدد المقاعد بنجاح",
-    "seatDeactivated": "تم إلغاء تفعيل عدد المقاعد بنجاح"
+    "seatDeactivated": "تم إلغاء تفعيل عدد المقاعد بنجاح",
+    "engineTypeActivated": "تم تفعيل نوع الماكينة بنجاح",
+    "engineTypeDeactivated": "تم إلغاء تفعيل نوع الماكينة بنجاح"
 }
