@@ -45,6 +45,10 @@ const CarsTable = ({
   const { t, i18n } = useTranslation("cars");
   const queryClient = useQueryClient();
   const [openChatId, setOpenChatId] = useState<number | null>(null);
+  // Local status map to allow immediate UI toggle feedback
+  const [localStatusMap, setLocalStatusMap] = useState<Record<number, boolean>>(
+    {}
+  );
 
   // Fetch vehicles with filters
   const {
@@ -82,6 +86,19 @@ const CarsTable = ({
       onDataChange(vehiclesData);
     }
   }, [vehiclesData, onDataChange]);
+
+  // Initialize local status map when vehicles are loaded
+  useEffect(() => {
+    if (!vehiclesData) return;
+    const map: Record<number, boolean> = {};
+    const list = (vehiclesData as VehiclesApiResponse).data || [];
+    list.forEach((v) => {
+      const isSelected =
+        v.status !== undefined ? v.status === 1 : !!v.is_active;
+      map[v.id] = isSelected;
+    });
+    setLocalStatusMap((prev) => ({ ...map, ...prev }));
+  }, [vehiclesData]);
 
   // Delete vehicle mutation
   const deleteVehicleMutation = useMutation({
@@ -140,11 +157,13 @@ const CarsTable = ({
   };
 
   const handleToggleStatus = (vehicle: Vehicle) => {
-    // Use status field (0/1) or fallback to is_active field
+    // Determine current status from local optimistic map first, then fallback to server fields
     const currentStatus =
-      vehicle.status !== undefined
+      localStatusMap[vehicle.id] !== undefined
+        ? localStatusMap[vehicle.id]
+        : vehicle.status !== undefined
         ? vehicle.status === 1
-        : vehicle.is_active || false;
+        : !!vehicle.is_active;
     const newStatus = !currentStatus;
 
     console.log(
@@ -155,7 +174,19 @@ const CarsTable = ({
       "New:",
       newStatus
     );
-    toggleStatusMutation.mutate({ id: vehicle.id, isActive: newStatus });
+    // Optimistically update local UI state
+    const previous = localStatusMap[vehicle.id] ?? currentStatus;
+    setLocalStatusMap((s) => ({ ...s, [vehicle.id]: newStatus }));
+
+    toggleStatusMutation.mutate(
+      { id: vehicle.id, isActive: newStatus },
+      {
+        onError: () => {
+          // Revert UI on error
+          setLocalStatusMap((s) => ({ ...s, [vehicle.id]: previous }));
+        },
+      }
+    );
   };
 
   const formatDate = (dateString: string) => {
@@ -339,7 +370,9 @@ const CarsTable = ({
                 <TableCell className="flex gap-[7px] items-center">
                   <Switch
                     isSelected={
-                      vehicle.status !== undefined
+                      localStatusMap[vehicle.id] !== undefined
+                        ? localStatusMap[vehicle.id]
+                        : vehicle.status !== undefined
                         ? vehicle.status === 1
                         : vehicle.is_active || false
                     }
