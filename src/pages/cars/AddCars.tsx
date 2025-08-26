@@ -73,13 +73,18 @@ const AddCarsForm = () => {
         return String(value);
       };
 
-      // Handle name field - API returns name as string
+      // Handle name field - API returns name as string or VehicleName object
       let nameAr = "";
       let nameEn = "";
 
-      // Based on API response, vehicle.name is always a string
-      nameAr = vehicle.name || "";
-      nameEn = ""; // English name is not provided in the API response
+      // Extract the vehicle name properly (handles both string and object types)
+      if (typeof vehicle.name === "string") {
+        nameAr = vehicle.name || "";
+        nameEn = ""; // English name not available for string format
+      } else if (vehicle.name && typeof vehicle.name === "object") {
+        nameAr = vehicle.name.ar || "";
+        nameEn = vehicle.name.en || "";
+      }
 
       const formDataToSet = {
         id: vehicle.id,

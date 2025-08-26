@@ -73,7 +73,13 @@ const Offers = () => (
             <TableRow key={offer.id}>
               <TableCell className="">{offer.id}</TableCell>
               <TableCell className="">image</TableCell>
-              <TableCell className="w-[10%]">{offer.name}</TableCell>
+              <TableCell className="w-[10%]">
+                {typeof offer.name === "string"
+                  ? offer.name
+                  : (offer.name as { ar: string; en: string })?.ar ||
+                    (offer.name as { ar: string; en: string })?.en ||
+                    "-"}
+              </TableCell>
               <TableCell className=" w-full">{offer.details}</TableCell>
 
               <TableCell className="flex items-center gap-2">
