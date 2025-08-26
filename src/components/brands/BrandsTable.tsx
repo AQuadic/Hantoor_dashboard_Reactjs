@@ -15,6 +15,8 @@ import { useTranslation } from "react-i18next";
 import { deleteBrands } from "@/api/brand/deleteBrands";
 import { updateBrand } from "@/api/brand/updateBrand";
 import toast from "react-hot-toast";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
 
 interface BrandImage {
   id: number;
@@ -52,9 +54,10 @@ interface Brand {
 interface BrandsTableProps {
   brands?: Brand[];
   refetch: () => void;
+    isLoading?: boolean;
 }
 
-export function BrandsTable({ brands, refetch }: BrandsTableProps) {
+export function BrandsTable({ brands, refetch, isLoading  }: BrandsTableProps) {
   const { t, i18n } = useTranslation("brands");
   const [updatingId, setUpdatingId] = React.useState<number | null>(null);
   const [localBrands, setLocalBrands] = React.useState<Brand[] | undefined>(
@@ -101,6 +104,9 @@ export function BrandsTable({ brands, refetch }: BrandsTableProps) {
       setUpdatingId(null);
     }
   };
+
+  if (isLoading) return <Loading />;
+  if (!brands || brands.length === 0) return <NoData />;
 
   return (
     <Table>

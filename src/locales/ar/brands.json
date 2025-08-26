@@ -15,5 +15,6 @@
   "brandActivated": "تم تفعيل الماركة بنجاح",
   "brandDeactivated": "تم تعطيل الماركة بنجاح",
   "brandStatusUpdateFailed": "فشل تحديث حالة الماركة. حاول مرة أخرى لاحقًا.",
-  "noImage": "لا توجد صورة"
+  "noImage": "لا توجد صورة",
+  "noDataAvailable": "لا توجد بيانات متاحة"
 }
