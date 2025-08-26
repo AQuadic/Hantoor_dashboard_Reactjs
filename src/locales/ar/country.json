@@ -19,5 +19,7 @@
     "countryAddedSuccessfully": "تم اضافة البلد بنجاح",
     "countryDeleted": "تم حذف البلد بنجاح",
     "searchByName": "ابحث بالاسم",
-    "currencyCode": "كود العملة"
+    "currencyCode": "كود العملة",
+    "countryActivated": "تم تفعيل البلد بنجاح",
+    "countryDeactivated": "تم إلغاء تفعيل البلد بنجاح"
 }

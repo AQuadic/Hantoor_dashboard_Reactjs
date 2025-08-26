@@ -1,7 +1,7 @@
 import { axios } from "@/lib/axios";
 
 export interface CountryPayload {
-  name: {
+  name?: {
     ar: string;
     en: string;
   };
