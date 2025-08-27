@@ -15,11 +15,13 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../general/Loading";
 import { getAdmins } from "@/api/admins/getAdmins";
+import { deleteAdmin } from "@/api/admins/deleteAdmin";
+import toast from "react-hot-toast";
 
 export function SubordinatesTable() {
   const { t } = useTranslation("subordinates");
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["admins"],
     queryFn: () =>
       getAdmins({
@@ -28,6 +30,12 @@ export function SubordinatesTable() {
         per_page: 50,
       }),
   });
+
+    const handleDelete = async (id: number) => {
+    await deleteAdmin(id);
+    toast.success(t("adminDeleted"));
+    refetch();
+  };
 
   if (isLoading) return <Loading />;
   if (isError) return <p>{t("error")}</p>;
@@ -74,7 +82,7 @@ export function SubordinatesTable() {
                 <Password />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(subordinate.id)} />
               </div>
             </TableCell>
           </TableRow>
