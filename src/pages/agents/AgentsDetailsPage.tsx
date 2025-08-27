@@ -3,9 +3,11 @@ import React, { useState } from 'react'
 import MaintenanceCentersTable from '@/components/agents/MaintenanceCentersTable';
 import SalesShowroomsTable from '@/components/agents/SalesShowroomsTable';
 
+type AgentFilterType = "MaintenanceCenters" | "SalesShowrooms";
+
 const AgentsDetailsPage = () => {
-    const [selectedFilter, setSelectedFilter] = useState("Maintenance centers");
-    
+    const [selectedFilter, setSelectedFilter] = useState<AgentFilterType>("MaintenanceCenters");
+
     return (
         <div>
             <AgentsHeader 
@@ -13,14 +15,14 @@ const AgentsDetailsPage = () => {
                 setSelectedFilter={setSelectedFilter}
             />
             <div className="px-2 md:px-8 relative min-h-[300px]">
-                {selectedFilter === "Maintenance centers" ? (
-                    <MaintenanceCentersTable />
+                {selectedFilter === "MaintenanceCenters" ? (
+                <MaintenanceCentersTable />
                 ) : (
-                    <SalesShowroomsTable />
+                <SalesShowroomsTable />
                 )}
             </div>
         </div>
     )
 }
 
-export default AgentsDetailsPage
+export default AgentsDetailsPage;

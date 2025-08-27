@@ -1,17 +1,19 @@
-import DashboardHeader from "../general/dashboard/DashboardHeader"
-import TabsFilter from "../general/dashboard/TabsFilter"
+import DashboardHeader from "../general/dashboard/DashboardHeader";
+import TabsFilter from "../general/dashboard/TabsFilter";
 
-interface SubordinatesHeaderProps {
-    selectedFilter: string;
-    setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
+type AgentFilterType = "MaintenanceCenters" | "SalesShowrooms";
+
+interface AgentsHeaderProps {
+  selectedFilter: AgentFilterType;
+  setSelectedFilter: React.Dispatch<React.SetStateAction<AgentFilterType>>;
 }
 
-const AgentsHeader : React.FC<SubordinatesHeaderProps> = ({
+const AgentsHeader : React.FC<AgentsHeaderProps> = ({
     selectedFilter,
     setSelectedFilter,
 }) => {
     return (
-        <div className="pt-0 pb-2 bg-white ">
+        <div className="pt-0 pb-2 bg-white">
         <DashboardHeader
             titleAr="تفاصيل الوكيل"
             titleEn="Agent details"
@@ -25,15 +27,15 @@ const AgentsHeader : React.FC<SubordinatesHeaderProps> = ({
             <img src="/images/agentAvatar.svg" alt="Avatar" />
             <h3 className="text-[#1E1B1B] text-xl">الشركة الدولية التجارية</h3>
         </div>
-        <TabsFilter
+        <TabsFilter<AgentFilterType>
             filters={[
             {
                 titleAr: "مراكز الصيانة",
-                titleEn: "Maintenance centers",
+                titleEn: "MaintenanceCenters",
             },
             {
                 titleAr: "معارض البيع",
-                titleEn: "Sales Showrooms",
+                titleEn: "SalesShowrooms",
             },
             ]}
             selectedFilter={selectedFilter}

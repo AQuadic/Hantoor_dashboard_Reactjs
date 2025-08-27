@@ -135,10 +135,10 @@ const AddUsers = () => {
                 listbox: "bg-white shadow-md",
               }}
               onVolumeChange={(event) => {
-                const value = event.target.value;
-                const country = countriesData?.data.find((c) => c.id.toString() === value);
-                if (country) setSelectedCountry(country);
-              }}
+              const value = (event.target as HTMLSelectElement).value;
+              const country = countriesData?.data.find((c) => c.id.toString() === value);
+              if (country) setSelectedCountry(country);
+            }}
             >
               {(country) => <SelectItem>{country.label}</SelectItem>}
             </Select>
