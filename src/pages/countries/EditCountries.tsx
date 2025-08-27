@@ -24,7 +24,9 @@ const EditCountries = () => {
   const [enCurrency, setEnCurrency] = useState("");
   const [serviceFee, setServiceFee] = useState("");
   const [serviceDuration, setServiceDuration] = useState("3");
-  const [serviceDurationType, setServiceDurationType] = useState<"month" | "day" | "year">("month");
+  const [serviceDurationType, setServiceDurationType] = useState<
+    "month" | "day" | "year"
+  >("month");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -154,7 +156,9 @@ const EditCountries = () => {
                 className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
                 value={serviceDurationType}
                 onChange={(e) =>
-                  setServiceDurationType(e.target.value as "month" | "day" | "year")
+                  setServiceDurationType(
+                    e.target.value as "month" | "day" | "year"
+                  )
                 }
               >
                 <option value="month">{t("month")}</option>
