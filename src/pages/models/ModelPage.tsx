@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -24,9 +24,29 @@ const BrandsPage = () => {
   const [selectedTab, setSelectedTab] = useState(sectionParam);
   const [currentPage, setCurrentPage] = useState(pageParam);
 
-  useEffect(() => {
-    setSearchParams({ section: selectedTab, page: currentPage.toString() });
-  }, [selectedTab, currentPage, setSearchParams]);
+  // Wrapper functions that update both state and URL
+  const handleTabChange = useCallback((value: React.SetStateAction<string>) => {
+    const newTab = typeof value === 'function' ? value(selectedTab) : value;
+    setSelectedTab(newTab);
+    setCurrentPage(1); // Reset page when changing tabs
+    
+    // Update URL when user changes tab
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("section", newTab);
+    newParams.set("page", "1");
+    setSearchParams(newParams, { replace: true });
+  }, [selectedTab, searchParams, setSearchParams]);
+
+  const handlePageChange = useCallback((value: React.SetStateAction<number>) => {
+    const newPage = typeof value === 'function' ? value(currentPage) : value;
+    setCurrentPage(newPage);
+    
+    // Update URL when user changes page
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("section", selectedTab);
+    newParams.set("page", newPage.toString());
+    setSearchParams(newParams, { replace: true });
+  }, [currentPage, selectedTab, searchParams, setSearchParams]);
 
   const [search, setSearch] = useState("");
   const [paginationMeta, setPaginationMeta] = useState({
@@ -144,7 +164,7 @@ const BrandsPage = () => {
     <section>
       <ModelHeader
         selectedFilter={selectedTab}
-        setSelectedFilter={setSelectedTab}
+        setSelectedFilter={handleTabChange}
         search={search}
         setSearch={setSearch}
       />
@@ -161,7 +181,7 @@ const BrandsPage = () => {
             {paginationMeta.totalItems > 0 && (
               <TablePagination
                 currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
+                setCurrentPage={handlePageChange}
                 totalPages={paginationMeta.totalPages}
                 totalItems={paginationMeta.totalItems}
                 itemsPerPage={paginationMeta.itemsPerPage}
