@@ -91,7 +91,7 @@ const handleSubmit = async () => {
                 label={t("arModelName")}
                 value={arModelName}
                 onChange={setArModelName}
-                placeholder=" تويوتا"
+                placeholder={t("writeHere")}
               />
 
               {isLoading ? (

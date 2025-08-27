@@ -46,7 +46,7 @@ const AddEngineType = () => {
                 label={t("arEngineType")}
                 value={arEngineType}
                 onChange={setArEngineType}
-                placeholder={t("gasoline")}
+                placeholder={t("writeHere")}
               />
             </div>
             <div className="flex-1">

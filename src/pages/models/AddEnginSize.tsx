@@ -45,7 +45,7 @@ const AddEnginSize = () => {
                 label={t("arEngineSize")}
                 value={arEnginSize}
                 onChange={setArEnginSize}
-                placeholder="1200 CC"
+                placeholder={t("writeHere")}
               />
             </div>
             <DashboardInput

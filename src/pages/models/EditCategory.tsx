@@ -106,6 +106,7 @@ const EditCategory = () => {
               <Input
                 label={t("arcategoryName")}
                 value={arName}
+                placeholder={t("writeHere")}
                 onChange={(e) => setArName(e.target.value)}
                 variant="bordered"
                 size="lg"
@@ -147,6 +148,7 @@ const EditCategory = () => {
             <Input
               label={t("encategoryName")}
               value={enName}
+              placeholder={t("writeHere")}
               onChange={(e) => setEnName(e.target.value)}
               variant="bordered"
               size="lg"

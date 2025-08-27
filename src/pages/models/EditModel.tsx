@@ -81,7 +81,7 @@ const EditModel = () => {
                     <Input
                         label={t('arModelName')}
                         variant="bordered"
-                        placeholder="2026"
+                        placeholder={t("writeHere")}
                         classNames={{ label: "mb-2 text-base" }}
                         size="md"
                         value={nameAr}

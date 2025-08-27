@@ -91,7 +91,7 @@ const EditEngineSize = () => {
               <Input
                 label={t('arEngineSize')}
                 variant="bordered"
-                placeholder="1200 CC"
+                placeholder={t("writeHere")}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
                 value={arSize}

@@ -77,7 +77,7 @@ const EditSeats = () => {
                 label={t("arSeatsNumbers")}
                 value={arSeatsNumbers}
                 onChange={setArSeatsNumbers}
-                placeholder="6"
+                placeholder={t("writeHere")}
               />
             </div>
             <DashboardInput

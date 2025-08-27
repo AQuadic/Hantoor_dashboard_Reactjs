@@ -91,7 +91,7 @@ const EditEnginType = () => {
               <Input
                 label={t('arEngineType')}
                 variant="bordered"
-                placeholder={t('gasoline')}
+                placeholder={t("writeHere")}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
                 value={arName}

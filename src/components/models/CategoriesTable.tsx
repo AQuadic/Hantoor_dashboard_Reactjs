@@ -27,6 +27,7 @@ import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { updateVehicleClass } from "@/api/categories/editCategory";
 import NoData from "../general/NoData";
+import Loading from "../general/Loading";
 
 interface CategoriesTableProps {
   search?: string;
@@ -47,7 +48,7 @@ export function CategoriesTable({
 }: CategoriesTableProps) {
   const { t, i18n } = useTranslation("models");
 
-  const { data: classesResponse, refetch } = useQuery<
+  const { data: classesResponse, refetch, isLoading } = useQuery<
     GetVehicleClassesPaginated | VehicleClass[]
   >({
     queryKey: ["vehicleClasses", search, page],
@@ -125,6 +126,7 @@ export function CategoriesTable({
     !Array.isArray(classesResponse) && classesResponse?.from
       ? classesResponse.from
       : (page - 1) * 10 + 1;
+  if (isLoading) return <Loading />;
   if (!classes.length) return <NoData />;
 
   return (

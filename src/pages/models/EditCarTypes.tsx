@@ -83,7 +83,7 @@ const { data: carType } = useQuery({
                     <Input
                         label={t('arType')}
                         variant="bordered"
-                        placeholder=" SUV"
+                        placeholder={t("writeHere")}
                         value={arName}
                         onChange={(e) => setArName(e.target.value)}
                         classNames={{ label: "mb-2 text-base" }}

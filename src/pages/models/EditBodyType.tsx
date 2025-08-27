@@ -77,7 +77,7 @@ const { data: bodyType } = useQuery<BodyType>({
                     <Input
                         label={t('arStructureName')}
                         variant="bordered"
-                        placeholder="SUV"
+                        placeholder={t("writeHere")}
                         value={nameAr}
                         onChange={(e) => setNameAr(e.target.value)}
                         classNames={{ label: "mb-2 text-base" }}

@@ -72,7 +72,7 @@ const AddBodyType = () => {
               <Input
                 label={t("arStructureName")}
                 variant="bordered"
-                placeholder="SUV"
+                placeholder={t("writeHere")}
                 value={arName}
                 onChange={(e) => setArName(e.target.value)}
                 classNames={{ label: "mb-2 text-base" }}

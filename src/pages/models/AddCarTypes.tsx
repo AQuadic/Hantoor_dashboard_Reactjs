@@ -55,7 +55,7 @@ const AddCarTypes = () => {
               <Input
                 label={t('arType')}
                 variant="bordered"
-                placeholder=" SUV"
+                placeholder={t("writeHere")}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
                 value={arType}

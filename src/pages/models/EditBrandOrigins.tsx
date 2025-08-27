@@ -92,7 +92,7 @@ items={[
                 label={t("arBrandName")}
                 value={arBrandName}
                 onChange={setArBrandName}
-                placeholder="أوروبا"
+                placeholder={t("writeHere")}
               />
             </div>
             <DashboardInput

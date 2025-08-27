@@ -90,7 +90,7 @@ const AddCategories = () => {
               label={t("arcategoryName")}
               value={arName}
               onChange={setArName}
-              placeholder="4 Runner"
+              placeholder={t("writeHere")}
             />
             <DashboardInput
               label={t("encategoryName")}
