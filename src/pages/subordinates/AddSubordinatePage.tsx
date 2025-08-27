@@ -6,9 +6,11 @@ import ImageInput from "@/components/general/ImageInput";
 import MobileInput from "@/components/general/MobileInput";
 import { Select, SelectItem } from "@heroui/react";
 import React, { useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { countries } from "countries-list";
 import { useTranslation } from "react-i18next";
+import { createAdmin } from "@/api/admins/addAdmin";
+import toast from "react-hot-toast";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -34,12 +36,37 @@ const AddSubordinatePage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+
   const authorities = [
     { key: "manager", label: "مدير" },
     { key: "secretary", label: "سكرتير" },
     { key: "employee", label: "عامل" },
     { key: "supervisor", label: "مسؤول" },
   ];
+
+    const handleSubmit = async () => {
+      if (password !== confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
+
+      try {
+        const newAdmin = await createAdmin({
+          name,
+          email,
+          password,
+          password_confirmation: confirmPassword,
+        });
+        toast.success(t("adminAddedSuccessfully"))
+        navigate("/subordinates");
+      } catch (error: any) {
+        console.error(error);
+        toast.error(error.response?.data?.message || "Something went wrong");
+      }
+    };
+
 
   return (
     <div>
@@ -141,7 +168,7 @@ const AddSubordinatePage = () => {
             />
           </div>
 
-          <DashboardButton titleEn={"Add"} titleAr={"اضافة"} />
+          <DashboardButton titleEn={"Add"} titleAr={"اضافة"} onClick={handleSubmit} isLoading={isSubmitting} />
         </div>
       </div>
     </div>

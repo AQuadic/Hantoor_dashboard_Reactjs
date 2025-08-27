@@ -16,5 +16,6 @@
     "permissions": "Permissions",
     "choosePermission": "Select Permission",
     "password": "Password",
-    "confirmPassword": "Confirm Password"
+    "confirmPassword": "Confirm Password",
+    "adminAddedSuccessfully": "Admin added successfully"
 }
