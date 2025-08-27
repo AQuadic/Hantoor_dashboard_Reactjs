@@ -46,7 +46,7 @@ interface BrandImage {
 interface Brand {
   id: number;
   name: { ar: string; en: string };
-  is_active: number;
+  is_active: boolean | number;
   image?: BrandImage;
   count?: number;
 }
@@ -54,10 +54,10 @@ interface Brand {
 interface BrandsTableProps {
   brands?: Brand[];
   refetch: () => void;
-    isLoading?: boolean;
+  isLoading?: boolean;
 }
 
-export function BrandsTable({ brands, refetch, isLoading  }: BrandsTableProps) {
+export function BrandsTable({ brands, refetch, isLoading }: BrandsTableProps) {
   const { t, i18n } = useTranslation("brands");
   const [updatingId, setUpdatingId] = React.useState<number | null>(null);
   const [localBrands, setLocalBrands] = React.useState<Brand[] | undefined>(
@@ -76,27 +76,27 @@ export function BrandsTable({ brands, refetch, isLoading  }: BrandsTableProps) {
 
   const handleToggleActive = async (brand: Brand) => {
     setUpdatingId(brand.id);
+    const currentActive = Boolean(brand.is_active);
+    const newActive = !currentActive;
     // Optimistically update UI
     setLocalBrands((prev) =>
-      prev?.map((b) =>
-        b.id === brand.id ? { ...b, is_active: b.is_active === 1 ? 0 : 1 } : b
-      )
+      prev?.map((b) => (b.id === brand.id ? { ...b, is_active: newActive } : b))
     );
     try {
       await updateBrand({
         id: brand.id,
-        // send numeric value 0/1
-        is_active: brand.is_active === 1 ? 0 : 1,
+        // send boolean value true/false
+        is_active: newActive,
       });
       toast.success(
-        brand.is_active === 1 ? t("brandDeactivated") : t("brandActivated")
+        currentActive ? t("brandDeactivated") : t("brandActivated")
       );
       refetch();
     } catch {
       // Revert UI on error
       setLocalBrands((prev) =>
         prev?.map((b) =>
-          b.id === brand.id ? { ...b, is_active: brand.is_active } : b
+          b.id === brand.id ? { ...b, is_active: currentActive } : b
         )
       );
       toast.error(t("brandStatusUpdateFailed"));
@@ -155,7 +155,7 @@ export function BrandsTable({ brands, refetch, isLoading  }: BrandsTableProps) {
               <TableCell className="w-full">{brand.count ?? "-"}</TableCell>
               <TableCell className="flex gap-[7px] items-center">
                 <Switch
-                  isSelected={brand.is_active === 1}
+                  isSelected={Boolean(brand.is_active)}
                   isDisabled={updatingId === brand.id}
                   onChange={() => handleToggleActive(brand)}
                 />
