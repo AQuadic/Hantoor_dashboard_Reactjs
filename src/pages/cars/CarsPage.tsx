@@ -24,6 +24,7 @@ const CarsPage = () => {
           searchTerm={searchTerm}
           onDataChange={handleDataChange}
         />
+        {vehiclesData?.data && vehiclesData.data.length > 0 && (
         <TablePagination
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
@@ -33,6 +34,7 @@ const CarsPage = () => {
           from={vehiclesData?.from || 0}
           to={vehiclesData?.to || 0}
         />
+        )}
       </div>
     </div>
   );

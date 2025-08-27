@@ -29,6 +29,7 @@ import {
   type VehicleFilters,
   type VehiclesApiResponse,
 } from "@/api/vehicles";
+import NoData from "../general/NoData";
 
 interface CarsTableProps {
   currentPage: number;
@@ -276,6 +277,8 @@ const CarsTable = ({
     vehiclesData && Array.isArray((vehiclesData as VehiclesApiResponse).data)
       ? (vehiclesData as VehiclesApiResponse).data
       : [];
+
+      if (!vehicles.length) return <NoData />;
 
   return (
     <div className="relative flex">
