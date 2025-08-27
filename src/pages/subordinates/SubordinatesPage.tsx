@@ -4,9 +4,51 @@ import SubordinatesHeader from "@/components/subordinates/SubordinatesHeader";
 import { SubordinatesTable } from "@/components/subordinates/SubordinatesTable";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getAdmins } from "@/api/admins/getAdmins";
 
 const SubordinatesPage = () => {
   const [selectedFilter, setSelectedFilter] = useState("Subordinates");
+
+  const [subordinatesCurrentPage, setSubordinatesCurrentPage] = useState(1);
+  const [subordinatesItemsPerPage] = useState(20);
+
+  const [permissionsCurrentPage, setPermissionsCurrentPage] = useState(1);
+  const [permissionsItemsPerPage] = useState(20);
+
+  const { data: subordinatesData } = useQuery({
+    queryKey: ["admins", subordinatesCurrentPage, subordinatesItemsPerPage],
+    queryFn: () =>
+      getAdmins({
+        search: "",
+        pagination: "normal",
+        per_page: subordinatesItemsPerPage,
+        page: subordinatesCurrentPage,
+      }),
+    enabled: selectedFilter === "Subordinates",
+  });
+
+  const { data: permissionsData } = useQuery({
+    queryKey: ["permissions", permissionsCurrentPage, permissionsItemsPerPage],
+    queryFn: () =>
+      getAdmins({
+        search: "",
+        pagination: "normal",
+        per_page: permissionsItemsPerPage,
+        page: permissionsCurrentPage,
+      }),
+    enabled: selectedFilter === "Permissions",
+  });
+
+  const subordinatesTotalItems = subordinatesData?.total || 0;
+  const subordinatesTotalPages = Math.ceil(subordinatesTotalItems / subordinatesItemsPerPage);
+  const subordinatesFrom = subordinatesTotalItems > 0 ? (subordinatesCurrentPage - 1) * subordinatesItemsPerPage + 1 : 0;
+  const subordinatesTo = Math.min(subordinatesCurrentPage * subordinatesItemsPerPage, subordinatesTotalItems);
+
+  const permissionsTotalItems = permissionsData?.total || 0;
+  const permissionsTotalPages = Math.ceil(permissionsTotalItems / permissionsItemsPerPage);
+  const permissionsFrom = permissionsTotalItems > 0 ? (permissionsCurrentPage - 1) * permissionsItemsPerPage + 1 : 0;
+  const permissionsTo = Math.min(permissionsCurrentPage * permissionsItemsPerPage, permissionsTotalItems);
 
   return (
     <section>
@@ -24,15 +66,18 @@ const SubordinatesPage = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <SubordinatesTable />
+              <SubordinatesTable 
+                currentPage={subordinatesCurrentPage}
+                itemsPerPage={subordinatesItemsPerPage}
+              />
               <TablePagination
-                currentPage={1}
-                setCurrentPage={() => {}}
-                totalPages={5}
-                totalItems={100}
-                itemsPerPage={20}
-                from={1}
-                to={20}
+                currentPage={subordinatesCurrentPage}
+                setCurrentPage={setSubordinatesCurrentPage}
+                itemsPerPage={subordinatesItemsPerPage}
+                totalPages={subordinatesTotalPages}
+                totalItems={subordinatesTotalItems}
+                from={subordinatesFrom}
+                to={subordinatesTo}
               />
             </motion.div>
           ) : (
@@ -43,15 +88,18 @@ const SubordinatesPage = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <PermissionsTable />
+              <PermissionsTable 
+                currentPage={permissionsCurrentPage}
+                itemsPerPage={permissionsItemsPerPage}
+              />
               <TablePagination
-                currentPage={1}
-                setCurrentPage={() => {}}
-                totalPages={5}
-                totalItems={100}
-                itemsPerPage={20}
-                from={1}
-                to={20}
+                currentPage={permissionsCurrentPage}
+                setCurrentPage={setPermissionsCurrentPage}
+                itemsPerPage={permissionsItemsPerPage}
+                totalPages={permissionsTotalPages}
+                totalItems={permissionsTotalItems}
+                from={permissionsFrom}
+                to={permissionsTo}
               />
             </motion.div>
           )}

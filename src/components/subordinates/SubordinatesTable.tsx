@@ -20,16 +20,22 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { updateAdmin } from "@/api/admins/editAdmin";
 
-export function SubordinatesTable() {
+interface SubordinatesTableProps {
+  currentPage: number;
+  itemsPerPage: number;
+}
+
+export function SubordinatesTable({ currentPage, itemsPerPage }: SubordinatesTableProps) {
   const { t } = useTranslation("subordinates");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["admins"],
+    queryKey: ["admins", currentPage, itemsPerPage],
     queryFn: () =>
       getAdmins({
         search: "",
-        pagination: "simple",
-        per_page: 50,
+        pagination: "normal",
+        per_page: itemsPerPage,
+        page: currentPage,
       }),
   });
 
