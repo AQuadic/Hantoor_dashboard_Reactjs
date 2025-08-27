@@ -21,7 +21,8 @@ export interface CountryResponse {
   };
   code: string;
   currency?: string;
-  service_fee: string | null;
+  currency_text?: { ar: string; en: string };
+  service_fee: number | null;
   service_duration: string | null;
   service_duration_type: string | null;
   is_active: boolean;

@@ -24,7 +24,9 @@ const EditCountries = () => {
   const [enCurrency, setEnCurrency] = useState("");
   const [serviceFee, setServiceFee] = useState("");
   const [serviceDuration, setServiceDuration] = useState("3");
-  const [serviceDurationType, setServiceDurationType] = useState<"month" | "day" | "year">("month");
+  const [serviceDurationType, setServiceDurationType] = useState<
+    "month" | "day" | "year"
+  >("month");
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -34,9 +36,9 @@ const EditCountries = () => {
         setArCountry(res.name.ar);
         setEnCountry(res.name.en);
         setCode(res.code || "");
-        setArCurrency(res.currency?.ar || "");
-        setEnCurrency(res.currency?.en || "");
-        setServiceFee(res.service_fee || "");
+        setArCurrency(res.currency_text?.ar || "");
+        setEnCurrency(res.currency_text?.en || "");
+        setServiceFee(res.service_fee?.toString() || "");
         setServiceDuration(res.service_duration || "3");
         setServiceDurationType((res.service_duration_type as any) || "month");
       })
@@ -47,12 +49,17 @@ const EditCountries = () => {
   }, [id, t]);
 
   const handleSubmit = async () => {
+    const serviceFeeNum = parseFloat(serviceFee);
+    if (isNaN(serviceFeeNum) || serviceFeeNum < 0) {
+      toast.error(t("invalidServiceFee"));
+      return;
+    }
+
     try {
       setLoading(true);
       await updateCountry(Number(id), {
         name: { ar: arCountry, en: enCountry },
-        code: code.trim().toUpperCase().slice(0, 3),
-        currency: arCurrency.trim(),
+        currency: enCurrency.trim() || arCurrency.trim(),
         service_fee: serviceFee,
         service_duration: serviceDuration,
         service_duration_type: serviceDurationType,
@@ -149,7 +156,9 @@ const EditCountries = () => {
                 className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
                 value={serviceDurationType}
                 onChange={(e) =>
-                  setServiceDurationType(e.target.value as "month" | "day" | "year")
+                  setServiceDurationType(
+                    e.target.value as "month" | "day" | "year"
+                  )
                 }
               >
                 <option value="month">{t("month")}</option>
@@ -166,6 +175,7 @@ const EditCountries = () => {
             value={code}
             onChange={setCode}
             placeholder="EG"
+            disabled
           />
         </div>
 

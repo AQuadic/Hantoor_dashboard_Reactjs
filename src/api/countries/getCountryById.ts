@@ -3,11 +3,12 @@ import { axios } from "@/lib/axios";
 export interface Country {
   service_duration_type: any;
   service_duration: string;
-  service_fee: string;
+  service_fee: number | null;
   id: number;
   name: { ar: string; en: string };
   code: string;
-  currency: { ar: string; en: string } | null;
+  currency: string;
+  currency_text: { ar: string; en: string } | null;
   tax: string | null;
   time_type: "day" | "month" | "year" | null;
   is_active: boolean;
