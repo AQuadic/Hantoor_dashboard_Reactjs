@@ -6,12 +6,10 @@ export interface CountryPayload {
     en: string;
   };
   code?: string;
-  currency?: {
-    ar: string;
-    en: string;
-  };
-  tax?: string;
-  time_type?: "day" | "month" | "year";
+  currency?: string;
+  service_fee?: string;
+  service_duration?: string;
+  service_duration_type?: "day" | "month" | "year";
   is_active?: boolean;
 }
 
@@ -22,12 +20,10 @@ export interface CountryResponse {
     en: string;
   };
   code: string;
-  currency: {
-    ar: string;
-    en: string;
-  } | null;
-  tax: string | null;
-  time_type: string | null;
+  currency?: string;
+  service_fee: string | null;
+  service_duration: string | null;
+  service_duration_type: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -37,6 +33,9 @@ export async function updateCountry(
   id: number,
   data: CountryPayload
 ): Promise<CountryResponse> {
-  const response = await axios.post<CountryResponse>(`/admin/country/${id}`, data);
+  const response = await axios.post<CountryResponse>(
+    `/admin/country/${id}`,
+    data
+  );
   return response.data;
 }

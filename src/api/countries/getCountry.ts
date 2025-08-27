@@ -11,8 +11,9 @@ export interface Country {
     ar: string;
     en: string;
   } | null;
-  tax: string | null;
-  time_type: string | null;
+  service_fee: string | null;
+  service_duration_type: string | null;
+  service_duration?: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;

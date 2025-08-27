@@ -1,6 +1,9 @@
 import { axios } from "@/lib/axios";
 
 export interface Country {
+  service_duration_type: any;
+  service_duration: string;
+  service_fee: string;
   id: number;
   name: { ar: string; en: string };
   code: string;
