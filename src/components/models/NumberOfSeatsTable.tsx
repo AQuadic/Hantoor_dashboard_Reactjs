@@ -17,6 +17,7 @@ import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import { updateNumberOfSeats } from "@/api/models/seats/editNumOfSeats";
+import NoData from "../general/NoData";
 
 interface NumberOfSeatsTableProps {
   search?: string;
@@ -93,6 +94,8 @@ export function NumberOfSeatsTable({
   if (isLoading) {
     return <Loading />;
   }
+
+  if (!seats || seats.length === 0) return <NoData />;
 
   return (
     <Table>

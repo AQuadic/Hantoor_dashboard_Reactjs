@@ -19,6 +19,7 @@ import { fetchAgents } from "@/api/agents/fetchAgents";
 import { useEffect } from "react";
 import Loading from "../general/Loading";
 import { editVehicleModel } from "@/api/models/models/editModel";
+import NoData from "../general/NoData";
 
 interface ModelTableProps {
   page: number;
@@ -79,6 +80,7 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
     };
 
   if (isLoading) return <Loading />; 
+  if (models.length === 0) return <NoData />;
 
   return (
     <Table>

@@ -26,6 +26,7 @@ import { deleteCategory } from "@/api/categories/deleteCategory";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { updateVehicleClass } from "@/api/categories/editCategory";
+import NoData from "../general/NoData";
 
 interface CategoriesTableProps {
   search?: string;
@@ -124,6 +125,7 @@ export function CategoriesTable({
     !Array.isArray(classesResponse) && classesResponse?.from
       ? classesResponse.from
       : (page - 1) * 10 + 1;
+  if (!classes.length) return <NoData />;
 
   return (
     <Table>

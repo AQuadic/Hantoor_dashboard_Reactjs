@@ -20,6 +20,7 @@ import { deleteBrandOrigin } from "@/api/models/brandOrigin/deleteBrandOrigin";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import { updateBrandOrigin } from "@/api/models/brandOrigin/editBrandOrigin";
+import NoData from "../general/NoData";
 
 interface BrandOriginTableProps {
   search?: string;
@@ -81,6 +82,8 @@ export function BrandOriginTable({
   if (isLoading) {
     return <Loading />;
   }
+
+  if (!data || data.length === 0) return <NoData />;
 
   const filtered = data?.filter((brand) => {
     const name = currentLang === "ar" ? brand.name.ar : brand.name.en;

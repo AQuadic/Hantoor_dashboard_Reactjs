@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import { updateEngineSize } from "@/api/models/engineSize/editEngineSize";
+import NoData from "../general/NoData";
 
 interface EngineSizesTableProps {
   search?: string;
@@ -82,6 +83,8 @@ export function EngineSizesTable({
   if (isLoading) {
     return <Loading />;
   }
+
+  if (!engineSize || engineSize.length === 0) return <NoData />;
 
   const filtered = engineSize?.filter((engine) => {
     const name =

@@ -154,15 +154,17 @@ const BrandsPage = () => {
             transition={{ duration: 0.3 }}
           >
             {renderTable()}
-            <TablePagination
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              totalPages={paginationMeta.totalPages}
-              totalItems={paginationMeta.totalItems}
-              itemsPerPage={paginationMeta.itemsPerPage}
-              from={paginationMeta.from}
-              to={paginationMeta.to}
-            />
+            {paginationMeta.totalItems > 0 && (
+              <TablePagination
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                totalPages={paginationMeta.totalPages}
+                totalItems={paginationMeta.totalItems}
+                itemsPerPage={paginationMeta.itemsPerPage}
+                from={paginationMeta.from}
+                to={paginationMeta.to}
+              />
+            )}
           </motion.div>
         </AnimatePresence>
       </div>

@@ -20,6 +20,7 @@ import { deleteCarType } from "@/api/models/carTypes/deleteCarType";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { updateCarType } from "@/api/models/carTypes/editCarType";
+import NoData from "../general/NoData";
 
 interface CarTypesTableProps {
   search?: string;
@@ -118,6 +119,7 @@ export function CarTypesTable({ search, page, setPagination }: CarTypesTableProp
   const from = !Array.isArray(carTypesResponse) && carTypesResponse?.from 
     ? carTypesResponse.from 
     : ((page - 1) * 10) + 1;
+  if (!carTypes.length) return <NoData />;
 
   return (
     <Table>

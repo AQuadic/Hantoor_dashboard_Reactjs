@@ -19,6 +19,7 @@ import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { BodyType, updateBodyType } from "@/api/models/structureType/editStructure";
 import Loading from "../general/Loading";
+import NoData from "../general/NoData";
 
 interface StructureTableProps {
   search: string;
@@ -89,6 +90,7 @@ const { data: modelsResponse } = useQuery<GetModelsResponse, Error>({
   const bodies = Array.isArray(bodiesResponse) 
     ? bodiesResponse 
     : bodiesResponse?.data ?? [];
+    if (!bodies || bodies.length === 0) return <NoData />;
 
   return (
     <Table>

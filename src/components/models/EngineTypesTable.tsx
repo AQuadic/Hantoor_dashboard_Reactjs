@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import { updateEngineType } from "@/api/models/engineTypes/editEngineType";
+import NoData from "../general/NoData";
 
 interface EngineTypesTableProps {
   search?: string;
@@ -85,6 +86,8 @@ export function EngineTypesTable({
   if (isLoading) {
     return <Loading />;
   }
+
+  if (!engineTypes || !engineTypes.length) return <NoData />;
 
   const filtered = engineTypes?.filter((engine) => {
     // Only ar name is used in table, so filter by that
