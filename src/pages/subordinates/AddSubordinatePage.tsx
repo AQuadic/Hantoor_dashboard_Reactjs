@@ -36,7 +36,7 @@ const AddSubordinatePage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, ] = useState(false);
   const navigate = useNavigate();
 
   const authorities = [
@@ -53,13 +53,14 @@ const AddSubordinatePage = () => {
       }
 
       try {
-        const newAdmin = await createAdmin({
+        await createAdmin({
           name,
           email,
           password,
           password_confirmation: confirmPassword,
+          mobile: phone,
         });
-        toast.success(t("adminAddedSuccessfully"))
+        toast.success(t("adminAddedSuccessfully"));
         navigate("/subordinates");
       } catch (error: any) {
         console.error(error);

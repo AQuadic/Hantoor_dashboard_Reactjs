@@ -4,6 +4,7 @@ interface CreateAdminPayload {
   name: string;
   email: string;
   password: string;
+  mobile: string;
 }
 
 interface CreateAdminResponse {

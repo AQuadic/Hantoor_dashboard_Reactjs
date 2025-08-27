@@ -11,60 +11,28 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import admin1 from "/images/admin/admin1.svg";
-import admin2 from "/images/admin/admin2.svg";
-import admin3 from "/images/admin/admin3.svg";
-import admin4 from "/images/admin/admin4.svg";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../general/Loading";
+import { getAdmins } from "@/api/admins/getAdmins";
 
 export function SubordinatesTable() {
   const { t } = useTranslation("subordinates");
-  const subordinates = [
-    {
-      id: 1,
-      image: admin1,
-      name: "محمد احمد",
-      mobile: "+966 123456 789",
-      email: "username@mail.com",
-      creationDate: "22/03/2024- 08:30 PM",
-      authority: "مدير",
-      lastLogin: "22/03/2024- 08:30 PM",
-      isActive: true,
-    },
-    {
-      id: 2,
-      image: admin2,
-      name: "مصطفى خالد",
-      mobile: "+966 123456 789",
-      email: "username@mail.com",
-      creationDate: "22/03/2024- 08:30 PM",
-      authority: "سكرتير",
-      lastLogin: "22/03/2024- 08:30 PM",
-      isActive: false,
-    },
-    {
-      id: 3,
-      image: admin3,
-      name: "إبراهيم محمود",
-      mobile: "+966 123456 789",
-      email: "username@mail.com",
-      creationDate: "22/03/2024- 08:30 PM",
-      authority: "عامل",
-      lastLogin: "22/03/2024- 08:30 PM",
-      isActive: true,
-    },
-    {
-      id: 4,
-      image: admin4,
-      name: "محمد احمد",
-      mobile: "+966 123456 789",
-      email: "username@mail.com",
-      creationDate: "22/03/2024- 08:30 PM",
-      authority: "مسؤول",
-      lastLogin: "22/03/2024- 08:30 PM",
-      isActive: false,
-    },
-  ];
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["admins"],
+    queryFn: () =>
+      getAdmins({
+        search: "",
+        pagination: "simple",
+        per_page: 50,
+      }),
+  });
+
+  if (isLoading) return <Loading />;
+  if (isError) return <p>{t("error")}</p>;
+
+  const subordinates = data?.data || [];
 
   return (
     <Table>
@@ -82,20 +50,23 @@ export function SubordinatesTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {subordinates.map((subordinate, index) => (
+        {subordinates.map((subordinate, index: number) => (
           <TableRow key={subordinate.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
-              <img src={subordinate.image} alt="admin" />
+              <img
+                src={subordinate.image || "/images/admin/admin1.svg"}
+                alt="admin"
+              />
             </TableCell>
             <TableCell>{subordinate.name}</TableCell>
-            <TableCell>{subordinate.mobile}</TableCell>
+            <TableCell>{subordinate.mobile || "-"}</TableCell>
             <TableCell>{subordinate.email}</TableCell>
-            <TableCell>{subordinate.creationDate}</TableCell>
-            <TableCell>{subordinate.authority}</TableCell>
-            <TableCell className="w-full">{subordinate.lastLogin}</TableCell>
+            <TableCell>{subordinate.created_at}</TableCell>
+            <TableCell>-</TableCell>
+            <TableCell>{subordinate.updated_at}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
+              <Switch checked={true} />
               <Link to={`/subordinates/${subordinate.id}`}>
                 <Edit />
               </Link>
