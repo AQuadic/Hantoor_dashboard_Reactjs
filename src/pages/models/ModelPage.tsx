@@ -25,28 +25,34 @@ const BrandsPage = () => {
   const [currentPage, setCurrentPage] = useState(pageParam);
 
   // Wrapper functions that update both state and URL
-  const handleTabChange = useCallback((value: React.SetStateAction<string>) => {
-    const newTab = typeof value === 'function' ? value(selectedTab) : value;
-    setSelectedTab(newTab);
-    setCurrentPage(1); // Reset page when changing tabs
-    
-    // Update URL when user changes tab
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("section", newTab);
-    newParams.set("page", "1");
-    setSearchParams(newParams, { replace: true });
-  }, [selectedTab, searchParams, setSearchParams]);
+  const handleTabChange = useCallback(
+    (value: React.SetStateAction<string>) => {
+      const newTab = typeof value === "function" ? value(selectedTab) : value;
+      setSelectedTab(newTab);
+      setCurrentPage(1); // Reset page when changing tabs
 
-  const handlePageChange = useCallback((value: React.SetStateAction<number>) => {
-    const newPage = typeof value === 'function' ? value(currentPage) : value;
-    setCurrentPage(newPage);
-    
-    // Update URL when user changes page
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("section", selectedTab);
-    newParams.set("page", newPage.toString());
-    setSearchParams(newParams, { replace: true });
-  }, [currentPage, selectedTab, searchParams, setSearchParams]);
+      // Update URL when user changes tab
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("section", newTab);
+      newParams.set("page", "1");
+      setSearchParams(newParams, { replace: true });
+    },
+    [selectedTab, searchParams, setSearchParams]
+  );
+
+  const handlePageChange = useCallback(
+    (value: React.SetStateAction<number>) => {
+      const newPage = typeof value === "function" ? value(currentPage) : value;
+      setCurrentPage(newPage);
+
+      // Update URL when user changes page
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("section", selectedTab);
+      newParams.set("page", newPage.toString());
+      setSearchParams(newParams, { replace: true });
+    },
+    [currentPage, selectedTab, searchParams, setSearchParams]
+  );
 
   const [search, setSearch] = useState("");
   const [paginationMeta, setPaginationMeta] = useState({

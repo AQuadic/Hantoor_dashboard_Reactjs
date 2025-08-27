@@ -524,18 +524,21 @@ Created wrapper interfaces and modified all API functions to extract nested data
 2025-08-27: **FIXED INFINITE LANGUAGE CHANGE LOOP IN CHANGELANGUAGE COMPONENT** - RESOLVED ✅
 
 **Issue**: Infinite "Current language: ar" console logs when entering modal page, preventing navigation
-**Root Cause**: 
+**Root Cause**:
+
 - useEffect had `i18n` in dependency array but called `i18n.changeLanguage()` inside the effect
 - This created infinite loop: effect runs → changes language → i18n object changes → effect runs again
 - LocalStorage language mismatch was causing condition to always be true
 
 **Solution Applied**:
+
 1. ✅ Removed problematic useEffect that caused infinite language changes
 2. ✅ Simplified to only update local state when i18n.language actually changes
 3. ✅ Removed console.log that was flooding the console
 4. ✅ Used stable dependency `i18n.language` instead of entire `i18n` object
 
 **Files Modified**:
+
 - ✅ `src/components/general/ChangeLanguage.tsx` - Fixed infinite useEffect loop
 
 **Status**: FULLY RESOLVED - No more infinite language change loops, modal navigation works normally
@@ -543,12 +546,14 @@ Created wrapper interfaces and modified all API functions to extract nested data
 2025-08-27: **FIXED NAVIGATION BLOCKING ISSUE IN MODELPAGE** - RESOLVED ✅
 
 **Issue**: Unable to navigate away from models page - browser back button and navigation completely blocked
-**Root Cause**: 
+**Root Cause**:
+
 - Aggressive useEffect was constantly updating URL search parameters on every render
 - setSearchParams was being called repeatedly, interfering with browser navigation history
 - URL updates were creating navigation conflicts that prevented leaving the page
 
 **Solution Applied**:
+
 1. ✅ Removed automatic URL parameter updates that were blocking navigation
 2. ✅ Converted URL management functions to only update local state
 3. ✅ Removed problematic useEffect that was calling setSearchParams continuously
@@ -556,6 +561,7 @@ Created wrapper interfaces and modified all API functions to extract nested data
 5. ✅ Maintained functionality while removing navigation-blocking URL updates
 
 **Files Modified**:
+
 - ✅ `src/pages/models/ModelPage.tsx` - Removed aggressive URL updating, fixed navigation blocking
 
 **Status**: FULLY RESOLVED - Navigation works normally, can go back/forward from models page
@@ -566,6 +572,7 @@ Created wrapper interfaces and modified all API functions to extract nested data
 **User Request**: URL should update when switching tabs (Models, Structure Types, etc.) for bookmarking/refresh, but without navigation blocking
 
 **Solution Applied**:
+
 1. ✅ Restored `setSearchParams` functionality for user-initiated actions only
 2. ✅ Added controlled URL updates in `handleTabChange` and `handlePageChange`
 3. ✅ URL updates only happen when user actively changes tabs or pages
@@ -573,9 +580,11 @@ Created wrapper interfaces and modified all API functions to extract nested data
 5. ✅ Maintained navigation fix by avoiding automatic/continuous URL updates
 
 **Files Modified**:
+
 - ✅ `src/pages/models/ModelPage.tsx` - Added back controlled URL updates for user actions
 
 **Result**:
+
 - ✅ **URL updates properly** when switching tabs (Models → Structure Types, etc.)
 - ✅ **Bookmarking works** - users can bookmark specific tab views
 - ✅ **Refresh preserves state** - page refresh keeps user on same tab
