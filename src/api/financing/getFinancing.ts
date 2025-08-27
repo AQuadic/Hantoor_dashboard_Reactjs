@@ -1,6 +1,6 @@
 import { axios } from "@/lib/axios";
 
-export interface Country {
+export interface FinancingCountry {
   id: number;
   name: {
     ar: string;
@@ -23,8 +23,8 @@ export interface Country {
   updated_at?: string;
 }
 
-export interface CountriesResponse {
-  data: Country[];
+export interface FinancingResponse {
+  data: FinancingCountry[];
   links: {
     first: string | null;
     last: string | null;
@@ -43,10 +43,10 @@ export interface CountriesResponse {
   };
 }
 
-export async function getCountries(
+export async function getFinancingCountries(
   page: number = 1,
   searchTerm: string = ""
-): Promise<CountriesResponse> {
+): Promise<FinancingResponse> {
   const pageNum = Number(page);
 
   const params: Record<string, string | number> = {
@@ -58,7 +58,7 @@ export async function getCountries(
     params.search = searchTerm.trim();
   }
 
-  const response = await axios.get<CountriesResponse>("/admin/country", {
+  const response = await axios.get<FinancingResponse>("/admin/country", {
     params,
   });
 
