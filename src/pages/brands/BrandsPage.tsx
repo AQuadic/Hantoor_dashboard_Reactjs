@@ -5,7 +5,6 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBrands, BrandsApiResponse } from "@/api/brand/fetchBrands";
 import { useTranslation } from "react-i18next";
-import Loading from "@/components/general/Loading";
 
 const BrandsPage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -28,9 +27,6 @@ const BrandsPage = () => {
     }
   }, [data]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
   if (error) {
     return <div>Error loading brands: {String(error)}</div>;
   }
@@ -44,7 +40,7 @@ const BrandsPage = () => {
         setTermEn={setSearchTermEn}
       />
       <div className="px-2 md:px-8">
-        <BrandsTable brands={data?.data ?? []} refetch={refetch} />
+        <BrandsTable brands={data?.data ?? []} refetch={refetch} isLoading={isLoading}  />
         {data?.data && data.data.length > 0 && (
         <TablePagination
           currentPage={data?.current_page ?? currentPage}

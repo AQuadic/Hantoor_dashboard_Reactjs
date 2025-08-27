@@ -15,19 +15,24 @@ import View from "../icons/general/View";
 import { Agent } from "@/api/agents/fetchAgents";
 import { useTranslation } from "react-i18next";
 import NoData from "../general/NoData";
+import Loading from "../general/Loading";
 
 interface AgentPageTableProps {
   agents: Agent[];
   onDelete: (id: number) => void;
   onToggleActive?: (id: number, isActive: boolean) => void;
+  isLoading?: boolean;
 }
 
 const AgentPageTable: React.FC<AgentPageTableProps> = ({
   agents,
   onDelete,
   onToggleActive,
+  isLoading,
 }) => {
   const { t } = useTranslation("agents");
+  if (isLoading) return <Loading />;
+
   if (!agents || agents.length === 0) return <NoData />;
 
   return (

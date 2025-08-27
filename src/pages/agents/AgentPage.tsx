@@ -12,7 +12,6 @@ import {
 } from "@/api/agents/fetchAgents";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
-import Loading from "@/components/general/Loading";
 
 const AgentPage = () => {
   const { t } = useTranslation("agents");
@@ -124,9 +123,6 @@ const AgentPage = () => {
     toggleStatusMutation.mutate({ id, isActive });
   };
 
-  if (isLoading) {
-    return <Loading />;
-  }
   return (
     <div>
       <AgentPageHeader setSearchTerm={setSearchTerm} />
@@ -135,6 +131,7 @@ const AgentPage = () => {
           agents={agentsData?.data || []}
           onDelete={handleDelete}
           onToggleActive={handleToggleActive}
+          isLoading={isLoading} 
         />
         {agentsData?.data && agentsData.data.length > 0 && (
           <TablePagination
