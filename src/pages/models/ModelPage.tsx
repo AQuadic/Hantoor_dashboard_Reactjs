@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -24,9 +24,35 @@ const BrandsPage = () => {
   const [selectedTab, setSelectedTab] = useState(sectionParam);
   const [currentPage, setCurrentPage] = useState(pageParam);
 
-  useEffect(() => {
-    setSearchParams({ section: selectedTab, page: currentPage.toString() });
-  }, [selectedTab, currentPage, setSearchParams]);
+  // Wrapper functions that update both state and URL
+  const handleTabChange = useCallback(
+    (value: React.SetStateAction<string>) => {
+      const newTab = typeof value === "function" ? value(selectedTab) : value;
+      setSelectedTab(newTab);
+      setCurrentPage(1); // Reset page when changing tabs
+
+      // Update URL when user changes tab
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("section", newTab);
+      newParams.set("page", "1");
+      setSearchParams(newParams, { replace: true });
+    },
+    [selectedTab, searchParams, setSearchParams]
+  );
+
+  const handlePageChange = useCallback(
+    (value: React.SetStateAction<number>) => {
+      const newPage = typeof value === "function" ? value(currentPage) : value;
+      setCurrentPage(newPage);
+
+      // Update URL when user changes page
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("section", selectedTab);
+      newParams.set("page", newPage.toString());
+      setSearchParams(newParams, { replace: true });
+    },
+    [currentPage, selectedTab, searchParams, setSearchParams]
+  );
 
   const [search, setSearch] = useState("");
   const [paginationMeta, setPaginationMeta] = useState({
@@ -37,6 +63,10 @@ const BrandsPage = () => {
     to: 0,
   });
 
+  const handleSetPagination = useCallback((meta: typeof paginationMeta) => {
+    setPaginationMeta(meta);
+  }, []);
+
   const renderTable = () => {
     switch (selectedTab) {
       case "Structure Types":
@@ -45,7 +75,7 @@ const BrandsPage = () => {
             <StructureTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -55,7 +85,7 @@ const BrandsPage = () => {
             <BrandOriginTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -65,7 +95,7 @@ const BrandsPage = () => {
             <NumberOfSeatsTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -75,7 +105,7 @@ const BrandsPage = () => {
             <EngineTypesTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -85,7 +115,7 @@ const BrandsPage = () => {
             <EngineSizesTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -101,24 +131,24 @@ const BrandsPage = () => {
             <ModelTable
               page={currentPage}
               search={search}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
       case "Car Types":
         return (
-          <CarTypesTable 
+          <CarTypesTable
             search={search}
             page={currentPage}
-            setPagination={(m) => setPaginationMeta(m)}
+            setPagination={handleSetPagination}
           />
         );
       case "Categories":
         return (
-          <CategoriesTable 
+          <CategoriesTable
             search={search}
             page={currentPage}
-            setPagination={(m) => setPaginationMeta(m)}
+            setPagination={handleSetPagination}
           />
         );
       case "Price To":
@@ -129,7 +159,7 @@ const BrandsPage = () => {
             <ModelTable
               page={currentPage}
               search={search}
-              setPagination={setPaginationMeta}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -140,7 +170,7 @@ const BrandsPage = () => {
     <section>
       <ModelHeader
         selectedFilter={selectedTab}
-        setSelectedFilter={setSelectedTab}
+        setSelectedFilter={handleTabChange}
         search={search}
         setSearch={setSearch}
       />
@@ -157,7 +187,7 @@ const BrandsPage = () => {
             {paginationMeta.totalItems > 0 && (
               <TablePagination
                 currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
+                setCurrentPage={handlePageChange}
                 totalPages={paginationMeta.totalPages}
                 totalItems={paginationMeta.totalItems}
                 itemsPerPage={paginationMeta.itemsPerPage}

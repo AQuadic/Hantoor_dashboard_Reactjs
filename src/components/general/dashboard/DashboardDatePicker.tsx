@@ -3,7 +3,7 @@ import React from "react";
 import DateSelectorIcon from "@/components/icons/general/DateSelectorIcon";
 import CalenderArrow from "@/components/icons/general/CalenderArrow";
 
-const DashboardDatePicker = () => {
+const DashboardDatePicker = React.memo(() => {
   return (
     <div dir={"ltr"} className="max-w-fit ">
       <DateRangePicker
@@ -21,9 +21,14 @@ const DashboardDatePicker = () => {
         }
         className=""
         radius="full"
+        isInvalid={false}
+        validate={() => true}
+        errorMessage=""
       />
     </div>
   );
-};
+});
+
+DashboardDatePicker.displayName = "DashboardDatePicker";
 
 export default DashboardDatePicker;

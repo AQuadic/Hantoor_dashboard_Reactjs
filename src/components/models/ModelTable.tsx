@@ -12,11 +12,15 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { getModels, Model, GetModelsResponse } from "@/api/models/models/getModels";
+import {
+  getModels,
+  Model,
+  GetModelsResponse,
+} from "@/api/models/models/getModels";
+import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { deleteModel } from "@/api/models/models/deleteModel";
 import { fetchAgents } from "@/api/agents/fetchAgents";
-import { useEffect } from "react";
 import Loading from "../general/Loading";
 import { editVehicleModel } from "@/api/models/models/editModel";
 import NoData from "../general/NoData";
@@ -36,7 +40,11 @@ interface ModelTableProps {
 export function ModelTable({ page, search, setPagination }: ModelTableProps) {
   const { t, i18n } = useTranslation("models");
 
-  const { data: modelsResponse, isLoading, refetch } = useQuery<GetModelsResponse, Error>({
+  const {
+    data: modelsResponse,
+    isLoading,
+    refetch,
+  } = useQuery<GetModelsResponse, Error>({
     queryKey: ["models-list", page, search],
     queryFn: () => getModels(page, 10, search),
   });
@@ -48,23 +56,26 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
   const currentPage = modelsResponse?.meta?.currentPage ?? page;
   const models: Model[] = modelsResponse?.data ?? [];
 
-  const from = models.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0;
-  const to = models.length > 0 ? from + models.length - 1 : 0;
+  const paginationData = useMemo(() => {
+    const from = models.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0;
+    const to = models.length > 0 ? from + models.length - 1 : 0;
+    return { totalPages, totalItems, itemsPerPage, from, to };
+  }, [totalPages, totalItems, itemsPerPage, models.length, currentPage]);
 
   useEffect(() => {
-    setPagination({ totalPages, totalItems, itemsPerPage, from, to });
-  }, [totalPages, totalItems, itemsPerPage, from, to, setPagination]);
+    setPagination(paginationData);
+  }, [paginationData, setPagination]);
 
   const { data: agentsData } = useQuery({
     queryKey: ["agents-list"],
     queryFn: () => fetchAgents(1, ""),
   });
 
-      const handleDelete = async (id: number) => {
-      await deleteModel(id);
-      toast.success(t("modelDeletedSuccessfully"));
-      refetch();
-    };
+  const handleDelete = async (id: number) => {
+    await deleteModel(id);
+    toast.success(t("modelDeletedSuccessfully"));
+    refetch();
+  };
 
   const handleToggleStatus = async (model: Model) => {
     try {
@@ -77,9 +88,9 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
       console.error(error);
       toast.error(t("somethingWentWrong"));
     }
-    };
+  };
 
-  if (isLoading) return <Loading />; 
+  if (isLoading) return <Loading />;
   if (models.length === 0) return <NoData />;
 
   return (
@@ -87,15 +98,15 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
       <TableHeader>
         <TableRow>
           <TableHead className="text-right ">#</TableHead>
-          <TableHead className="text-right">{t('model')}</TableHead>
-          <TableHead className="text-right">{t('agent')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("model")}</TableHead>
+          <TableHead className="text-right">{t("agent")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {models.map((model, index) => (
           <TableRow key={model.id} noBackgroundColumns={1}>
-            <TableCell>{from + index}</TableCell>
+            <TableCell>{paginationData.from + index}</TableCell>
             <TableCell>
               {i18n.language === "ar"
                 ? model.name.ar
@@ -104,7 +115,7 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
             <TableCell className="w-full">
               {(() => {
                 const agent = agentsData?.data.find(
-                  (a: any) => a.id === model.agent_id
+                  (a) => a.id === model.agent_id
                 );
                 if (!agent) return "—";
 
@@ -123,9 +134,9 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
                 <Edit />
               </Link>
               <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(model.id)}
-                  />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(model.id)}
+                />
               </div>
             </TableCell>
           </TableRow>

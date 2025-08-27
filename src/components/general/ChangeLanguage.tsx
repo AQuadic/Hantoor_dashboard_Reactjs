@@ -7,21 +7,15 @@ const ChangeLanguage = () => {
   const [currentLang, setCurrentLang] = useState(i18n.language);
 
   useEffect(() => {
-    // Ensure we have the correct language on mount
-    const savedLang = localStorage.getItem("language") || "en";
-    if (i18n.language !== savedLang) {
-      i18n.changeLanguage(savedLang);
-    }
+    // Only update local state when i18n language changes
     setCurrentLang(i18n.language);
-  }, [i18n]);
+  }, [i18n.language]);
 
   const toggleLanguage = () => {
     const newLang = currentLang === "en" ? "ar" : "en";
     i18n.changeLanguage(newLang);
     setCurrentLang(newLang);
   };
-
-  console.log("Current language:", currentLang);
 
   return (
     <Button
