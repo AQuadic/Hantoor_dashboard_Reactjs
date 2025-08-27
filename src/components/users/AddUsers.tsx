@@ -6,6 +6,10 @@ import MobileInput from "../general/MobileInput";
 import { countries } from "countries-list";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { createAdminUser, CreateAdminUserPayload } from "@/api/users/addUser";
+import toast from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import { CountriesResponse, getCountries } from "@/api/countries/getCountry";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -25,15 +29,40 @@ const AddUsers = () => {
   const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [image, ] = useState<File | null>(null);
+  const [countryId, ] = useState("");
+  const [cityId, ] = useState("");
 
-  const countries = [
-    { key: "1", label: "مصر" },
-    { key: "2", label: "مصر" },
-    { key: "3", label: "مصر" },
-    { key: "4", label: "مصر" },
-    { key: "5", label: "مصر" },
-    { key: "6", label: "مصر" },
-  ];
+  const { data: countriesData } = useQuery<CountriesResponse>({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(1),
+  });
+  
+  const handleSubmit = async () => {
+    const payload: CreateAdminUserPayload = {
+      name,
+      email: email || undefined,
+      phone,
+      phone_country: selectedCountry.iso2,
+      image: image || undefined,
+      country_id: countryId || undefined,
+      city_id: cityId || undefined,
+      password: password || undefined,
+      password_confirmation: confirmPassword || undefined,
+    };
+
+    try {
+      await createAdminUser(payload);
+      toast.success("User created successfully!");
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to create user.");
+    }
+  };
+
   return (
     <section>
       <DashboardHeader
@@ -54,15 +83,15 @@ const AddUsers = () => {
         {/* Name */}
         <div className="relative">
           <input
-            type="name"
+            type="text"
             name="name"
             id="name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full h-[64px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
-            placeholder="username@mail.com"
+            placeholder="username"
           />
-          <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
-            {t("name")}
-          </h2>
+          <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">{t("name")}</h2>
         </div>
         <div className="flex md:flex-row flex-col items-center gap-[15px]">
           {/* Email */}
@@ -71,6 +100,8 @@ const AddUsers = () => {
               type="email"
               name="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className=" w-full h-[64px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
               placeholder="username@mail.com"
             />
@@ -94,14 +125,19 @@ const AddUsers = () => {
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Country */}
           <div className="relative w-full mt-[18px]">
-            <Select
-              items={countries}
+                <Select
+              items={countriesData?.data.map((c) => ({ key: c.id.toString(), label: c.name.ar })) || []}
               label={t("country")}
               placeholder={t("all")}
               classNames={{
                 trigger: "h-[64px] !h-[64px] min-h-[64px] bg-white border",
                 label: "!text-[15px] !text-[#000000]",
                 listbox: "bg-white shadow-md",
+              }}
+              onVolumeChange={(event) => {
+                const value = event.target.value;
+                const country = countriesData?.data.find((c) => c.id.toString() === value);
+                if (country) setSelectedCountry(country);
               }}
             >
               {(country) => <SelectItem>{country.label}</SelectItem>}
@@ -114,6 +150,8 @@ const AddUsers = () => {
               type={showPassword ? "text" : "password"}
               name="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full h-[64px] border border-[#E2E2E2] rounded-[12px] mt-[18px] px-4 pt-4"
               placeholder="********************"
             />
@@ -135,6 +173,8 @@ const AddUsers = () => {
             type={showConfirmPassword ? "text" : "password"}
             name="confirm password"
             id="confirm password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full h-[64px] border border-[#E2E2E2] rounded-[12px] mt-[18px] px-4 pt-4"
             placeholder="********************"
           />
@@ -150,7 +190,7 @@ const AddUsers = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton titleAr={"اضافة"} titleEn={"Save"} />
+          <DashboardButton titleAr={"اضافة"} titleEn={"Save"} onClick={handleSubmit} />
         </div>
       </div>
     </section>
