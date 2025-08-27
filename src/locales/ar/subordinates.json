@@ -17,5 +17,8 @@
     "choosePermission": "اختر الصلاحية",
     "password": "كلمة المرور",
     "confirmPassword": "تأكيد كلمة المرور",
-    "adminAddedSuccessfully": "تم إضافة المسؤول بنجاح"
+    "adminAddedSuccessfully": "تم إضافة المسؤول بنجاح",
+    "adminUpdatedSuccessfully": "تم تحديث المسؤول بنجاح",
+    "adminActivated": "تم تفعيل المسؤول بنجاح",
+    "adminDeactivated": "تم إلغاء تفعيل المسؤول بنجاح"
 }

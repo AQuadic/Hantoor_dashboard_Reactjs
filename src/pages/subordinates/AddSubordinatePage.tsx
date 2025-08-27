@@ -10,8 +10,9 @@ import { useNavigate, useParams } from "react-router";
 import { countries } from "countries-list";
 import { useTranslation } from "react-i18next";
 import { createAdmin } from "@/api/admins/addAdmin";
-import toast from "react-hot-toast";
 import { getAdmin } from "@/api/admins/getAdminById";
+import toast from "react-hot-toast";
+import { updateAdmin } from "@/api/admins/editAdmin";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -59,8 +60,8 @@ const AddSubordinatePage = () => {
       } catch (error: any) {
         toast.error(
           error.response?.data?.message ||
-          error.message ||
-          "Failed to load admin data"
+            error.message ||
+            "Failed to load admin data"
         );
       }
     };
@@ -68,14 +69,25 @@ const AddSubordinatePage = () => {
     fetchAdmin();
   }, [isEdit, managerId]);
 
-    const handleSubmit = async () => {
-      if (password !== confirmPassword) {
-        toast.error("Passwords do not match");
-        return;
-      }
+  const handleSubmit = async () => {
+    if (!isEdit && password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
 
-      try {
-        setIsSubmitting(true);
+    try {
+      setIsSubmitting(true);
+
+      if (isEdit) {
+        // ✅ update existing admin
+        await updateAdmin(managerId as string, {
+          name,
+          email,
+          mobile: phone,
+          ...(password ? { password, password_confirmation: confirmPassword } : {}),
+        });
+      } else {
+        // ✅ create new admin
         await createAdmin({
           name,
           email,
@@ -83,18 +95,19 @@ const AddSubordinatePage = () => {
           password_confirmation: confirmPassword,
           mobile: phone,
         });
-        toast.success(
-          isEdit ? t("adminUpdatedSuccessfully") : t("adminAddedSuccessfully")
-        );
-        navigate("/subordinates");
-      } catch (error: any) {
-        console.error(error);
-        toast.error(error.response?.data?.message || "Something went wrong");
-      } finally {
-        setIsSubmitting(false);
       }
-    };
 
+      toast.success(
+        isEdit ? t("adminUpdatedSuccessfully") : t("adminAddedSuccessfully")
+      );
+      navigate("/subordinates");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div>
@@ -181,6 +194,7 @@ const AddSubordinatePage = () => {
             </div>
           </div>
 
+          {/* Password only shown when adding new admin */}
           {!isEdit && (
             <div className="flex md:flex-row flex-col gap-4">
               <DashboardInput

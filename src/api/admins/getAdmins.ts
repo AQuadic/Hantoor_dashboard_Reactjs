@@ -1,6 +1,7 @@
 import { axios } from "@/lib/axios";
 
 export interface Admin {
+  isActive: boolean | undefined;
   image: string;
   id: number;
   name: string;
