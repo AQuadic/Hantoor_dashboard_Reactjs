@@ -34,9 +34,9 @@ const EditCountries = () => {
         setArCountry(res.name.ar);
         setEnCountry(res.name.en);
         setCode(res.code || "");
-        setArCurrency(res.currency?.ar || "");
-        setEnCurrency(res.currency?.en || "");
-        setServiceFee(res.service_fee || "");
+        setArCurrency(res.currency_text?.ar || "");
+        setEnCurrency(res.currency_text?.en || "");
+        setServiceFee(res.service_fee?.toString() || "");
         setServiceDuration(res.service_duration || "3");
         setServiceDurationType((res.service_duration_type as any) || "month");
       })
