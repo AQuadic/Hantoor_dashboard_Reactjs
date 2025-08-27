@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -37,6 +37,10 @@ const BrandsPage = () => {
     to: 0,
   });
 
+  const handleSetPagination = useCallback((meta: typeof paginationMeta) => {
+    setPaginationMeta(meta);
+  }, []);
+
   const renderTable = () => {
     switch (selectedTab) {
       case "Structure Types":
@@ -45,7 +49,7 @@ const BrandsPage = () => {
             <StructureTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -55,7 +59,7 @@ const BrandsPage = () => {
             <BrandOriginTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -65,7 +69,7 @@ const BrandsPage = () => {
             <NumberOfSeatsTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -75,7 +79,7 @@ const BrandsPage = () => {
             <EngineTypesTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -85,7 +89,7 @@ const BrandsPage = () => {
             <EngineSizesTable
               search={search}
               page={currentPage}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -101,24 +105,24 @@ const BrandsPage = () => {
             <ModelTable
               page={currentPage}
               search={search}
-              setPagination={(m) => setPaginationMeta(m)}
+              setPagination={handleSetPagination}
             />
           </>
         );
       case "Car Types":
         return (
-          <CarTypesTable 
+          <CarTypesTable
             search={search}
             page={currentPage}
-            setPagination={(m) => setPaginationMeta(m)}
+            setPagination={handleSetPagination}
           />
         );
       case "Categories":
         return (
-          <CategoriesTable 
+          <CategoriesTable
             search={search}
             page={currentPage}
-            setPagination={(m) => setPaginationMeta(m)}
+            setPagination={handleSetPagination}
           />
         );
       case "Price To":
@@ -129,7 +133,7 @@ const BrandsPage = () => {
             <ModelTable
               page={currentPage}
               search={search}
-              setPagination={setPaginationMeta}
+              setPagination={handleSetPagination}
             />
           </>
         );

@@ -495,3 +495,28 @@ Created wrapper interfaces and modified all API functions to extract nested data
 2025-08-26: UI fix - CarsTable date formatting
 
 - ✅ Updated `src/components/cars/CarsTable.tsx` `formatDate` to force Latin numerals for Arabic locales using the Unicode extension `-u-nu-latn` so "تاريخ ووقت الاضافة" displays numbers in English/Latin digits while keeping Arabic locale formatting for month/day order.
+
+2025-08-27: **FIXED INFINITE RE-RENDER ISSUE IN MODELPAGE** - RESOLVED ✅
+
+**Issue**: Maximum update depth exceeded error flooding console with infinite React re-renders
+**Root Cause**:
+
+- Inline arrow functions `(m) => setPaginationMeta(m)` created new functions on every render
+- Calculated `from` and `to` values in ModelTable triggered infinite useEffect loops
+- setPagination callbacks were not stable references
+
+**Solution Applied**:
+
+1. ✅ Added `useCallback` to memoize setPagination function in ModelPage.tsx
+2. ✅ Replaced all inline `(m) => setPaginationMeta(m)` with stable `handleSetPagination` reference
+3. ✅ Used `useMemo` in ModelTable.tsx to calculate pagination data once per dependency change
+4. ✅ Fixed useEffect dependency arrays to use stable references
+5. ✅ Updated all table components to use stable function references
+
+**Files Modified**:
+
+- ✅ `src/pages/models/ModelPage.tsx` - Added useCallback for setPagination
+- ✅ `src/components/models/ModelTable.tsx` - Added useMemo for pagination calculations
+- ✅ All table components now use stable function references
+
+**Status**: FULLY RESOLVED - No more infinite re-render errors in console
