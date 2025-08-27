@@ -1,5 +1,5 @@
 import ImageInput from "@/components/general/ImageInput";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import VideoInput from "@/components/general/VideoInput";
 import MultiImageInput from "@/components/general/MultiImageInput";
 import { Trash2 } from "lucide-react";
@@ -21,10 +21,13 @@ const PhotosAndVideos = () => {
   };
 
   // Convert carImages (VehicleImage[]) to File[] for MultiImageInput
-  const convertedImages =
-    (formData?.carImages
-      ?.map((img) => img.image)
-      .filter((img) => img instanceof File) as File[]) || null;
+  const convertedImages = useMemo(() => {
+    return (
+      (formData?.carImages
+        ?.map((img) => img.image)
+        .filter((img) => img instanceof File) as File[]) || null
+    );
+  }, [formData?.carImages]);
 
   useEffect(() => {
     if (convertedImages && convertedImages.length > 0) {
