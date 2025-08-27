@@ -21,5 +21,6 @@
   "suspensionDuration": "Suspension duration",
   "status": "Status",
   "searchCountryOrPhoneCode": "Search country or phone code",
-  "searchByName": "Search by name"
+  "searchByName": "Search by name",
+  "userAdded": "User added successfully"
 }
