@@ -22,5 +22,6 @@
   "status": "Status",
   "searchCountryOrPhoneCode": "Search country or phone code",
   "searchByName": "Search by name",
-  "userAdded": "User added successfully"
+  "userAdded": "User added successfully",
+  "userDeleted": "User deleted successfully"
 }

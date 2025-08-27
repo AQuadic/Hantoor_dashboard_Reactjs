@@ -17,15 +17,23 @@ import userPlaceholder from "/images/users/user1.svg";
 import { AdminUser, getAdminUsers } from "@/api/users/getUsers";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import { deleteUser } from "@/api/users/deleteUser";
+import toast from "react-hot-toast";
 
 export function UserTable() {
   const { t } = useTranslation("users");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["adminUsers"],
     queryFn: () => getAdminUsers(),
   });
   const users: AdminUser[] = data?.data || [];
+
+    const handleDelete = async (id: number) => {
+    await deleteUser(id);
+    toast.success(t("userDeleted"));
+    refetch();
+  };
 
   if (isLoading) return <Loading />;
   if (users.length === 0) return <NoData />;
@@ -101,7 +109,7 @@ export function UserTable() {
               <Link to="change-password">
                 <Password />
               </Link>
-              <TableDeleteButton handleDelete={() => {}} />
+              <TableDeleteButton handleDelete={() => handleDelete(user.id)} />
             </TableCell>
           </TableRow>
         ))}

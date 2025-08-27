@@ -22,5 +22,6 @@
   "status": "الحالة",
   "searchCountryOrPhoneCode": "البحث عن البلد أو رمز الهاتف",
   "searchByName": "ابحث بالاسم",
-  "userAdded": "تم إضافة المستخدم بنجاح"
+  "userAdded": "تم إضافة المستخدم بنجاح",
+  "userDeleted": "تم حذف المستخدم بنجاح"
 }
