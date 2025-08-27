@@ -1,5 +1,4 @@
-// src/pages/countries/EditCountries.tsx
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import { useNavigate, useParams } from "react-router";
@@ -23,11 +22,12 @@ const EditCountries = () => {
   const [code, setCode] = useState("");
   const [arCurrency, setArCurrency] = useState("");
   const [enCurrency, setEnCurrency] = useState("");
-  const [tax, setTax] = useState("");
-  const [timeType, setTimeType] = useState<"month" | "day" | "year">("month");
+  const [serviceFee, setServiceFee] = useState("");
+  const [serviceDuration, setServiceDuration] = useState("3");
+  const [serviceDurationType, setServiceDurationType] = useState<"month" | "day" | "year">("month");
   const [loading, setLoading] = useState(false);
 
-  if (!country) {
+  useEffect(() => {
     getCountryById(Number(id))
       .then((res) => {
         setCountry(res);
@@ -36,24 +36,26 @@ const EditCountries = () => {
         setCode(res.code || "");
         setArCurrency(res.currency?.ar || "");
         setEnCurrency(res.currency?.en || "");
-        setTax(res.tax || "");
-        setTimeType((res.time_type as any) || "month");
+        setServiceFee(res.service_fee || "");
+        setServiceDuration(res.service_duration || "3");
+        setServiceDurationType((res.service_duration_type as any) || "month");
       })
       .catch((err) => {
         console.error("Failed to fetch country:", err);
         toast.error(t("failedToLoad"));
       });
-  }
+  }, [id, t]);
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
       await updateCountry(Number(id), {
         name: { ar: arCountry, en: enCountry },
-        code,
-        currency: { ar: arCurrency, en: enCurrency },
-        tax,
-        time_type: timeType,
+        code: code.trim().toUpperCase().slice(0, 3),
+        currency: arCurrency.trim(),
+        service_fee: serviceFee,
+        service_duration: serviceDuration,
+        service_duration_type: serviceDurationType,
         is_active: true,
       });
       toast.success(t("countryUpdatedSuccessfully"));
@@ -129,19 +131,26 @@ const EditCountries = () => {
           <div className="relative w-full">
             <DashboardInput
               label={t("tax")}
-              value={tax}
-              onChange={setTax}
+              value={serviceFee}
+              onChange={setServiceFee}
               placeholder="20 درهم"
             />
           </div>
           <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
             <p className="text-right text-black text-sm">{t("time")}</p>
             <div className="flex items-center justify-between gap-1">
-              <span className="text-gray-500 text-sm">3</span>
+              <input
+                type="number"
+                value={serviceDuration}
+                onChange={(e) => setServiceDuration(e.target.value)}
+                className="w-10 text-gray-500 text-sm text-center"
+              />
               <select
                 className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
-                value={timeType}
-                onChange={(e) => setTimeType(e.target.value as any)}
+                value={serviceDurationType}
+                onChange={(e) =>
+                  setServiceDurationType(e.target.value as "month" | "day" | "year")
+                }
               >
                 <option value="month">{t("month")}</option>
                 <option value="day">{t("day")}</option>

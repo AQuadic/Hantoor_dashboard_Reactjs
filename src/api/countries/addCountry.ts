@@ -1,20 +1,16 @@
 import { axios } from "@/lib/axios";
 
 export interface CountryPayload {
-  name: {
-    ar: string;
-    en: string;
-  };
+  name: { ar: string; en: string };
   code: string;
-  currency_text?: {
-    ar: string;
-    en: string;
-  };
+  currency_text?: { ar: string; en: string };
   currency_code?: string;
-  tax?: string;
-  time_type?: "day" | "month" | "year";
+  service_fee?: string; 
+  service_duration_type?: "day" | "month" | "year";
+  service_duration?: string;
   is_active?: boolean;
 }
+
 
 export interface CountryResponse {
   id: number;

@@ -5,12 +5,14 @@ import DashboardInput from "@/components/general/DashboardInput";
 import ImageInput from "@/components/general/ImageInput";
 import MobileInput from "@/components/general/MobileInput";
 import { Select, SelectItem } from "@heroui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { countries } from "countries-list";
 import { useTranslation } from "react-i18next";
 import { createAdmin } from "@/api/admins/addAdmin";
+import { getAdmin } from "@/api/admins/getAdminById";
 import toast from "react-hot-toast";
+import { updateAdmin } from "@/api/admins/editAdmin";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -46,27 +48,66 @@ const AddSubordinatePage = () => {
     { key: "supervisor", label: "مسؤول" },
   ];
 
-    const handleSubmit = async () => {
-      if (password !== confirmPassword) {
-        toast.error("Passwords do not match");
-        return;
-      }
-
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      if (!isEdit) return;
       try {
-        const newAdmin = await createAdmin({
+        const data = await getAdmin(managerId as string);
+
+        setName(data.name || "");
+        setEmail(data.email || "");
+        setPhone(data.mobile || "");
+      } catch (error: any) {
+        toast.error(
+          error.response?.data?.message ||
+            error.message ||
+            "Failed to load admin data"
+        );
+      }
+    };
+
+    fetchAdmin();
+  }, [isEdit, managerId]);
+
+  const handleSubmit = async () => {
+    if (!isEdit && password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      if (isEdit) {
+        // ✅ update existing admin
+        await updateAdmin(managerId as string, {
+          name,
+          email,
+          mobile: phone,
+          ...(password ? { password, password_confirmation: confirmPassword } : {}),
+        });
+      } else {
+        // ✅ create new admin
+        await createAdmin({
           name,
           email,
           password,
           password_confirmation: confirmPassword,
+          mobile: phone,
         });
-        toast.success(t("adminAddedSuccessfully"))
-        navigate("/subordinates");
-      } catch (error: any) {
-        console.error(error);
-        toast.error(error.response?.data?.message || "Something went wrong");
       }
-    };
 
+      toast.success(
+        isEdit ? t("adminUpdatedSuccessfully") : t("adminAddedSuccessfully")
+      );
+      navigate("/subordinates");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div>
@@ -118,7 +159,7 @@ const AddSubordinatePage = () => {
             </div>
             <div className="w-full">
               <MobileInput
-                label={t("phone")}
+                label={t("phoneNumber")}
                 selectedCountry={selectedCountry}
                 setSelectedCountry={setSelectedCountry}
                 phone={phone}
@@ -153,22 +194,30 @@ const AddSubordinatePage = () => {
             </div>
           </div>
 
-          <div className="flex md:flex-row flex-col gap-4">
-            <DashboardInput
-              label={t("password")}
-              value={password}
-              onChange={setPassword}
-              placeholder="••••••••••••••••"
-            />
-            <DashboardInput
-              label={t("confirmPassword")}
-              value={confirmPassword}
-              onChange={setConfirmPassword}
-              placeholder="••••••••••••••••"
-            />
-          </div>
+          {/* Password only shown when adding new admin */}
+          {!isEdit && (
+            <div className="flex md:flex-row flex-col gap-4">
+              <DashboardInput
+                label={t("password")}
+                value={password}
+                onChange={setPassword}
+                placeholder="••••••••••••••••"
+              />
+              <DashboardInput
+                label={t("confirmPassword")}
+                value={confirmPassword}
+                onChange={setConfirmPassword}
+                placeholder="••••••••••••••••"
+              />
+            </div>
+          )}
 
-          <DashboardButton titleEn={"Add"} titleAr={"اضافة"} onClick={handleSubmit} isLoading={isSubmitting} />
+          <DashboardButton
+            titleEn={isEdit ? "Save" : "Add"}
+            titleAr={isEdit ? "حفظ" : "اضافة"}
+            onClick={handleSubmit}
+            isLoading={isSubmitting}
+          />
         </div>
       </div>
     </div>

@@ -4,18 +4,65 @@ import SubordinatesHeader from "@/components/subordinates/SubordinatesHeader";
 import { SubordinatesTable } from "@/components/subordinates/SubordinatesTable";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getAdmins } from "@/api/admins/getAdmins";
 
 const SubordinatesPage = () => {
-  const [selectedFilter, setSelectedFilter] = useState("Subordinates");
+  const [selectedFilter, setSelectedFilter] = useState<"Subordinates" | "Permissions">("Subordinates");
+
+  const [searchTermAr, setSearchTermAr] = useState("");
+  const [searchTermEn, setSearchTermEn] = useState("");
+
+  const [subordinatesCurrentPage, setSubordinatesCurrentPage] = useState(1);
+  const [subordinatesItemsPerPage] = useState(20);
+
+  const [permissionsCurrentPage, setPermissionsCurrentPage] = useState(1);
+  const [permissionsItemsPerPage] = useState(20);
+
+  const { data: subordinatesData } = useQuery({
+    queryKey: ["admins", subordinatesCurrentPage, subordinatesItemsPerPage, searchTermAr, searchTermEn],
+    queryFn: () =>
+      getAdmins({
+        search: selectedFilter === "Subordinates" ? searchTermEn || searchTermAr : "",
+        pagination: "normal",
+        per_page: subordinatesItemsPerPage,
+        page: subordinatesCurrentPage,
+      }),
+    enabled: selectedFilter === "Subordinates",
+  });
+
+  const { data: permissionsData } = useQuery({
+    queryKey: ["permissions", permissionsCurrentPage, permissionsItemsPerPage, searchTermAr, searchTermEn],
+    queryFn: () =>
+      getAdmins({
+        search: selectedFilter === "Permissions" ? searchTermEn || searchTermAr : "",
+        pagination: "normal",
+        per_page: permissionsItemsPerPage,
+        page: permissionsCurrentPage,
+      }),
+    enabled: selectedFilter === "Permissions",
+  });
+
+  const subordinatesTotalItems = subordinatesData?.total || 0;
+  const subordinatesTotalPages = Math.ceil(subordinatesTotalItems / subordinatesItemsPerPage);
+  const subordinatesFrom = subordinatesTotalItems > 0 ? (subordinatesCurrentPage - 1) * subordinatesItemsPerPage + 1 : 0;
+  const subordinatesTo = Math.min(subordinatesCurrentPage * subordinatesItemsPerPage, subordinatesTotalItems);
+
+  const permissionsTotalItems = permissionsData?.total || 0;
+  const permissionsTotalPages = Math.ceil(permissionsTotalItems / permissionsItemsPerPage);
+  const permissionsFrom = permissionsTotalItems > 0 ? (permissionsCurrentPage - 1) * permissionsItemsPerPage + 1 : 0;
+  const permissionsTo = Math.min(permissionsCurrentPage * permissionsItemsPerPage, permissionsTotalItems);
 
   return (
     <section>
       <SubordinatesHeader
         selectedFilter={selectedFilter}
         setSelectedFilter={setSelectedFilter}
+        setTermAr={setSearchTermAr}
+        setTermEn={setSearchTermEn}
       />
       <div className="px-2 md:px-8 relative min-h-[300px]">
-        <AnimatePresence mode="wait">
+ <AnimatePresence mode="wait">
           {selectedFilter === "Subordinates" ? (
             <motion.div
               key="subordinates"
@@ -24,16 +71,22 @@ const SubordinatesPage = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <SubordinatesTable />
-              <TablePagination
-                currentPage={1}
-                setCurrentPage={() => {}}
-                totalPages={5}
-                totalItems={100}
-                itemsPerPage={20}
-                from={1}
-                to={20}
+              <SubordinatesTable
+                currentPage={subordinatesCurrentPage}
+                itemsPerPage={subordinatesItemsPerPage}
+                searchTerm={searchTermAr || searchTermEn}
               />
+              {subordinatesTotalItems > 0 && (
+                <TablePagination
+                  currentPage={subordinatesCurrentPage}
+                  setCurrentPage={setSubordinatesCurrentPage}
+                  itemsPerPage={subordinatesItemsPerPage}
+                  totalPages={subordinatesTotalPages}
+                  totalItems={subordinatesTotalItems}
+                  from={subordinatesFrom}
+                  to={subordinatesTo}
+                />
+              )}
             </motion.div>
           ) : (
             <motion.div
@@ -43,16 +96,22 @@ const SubordinatesPage = () => {
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3 }}
             >
-              <PermissionsTable />
-              <TablePagination
-                currentPage={1}
-                setCurrentPage={() => {}}
-                totalPages={5}
-                totalItems={100}
-                itemsPerPage={20}
-                from={1}
-                to={20}
+              <PermissionsTable
+                // currentPage={permissionsCurrentPage}
+                // itemsPerPage={permissionsItemsPerPage}
+                // searchTerm={searchTermAr || searchTermEn}
               />
+              {permissionsTotalItems > 0 && (
+                <TablePagination
+                  currentPage={permissionsCurrentPage}
+                  setCurrentPage={setPermissionsCurrentPage}
+                  itemsPerPage={permissionsItemsPerPage}
+                  totalPages={permissionsTotalPages}
+                  totalItems={permissionsTotalItems}
+                  from={permissionsFrom}
+                  to={permissionsTo}
+                />
+              )}
             </motion.div>
           )}
         </AnimatePresence>

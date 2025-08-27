@@ -1,4 +1,3 @@
-import { Switch } from "@heroui/react";
 import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import Edit from "../icons/general/Edit";
@@ -11,99 +10,103 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import admin1 from "/images/admin/admin1.svg";
-import admin2 from "/images/admin/admin2.svg";
-import admin3 from "/images/admin/admin3.svg";
-import admin4 from "/images/admin/admin4.svg";
+import { Switch } from "@heroui/react";
+import { useQuery } from "@tanstack/react-query";
+import { getAdmins } from "@/api/admins/getAdmins";
+import { deleteAdmin } from "@/api/admins/deleteAdmin";
 import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
+import { updateAdmin } from "@/api/admins/editAdmin";
 
-export function SubordinatesTable() {
+interface SubordinatesTableProps {
+  currentPage: number;
+  itemsPerPage: number;
+  searchTerm?: string;
+}
+
+export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: SubordinatesTableProps) {
   const { t } = useTranslation("subordinates");
-  const subordinates = [
-    {
-      id: 1,
-      image: admin1,
-      name: "محمد احمد",
-      mobile: "+966 123456 789",
-      email: "username@mail.com",
-      creationDate: "22/03/2024- 08:30 PM",
-      authority: "مدير",
-      lastLogin: "22/03/2024- 08:30 PM",
-      isActive: true,
-    },
-    {
-      id: 2,
-      image: admin2,
-      name: "مصطفى خالد",
-      mobile: "+966 123456 789",
-      email: "username@mail.com",
-      creationDate: "22/03/2024- 08:30 PM",
-      authority: "سكرتير",
-      lastLogin: "22/03/2024- 08:30 PM",
-      isActive: false,
-    },
-    {
-      id: 3,
-      image: admin3,
-      name: "إبراهيم محمود",
-      mobile: "+966 123456 789",
-      email: "username@mail.com",
-      creationDate: "22/03/2024- 08:30 PM",
-      authority: "عامل",
-      lastLogin: "22/03/2024- 08:30 PM",
-      isActive: true,
-    },
-    {
-      id: 4,
-      image: admin4,
-      name: "محمد احمد",
-      mobile: "+966 123456 789",
-      email: "username@mail.com",
-      creationDate: "22/03/2024- 08:30 PM",
-      authority: "مسؤول",
-      lastLogin: "22/03/2024- 08:30 PM",
-      isActive: false,
-    },
-  ];
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["admins", currentPage, itemsPerPage, searchTerm],
+    queryFn: () =>
+      getAdmins({
+        search: searchTerm,
+        pagination: "normal",
+        per_page: itemsPerPage,
+        page: currentPage,
+      }),
+  });
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteAdmin(id);
+      toast.success(t("adminDeleted"));
+      refetch();
+    } catch {
+      toast.error(t("error"));
+    }
+  };
+
+  const handleToggleStatus = async (id: number, current: boolean) => {
+    try {
+      await updateAdmin(id, { isActive: !current });
+      toast.success(!current ? t("adminActivated") : t("adminDeactivated"));
+      refetch();
+    } catch {
+      toast.error(t("error"));
+    }
+  };
+
+  if (isLoading) return <Loading />;
+  if (!data?.data || data.data.length === 0) return <NoData />;
 
   return (
     <Table>
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('image')}</TableHead>
-          <TableHead className="text-right">{t('name')}</TableHead>
-          <TableHead className="text-right">{t('phoneNumber')}</TableHead>
-          <TableHead className="text-right">{t('email')}</TableHead>
-          <TableHead className="text-right">{t('dateTime')}</TableHead>
-          <TableHead className="text-right">{t('administrativePositions')}</TableHead>
-          <TableHead className="text-right">{t('lastLogin')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("image")}</TableHead>
+          <TableHead className="text-right">{t("name")}</TableHead>
+          <TableHead className="text-right">{t("phoneNumber")}</TableHead>
+          <TableHead className="text-right">{t("email")}</TableHead>
+          <TableHead className="text-right">{t("dateTime")}</TableHead>
+          <TableHead className="text-right">{t("administrativePositions")}</TableHead>
+          <TableHead className="text-right">{t("lastLogin")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {subordinates.map((subordinate, index) => (
-          <TableRow key={subordinate.id} noBackgroundColumns={1}>
+        {data.data.map((admin, index) => (
+          <TableRow key={admin.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
-              <img src={subordinate.image} alt="admin" />
+              <img
+                src={admin.image || "/images/admin/admin1.svg"}
+                alt="admin"
+              />
             </TableCell>
-            <TableCell>{subordinate.name}</TableCell>
-            <TableCell>{subordinate.mobile}</TableCell>
-            <TableCell>{subordinate.email}</TableCell>
-            <TableCell>{subordinate.creationDate}</TableCell>
-            <TableCell>{subordinate.authority}</TableCell>
-            <TableCell className="w-full">{subordinate.lastLogin}</TableCell>
+            <TableCell>{admin.name}</TableCell>
+            <TableCell>{admin.mobile || "-"}</TableCell>
+            <TableCell>{admin.email}</TableCell>
+            <TableCell>{admin.created_at}</TableCell>
+            <TableCell>-</TableCell>
+            <TableCell>{admin.updated_at}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
-              <Link to={`/subordinates/${subordinate.id}`}>
+              <Switch
+                isSelected={!!admin.isActive}
+                onChange={() => handleToggleStatus(admin.id, !!admin.isActive)}
+              />
+              <Link to={`/subordinates/${admin.id}`}>
                 <Edit />
               </Link>
-              <Link to={`/subordinates/change_password/${subordinate.id}`}>
+              <Link to={`/subordinates/change_password/${admin.id}`}>
                 <Password />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(admin.id)} />
               </div>
             </TableCell>
           </TableRow>

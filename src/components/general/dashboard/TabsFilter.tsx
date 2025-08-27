@@ -1,21 +1,23 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 
-interface filterType {
-  titleEn: string;
+export type FilterType = "Subordinates" | "Permissions";
+
+interface filterObj {
+  titleEn: FilterType;
   titleAr: string;
 }
 
 interface TabsFilterProps {
-  filters: filterType[];
-  selectedFilter: string;
-  setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
+  filters: filterObj[];
+  selectedFilter: FilterType;
+  setSelectedFilter: React.Dispatch<React.SetStateAction<FilterType>>;
   classNames?: string;
 }
 
 const TabsFilter: React.FC<TabsFilterProps> = ({
   filters = [],
-  selectedFilter = "",
+  selectedFilter,
   setSelectedFilter,
   classNames,
 }) => {

@@ -17,5 +17,9 @@
     "choosePermission": "Select Permission",
     "password": "Password",
     "confirmPassword": "Confirm Password",
-    "adminAddedSuccessfully": "Admin added successfully"
+    "adminAddedSuccessfully": "Admin added successfully",
+    "adminUpdatedSuccessfully": "Admin updated successfully",
+    "adminActivated": "Admin activated successfully",
+    "adminDeactivated": "Admin deactivated successfully",
+    "searchBy": "Search by name, phone number, email"
 }

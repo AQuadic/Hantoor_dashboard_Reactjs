@@ -310,7 +310,7 @@ const DashboardSidebar = () => {
                 className={`block mt-4 rounded-md ${
                   isDesktopCollapsed
                     ? "px-0 py-2 flex justify-center"
-                    : "px-4 py-2"
+                    : "px-8"
                 }`}
                 title={isDesktopCollapsed ? getLinkLabel(link) : ""}
               >

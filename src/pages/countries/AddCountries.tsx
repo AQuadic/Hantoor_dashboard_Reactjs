@@ -9,57 +9,67 @@ import { useTranslation } from "react-i18next";
 
 const AddCountries = () => {
   const { t } = useTranslation("country");
+  const navigate = useNavigate();
+
   const [arCountry, setArCountry] = useState("");
   const [enCountry, setEnCountry] = useState("");
   const [code, setCode] = useState("");
   const [currencyCode, setCurrencyCode] = useState("");
   const [arCurrency, setArCurrency] = useState("");
   const [enCurrency, setEnCurrency] = useState("");
-  const [tax, setTax] = useState("");
-  const [timeType, setTimeType] = useState<"month" | "day" | "year">("month");
+  const [serviceFee, setServiceFee] = useState("");
+  const [serviceDurationType, setServiceDurationType] = useState<"month" | "day" | "year">("month");
+  const [serviceDuration, setServiceDuration] = useState("3");
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      await storeCountry({
-        name: { ar: arCountry, en: enCountry },
-        code,
-        currency_text: { ar: arCurrency, en: enCurrency },
-        currency_code: currencyCode,
-        tax,
-        time_type: timeType,
-        is_active: true,
-      });
+const handleSubmit = async () => {
+  try {
+    setLoading(true);
 
-      toast.success(t("countryAddedSuccessfully"));
-      navigate("/countries");
-      setArCountry("");
-      setEnCountry("");
-      setCode("");
-      setArCurrency("");
-      setEnCurrency("");
-      setCurrencyCode("");
-      setTax("");
-      setTimeType("month");
-    } catch (error: unknown) {
-      console.error("Failed to create country:", error);
+    // تنظيف الكود
+    const cleanCode = code.trim().toUpperCase().slice(0, 3); // يحافظ على 3 أحرف فقط
+    const cleanCurrencyCode = currencyCode.trim().toUpperCase().slice(0, 3);
 
-      let message = t("failedToAdd");
-      if (error && typeof error === "object") {
-        const e = error as {
-          response?: { data?: { message?: string } };
-          message?: string;
-        };
-        message = e.response?.data?.message || e.message || message;
-      }
+    await storeCountry({
+      name: { ar: arCountry, en: enCountry },
+      code: cleanCode,
+      currency_text: { ar: arCurrency, en: enCurrency },
+      currency_code: cleanCurrencyCode,
+      service_fee: serviceFee,
+      service_duration_type: serviceDurationType,
+      service_duration: serviceDuration,
+      is_active: true,
+    });
 
-      toast.error(message);
-    } finally {
-      setLoading(false);
+    toast.success(t("countryAddedSuccessfully"));
+    navigate("/countries");
+
+    setArCountry("");
+    setEnCountry("");
+    setCode("");
+    setArCurrency("");
+    setEnCurrency("");
+    setCurrencyCode("");
+    setServiceFee("");
+    setServiceDurationType("month");
+  } catch (error: unknown) {
+    console.error("Failed to create country:", error);
+
+    let message = t("failedToAdd");
+    if (error && typeof error === "object") {
+      const e = error as {
+        response?: { data?: { message?: string } };
+        message?: string;
+      };
+      message = e.response?.data?.message || e.message || message;
     }
-  };
+
+    toast.error(message);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <section>
@@ -74,6 +84,7 @@ const AddCountries = () => {
       />
 
       <div className=" bg-white mt-3 rounded-[15px] py-[19px] md:px-[29px] px-2 md:mx-8 mx-2">
+        {/* Country names */}
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Arabic country */}
           <div className="relative w-full ">
@@ -120,20 +131,25 @@ const AddCountries = () => {
           <div className="relative w-full">
             <DashboardInput
               label={t("tax")}
-              value={tax}
-              onChange={setTax}
+              value={serviceFee}
+              onChange={setServiceFee}
               placeholder="20 درهم"
             />
           </div>
-          <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
+          <div className="relative w-full border border-gray-300 rounded-lg p-3 text-sm">
             <p className="text-right text-black text-sm">{t("time")}</p>
             <div className="flex items-center justify-between gap-1">
-              <span className="text-gray-500 text-sm">3</span>
+              <input
+                type="number"
+                value={serviceDuration}
+                onChange={(e) => setServiceDuration(e.target.value)}
+                className="w-10 text-gray-500 text-sm text-center"
+              />
               <select
                 className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
-                value={timeType}
+                value={serviceDurationType}
                 onChange={(e) =>
-                  setTimeType(e.target.value as "month" | "day" | "year")
+                  setServiceDurationType(e.target.value as "month" | "day" | "year")
                 }
               >
                 <option value="month">{t("month")}</option>
