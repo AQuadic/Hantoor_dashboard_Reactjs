@@ -1,10 +1,10 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { Toaster } from "react-hot-toast";
 import React, { useRef } from "react";
-import { Outlet, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import DashboardSidebar from "./DashboardSidebar";
 import DashboardHeader from "./LayoutHeader";
 import { useScrollRestoration } from "./useScrollRestoration";
+import AnimatedOutlet from "./AnimatedOutlet";
 
 const Layout = () => {
   const location = useLocation();
@@ -34,19 +34,8 @@ const Layout = () => {
         {!isLoginOrRelatedPage && <DashboardHeader />}
         {/* Animation container with relative positioning */}
         <div className="relative min-h-full">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={location.pathname}
-              initial={{ opacity: 0, y: -50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 50 }}
-              transition={{ duration: 0.4, ease: "easeInOut" }}
-              className="absolute inset-0 w-full min-h-full"
-            >
-              <Outlet />
-              {!isLoginOrRelatedPage && <div className="pb-8" />}
-            </motion.div>
-          </AnimatePresence>
+          <AnimatedOutlet />
+          {!isLoginOrRelatedPage && <div className="pb-8" />}
         </div>
       </div>
     </div>
