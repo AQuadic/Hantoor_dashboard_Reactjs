@@ -23,16 +23,17 @@ import { updateAdmin } from "@/api/admins/editAdmin";
 interface SubordinatesTableProps {
   currentPage: number;
   itemsPerPage: number;
+  searchTerm?: string;
 }
 
-export function SubordinatesTable({ currentPage, itemsPerPage }: SubordinatesTableProps) {
+export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: SubordinatesTableProps) {
   const { t } = useTranslation("subordinates");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["admins", currentPage, itemsPerPage],
+    queryKey: ["admins", currentPage, itemsPerPage, searchTerm],
     queryFn: () =>
       getAdmins({
-        search: "",
+        search: searchTerm,
         pagination: "normal",
         per_page: itemsPerPage,
         page: currentPage,

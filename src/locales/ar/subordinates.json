@@ -20,5 +20,6 @@
     "adminAddedSuccessfully": "تم إضافة المسؤول بنجاح",
     "adminUpdatedSuccessfully": "تم تحديث المسؤول بنجاح",
     "adminActivated": "تم تفعيل المسؤول بنجاح",
-    "adminDeactivated": "تم إلغاء تفعيل المسؤول بنجاح"
+    "adminDeactivated": "تم إلغاء تفعيل المسؤول بنجاح",
+    "searchBy": "ابحث بالاسم, رقم الجوال, البريد الالكتروني"
 }

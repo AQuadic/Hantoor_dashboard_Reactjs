@@ -5,16 +5,22 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import TabsFilter from "../general/dashboard/TabsFilter";
+import { useTranslation } from "react-i18next";
 
 interface SubordinatesHeaderProps {
-  selectedFilter: string;
-  setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
+  selectedFilter: "Subordinates" | "Permissions";
+  setSelectedFilter: React.Dispatch<React.SetStateAction<"Subordinates" | "Permissions">>;
+  setTermAr: React.Dispatch<React.SetStateAction<string>>;
+  setTermEn: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
+  setTermAr,
+  setTermEn,
 }) => {
+  const { t } = useTranslation("subordinates");
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -44,11 +50,12 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
           <SearchBar
-            termAr={"ابحث بالاسم, رقم الجوال, البريد الالكتروني"}
-            termEn={"Search by name, mobile number, email"}
-            setTermAr={() => {}} 
-            setTermEn={() => {}} 
-            />
+            termAr={""}
+            termEn={""}
+            placeholder={t('searchBy')}
+            setTermAr={setTermAr}
+            setTermEn={setTermEn}
+          />
         </div>
         <div className="flex-1">
           <DashboardDatePicker />
