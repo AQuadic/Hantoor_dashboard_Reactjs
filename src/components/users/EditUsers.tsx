@@ -30,11 +30,11 @@ const EditUsers = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-    const [selectedCountry, setSelectedCountry] = useState(
+  const [selectedCountry, setSelectedCountry] = useState(
     getCountryByIso2("EG")
   );
   const [phone, setPhone] = useState("");
-  const [image, ] = useState<File | null>(null);
+  const [image] = useState<File | null>(null);
   const [selectedCountryId, setSelectedCountryId] = useState<string>("");
 
   const { data: countriesData } = useQuery<CountriesResponse>({
@@ -148,7 +148,12 @@ const EditUsers = () => {
           {/* Country */}
           <div className="relative md:w-1/2 w-full mt-[18px] rtl:pl-2 ltr:pr-2">
             <Select
-              items={countriesData?.data.map((c) => ({ key: c.id.toString(), label: c.name.ar })) || []}
+              items={
+                countriesData?.data.map((c) => ({
+                  key: c.id.toString(),
+                  label: c.name.ar,
+                })) || []
+              }
               label={t("country")}
               placeholder={t("all")}
               classNames={{
@@ -157,10 +162,19 @@ const EditUsers = () => {
                 listbox: "bg-white shadow-md",
               }}
               onVolumeChange={(event) => {
-              const value = (event.target as HTMLSelectElement).value;
-              const country = countriesData?.data.find((c) => c.id.toString() === value);
-              if (country) setSelectedCountry(country);
-            }}
+                const value = (event.target as HTMLSelectElement).value;
+                const country = countriesData?.data.find(
+                  (c) => c.id.toString() === value
+                );
+                if (country) {
+                  // Transform API Country to expected format used by MobileInput
+                  setSelectedCountry({
+                    iso2: country.code,
+                    name: country.name.en,
+                    phone: [country.code],
+                  });
+                }
+              }}
             >
               {(country) => <SelectItem>{country.label}</SelectItem>}
             </Select>
@@ -168,7 +182,11 @@ const EditUsers = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton titleAr={"حفظ"} titleEn={"Save"} onClick={handleSubmit} />
+          <DashboardButton
+            titleAr={"حفظ"}
+            titleEn={"Save"}
+            onClick={handleSubmit}
+          />
         </div>
       </div>
     </section>
