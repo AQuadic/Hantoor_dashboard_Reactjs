@@ -47,12 +47,17 @@ const EditCountries = () => {
   }, [id, t]);
 
   const handleSubmit = async () => {
+    const serviceFeeNum = parseFloat(serviceFee);
+    if (isNaN(serviceFeeNum) || serviceFeeNum < 0) {
+      toast.error(t("invalidServiceFee"));
+      return;
+    }
+
     try {
       setLoading(true);
       await updateCountry(Number(id), {
         name: { ar: arCountry, en: enCountry },
-        code: code.trim().toUpperCase().slice(0, 3),
-        currency: arCurrency.trim(),
+        currency: enCurrency.trim() || arCurrency.trim(),
         service_fee: serviceFee,
         service_duration: serviceDuration,
         service_duration_type: serviceDurationType,
@@ -166,6 +171,7 @@ const EditCountries = () => {
             value={code}
             onChange={setCode}
             placeholder="EG"
+            disabled
           />
         </div>
 
