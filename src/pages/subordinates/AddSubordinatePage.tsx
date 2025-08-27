@@ -5,12 +5,13 @@ import DashboardInput from "@/components/general/DashboardInput";
 import ImageInput from "@/components/general/ImageInput";
 import MobileInput from "@/components/general/MobileInput";
 import { Select, SelectItem } from "@heroui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { countries } from "countries-list";
 import { useTranslation } from "react-i18next";
 import { createAdmin } from "@/api/admins/addAdmin";
 import toast from "react-hot-toast";
+import { getAdmin } from "@/api/admins/getAdminById";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -36,7 +37,7 @@ const AddSubordinatePage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isSubmitting, ] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const authorities = [
@@ -46,6 +47,27 @@ const AddSubordinatePage = () => {
     { key: "supervisor", label: "مسؤول" },
   ];
 
+  useEffect(() => {
+    const fetchAdmin = async () => {
+      if (!isEdit) return;
+      try {
+        const data = await getAdmin(managerId as string);
+
+        setName(data.name || "");
+        setEmail(data.email || "");
+        setPhone(data.mobile || "");
+      } catch (error: any) {
+        toast.error(
+          error.response?.data?.message ||
+          error.message ||
+          "Failed to load admin data"
+        );
+      }
+    };
+
+    fetchAdmin();
+  }, [isEdit, managerId]);
+
     const handleSubmit = async () => {
       if (password !== confirmPassword) {
         toast.error("Passwords do not match");
@@ -53,6 +75,7 @@ const AddSubordinatePage = () => {
       }
 
       try {
+        setIsSubmitting(true);
         await createAdmin({
           name,
           email,
@@ -60,11 +83,15 @@ const AddSubordinatePage = () => {
           password_confirmation: confirmPassword,
           mobile: phone,
         });
-        toast.success(t("adminAddedSuccessfully"));
+        toast.success(
+          isEdit ? t("adminUpdatedSuccessfully") : t("adminAddedSuccessfully")
+        );
         navigate("/subordinates");
       } catch (error: any) {
         console.error(error);
         toast.error(error.response?.data?.message || "Something went wrong");
+      } finally {
+        setIsSubmitting(false);
       }
     };
 
@@ -119,7 +146,7 @@ const AddSubordinatePage = () => {
             </div>
             <div className="w-full">
               <MobileInput
-                label={t("phone")}
+                label={t("phoneNumber")}
                 selectedCountry={selectedCountry}
                 setSelectedCountry={setSelectedCountry}
                 phone={phone}
@@ -154,22 +181,29 @@ const AddSubordinatePage = () => {
             </div>
           </div>
 
-          <div className="flex md:flex-row flex-col gap-4">
-            <DashboardInput
-              label={t("password")}
-              value={password}
-              onChange={setPassword}
-              placeholder="••••••••••••••••"
-            />
-            <DashboardInput
-              label={t("confirmPassword")}
-              value={confirmPassword}
-              onChange={setConfirmPassword}
-              placeholder="••••••••••••••••"
-            />
-          </div>
+          {!isEdit && (
+            <div className="flex md:flex-row flex-col gap-4">
+              <DashboardInput
+                label={t("password")}
+                value={password}
+                onChange={setPassword}
+                placeholder="••••••••••••••••"
+              />
+              <DashboardInput
+                label={t("confirmPassword")}
+                value={confirmPassword}
+                onChange={setConfirmPassword}
+                placeholder="••••••••••••••••"
+              />
+            </div>
+          )}
 
-          <DashboardButton titleEn={"Add"} titleAr={"اضافة"} onClick={handleSubmit} isLoading={isSubmitting} />
+          <DashboardButton
+            titleEn={isEdit ? "Save" : "Add"}
+            titleAr={isEdit ? "حفظ" : "اضافة"}
+            onClick={handleSubmit}
+            isLoading={isSubmitting}
+          />
         </div>
       </div>
     </div>
