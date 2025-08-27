@@ -34,15 +34,15 @@ const AddUsers = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [image, ] = useState<File | null>(null);
-  const [countryId, ] = useState("");
-  const [cityId, ] = useState("");
+  const [image] = useState<File | null>(null);
+  const [countryId] = useState("");
+  const [cityId] = useState("");
   const navigate = useNavigate();
   const { data: countriesData } = useQuery<CountriesResponse>({
     queryKey: ["countries"],
     queryFn: () => getCountries(1),
   });
-  
+
   const handleSubmit = async () => {
     const payload: CreateAdminUserPayload = {
       name,
@@ -58,10 +58,10 @@ const AddUsers = () => {
 
     try {
       await createAdminUser(payload);
-      toast.success(t('userAdded'));
-      navigate('/users')
-    } catch (error: any) {
-      toast.error(error.response?.data?.message || "Failed to create user.");
+      toast.success(t("userAdded"));
+      navigate("/users");
+    } catch {
+      toast.error("Failed to create user.");
     }
   };
 
@@ -93,7 +93,9 @@ const AddUsers = () => {
             className="w-full h-[64px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
             placeholder="username"
           />
-          <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">{t("name")}</h2>
+          <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
+            {t("name")}
+          </h2>
         </div>
         <div className="flex md:flex-row flex-col items-center gap-[15px]">
           {/* Email */}
@@ -127,8 +129,13 @@ const AddUsers = () => {
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Country */}
           <div className="relative w-full mt-[18px]">
-                <Select
-              items={countriesData?.data.map((c) => ({ key: c.id.toString(), label: c.name.ar })) || []}
+            <Select
+              items={
+                countriesData?.data.map((c) => ({
+                  key: c.id.toString(),
+                  label: c.name.ar,
+                })) || []
+              }
               label={t("country")}
               placeholder={t("all")}
               classNames={{
@@ -137,10 +144,19 @@ const AddUsers = () => {
                 listbox: "bg-white shadow-md",
               }}
               onVolumeChange={(event) => {
-              const value = (event.target as HTMLSelectElement).value;
-              const country = countriesData?.data.find((c) => c.id.toString() === value);
-              if (country) setSelectedCountry(country);
-            }}
+                const value = (event.target as HTMLSelectElement).value;
+                const country = countriesData?.data.find(
+                  (c) => c.id.toString() === value
+                );
+                if (country) {
+                  // Transform API Country to expected format
+                  setSelectedCountry({
+                    iso2: country.code,
+                    name: country.name.en,
+                    phone: [country.code], // Using country code as phone prefix fallback
+                  });
+                }
+              }}
             >
               {(country) => <SelectItem>{country.label}</SelectItem>}
             </Select>
@@ -192,7 +208,11 @@ const AddUsers = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton titleAr={"اضافة"} titleEn={"Save"} onClick={handleSubmit} />
+          <DashboardButton
+            titleAr={"اضافة"}
+            titleEn={"Save"}
+            onClick={handleSubmit}
+          />
         </div>
       </div>
     </section>

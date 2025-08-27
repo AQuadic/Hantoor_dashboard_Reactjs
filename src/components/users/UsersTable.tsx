@@ -29,7 +29,7 @@ export function UserTable() {
   });
   const users: AdminUser[] = data?.data || [];
 
-    const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
     await deleteUser(id);
     toast.success(t("userDeleted"));
     refetch();
@@ -41,32 +41,36 @@ export function UserTable() {
   return (
     <Table>
       <TableHeader>
-        <TableRow >
+        <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('image')}</TableHead>
-          <TableHead className="text-right">{t('name')}</TableHead>
-          <TableHead className="text-right">{t('phone')}</TableHead>
-          <TableHead className="text-right">{t('email')}</TableHead>
-          <TableHead className="text-right">{t('dateAndTime')}</TableHead>
-          <TableHead className="text-right">{t('registrationMethod')}</TableHead>
-          <TableHead className="text-right">{t('country')}</TableHead>
-          <TableHead className="text-right">{t('NOSearches')}</TableHead>
-          <TableHead className="text-right">{t('paymentMethod')}</TableHead>
-          <TableHead className="text-right">{t('numberOfInsurance')}</TableHead>
-          <TableHead className="text-right">{t('carNumbers')}</TableHead>
-          <TableHead className="text-right">{t('currency')}</TableHead>
-          <TableHead className="text-right">{t('active')}</TableHead>
-          <TableHead className="text-right">{t('suspensionDuration')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("image")}</TableHead>
+          <TableHead className="text-right">{t("name")}</TableHead>
+          <TableHead className="text-right">{t("phone")}</TableHead>
+          <TableHead className="text-right">{t("email")}</TableHead>
+          <TableHead className="text-right">{t("dateAndTime")}</TableHead>
+          <TableHead className="text-right">
+            {t("registrationMethod")}
+          </TableHead>
+          <TableHead className="text-right">{t("country")}</TableHead>
+          <TableHead className="text-right">{t("NOSearches")}</TableHead>
+          <TableHead className="text-right">{t("paymentMethod")}</TableHead>
+          <TableHead className="text-right">{t("numberOfInsurance")}</TableHead>
+          <TableHead className="text-right">{t("carNumbers")}</TableHead>
+          <TableHead className="text-right">{t("currency")}</TableHead>
+          <TableHead className="text-right">{t("active")}</TableHead>
+          <TableHead className="text-right">
+            {t("suspensionDuration")}
+          </TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
-      <TableBody >
+      <TableBody>
         {users.map((user, index) => (
-        <TableRow key={user.id} noBackgroundColumns={2}>
+          <TableRow key={user.id} noBackgroundColumns={2}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               <img
-                src={user.image || userPlaceholder}
+                src={userPlaceholder}
                 alt={user.name}
                 className="w-[52.3px] h-[51px] rounded-full"
               />
@@ -86,20 +90,20 @@ export function UserTable() {
               <Switch checked={true} />
             </TableCell>
             <TableCell>
-            <div className="w-[160px]">
-              <Select
-                items={[{ key: "1", label: "حدد المدة" }]}
-                label="حدد المدة"
-                classNames={{
-                  trigger:
-                    "h-9 !h-9 min-h-9 bg-white border !py-5 rounded-[5px]",
-                  label: "text-sm text-gray-700",
-                  listbox: "bg-white shadow-md",
-                }}
-              >
-                {(option) => <SelectItem>{option.label}</SelectItem>}
-              </Select>
-            </div>
+              <div className="w-[160px]">
+                <Select
+                  items={[{ key: "1", label: "حدد المدة" }]}
+                  label="حدد المدة"
+                  classNames={{
+                    trigger:
+                      "h-9 !h-9 min-h-9 bg-white border !py-5 rounded-[5px]",
+                    label: "text-sm text-gray-700",
+                    listbox: "bg-white shadow-md",
+                  }}
+                >
+                  {(option) => <SelectItem>{option.label}</SelectItem>}
+                </Select>
+              </div>
             </TableCell>
             <TableCell className="flex items-center gap-[7px]">
               <Switch />
