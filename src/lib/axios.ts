@@ -36,15 +36,15 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    // if (
-    //   error.response &&
-    //   // error.response.status === 401 &&
-    //   // typeof window !== "undefined" &&
-    //   !window.location.href.includes("login")
-    // ) {
-    //   Cookies.remove("hantoor_token");
-    //   window.location.href = "/login";
-    // }
-    // return Promise.reject(error);
+    if (
+      error.response &&
+      error.response.status === 401 &&
+      typeof window !== "undefined" &&
+      !window.location.href.includes("login")
+    ) {
+      Cookies.remove("hantoor_token");
+      window.location.href = "/login";
+    }
+    return Promise.reject(error);
   }
 );

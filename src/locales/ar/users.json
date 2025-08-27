@@ -21,5 +21,7 @@
   "suspensionDuration": "مدة الايقاف",
   "status": "الحالة",
   "searchCountryOrPhoneCode": "البحث عن البلد أو رمز الهاتف",
-  "searchByName": "ابحث بالاسم"
+  "searchByName": "ابحث بالاسم",
+  "userAdded": "تم إضافة المستخدم بنجاح",
+  "userDeleted": "تم حذف المستخدم بنجاح"
 }

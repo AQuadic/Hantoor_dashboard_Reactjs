@@ -10,6 +10,7 @@ import { createAdminUser, CreateAdminUserPayload } from "@/api/users/addUser";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { CountriesResponse, getCountries } from "@/api/countries/getCountry";
+import { useNavigate } from "react-router";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -36,7 +37,7 @@ const AddUsers = () => {
   const [image, ] = useState<File | null>(null);
   const [countryId, ] = useState("");
   const [cityId, ] = useState("");
-
+  const navigate = useNavigate();
   const { data: countriesData } = useQuery<CountriesResponse>({
     queryKey: ["countries"],
     queryFn: () => getCountries(1),
@@ -57,7 +58,8 @@ const AddUsers = () => {
 
     try {
       await createAdminUser(payload);
-      toast.success("User created successfully!");
+      toast.success(t('userAdded'));
+      navigate('/users')
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to create user.");
     }
