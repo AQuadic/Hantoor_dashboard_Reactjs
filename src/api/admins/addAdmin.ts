@@ -22,6 +22,9 @@ interface CreateAdminPayload {
   email: string;
   password: string;
   password_confirmation: string;
+  phone?: string;
+  phone_country?: string;
+  image?: File | null;
 }
 
 export async function createAdmin(

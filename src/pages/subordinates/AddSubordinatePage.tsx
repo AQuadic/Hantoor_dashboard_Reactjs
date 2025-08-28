@@ -94,6 +94,7 @@ const AddSubordinatePage = () => {
           password_confirmation: confirmPassword,
           phone,
           phone_country: selectedCountry.iso2,
+          image: profileImage,
         });
       }
 
