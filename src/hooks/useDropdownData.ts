@@ -224,7 +224,6 @@ export const useAllDropdownData = () => {
   const brands = useBrands();
   const agents = useAgents();
   const models = useModels();
-  const vehicleBodies = useVehicleBodies();
   const vehicleTypes = useVehicleTypes();
   const vehicleClasses = useVehicleClasses();
   const brandOrigins = useBrandOrigins();
@@ -237,7 +236,6 @@ export const useAllDropdownData = () => {
     brands.isLoading ||
     agents.isLoading ||
     models.isLoading ||
-    vehicleBodies.isLoading ||
     vehicleTypes.isLoading ||
     vehicleClasses.isLoading ||
     brandOrigins.isLoading ||
@@ -250,7 +248,6 @@ export const useAllDropdownData = () => {
     brands.error ||
     agents.error ||
     models.error ||
-    vehicleBodies.error ||
     vehicleTypes.error ||
     vehicleClasses.error ||
     brandOrigins.error ||
@@ -263,7 +260,6 @@ export const useAllDropdownData = () => {
     brands,
     agents,
     models,
-    vehicleBodies,
     vehicleTypes,
     vehicleClasses,
     brandOrigins,

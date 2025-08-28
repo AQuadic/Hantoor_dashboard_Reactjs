@@ -1,25 +1,29 @@
 import { Select, SelectItem } from "@heroui/react";
 import DashboardInput from "@/components/general/DashboardInput";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import CarDetailsField from "@/components/cars/addcars/CarDetailsField";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
 import { VehicleFeature } from "@/api/vehicles/fetchVehicles";
 import { useAllDropdownData } from "@/hooks/useDropdownData";
+import { getCountries, Country } from "@/api/countries/getCountry";
+import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 
 const CarDetails = () => {
   const { t } = useTranslation("cars");
   const { formData, updateField, features, addFeature, removeFeature } =
     useVehicleForm();
 
-  // Fetch all dropdown data
+  // State for countries data
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [countriesLoading, setCountriesLoading] = useState(true);
+
+  // Fetch all dropdown data (excluding countries and vehicle bodies)
   const {
-    countries,
     brands,
     agents,
     models,
-    vehicleBodies,
     vehicleTypes,
     vehicleClasses,
     brandOrigins,
@@ -27,6 +31,35 @@ const CarDetails = () => {
     engineTypes,
     engineSizes,
   } = useAllDropdownData();
+
+  // Fetch vehicle bodies - use same approach as Models page
+  const { data: vehicleBodiesData, isLoading: vehicleBodiesLoading } =
+    useVehicleBodies({
+      pagination: true,
+    });
+
+  const vehicleBodies = {
+    data: vehicleBodiesData?.data || [],
+    isLoading: vehicleBodiesLoading,
+  };
+
+  // Fetch countries on component mount
+  useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        setCountriesLoading(true);
+        const response = await getCountries(1, ""); // Get first page with no search
+        setCountries(response.data);
+      } catch (error) {
+        console.error("Failed to fetch countries:", error);
+        setCountries([]);
+      } finally {
+        setCountriesLoading(false);
+      }
+    };
+
+    fetchCountries();
+  }, []);
 
   const addCarDetailsField = () => {
     addFeature?.();
@@ -66,14 +99,16 @@ const CarDetails = () => {
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
-          selectedKeys={formData?.country_id ? [formData.country_id] : []}
+          selectedKeys={
+            formData?.country_id ? [formData.country_id.toString()] : []
+          }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("country_id", value || "1"); // Default to 1 if no selection
+            updateField?.("country_id", value);
           }}
-          isLoading={countries.isLoading}
+          isLoading={countriesLoading}
         >
-          {countries.data.map((country) => (
+          {countries.map((country) => (
             <SelectItem key={country.id.toString()}>
               {country.name.ar}
             </SelectItem>
@@ -89,7 +124,7 @@ const CarDetails = () => {
           selectedKeys={formData?.brand_id ? [formData.brand_id] : []}
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("brand_id", value || "1");
+            updateField?.("brand_id", value);
           }}
           isLoading={brands.isLoading}
         >
@@ -107,7 +142,7 @@ const CarDetails = () => {
           selectedKeys={formData?.agent_id ? [formData.agent_id] : []}
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("agent_id", value || "1");
+            updateField?.("agent_id", value);
           }}
           isLoading={agents.isLoading}
         >
@@ -127,7 +162,7 @@ const CarDetails = () => {
           }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("vehicle_model_id", value || "1");
+            updateField?.("vehicle_model_id", value);
           }}
           isLoading={models.isLoading}
         >
@@ -149,7 +184,7 @@ const CarDetails = () => {
           }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("vehicle_body_type_id", value || "1");
+            updateField?.("vehicle_body_type_id", value);
           }}
           isLoading={vehicleBodies.isLoading}
         >
@@ -169,7 +204,7 @@ const CarDetails = () => {
           }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("vehicle_type_id", value || "1");
+            updateField?.("vehicle_type_id", value);
           }}
           isLoading={vehicleTypes.isLoading}
         >
@@ -189,7 +224,7 @@ const CarDetails = () => {
           }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("vehicle_class_id", value || "1");
+            updateField?.("vehicle_class_id", value);
           }}
           isLoading={vehicleClasses.isLoading}
         >
@@ -211,7 +246,7 @@ const CarDetails = () => {
           }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("brand_origin_id", value || "1");
+            updateField?.("brand_origin_id", value);
           }}
           isLoading={brandOrigins.isLoading}
         >
@@ -231,7 +266,7 @@ const CarDetails = () => {
           }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("number_of_seat_id", value || "1");
+            updateField?.("number_of_seat_id", value);
           }}
           isLoading={seats.isLoading}
         >
@@ -251,7 +286,7 @@ const CarDetails = () => {
           }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("engine_type_id", value || "1");
+            updateField?.("engine_type_id", value);
           }}
           isLoading={engineTypes.isLoading}
         >
@@ -273,7 +308,7 @@ const CarDetails = () => {
           }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            updateField?.("engine_volume_id", value || "1");
+            updateField?.("engine_volume_id", value);
           }}
           isLoading={engineSizes.isLoading}
         >

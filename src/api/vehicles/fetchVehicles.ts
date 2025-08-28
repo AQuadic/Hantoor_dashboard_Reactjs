@@ -414,8 +414,6 @@ export async function createVehicle(
   if (data.video) {
     formData.append("video", data.video);
   }
-  //TODO this should be removed
-  formData.append("country_id", "1");
   // Add image arrays
   if (data.images?.length) {
     data.images.forEach((img, index) => {
