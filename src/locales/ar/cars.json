@@ -74,5 +74,9 @@
   "dateAndTime": "تاريخ ووقت الاضافة",
   "status": "الحالة",
 
-  "views": "عدد المشاهدات"
+  "views": "عدد المشاهدات",
+  "vehicleUpdatedSuccess": "تم تحديث السيارة بنجاح",
+  "pleaseFillAllFields": "يرجى ملء جميع الحقول",
+  "pleaseEnterPrice": "يرجى إدخال السعر",
+  "vehicleCreatedSuccess": "تم اضافة السيارة بنجاح"
 }

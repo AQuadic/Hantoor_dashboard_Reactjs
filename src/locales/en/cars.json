@@ -74,5 +74,9 @@
   "dateAndTime": "Date & time added",
   "status": "Status",
 
-  "views": "Number of Views"
+  "views": "Number of Views",
+  "vehicleUpdatedSuccess": "Vehicle updated successfully",
+  "pleaseFillAllFields": "Please fill all fields",
+  "pleaseEnterPrice": "Please enter price",
+  "vehicleCreatedSuccess": "Vehicle created successfully"
 }
