@@ -1,12 +1,12 @@
 import { axios } from "@/lib/axios";
 
 export interface Admin {
-  isActive: boolean | undefined;
-  image: string;
   id: number;
   name: string;
   email: string;
-  mobile?: string;
+  phone?: string | null;
+  image?: string | null;
+  isActive?: boolean;
   created_at: string;
   updated_at: string;
 }

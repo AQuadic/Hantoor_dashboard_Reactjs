@@ -89,7 +89,7 @@ export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: Sub
               />
             </TableCell>
             <TableCell>{admin.name}</TableCell>
-            <TableCell>{admin.mobile || "-"}</TableCell>
+            <TableCell>{admin.phone || "-"}</TableCell>
             <TableCell>{admin.email}</TableCell>
             <TableCell>{admin.created_at}</TableCell>
             <TableCell>-</TableCell>
