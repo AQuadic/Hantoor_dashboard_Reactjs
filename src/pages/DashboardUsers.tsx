@@ -11,10 +11,13 @@ import { useState } from "react";
 
 const DashboardUsers = () => {
   const { t } = useTranslation("users");
-  
+
   const [searchTermAr, setSearchTermAr] = useState("");
   const [searchTermEn, setSearchTermEn] = useState("");
-  
+  const [currentPage, setCurrentPage] = useState(1);
+  const [perPage] = useState(10);
+  const [meta, setMeta] = useState<any>(null);
+
   const activeSearchTerm = searchTermEn || searchTermAr;
 
   return (
@@ -38,7 +41,7 @@ const DashboardUsers = () => {
             <SearchBar
               termAr={searchTermAr}
               termEn={searchTermEn}
-              placeholder={t('searchBy')}
+              placeholder={t("searchBy")}
               setTermAr={setSearchTermAr}
               setTermEn={setSearchTermEn}
             />
@@ -58,19 +61,23 @@ const DashboardUsers = () => {
         <UserSelects />
       </div>
       <div className="px-2 md:px-8">
-        <UserTable searchTerm={activeSearchTerm} />
-
-        <TablePagination
-          currentPage={1}
-          setCurrentPage={function (): void {
-            throw new Error("Function not implemented.");
-          }}
-          totalPages={100}
-          totalItems={100}
-          itemsPerPage={5}
-          from={1}
-          to={5}
+        <UserTable
+          searchTerm={activeSearchTerm}
+          page={currentPage}
+          perPage={perPage}
+          onDataLoaded={setMeta}
         />
+        {meta && meta.total > 0 && (
+          <TablePagination
+            currentPage={meta.current_page}
+            setCurrentPage={setCurrentPage}
+            totalPages={meta.last_page || 1}
+            totalItems={meta.total || 0}
+            itemsPerPage={meta.per_page}
+            from={meta.from}
+            to={meta.to}
+          />
+        )}
       </div>
     </section>
   );

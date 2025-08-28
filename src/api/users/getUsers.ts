@@ -38,6 +38,7 @@ export interface GetAdminUsersParams {
   search?: string;
   pagination?: "simple" | "normal" | "none";
   per_page?: number;
+  page?: number;
   from_date?: string;
   to_date?: string;  
 }
