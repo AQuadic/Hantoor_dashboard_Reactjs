@@ -720,9 +720,9 @@ export async function toggleVehicleStatus(
   isActive: boolean
 ): Promise<Vehicle> {
   // Send a PATCH request with JSON payload (is_active as numeric 1/0)
-  const payload = { is_active: isActive ? 1 : 0 };
+  const payload = { is_active: isActive ? 1 : 0, _method: "PATCH" };
 
-  const response = await axios.patch(`/admin/vehicle/${id}`, payload);
+  const response = await axios.post(`/admin/vehicle/${id}`, payload);
   const responseData = response.data as VehicleApiResponseWrapper;
   return responseData.data;
 }
