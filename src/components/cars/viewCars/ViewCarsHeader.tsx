@@ -1,16 +1,26 @@
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
-import DiscountPercentage from "./DiscountPercentage";
+import { Vehicle } from "@/api/vehicles/getVehicleById";
+import { useTranslation } from "react-i18next";
 
-interface SubordinatesHeaderProps {
+interface ViewCarsHeaderProps {
   selectedFilter: string;
   setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
+  vehicle?: Vehicle;
 }
 
-const ViewCarsHeader: React.FC<SubordinatesHeaderProps> = ({
+const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
+  vehicle,
 }) => {
+  const { t, i18n } = useTranslation('cars');
+  const getdispbByLang = (name?: { ar?: string; en?: string }) => {
+  if (!name) return "undefined";
+  const lang = i18n.language as 'ar' | 'en';
+  return name[lang] || name.ar || name.en || "undefined";
+};
+
   const filtersData = [
     {
       titleAr: "عن السيارة",
@@ -67,31 +77,58 @@ const ViewCarsHeader: React.FC<SubordinatesHeaderProps> = ({
             width={338}
             height={175}
             className="object-cover w-[338px] h-[175px] rounded-xl"
-            src="/public/images/carDetails.png"
+            src={vehicle?.image || vehicle?.additional_images?.[0] || "/images/carDetails.png"}
+            alt="Vehicle"
           />
           <div className="flex flex-col gap-1.5">
-            <h3 className="text-xl font-bold">تويوتا كامري 2025</h3>
+            <h3 className="text-xl font-bold">{getdispbByLang(vehicle?.name)}</h3>
             <div className="flex items-center gap-2">
-              <img
-                className="w-[35px] h-[25px]"
-                src="/public/images/toyota.png"
-                alt="Toyota Logo"
-              />
-              <p className="text-lg text-[#606060]">تويوتا</p>
+              {vehicle?.brand?.image?.url && (
+                <img
+                  className="w-[35px] h-[25px] object-contain"
+                  src={vehicle.brand.image.url}
+                  alt={`${getdispbByLang(vehicle?.brand?.name)} Logo`}
+                />
+              )}
+              <p className="text-lg text-[#606060]">{getdispbByLang(vehicle?.brand?.name)}</p>
             </div>
-            <p className="text-xl font-bold text-primary">500.000 درهم</p>
-            <p className="text-lg text-[#606060] line-through">600.200 درهم</p>
-            <DiscountPercentage percentage={15} />
+            <p className="text-xl font-bold text-primary">
+              {vehicle?.price ? `${vehicle.price} درهم` : "0 درهم"}
+            </p>
+
+            {/* {(vehicle?.vehicle_model?.name || vehicle?.vehicle_type?.name || vehicle?.vehicle_class?.name) && (
+              <div className="flex gap-4 mt-2 text-sm text-[#606060]">
+                {vehicle?.vehicle_model?.name && (
+                  <div>
+                    <span>الموديل: </span>
+                    <span className="font-medium">{getdispbByLang(vehicle.vehicle_model.name)}</span>
+                  </div>
+                )}
+                {vehicle?.vehicle_type?.name && (
+                  <div>
+                    <span>النوع: </span>
+                    <span className="font-medium">{getdispbByLang(vehicle.vehicle_type.name)}</span>
+                  </div>
+                )}
+                {vehicle?.vehicle_class?.name && (
+                  <div>
+                    <span>الفئة: </span>
+                    <span className="font-medium">{getdispbByLang(vehicle.vehicle_class.name)}</span>
+                  </div>
+                )}
+              </div>
+            )} */}
           </div>
         </div>
-        <div>
-          <div className="flex flex-col p-4 border rounded-2xl ">
-            <p className="text-2xl text-primary font-bold">10</p>
-            <p className="text-sm text-[#64748B]">عدد مرات الإضافة للمفضلة</p>
+
+        <div className="flex flex-col gap-1.5">
+          <div className="flex flex-col p-4 border rounded-2xl">
+            <p className="text-2xl text-primary font-bold">{vehicle?.favorites || 0}</p>
+            <p className="text-sm text-[#64748B]">{t('favTimes')}</p>
           </div>
           <div className="flex flex-col p-4 border rounded-2xl mt-1.5">
-            <p className="text-2xl text-primary font-bold">21</p>
-            <p className="text-sm text-[#64748B]">عدد المشاهدات</p>
+            <p className="text-2xl text-primary font-bold">{vehicle?.views || 0}</p>
+            <p className="text-sm text-[#64748B]">{t('views')}</p>
           </div>
         </div>
       </div>

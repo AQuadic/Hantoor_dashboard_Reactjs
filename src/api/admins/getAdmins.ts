@@ -1,12 +1,31 @@
 import { axios } from "@/lib/axios";
 
+export interface AdminImage {
+  id: number;
+  uuid: string;
+  size: number;
+  url: string;
+  responsive_urls: string[];
+}
+
 export interface Admin {
-  isActive: boolean | undefined;
-  image: string;
   id: number;
   name: string;
   email: string;
-  mobile?: string;
+  phone?: string | null;
+  image?: AdminImage | null;
+  isActive?: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Admin {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  image?: AdminImage | null;
+  isActive?: boolean;
   created_at: string;
   updated_at: string;
 }

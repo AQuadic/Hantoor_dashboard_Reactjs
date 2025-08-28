@@ -21,5 +21,6 @@
     "searchByName": "Search by name",
     "currencyCode": "Currency code",
     "countryActivated": "Country activated successfully",
-    "countryDeactivated": "Country deactivated successfully"
+    "countryDeactivated": "Country deactivated successfully",
+    "countryUpdatedSuccessfully": "Country updated successfully"
 }

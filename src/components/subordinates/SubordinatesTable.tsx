@@ -84,12 +84,20 @@ export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: Sub
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               <img
-                src={admin.image || "/images/admin/admin1.svg"}
-                alt="admin"
+                src={
+                  admin.image?.responsive_urls?.[0] ||
+                  admin.image?.url ||
+                  "/images/admin/admin1.svg"
+                }
+                alt={admin.name || "admin"}
+                className="w-10 h-10 rounded-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src = "/images/admin/admin1.svg";
+                }}
               />
             </TableCell>
             <TableCell>{admin.name}</TableCell>
-            <TableCell>{admin.mobile || "-"}</TableCell>
+            <TableCell>{admin.phone || "-"}</TableCell>
             <TableCell>{admin.email}</TableCell>
             <TableCell>{admin.created_at}</TableCell>
             <TableCell>-</TableCell>

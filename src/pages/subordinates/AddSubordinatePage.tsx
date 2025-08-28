@@ -79,21 +79,22 @@ const AddSubordinatePage = () => {
       setIsSubmitting(true);
 
       if (isEdit) {
-        // ✅ update existing admin
         await updateAdmin(managerId as string, {
           name,
           email,
-          mobile: phone,
+          phone,
+          phone_country: selectedCountry.iso2,
           ...(password ? { password, password_confirmation: confirmPassword } : {}),
         });
       } else {
-        // ✅ create new admin
         await createAdmin({
           name,
           email,
           password,
           password_confirmation: confirmPassword,
-          mobile: phone,
+          phone,
+          phone_country: selectedCountry.iso2,
+          image: profileImage,
         });
       }
 

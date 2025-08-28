@@ -14,7 +14,7 @@ import { Switch, Select, SelectItem } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import userPlaceholder from "/images/users/user1.svg";
-import { AdminUser, getAdminUsers } from "@/api/users/getUsers";
+import { AdminUser, AdminUsersResponse, getAdminUsers } from "@/api/users/getUsers";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { deleteUser } from "@/api/users/deleteUser";
@@ -22,18 +22,30 @@ import toast from "react-hot-toast";
 
 interface UserTableProps {
   searchTerm?: string;
+  page: number;
+  perPage: number;
+  onDataLoaded: (meta: AdminUsersResponse["meta"]) => void;
 }
 
-export function UserTable({ searchTerm = "" }: UserTableProps) {
+export function UserTable({ searchTerm = "", page, perPage, onDataLoaded }: UserTableProps) {
   const { t } = useTranslation("users");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["adminUsers", searchTerm],
-    queryFn: () => getAdminUsers({ 
-      search: searchTerm || undefined
-    }),
+    queryKey: ["adminUsers", searchTerm, page, perPage],
+    queryFn: () =>
+      getAdminUsers({
+        search: searchTerm || undefined,
+        page,
+        per_page: perPage,
+        pagination: "normal",
+      }),
   });
+
   const users: AdminUser[] = data?.data || [];
+
+  if (data?.meta) {
+    onDataLoaded(data.meta);
+  }
 
   const handleDelete = async (id: number) => {
     await deleteUser(id);

@@ -3,7 +3,8 @@
 export interface UpdateAdminPayload {
   name?: string;
   email?: string;
-  mobile?: string;
+  phone?: string;
+  phone_country?: string;
   password?: string;
   password_confirmation?: string;
   isActive?: boolean;

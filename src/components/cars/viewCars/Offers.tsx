@@ -70,7 +70,7 @@ const Offers = () => (
         </TableHeader>
         <TableBody>
           {offers.map((offer) => (
-            <TableRow key={offer.id}>
+            <TableRow key={offer.id} noBackgroundColumns={1}>
               <TableCell className="">{offer.id}</TableCell>
               <TableCell className="">image</TableCell>
               <TableCell className="w-[10%]">
