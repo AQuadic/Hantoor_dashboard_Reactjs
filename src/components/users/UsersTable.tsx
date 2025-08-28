@@ -20,12 +20,18 @@ import NoData from "../general/NoData";
 import { deleteUser } from "@/api/users/deleteUser";
 import toast from "react-hot-toast";
 
-export function UserTable() {
+interface UserTableProps {
+  searchTerm?: string;
+}
+
+export function UserTable({ searchTerm = "" }: UserTableProps) {
   const { t } = useTranslation("users");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["adminUsers"],
-    queryFn: () => getAdminUsers(),
+    queryKey: ["adminUsers", searchTerm],
+    queryFn: () => getAdminUsers({ 
+      search: searchTerm || undefined
+    }),
   });
   const users: AdminUser[] = data?.data || [];
 

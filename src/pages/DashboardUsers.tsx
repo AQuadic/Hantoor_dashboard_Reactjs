@@ -5,9 +5,18 @@ import SearchBar from "@/components/general/dashboard/SearchBar";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import UserSelects from "@/components/users/UserSelects";
 import { UserTable } from "@/components/users/UsersTable";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
+import { useState } from "react";
 
 const DashboardUsers = () => {
+  const { t } = useTranslation("users");
+  
+  const [searchTermAr, setSearchTermAr] = useState("");
+  const [searchTermEn, setSearchTermEn] = useState("");
+  
+  const activeSearchTerm = searchTermEn || searchTermAr;
+
   return (
     <section>
       <div className="py-2 bg-white border-b border-[#E1E1E1]">
@@ -27,10 +36,11 @@ const DashboardUsers = () => {
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
           <div className="flex-1">
             <SearchBar
-              termAr={"ابحث بالاسم, رقم الجوال, البريد الالكتروني"}
-              termEn={"Search by name, mobile number, email"}
-              setTermAr={() => {}}
-              setTermEn={() => {}}
+              termAr={searchTermAr}
+              termEn={searchTermEn}
+              placeholder={t('searchBy')}
+              setTermAr={setSearchTermAr}
+              setTermEn={setSearchTermEn}
             />
           </div>
           <div className="flex-1">
@@ -48,7 +58,7 @@ const DashboardUsers = () => {
         <UserSelects />
       </div>
       <div className="px-2 md:px-8">
-        <UserTable />
+        <UserTable searchTerm={activeSearchTerm} />
 
         <TablePagination
           currentPage={1}
