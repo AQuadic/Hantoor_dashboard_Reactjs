@@ -35,7 +35,7 @@ const Specifications = () => {
           </TableHeader>
           <TableBody>
             {specifications.map((specification) => (
-              <TableRow>
+              <TableRow noBackgroundColumns={1}>
                 <TableCell>{specification.brand}</TableCell>
                 <TableCell>{specification.category}</TableCell>
                 <TableCell>{specification.type}</TableCell>

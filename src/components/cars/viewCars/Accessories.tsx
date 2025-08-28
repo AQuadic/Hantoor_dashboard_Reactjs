@@ -41,7 +41,7 @@ const Accessories = () => {
           </TableHeader>
           <TableBody>
             {accessories.map((accessory, index) => (
-              <TableRow key={index}>
+              <TableRow key={index} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
                   <img

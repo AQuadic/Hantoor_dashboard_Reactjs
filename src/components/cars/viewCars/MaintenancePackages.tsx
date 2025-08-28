@@ -45,7 +45,7 @@ const MaintenancePackages = () => {
           </TableHeader>
           <TableBody>
             {packages.map((pkg) => (
-              <TableRow key={pkg.id}>
+              <TableRow key={pkg.id} noBackgroundColumns={1}>
                 <TableCell>{pkg.id}</TableCell>
                 <TableCell>{pkg.duration}</TableCell>
                 <TableCell className="w-full">{pkg.price}</TableCell>

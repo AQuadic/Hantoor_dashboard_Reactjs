@@ -72,5 +72,7 @@
   "leaseToOwn": "Lease-to-Own",
   "favTimes": "Number of times added to favorites",
   "dateAndTime": "Date & time added",
-  "status": "Status"
+  "status": "Status",
+
+  "views": "Number of Views"
 }

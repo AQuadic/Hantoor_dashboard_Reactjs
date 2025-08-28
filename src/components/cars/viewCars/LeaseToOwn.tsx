@@ -24,7 +24,7 @@ const LeaseToOwn = () => {
           </TableHeader>
           <TableBody>
             {rentToOwn.map((accessory, index) => (
-              <TableRow key={index}>
+              <TableRow key={index} noBackgroundColumns={1}>
                 <TableCell className="">{accessory.price}</TableCell>
                 <TableCell className="w-full">{accessory.duration}</TableCell>
                 <TableCell className="flex items-center gap-[7px]">
