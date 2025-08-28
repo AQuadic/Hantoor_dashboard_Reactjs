@@ -100,7 +100,7 @@ const PhotosAndVideos = () => {
           </div>
         </div>
       </div>
-      {convertedImages?.length && convertedImages.length > 0 && (
+      {convertedImages && convertedImages.length > 0 && (
         <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
           <h1 className="text-lg text-primary font-bold mb-2">
             الصور الاضافية
