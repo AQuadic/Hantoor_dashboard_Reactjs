@@ -11,7 +11,7 @@ import { getCountries, Country } from "@/api/countries/getCountry";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 
 const CarDetails = () => {
-  const { t } = useTranslation("cars");
+  const { t, i18n } = useTranslation("cars");
   const { formData, updateField, features, addFeature, removeFeature } =
     useVehicleForm();
 
@@ -110,7 +110,7 @@ const CarDetails = () => {
         >
           {countries.map((country) => (
             <SelectItem key={country.id.toString()}>
-              {country.name.ar}
+              {country.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
@@ -129,7 +129,9 @@ const CarDetails = () => {
           isLoading={brands.isLoading}
         >
           {brands.data.map((brand) => (
-            <SelectItem key={brand.id.toString()}>{brand.name.ar}</SelectItem>
+            <SelectItem key={brand.id.toString()}>
+              {brand?.name[i18n.language as "ar" | "en"]}
+            </SelectItem>
           ))}
         </Select>
 
@@ -147,7 +149,9 @@ const CarDetails = () => {
           isLoading={agents.isLoading}
         >
           {agents.data.map((agent) => (
-            <SelectItem key={agent.id.toString()}>{agent.name.ar}</SelectItem>
+            <SelectItem key={agent.id.toString()}>
+                {agent.name[i18n.language as "ar" | "en"]}
+            </SelectItem>
           ))}
         </Select>
 
@@ -167,7 +171,9 @@ const CarDetails = () => {
           isLoading={models.isLoading}
         >
           {models.data.map((model) => (
-            <SelectItem key={model.id.toString()}>{model.name.ar}</SelectItem>
+            <SelectItem key={model.id.toString()}>
+                {model?.name[i18n.language as "ar" | "en"]}
+            </SelectItem>
           ))}
         </Select>
 
@@ -189,7 +195,9 @@ const CarDetails = () => {
           isLoading={vehicleBodies.isLoading}
         >
           {vehicleBodies.data.map((body) => (
-            <SelectItem key={body.id.toString()}>{body.name.ar}</SelectItem>
+            <SelectItem key={body.id.toString()}>
+                {body.name[i18n.language as "ar" | "en"]}
+            </SelectItem>
           ))}
         </Select>
 
@@ -209,7 +217,9 @@ const CarDetails = () => {
           isLoading={vehicleTypes.isLoading}
         >
           {vehicleTypes.data.map((type) => (
-            <SelectItem key={type.id.toString()}>{type.name.ar}</SelectItem>
+            <SelectItem key={type.id.toString()}>
+                  {type.name[i18n.language as "ar" | "en"]}
+            </SelectItem>
           ))}
         </Select>
 
@@ -230,7 +240,7 @@ const CarDetails = () => {
         >
           {vehicleClasses.data.map((vehicleClass) => (
             <SelectItem key={vehicleClass.id.toString()}>
-              {vehicleClass.name.ar}
+              {vehicleClass.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
@@ -251,7 +261,9 @@ const CarDetails = () => {
           isLoading={brandOrigins.isLoading}
         >
           {brandOrigins.data.map((origin) => (
-            <SelectItem key={origin.id.toString()}>{origin.name.ar}</SelectItem>
+            <SelectItem key={origin.id.toString()}>
+                  {origin.name[i18n.language as "ar" | "en"]}
+            </SelectItem>
           ))}
         </Select>
 
@@ -292,7 +304,7 @@ const CarDetails = () => {
         >
           {engineTypes.data.map((engineType) => (
             <SelectItem key={engineType.id.toString()}>
-              {engineType.name.ar}
+              {engineType.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
@@ -314,7 +326,7 @@ const CarDetails = () => {
         >
           {engineSizes.data.map((engineSize) => (
             <SelectItem key={engineSize.id.toString()}>
-              {engineSize.name.ar}
+              {engineSize.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>

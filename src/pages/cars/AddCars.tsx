@@ -22,6 +22,7 @@ import {
   type UpdateVehiclePayload,
   type VehicleImage,
 } from "@/api/vehicles";
+import Loading from "@/components/general/Loading";
 
 const AddCarsForm = () => {
   const params = useParams();
@@ -227,9 +228,7 @@ const AddCarsForm = () => {
 
   if (isLoading && isEdit) {
     return (
-      <div className="flex justify-center items-center h-64">
-        {t("loading") || "Loading..."}
-      </div>
+      <Loading />
     );
   }
 

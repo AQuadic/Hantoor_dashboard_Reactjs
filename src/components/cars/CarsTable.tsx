@@ -28,6 +28,7 @@ import {
   type Vehicle,
   type VehicleFilters,
   type VehiclesApiResponse,
+  VehicleName,
 } from "@/api/vehicles";
 import NoData from "../general/NoData";
 
@@ -235,9 +236,11 @@ const CarsTable = ({
   };
 
   // Helper function to safely get vehicle name (API returns name as string or VehicleName object)
-  const getVehicleDisplayName = (vehicle: Vehicle) => {
-    return getVehicleName(vehicle.name) || "-";
+  const getVehicleDisplayName = (name: string | VehicleName) => {
+    if (typeof name === "string") return name || "-"; // just return string
+    return i18n.language === "ar" ? name.ar || "-" : name.en || "-";
   };
+
 
   // Translate boolean-ish values to localized Yes/No
   const translateYesNo = (val: unknown) => {
@@ -321,22 +324,26 @@ const CarsTable = ({
                 <TableCell>
                   <img
                     src={getVehicleImage(vehicle)}
-                    alt={getVehicleDisplayName(vehicle)}
+                    alt={getVehicleDisplayName(vehicle.name)}
                     className="w-[93px] h-[60px] object-cover rounded"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = carImage;
                     }}
                   />
                 </TableCell>
-                <TableCell>{getVehicleDisplayName(vehicle)}</TableCell>
                 <TableCell>
-                  {vehicle.brand?.name?.ar || vehicle.brand?.name?.en || "-"}
+                  {getVehicleDisplayName(vehicle.name)}
                 </TableCell>
                 <TableCell>
-                  {vehicle.agent?.name?.ar || vehicle.agent?.name?.en || "-"}
+                  {vehicle.brand?.name[i18n.language as "ar" | "en"]}
+                </TableCell>
+                <TableCell>
+                  {vehicle.agent?.name[i18n.language as "ar" | "en"]}
                 </TableCell>
                 <TableCell>-</TableCell>
-                <TableCell>{vehicle.vehicle_model?.name?.ar || "-"}</TableCell>
+                <TableCell>
+                  {vehicle.vehicle_model?.name[i18n.language as "ar" | "en"]}
+                </TableCell>
                 <TableCell>{formatPrice(vehicle.price)}</TableCell>
                 <TableCell>{translateYesNo(vehicle.is_discount)}</TableCell>
                 <TableCell>
