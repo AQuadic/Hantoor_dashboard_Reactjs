@@ -12,6 +12,7 @@ import { countries } from "countries-list";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
+import { useNavigate } from "react-router";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -27,6 +28,7 @@ const EditUsers = () => {
   const { t } = useTranslation("users");
   const { id } = useParams<{ id: string }>();
   const userId = id;
+  const navigate = useNavigate();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -63,7 +65,7 @@ const EditUsers = () => {
       name,
       email,
       phone,
-      phone_country: selectedCountryId,
+      phone_country: selectedCountry.iso2,
       image: image || undefined,
       country_id: selectedCountryId || undefined,
     };
@@ -71,7 +73,8 @@ const EditUsers = () => {
     try {
       const updatedUser = await updateAdminUser(userId, payload);
       console.log("User updated:", updatedUser);
-      toast.success("User updated successfully!");
+      toast.success(t('userUpdated'));
+      navigate("/users")
     } catch (error: any) {
       const message =
         error?.response?.data?.message ||
