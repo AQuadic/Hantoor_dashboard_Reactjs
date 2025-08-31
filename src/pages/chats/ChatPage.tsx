@@ -93,15 +93,17 @@ const ChatPage = () => {
           conversations={conversationsData?.data || []}
           onDelete={handleDelete}
         />
-        <TablePagination
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={conversationsData?.last_page || 1}
-          totalItems={conversationsData?.total || 0}
-          itemsPerPage={conversationsData?.per_page || 15}
-          from={conversationsData?.from || 0}
-          to={conversationsData?.to || 0}
-        />
+        {conversationsData?.data && conversationsData.data.length > 0 && (
+          <TablePagination
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={conversationsData?.last_page || 1}
+            totalItems={conversationsData?.total || 0}
+            itemsPerPage={conversationsData?.per_page || 15}
+            from={conversationsData?.from || 0}
+            to={conversationsData?.to || 0}
+          />
+        )}
       </div>
     </div>
   );

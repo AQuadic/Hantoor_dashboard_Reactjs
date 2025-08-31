@@ -20,6 +20,7 @@ import {
 } from "@/api/chats/fetchConversations";
 import { toast } from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import NoData from "../general/NoData";
 
 interface ChatTableProps {
   conversations: Conversation[];
@@ -94,6 +95,8 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
   const handleOpenChat = (conversationId: number) => {
     setOpenConversationId(conversationId);
   };
+
+  if (conversations.length === 0) return <NoData />;
 
   return (
     <div className="relative flex">
