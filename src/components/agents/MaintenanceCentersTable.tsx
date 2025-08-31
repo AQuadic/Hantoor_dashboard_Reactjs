@@ -1,33 +1,66 @@
 import Location from "../icons/agents/Location";
+import { Agent } from "@/api/agents/getAgentById";
+import { useTranslation } from "react-i18next";
 
+interface Props {
+  agent: Agent | null;
+}
 
-const MaintenanceCentersTable = () => {
-return (
-<section className="mt-6 space-y-4">
-{[...Array(3)].map((_, index) => (
-    <div
-    key={index}
-    className="w-full h-[76px] bg-[#FFFFFF] border border-[#DEDEDE] rounded-[13px]"
-    >
-    <div className="py-3 px-5 flex items-center justify-between">
-        <div>
-        <h1 className="text-[#2A32F8] text-[17px] font-bold">
-            المركز الدولي لصيانة السيارات
-        </h1>
-        <p className="text-[#03040A] text-sm mt-1">
-            ش ذياب بن عيسى, مدينة خليفة, أبوظبي
-        </p>
+const MaintenanceCentersTable: React.FC<Props> = ({ agent }) => {
+  const { i18n } = useTranslation();
+  const lang = i18n.language as "ar" | "en";
+
+  if (!agent) {
+    return <p className="mt-6 text-gray-500">Loading agent details...</p>;
+  }
+
+  return (
+    <section className="mt-6 space-y-4">
+      {agent.service_centers?.map((center) => (
+        <div
+          key={center.id}
+          className="w-full h-[76px] bg-[#FFFFFF] border border-[#DEDEDE] rounded-[13px]"
+        >
+          <div className="py-3 px-5 flex items-center justify-between">
+            <div>
+              <h1 className="text-[#2A32F8] text-[17px] font-bold">
+                {center.name?.[lang] ?? ""}
+              </h1>
+              <p className="text-[#03040A] text-sm mt-1">
+                {center.description?.[lang] ?? ""}
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              {center.link_google_map && (
+                <a
+                  href={center.link_google_map}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Location />
+                </a>
+              )}
+
+              {center.phone && (
+                <>
+                  <a href={`tel:${center.phone}`}>
+                    <img src="/images/phone.svg" alt="Phone" />
+                  </a>
+                  <a
+                    href={`https://wa.me/${center.phone}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img src="/images/whatsapp.svg" alt="WhatsApp" />
+                  </a>
+                </>
+              )}
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-        <Location />
-        <img src="/images/whatsapp.svg" />
-        <img src="/images/phone.svg" />
-        </div>
-    </div>
-    </div>
-))}
-</section>
-);
+      ))}
+    </section>
+  );
 };
 
 export default MaintenanceCentersTable;

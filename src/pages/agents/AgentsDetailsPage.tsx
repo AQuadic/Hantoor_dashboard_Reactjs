@@ -1,12 +1,31 @@
-import AgentsHeader from '@/components/agents/AgentsHeader'
-import React, { useState } from 'react'
+import AgentsHeader from '@/components/agents/AgentsHeader';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import MaintenanceCentersTable from '@/components/agents/MaintenanceCentersTable';
 import SalesShowroomsTable from '@/components/agents/SalesShowroomsTable';
+import { Agent, getAgentById } from '@/api/agents/getAgentById';
 
 type AgentFilterType = "MaintenanceCenters" | "SalesShowrooms";
 
 const AgentsDetailsPage = () => {
-    const [selectedFilter, setSelectedFilter] = useState<AgentFilterType>("MaintenanceCenters");
+  const { id } = useParams<{ id: string }>();
+  const [selectedFilter, setSelectedFilter] = useState<AgentFilterType>("MaintenanceCenters");
+  const [agent, setAgent] = useState<Agent | null>(null);
+
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchAgent = async () => {
+      try {
+        const data = await getAgentById(Number(id));
+        setAgent(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAgent();
+  }, [id]);
 
     return (
         <div>
@@ -16,9 +35,9 @@ const AgentsDetailsPage = () => {
             />
             <div className="px-2 md:px-8 relative min-h-[300px]">
                 {selectedFilter === "MaintenanceCenters" ? (
-                <MaintenanceCentersTable />
+                <MaintenanceCentersTable agent={agent} />
                 ) : (
-                <SalesShowroomsTable />
+                <SalesShowroomsTable agent={agent} />
                 )}
             </div>
         </div>

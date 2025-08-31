@@ -30,7 +30,7 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
   onToggleActive,
   isLoading,
 }) => {
-  const { t } = useTranslation("agents");
+  const { t, i18n } = useTranslation("agents");
   if (isLoading) return <Loading />;
 
   if (!agents || agents.length === 0) return <NoData />;
@@ -50,7 +50,7 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
         {agents.map((agent, index) => (
           <TableRow key={agent.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{agent.name.ar}</TableCell>
+            <TableCell>{agent.name[i18n.language as "ar" | "en"]}</TableCell>
             <TableCell className="">
               {typeof agent.centers_count === "number"
                 ? agent.centers_count
