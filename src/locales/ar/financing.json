@@ -25,5 +25,6 @@
 
   "image": "الصورة",
   "bankNameTitle": "اسم البنك",
-  "interestValue": "قيمة الفائدة"
+  "interestValue": "قيمة الفائدة",
+  "bankDeleted": "تم حذف البنك"
 }

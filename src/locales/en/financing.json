@@ -25,5 +25,6 @@
 
   "image": "Image",
   "bankNameTitle": "Bank name",
-  "interestValue": "Interest value"
+  "interestValue": "Interest value",
+  "bankDeleted": "Bank deleted successfully"
 }

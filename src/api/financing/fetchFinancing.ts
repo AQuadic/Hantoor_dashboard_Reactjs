@@ -12,6 +12,10 @@ export interface FinancingRequest {
   status: string;
   created_at: string;
   updated_at: string;
+  name?: {
+    ar: string;
+    en: string;
+  };
 }
 
 export async function getRequestFinancing(params: RequestFinancingParams = {}): Promise<FinancingRequest[]> {

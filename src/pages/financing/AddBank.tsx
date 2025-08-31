@@ -3,12 +3,18 @@ import ImageInput from "@/components/general/ImageInput";
 import MobileInput from "@/components/general/MobileInput";
 import DashboardInput from "@/components/general/DashboardInput";
 import { Select, SelectItem } from "@heroui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { countries } from "countries-list";
 import Add from "@/components/icons/banks/Add";
 import Delete from "@/components/icons/banks/Delete";
 import { useTranslation } from "react-i18next";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
+import { toast } from "react-hot-toast";
+import { createRequestFinancing, CreateRequestFinancingParams } from "@/api/financing/addBank";
+import { getCountries, Country } from "@/api/countries/getCountry";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { getRequestFinancingById } from "@/api/financing/getFinancinyById";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -21,16 +27,33 @@ const getCountryByIso2 = (iso2: string) => {
 };
 
 const AddBank = () => {
-  const { t } = useTranslation("financing");
+  const { t, i18n } = useTranslation("financing");
   const [selectedCountry, setSelectedCountry] = useState(
     getCountryByIso2("EG")
   );
   const [phone, setPhone] = useState("");
   const [profileImage, setProfileImage] = useState<File | null>(null);
 
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const countryIdFromLocation = location.state?.countryId;
+  const countryNameFromLocation = location.state?.countryName;
+
   // Bank name states
   const [arBankName, setArBankName] = useState("");
   const [enBankName, setEnBankName] = useState("");
+  
+  const [selectedCountryId, setSelectedCountryId] = useState<string>(
+    countryIdFromLocation?.toString() || ""
+  );
+
+  const [displayCountryName, setDisplayCountryName] = useState<string>(
+    countryNameFromLocation || ""
+  );
+
+  const [countries, setCountries] = useState<Country[]>([]);
+  const [, setCountriesLoading] = useState(true);
 
   // Visitor data states
   const [visitorSalaryFrom, setVisitorSalaryFrom] = useState("");
@@ -51,8 +74,69 @@ const AddBank = () => {
     { key: "2", label: "سنتين" },
     { key: "3", label: "3 سنوات" },
     { key: "4", label: "4 سنوات" },
-    { key: "4", label: "5 سنوات" },
+    { key: "5", label: "5 سنوات" },
   ];
+
+  const { id } = useParams();
+
+  useEffect(() => {
+    const fetchCountriesAndCountryName = async () => {
+      try {
+        setCountriesLoading(true);
+        const response = await getCountries(1, "");
+        setCountries(response.data);
+
+        let countryId = countryIdFromLocation;
+
+        if (!countryId && id) {
+          try {
+            const request = await getRequestFinancingById(Number(id));
+            countryId = request[0]?.country_id;
+          } catch (error) {
+            console.error("Error fetching request financing:", error);
+          }
+        }
+
+        if (countryId && response.data.length > 0) {
+          const foundCountry = response.data.find((c) => c.id === Number(countryId));
+          if (foundCountry) {
+            const updatedCountryId = foundCountry.id.toString();
+            const updatedCountryName = foundCountry.name[i18n.language as "ar" | "en"];
+            
+            setSelectedCountryId(updatedCountryId);
+            setDisplayCountryName(updatedCountryName);
+            
+            console.log("Selected country ID:", updatedCountryId);
+            console.log("Selected country name:", updatedCountryName);
+          }
+        } else if (response.data.length > 0) {
+          const fallbackCountry = response.data[0];
+          const fallbackCountryId = fallbackCountry.id.toString();
+          const fallbackCountryName = fallbackCountry.name[i18n.language as "ar" | "en"];
+          
+          setSelectedCountryId(fallbackCountryId);
+          setDisplayCountryName(fallbackCountryName);
+          
+          console.log("Using fallback country ID:", fallbackCountryId);
+          console.log("Using fallback country name:", fallbackCountryName);
+        }
+
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+        setSelectedCountryId("21");
+        setDisplayCountryName(i18n.language === "ar" ? "مصر" : "Egypt");
+      } finally {
+        setCountriesLoading(false);
+      }
+    };
+
+    fetchCountriesAndCountryName();
+  }, [id, i18n.language, countryIdFromLocation, countryNameFromLocation]);
+
+  useEffect(() => {
+    console.log("Current selectedCountryId:", selectedCountryId);
+    console.log("Current displayCountryName:", displayCountryName);
+  }, [selectedCountryId, displayCountryName]);
 
   const entities = [
     { key: "1", label: "جهة حكومية" },
@@ -64,21 +148,184 @@ const AddBank = () => {
     { key: "2", label: "جهة خاصة" },
   ];
 
+  const validateForm = () => {
+    if (!arBankName.trim()) {
+      toast.error("Arabic bank name is required");
+      return false;
+    }
+    if (!enBankName.trim()) {
+      toast.error("English bank name is required");
+      return false;
+    }
+    if (!phone.trim()) {
+      toast.error("Phone number is required");
+      return false;
+    }
+    if (phone.length > 20) {
+      toast.error("Phone must not be greater than 20 characters");
+      return false;
+    }
+    if (!selectedCountryId) {
+      toast.error("Country is required");
+      return false;
+    }
+    return true;
+  };
+
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  let finalCountryId = selectedCountryId;
+  let finalCountryName = displayCountryName;
+
+  if (!finalCountryId && countries.length > 0) {
+    finalCountryId = countries[0].id.toString();
+    finalCountryName = countries[0].name[i18n.language as "ar" | "en"];
+    
+    setSelectedCountryId(finalCountryId);
+    setDisplayCountryName(finalCountryName);
+  }
+
+  if (!finalCountryId) {
+    finalCountryId = "21";
+    finalCountryName = i18n.language === "ar" ? "مصر" : "Egypt";
+  }
+
+  console.log("Final submitting countryId:", finalCountryId);
+  console.log("Final submitting countryName:", finalCountryName);
+
+  if (!validateForm()) {
+    return;
+  }
+
+  setIsLoading(true);
+  try {
+    const params: CreateRequestFinancingParams = {
+      phone,
+      country_id: Number(finalCountryId),
+      is_active: true,
+      name: {
+        ar: arBankName,
+        en: enBankName,
+      },
+    };
+
+    const response = await createRequestFinancing(params);
+    if (response.success) {
+      toast.success(response.message || "Bank added successfully!");
+      
+      navigate(`/financing/details/${finalCountryId}`, {
+        state: {
+          country: finalCountryName,
+          countryId: Number(finalCountryId),
+        },
+        replace: true,
+      });
+      resetForm();
+    } else {
+      toast.error(response.message || "Failed to add bank");
+    }
+  } catch (error: any) {
+    console.error("Error adding bank:", error);
+    toast.error(error.message || "An error occurred while adding the bank");
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+useEffect(() => {
+  const fetchCountriesAndCountryName = async () => {
+    try {
+      setCountriesLoading(true);
+      const response = await getCountries(1, "");
+      setCountries(response.data);
+
+      let countryId = countryIdFromLocation;
+
+      const numericCountryId = countryId ? Number(countryId) : null;
+
+      if (!numericCountryId && id) {
+        try {
+          const request = await getRequestFinancingById(Number(id));
+          countryId = request[0]?.country_id?.toString();
+        } catch (error) {
+          console.error("Error fetching request financing:", error);
+        }
+      }
+
+      if (countryId && response.data.length > 0) {
+        const foundCountry = response.data.find((c) => c.id === Number(countryId));
+        if (foundCountry) {
+          const updatedCountryId = foundCountry.id.toString();
+          const updatedCountryName = foundCountry.name[i18n.language as "ar" | "en"];
+          
+          setSelectedCountryId(updatedCountryId);
+          setDisplayCountryName(updatedCountryName);
+          
+          console.log("Selected country ID:", updatedCountryId);
+          console.log("Selected country name:", updatedCountryName);
+        } else {
+          console.warn("Country not found in fetched countries list:", countryId);
+        }
+      } else if (response.data.length > 0) {
+        const fallbackCountry = response.data[0];
+        const fallbackCountryId = fallbackCountry.id.toString();
+        const fallbackCountryName = fallbackCountry.name[i18n.language as "ar" | "en"];
+        
+        setSelectedCountryId(fallbackCountryId);
+        setDisplayCountryName(fallbackCountryName);
+        
+        console.log("Using fallback country ID:", fallbackCountryId);
+        console.log("Using fallback country name:", fallbackCountryName);
+      }
+
+    } catch (error) {
+      console.error("Error fetching countries:", error);
+      setSelectedCountryId("21");
+      setDisplayCountryName(i18n.language === "ar" ? "مصر" : "Egypt");
+    } finally {
+      setCountriesLoading(false);
+    }
+  };
+
+  fetchCountriesAndCountryName();
+}, [id, i18n.language, countryIdFromLocation, countryNameFromLocation]);
+
+  const resetForm = () => {
+    setArBankName("");
+    setEnBankName("");
+    setPhone("");
+    setProfileImage(null);
+    setVisitorSalaryFrom("");
+    setVisitorSalaryTo("");
+    setVisitorInterestAmount("");
+    setVisitorSalaryFrom2("");
+    setVisitorSalaryTo2("");
+    setVisitorInterestAmount2("");
+    setCitizenSalaryFrom("");
+    setCitizenSalaryTo("");
+    setCitizenInterestAmount("");
+    setSelectedCountry(getCountryByIso2("EG"));
+  };
+
   return (
     <section>
       <div className="pt-0 pb-2 bg-white ">
         <DashboardHeader
           titleAr="اضافة بنك جديد"
           titleEn="Add bank"
+          subtitleAr={displayCountryName ? `${displayCountryName}` : ""}
+          subtitleEn={displayCountryName ? `${displayCountryName}` : ""}
           items={[
             { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
-            { titleAr: "الوكلاء", titleEn: "Agents", link: "/" },
-            { titleAr: "البنوك", titleEn: "Banks", link: "/" },
+            { titleAr: "التمويل", titleEn: "Financing", link: "/financing" },
+            { titleAr: displayCountryName || "البلد", titleEn: displayCountryName || "Country", link: `/financing/details/${selectedCountryId}` },
             { titleAr: "اضافة بنك جديد", titleEn: "Add bank" },
           ]}
         />
       </div>
-      <form className="p-8">
+      <form className="p-8" onSubmit={handleSubmit}>
         <div className="p-8 bg-white rounded-2xl ">
           <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">
             {t("bankLogo")}
@@ -295,6 +542,14 @@ const AddBank = () => {
             </div>
             <DashboardButton titleAr="اضافة" titleEn="Add" />
           </div>
+        </div>
+        
+        <div className="flex justify-end mt-6">
+          <DashboardButton 
+            titleAr={isLoading ? "جاري الاضافة..." : "اضافة"} 
+            titleEn={isLoading ? "Adding..." : "Add"} 
+            type="submit"
+          />
         </div>
       </form>
     </section>

@@ -29,6 +29,20 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
     console.log("Delete country:", id);
   };
 
+  const handleViewCountry = (country: FinancingCountry) => {
+    console.log("Navigating to country:", {
+      id: country.id,
+      name: isArabic ? country.name.ar : country.name.en
+    });
+    
+    navigate(`/financing/details/${country.id}`, {
+      state: {
+        country: isArabic ? country.name.ar : country.name.en,
+        countryId: country.id
+      },
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-8">
@@ -83,13 +97,7 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
             >
               <Switch defaultSelected={country.is_active} />
               <div
-                onClick={() =>
-                  navigate(`/financing/details/${country.id}`, {
-                    state: {
-                      country: isArabic ? country.name.ar : country.name.en,
-                    },
-                  })
-                }
+                onClick={() => handleViewCountry(country)}
                 className="cursor-pointer"
               >
                 <View />
