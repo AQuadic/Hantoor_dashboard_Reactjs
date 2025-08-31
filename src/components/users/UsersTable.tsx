@@ -105,7 +105,7 @@ export function UserTable({ searchTerm = "", page, perPage, onDataLoaded }: User
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
             <TableCell>
-              <Switch checked={true} />
+              22/03/2024- 08:30 PM
             </TableCell>
             <TableCell>
               <div className="w-[160px]">

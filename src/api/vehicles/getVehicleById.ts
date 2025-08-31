@@ -2,7 +2,7 @@ import { axios } from "@/lib/axios";
 
 export interface Vehicle {
   id: number;
-  name: string;
+  name: { ar: string; en: string };
   country_id: number | null;
   brand_id: number | null;
   agent_id: number | null;
