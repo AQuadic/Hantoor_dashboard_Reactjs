@@ -59,7 +59,13 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
   const paginationData = useMemo(() => {
     const from = models.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0;
     const to = models.length > 0 ? from + models.length - 1 : 0;
-    return { totalPages, totalItems, itemsPerPage, from, to };
+    return { 
+      totalPages: Math.max(totalPages, 1),
+      totalItems: Math.max(totalItems, models.length), 
+      itemsPerPage, 
+      from, 
+      to 
+    };
   }, [totalPages, totalItems, itemsPerPage, models.length, currentPage]);
 
   useEffect(() => {
