@@ -1,4 +1,3 @@
-// import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import Edit from "../icons/general/Edit";
@@ -6,31 +5,31 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 import { useTranslation } from "react-i18next";
 import { Switch } from "@heroui/react";
+import { FinancingRequest } from "@/api/financing/fetchFinancing";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
 
-const BanksTable = () => {
-    // const navigate = useNavigate();
-    const { t } = useTranslation("financing");
+interface BanksTableProps {
+  data: FinancingRequest[];
+  isLoading: boolean;
+  error: Error | null;
+}
 
-    const bank = [
-    {
-        id: 1,
-        question: "/",
-        country: "الامارات",
-        count: 22,
-    },
-    {
-        id: 2,
-        question: "/",
-        country: "مصر",
-        count: 22,
-    },
-    {
-        id: 3,
-        question: "/",
-        country: "الامارات",
-        count: 22,
-    },
-    ];
+const BanksTable = ({ data, isLoading, error }: BanksTableProps) => {
+  const { t } = useTranslation("financing");
+
+  if (isLoading) {
+    return (
+      <Loading />
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <NoData />
+    );
+  }
+
     return (
         <Table>
         <TableHeader>
@@ -43,26 +42,17 @@ const BanksTable = () => {
             </TableRow>
         </TableHeader>
         <TableBody>
-            {bank.map((bank, index) => (
-            <TableRow
-                key={bank.id}
-                noBackgroundColumns={1}
-                // onClick={() => navigate(`/faq/details/${bank.id}`)}
-                // className="cursor-pointer hover:bg-gray-100"
-            >
+            {data.map((bank, index) => (
+            <TableRow key={bank.id}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{bank.question}</TableCell>
-                <TableCell>{bank.country}</TableCell>
-                <TableCell className="w-full">{bank.count}</TableCell>
-                <TableCell
-                className="flex gap-[7px] items-center"
-                // onClick={(e) => e.stopPropagation()} 
-                >
-                <Switch />
+                <TableCell>{bank.user_id}</TableCell>
+                <TableCell>{bank.amount}</TableCell>
+                <TableCell>{bank.status}</TableCell>
+                <TableCell className="flex gap-[7px] items-center">
+                <Switch defaultSelected={bank.status === "active"} />
                 <Link to={`/bank/edit/${bank.id}`}>
                     <Edit />
                 </Link>
-
                 <div className="mt-2">
                 <TableDeleteButton handleDelete={() => {}} />
                 </div>

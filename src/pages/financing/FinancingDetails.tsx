@@ -1,18 +1,38 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import DashboardDatePicker from '@/components/general/dashboard/DashboardDatePicker';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
 import SearchBar from '@/components/general/dashboard/SearchBar';
 import React from 'react';
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import { Link } from "react-router";
+import { useQuery } from "@tanstack/react-query";
+import { getRequestFinancing, FinancingRequest } from "@/api/financing/fetchFinancing";
 import BanksTable from "@/components/financing/BanksTable";
 
 const FinancingDetails = () => {
-    const location = useLocation();
-    const country = location.state?.country;
+  const location = useLocation();
+  const params = useParams<{ id: string }>();
+  const country = location.state?.country; 
+  const countryIdFromState = location.state?.countryId;
 
-    return (
-        <section>
+  const country_id = countryIdFromState || (params.id ? Number(params.id) : undefined);
+
+  console.log("country_id:", country_id);
+
+const { data, isLoading, error } = useQuery<FinancingRequest[], Error>({
+  queryKey: ["requestFinancing", country_id],
+  queryFn: async () => {
+    if (!country_id) return [];
+    const requests = await getRequestFinancing({ country_id, pagination: false });
+    console.log("Fetched requests:", requests);
+    return requests;
+  },
+  enabled: !!country_id,
+});
+
+
+        return (
+            <section>
             <div className="pt-0 pb-2 bg-white">
             <DashboardHeader
                 titleAr="التمويل"
