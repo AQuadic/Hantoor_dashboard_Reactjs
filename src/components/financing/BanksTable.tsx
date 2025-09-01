@@ -8,6 +8,8 @@ import { useTranslation } from "react-i18next";
 import { getBanks } from "@/api/bank/getBanks";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import { deleteBank } from "@/api/bank/deleteBank";
+import toast from "react-hot-toast";
 
 interface BanksTableProps {
   countryId?: string | number;
@@ -16,7 +18,7 @@ interface BanksTableProps {
 const BanksTable = ({ countryId }: BanksTableProps) => {
   const { t, i18n } = useTranslation("financing");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["banks", countryId],
     queryFn: ({ queryKey }) => {
       const [, id] = queryKey;
@@ -24,6 +26,12 @@ const BanksTable = ({ countryId }: BanksTableProps) => {
     },
     enabled: !!countryId,
   });
+
+    const handleDelete = async (id: number) => {
+      await deleteBank(id);
+      toast.success(t("bankDeleted"));
+      refetch();
+    };
 
   if (isLoading) return <Loading />;
   if (!data || !Array.isArray(data) || !data.length) return <NoData />;
@@ -52,7 +60,7 @@ const BanksTable = ({ countryId }: BanksTableProps) => {
                   <Edit />
                 </Link>
                 <div className="mt-2">
-                  <TableDeleteButton handleDelete={() => console.log("Delete", bank.id)} />
+                  <TableDeleteButton handleDelete={() => handleDelete(bank.id)} />
                 </div>
               </TableCell>
             </TableRow>
