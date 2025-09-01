@@ -1,26 +1,31 @@
 import { axios } from "@/lib/axios";
 
-export interface RequestFinancingParams {
-  country_id?: number;
-  pagination?: boolean;
-}
-
-export interface FinancingRequest {
+export interface FinancingItem {
   id: number;
-  user_id: number;
-  amount: number;
-  status: string;
+  phone: string;
+  country_id: number;
+  is_active: number | boolean;
   created_at: string;
   updated_at: string;
-  name?: {
-    ar: string;
-    en: string;
-  };
 }
 
-export async function getRequestFinancing(params: RequestFinancingParams = {}): Promise<FinancingRequest[]> {
-  const response = await axios.get<FinancingRequest[]>("/admin/request-financing", { params });
-  console.log("API response:", response.data);
+export async function getRequestFinancing(
+  country_id?: number,
+  pagination: boolean = false
+): Promise<FinancingItem[]> {
+  const response = await axios.get<FinancingItem[]>(
+    "/admin/request-financing",
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      params: {
+        ...(country_id ? { country_id } : {}),
+        pagination,
+      },
+    }
+  );
 
-  return response.data || [];
+  return response.data;
 }

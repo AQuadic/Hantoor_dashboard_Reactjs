@@ -1,31 +1,52 @@
 import { Link } from "react-router";
-
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import Edit from "@/components/icons/general/Edit";
 import { useTranslation } from "react-i18next";
 import { Switch } from "@heroui/react";
+import { useQuery } from "@tanstack/react-query";
+import {getRequestFinancing } from "@/api/financing/fetchFinancing";
+import { getCountries, Country } from "@/api/countries/getCountry";
+import Loading from "@/components/general/Loading";
+import NoData from "@/components/general/NoData";
 
 const InsuranceTable = () => {
-    const { t } = useTranslation("setting");
-    const countries = [
-    {
-        id: 1,
-        Whatsapp: "+971 123 456 789",
-        country: "الامارات"
-    },
-    {
-        id: 2,
-        Whatsapp: "+971 123 456 789",
-        country: "الامارات"
-    },
-    {
-        id: 3,
-        Whatsapp: "+971 123 456 789",
-        country: "الامارات"
-    },
-    ];
+  const { t, i18n } = useTranslation("setting");
+
+const { data: financingItems = [], isLoading: financingLoading } = useQuery({
+  queryKey: ["request-financing"],
+  queryFn: () => getRequestFinancing(undefined, false),
+});
+
+
+  const { data: countriesData, isLoading: countriesLoading } = useQuery({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(1, ""),
+  });
+
+  const countries: Country[] = countriesData?.data ?? [];
+
+  const getCountryName = (id: number) => {
+    const country = countries.find((c) => c.id === id);
+    if (!country) return "-";
+    return i18n.language === "ar" ? country.name.ar : country.name.en;
+  };
+
+  if (financingLoading || countriesLoading) {
+    return <Loading />;
+  }
+
+  if (!financingItems.length) {
+    return <NoData />;
+  }
+
     return (
         <Table>
         <TableHeader>
@@ -37,17 +58,16 @@ const InsuranceTable = () => {
             </TableRow>
         </TableHeader>
         <TableBody>
-            {countries.map((country, index) => (
-            <TableRow key={country.id} noBackgroundColumns={1}>
+            {financingItems.map((item, index) => (
+            <TableRow key={item.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell dir="ltr">{country.Whatsapp}</TableCell>
-                <TableCell className="w-full">{country.country}</TableCell>
+                <TableCell dir="ltr">{item.phone}</TableCell>
+                <TableCell className="w-full">{getCountryName(item.country_id)}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                <Switch />
-                <Link to="/setting/edit-whatsapp/:id">
+                <Switch defaultSelected={!!item.is_active} />
+                <Link to={`/setting/edit-whatsapp/${item.id}`}>
                     <Edit />
                 </Link>
-
                 <div className="mt-2">
                 <TableDeleteButton handleDelete={() => {}} />
                 </div>
