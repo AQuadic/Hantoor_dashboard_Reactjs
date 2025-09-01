@@ -1,34 +1,26 @@
-import { axios } from "@/lib/axios";
+// services/requestFinancing.ts
+import { axios } from "@/lib/axios"; // adjust the path to where your axios instance is
 
-export interface FinancingRequestById {
+export interface RequestFinancingResponse {
   id: number;
-  bank_name: {
-    ar: string;
-    en: string;
-  };
-  phone: string;
   country_id: number;
-  is_active: boolean;
-  visitor_data: {
-    salary_from: string;
-    salary_to: string;
-    interest_amount: string;
-  }[];
-  citizen_data: {
-    salary_from: string;
-    salary_to: string;
-    interest_amount: string;
-  }[];
+  phone: string;
+  is_active: number;
   created_at: string;
   updated_at: string;
 }
 
-export const getRequestFinancingById = async (id: number): Promise<FinancingRequestById[]> => {
+
+export const getRequestFinancingById = async (
+  id: number
+): Promise<RequestFinancingResponse | null> => {
   try {
-    const response = await axios.get(`/admin/request-financing/${id}`);
-    return (response.data as { data: FinancingRequestById[] }).data;
-  } catch (error: any) {
-    console.error("Error fetching financing requests:", error);
-    throw new Error(error?.response?.data?.message || "Failed to fetch financing requests");
+    const response = await axios.get<RequestFinancingResponse>(
+      `/admin/request-financing/${id}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching request financing by ID:", error);
+    return null;
   }
 };
