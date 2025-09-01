@@ -16,11 +16,13 @@ import {getRequestFinancing } from "@/api/financing/fetchFinancing";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
+import { deleteFinancing } from "@/api/financing/deleteFinancing";
+import toast from "react-hot-toast";
 
 const InsuranceTable = () => {
   const { t, i18n } = useTranslation("setting");
 
-const { data: financingItems = [], isLoading: financingLoading } = useQuery({
+const { data: financingItems = [], isLoading: financingLoading, refetch } = useQuery({
   queryKey: ["request-financing"],
   queryFn: () => getRequestFinancing(undefined, false),
 });
@@ -38,6 +40,12 @@ const { data: financingItems = [], isLoading: financingLoading } = useQuery({
     if (!country) return "-";
     return i18n.language === "ar" ? country.name.ar : country.name.en;
   };
+
+  const handleDelete = async (id: number) => {
+      await deleteFinancing(id);
+      toast.success(t("deletedSuccessfully"));
+      refetch();
+    };
 
   if (financingLoading || countriesLoading) {
     return <Loading />;
@@ -69,7 +77,7 @@ const { data: financingItems = [], isLoading: financingLoading } = useQuery({
                     <Edit />
                 </Link>
                 <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(item.id)} />
                 </div>
                 </TableCell>
             </TableRow>

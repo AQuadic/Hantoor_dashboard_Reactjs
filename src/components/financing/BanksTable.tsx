@@ -8,7 +8,7 @@ import { Switch } from "@heroui/react";
 import { FinancingRequest } from "@/api/financing/fetchFinancing";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
-import { deleteBank } from "@/api/financing/deleteBank";
+import { deleteFinancing } from "@/api/financing/deleteFinancing";
 import toast from "react-hot-toast";
 
 interface BanksTableProps {
@@ -21,7 +21,7 @@ interface BanksTableProps {
 const BanksTable = ({ data, isLoading, refetch }: BanksTableProps) => {
   const { t, i18n } = useTranslation("financing");
     const handleDelete = async (id: number) => {
-      await deleteBank(id);
+      await deleteFinancing(id);
       toast.success(t("bankDeleted"));
       refetch();
     };

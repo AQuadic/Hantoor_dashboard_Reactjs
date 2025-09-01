@@ -70,5 +70,6 @@
   "selectCountry": "Select country",
   "PhoneAddedSuccessfully": "Phone added successfully",
   "pleaseEnterPhone": "Please enter phone number",
-  "pleaseSelectCountry": "Please Select country"
+  "pleaseSelectCountry": "Please Select country",
+  "deletedSuccessfully": "Deleted successfully"
 }
