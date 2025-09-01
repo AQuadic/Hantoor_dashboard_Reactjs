@@ -11,7 +11,13 @@ import {
 import { Switch } from "@heroui/react";
 import View from "../icons/general/View";
 import { useTranslation } from "react-i18next";
-import { FinancingCountry } from "@/api/financing/getFinancing";
+
+export interface FinancingCountry {
+  id: number;
+  name: { ar: string; en: string };
+  banks_count: number;
+  is_active: boolean;
+}
 
 interface FinancingTableProps {
   data: FinancingCountry[];
@@ -24,54 +30,20 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
   const navigate = useNavigate();
   const isArabic = i18n.language === "ar";
 
-  const handleDelete = (id: number) => {
-    // TODO: Implement delete functionality
-    console.log("Delete country:", id);
-  };
-
   const handleViewCountry = (country: FinancingCountry) => {
-    console.log("Navigating to country:", {
-      id: country.id,
-      name: isArabic ? country.name.ar : country.name.en
-    });
-    
+    const countryName = isArabic ? country.name.ar : country.name.en;
+
     navigate(`/financing/details/${country.id}`, {
       state: {
-        country: isArabic ? country.name.ar : country.name.en,
-        countryId: country.id
+        country: countryName,
+        countryId: country.id,
       },
     });
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center py-8">
-        <div className="text-lg">
-          {isArabic ? "جاري التحميل..." : "Loading..."}
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center py-8">
-        <div className="text-red-500 text-lg">
-          {isArabic ? "حدث خطأ في تحميل البيانات" : "Error loading data"}
-        </div>
-      </div>
-    );
-  }
-
-  if (!data || data.length === 0) {
-    return (
-      <div className="flex justify-center items-center py-8">
-        <div className="text-gray-500 text-lg">
-          {isArabic ? "لا توجد بيانات" : "No data available"}
-        </div>
-      </div>
-    );
-  }
+  if (isLoading) return <div className="py-8 text-center">{isArabic ? "جاري التحميل..." : "Loading..."}</div>;
+  if (error) return <div className="py-8 text-center text-red-500">{isArabic ? "حدث خطأ" : "Error"}</div>;
+  if (!data || data.length === 0) return <div className="py-8 text-center text-gray-500">{isArabic ? "لا توجد بيانات" : "No data"}</div>;
 
   return (
     <Table>
@@ -87,25 +59,15 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
         {data.map((country, index) => (
           <TableRow key={country.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>
-              {isArabic ? country.name.ar : country.name.en}
-            </TableCell>
+            <TableCell>{isArabic ? country.name.ar : country.name.en}</TableCell>
             <TableCell className="w-full">{country.banks_count}</TableCell>
-            <TableCell
-              className="flex gap-[7px] items-center"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <TableCell className="flex items-center gap-2">
               <Switch defaultSelected={country.is_active} />
-              <div
-                onClick={() => handleViewCountry(country)}
-                className="cursor-pointer"
-              >
+              <div className="cursor-pointer" onClick={() => handleViewCountry(country)}>
                 <View />
               </div>
-              <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(country.id)}
-                />
+              <div>
+                <TableDeleteButton handleDelete={() => console.log("Delete:", country.id)} />
               </div>
             </TableCell>
           </TableRow>

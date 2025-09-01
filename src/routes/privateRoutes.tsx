@@ -181,7 +181,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <FinancingDetails />,
   },
   {
-    path: "/bank/add",
+    path: "/bank/add/:countryId",
     element: <AddBank />,
   },
   {

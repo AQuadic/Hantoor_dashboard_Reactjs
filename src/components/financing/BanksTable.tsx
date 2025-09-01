@@ -5,64 +5,49 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "../ui/table";
 import { useTranslation } from "react-i18next";
 import { Switch } from "@heroui/react";
-import { FinancingRequest } from "@/api/financing/fetchFinancing";
-import Loading from "../general/Loading";
-import NoData from "../general/NoData";
-import { deleteFinancing } from "@/api/financing/deleteFinancing";
-import toast from "react-hot-toast";
 
 interface BanksTableProps {
-  data: FinancingRequest[];
-  isLoading: boolean;
-  error: Error | null;
-  refetch: () => void;
+  countryId?: string | number;
 }
 
-const BanksTable = ({ data, isLoading, refetch }: BanksTableProps) => {
-  const { t, i18n } = useTranslation("financing");
-    const handleDelete = async (id: number) => {
-      await deleteFinancing(id);
-      toast.success(t("bankDeleted"));
-      refetch();
-    };
+const BanksTable = ({ countryId }: BanksTableProps) => {
+  const { t } = useTranslation("financing");
 
-  if (isLoading) {
-    return (
-      <Loading />
-    );
-  }
+  const bank = [
+    { id: 1, question: "/", country: "الامارات", country_id: 1, count: 22 },
+    { id: 2, question: "/", country: "مصر", country_id: 2, count: 22 },
+    { id: 3, question: "/", country: "الامارات", country_id: 1, count: 22 },
+  ];
 
-  if (!data || data.length === 0) {
-    return (
-      <NoData />
-    );
-  }
+  const filteredBanks = countryId
+    ? bank.filter((b) => b.country_id.toString() === countryId.toString())
+    : bank;
 
     return (
         <Table>
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">{t('image')}</TableHead>
-            <TableHead className="text-right">{t('bankNameTitle')}</TableHead>
-            <TableHead className="text-right w-full">{t('interestValue')}</TableHead>
-            <TableHead className="text-right">{t('status')}</TableHead>
+            <TableHead className="text-right">{t("image")}</TableHead>
+            <TableHead className="text-right">{t("bankNameTitle")}</TableHead>
+            <TableHead className="text-right">{t("interestValue")}</TableHead>
+            <TableHead className="text-right">{t("status")}</TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
-            {data.map((bank, index) => (
+            {filteredBanks.map((bank, index) => (
             <TableRow key={bank.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{bank.name ? bank.name[i18n.language as "ar" | "en"] : "-"}</TableCell>
-                <TableCell>{bank.amount}</TableCell>
-                <TableCell>{bank.status}</TableCell>
+                <TableCell>{bank.question}</TableCell>
+                <TableCell>{bank.country}</TableCell>
+                <TableCell className="w-full">{bank.count}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                <Switch defaultSelected={bank.status === "active"} />
+                <Switch />
                 <Link to={`/bank/edit/${bank.id}`}>
                     <Edit />
                 </Link>
                 <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(bank.id)} />
+                <TableDeleteButton handleDelete={() => {}} />
                 </div>
                 </TableCell>
             </TableRow>

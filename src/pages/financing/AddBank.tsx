@@ -12,8 +12,7 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { toast } from "react-hot-toast";
 import { createRequestFinancing, CreateRequestFinancingParams } from "@/api/financing/addFinancing";
 import { getCountries, Country } from "@/api/countries/getCountry";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useParams } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getRequestFinancingById } from "@/api/financing/getFinancinyById";
 
 const getCountryByIso2 = (iso2: string) => {
@@ -28,47 +27,44 @@ const getCountryByIso2 = (iso2: string) => {
 
 const AddBank = () => {
   const { t, i18n } = useTranslation("financing");
-  const [selectedCountry, setSelectedCountry] = useState(
-    getCountryByIso2("EG")
-  );
+  const [selectedCountry, setSelectedCountry] = useState(getCountryByIso2("EG"));
   const [phone, setPhone] = useState("");
   const [profileImage, setProfileImage] = useState<File | null>(null);
-
   const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
   const countryIdFromLocation = location.state?.countryId;
   const countryNameFromLocation = location.state?.countryName;
 
-  // Bank name states
   const [arBankName, setArBankName] = useState("");
   const [enBankName, setEnBankName] = useState("");
-  
-  const [selectedCountryId, setSelectedCountryId] = useState<string>(
-    countryIdFromLocation?.toString() || ""
-  );
+  const [selectedCountryId, setSelectedCountryId] = useState<string>(countryIdFromLocation?.toString() || "");
+  const [displayCountryName, setDisplayCountryName] = useState<string>(countryNameFromLocation || "");
 
-  const [displayCountryName, setDisplayCountryName] = useState<string>(
-    countryNameFromLocation || ""
-  );
-
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [, setCountries] = useState<Country[]>([]);
   const [, setCountriesLoading] = useState(true);
 
-  // Visitor data states
+  // Visitor Data
   const [visitorSalaryFrom, setVisitorSalaryFrom] = useState("");
   const [visitorSalaryTo, setVisitorSalaryTo] = useState("");
   const [visitorInterestAmount, setVisitorInterestAmount] = useState("");
+  const [visitorDuration, setVisitorDuration] = useState("");
+  const [visitorWorkplace, setVisitorWorkplace] = useState("");
 
-  // Second visitor data states (for duplicated section)
   const [visitorSalaryFrom2, setVisitorSalaryFrom2] = useState("");
   const [visitorSalaryTo2, setVisitorSalaryTo2] = useState("");
   const [visitorInterestAmount2, setVisitorInterestAmount2] = useState("");
+  const [visitorDuration2, setVisitorDuration2] = useState("");
+  const [visitorWorkplace2, setVisitorWorkplace2] = useState("");
 
-  // Citizen data states
+  // Citizen Data
   const [citizenSalaryFrom, setCitizenSalaryFrom] = useState("");
   const [citizenSalaryTo, setCitizenSalaryTo] = useState("");
   const [citizenInterestAmount, setCitizenInterestAmount] = useState("");
+  const [citizenDuration, setCitizenDuration] = useState("");
+  const [citizenWorkplace, setCitizenWorkplace] = useState("");
+
   const authorities = [
     { key: "1", label: "1 سنة" },
     { key: "2", label: "سنتين" },
@@ -77,10 +73,15 @@ const AddBank = () => {
     { key: "5", label: "5 سنوات" },
   ];
 
+  const Workplaces = [
+    { key: "1", label: "جهة حكومية" },
+    { key: "2", label: "جهة خاصة" },
+  ];
+
   const { id } = useParams();
 
   useEffect(() => {
-    const fetchCountriesAndCountryName = async () => {
+    const fetchCountries = async () => {
       try {
         setCountriesLoading(true);
         const response = await getCountries(1, "");
@@ -89,64 +90,30 @@ const AddBank = () => {
         let countryId = countryIdFromLocation;
 
         if (!countryId && id) {
-          try {
-            const request = await getRequestFinancingById(Number(id));
-            countryId = request[0]?.country_id;
-          } catch (error) {
-            console.error("Error fetching request financing:", error);
-          }
+          const request = await getRequestFinancingById(Number(id));
+          countryId = request[0]?.country_id;
         }
 
         if (countryId && response.data.length > 0) {
           const foundCountry = response.data.find((c) => c.id === Number(countryId));
           if (foundCountry) {
-            const updatedCountryId = foundCountry.id.toString();
-            const updatedCountryName = foundCountry.name[i18n.language as "ar" | "en"];
-            
-            setSelectedCountryId(updatedCountryId);
-            setDisplayCountryName(updatedCountryName);
-            
-            console.log("Selected country ID:", updatedCountryId);
-            console.log("Selected country name:", updatedCountryName);
+            setSelectedCountryId(foundCountry.id.toString());
+            setDisplayCountryName(foundCountry.name[i18n.language as "ar" | "en"]);
           }
         } else if (response.data.length > 0) {
           const fallbackCountry = response.data[0];
-          const fallbackCountryId = fallbackCountry.id.toString();
-          const fallbackCountryName = fallbackCountry.name[i18n.language as "ar" | "en"];
-          
-          setSelectedCountryId(fallbackCountryId);
-          setDisplayCountryName(fallbackCountryName);
-          
-          console.log("Using fallback country ID:", fallbackCountryId);
-          console.log("Using fallback country name:", fallbackCountryName);
+          setSelectedCountryId(fallbackCountry.id.toString());
+          setDisplayCountryName(fallbackCountry.name[i18n.language as "ar" | "en"]);
         }
-
-      } catch (error) {
-        console.error("Error fetching countries:", error);
+      } catch {
         setSelectedCountryId("21");
         setDisplayCountryName(i18n.language === "ar" ? "مصر" : "Egypt");
       } finally {
         setCountriesLoading(false);
       }
     };
-
-    fetchCountriesAndCountryName();
-  }, [id, i18n.language, countryIdFromLocation, countryNameFromLocation]);
-
-  useEffect(() => {
-    console.log("Current selectedCountryId:", selectedCountryId);
-    console.log("Current displayCountryName:", displayCountryName);
-  }, [selectedCountryId, displayCountryName]);
-
-  const entities = [
-    { key: "1", label: "جهة حكومية" },
-    { key: "2", label: "جهة خاصة" },
-  ];
-
-  const Workplaces = [
-    { key: "1", label: "جهة حكومية" },
-    { key: "2", label: "جهة خاصة" },
-  ];
+    fetchCountries();
+  }, [id, i18n.language, countryIdFromLocation]);
 
   const validateForm = () => {
     if (!arBankName.trim()) {
@@ -175,137 +142,68 @@ const AddBank = () => {
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
-
-  let finalCountryId = selectedCountryId;
-  let finalCountryName = displayCountryName;
-
-  if (!finalCountryId && countries.length > 0) {
-    finalCountryId = countries[0].id.toString();
-    finalCountryName = countries[0].name[i18n.language as "ar" | "en"];
-    
-    setSelectedCountryId(finalCountryId);
-    setDisplayCountryName(finalCountryName);
-  }
-
-  if (!finalCountryId) {
-    finalCountryId = "21";
-    finalCountryName = i18n.language === "ar" ? "مصر" : "Egypt";
-  }
-
-  console.log("Final submitting countryId:", finalCountryId);
-  console.log("Final submitting countryName:", finalCountryName);
-
-  if (!validateForm()) {
-    return;
-  }
+  if (!validateForm()) return;
 
   setIsLoading(true);
   try {
     const params: CreateRequestFinancingParams = {
       phone,
-      country_id: Number(finalCountryId),
+      country_id: Number(selectedCountryId),
       is_active: true,
-      name: {
-        ar: arBankName,
-        en: enBankName,
-      },
+      name: { ar: arBankName, en: enBankName },
+      visitor: [
+        {
+          salary_from: visitorSalaryFrom,
+          salary_to: visitorSalaryTo,
+          interest_amount: visitorInterestAmount,
+          duration: visitorDuration,
+          workplace: visitorWorkplace,
+        },
+        {
+          salary_from: visitorSalaryFrom2,
+          salary_to: visitorSalaryTo2,
+          interest_amount: visitorInterestAmount2,
+          duration: visitorDuration2,
+          workplace: visitorWorkplace2,
+        },
+      ],
+      citizen: [
+        {
+          salary_from: citizenSalaryFrom,
+          salary_to: citizenSalaryTo,
+          interest_amount: citizenInterestAmount,
+          duration: citizenDuration,
+          workplace: citizenWorkplace,
+        },
+      ],
     };
 
     const response = await createRequestFinancing(params);
     if (response.success) {
       toast.success(response.message || "Bank added successfully!");
-      
-      navigate(`/financing/details/${finalCountryId}`, {
-        state: {
-          country: finalCountryName,
-          countryId: Number(finalCountryId),
-        },
-        replace: true,
+      navigate(`/financing/details/${selectedCountryId}`, {
+        state: { country: displayCountryName, countryId: Number(selectedCountryId) },
       });
       resetForm();
     } else {
       toast.error(response.message || "Failed to add bank");
     }
   } catch (error: any) {
-    console.error("Error adding bank:", error);
     toast.error(error.message || "An error occurred while adding the bank");
   } finally {
     setIsLoading(false);
   }
 };
 
-useEffect(() => {
-  const fetchCountriesAndCountryName = async () => {
-    try {
-      setCountriesLoading(true);
-      const response = await getCountries(1, "");
-      setCountries(response.data);
-
-      let countryId = countryIdFromLocation;
-
-      const numericCountryId = countryId ? Number(countryId) : null;
-
-      if (!numericCountryId && id) {
-        try {
-          const request = await getRequestFinancingById(Number(id));
-          countryId = request[0]?.country_id?.toString();
-        } catch (error) {
-          console.error("Error fetching request financing:", error);
-        }
-      }
-
-      if (countryId && response.data.length > 0) {
-        const foundCountry = response.data.find((c) => c.id === Number(countryId));
-        if (foundCountry) {
-          const updatedCountryId = foundCountry.id.toString();
-          const updatedCountryName = foundCountry.name[i18n.language as "ar" | "en"];
-          
-          setSelectedCountryId(updatedCountryId);
-          setDisplayCountryName(updatedCountryName);
-          
-          console.log("Selected country ID:", updatedCountryId);
-          console.log("Selected country name:", updatedCountryName);
-        } else {
-          console.warn("Country not found in fetched countries list:", countryId);
-        }
-      } else if (response.data.length > 0) {
-        const fallbackCountry = response.data[0];
-        const fallbackCountryId = fallbackCountry.id.toString();
-        const fallbackCountryName = fallbackCountry.name[i18n.language as "ar" | "en"];
-        
-        setSelectedCountryId(fallbackCountryId);
-        setDisplayCountryName(fallbackCountryName);
-        
-        console.log("Using fallback country ID:", fallbackCountryId);
-        console.log("Using fallback country name:", fallbackCountryName);
-      }
-
-    } catch (error) {
-      console.error("Error fetching countries:", error);
-      setSelectedCountryId("21");
-      setDisplayCountryName(i18n.language === "ar" ? "مصر" : "Egypt");
-    } finally {
-      setCountriesLoading(false);
-    }
-  };
-
-  fetchCountriesAndCountryName();
-}, [id, i18n.language, countryIdFromLocation, countryNameFromLocation]);
 
   const resetForm = () => {
     setArBankName("");
     setEnBankName("");
     setPhone("");
     setProfileImage(null);
-    setVisitorSalaryFrom("");
-    setVisitorSalaryTo("");
-    setVisitorInterestAmount("");
-    setVisitorSalaryFrom2("");
-    setVisitorSalaryTo2("");
-    setVisitorInterestAmount2("");
-    setCitizenSalaryFrom("");
-    setCitizenSalaryTo("");
-    setCitizenInterestAmount("");
+    setVisitorSalaryFrom(""); setVisitorSalaryTo(""); setVisitorInterestAmount(""); setVisitorDuration(""); setVisitorWorkplace("");
+    setVisitorSalaryFrom2(""); setVisitorSalaryTo2(""); setVisitorInterestAmount2(""); setVisitorDuration2(""); setVisitorWorkplace2("");
+    setCitizenSalaryFrom(""); setCitizenSalaryTo(""); setCitizenInterestAmount(""); setCitizenDuration(""); setCitizenWorkplace("");
     setSelectedCountry(getCountryByIso2("EG"));
   };
 
@@ -315,8 +213,8 @@ useEffect(() => {
         <DashboardHeader
           titleAr="اضافة بنك جديد"
           titleEn="Add bank"
-          subtitleAr={displayCountryName ? `${displayCountryName}` : ""}
-          subtitleEn={displayCountryName ? `${displayCountryName}` : ""}
+          subtitleAr={displayCountryName}
+          subtitleEn={displayCountryName}
           items={[
             { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
             { titleAr: "التمويل", titleEn: "Financing", link: "/financing" },
@@ -326,30 +224,12 @@ useEffect(() => {
         />
       </div>
       <form className="p-8" onSubmit={handleSubmit}>
-        <div className="p-8 bg-white rounded-2xl ">
-          <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">
-            {t("bankLogo")}
-          </h3>
+        <div className="p-8 bg-white rounded-2xl">
+          <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">{t("bankLogo")}</h3>
           <ImageInput image={profileImage} setImage={setProfileImage} />
           <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
-            {/* Arabic bank */}
-            <div className="relative w-full">
-              <DashboardInput
-                label={t("arbankName")}
-                value={arBankName}
-                onChange={setArBankName}
-                placeholder={t("bankName")}
-              />
-            </div>
-            {/* English bank */}
-            <div className="relative w-full">
-              <DashboardInput
-                label={t("enbankName")}
-                value={enBankName}
-                onChange={setEnBankName}
-                placeholder={t("writeHere")}
-              />
-            </div>
+            <DashboardInput label={t("arbankName")} value={arBankName} onChange={setArBankName} placeholder={t("bankName")} />
+            <DashboardInput label={t("enbankName")} value={enBankName} onChange={setEnBankName} placeholder={t("writeHere")} />
           </div>
           <div className="mt-[15px]">
             <MobileInput
@@ -388,27 +268,17 @@ useEffect(() => {
                 label={t("duration")}
                 variant="bordered"
                 placeholder="1 سنة"
-                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-                size="lg"
-              >
-                {authorities.map((authority) => (
-                  <SelectItem key={authority.key} textValue={authority.label}>
-                    {authority.label}
-                  </SelectItem>
-                ))}
+                classNames={{ label: "mb-2 text-base !text-[#080808]" }} 
+                size="lg" value={visitorDuration} onChange={(val) => setVisitorDuration(val.toString())}>
+              {authorities.map((a) => <SelectItem key={a.key} textValue={a.label}>{a.label}</SelectItem>)}
               </Select>
               <Select
                 label={t("Workplace")}
                 variant="bordered"
                 placeholder="جهة حكومية"
-                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-                size="lg"
-              >
-                {entities.map((entitiy) => (
-                  <SelectItem key={entitiy.key} textValue={entitiy.label}>
-                    {entitiy.label}
-                  </SelectItem>
-                ))}
+                classNames={{ label: "mb-2 text-base !text-[#080808]" }} 
+                size="lg" value={visitorWorkplace} onChange={(val) => setVisitorWorkplace(val.toString())}>
+                {Workplaces.map((w) => <SelectItem key={w.key} textValue={w.label}>{w.label}</SelectItem>)}
               </Select>
               <DashboardInput
                 label={t("InterestAmount")}
@@ -429,57 +299,16 @@ useEffect(() => {
                 <Delete />
               </div>
               <div className="flex items-center gap-[9px]">
-                <DashboardInput
-                  label={t("salaryFrom")}
-                  value={visitorSalaryFrom2}
-                  onChange={setVisitorSalaryFrom2}
-                  placeholder="5000 درهم"
-                />
-                <DashboardInput
-                  label={t("salaryTo")}
-                  value={visitorSalaryTo2}
-                  onChange={setVisitorSalaryTo2}
-                  placeholder="5000 درهم"
-                />
+                <DashboardInput label={t("salaryFrom")} value={visitorSalaryFrom2} onChange={setVisitorSalaryFrom2} placeholder="5000 درهم" />
+                <DashboardInput label={t("salaryTo")} value={visitorSalaryTo2} onChange={setVisitorSalaryTo2} placeholder="5000 درهم" />
               </div>
-              <Select
-                label={t("duration")}
-                variant="bordered"
-                placeholder="1 سنة"
-                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-                size="lg"
-              >
-                {authorities.map((authority) => (
-                  <SelectItem key={authority.key} textValue={authority.label}>
-                    {authority.label}
-                  </SelectItem>
-                ))}
+              <Select label={t("duration")} variant="bordered" placeholder="1 سنة" classNames={{ label: "mb-2 text-base !text-[#080808]" }} size="lg" value={visitorDuration2} onChange={(val) => setVisitorDuration2(val.toString())}>
+                {authorities.map((a) => <SelectItem key={a.key} textValue={a.label}>{a.label}</SelectItem>)}
               </Select>
-              <Select
-                label={t("Workplace")}
-                variant="bordered"
-                placeholder="جهة حكومية"
-                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-                size="lg"
-              >
-                {Workplaces.map((workplace) => (
-                  <SelectItem key={workplace.key} textValue={workplace.label}>
-                    {workplace.label}
-                  </SelectItem>
-                ))}
+              <Select label={t("Workplace")} variant="bordered" placeholder="جهة حكومية" classNames={{ label: "mb-2 text-base !text-[#080808]" }} size="lg" value={visitorWorkplace2} onChange={(val) => setVisitorWorkplace2(val.toString())}>
+                {Workplaces.map((w) => <SelectItem key={w.key} textValue={w.label}>{w.label}</SelectItem>)}
               </Select>
-              <DashboardInput
-                label={t("InterestAmount")}
-                value={visitorInterestAmount2}
-                onChange={setVisitorInterestAmount2}
-                placeholder="5%"
-              />
-
-              <div className="w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer">
-                <Add />
-                <p className="text-[#2A32F8] text-base">{t("addMoreData")}</p>
-              </div>
-              <DashboardButton titleAr="اضافة" titleEn="Add" />
+              <DashboardInput label={t("InterestAmount")} value={visitorInterestAmount2} onChange={setVisitorInterestAmount2} placeholder="5%" />
             </div>
           </div>
 
@@ -491,59 +320,19 @@ useEffect(() => {
               {t("salaryRang")}
             </h2>
             <div className="flex items-center gap-[9px]">
-              <DashboardInput
-                label={t("salaryFrom")}
-                value={citizenSalaryFrom}
-                onChange={setCitizenSalaryFrom}
-                placeholder="5000 درهم"
-              />
-              <DashboardInput
-                label="المرتب الى"
-                value={citizenSalaryTo}
-                onChange={setCitizenSalaryTo}
-                placeholder="5000 درهم"
-              />
+              <DashboardInput label={t("salaryFrom")} value={citizenSalaryFrom} onChange={setCitizenSalaryFrom} placeholder="5000 درهم" />
+              <DashboardInput label={t("salaryTo")} value={citizenSalaryTo} onChange={setCitizenSalaryTo} placeholder="5000 درهم" />
             </div>
-            <Select
-              label={t("duration")}
-              variant="bordered"
-              placeholder="1 سنة"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-            >
-              {authorities.map((authority) => (
-                <SelectItem key={authority.key} textValue={authority.label}>
-                  {authority.label}
-                </SelectItem>
-              ))}
+            <Select label={t("duration")} variant="bordered" placeholder="1 سنة" classNames={{ label: "mb-2 text-base !text-[#080808]" }} size="lg" value={citizenDuration} onChange={(val) => setCitizenDuration(val.toString())}>
+              {authorities.map((a) => <SelectItem key={a.key} textValue={a.label}>{a.label}</SelectItem>)}
             </Select>
-            <Select
-              label={t("Workplace")}
-              variant="bordered"
-              placeholder="جهة حكومية"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-            >
-              {Workplaces.map((workplace) => (
-                <SelectItem key={workplace.key} textValue={workplace.label}>
-                  {workplace.label}
-                </SelectItem>
-              ))}
+            <Select label={t("Workplace")} variant="bordered" placeholder="جهة حكومية" classNames={{ label: "mb-2 text-base !text-[#080808]" }} size="lg" value={citizenWorkplace} onChange={(val) => setCitizenWorkplace(val.toString())}>
+              {Workplaces.map((w) => <SelectItem key={w.key} textValue={w.label}>{w.label}</SelectItem>)}
             </Select>
-            <DashboardInput
-              label={t("InterestAmount")}
-              value={citizenInterestAmount}
-              onChange={setCitizenInterestAmount}
-              placeholder="5%"
-            />
-            <div className="w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer">
-              <Add />
-              <p className="text-[#2A32F8] text-base">{t("addMoreData")}</p>
-            </div>
-            <DashboardButton titleAr="اضافة" titleEn="Add" />
+            <DashboardInput label={t("InterestAmount")} value={citizenInterestAmount} onChange={setCitizenInterestAmount} placeholder="5%" />
           </div>
         </div>
-        
+
         <div className="flex justify-end mt-6">
           <DashboardButton 
             titleAr={isLoading ? "جاري الاضافة..." : "اضافة"} 
