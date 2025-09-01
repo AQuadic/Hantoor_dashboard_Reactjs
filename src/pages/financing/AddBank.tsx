@@ -151,37 +151,42 @@ const handleSubmit = async (e: React.FormEvent) => {
   setIsLoading(true);
 
   try {
-    const finance: BankFinance[] = [
-      {
-        type: "expatriate",
-        salary_from: visitorSalaryFrom ? Number(visitorSalaryFrom) : undefined,
-        salary_to: visitorSalaryTo ? Number(visitorSalaryTo) : undefined,
-        duration: visitorDuration,
-        employer: visitorWorkplace,
-        value: visitorInterestAmount,
-      },
-      {
-        type: "expatriate",
-        salary_from: visitorSalaryFrom2 ? Number(visitorSalaryFrom2) : undefined,
-        salary_to: visitorSalaryTo2 ? Number(visitorSalaryTo2) : undefined,
-        duration: visitorDuration2,
-        employer: visitorWorkplace2,
-        value: visitorInterestAmount2,
-      },
-      {
-        type: "citizen",
-        salary_from: citizenSalaryFrom ? Number(citizenSalaryFrom) : undefined,
-        salary_to: citizenSalaryTo ? Number(citizenSalaryTo) : undefined,
-        duration: citizenDuration,
-        employer: citizenWorkplace,
-        value: citizenInterestAmount,
-      },
-    ];
+const finance: BankFinance[] = [
+  {
+    type: "expatriate",
+    salary_from: visitorSalaryFrom ? Number(visitorSalaryFrom) : undefined,
+    salary_to: visitorSalaryTo ? Number(visitorSalaryTo) : undefined,
+    duration: visitorDuration.toString(),
+    employer: visitorWorkplace.toString(),
+    value: visitorInterestAmount,
+    is_active: true,
+  },
+  {
+    type: "expatriate",
+    salary_from: visitorSalaryFrom2 ? Number(visitorSalaryFrom2) : undefined,
+    salary_to: visitorSalaryTo2 ? Number(visitorSalaryTo2) : undefined,
+    duration: visitorDuration2.toString(),
+    employer: visitorWorkplace2.toString(),
+    value: visitorInterestAmount2,
+    is_active: true,
+  },
+  {
+    type: "citizen",
+    salary_from: citizenSalaryFrom ? Number(citizenSalaryFrom) : undefined,
+    salary_to: citizenSalaryTo ? Number(citizenSalaryTo) : undefined,
+    duration: citizenDuration.toString(),
+    employer: citizenWorkplace.toString(),
+    value: citizenInterestAmount,
+    is_active: true,
+  },
+];
+
 
     const payload: CreateBankPayload = {
       name: { ar: arBankName, en: enBankName },
       country_id: Number(selectedCountryId),
       phone,
+      phone_country: selectedCountry.iso2,
       is_active: true,
       image: profileImage,
       finance,
