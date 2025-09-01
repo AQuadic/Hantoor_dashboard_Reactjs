@@ -8,34 +8,22 @@ import View from "../icons/general/View";
 import FaqDetails from "@/pages/faqs/FaqDetails";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getFAQs, FAQ } from "@/api/faq/getFaq";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
 
 const FAQsTable = () => {
-  const { t } = useTranslation("questions");
+  const { t, i18n } = useTranslation("questions");
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
 
-  const technicalsupport = [
-    {
-      id: 1,
-      question: "مشكلة في عرض السيارات أو البيانات",
-      country: "الامارات",
-      count: 22,
-      date: "22/03/2024 - 08:30 PM",
-    },
-    {
-      id: 2,
-      question: "مشكلة في عرض السيارات أو البيانات",
-      country: "الامارات",
-      count: 22,
-      date: "22/03/2024 - 08:30 PM",
-    },
-    {
-      id: 3,
-      question: "مشكلة في عرض السيارات أو البيانات",
-      country: "الامارات",
-      count: 22,
-      date: "22/03/2024 - 08:30 PM",
-    },
-  ];
+  const { data: faqsData, isLoading } = useQuery({
+    queryKey: ["faqs"],
+    queryFn: () => getFAQs({ pagination: "simple" }),
+  });
+
+  if (isLoading) return <Loading />
+  if (!faqsData) return <NoData />
 
   return (
     <div className="">
@@ -52,24 +40,25 @@ const FAQsTable = () => {
               <TableHead className="text-right">{t('status')}</TableHead>
             </TableRow>
           </TableHeader>
+
           <TableBody>
-            {technicalsupport.map((question, index) => (
-              <TableRow key={question.id} noBackgroundColumns={1}>
+            {faqsData?.data.map((faq: FAQ, index: number) => (
+              <TableRow key={faq.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{question.question}</TableCell>
-                <TableCell>{question.country}</TableCell>
-                <TableCell>{question.count}</TableCell>
-                <TableCell>{question.count}</TableCell>
-                <TableCell className="w-full">{question.date}</TableCell>
+                <TableCell>{i18n.language === "ar" ? faq.question.ar : faq.question.en}</TableCell>
+                <TableCell>{faq.country_id || "-"}</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell>-</TableCell>
+                <TableCell className="w-full">{new Date(faq.created_at).toLocaleString()}</TableCell>
                 <TableCell
                   className="flex gap-[7px] items-center"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Switch />
-                  <button onClick={() => setOpenFaqId(question.id)}>
+                  <button onClick={() => setOpenFaqId(faq.id)}>
                     <View />
                   </button>
-                  <Link to={`/faq/edit/${question.id}`}>
+                  <Link to={`/faq/edit/${faq.id}`}>
                     <Edit />
                   </Link>
                   <div className="mt-2">
