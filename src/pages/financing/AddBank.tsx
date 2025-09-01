@@ -10,10 +10,10 @@ import Delete from "@/components/icons/banks/Delete";
 import { useTranslation } from "react-i18next";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { toast } from "react-hot-toast";
-import { createRequestFinancing, CreateRequestFinancingParams } from "@/api/financing/addFinancing";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { getRequestFinancingById } from "@/api/financing/getFinancinyById";
+import { BankFinance, createBank, CreateBankPayload } from "@/api/bank/postBank";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -91,7 +91,10 @@ const AddBank = () => {
 
         if (!countryId && id) {
           const request = await getRequestFinancingById(Number(id));
-          countryId = request[0]?.country_id;
+
+          if (request && "country_id" in request) {
+            countryId = request.country_id; 
+          }
         }
 
         if (countryId && response.data.length > 0) {
@@ -142,43 +145,50 @@ const AddBank = () => {
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+
   if (!validateForm()) return;
 
   setIsLoading(true);
+
   try {
-    const params: CreateRequestFinancingParams = {
-      phone,
-      country_id: Number(selectedCountryId),
-      is_active: true,
+    const finance: BankFinance[] = [
+      {
+        type: "expatriate",
+        salary_from: visitorSalaryFrom ? Number(visitorSalaryFrom) : undefined,
+        salary_to: visitorSalaryTo ? Number(visitorSalaryTo) : undefined,
+        duration: visitorDuration,
+        employer: visitorWorkplace,
+        value: visitorInterestAmount,
+      },
+      {
+        type: "expatriate",
+        salary_from: visitorSalaryFrom2 ? Number(visitorSalaryFrom2) : undefined,
+        salary_to: visitorSalaryTo2 ? Number(visitorSalaryTo2) : undefined,
+        duration: visitorDuration2,
+        employer: visitorWorkplace2,
+        value: visitorInterestAmount2,
+      },
+      {
+        type: "citizen",
+        salary_from: citizenSalaryFrom ? Number(citizenSalaryFrom) : undefined,
+        salary_to: citizenSalaryTo ? Number(citizenSalaryTo) : undefined,
+        duration: citizenDuration,
+        employer: citizenWorkplace,
+        value: citizenInterestAmount,
+      },
+    ];
+
+    const payload: CreateBankPayload = {
       name: { ar: arBankName, en: enBankName },
-      visitor: [
-        {
-          salary_from: visitorSalaryFrom,
-          salary_to: visitorSalaryTo,
-          interest_amount: visitorInterestAmount,
-          duration: visitorDuration,
-          workplace: visitorWorkplace,
-        },
-        {
-          salary_from: visitorSalaryFrom2,
-          salary_to: visitorSalaryTo2,
-          interest_amount: visitorInterestAmount2,
-          duration: visitorDuration2,
-          workplace: visitorWorkplace2,
-        },
-      ],
-      citizen: [
-        {
-          salary_from: citizenSalaryFrom,
-          salary_to: citizenSalaryTo,
-          interest_amount: citizenInterestAmount,
-          duration: citizenDuration,
-          workplace: citizenWorkplace,
-        },
-      ],
+      country_id: Number(selectedCountryId),
+      phone,
+      is_active: true,
+      image: profileImage,
+      finance,
     };
 
-    const response = await createRequestFinancing(params);
+    const response = await createBank(payload);
+
     if (response.success) {
       toast.success(response.message || "Bank added successfully!");
       navigate(`/financing/details/${selectedCountryId}`, {
@@ -194,7 +204,6 @@ const handleSubmit = async (e: React.FormEvent) => {
     setIsLoading(false);
   }
 };
-
 
   const resetForm = () => {
     setArBankName("");
