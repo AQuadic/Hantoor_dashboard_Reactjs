@@ -71,5 +71,6 @@
   "PhoneAddedSuccessfully": "Phone added successfully",
   "pleaseEnterPhone": "Please enter phone number",
   "pleaseSelectCountry": "Please Select country",
-  "deletedSuccessfully": "Deleted successfully"
+  "deletedSuccessfully": "Deleted successfully",
+  "PhoneUpdatedSuccessfully": "Phone edited successfully"
 }

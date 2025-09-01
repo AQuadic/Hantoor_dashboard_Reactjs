@@ -71,5 +71,6 @@
   "PhoneAddedSuccessfully": "تم اضافة الرقم بنجاح",
   "pleaseEnterPhone": "يرجي ادخال الرقم",
   "pleaseSelectCountry": "يرجي اختيار البلد",
-  "deletedSuccessfully": "تم الحذف بنجاح "
+  "deletedSuccessfully": "تم الحذف بنجاح",
+  "PhoneUpdatedSuccessfully": "تم تحديث الرقم بنجاح"
 }

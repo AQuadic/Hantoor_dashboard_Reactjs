@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -12,6 +12,7 @@ import { Select, SelectItem } from "@heroui/react";
 import { getRequestFinancingById } from "@/api/financing/getFinancinyById";
 import { Country, getCountries } from "@/api/countries/getCountry";
 import Loading from "@/components/general/Loading";
+import { updateRequestFinancing } from "@/api/financing/editFinancing";
 
 const EditWhatsappNumber = () => {
   const { t, i18n } = useTranslation("setting");
@@ -20,6 +21,7 @@ const EditWhatsappNumber = () => {
   const [phone, setPhone] = useState("");
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   const { data, isLoading } = useQuery({
     queryKey: ["countries"],
@@ -45,6 +47,35 @@ const EditWhatsappNumber = () => {
     };
     fetchData();
   }, [id, t]);
+
+  const handleSave = async () => {
+    if (!id) return;
+
+    if (!selectedCountry) {
+      toast.error(t("pleaseSelectCountry"));
+      return;
+    }
+    if (!phone) {
+      toast.error(t("pleaseEnterPhone"));
+      return;
+    }
+
+    try {
+      const res = await updateRequestFinancing({
+        id: Number(id),
+        country_id: Number(selectedCountry),
+        phone: phone,
+        is_active: true,
+      });
+
+      toast.success(res.message || t("PhoneUpdatedSuccessfully"));
+      navigate("/settings?section=Insurance+Price+Request+Button");
+
+    } catch (err: any) {
+      toast.error(err.message || t("somethingWentWrong"));
+    }
+
+  };
 
   if (loading) return <Loading />
 
@@ -95,10 +126,7 @@ const EditWhatsappNumber = () => {
             />
           </div>
         </div>
-        <DashboardButton
-          titleAr="حفظ"
-          titleEn="Save"
-        />
+        <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
       </div>
     </section>
   );

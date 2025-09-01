@@ -42,14 +42,12 @@ const AddWhatsappNumber = () => {
     try {
       setLoading(true);
       const res = await createRequestFinancing(payload);
-      if (res.success) {
-        setPhone("");
-        setSelectedCountry(null);
-        toast.success(t("PhoneAddedSuccessfully"));
-        navigate("/settings?section=Insurance+Price+Request+Button")
-      } else {
-        toast.error(res.message || t("somethingWentWrong"));
-      }
+
+      toast.success(t("PhoneAddedSuccessfully"));
+      setPhone("");
+      setSelectedCountry(null);
+      navigate("/settings?section=Insurance+Price+Request+Button");
+
     } catch (err: any) {
       toast.error(err.message || t("somethingWentWrong"));
     } finally {
