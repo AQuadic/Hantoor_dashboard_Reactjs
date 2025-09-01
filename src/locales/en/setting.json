@@ -65,5 +65,10 @@
   "errorUpdateLink": "Failed to update the link",
 
   "savedSuccessfully": "Saved successfully",
-  "pleaseFillTheField": "Please fill this field"
+  "pleaseFillTheField": "Please fill this field",
+
+  "selectCountry": "Select country",
+  "PhoneAddedSuccessfully": "Phone added successfully",
+  "pleaseEnterPhone": "Please enter phone number",
+  "pleaseSelectCountry": "Please Select country"
 }

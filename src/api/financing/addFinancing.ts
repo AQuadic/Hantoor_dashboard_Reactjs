@@ -4,7 +4,6 @@ export interface CreateRequestFinancingParams {
   phone: string;     
   country_id: number;  
   is_active?: boolean;
-  name: { ar: string; en: string };
 }
 
 export interface CreateRequestFinancingResponse {

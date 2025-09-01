@@ -65,5 +65,10 @@
   "errorUpdateLink": "فشل تحديث الرابط",
 
   "savedSuccessfully": "تم الحفظ بنجاح",
-  "pleaseFillTheField": "الرجاء ملء هذا الحقل"
+  "pleaseFillTheField": "الرجاء ملء هذا الحقل",
+
+  "selectCountry": "اختر البلد",
+  "PhoneAddedSuccessfully": "تم اضافة الرقم بنجاح",
+  "pleaseEnterPhone": "يرجي ادخال الرقم",
+  "pleaseSelectCountry": "يرجي اختيار البلد"
 }

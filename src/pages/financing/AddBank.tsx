@@ -10,7 +10,7 @@ import Delete from "@/components/icons/banks/Delete";
 import { useTranslation } from "react-i18next";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { toast } from "react-hot-toast";
-import { createRequestFinancing, CreateRequestFinancingParams } from "@/api/financing/addBank";
+import { createRequestFinancing, CreateRequestFinancingParams } from "@/api/financing/addFinancing";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
