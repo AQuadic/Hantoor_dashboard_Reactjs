@@ -3,12 +3,17 @@ import ImageInput from "@/components/general/ImageInput";
 import MobileInput from "@/components/general/MobileInput";
 import DashboardInput from "@/components/general/DashboardInput";
 import { Select, SelectItem } from "@heroui/react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { countries } from "countries-list";
 import Add from "@/components/icons/banks/Add";
 import Delete from "@/components/icons/banks/Delete";
 import { useTranslation } from "react-i18next";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
+import { getBankById } from "@/api/bank/getBankById";
+import Loading from "@/components/general/Loading";
+import NoData from "@/components/general/NoData";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -22,6 +27,14 @@ const getCountryByIso2 = (iso2: string) => {
 
 const EditBank = () => {
   const { t } = useTranslation("financing");
+  const { id } = useParams<{ id: string }>();
+
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["bank", id],
+    queryFn: () => getBankById(Number(id)),
+    enabled: !!id,
+  });
+
   const [selectedCountry, setSelectedCountry] = useState(
     getCountryByIso2("EG")
   );
@@ -33,25 +46,43 @@ const EditBank = () => {
   const [enBankName, setEnBankName] = useState("");
 
   // Visitor data states
-  const [visitorSalaryFrom, setVisitorSalaryFrom] = useState("");
+  const [visitorData, setVisitorData] = useState<
+    Array<{
+      salaryFrom: string;
+      salaryTo: string;
+      interestAmount: string;
+      duration: string;
+      workplace: string;
+    }>
+  >([
+    {
+      salaryFrom: "",
+      salaryTo: "",
+      interestAmount: "",
+      duration: "",
+      workplace: "",
+    },
+  ]);
   const [visitorSalaryTo, setVisitorSalaryTo] = useState("");
-  const [visitorInterestAmount, setVisitorInterestAmount] = useState("");
-
-  // Second visitor data states (for duplicated section)
+  const [visitorSalaryFrom, setVisitorSalaryFrom] = useState("");
   const [visitorSalaryFrom2, setVisitorSalaryFrom2] = useState("");
-  const [visitorSalaryTo2, setVisitorSalaryTo2] = useState("");
+  const [visitorInterestAmount, setVisitorInterestAmount] = useState("");
   const [visitorInterestAmount2, setVisitorInterestAmount2] = useState("");
+  const [visitorSalaryTo2, setVisitorSalaryTo2] = useState("");
 
   // Citizen data states
   const [citizenSalaryFrom, setCitizenSalaryFrom] = useState("");
   const [citizenSalaryTo, setCitizenSalaryTo] = useState("");
   const [citizenInterestAmount, setCitizenInterestAmount] = useState("");
+  const [citizenDuration, setCitizenDuration] = useState("");
+  const [citizenWorkplace, setCitizenWorkplace] = useState("");
+
   const authorities = [
     { key: "1", label: "1 سنة" },
     { key: "2", label: "سنتين" },
     { key: "3", label: "3 سنوات" },
     { key: "4", label: "4 سنوات" },
-    { key: "4", label: "5 سنوات" },
+    { key: "5", label: "5 سنوات" },
   ];
 
   const entities = [
@@ -63,6 +94,52 @@ const EditBank = () => {
     { key: "1", label: "جهة حكومية" },
     { key: "2", label: "جهة خاصة" },
   ];
+
+  useEffect(() => {
+    if (data) {
+      setArBankName(data.name.ar || "");
+      setEnBankName(data.name.en || "");
+      setPhone(data.phone || "");
+      setSelectedCountry(getCountryByIso2(data.phone_country || "EG"));
+
+      const expatriates = data.finance?.filter((f) => f.type === "expatriate") || [];
+      const citizens = data.finance?.filter((f) => f.type === "citizen") || [];
+
+      if (expatriates.length > 0) {
+        setVisitorData(
+          expatriates.map((exp) => ({
+            salaryFrom: exp.salary_from?.toString() || "",
+            salaryTo: exp.salary_to?.toString() || "",
+            interestAmount: exp.value || "",
+            duration: exp.duration || "",
+            workplace: exp.employer || "",
+          }))
+        );
+      } else {
+        setVisitorData([
+          {
+            salaryFrom: "",
+            salaryTo: "",
+            interestAmount: "",
+            duration: "",
+            workplace: "",
+          },
+        ]);
+      }
+
+      if (citizens.length > 0) {
+        const citizen = citizens[0];
+        setCitizenSalaryFrom(citizen.salary_from?.toString() || "");
+        setCitizenSalaryTo(citizen.salary_to?.toString() || "");
+        setCitizenInterestAmount(citizen.value || "");
+        setCitizenDuration(citizen.duration || "");
+        setCitizenWorkplace(citizen.employer || "");
+      }
+    }
+  }, [data]);
+
+  if (isLoading) return <Loading />;
+  if (error) return <NoData />;
 
   return (
     <section>
@@ -263,6 +340,8 @@ const EditBank = () => {
               placeholder="1 سنة"
               classNames={{ label: "mb-2 text-base !text-[#080808]" }}
               size="lg"
+              selectedKeys={citizenDuration ? [citizenDuration] : []}
+              onChange={(e) => setCitizenDuration(e.target.value)}
             >
               {authorities.map((authority) => (
                 <SelectItem key={authority.key} textValue={authority.label}>
@@ -276,10 +355,12 @@ const EditBank = () => {
               placeholder="جهة حكومية"
               classNames={{ label: "mb-2 text-base !text-[#080808]" }}
               size="lg"
+              selectedKeys={citizenWorkplace ? [citizenWorkplace] : []}
+              onChange={(e) => setCitizenWorkplace(e.target.value)}
             >
-              {Workplaces.map((workplace) => (
-                <SelectItem key={workplace.key} textValue={workplace.label}>
-                  {workplace.label}
+              {entities.map((entity) => (
+                <SelectItem key={entity.key} textValue={entity.label}>
+                  {entity.label}
                 </SelectItem>
               ))}
             </Select>
