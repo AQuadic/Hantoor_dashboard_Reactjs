@@ -12,15 +12,23 @@ import { useQuery } from "@tanstack/react-query";
 import { getFAQs, FAQ } from "@/api/faq/getFaq";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import { deleteFAQ } from "@/api/faq/deleteFaq";
+import toast from "react-hot-toast";
 
 const FAQsTable = () => {
   const { t, i18n } = useTranslation("questions");
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
 
-  const { data: faqsData, isLoading } = useQuery({
+  const { data: faqsData, isLoading, refetch } = useQuery({
     queryKey: ["faqs"],
     queryFn: () => getFAQs({ pagination: "simple" }),
   });
+
+    const handleDelete = async (id: number) => {
+    await deleteFAQ(id);
+    toast.success(t("faqDeleted"));
+    refetch();
+  };
 
   if (isLoading) return <Loading />
   if (!faqsData) return <NoData />
@@ -62,7 +70,7 @@ const FAQsTable = () => {
                     <Edit />
                   </Link>
                   <div className="mt-2">
-                    <TableDeleteButton handleDelete={() => {}} />
+                    <TableDeleteButton handleDelete={() => handleDelete(faq.id)} />
                   </div>
                 </TableCell>
               </TableRow>
