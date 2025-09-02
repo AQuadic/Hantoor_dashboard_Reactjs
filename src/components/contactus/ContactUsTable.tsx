@@ -1,43 +1,42 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import View from "../icons/general/View";
 import ContactUsView from "@/pages/contactus/ContactUsView";
 import Email from "../icons/contactus/Email";
 import Star from "../icons/contactus/Star";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getSuggestions, SuggestionsResponse } from "@/api/suggestions/getSuggestions";
+import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
+import NoData from "../general/NoData";
+import { deleteSuggestions } from "@/api/suggestions/deleteSuggestion";
+import toast from "react-hot-toast";
 
 const ContactUsTable = () => {
     const { t } = useTranslation("contactUs");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
 
-    const messages = [
-        {
-            id: 1,
-            name: "مصطفي محمد",
-            number: "6881066",
-            email: "username@mail.com",
-            country: "الامارات",
-            phone: "+966 123456 789"
-        },
-        {
-            id: 2,
-            name: "مصطفي محمد",
-            number: "6881066",
-            email: "username@mail.com",
-            country: "الامارات",
-            phone: "+966 123456 789"
-        },
-        {
-            id: 3,
-            name: "مصطفي محمد",
-            number: "6881066",
-            email: "username@mail.com",
-            country: "الامارات",
-            phone: "+966 123456 789"
-        },
-    ];
+  const { data, isLoading, refetch } = useQuery<SuggestionsResponse, Error>({
+    queryKey: ["suggestions"],
+    queryFn: () => getSuggestions({ page: 1, per_page: 10 }),
+    retry: 1,
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!data?.data || data?.data.length === 0) {
+    return <NoData />
+  }
+
+    const handleDelete = async (id: number) => {
+        await deleteSuggestions(id);
+        toast.success(t("suggestionDeleted"));
+        refetch();
+    };
+
     return (
         <div className="">
         <div className="w-full">
@@ -54,13 +53,13 @@ const ContactUsTable = () => {
             </TableRow>
         </TableHeader>
             <TableBody>
-                {messages.map((message, index) => (
+                {data?.data.map((message, index) => (
                 <TableRow key={message.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{message.name}</TableCell>
-                <TableCell>{message.phone}</TableCell>
-                <TableCell>{message.email}</TableCell>
-                <TableCell className="w-full">{message.country}</TableCell>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{message.title}</TableCell>
+                    <TableCell>{message.description}</TableCell>
+                    <TableCell>{message.created_at}</TableCell>
+                    <TableCell className="w-full">{message.updated_at || "N/A"}</TableCell>
                     <TableCell className="flex items-center gap-2">
                         <TableCell
                     className="flex gap-[7px] items-center"
@@ -76,7 +75,7 @@ const ContactUsTable = () => {
                     </button>
                         <Star />
                     <div className="mt-2">
-                    <TableDeleteButton handleDelete={() => {}} />
+                    <TableDeleteButton handleDelete={() => handleDelete(message.id)} />
                     </div>
                     </TableCell>
                 </TableRow>
