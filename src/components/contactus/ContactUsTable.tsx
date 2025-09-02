@@ -56,10 +56,10 @@ const ContactUsTable = () => {
                 {data?.data.map((message, index) => (
                 <TableRow key={message.id} noBackgroundColumns={1}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{message.title}</TableCell>
-                    <TableCell>{message.description}</TableCell>
-                    <TableCell>{message.created_at}</TableCell>
-                    <TableCell className="w-full">{message.updated_at || "N/A"}</TableCell>
+                    <TableCell>{message.name}</TableCell>
+                    <TableCell>{message.phone}</TableCell>
+                    <TableCell>{message.email}</TableCell>
+                    <TableCell>{message.country}</TableCell>
                     <TableCell className="flex items-center gap-2">
                         <TableCell
                     className="flex gap-[7px] items-center"

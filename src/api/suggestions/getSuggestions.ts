@@ -6,6 +6,11 @@ export interface Suggestion {
   description: string;
   created_at: string;
   updated_at?: string;
+  name: string;
+  phone: string;
+  email: string;
+  country: string;
+  count: number;
 }
 
 export interface SuggestionsResponse {
