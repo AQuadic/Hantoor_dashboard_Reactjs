@@ -39,6 +39,7 @@ export interface GetFAQsParams {
   country_id?: number;
   pagination?: "simple" | "normal" | "none";
   page?: number;
+  type?: "Frequent Questions" | "Technical Support Questions";
 }
 
 export async function getFAQs(params: GetFAQsParams = {}): Promise<FAQsResponse> {

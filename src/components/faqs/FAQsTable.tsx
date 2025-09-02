@@ -11,25 +11,28 @@ import { useTranslation } from "react-i18next";
 import { FAQ } from "@/api/faq/getFaq";
 import { deleteFAQ } from "@/api/faq/deleteFaq";
 import toast from "react-hot-toast";
+import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 
 interface FAQsTableProps {
-  data: FAQ[];
+  data?: FAQ[];
   from?: number;
+  isLoading?: boolean;
   refetch: () => void;
 }
 
-const FAQsTable = ({ data, from = 1, refetch }: FAQsTableProps) => {
+const FAQsTable = ({ data, from = 1, isLoading = false, refetch }: FAQsTableProps) => {
   const { t, i18n } = useTranslation("questions");
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
 
-    const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
     await deleteFAQ(id);
     toast.success(t("faqDeleted"));
     refetch();
   };
 
-  if (!data || data.length === 0) return <NoData />
+  if (isLoading) return <Loading />;
+  if (!data || data.length === 0) return <NoData />;
 
   return (
     <div className="">
