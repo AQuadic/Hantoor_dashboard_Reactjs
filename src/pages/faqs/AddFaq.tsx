@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom"; // <-- correct import
 
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
@@ -27,18 +28,23 @@ const AddFaq = () => {
   const [arBody, setArBody] = useState("");
   const [enBody, setEnBody] = useState("");
   const [countryId, setCountryId] = useState<string | undefined>();
-  const [type, ] = useState<"Frequent Questions" | "Technical Support Questions">(
+  const [type] = useState<"Frequent Questions" | "Technical Support Questions">(
     "Frequent Questions"
   );
   const [, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
-
+  const navigate = useNavigate();
   const { data: countriesData, isLoading: countriesLoading } = useQuery<CountriesResponse>({
     queryKey: ["countries"],
     queryFn: () => getCountries(1),
   });
 
   const handleSubmit = async () => {
+    if (!countryId) {
+      toast.error(t("Please select a country"));
+      return;
+    }
+
     const payload: CreateFAQPayload = {
       country_id: countryId,
       type,
@@ -47,26 +53,32 @@ const AddFaq = () => {
     };
 
     setLoading(true);
-    const result = await createFAQ(payload);
-    setLoading(false);
+    try {
+      const result = await createFAQ(payload);
+      setLoading(false);
 
-    if (result.success) {
-      toast.success("FAQ added successfully!");
-      setArQuestion("");
-      setEnQuestion("");
-      setArBody("");
-      setEnBody("");
-      setCountryId(undefined);
-      setErrors({});
-    } else {
-      if (result.errors) {
-        setErrors(result.errors);
-        const errorMessages = Object.entries(result.errors)
+      if (result) {
+        toast.success(t("addedSuccessfully"));
+        setArQuestion("");
+        setEnQuestion("");
+        setArBody("");
+        setEnBody("");
+        setCountryId(undefined);
+        setErrors({});
+        navigate("/faqs");
+      } else {
+        toast.error(t("Something went wrong"));
+      }
+    } catch (err: any) {
+      setLoading(false);
+      if (err?.errors) {
+        setErrors(err.errors);
+        const errorMessages = Object.entries(err.errors)
           .map(([key, msgs]) => `${key}: ${(msgs as string[]).join(", ")}`)
           .join("\n");
         toast.error(errorMessages);
       } else {
-        toast.error(result.message || "Something went wrong");
+        toast.error(err?.message || t("Something went wrong"));
       }
     }
   };
@@ -90,10 +102,7 @@ const AddFaq = () => {
               onValueChange={(value) => setCountryId(value)}
               disabled={countriesLoading || !countriesData?.data?.length}
             >
-              <SelectTrigger
-                className="w-full !h-16 rounded-[12px] mt-4"
-                dir="rtl"
-              >
+              <SelectTrigger className="w-full !h-16 rounded-[12px] mt-4" dir="rtl">
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
               <SelectContent dir="rtl">
@@ -139,7 +148,7 @@ const AddFaq = () => {
                setBody={setArBody}
               />
           </div>
-          {/* English Question */}
+          {/* English Answer */}
           <div className="relative w-full">
             <DashboardTextEditor
               title={t("enAnswer")}

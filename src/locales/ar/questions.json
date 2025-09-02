@@ -27,5 +27,6 @@
     "NOUses": "عدد مرات الاستفادة",
     "NONotBenefited": "عدد مرات عدم الاستفادة",
 
-    "faqDeleted": "تم حذف السؤال بنجاح"
+    "faqDeleted": "تم حذف السؤال بنجاح",
+    "addedSuccessfully": "تمت الاضافة بنجاح"
 }
