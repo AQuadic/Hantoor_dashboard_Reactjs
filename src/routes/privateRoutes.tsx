@@ -72,7 +72,6 @@ import NotificationDetails from "@/pages/notification/NotificationDetails";
 import AddNotification from "@/pages/notification/AddNotification";
 import ViewCars from "@/pages/cars/ViewCars";
 import ViewAgent from "@/pages/cars/ViewAgent";
-import { useParams } from "react-router";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -160,12 +159,9 @@ export const privateRoutes: RouteTypes[] = [
     element: <EditFaq />,
   },
   {
-  path: "/faq/details/:id",
-  element: (() => {
-    const { id } = useParams<{ id: string }>();
-    return id ? <FaqDetails faqId={Number(id)} /> : <p>FAQ ID not found</p>;
-  })(),
-},
+    path: "/faq/details/:id",
+    element: <FaqDetails faqId={0} />,
+  },
   {
     path: "/subordinates/add",
     element: <AddSubordinatePage />,
