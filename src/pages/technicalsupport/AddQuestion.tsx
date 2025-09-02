@@ -9,15 +9,79 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { createFAQ, CreateFAQPayload } from "@/api/faq/addFaq";
+import toast from "react-hot-toast";
+import { useQuery } from "@tanstack/react-query";
+import { CountriesResponse, Country, getCountries } from "@/api/countries/getCountry";
+import { useNavigate } from "react-router";
 
 const AddQuestions = () => {
   const { t } = useTranslation("questions");
+
+  const [countryId, setCountryId] = React.useState<string>();
   const [arBody, setArBody] = React.useState("");
   const [enBody, setEnBody] = React.useState("");
   const [arQuestion, setArQuestion] = React.useState("");
   const [enQuestion, setEnQuestion] = React.useState("");
+  const navigate = useNavigate();
+  const [, setLoading] = React.useState(false);
+  const [type] = useState<"Frequent Questions" | "Technical Support Questions">(
+    "Technical Support Questions"
+  );
+    const [, setErrors] = useState<Record<string, string[]>>({});
+  
+  const { data: countriesData, isLoading: countriesLoading } = useQuery<CountriesResponse>({
+      queryKey: ["countries"],
+      queryFn: () => getCountries(1),
+    });
+
+      const handleSubmit = async () => {
+    if (!countryId) {
+      toast.error(t("Please select a country"));
+      return;
+    }
+
+    const payload: CreateFAQPayload = {
+      type,
+      question: { ar: arQuestion, en: enQuestion },
+      answer: { ar: arBody, en: enBody },
+    };
+
+    setLoading(true);
+    try {
+      const result = await createFAQ(payload);
+      setLoading(false);
+
+      if (result) {
+        toast.success(t("addedSuccessfully"));
+        setArQuestion("");
+        setEnQuestion("");
+        setArBody("");
+        setEnBody("");
+        setCountryId(undefined);
+        setErrors({});
+        navigate("/technical-support");
+      } else {
+        toast.error(t("Something went wrong"));
+      }
+    } catch (err: any) {
+      setLoading(false);
+      if (err?.errors) {
+        setErrors(err.errors);
+        const errorMessages = Object.entries(err.errors)
+          .map(([key, msgs]) => `${key}: ${(msgs as string[]).join(", ")}`)
+          .join("\n");
+        toast.error(errorMessages);
+      } else {
+        toast.error(err?.message || t("Something went wrong"));
+      }
+    }
+  };
+
+
+
   return (
     <section>
       <DashboardHeader
@@ -36,17 +100,19 @@ const AddQuestions = () => {
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Country */}
           <div className="md:w-1/2 w-full">
-            <Select>
-              <SelectTrigger
-                className="w-full !h-16 rounded-[12px] mt-4"
-                dir="rtl"
-              >
+            <Select
+              onValueChange={(value) => setCountryId(value)}
+              disabled={countriesLoading || !countriesData?.data?.length}
+            >
+              <SelectTrigger className="w-full !h-16 rounded-[12px] mt-4" dir="rtl">
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
               <SelectContent dir="rtl">
-                <SelectItem value="1">الامارات</SelectItem>
-                <SelectItem value="2">الامارات</SelectItem>
-                <SelectItem value="3">الامارات</SelectItem>
+                {countriesData?.data.map((country: Country) => (
+                  <SelectItem key={country.id} value={country.id.toString()}>
+                    {country.name.ar}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -73,18 +139,18 @@ const AddQuestions = () => {
         </div>
 
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
-          {/* Arabic Question */}
+          {/* Arabic Answer */}
           <div className="relative w-full">
             <DashboardTextEditor
-              title={t("arQuestion")}
+              title={t("arAnswer")}
               body={arBody}
               setBody={setArBody}
             />
           </div>
-          {/* English Question */}
+          {/* English Answer */}
           <div className="relative w-full">
             <DashboardTextEditor
-              title={t("arQuestion")}
+              title={t("enAnswer")}
               body={enBody}
               setBody={setEnBody}
             />
@@ -92,7 +158,7 @@ const AddQuestions = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton titleAr="اضافة" titleEn="Add" />
+          <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit} />
         </div>
       </div>
     </section>

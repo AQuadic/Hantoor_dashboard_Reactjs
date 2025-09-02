@@ -9,7 +9,6 @@ import NoData from "@/components/general/NoData";
 
 const FAQsPage = () => {
   const [page, setPage] = useState(1);
-
   const { data: faqsData, isLoading, refetch } = useQuery<FAQsResponse>({
     queryKey: ["faqs", page],
     queryFn: () => getFAQs({ pagination: "normal", page }),
@@ -17,27 +16,35 @@ const FAQsPage = () => {
   });
 
   if (isLoading) return <Loading />;
-  if (!faqsData) return <NoData />;
+  if (!faqsData || !faqsData.data) return <NoData />;
 
-  const { meta, data } = faqsData;
+  const faqs = faqsData.data;
+  const perPage = faqsData.meta?.per_page || 10;
+
+  const totalItems = faqs.length;
+  const totalPages = Math.ceil(totalItems / perPage);
+  const from = (page - 1) * perPage + 1;
+  const to = Math.min(page * perPage, totalItems);
+
+  const currentData = faqs.slice(from - 1, to);
 
   return (
     <div>
       <FAQsHeader />
       <div className="px-2 md:px-8">
-        <FAQsTable data={data} from={meta.from} refetch={refetch} />
+        <FAQsTable data={currentData} from={from} refetch={refetch} />
 
         <div className="mt-4">
-          {data.length > 0 && (
-          <TablePagination
-            currentPage={meta.current_page}
-            setCurrentPage={setPage}
-            totalPages={meta.last_page ?? 1}
-            totalItems={meta.total}
-            itemsPerPage={meta.per_page}
-            from={meta.from}
-            to={meta.to}
-          />
+          {totalItems > 0 && (
+            <TablePagination
+              currentPage={page}
+              setCurrentPage={setPage}
+              totalPages={totalPages}
+              totalItems={totalItems}
+              itemsPerPage={perPage}
+              from={from}
+              to={to}
+            />
           )}
         </div>
       </div>
