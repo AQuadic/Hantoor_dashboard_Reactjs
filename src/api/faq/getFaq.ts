@@ -25,13 +25,13 @@ export interface FAQsResponse {
     prev?: string | null;
     next?: string | null;
   };
-  meta?: {
+  meta: {
     current_page: number;
     per_page: number;
-    total?: number;
-    last_page?: number;
-    from?: number;
-    to?: number;
+    total: number;
+    last_page: number;
+    from: number;
+    to: number;
   };
 }
 

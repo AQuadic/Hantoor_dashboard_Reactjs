@@ -8,21 +8,20 @@ import View from "../icons/general/View";
 import FaqDetails from "@/pages/faqs/FaqDetails";
 import { Link } from "react-router";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import { getFAQs, FAQ } from "@/api/faq/getFaq";
-import Loading from "../general/Loading";
-import NoData from "../general/NoData";
+import { FAQ } from "@/api/faq/getFaq";
 import { deleteFAQ } from "@/api/faq/deleteFaq";
 import toast from "react-hot-toast";
+import NoData from "../general/NoData";
 
-const FAQsTable = () => {
+interface FAQsTableProps {
+  data: FAQ[];
+  from?: number;
+  refetch: () => void;
+}
+
+const FAQsTable = ({ data, from = 1, refetch }: FAQsTableProps) => {
   const { t, i18n } = useTranslation("questions");
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
-
-  const { data: faqsData, isLoading, refetch } = useQuery({
-    queryKey: ["faqs"],
-    queryFn: () => getFAQs({ pagination: "simple" }),
-  });
 
     const handleDelete = async (id: number) => {
     await deleteFAQ(id);
@@ -30,8 +29,7 @@ const FAQsTable = () => {
     refetch();
   };
 
-  if (isLoading) return <Loading />
-  if (!faqsData) return <NoData />
+  if (!data || data.length === 0) return <NoData />
 
   return (
     <div className="">
@@ -50,7 +48,7 @@ const FAQsTable = () => {
           </TableHeader>
 
           <TableBody>
-            {faqsData?.data.map((faq: FAQ, index: number) => (
+            {data.map((faq: FAQ, index: number) => (
               <TableRow key={faq.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{i18n.language === "ar" ? faq.question.ar : faq.question.en}</TableCell>
