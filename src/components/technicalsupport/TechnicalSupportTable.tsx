@@ -4,25 +4,29 @@ import Edit from "../icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import { getFAQs, FAQ, FAQsResponse } from "@/api/faq/getFaq";
-import Loading from "../general/Loading";
-import NoData from "../general/NoData";
 import { deleteFAQ } from "@/api/faq/deleteFaq";
 import toast from "react-hot-toast";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
+import { FAQ } from "@/api/faq/getFaq";
 
-const TechnicalSupportTable = () => {
+interface TechnicalSupportTableProps {
+  data: FAQ[];
+  from: number;
+  isLoading: boolean;
+  refetch: () => void;
+}
+
+const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = ({
+  data,
+  from,
+  isLoading,
+  refetch,
+}) => {
   const { t } = useTranslation("questions");
 
-    const { data, isLoading, isError, refetch } = useQuery<FAQsResponse, Error>({
-    queryKey: ["technicalSupportFAQs"],
-    queryFn: () => getFAQs({ type: "Technical Support Questions" }),
-    });
-
   if (isLoading) return <Loading />;
-  if (isError || !data?.data.length) return <NoData />;
-
-  const technicalSupportFAQs: FAQ[] = data.data;
+  if (!data.length) return <NoData />;
 
   const handleDelete = async (id: number) => {
     await deleteFAQ(id);
@@ -43,7 +47,7 @@ const TechnicalSupportTable = () => {
             </TableRow>
         </TableHeader>
         <TableBody>
-            {technicalSupportFAQs.map((question, index) => (
+            {data.map((question, index) => (
             <TableRow key={question.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{question.question.ar}</TableCell>
@@ -65,6 +69,6 @@ const TechnicalSupportTable = () => {
         </TableBody>
         </Table>
     )
-}
+  }
 
 export default TechnicalSupportTable
