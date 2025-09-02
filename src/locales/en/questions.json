@@ -27,5 +27,6 @@
     "NONotBenefited": "Number of Unused Opportunities",
 
     "faqDeleted": "Faq deleted successfully",
-    "addedSuccessfully": "Added successfully"
+    "addedSuccessfully": "Added successfully",
+    "editedSuccessfully": "Edited successfully"
 }
