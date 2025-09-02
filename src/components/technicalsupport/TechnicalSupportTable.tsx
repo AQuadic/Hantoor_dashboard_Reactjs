@@ -8,11 +8,13 @@ import { useQuery } from "@tanstack/react-query";
 import { getFAQs, FAQ, FAQsResponse } from "@/api/faq/getFaq";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import { deleteFAQ } from "@/api/faq/deleteFaq";
+import toast from "react-hot-toast";
 
 const TechnicalSupportTable = () => {
   const { t } = useTranslation("questions");
 
-    const { data, isLoading, isError } = useQuery<FAQsResponse, Error>({
+    const { data, isLoading, isError, refetch } = useQuery<FAQsResponse, Error>({
     queryKey: ["technicalSupportFAQs"],
     queryFn: () => getFAQs({ type: "Technical Support Questions" }),
     });
@@ -21,6 +23,12 @@ const TechnicalSupportTable = () => {
   if (isError || !data?.data.length) return <NoData />;
 
   const technicalSupportFAQs: FAQ[] = data.data;
+
+  const handleDelete = async (id: number) => {
+    await deleteFAQ(id);
+    toast.success(t("faqDeleted"));
+    refetch();
+  };
 
     return (
         <Table>
@@ -49,7 +57,7 @@ const TechnicalSupportTable = () => {
                 </Link>
 
                 <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(question.id)} />
                 </div>
                 </TableCell>
             </TableRow>

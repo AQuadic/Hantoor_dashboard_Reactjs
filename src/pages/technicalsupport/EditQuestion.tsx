@@ -9,15 +9,92 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { CountriesResponse, Country, getCountries } from "@/api/countries/getCountry";
+import { useQuery } from "@tanstack/react-query";
+import { FAQ, getFAQById } from "@/api/faq/getFaqById";
+import { updateFaq, FaqPayload } from "@/api/faq/editFaq";
+import { useParams, useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import Loading from "@/components/general/Loading";
 
 const EditQuestion = () => {
   const { t } = useTranslation("questions");
-  const [arBody, setArBody] = React.useState("");
-  const [enBody, setEnBody] = React.useState("");
-  const [arQuestion, setArQuestion] = React.useState("");
-  const [enQuestion, setEnQuestion] = React.useState("");
+  const { id: faqId } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+
+  const [arBody, setArBody] = useState("");
+  const [enBody, setEnBody] = useState("");
+  const [arQuestion, setArQuestion] = useState("");
+  const [enQuestion, setEnQuestion] = useState("");
+  const [countryId, setCountryId] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+
+  const { data: countriesData, isLoading: countriesLoading } = useQuery<CountriesResponse>({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(1),
+  });
+
+  useEffect(() => {
+    if (!faqId) return;
+
+    const fetchFaq = async () => {
+      try {
+        setLoading(true);
+        const data: FAQ = await getFAQById(faqId);
+
+        setCountryId(data.country_id ? String(data.country_id) : "");
+        setArQuestion(data.question?.ar || "");
+        setEnQuestion(data.question?.en || "");
+
+        const parseAnswer = (val?: string) => {
+          if (!val) return "";
+          try {
+            const parsed = JSON.parse(val);
+            return parsed?.[0]?.children?.[0]?.text || "";
+          } catch {
+            return val;
+          }
+        };
+
+        setArBody(parseAnswer(data.answer?.ar));
+        setEnBody(parseAnswer(data.answer?.en));
+      } catch (error) {
+        console.error("Failed to fetch FAQ:", error);
+        toast.error("Failed to fetch FAQ data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFaq();
+  }, [faqId]);
+
+  const handleSave = async () => {
+    if (!faqId) return;
+
+    const payload: FaqPayload = {
+      country_id: countryId,
+      type: "Technical Support Questions",
+      question: { ar: arQuestion, en: enQuestion },
+      answer: { ar: arBody, en: enBody },
+    };
+
+    try {
+      setLoading(true);
+      await updateFaq(faqId, payload);
+      toast.success(t('editedSuccessfully'));
+      navigate("/technical-support");
+    } catch {
+      toast.error("Failed to update FAQ");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading || countriesLoading) return <Loading />
+
   return (
     <section>
       <DashboardHeader
@@ -36,17 +113,20 @@ const EditQuestion = () => {
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Country */}
           <div className="md:w-1/2 w-full">
-            <Select>
-              <SelectTrigger
-                className="w-full !h-16 rounded-[12px] mt-4"
-                dir="rtl"
-              >
+            <Select
+              onValueChange={(value) => setCountryId(value)}
+              value={countryId}
+              disabled={countriesLoading || !countriesData?.data?.length}
+            >
+              <SelectTrigger className="w-full !h-16 rounded-[12px] mt-4" dir="rtl">
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
               <SelectContent dir="rtl">
-                <SelectItem value="1">الامارات</SelectItem>
-                <SelectItem value="2">الامارات</SelectItem>
-                <SelectItem value="3">الامارات</SelectItem>
+                {countriesData?.data.map((country: Country) => (
+                  <SelectItem key={country.id} value={country.id.toString()}>
+                    {country.name.ar}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -76,7 +156,7 @@ const EditQuestion = () => {
           {/* Arabic Question */}
           <div className="relative w-full">
             <DashboardTextEditor
-              title={t("arQuestion")}
+              title={t("arAnswer")}
               body={arBody}
               setBody={setArBody}
             />
@@ -84,7 +164,7 @@ const EditQuestion = () => {
           {/* English Question */}
           <div className="relative w-full">
             <DashboardTextEditor
-              title={t("arQuestion")}
+              title={t("enAnswer")}
               body={enBody}
               setBody={setEnBody}
             />
@@ -92,7 +172,7 @@ const EditQuestion = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton titleAr="حفظ" titleEn="Save" />
+          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
         </div>
       </div>
     </section>
