@@ -108,7 +108,7 @@ const ContactUsTable = () => {
                 transition={{ duration: 0.3 }}
                 className="fixed top-0 right-0 h-full md:w-[493px] w-[300px] bg-white shadow-lg z-50 overflow-y-auto"
                 >
-                <ContactUsView />
+                <ContactUsView id={openMessageId} />
                 </motion.div>
             </>
             )}
