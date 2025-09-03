@@ -1,30 +1,51 @@
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
 import TableDeleteButton from "../../general/dashboard/table/TableDeleteButton";
 import Edit from "../../icons/general/Edit";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "../../ui/table";
-import profileImg from '/images/profileImg.png'
-import profileImg2 from '/images/profileImg2.png'
 import { useTranslation } from "react-i18next";
+import { getOnboardings, OnboardingItem } from "@/api/onboarding/getProfile";
+import Loading from "@/components/general/Loading";
+import NoData from "@/components/general/NoData";
+
+interface PortableTextChild {
+  text: string;
+}
+
+interface PortableTextBlock {
+  type: string;
+  children: PortableTextChild[];
+}
+
+
+const parseDescription = (desc: string) => {
+  try {
+    const blocks: PortableTextBlock[] = JSON.parse(desc);
+    if (!Array.isArray(blocks)) return desc;
+    return blocks
+      .map(block => {
+        if (block.type === "paragraph" && Array.isArray(block.children)) {
+          return block.children.map(child => child.text).join("");
+        }
+        return "";
+      })
+      .join("\n");
+  } catch {
+    return desc;
+  }
+};
 
 const ProfileTable = () => {
-    const { t } = useTranslation("setting");
-    const profile = [
-    {
-        id: 1,
-        image: profileImg,
-        text:'ودع الطرق التقليدية في البحث عن السيارات وفر وقتك و جهدك',
-        country: 'السعودية',
-        description: 'Hantoor , حيث تلتقي التكنولوجيا بالتميز لتبسيط رحلتك نحو امتلاك السياره التي طالما حلمت بها...'
-    },
-    {
-        id: 2,
-        image: profileImg2,
-        text:'استكشف ، قارن و اختار',
-        country: 'مصر',
-        description: 'Hantoor , حيث تلتقي التكنولوجيا بالتميز لتبسيط رحلتك نحو امتلاك السياره التي طالما حلمت بها...'
-    },
-    ];
+    const { t, i18n } = useTranslation("setting");
+
+    const { data: profiles, isLoading } = useQuery<OnboardingItem[]>({
+    queryKey: ["onboardings"],
+    queryFn: () => getOnboardings({ pagination: "none" }),
+    });
+
+    if (isLoading) return <Loading />
+    if (!profiles || profiles.length === 0) return <NoData />
+
     return (
         <Table>
         <TableHeader>
@@ -38,17 +59,31 @@ const ProfileTable = () => {
             </TableRow>
         </TableHeader>
         <TableBody>
-            {profile.map((profie, index) => (
-            <TableRow key={profie.id} noBackgroundColumns={1}>
+            {profiles.map((profile: OnboardingItem, index: number) => (
+            <TableRow key={profile.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
-                    <img src={profie.image} alt="car" />
+                {profile.image ? (
+                    typeof profile.image === "string" ? (
+                    <img src={profile.image} alt={profile.title.en} className="w-20 h-20 object-cover" />
+                    ) : (
+                    <img src={profile.image.url} alt={profile.title.en} className="w-20 h-20 object-cover" />
+                    )
+                ) : (
+                    <div className="text-gray-400">
+                    No Image
+                    </div>
+                )}
                 </TableCell>
-                <TableCell>{profie.text}</TableCell>
-                <TableCell>{profie.country}</TableCell>
-                <TableCell className="w-full">{profie.description}</TableCell>
+                <TableCell>{i18n.language === "ar" ? profile.title.ar : profile.title.en}</TableCell>
+                <TableCell>{profile.country_id}</TableCell>
+                <TableCell className="w-full">
+                {i18n.language === "ar"
+                    ? parseDescription(profile.description.ar)
+                    : parseDescription(profile.description.en)}
+                </TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                <Link to={`/profile/edit/${profie.id}`}>
+                <Link to={`/profile/edit/${profile.id}`}>
                     <Edit />
                 </Link>
 
