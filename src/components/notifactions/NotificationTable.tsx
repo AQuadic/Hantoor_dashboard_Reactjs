@@ -4,33 +4,34 @@ import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import View from "../icons/general/View";
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
-import { getBroadcastNotifications, BroadcastNotification } from "@/api/notifications/getNotifications";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { deleteNotification } from "@/api/notifications/deleteNotification";
 import toast from "react-hot-toast";
+import { BroadcastNotification } from "@/api/notifications/getNotifications";
 
 interface NotificationTableProps {
-  searchTerm?: string;
-  perPage?: number;
+  data: BroadcastNotification[];
+  from: number;
+  isLoading: boolean;
+  refetch: () => void;
 }
 
-const NotificationTable: React.FC<NotificationTableProps> = ({ searchTerm = "", perPage = 50 }) => {
+const NotificationTable: React.FC<NotificationTableProps> = ({
+  data,
+  from,
+  isLoading,
+  refetch,
+}) => {
     const { t, i18n } = useTranslation("notifications");
 const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
 
     const toggleExpand = (id: number) => {
         setExpandedRows((prev) => ({
         ...prev,
-        [id]: !prev[id]
+        [id]: !prev[id],
         }));
     };
-
-  const { data, isLoading, refetch } = useQuery({
-    queryKey: ["broadcastNotifications", searchTerm],
-    queryFn: () => getBroadcastNotifications({ per_page: perPage, search: searchTerm }),
-  });
 
   const handleDelete = async (id: number) => {
     await deleteNotification(id);
@@ -39,9 +40,7 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
   };
 
   if (isLoading) return <Loading />
-  if (!data || data.data.length === 0) return <NoData />
-
-  const notifications: BroadcastNotification[] = data?.data || [];
+  if (!data || data.length === 0) return <NoData />
 
     return (
         <Table>
@@ -56,7 +55,7 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
             </TableRow>
         </TableHeader>
         <TableBody>
-            {notifications.map((notification, index) => {
+            {data.map((notification, index) => {
             const isExpanded = expandedRows[notification.id];
             const bodyText = i18n.language === "ar" ? notification.body.ar : notification.body.en;
 
@@ -65,9 +64,9 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
 
             return (
                 <TableRow key={notification.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>{from + index}</TableCell>
                 <TableCell>
-                    {notification.image ? (
+                    {notification.image && "url" in notification.image ? (
                     <img src={notification.image.url} alt="Notification" className="w-16 h-16 object-cover rounded-md" />
                     ) : (
                     <span>No image</span>
@@ -80,13 +79,8 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
                     : notification.country?.name?.en ?? "-"}
                 </TableCell>
                 <TableCell className="w-full">
-                {isExpanded
-                    ? i18n.language === "ar"
-                        ? notification.body.ar
-                        : notification.body.en
-                    : shortDescription}
-
-                    {(i18n.language === "ar" ? notification.body.ar : notification.body.en).length > 50 && (
+                    {isExpanded ? bodyText : shortDescription}
+                    {bodyText.length > 50 && (
                     <button
                         className="text-blue-600 ml-2 hover:underline"
                         onClick={() => toggleExpand(notification.id)}

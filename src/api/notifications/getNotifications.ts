@@ -19,29 +19,42 @@ export interface Country {
 export interface BroadcastNotification {
   id: number;
   title: {
-    en: string;
     ar: string;
+    en: string;
   };
   body: {
-    en: string;
     ar: string;
+    en: string;
   };
-  type: "all" | "selected";
-  country_id: number;
-  country?: Country;
-  notifiable_ids?: string[];
-  image?: NotificationImage | null;
-  created_at: string;
-  updated_at: string;
+  country?: {
+    id: number;
+    name: {
+      ar: string;
+      en: string;
+    };
+  };
+  image?: {
+    url?: string;
+    responsive_urls?: string[];
+  };
+  type?: string;
+  notifiable_ids?: number[];
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface BroadcastNotificationsResponse {
   data: BroadcastNotification[];
-  current_page?: number;
-  per_page?: number;
-  total?: number;
-  last_page?: number;
+  meta: {
+    current_page: number;
+    from: number;
+    to: number;
+    per_page: number;
+    total: number;
+    last_page: number;
+  };
 }
+
 
 export interface BroadcastNotificationsQuery {
   search?: string;
