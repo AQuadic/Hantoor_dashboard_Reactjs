@@ -72,5 +72,6 @@
   "pleaseEnterPhone": "Please enter phone number",
   "pleaseSelectCountry": "Please Select country",
   "deletedSuccessfully": "Deleted successfully",
-  "PhoneUpdatedSuccessfully": "Phone edited successfully"
+  "PhoneUpdatedSuccessfully": "Phone edited successfully",
+  "pageAddedSuccsessfully": "Page added successfully"
 }

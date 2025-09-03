@@ -1,15 +1,56 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Input } from '@heroui/react';
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
 import { useTranslation } from 'react-i18next';
 import DashboardTextEditor from '../general/DashboardTextEditor';
+import { addPage, RequestBody } from '@/api/pages/addPage';
+import { getCountries, Country } from '@/api/countries/getCountry';
+import { useQuery } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router';
 
 const AddTerms = () => {
     const { t } = useTranslation("setting");
-    const [arBody, setArBody] = React.useState("");
-    const [enBody, setEnBody] = React.useState("");
+    const [arBody, setArBody] = useState("");
+    const [enBody, setEnBody] = useState("");
+    const [arTitle, setArTitle] = useState("");
+    const [enTitle, setEnTitle] = useState("");
+    const [isActive, ] = useState(false);
+    const [orderColumn, ] = useState<number | undefined>(undefined);
+    const [, setCountryId] = useState<number | undefined>(undefined);
+    const navigate = useNavigate ()
+    const { data: countriesResponse, isLoading, isError } = useQuery({
+    queryKey: ['countries'],
+    queryFn: () => getCountries(),
+    });
+  const countries: Country[] = countriesResponse?.data || [];
+
+  const handleSubmit = async () => {
+    const data: RequestBody = {
+      is_active: isActive,
+      order_column: orderColumn,
+      title: {
+        ar: arTitle || undefined,
+        en: enTitle,
+      },
+      description: {
+        ar: arBody || undefined,
+        en: enBody,
+      },
+    };
+
+    try {
+      const response = await addPage(data);
+      toast.success(t('pageAddedSuccsessfully'))
+      navigate('/settings?section=Terms+and+Conditions');
+      console.log("API Response:", response);
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  };
+
     return (
         <div>
             <div className="pt-0 pb-2 bg-white ">
@@ -27,7 +68,7 @@ const AddTerms = () => {
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
                 {/* Country */}
                 <div className="md:w-1/2 w-full">
-                <Select>
+                <Select onValueChange={(val) => setCountryId(Number(val))}>
                     <SelectTrigger
                     className="w-full !h-16 rounded-[12px] mt-4"
                     dir="rtl"
@@ -35,9 +76,22 @@ const AddTerms = () => {
                     <SelectValue placeholder={t('country')} />
                     </SelectTrigger>
                     <SelectContent dir="rtl">
-                    <SelectItem value="1">الامارات</SelectItem>
-                    <SelectItem value="2">الامارات</SelectItem>
-                    <SelectItem value="3">الامارات</SelectItem>
+                        {isLoading && (
+                            <SelectItem value="-1" disabled>
+                            {t('loading')}
+                            </SelectItem>
+                        )}
+                        {isError && (
+                            <SelectItem value="-1" disabled>
+                            {t('errorLoading')}
+                            </SelectItem>
+                        )}
+                        {!isLoading && !isError &&
+                            countries.map((country) => (
+                            <SelectItem key={country.id} value={country.id.toString()}>
+                                {country.name.ar}
+                            </SelectItem>
+                            ))}
                     </SelectContent>
                 </Select>
                 </div>
@@ -51,6 +105,8 @@ const AddTerms = () => {
                     placeholder={t('pricingPolicy')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
+                    value={arTitle}
+                    onChange={(e) => setArTitle(e.target.value)}
                     />
                 </div>
                 {/* English Question */}
@@ -61,6 +117,8 @@ const AddTerms = () => {
                     placeholder={t('pricingPolicy')}
                     classNames={{ label: "mb-2 text-base" }}
                     size="lg"
+                    value={enTitle}
+                    onChange={(e) => setEnTitle(e.target.value)}
                 />
                 </div>
             </div>
@@ -85,7 +143,7 @@ const AddTerms = () => {
             </div>
     
             <div className="mt-4">
-                <DashboardButton titleAr="اضافة" titleEn="Add" />
+                <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit} />
             </div>
             </div>
         </div>
