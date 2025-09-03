@@ -74,5 +74,6 @@
   "deletedSuccessfully": "Deleted successfully",
   "PhoneUpdatedSuccessfully": "Phone edited successfully",
   "pageAddedSuccsessfully": "Page added successfully",
-  "pageDeleted": "Page deleted successfully"
+  "pageDeleted": "Page deleted successfully",
+  "pageUpdatedSuccessfully": "Page updated successfully"
 }

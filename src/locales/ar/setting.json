@@ -74,5 +74,6 @@
   "deletedSuccessfully": "تم الحذف بنجاح",
   "PhoneUpdatedSuccessfully": "تم تحديث الرقم بنجاح",
   "pageAddedSuccsessfully": "تم اضافة الصفحة بنجاح",
-  "pageDeleted": "تم حذف الصفحة بنجاح"
+  "pageDeleted": "تم حذف الصفحة بنجاح",
+  "pageUpdatedSuccessfully": "تم تحديث الصفحة بنجاح"
 }

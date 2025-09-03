@@ -366,7 +366,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <AddTerms />,
   },
   {
-    path: "/profile/edit-termsandconditions",
+    path: "/profile/edit-termsandconditions/:id",
     element: <EditTerms />,
   },
   {
