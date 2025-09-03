@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ImageInput from '@/components/general/ImageInput'
 import { Input } from '@heroui/react';
 import DashboardButton from '@/components/general/dashboard/DashboardButton';
@@ -12,6 +12,8 @@ import { getOnboardingById, OnboardingDetail } from "@/api/onboarding/getProfile
 import { getCountries, Country } from "@/api/countries/getCountry";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
+import { updateOnboarding } from "@/api/onboarding/updateProfile";
+import toast from "react-hot-toast";
 
 const EditProfile: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -23,7 +25,7 @@ const EditProfile: React.FC = () => {
   const [arBody, setArBody] = useState("");
   const [enBody, setEnBody] = useState("");
   const [countryId, setCountryId] = useState<string>("");
-
+  const navigate = useNavigate ();
   const { data: profile, isLoading } = useQuery<OnboardingDetail>({
     queryKey: ["onboarding", id],
     queryFn: () => getOnboardingById(id!),
@@ -58,6 +60,27 @@ const EditProfile: React.FC = () => {
 
   if (isLoading) return <Loading />
   if (!profile) return <NoData />
+
+  const handleSave = async () => {
+    try {
+      await updateOnboarding(id!, {
+        image: profileImage,
+        country_id: countryId,
+        title: { ar: arTitle, en: enTitle },
+        description: { ar: arBody, en: enBody },
+      });
+      toast.success(t('profileUpdated'));
+      navigate("/settings?section=Informational+Pages")
+    } catch (err: any) {
+    if (err.response && err.response.data) {
+      console.error("Update failed:", err.response.data);
+      toast.error(err.response.data.message || "Failed to update profile.");
+    } else {
+      console.error("Update failed:", err);
+      toast.error("Failed to update profile.");
+    }
+  }
+};
 
     return (
         <div>
@@ -144,7 +167,7 @@ const EditProfile: React.FC = () => {
             </div>
     
             <div className="mt-4">
-                <DashboardButton titleAr="حفظ" titleEn="Save" />
+                <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
             </div>
             </div>
         </div>

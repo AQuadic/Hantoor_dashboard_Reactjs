@@ -79,5 +79,6 @@
   "imageDeleted": "Image deleted successfully",
   "imageAdded": "Slider uploaded successfully",
   "profileAdded": "Profile page added successfully",
-  "profileDeleted": "Profile deleted successfully"
+  "profileDeleted": "Profile deleted successfully",
+  "profileUpdated": "Profile updated successfully"
 }
