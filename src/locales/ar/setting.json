@@ -77,5 +77,6 @@
   "pageDeleted": "تم حذف الصفحة بنجاح",
   "pageUpdatedSuccessfully": "تم تحديث الصفحة بنجاح",
   "imageDeleted": "تم حذف الصورة بنجاح",
-  "imageAdded": "تم اضافة الصورة بنجاح"
+  "imageAdded": "تم اضافة الصورة بنجاح",
+  "profileAdded": "تم اضافة الصفحة بنجاح"
 }
