@@ -11,7 +11,12 @@ import NoData from "../general/NoData";
 import { deleteNotification } from "@/api/notifications/deleteNotification";
 import toast from "react-hot-toast";
 
-const NotificationTable = () => {
+interface NotificationTableProps {
+  searchTerm?: string;
+  perPage?: number;
+}
+
+const NotificationTable: React.FC<NotificationTableProps> = ({ searchTerm = "", perPage = 50 }) => {
     const { t } = useTranslation("notifications");
 const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
 
@@ -23,8 +28,8 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
     };
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["broadcastNotifications"],
-    queryFn: () => getBroadcastNotifications({ per_page: 50 }),
+    queryKey: ["broadcastNotifications", searchTerm],
+    queryFn: () => getBroadcastNotifications({ per_page: perPage, search: searchTerm }),
   });
 
   const handleDelete = async (id: number) => {
@@ -34,7 +39,7 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
   };
 
   if (isLoading) return <Loading />
-  if (!data) return <NoData />
+  if (!data || data.data.length === 0) return <NoData />
 
   const notifications: BroadcastNotification[] = data?.data || [];
 

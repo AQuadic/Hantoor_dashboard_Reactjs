@@ -1,14 +1,16 @@
+import React, { useState } from "react";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import NotificationsHeader from "@/components/notifactions/NotificationsHeader";
 import NotificationTable from "@/components/notifactions/NotificationTable";
-import React from "react";
 
 const NotificationPage = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
   return (
     <div>
-      <NotificationsHeader />
+      <NotificationsHeader onSearch={setSearchTerm} />
       <div className="md:px-8 px-2">
-        <NotificationTable />
+        <NotificationTable searchTerm={searchTerm} perPage={50} />
         <TablePagination
           currentPage={1}
           setCurrentPage={function (): void {

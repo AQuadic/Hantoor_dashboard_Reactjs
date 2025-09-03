@@ -1,11 +1,24 @@
-import React from 'react'
-import DashboardHeader from '../general/dashboard/DashboardHeader'
-import SearchBar from '../general/dashboard/SearchBar'
-import DashboardDatePicker from '../general/dashboard/DashboardDatePicker'
-import DashboardButton from '../general/dashboard/DashboardButton'
-import { Link } from 'react-router'
+import React, { useState } from 'react';
+import DashboardHeader from '../general/dashboard/DashboardHeader';
+import SearchBar from '../general/dashboard/SearchBar';
+import DashboardDatePicker from '../general/dashboard/DashboardDatePicker';
+import DashboardButton from '../general/dashboard/DashboardButton';
+import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
-const NotificationsHeader = () => {
+interface NotificationsHeaderProps {
+  onSearch: (term: string) => void;
+}
+
+const NotificationsHeader: React.FC<NotificationsHeaderProps> = ({ onSearch }) => {
+  const { t } = useTranslation("notifications");
+  const [, setSearchTerm] = useState("");
+
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    onSearch(value);
+  }
+
     return (
         <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
         <DashboardHeader
@@ -20,10 +33,11 @@ const NotificationsHeader = () => {
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
             <div className="flex-1">
                 <SearchBar
-                    termAr={"ابحث بالاسم"}
-                    termEn={"Search by name"}
-                    setTermAr={() => {}} 
-                    setTermEn={() => {}} 
+                    termAr={""}
+                    termEn={""}
+                    placeholder={t('searchByName')}
+                    setTermAr={handleSearch} 
+                    setTermEn={handleSearch} 
                 />
             </div>
             <div className="flex-1">
@@ -34,7 +48,7 @@ const NotificationsHeader = () => {
             </Link>
         </div>
         </div>
-    )
+    );
 }
 
-export default NotificationsHeader
+export default NotificationsHeader;

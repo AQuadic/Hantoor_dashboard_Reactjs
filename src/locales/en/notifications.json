@@ -22,5 +22,6 @@
     "status": "Status",
 
     "notificationAddedSuccessfully": "Notification added successfully",
-    "notificationDeleted": "Notifiaction deleted successfully"
+    "notificationDeleted": "Notifiaction deleted successfully",
+    "searchByName": "Search by name"
 }
