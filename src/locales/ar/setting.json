@@ -73,5 +73,6 @@
   "pleaseSelectCountry": "يرجي اختيار البلد",
   "deletedSuccessfully": "تم الحذف بنجاح",
   "PhoneUpdatedSuccessfully": "تم تحديث الرقم بنجاح",
-  "pageAddedSuccsessfully": "تم اضافة الصفحة بنجاح"
+  "pageAddedSuccsessfully": "تم اضافة الصفحة بنجاح",
+  "pageDeleted": "تم حذف الصفحة بنجاح"
 }

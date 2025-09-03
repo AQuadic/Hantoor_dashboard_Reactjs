@@ -73,5 +73,6 @@
   "pleaseSelectCountry": "Please Select country",
   "deletedSuccessfully": "Deleted successfully",
   "PhoneUpdatedSuccessfully": "Phone edited successfully",
-  "pageAddedSuccsessfully": "Page added successfully"
+  "pageAddedSuccsessfully": "Page added successfully",
+  "pageDeleted": "Page deleted successfully"
 }

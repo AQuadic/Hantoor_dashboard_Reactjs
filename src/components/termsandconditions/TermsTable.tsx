@@ -6,12 +6,16 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getPages, Page } from "@/api/pages/getPages";
 import { getCountries, Country } from "@/api/countries/getCountry";
+import { deletePage } from "@/api/pages/deletePage";
+import toast from "react-hot-toast";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
 
 const TermsTable = () => {
   const { t, i18n } = useTranslation("setting");
   const lang: "ar" | "en" = i18n.language === "ar" ? "ar" : "en";
 
-  const { data: pagesData, isLoading: isPagesLoading, isError: isPagesError } = useQuery({
+  const { data: pagesData, isLoading: isPagesLoading, refetch } = useQuery({
     queryKey: ["pages"],
     queryFn: () => getPages({ per_page: 50 }),
   });
@@ -24,9 +28,9 @@ const TermsTable = () => {
   const pages: Page[] = pagesData?.data || [];
   const countries: Country[] = countriesData?.data || [];
 
-  if (isPagesLoading) return <div>{t("loading")}</div>;
-  if (isPagesError) return <div>{t("errorLoading")}</div>;
-
+  if (isPagesLoading) return <Loading />
+  if (!pagesData) return <NoData />
+  
   const getCountryName = (id?: number) => {
     const country = countries.find((c) => c.id === id);
     return country ? country.name[lang] : "-";
@@ -49,6 +53,12 @@ const TermsTable = () => {
     }
 
     return "";
+  };
+
+    const handleDelete = async (id: number) => {
+    await deletePage(id);
+    toast.success(t("pageDeleted"));
+    refetch();
   };
 
     return (
@@ -75,7 +85,7 @@ const TermsTable = () => {
                 </Link>
 
                 <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(page.id)} />
                 </div>
                 </TableCell>
             </TableRow>
