@@ -12,7 +12,7 @@ import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router';
 
 const AddProfile = () => {
-    const { t } = useTranslation("setting");
+    const { t, i18n } = useTranslation("setting");
     const [profileImage, setProfileImage] = useState<File | null>(null);
     const [countryId, setCountryId] = useState<string>('');
     const [titleAr, setTitleAr] = useState('');
@@ -91,7 +91,7 @@ const AddProfile = () => {
                     ? <SelectItem value="loading" disabled>Loading...</SelectItem> // use a non-empty value and disabled
                     : countries.map(country => (
                         <SelectItem key={country.id} value={country.id.toString()}>
-                            {country.name.ar} / {country.name.en}
+                            {i18n.language === "ar" ? country.name.ar : country.name.en}
                         </SelectItem>
                         ))
                     }
