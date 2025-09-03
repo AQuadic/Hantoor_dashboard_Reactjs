@@ -23,5 +23,7 @@
 
     "notificationAddedSuccessfully": "تم إضافة الإشعار بنجاح",
     "notificationDeleted": "تم حذف الإشعار بنجاح",
-    "searchByName": "ابحث بالاسم"
+    "searchByName": "ابحث بالاسم",
+
+    "noClients": "لا يوجد عملاء"
 }

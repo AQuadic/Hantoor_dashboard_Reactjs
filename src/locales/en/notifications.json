@@ -23,5 +23,7 @@
 
     "notificationAddedSuccessfully": "Notification added successfully",
     "notificationDeleted": "Notifiaction deleted successfully",
-    "searchByName": "Search by name"
+    "searchByName": "Search by name",
+
+    "noClients": "No clients"
 }
