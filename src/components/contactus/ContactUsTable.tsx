@@ -28,7 +28,7 @@ const ContactUsTable = () => {
     return <Loading />
   }
 
-  if (!data?.data || data?.data.length === 0) {
+  if (!data || data.length === 0) {
     return <NoData />
   }
 
@@ -45,38 +45,41 @@ const ContactUsTable = () => {
         <TableHeader>
             <TableRow>
             <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">{t('clientName')}</TableHead>
-            <TableHead className="text-right">{t('phoneNumber')}</TableHead>
-            <TableHead className="text-right">{t('email')}</TableHead>
-            <TableHead className="text-right">{t('country')}</TableHead>
+            <TableHead className="text-right">{t("clientName")}</TableHead>
+            <TableHead className="text-right">{t("phoneNumber")}</TableHead>
+            <TableHead className="text-right">{t("email")}</TableHead>
+            <TableHead className="text-right">{t("country")}</TableHead>
             <TableHead className="text-right"></TableHead>
 
             </TableRow>
         </TableHeader>
             <TableBody>
-                {data?.data.map((message, index) => (
+                {data.map((message, index) => (
                 <TableRow key={message.id} noBackgroundColumns={1}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{message.name}</TableCell>
                     <TableCell>{message.phone}</TableCell>
                     <TableCell>{message.email}</TableCell>
-                    <TableCell>{message.country}</TableCell>
+                    <TableCell>{message.city}</TableCell>
                     <TableCell className="flex items-center gap-2">
-                        <TableCell
-                    className="flex gap-[7px] items-center"
-                    onClick={(e) => e.stopPropagation()} 
+                    <div
+                        className="flex gap-[7px] items-center"
+                        onClick={(e) => e.stopPropagation()}
                     >
-                    <div className="flex items-center justify-center gap-[10px] w-[160px] h-[37px] bg-[#1E1B1B] rounded-[8.15px]">
+                        <div className="flex items-center justify-center gap-[10px] w-[160px] h-[37px] bg-[#1E1B1B] rounded-[8.15px]">
                         <Email />
-                        <button className=" text-[#FFFFFF] font-bold text-sm">{t('replayViaEmail')}</button>
+                        <button className=" text-[#FFFFFF] font-bold text-sm">
+                            {t("replayViaEmail")}
+                        </button>
+                        </div>
                     </div>
-                </TableCell>
+                
                     <button onClick={() => setOpenMessageId(message.id)}>
                         <View />
                     </button>
-                        <Star />
+                    <Star />
                     <div className="mt-2">
-                    <TableDeleteButton handleDelete={() => handleDelete(message.id)} />
+                        <TableDeleteButton handleDelete={() => handleDelete(message.id)} />
                     </div>
                     </TableCell>
                 </TableRow>
