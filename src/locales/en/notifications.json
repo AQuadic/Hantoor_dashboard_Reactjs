@@ -21,5 +21,6 @@
     "description": "Description",
     "status": "Status",
 
-    "notificationAddedSuccessfully": "Notification added successfully"
+    "notificationAddedSuccessfully": "Notification added successfully",
+    "notificationDeleted": "Notifiaction deleted successfully"
 }

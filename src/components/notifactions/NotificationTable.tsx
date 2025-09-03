@@ -8,6 +8,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getBroadcastNotifications, BroadcastNotification } from "@/api/notifications/getNotifications";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import { deleteNotification } from "@/api/notifications/deleteNotification";
+import toast from "react-hot-toast";
 
 const NotificationTable = () => {
     const { t } = useTranslation("notifications");
@@ -20,10 +22,16 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
         }));
     };
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["broadcastNotifications"],
     queryFn: () => getBroadcastNotifications({ per_page: 50 }),
   });
+
+  const handleDelete = async (id: number) => {
+    await deleteNotification(id);
+    toast.success(t("notificationDeleted"));
+    refetch();
+  };
 
   if (isLoading) return <Loading />
   if (!data) return <NoData />
@@ -77,7 +85,7 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
                     <View />
                     </Link>
                     <div className="mt-2">
-                    <TableDeleteButton handleDelete={() => {}} />
+                    <TableDeleteButton handleDelete={() => handleDelete(notification.id)} />
                     </div>
                 </TableCell>
                 </TableRow>
