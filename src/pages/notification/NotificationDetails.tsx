@@ -36,10 +36,15 @@ const NotificationDetails = () => {
 
             <div className='md:px-8 px-2 mt-1 flex xl:flex-row flex-col gap-[33px]'>
                 <div className='flex-1'>
-                    <img src={data.image ?? "/images/carDetails.png"} alt="Notification" />
+                    <img
+                    src={data.image?.url ?? "/images/carDetails.png"}
+                    alt="Notification"
+                    className="w-full max-h-[400px] object-cover rounded-lg"
+                    />
                     <h1 className='text-[#2A32F8] text-2xl font-bold mt-[13px]'>
-                        {t('thecountry')} <span>{data.country_id}</span>
+                    {t('thecountry')} <span>{i18n.language === "ar" ? data.country?.name.ar : data.country?.name.en}</span>
                     </h1>
+
                     <h1 className='text-[#071739] text-xl leading-6 font-bold mt-2.5'>{data.title.ar}</h1>
                     <p className="text-[#071739] text-base font-normal mt-[11px] xl:w-[725px] w-full">{data.body.ar}</p>
                     <hr className='my-4'/>
