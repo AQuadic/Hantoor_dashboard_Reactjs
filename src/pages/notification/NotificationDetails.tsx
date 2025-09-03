@@ -20,10 +20,6 @@ const NotificationDetails = () => {
   if (isLoading) return <Loading />
   if (!data) return <NoData />
 
-  const lang = i18n.language as "ar" | "en";
-  const title = data.title[lang];
-  const body = data.body[lang];
-
     return (
         <section>
             <div className="pt-0 pb-2 bg-white ">
@@ -44,13 +40,13 @@ const NotificationDetails = () => {
                     <h1 className='text-[#2A32F8] text-2xl font-bold mt-[13px]'>
                         {t('thecountry')} <span>{data.country_id}</span>
                     </h1>
-                    <h1 className='text-[#071739] text-xl leading-6 font-bold mt-2.5'>{title}</h1>
-                    <p className="text-[#071739] text-base font-normal mt-[11px] xl:w-[725px] w-full">{body}</p>
+                    <h1 className='text-[#071739] text-xl leading-6 font-bold mt-2.5'>{data.title.ar}</h1>
+                    <p className="text-[#071739] text-base font-normal mt-[11px] xl:w-[725px] w-full">{data.body.ar}</p>
                     <hr className='my-4'/>
                     <div className='text-left'>
-                        <h2 className='text-[#071739] text-xl font-bold'>Data protection</h2>
+                        <h2 className='text-[#071739] text-xl font-bold'>{data.title.en}</h2>
                         <p className='text-[#071739] text-base font-normal mt-4'>
-                        Lorem ipsum is placeholder text commonly used...
+                        {data.body.en}
                         </p>
                     </div>
                 </div>
