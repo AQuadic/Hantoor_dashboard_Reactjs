@@ -75,5 +75,7 @@
   "PhoneUpdatedSuccessfully": "Phone edited successfully",
   "pageAddedSuccsessfully": "Page added successfully",
   "pageDeleted": "Page deleted successfully",
-  "pageUpdatedSuccessfully": "Page updated successfully"
+  "pageUpdatedSuccessfully": "Page updated successfully",
+  "imageDeleted": "Image deleted successfully",
+  "imageAdded": "Slider uploaded successfully"
 }

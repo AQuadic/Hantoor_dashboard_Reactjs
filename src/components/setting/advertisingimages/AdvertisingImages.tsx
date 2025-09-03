@@ -1,14 +1,58 @@
 import ImageInput from "@/components/general/ImageInput";
 import VideoInput from "@/components/general/VideoInput";
 import Delete from "@/components/icons/advertise/Delete";
-import {Select,SelectContent,SelectItem,SelectTrigger,SelectValue,} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getSliders, Slider } from "@/api/slider/getSlider";
+import { createSlider } from "@/api/slider/addSlider";
+import { deleteSlider } from "@/api/slider/deleteSlider";
+import { useQuery } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 const AdvertisingImages = () => {
     const { t } = useTranslation("setting");
-    const [profileImage, setProfileImage] = React.useState<File | null>(null);
+    const [profileImage, setProfileImage] = useState<File | null>(null);
     const [video, setVideo] = useState<File | null>(null);
+    const [, setUploading] = useState(false);
+    const [, setUploadError] = useState<string | null>(null);
+
+    const { data, refetch } = useQuery({
+        queryKey: ["sliders"],
+        queryFn: async () => {
+        const response = await getSliders();
+        return response.data;
+        },
+    });
+
+    const [preview, setPreview] = useState<string | null>(null);
+
+    const handleUpload = async (file: File) => {
+    setProfileImage(file);
+    setPreview(URL.createObjectURL(file));
+    setUploading(true);
+    setUploadError(null);
+
+    try {
+        await createSlider({ title: "New Slider", imageAr: file, imageEn: file });
+        toast.success(t('imageAdded'));
+        refetch();
+    } catch {
+        setUploadError("Failed to upload image");
+    } finally {
+        setUploading(false);
+    }
+    };
+
+    const handleDelete = async (id: number) => {
+        try {
+        await deleteSlider(id);
+        toast.success(t("imageDeleted"));
+        refetch();
+        } catch {
+        toast.error("Failed to delete image");
+        }
+    };
 
     return (
         <div className='px-2 md:px-8'>
@@ -27,34 +71,39 @@ const AdvertisingImages = () => {
                 </SelectContent>
                 </Select>
             </div>
-            <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
+            <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
                 <h1 className="text-[17px] text-[#2A32F8] font-bold">{t('advertisingImages')}</h1>
                 <div className="mt-[14px] flex flex-wrap items-center gap-[14px]">
-                    <ImageInput image={profileImage} setImage={setProfileImage} />
-                    <div className="relative">
-                        <img src="/images/advertiseIMG.png" className="w-[378px] h-[169px]" alt="Image" />
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <Delete />
-                        </div>
-                    </div>
-                    <div className="relative">
-                        <img src="/images/advertiseIMG.png" className="w-[378px] h-[169px]" alt="Image" />
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <Delete />
-                        </div>
-                    </div>
-                    <div className="relative">
-                        <img src="/images/advertiseIMG.png" className="w-[378px] h-[169px]" alt="Image" />
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <Delete />
-                        </div>
-                    </div>
-                    <div className="relative">
-                        <img src="/images/advertiseIMG.png" className="w-[378px] h-[169px]" alt="Image" />
-                        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                            <Delete />
-                        </div>
-                    </div>
+                    <ImageInput
+                    image={profileImage}
+                    setImage={(value) => {
+                        if (typeof value === "function") {
+                        const file = value(profileImage);
+                        if (file) handleUpload(file);
+                        } else if (value) {
+                        handleUpload(value);
+                        } else {
+                        setProfileImage(null);
+                        }
+                    }}
+                    />
+                    {data?.map((slider: Slider) => (
+                        <div key={slider.id} className="relative">
+                        <img
+                            src={slider.ar_image || preview || "/images/placeholder.png"}
+                            className="w-[378px] h-[169px]"
+                            alt={slider.name || `Slider ${slider.id}`}
+                            />
+
+                <button
+                    type="button"
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                    onClick={() => handleDelete(slider.id)}
+                >
+                    <Delete />
+                </button>
+                </div>
+            ))}
                 </div>
             </div>
 
