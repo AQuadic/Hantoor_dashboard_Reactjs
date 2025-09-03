@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import View from "../icons/general/View";
@@ -14,23 +14,42 @@ import { deleteSuggestions } from "@/api/suggestions/deleteSuggestion";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 
-const ContactUsTable = () => {
+type ContactUsTableProps = {
+  page: number;
+  perPage: number;
+  setTotalPages: (pages: number) => void;
+  setPerPage: (perPage: number) => void;
+  setTotalItems: (total: number) => void;
+};
+
+const ContactUsTable: React.FC<ContactUsTableProps> = ({
+  page,
+  perPage,
+  setTotalPages,
+  setPerPage,
+  setTotalItems,
+}) => {
     const { t } = useTranslation("contactUs");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
 
   const { data, isLoading, refetch } = useQuery<SuggestionsResponse, Error>({
-    queryKey: ["suggestions"],
-    queryFn: () => getSuggestions({ page: 1, per_page: 10 }),
-    retry: 1,
+    queryKey: ["suggestions", page, perPage],
+    queryFn: () => getSuggestions({ page, per_page: perPage }),
   });
 
-  if (isLoading) {
-    return <Loading />
-  }
+  useEffect(() => {
+    if (data) {
+      setTotalPages(data.meta.last_page);
+      setPerPage(data.meta.per_page);
+      setTotalItems(data.meta.total);
+    }
+  }, [data, setTotalPages, setPerPage, setTotalItems]);
 
-  if (!data || data.length === 0) {
-    return <NoData />
-  }
+  if (isLoading) return <Loading />;
+
+  const suggestions = data?.data || [];
+
+  if (suggestions.length === 0) return <NoData />;
 
     const handleDelete = async (id: number) => {
         await deleteSuggestions(id);
@@ -54,7 +73,7 @@ const ContactUsTable = () => {
             </TableRow>
         </TableHeader>
             <TableBody>
-                {data.map((message, index) => (
+                {suggestions.map((message, index) => (
                 <TableRow key={message.id} noBackgroundColumns={1}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{message.name}</TableCell>
