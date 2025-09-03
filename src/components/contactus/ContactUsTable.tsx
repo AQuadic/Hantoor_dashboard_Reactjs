@@ -12,6 +12,7 @@ import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import NoData from "../general/NoData";
 import { deleteSuggestions } from "@/api/suggestions/deleteSuggestion";
 import toast from "react-hot-toast";
+import Loading from "../general/Loading";
 
 const ContactUsTable = () => {
     const { t } = useTranslation("contactUs");
@@ -24,7 +25,7 @@ const ContactUsTable = () => {
   });
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loading />
   }
 
   if (!data?.data || data?.data.length === 0) {

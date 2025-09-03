@@ -19,5 +19,7 @@
 
     "textTitle": "Text Title",
     "description": "Description",
-    "status": "Status"
+    "status": "Status",
+
+    "notificationAddedSuccessfully": "Notification added successfully"
 }

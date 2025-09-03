@@ -6,36 +6,68 @@ import SuccessPopup from "@/components/general/SuccessPopup";
 import { Checkbox, Select, SelectItem } from "@heroui/react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getCountries, Country } from "@/api/countries/getCountry";
+import { sendBroadcastNotification, BroadcastNotificationPayload } from "@/api/notifications/createNotification";
+import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const AddNotification = () => {
-  const { t } = useTranslation("notifications");
-  const [profileImage, setProfileImage] = React.useState<File | null>(null);
+  const { t, i18n } = useTranslation("notifications");
+  const [profileImage, setProfileImage] = useState<File | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [arText, setArText] = useState("");
   const [enText, setEnText] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
+  const [recieverType, setRecieverType] = useState<"all" | "selected">("all");
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+  const navigate = useNavigate ();
 
-  const countries = [
-    { key: "ae", label: "الامارات" },
-    { key: "eg", label: "مصر" },
-    { key: "ksa", label: "السعودية" },
-  ];
+  const { data: countriesData, isLoading: countriesLoading } = useQuery({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(),
+  });
 
   const reciever = [
     { key: "1", label: "الكل" },
-    { key: "2", label: "الكل" },
-    { key: "3", label: "الكل" },
+    { key: "2", label: "محدد" },
   ];
 
   const data = [
-    { name: "ابراهيم محمود", phone: "+966 123456 789" },
-    { name: "مصطفي محمد", phone: "+966 123456 789" },
-    { name: "Khaled Mohmed", phone: "+966 123456 789" },
-    { name: "Dina Khaled", phone: "+966 123456 789" },
+    { id: "1", name: "ابراهيم محمود", phone: "+966 123456 789" },
+    { id: "2", name: "مصطفي محمد", phone: "+966 123456 789" },
+    { id: "3", name: "Khaled Mohmed", phone: "+966 123456 789" },
+    { id: "4", name: "Dina Khaled", phone: "+966 123456 789" },
   ];
 
-  const handleSend = () => {
-    setShowPopup(true);
-    setTimeout(() => setShowPopup(false), 2000);
+  const handleSend = async () => {
+    if (!selectedCountry) {
+      toast.error("Please select a country");
+      return;
+    }
+
+    const payload: BroadcastNotificationPayload = {
+      title: { en: enText, ar: arText },
+      body: { en: enText, ar: arText },
+      type: recieverType,
+      country_id: selectedCountry.id,
+      notifiable_ids: recieverType === "selected" ? selectedUsers : undefined,
+      image: profileImage || undefined,
+    };
+
+    try {
+      await sendBroadcastNotification(payload);
+      setShowPopup(true);
+      toast.success(t('notificationAddedSuccessfully'))
+      navigate("/notifications")
+      setTimeout(() => setShowPopup(false), 2000);
+    } catch (error: any) {
+      if (error.response?.data?.message) {
+        toast.error(`Error: ${error.response.data.message}`);
+      } else {
+        toast.error("Failed to send notification");
+      }
+    }
   };
 
   return (
@@ -114,19 +146,27 @@ const AddNotification = () => {
           </div>
 
           <div className="flex xl:flex-row flex-col items-center gap-3 mt-3">
-            <Select
-              label={t("country")}
-              variant="bordered"
-              placeholder={t("choose")}
-              classNames={{ label: "mb-2 text-base" }}
-              size="lg"
-            >
-              {countries.map((c) => (
-                <SelectItem key={c.key} textValue={c.label}>
-                  {c.label}
-                </SelectItem>
-              ))}
-            </Select>
+            {countriesData && (
+              <Select
+                label={t("country")}
+                variant="bordered"
+                placeholder={countriesLoading ? "Loading..." : t("choose")}
+                value={selectedCountry?.id.toString() || ""}
+                onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                  const val = e.target.value;
+                  const country = countriesData?.data.find((c) => c.id.toString() === val);
+                  setSelectedCountry(country || null);
+                }}
+                classNames={{ label: "mb-2 text-base" }}
+                size="lg"
+              >
+                {(countriesData?.data || []).map((c) => (
+                  <SelectItem key={c.id} textValue={c.name.en}>
+                    {i18n.language === "ar" ? c.name.ar : c.name.en}
+                  </SelectItem>
+                ))}
+              </Select>
+            )}
 
             <Select
               label={t("selectReciver")}
@@ -192,15 +232,21 @@ const AddNotification = () => {
             </thead>
 
             <tbody>
-              {data.map((item, index) => (
+              {data.map((item) => (
                 <tr
-                  key={index}
+                  key={item.id}
                   className="bg-white border-b border-[#E3E8EF] text-sm text-right"
                 >
                   <td className="align-middle">
-                    <Checkbox defaultSelected></Checkbox>
+                    <Checkbox
+                      defaultSelected={selectedUsers.includes(item.id)}
+                      onChange={(checked) => {
+                        if (checked) setSelectedUsers((prev) => [...prev, item.id]);
+                        else setSelectedUsers((prev) => prev.filter((id) => id !== item.id));
+                      }}
+                      disabled={recieverType === "all"}
+                    />
                   </td>
-
                   <td className="py-3 pr-2">
                     <img
                       src="/images/user.svg"

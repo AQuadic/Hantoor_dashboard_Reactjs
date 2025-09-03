@@ -19,5 +19,7 @@
 
     "textTitle": "عنوان النص",
     "description": "الوصف",
-    "status": "الحالة"
+    "status": "الحالة",
+
+    "notificationAddedSuccessfully": "تم إضافة الإشعار بنجاح"
 }
