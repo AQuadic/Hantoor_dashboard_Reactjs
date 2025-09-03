@@ -2,9 +2,13 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
-import notificationCar from '/images/notificationCar.png'
 import View from "../icons/general/View";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getBroadcastNotifications, BroadcastNotification } from "@/api/notifications/getNotifications";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
+
 const NotificationTable = () => {
     const { t } = useTranslation("notifications");
 const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
@@ -16,29 +20,16 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
         }));
     };
 
-    const notifications = [
-    {
-        id: 1,
-        image:notificationCar,
-        text: "حماية البيانات",
-        country: "الامارات",
-        description: "أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ علي"
-    },
-    {
-        id: 2,
-        image:notificationCar,
-        text: "القواعد العامه",
-        country: "مصر",
-        description: "أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ علي"
-    },
-    {
-        id: 3,
-        image:notificationCar,
-        text: "تحذير",
-        country: "السعودية",
-        description: "أي معلومات شخصية تزودنا بها عند استخدامك لهذا الموقع سوف تعامل وفقاً لسياسة الخصوصية الموجودة لدينا والحفاظ علي"
-    },
-    ];
+  const { data, isLoading } = useQuery({
+    queryKey: ["broadcastNotifications"],
+    queryFn: () => getBroadcastNotifications({ per_page: 50 }),
+  });
+
+  if (isLoading) return <Loading />
+  if (!data) return <NoData />
+
+  const notifications: BroadcastNotification[] = data?.data || [];
+
     return (
         <Table>
         <TableHeader>
@@ -54,24 +45,29 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
         <TableBody>
             {notifications.map((notification, index) => {
             const isExpanded = expandedRows[notification.id];
-            const shortDescription = notification.description.slice(0, 50) + "";
+            const shortDescription =
+                notification.body.en.length > 50
+                    ? notification.body.en.slice(0, 50) + "..."
+                    : notification.body.en;
 
             return (
                 <TableRow key={notification.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
-                    <img src={notification.image} alt="Car" className="rounded-[8px]" />
+                <img src={notification.image} alt="Car" className="rounded-[8px]" />
                 </TableCell>
-                <TableCell>{notification.text}</TableCell>
-                <TableCell>{notification.country}</TableCell>
+                <TableCell>{notification.title.en}</TableCell>
+                <TableCell>{notification.country_id}</TableCell>
                 <TableCell className="w-full">
-                    {isExpanded ? notification.description : shortDescription}
+                {isExpanded ? notification.body.en : shortDescription}
+                {notification.body.en.length > 50 && (
                     <button
                     className="text-blue-600 ml-2 hover:underline"
                     onClick={() => toggleExpand(notification.id)}
                     >
-                    {isExpanded ? "..." : "..."}
+                    {isExpanded ? "Show Less" : "Show More"}
                     </button>
+                )}
                 </TableCell>
                 <TableCell
                     className="flex gap-[7px] items-center"
