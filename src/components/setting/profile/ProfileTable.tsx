@@ -7,6 +7,8 @@ import { useTranslation } from "react-i18next";
 import { getOnboardings, OnboardingItem } from "@/api/onboarding/getProfile";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
+import { deleteProfile } from "@/api/onboarding/deleteProfile";
+import toast from "react-hot-toast";
 
 interface PortableTextChild {
   text: string;
@@ -38,13 +40,19 @@ const parseDescription = (desc: string) => {
 const ProfileTable = () => {
     const { t, i18n } = useTranslation("setting");
 
-    const { data: profiles, isLoading } = useQuery<OnboardingItem[]>({
+    const { data: profiles, isLoading, refetch } = useQuery<OnboardingItem[]>({
     queryKey: ["onboardings"],
     queryFn: () => getOnboardings({ pagination: "none" }),
     });
 
     if (isLoading) return <Loading />
     if (!profiles || profiles.length === 0) return <NoData />
+
+    const handleDelete = async (id: number) => {
+    await deleteProfile(id);
+    toast.success(t("profileDeleted"));
+    refetch();
+  };
 
     return (
         <Table>
@@ -88,7 +96,7 @@ const ProfileTable = () => {
                 </Link>
 
                 <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(profile.id)} />
                 </div>
                 </TableCell>
             </TableRow>
