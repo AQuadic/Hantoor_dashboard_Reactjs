@@ -17,7 +17,7 @@ interface NotificationTableProps {
 }
 
 const NotificationTable: React.FC<NotificationTableProps> = ({ searchTerm = "", perPage = 50 }) => {
-    const { t } = useTranslation("notifications");
+    const { t, i18n } = useTranslation("notifications");
 const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
 
     const toggleExpand = (id: number) => {
@@ -58,29 +58,42 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
         <TableBody>
             {notifications.map((notification, index) => {
             const isExpanded = expandedRows[notification.id];
+            const bodyText = i18n.language === "ar" ? notification.body.ar : notification.body.en;
+
             const shortDescription =
-                notification.body.en.length > 50
-                    ? notification.body.en.slice(0, 50) + "..."
-                    : notification.body.en;
+            bodyText.length > 50 ? bodyText.slice(0, 50) + "..." : bodyText;
 
             return (
                 <TableRow key={notification.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
-                <img src={notification.image} alt="Car" className="rounded-[8px]" />
+                    {notification.image ? (
+                    <img src={notification.image.url} alt="Notification" className="w-16 h-16 object-cover rounded-md" />
+                    ) : (
+                    <span>No image</span>
+                    )}
                 </TableCell>
-                <TableCell>{notification.title.en}</TableCell>
-                <TableCell>{notification.country_id}</TableCell>
+                <TableCell>{i18n.language === "ar" ? notification.title.ar : notification.title.en}</TableCell>
+                <TableCell>
+                {i18n.language === "ar"
+                    ? notification.country?.name?.ar ?? "-"
+                    : notification.country?.name?.en ?? "-"}
+                </TableCell>
                 <TableCell className="w-full">
-                {isExpanded ? notification.body.en : shortDescription}
-                {notification.body.en.length > 50 && (
+                {isExpanded
+                    ? i18n.language === "ar"
+                        ? notification.body.ar
+                        : notification.body.en
+                    : shortDescription}
+
+                    {(i18n.language === "ar" ? notification.body.ar : notification.body.en).length > 50 && (
                     <button
-                    className="text-blue-600 ml-2 hover:underline"
-                    onClick={() => toggleExpand(notification.id)}
+                        className="text-blue-600 ml-2 hover:underline"
+                        onClick={() => toggleExpand(notification.id)}
                     >
-                    {isExpanded ? "Show Less" : "Show More"}
+                        {isExpanded ? t("showLess") : t("showMore")}
                     </button>
-                )}
+                    )}
                 </TableCell>
                 <TableCell
                     className="flex gap-[7px] items-center"

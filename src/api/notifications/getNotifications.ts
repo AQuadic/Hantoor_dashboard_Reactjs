@@ -1,5 +1,21 @@
 import { axios } from "@/lib/axios";
 
+export interface NotificationImage {
+  id: number;
+  uuid: string;
+  size: number;
+  url: string;
+  responsive_urls: string[];
+}
+
+export interface Country {
+  id: number;
+  name: {
+    en: string;
+    ar: string;
+  };
+}
+
 export interface BroadcastNotification {
   id: number;
   title: {
@@ -12,8 +28,9 @@ export interface BroadcastNotification {
   };
   type: "all" | "selected";
   country_id: number;
+  country?: Country;
   notifiable_ids?: string[];
-  image?: string;
+  image?: NotificationImage | null;
   created_at: string;
   updated_at: string;
 }

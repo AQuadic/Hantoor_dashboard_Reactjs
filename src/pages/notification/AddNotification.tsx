@@ -18,6 +18,9 @@ const AddNotification = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [arText, setArText] = useState("");
   const [enText, setEnText] = useState("");
+  const [arDescription, setArDescription] = useState("");
+  const [enDescription, setEnDescription] = useState("");
+
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [recieverType, setRecieverType] = useState<"all" | "selected">("all");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
@@ -48,7 +51,7 @@ const AddNotification = () => {
 
     const payload: BroadcastNotificationPayload = {
       title: { en: enText, ar: arText },
-      body: { en: enText, ar: arText },
+      body: { en: enDescription, ar: arDescription },
       type: recieverType,
       country_id: selectedCountry.id,
       notifiable_ids: recieverType === "selected" ? selectedUsers : undefined,
@@ -118,7 +121,8 @@ const AddNotification = () => {
             <div className="relative w-full">
               <textarea
                 id="arabic-description"
-                name="arabic-description"
+                value={arDescription}
+                onChange={(e) => setArDescription(e.target.value)}
                 placeholder={t("lorem")}
                 className="peer w-full h-[191px] rounded-[12px] border border-[#E2E2E2] p-4 pt-8 focus:outline-none"
               />
@@ -132,7 +136,8 @@ const AddNotification = () => {
             <div className="relative w-full">
               <textarea
                 id="english-description"
-                name="english-description"
+                value={enDescription}
+                onChange={(e) => setEnDescription(e.target.value)}
                 placeholder={t("lorem")}
                 className="peer w-full h-[191px] rounded-[12px] border border-[#E2E2E2] p-4 pt-8 focus:outline-none"
               />
