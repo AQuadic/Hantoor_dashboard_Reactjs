@@ -1,32 +1,56 @@
 import { Link } from "react-router";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import Edit from "../icons/general/Edit";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getPages, Page } from "@/api/pages/getPages";
+import { getCountries, Country } from "@/api/countries/getCountry";
 
 const TermsTable = () => {
-    const { t } = useTranslation("setting")
-    const profile = [
-    {
-        id: 1,
-        title: "سياسة الأسعار",
-        country: 'السعودية',
-        description: 'لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي تستخدم بشكل شائع لتوضيح الشكل المرئي للمستند أو الخط دون الاعتماد...'
-    },
-    {
-        id: 2,
-        title: "سياسة الأسعار",
-        country: 'مصر',
-        description: 'لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي تستخدم بشكل شائع لتوضيح الشكل المرئي للمستند أو الخط دون الاعتماد...'
-    },
-    {
-        id: 3,
-        title: "سياسة الأسعار",
-        country: 'السعودية',
-        description: 'لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي تستخدم بشكل شائع لتوضيح الشكل المرئي للمستند أو الخط دون الاعتماد...'
-    },
-    ];
+  const { t, i18n } = useTranslation("setting");
+  const lang: "ar" | "en" = i18n.language === "ar" ? "ar" : "en";
+
+  const { data: pagesData, isLoading: isPagesLoading, isError: isPagesError } = useQuery({
+    queryKey: ["pages"],
+    queryFn: () => getPages({ per_page: 50 }),
+  });
+
+  const { data: countriesData } = useQuery({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(),
+  });
+
+  const pages: Page[] = pagesData?.data || [];
+  const countries: Country[] = countriesData?.data || [];
+
+  if (isPagesLoading) return <div>{t("loading")}</div>;
+  if (isPagesError) return <div>{t("errorLoading")}</div>;
+
+  const getCountryName = (id?: number) => {
+    const country = countries.find((c) => c.id === id);
+    return country ? country.name[lang] : "-";
+  };
+
+  const parseDescription = (desc?: string) => {
+    if (!desc) return "";
+
+    try {
+      const blocks = JSON.parse(desc);
+      if (Array.isArray(blocks)) {
+        return blocks
+          .map((block: any) =>
+            block.children?.map((child: any) => child.text).join("") || ""
+          )
+          .join("\n");
+      }
+    } catch {
+      return desc;
+    }
+
+    return "";
+  };
+
     return (
         <Table>
         <TableHeader>
@@ -39,14 +63,14 @@ const TermsTable = () => {
             </TableRow>
         </TableHeader>
         <TableBody>
-            {profile.map((profie, index) => (
-            <TableRow key={profie.id} noBackgroundColumns={1}>
+            {pages.map((page, index) => (
+            <TableRow key={page.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
-                <TableCell>{profie.title}</TableCell>
-                <TableCell>{profie.country}</TableCell>
-                <TableCell>{profie.description}</TableCell>
+                <TableCell>{page.title?.[lang] || page.title?.en}</TableCell>
+                <TableCell>{getCountryName(page.country_id)}</TableCell>
+                <TableCell>{parseDescription(page.description?.[lang])}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                <Link to={`/profile/edit-termsandconditions`}>
+                <Link to={`/profile/edit-termsandconditions/${page.id}`}>
                     <Edit />
                 </Link>
 
