@@ -4,33 +4,34 @@ import Edit from "../icons/general/Edit";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { getPages, Page } from "@/api/pages/getPages";
+import { Page } from "@/api/pages/getPages";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import { deletePage } from "@/api/pages/deletePage";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 
-const TermsTable = () => {
+interface TermsTableProps {
+  data: Page[];
+  from: number;
+  isLoading: boolean;
+  refetch: () => void;
+}
+
+const TermsTable = ({ data, isLoading, refetch }: TermsTableProps) => {
   const { t, i18n } = useTranslation("setting");
   const lang: "ar" | "en" = i18n.language === "ar" ? "ar" : "en";
-
-  const { data: pagesData, isLoading: isPagesLoading, refetch } = useQuery({
-    queryKey: ["pages"],
-    queryFn: () => getPages({ per_page: 50 }),
-  });
 
   const { data: countriesData } = useQuery({
     queryKey: ["countries"],
     queryFn: () => getCountries(),
   });
 
-  const pages: Page[] = pagesData?.data || [];
   const countries: Country[] = countriesData?.data || [];
 
-  if (isPagesLoading) return <Loading />
-  if (!pagesData) return <NoData />
-  
+  if (isLoading) return <Loading />;
+  if (!data || data.length === 0) return <NoData />;
+
   const getCountryName = (id?: number) => {
     const country = countries.find((c) => c.id === id);
     return country ? country.name[lang] : "-";
@@ -55,13 +56,13 @@ const TermsTable = () => {
     return "";
   };
 
-    const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
     await deletePage(id);
     toast.success(t("pageDeleted"));
     refetch();
   };
 
-    return (
+  return (
         <Table>
         <TableHeader>
             <TableRow>
@@ -73,7 +74,7 @@ const TermsTable = () => {
             </TableRow>
         </TableHeader>
         <TableBody>
-            {pages.map((page, index) => (
+            {data.map((page, index) => (
             <TableRow key={page.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{page.title?.[lang] || page.title?.en}</TableCell>
