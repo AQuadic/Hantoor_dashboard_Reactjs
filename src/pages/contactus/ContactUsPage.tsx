@@ -8,14 +8,19 @@ const ContactUsPage = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
+  const [search, setSearch] = useState(""); 
 
   return (
     <div>
-      <ContactUsHeader />
+      <ContactUsHeader 
+        search={search} 
+        setSearch={setSearch} 
+      />
       <div className="px-2 md:px-8">
         <ContactUsTable
           page={page}
           perPage={perPage}
+          search={search}
           setTotalPages={setTotalPages}
           setPerPage={setPerPage}
           setTotalItems={setTotalItems}
@@ -38,5 +43,6 @@ const ContactUsPage = () => {
     </div>
   );
 };
+
 
 export default ContactUsPage;

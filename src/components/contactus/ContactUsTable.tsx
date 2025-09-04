@@ -17,6 +17,7 @@ import Loading from "../general/Loading";
 type ContactUsTableProps = {
   page: number;
   perPage: number;
+  search: string; 
   setTotalPages: (pages: number) => void;
   setPerPage: (perPage: number) => void;
   setTotalItems: (total: number) => void;
@@ -25,6 +26,7 @@ type ContactUsTableProps = {
 const ContactUsTable: React.FC<ContactUsTableProps> = ({
   page,
   perPage,
+  search,
   setTotalPages,
   setPerPage,
   setTotalItems,
@@ -32,10 +34,10 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
     const { t } = useTranslation("contactUs");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
 
-  const { data, isLoading, refetch } = useQuery<SuggestionsResponse, Error>({
-    queryKey: ["suggestions", page, perPage],
-    queryFn: () => getSuggestions({ page, per_page: perPage }),
-  });
+    const { data, isLoading, refetch } = useQuery<SuggestionsResponse, Error>({
+    queryKey: ["suggestions", page, perPage, search],
+    queryFn: () => getSuggestions({ page, per_page: perPage, search }),
+    })
 
   useEffect(() => {
     if (data) {
