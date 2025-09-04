@@ -85,12 +85,15 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
                         className="flex gap-[7px] items-center"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <div className="flex items-center justify-center gap-[10px] w-[160px] h-[37px] bg-[#1E1B1B] rounded-[8.15px]">
-                        <Email />
-                        <button className=" text-[#FFFFFF] font-bold text-sm">
+                        <a
+                            href={`mailto:${message.email}`}
+                            className="flex items-center justify-center gap-[10px] w-[160px] h-[37px] bg-[#1E1B1B] rounded-[8.15px]"
+                        >
+                            <Email />
+                            <span className="text-[#FFFFFF] font-bold text-sm">
                             {t("replayViaEmail")}
-                        </button>
-                        </div>
+                            </span>
+                        </a>
                     </div>
                 
                     <button onClick={() => setOpenMessageId(message.id)}>
