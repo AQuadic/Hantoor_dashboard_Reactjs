@@ -8,12 +8,39 @@ export interface PriceFrom {
   updated_at: string | null;
 }
 
-export async function getPriceFrom(params?: {
+export interface PriceFromResponse {
+  data: PriceFrom[];
+  current_page: number;
+  last_page: number;
+  per_page: number;
+  from: number;
+  to: number;
+  total: number;
+}
+
+export interface GetPriceFromParams {
   pagination?: boolean;
   is_active?: boolean;
-}): Promise<PriceFrom[]> {
-  const response = await axios.get<PriceFrom[]>("/admin/pricefrom", {
-    params,
-  });
-  return response.data;
+  page?: number;
+  search?: string;
+}
+
+export async function getPriceFrom(
+  params?: GetPriceFromParams
+): Promise<PriceFromResponse> {
+  const response = await axios.get("/admin/pricefrom", { params });
+
+  if (Array.isArray(response.data)) {
+    return {
+      data: response.data,
+      current_page: 1,
+      last_page: 1,
+      per_page: response.data.length,
+      from: 1,
+      to: response.data.length,
+      total: response.data.length,
+    };
+  }
+
+  return response.data as PriceFromResponse;
 }

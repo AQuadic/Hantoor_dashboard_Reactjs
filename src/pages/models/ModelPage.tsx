@@ -122,7 +122,11 @@ const BrandsPage = () => {
       case "Price From":
         return (
           <>
-            <PriceFromTable search={search} />
+            <PriceFromTable
+            page={currentPage}
+            search={search} 
+            setPagination={handleSetPagination}
+            />
           </>
         );
       case "Models":
