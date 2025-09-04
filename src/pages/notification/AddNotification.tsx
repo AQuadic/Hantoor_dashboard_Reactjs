@@ -253,7 +253,7 @@ const AddNotification = () => {
                 >
                   <td className="align-middle">
                     <Checkbox
-                      selected={selectedUsers.includes(user.id.toString())}
+                      isSelected={selectedUsers.includes(user.id.toString())}
                       onChange={(checked) => {
                         if (checked)
                           setSelectedUsers((prev) => [...prev, user.id.toString()]);
