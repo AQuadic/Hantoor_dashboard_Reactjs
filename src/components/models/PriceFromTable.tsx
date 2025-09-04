@@ -17,6 +17,7 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
 import toast from "react-hot-toast";
+import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
 
 interface PriceFromTableProps {
   search?: string;
@@ -42,6 +43,19 @@ export function PriceFromTable({ search = "" }: PriceFromTableProps) {
     refetch();
   };
 
+  const handleToggleStatus = async (id: number, current: number) => {
+    try {
+      const newStatus = current === 1 ? 0 : 1;
+      await updatePriceFrom(id, { is_active: newStatus });
+      toast.success(
+        newStatus === 1 ? t("priceActivated") : t("priceDeactivated")
+      );
+      refetch();
+    } catch {
+      toast.error(t("error"));
+    }
+  };
+
   if (isLoading) return <Loading />
   if (!data) return <NoData />
 
@@ -61,7 +75,10 @@ export function PriceFromTable({ search = "" }: PriceFromTableProps) {
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{price.name}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch defaultSelected={!!price.is_active} />
+              <Switch
+                isSelected={price.is_active === 1}
+                onChange={() => handleToggleStatus(price.id, price.is_active)}
+              />
               <Link to={`/price-from/edit/${price.id}`}>
                 <Edit />
               </Link>

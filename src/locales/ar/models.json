@@ -83,5 +83,7 @@
     "engineSizeDeactivated": "تم إلغاء تفعيل حجم الماكينة بنجاح",
 
     "priceAddedSuccessfully": "تم اضافة السعر بنجاح",
-    "priceDeleted": "تم حذف السعر بنجاح"
+    "priceDeleted": "تم حذف السعر بنجاح",
+    "priceActivated": "تم تفعيل السعر بنجاح",
+    "priceDeactivated": "تم إلغاء تفعيل السعر بنجاح"
 }
