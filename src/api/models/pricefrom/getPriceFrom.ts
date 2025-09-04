@@ -28,17 +28,31 @@ export interface GetPriceFromParams {
 export async function getPriceFrom(
   params?: GetPriceFromParams
 ): Promise<PriceFromResponse> {
-  const response = await axios.get("/admin/pricefrom", { params });
+  const response = await axios.get("/admin/pricefrom", {
+    params: {
+      ...params,
+      search: params?.search || undefined,
+    },
+  });
 
   if (Array.isArray(response.data)) {
+    let filtered = response.data;
+
+    if (params?.search) {
+      const keyword = params.search.toLowerCase();
+      filtered = filtered.filter((item: PriceFrom) =>
+        item.name.toLowerCase().includes(keyword)
+      );
+    }
+
     return {
-      data: response.data,
+      data: filtered,
       current_page: 1,
       last_page: 1,
-      per_page: response.data.length,
-      from: 1,
-      to: response.data.length,
-      total: response.data.length,
+      per_page: filtered.length,
+      from: filtered.length > 0 ? 1 : 0,
+      to: filtered.length,
+      total: filtered.length,
     };
   }
 
