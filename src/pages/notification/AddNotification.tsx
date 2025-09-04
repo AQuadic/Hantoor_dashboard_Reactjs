@@ -11,6 +11,7 @@ import { getCountries, Country } from "@/api/countries/getCountry";
 import { sendBroadcastNotification, BroadcastNotificationPayload } from "@/api/notifications/createNotification";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
+import { getAdminUsers } from "@/api/users/getUsers";
 
 const AddNotification = () => {
   const { t, i18n } = useTranslation("notifications");
@@ -36,12 +37,16 @@ const AddNotification = () => {
     { key: "2", label: "محدد" },
   ];
 
-  const data = [
-    { id: "1", name: "ابراهيم محمود", phone: "+966 123456 789" },
-    { id: "2", name: "مصطفي محمد", phone: "+966 123456 789" },
-    { id: "3", name: "Khaled Mohmed", phone: "+966 123456 789" },
-    { id: "4", name: "Dina Khaled", phone: "+966 123456 789" },
-  ];
+  const { data: usersData } = useQuery({
+  queryKey: ["admin-users", selectedCountry?.id],
+  queryFn: () =>
+    getAdminUsers({
+      country_id: selectedCountry?.id,
+    }),
+    enabled: !!selectedCountry,
+  });
+
+
 
   const handleSend = async () => {
     if (!selectedCountry) {
@@ -179,6 +184,10 @@ const AddNotification = () => {
               placeholder={t("choose")}
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
+              value={recieverType === "all" ? "1" : "2"}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setRecieverType(e.target.value === "1" ? "all" : "selected");
+              }}
             >
               {reciever.map((authority) => (
                 <SelectItem key={authority.key} textValue={authority.label}>
@@ -237,17 +246,21 @@ const AddNotification = () => {
             </thead>
 
             <tbody>
-              {data.map((item) => (
+              {usersData?.data.map((user) => (
                 <tr
-                  key={item.id}
+                  key={user.id}
                   className="bg-white border-b border-[#E3E8EF] text-sm text-right"
                 >
                   <td className="align-middle">
                     <Checkbox
-                      defaultSelected={selectedUsers.includes(item.id)}
+                      selected={selectedUsers.includes(user.id.toString())}
                       onChange={(checked) => {
-                        if (checked) setSelectedUsers((prev) => [...prev, item.id]);
-                        else setSelectedUsers((prev) => prev.filter((id) => id !== item.id));
+                        if (checked)
+                          setSelectedUsers((prev) => [...prev, user.id.toString()]);
+                        else
+                          setSelectedUsers((prev) =>
+                            prev.filter((id) => id !== user.id.toString())
+                          );
                       }}
                       disabled={recieverType === "all"}
                     />
@@ -261,11 +274,11 @@ const AddNotification = () => {
                   </td>
 
                   <td className="py-3 pr-2 text-[#071739] font-normal">
-                    {item.name}
+                    {user.name}
                   </td>
 
                   <td className="py-3 pr-2 text-[#606C7E]" dir="ltr">
-                    {item.phone}
+                    {user.phone}
                   </td>
                 </tr>
               ))}
