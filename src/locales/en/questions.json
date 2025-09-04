@@ -30,5 +30,6 @@
     "addedSuccessfully": "Added successfully",
     "editedSuccessfully": "Edited successfully",
 
-    "conversationDeleted": "Conversation deleted successfully"
+    "conversationDeleted": "Conversation deleted successfully",
+    "conversationUpdated": "Conversation updated successfully"
 }

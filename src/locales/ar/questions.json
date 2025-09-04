@@ -31,5 +31,6 @@
     "addedSuccessfully": "تمت الاضافة بنجاح",
     "editedSuccessfully": "تم التعديل بنجاح",
 
-    "conversationDeleted": "تم حذف المحادثة بنجاح"
+    "conversationDeleted": "تم حذف المحادثة بنجاح",
+    "conversationUpdated": "تم تحديث المحادثة بنجاح"
 }

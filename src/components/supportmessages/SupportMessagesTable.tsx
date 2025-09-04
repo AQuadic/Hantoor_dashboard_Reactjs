@@ -11,6 +11,7 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { deleteConversation } from "@/api/support/deleteConversation";
+import { updateConversation } from "@/api/support/updateConversation";
 
 interface SupportMessagesTableProps {
   page: number;
@@ -20,6 +21,8 @@ interface SupportMessagesTableProps {
 const SupportMessagesTable = ({ page, itemsPerPage }: SupportMessagesTableProps) => {
     const { t } = useTranslation("questions");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
+    const [notesMap, setNotesMap] = useState<Record<number, string>>({});
+    const [activeMap, setActiveMap] = useState<Record<number, boolean>>({});
 
   const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Error>({
     queryKey: ["supportConversations", page, itemsPerPage],
@@ -31,6 +34,20 @@ const SupportMessagesTable = ({ page, itemsPerPage }: SupportMessagesTableProps)
     toast.success(t("conversationDeleted"));
     refetch();
 };
+
+  const handleUpdate = async (id: number, updates: { notes?: string; status?: string; is_active?: boolean }) => {
+    try {
+      await updateConversation(id, updates);
+      toast.success(t("conversationUpdated"));
+      refetch();
+    } catch (err: any) {
+    const message =
+      err?.response?.data?.message ||
+      err?.message ||
+      t("error");
+    toast.error(message);
+  }
+  };
 
   if (isLoading) return <Loading />
   const supportMessages: Conversation[] = data?.data || [];
@@ -69,19 +86,47 @@ const SupportMessagesTable = ({ page, itemsPerPage }: SupportMessagesTableProps)
                     onClick={(e) => e.stopPropagation()}
                     >
                     <div className="flex items-center gap-[10px]">
-                        <button className="w-[78px] h-[37px] bg-[#2A32F8] rounded-[8.15px] text-[#FFFFFF] font-bold text-[13px]">
-                            {t('working')}
+                        <button
+                        className={`w-[78px] h-[37px] rounded-[8.15px] font-bold text-[13px] ${
+                            activeMap[message.id] ?? message.is_active
+                            ? "bg-[#2A32F8] text-[#FFFFFF]"
+                            : "bg-[#FFFFFF] text-[#A1A1A1]"
+                        }`}
+                        onClick={() => {
+                            const newValue = true;
+                            setActiveMap((prev) => ({ ...prev, [message.id]: newValue }));
+                            handleUpdate(message.id, { is_active: newValue });
+                        }}
+                        >
+                        {t("working")}
                         </button>
-                        <button className="w-[78px] h-[37px] bg-[#FFFFFF] rounded-[8.15px] text-[#A1A1A1] font-normal text-[13px]">
-                            {t('done')}
+
+                        <button
+                        className={`w-[78px] h-[37px] rounded-[8.15px] font-normal text-[13px] ${
+                            !(activeMap[message.id] ?? message.is_active)
+                            ? "bg-[#2A32F8] text-[#FFFFFF]"
+                            : "bg-[#FFFFFF] text-[#A1A1A1]"
+                        }`}
+                        onClick={() => {
+                            const newValue = false;
+                            setActiveMap((prev) => ({ ...prev, [message.id]: newValue }));
+                            handleUpdate(message.id, { is_active: newValue });
+                        }}
+                        >
+                        {t("done")}
                         </button>
                         <input
                         type="text"
                         name="notes"
                         id="notes"
-                        value={message.notes}
-                        className="w-[195px] h-[37px] bg-[#FFFFFF] border border-[#D8D8D8] rounded-[10px] focus:outline-none px-3 placeholder:text-[13px]"
-                        placeholder={t('yourNotes')}
+                        value={notesMap[message.id] ?? message.notes}
+                        onChange={(e) => {
+                            const newValue = e.target.value;
+                            setNotesMap((prev) => ({ ...prev, [message.id]: newValue }));
+                            handleUpdate(message.id, { notes: newValue });
+                        }}
+                        className="w-[150px] h-[37px] bg-[#FFFFFF] border border-[#D8D8D8] rounded-[10px] focus:outline-none px-3 placeholder:text-[13px]"
+                        placeholder={t("yourNotes")}
                         />
                     </div>
 
