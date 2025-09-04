@@ -7,14 +7,16 @@ import { getFAQs, FAQsResponse } from "@/api/faq/getFaq";
 
 const TechnicalSupport = () => {
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
   const { data, isLoading, refetch } = useQuery<FAQsResponse, Error>({
-    queryKey: ["TechnicalSupportFAQs", page],
+    queryKey: ["TechnicalSupportFAQs", page, search],
     queryFn: () =>
       getFAQs({
         pagination: "normal",
         page,
         type: "Technical Support Questions",
+        search,
       }),
   });
 
@@ -27,7 +29,7 @@ const TechnicalSupport = () => {
 
   return (
     <div>
-      <TechnicalsupportHeader />
+      <TechnicalsupportHeader search={search} setSearch={setSearch} /> {/* pass props */}
       <div className="px-2 md:px-8">
         <TechnicalSupportTable
           data={faqs}
@@ -36,8 +38,8 @@ const TechnicalSupport = () => {
           refetch={refetch}
         />
 
-        <div className="mt-4">
-          {totalItems > 0 && (
+        {totalItems > 0 && (
+          <div className="mt-4">
             <TablePagination
               currentPage={page}
               setCurrentPage={setPage}
@@ -47,11 +49,12 @@ const TechnicalSupport = () => {
               from={from}
               to={to}
             />
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
 
 export default TechnicalSupport;

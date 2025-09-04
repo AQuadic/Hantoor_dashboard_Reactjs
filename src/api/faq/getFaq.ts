@@ -40,6 +40,7 @@ export interface GetFAQsParams {
   pagination?: "simple" | "normal" | "none";
   page?: number;
   type?: "Frequent Questions" | "Technical Support Questions";
+  search?: string
 }
 
 export async function getFAQs(params: GetFAQsParams = {}): Promise<FAQsResponse> {
