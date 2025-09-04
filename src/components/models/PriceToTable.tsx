@@ -11,23 +11,57 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
+import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
+import toast from "react-hot-toast";
+import { useEffect } from "react";
+import { getPriceTo, PriceToResponse } from "@/api/models/priceto/getPriceTo";
 
-export function PriceToTable() {
+interface PriceToTableProps {
+  search?: string;
+  page: number;
+  setPagination: (meta: {
+    totalPages: number;
+    totalItems: number;
+    itemsPerPage: number;
+    from: number;
+    to: number;
+  }) => void;
+}
+
+export function PriceToTable({ search = "", page, setPagination }: PriceToTableProps) {
   const { t } = useTranslation("models");
-  const priceto = [
-    {
-      id: 1,
-      price: "500.000 درهم",
-    },
-    {
-      id: 1,
-      price: "600.000 درهم",
-    },
-    {
-      id: 1,
-      price: "700.000 درهم",
-    },
-  ];
+
+const { data, isLoading, refetch } = useQuery<PriceToResponse>({
+  queryKey: ["priceto", page, search],
+  queryFn: () => getPriceTo({ page, search }),
+  placeholderData: (previousData: PriceToResponse | undefined) => previousData,
+});
+
+const priceToList = data?.data ?? [];
+
+  useEffect(() => {
+    if (data) {
+      setPagination({
+        totalPages: data.last_page,
+        totalItems: data.total,
+        itemsPerPage: data.per_page,
+        from: data.from,
+        to: data.to,
+      });
+    }
+  }, [data, setPagination]);
+
+  const handleDelete = async (id: number) => {
+    await deletePriceFrom(id);
+    toast.success(t("priceDeleted"));
+    refetch();
+  };
+
+  if (isLoading) return <Loading />;
+  if (!priceToList.length) return <NoData />;
 
   return (
     <Table>
@@ -39,10 +73,10 @@ export function PriceToTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {priceto.map((price, index) => (
+        {priceToList.map((price, index) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell className="w-full">{price.price}</TableCell>
+            <TableCell className="w-full">{price.name}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch />
               <Link to={`/price-to/edit/${price.id}`}>
@@ -50,7 +84,7 @@ export function PriceToTable() {
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(price.id)} />
               </div>
             </TableCell>
           </TableRow>

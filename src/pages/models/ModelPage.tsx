@@ -156,7 +156,11 @@ const BrandsPage = () => {
           />
         );
       case "Price To":
-        return <PriceToTable />;
+        return <PriceToTable
+                search={search}
+              page={currentPage}
+              setPagination={handleSetPagination}
+          />;
       default:
         return (
           <>
