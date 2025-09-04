@@ -7,9 +7,10 @@ import { getFAQs, FAQsResponse } from "@/api/faq/getFaq";
 
 const FAQsPage = () => {
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
 
   const { data: faqsData, isLoading, refetch } = useQuery<FAQsResponse, Error>({
-    queryKey: ["FrequentQuestions", page],
+    queryKey: ["FrequentQuestions", page, search],
     queryFn: () =>
       getFAQs({
         pagination: "normal",
@@ -27,7 +28,7 @@ const FAQsPage = () => {
 
   return (
     <div>
-      <FAQsHeader />
+      <FAQsHeader search={search} setSearch={setSearch} />
       <div className="px-2 md:px-8">
         <FAQsTable data={faqs} from={from} isLoading={isLoading} refetch={refetch} />
 

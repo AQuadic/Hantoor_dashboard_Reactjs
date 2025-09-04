@@ -1,11 +1,14 @@
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import Avatar from "/images/avatar.svg";
 import Link from "@/components/icons/chats/Link";
 import AvatarIcon from "@/components/icons/chats/Avatar";
 import SendIcon from "@/components/icons/chats/SendIcon";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getConversationById } from "@/api/support/getConversationById";
+import { sendMessage } from "@/api/support/sendMessage";
 import Loading from "@/components/general/Loading";
+import toast from "react-hot-toast";
 
 interface SupportMsgsConversationProps {
   conversationId: number;
@@ -13,6 +16,7 @@ interface SupportMsgsConversationProps {
 
 const SupportMsgsConversation = ({ conversationId }: SupportMsgsConversationProps) => {
   const { t } = useTranslation("header");
+  const queryClient = useQueryClient();
 
   const { data: conversation, isLoading, error } = useQuery({
     queryKey: ["conversation", conversationId],
@@ -20,21 +24,45 @@ const SupportMsgsConversation = ({ conversationId }: SupportMsgsConversationProp
     enabled: !!conversationId,
   });
 
+  const [newMessage, setNewMessage] = useState<string>("");
+  const [mediaFile, setMediaFile] = useState<File | null>(null);
+
   if (isLoading) return <Loading />;
 
-  if (error || !conversation?.notes) {
+  if (error || !conversation) {
     return <div className="text-center py-10">{t("noData")}</div>;
   }
 
-  const messages = [
-    {
-      id: conversation.id,
-      name: conversation.name || "User",
-      text: conversation.notes,
-      time: new Date(conversation.created_at).toLocaleTimeString(),
-      isSender: true,
-    },
-  ];
+  const messages = conversation.notes
+    ? [
+        {
+          id: conversation.id,
+          name: conversation.name || "User",
+          text: conversation.notes,
+          time: new Date(conversation.created_at).toLocaleTimeString(),
+          isSender: true,
+        },
+      ]
+    : [];
+
+    const handleSendMessage = async () => {
+    if (!newMessage && !mediaFile) return;
+
+    try {
+        await sendMessage({
+        conversation_id: conversationId,
+        message: newMessage,
+        media: mediaFile || undefined,
+        });
+        toast.success(t("messageSent"));
+        setNewMessage("");
+        setMediaFile(null);
+        queryClient.invalidateQueries({ queryKey: ["conversation", conversationId] });
+    } catch (err: any) {
+        toast.error(err?.message || t("error"));
+    }
+    };
+
 
     return (
         <section className="relative py-4 px-4 h-full flex flex-col">
@@ -78,14 +106,30 @@ const SupportMsgsConversation = ({ conversationId }: SupportMsgsConversationProp
             type="text"
             className="flex-1 h-12 bg-[#F6F6F6] rounded-3xl px-12 border border-[#DCDCDC]"
             placeholder="اكتب رسالتك..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            />
+
+            <input
+            type="file"
+            className="hidden"
+            id="mediaFile"
+            onChange={(e) => {
+                if (e.target.files?.[0]) setMediaFile(e.target.files[0]);
+            }}
             />
             <div className="absolute left-28">
-                <Link />
+            <label htmlFor="mediaFile">
+                <AvatarIcon />
+            </label>
             </div>
             <div className="absolute left-20">
-                <AvatarIcon />
+                <Link />
             </div>
+
+            <button onClick={handleSendMessage}>
             <SendIcon />
+            </button>
         </div>
         </section>
     );
