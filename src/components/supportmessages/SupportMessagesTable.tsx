@@ -1,41 +1,33 @@
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import View from "../icons/general/View";
 import SupportMsgsConversation from "@/pages/supportmessages/SupportMsgsConversation";
 import { useTranslation } from "react-i18next";
+import { getSupportConversations, Conversation, SupportConversationsResponse } from "@/api/support/getConversations";
+import { useState } from "react";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
 
-const SupportMessagesTable = () => {
+interface SupportMessagesTableProps {
+  page: number;
+  itemsPerPage: number;
+}
+
+const SupportMessagesTable = ({ page, itemsPerPage }: SupportMessagesTableProps) => {
     const { t } = useTranslation("questions");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
 
-    const supportMessages = [
-        {
-            id: 1,
-            number: "6881066",
-            country: "الامارات",
-            question: "صعوبة في التواصل مع الوكلاء أو المعارض",
-            name: "مصطفي محمد",
-            phone: "+966 123456 789"
-        },
-        {
-            id: 2,
-            number: "6881066",
-            country: "مصر",
-            question: "صعوبة في التواصل مع الوكلاء أو المعارض",
-            name: "مصطفي محمد",
-            phone: "+966 123456 789"
-        },
-        {
-            id: 3,
-            number: "6881066",
-            country: "الامارات",
-            question: "صعوبة في التواصل مع الوكلاء أو المعارض",
-            name: "مصطفي محمد",
-            phone: "+966 123456 789"
-        },
-    ];
+  const { data, isLoading } = useQuery<SupportConversationsResponse, Error>({
+    queryKey: ["supportConversations", page, itemsPerPage],
+    queryFn: () => getSupportConversations({ page, per_page: itemsPerPage }),
+  });
+
+  if (isLoading) return <Loading />
+  const supportMessages: Conversation[] = data?.data || [];
+  if (!supportMessages.length) return <NoData />;
+
     return (
         <div className="relative flex">
         <div className="w-full">
@@ -55,9 +47,9 @@ const SupportMessagesTable = () => {
                 {supportMessages.map((message, index) => (
                 <TableRow key={message.id} noBackgroundColumns={1}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{message.number}</TableCell>
-                    <TableCell>{message.country}</TableCell>
-                    <TableCell>{message.question}</TableCell>
+                    <TableCell>{message.id}</TableCell>
+                    <TableCell>{message.country_id || "-"}</TableCell>
+                    <TableCell>{message.title}</TableCell>
                     <TableCell>{message.name}</TableCell>
                     <TableCell className="w-full">
                         <div dir="ltr">
@@ -79,6 +71,7 @@ const SupportMessagesTable = () => {
                         type="text"
                         name="notes"
                         id="notes"
+                        value={message.notes}
                         className="w-[195px] h-[37px] bg-[#FFFFFF] border border-[#D8D8D8] rounded-[10px] focus:outline-none px-3 placeholder:text-[13px]"
                         placeholder={t('yourNotes')}
                         />
