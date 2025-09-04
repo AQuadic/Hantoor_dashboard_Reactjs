@@ -18,6 +18,7 @@ import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { getPriceTo, PriceToResponse } from "@/api/models/priceto/getPriceTo";
 import { deletePriceTo } from "@/api/models/priceto/deletePriceTo";
+import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
 
 interface PriceToTableProps {
   search?: string;
@@ -60,6 +61,17 @@ const priceToList = data?.data ?? [];
     refetch();
   };
 
+  const handleToggleStatus = async (id: number, current: number) => {
+    try {
+      const newStatus = current === 1 ? 0 : 1;
+      await updatePriceTo(id, { is_active: newStatus });
+      toast.success(newStatus === 1 ? t("priceActivated") : t("priceDeactivated"));
+      refetch();
+    } catch {
+      toast.error(t("error"));
+    }
+  };
+
   if (isLoading) return <Loading />;
   if (!priceToList.length) return <NoData />;
 
@@ -78,7 +90,10 @@ const priceToList = data?.data ?? [];
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{price.name}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
+              <Switch
+                isSelected={price.is_active === 1}
+                onChange={() => handleToggleStatus(price.id, price.is_active)}
+              />
               <Link to={`/price-to/edit/${price.id}`}>
                 <Edit />
               </Link>

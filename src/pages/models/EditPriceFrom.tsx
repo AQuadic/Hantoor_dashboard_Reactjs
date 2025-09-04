@@ -33,7 +33,7 @@ const EditPriceFrom = () => {
 
     try {
       await updatePriceFrom(priceId, { name: priceAr || priceEn });
-      toast.success(t("savedSuccessfully"));
+      toast.success(t("priceUpdated"));
       navigate("/models?section=Price From")
     } catch (error: any) {
     if (error.response?.data?.message) {
