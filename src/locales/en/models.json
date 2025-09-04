@@ -80,5 +80,7 @@
     "engineTypeActivated": "Engine type activated successfully",
     "engineTypeDeactivated": "Engine type deactivated successfully",
     "engineSizeActivated": "Engine size activated successfully",
-    "engineSizeDeactivated": "Engine size deactivated successfully"
+    "engineSizeDeactivated": "Engine size deactivated successfully",
+
+    "priceAddedSuccessfully": "Price added successfully"
 }

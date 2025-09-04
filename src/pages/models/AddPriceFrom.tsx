@@ -1,23 +1,51 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input, Select, SelectItem } from "@heroui/react";
-import React from "react";
+import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { createPriceFrom } from "@/api/pricefrom/addPriceFrom";
+import { useQuery } from "@tanstack/react-query";
+import { getCountries, Country } from "@/api/countries/getCountry";
+import toast from "react-hot-toast";
 
 const AddPriceFrom = () => {
-  const { t } = useTranslation("models");
-  const [, setSelectedAgent] = React.useState("");
+  const { t, i18n } = useTranslation("models");
+  const [arPrice, setArPrice] = useState("");
+  const [enPrice, setEnPrice] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const navigate = useNavigate ()
   const params = useParams();
   const brandId = params.id;
-
   const isEdit = Boolean(brandId);
 
-  const agents = [
-    { label: "الامارات", value: "model1" },
-    { label: "مصر", value: "model2" },
-    { label: "السعودية", value: "model3" },
-  ];
+  const { data: countriesData, isLoading, isError } = useQuery({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(),
+  });
+
+  const handleSubmit = async () => {
+    if (!arPrice || !selectedCountry) {
+      alert(t("pleaseFillAllFields"));
+      return;
+    }
+
+    try {
+      await createPriceFrom({
+      name: arPrice,
+      country_id: Number(selectedCountry),
+    });
+      toast.success(t("priceAddedSuccessfully"));
+      navigate("/models?section=Price From")
+    } catch (error: any) {
+    if (error.response) {
+      const apiMessage =
+        error.response.data.message ||
+        t("error");
+        toast.error(apiMessage);
+    }
+  }
+  };
 
   return (
     <div>
@@ -49,7 +77,9 @@ const AddPriceFrom = () => {
               <Input
                 label={t('arPrice')}
                 variant="bordered"
-                placeholder=" 100.000"
+                placeholder={t("writeHere")}
+                value={arPrice}
+                onChange={(e) => setArPrice(e.target.value)}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
@@ -58,11 +88,13 @@ const AddPriceFrom = () => {
                 size={"lg"}
                 variant="bordered"
                 label={t('country')}
-                onSelectionChange={(key) => setSelectedAgent(key as string)}
+                selectedKeys={selectedCountry ? [selectedCountry] : []}
+                onSelectionChange={(keys) => setSelectedCountry(Array.from(keys)[0] as string)}
+                isDisabled={isLoading || isError}
               >
-                {agents.map((agent) => (
-                  <SelectItem key={agent.value} textValue={agent.label}>
-                    {agent.label}
+                {(countriesData?.data || []).map((country: Country) => (
+                  <SelectItem key={country.id} textValue={i18n.language === "ar" ? country.name.ar : country.name.en}>
+                    {i18n.language === "ar" ? country.name.ar : country.name.en}
                   </SelectItem>
                 ))}
               </Select>
@@ -71,13 +103,15 @@ const AddPriceFrom = () => {
               label={t('enPrice')}
               variant="bordered"
               placeholder={t('writeHere')}
+              value={enPrice}
+              onChange={(e) => setEnPrice(e.target.value)}
               className="flex-1"
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
             />
           </div>
 
-          <DashboardButton titleAr="اضافة" titleEn="Add" />
+          <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit} />
         </div>
       </div>
     </div>
