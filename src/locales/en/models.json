@@ -82,5 +82,6 @@
     "engineSizeActivated": "Engine size activated successfully",
     "engineSizeDeactivated": "Engine size deactivated successfully",
 
-    "priceAddedSuccessfully": "Price added successfully"
+    "priceAddedSuccessfully": "Price added successfully",
+    "priceDeleted": "Price deleted successfully"
 }

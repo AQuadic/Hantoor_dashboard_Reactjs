@@ -15,6 +15,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getPriceFrom, PriceFrom } from "@/api/models/pricefrom/getPriceFrom";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
+import toast from "react-hot-toast";
 
 interface PriceFromTableProps {
   search?: string;
@@ -23,7 +25,7 @@ interface PriceFromTableProps {
 export function PriceFromTable({ search = "" }: PriceFromTableProps) {
   const { t } = useTranslation("models");
 
-  const { data, isLoading } = useQuery<PriceFrom[]>({
+  const { data, isLoading, refetch } = useQuery<PriceFrom[]>({
     queryKey: ["pricefrom"],
     queryFn: () => getPriceFrom({ pagination: false }),
   });
@@ -33,6 +35,12 @@ export function PriceFromTable({ search = "" }: PriceFromTableProps) {
   const filtered = priceFromList.filter((item) =>
     item.name?.toLowerCase().includes(search.toLowerCase())
   );
+
+  const handleDelete = async (id: number) => {
+    await deletePriceFrom(id);
+    toast.success(t("priceDeleted"));
+    refetch();
+  };
 
   if (isLoading) return <Loading />
   if (!data) return <NoData />
@@ -59,7 +67,7 @@ export function PriceFromTable({ search = "" }: PriceFromTableProps) {
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
+                <TableDeleteButton handleDelete={() => handleDelete(price.id)} />
               </div>
             </TableCell>
           </TableRow>
