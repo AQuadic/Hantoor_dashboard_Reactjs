@@ -14,10 +14,10 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
-import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 import { getPriceTo, PriceToResponse } from "@/api/models/priceto/getPriceTo";
+import { deletePriceTo } from "@/api/models/priceto/deletePriceTo";
 
 interface PriceToTableProps {
   search?: string;
@@ -55,7 +55,7 @@ const priceToList = data?.data ?? [];
   }, [data, setPagination]);
 
   const handleDelete = async (id: number) => {
-    await deletePriceFrom(id);
+    await deletePriceTo(id);
     toast.success(t("priceDeleted"));
     refetch();
   };
