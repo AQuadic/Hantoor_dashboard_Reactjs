@@ -3,45 +3,44 @@ import Avatar from "/images/avatar.svg";
 import Link from "@/components/icons/chats/Link";
 import AvatarIcon from "@/components/icons/chats/Avatar";
 import SendIcon from "@/components/icons/chats/SendIcon";
+import { useQuery } from "@tanstack/react-query";
+import { getConversationById } from "@/api/support/getConversationById";
+import Loading from "@/components/general/Loading";
 
-const SupportMsgsConversation = () => {
-    const { t } = useTranslation("header");
-    const messages = [
-        {
-        id: 1,
-        name: "مصطفى محمود",
-        time: "3:02PM",
-        text: "لوريم إيبسوم طريقة كتابة النصوص في النشر والتصميم الجرافيك",
-        isSender: true,
-        },
-        {
-        id: 2,
-        name: "مصطفى محمود",
-        time: "3:02PM",
-        text: "لوريم إيبسوم طريقة كتابة النصوص في النشر والتصميم الجرافيك",
-        isSender: false,
-        },
-        {
-        id: 3,
-        name: "مصطفى محمود",
-        time: "3:02PM",
-        text: "لوريم إيبسوم طريقة كتابة النصوص في النشر والتصميم الجرافيك",
-        isSender: true,
-        },
-        {
-        id: 4,
-        name: "مصطفى محمود",
-        time: "3:02PM",
-        text: "لوريم إيبسوم طريقة كتابة النصوص في النشر والتصميم الجرافيك",
-        isSender: false,
-        },
-    ];
+interface SupportMsgsConversationProps {
+  conversationId: number;
+}
+
+const SupportMsgsConversation = ({ conversationId }: SupportMsgsConversationProps) => {
+  const { t } = useTranslation("header");
+
+  const { data: conversation, isLoading, error } = useQuery({
+    queryKey: ["conversation", conversationId],
+    queryFn: () => getConversationById(conversationId),
+    enabled: !!conversationId,
+  });
+
+  if (isLoading) return <Loading />;
+
+  if (error || !conversation?.notes) {
+    return <div className="text-center py-10">{t("noData")}</div>;
+  }
+
+  const messages = [
+    {
+      id: conversation.id,
+      name: conversation.name || "User",
+      text: conversation.notes,
+      time: new Date(conversation.created_at).toLocaleTimeString(),
+      isSender: true,
+    },
+  ];
 
     return (
-        <section className="relative py-4 px-4 max-w-2xl mx-auto">
-        <h2 className="text-[#071739] text-[23px] font-bold text-center">{t('conversation')}</h2>
+        <section className="relative py-4 px-4 h-full flex flex-col">
+        <h2 className="text-[#071739] text-[23px] font-bold text-center">{t("conversation")}</h2>
         <hr className="my-4"/>
-        <div className="space-y-6 mb-52">
+        <div className="flex-1 overflow-y-auto space-y-6 pb-4">
             {messages.map((msg) => (
             <div
                 key={msg.id}
@@ -74,16 +73,16 @@ const SupportMsgsConversation = () => {
             ))}
         </div>
 
-        <div className="relative left-0 w-full flex justify-center gap-3 px-4">
+        <div className="flex gap-3 items-center mt-auto relative">
             <input
             type="text"
-            className="w-full h-12 bg-[#F6F6F6] rounded-3xl px-4 border border-[#DCDCDC]"
+            className="flex-1 h-12 bg-[#F6F6F6] rounded-3xl px-12 border border-[#DCDCDC]"
             placeholder="اكتب رسالتك..."
             />
-            <div className="absolute left-28 top-4">
+            <div className="absolute left-28">
                 <Link />
             </div>
-            <div className="absolute left-20 top-4">
+            <div className="absolute left-20">
                 <AvatarIcon />
             </div>
             <SendIcon />
