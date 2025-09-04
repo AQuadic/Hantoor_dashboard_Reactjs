@@ -9,6 +9,7 @@ export interface Conversation {
   phone: string;
   name:string;
   notes: string
+  is_active: number
 }
 
 export interface SupportConversationsResponse {
