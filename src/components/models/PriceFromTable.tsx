@@ -11,6 +11,10 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getPriceFrom, PriceFrom } from "@/api/models/pricefrom/getPriceFrom";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
 
 interface PriceFromTableProps {
   search?: string;
@@ -18,24 +22,21 @@ interface PriceFromTableProps {
 
 export function PriceFromTable({ search = "" }: PriceFromTableProps) {
   const { t } = useTranslation("models");
-  const pricefrom = [
-    {
-      id: 1,
-      price: "100.000 درهم",
-    },
-    {
-      id: 1,
-      price: "200.000 درهم",
-    },
-    {
-      id: 1,
-      price: "300.000 درهم",
-    },
-  ];
 
-  const filtered = pricefrom.filter((item) =>
-    item.price.toLowerCase().includes(search.toLowerCase())
+  const { data, isLoading } = useQuery<PriceFrom[]>({
+    queryKey: ["pricefrom"],
+    queryFn: () => getPriceFrom({ pagination: false }),
+  });
+
+  const priceFromList: PriceFrom[] = data ?? [];
+
+  const filtered = priceFromList.filter((item) =>
+    item.name?.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (isLoading) return <Loading />
+  if (!data) return <NoData />
+
 
   return (
     <Table>
@@ -50,9 +51,9 @@ export function PriceFromTable({ search = "" }: PriceFromTableProps) {
         {filtered.map((price, index) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell className="w-full">{price.price}</TableCell>
+            <TableCell className="w-full">{price.name}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch />
+              <Switch defaultSelected={!!price.is_active} />
               <Link to={`/price-from/edit/${price.id}`}>
                 <Edit />
               </Link>
