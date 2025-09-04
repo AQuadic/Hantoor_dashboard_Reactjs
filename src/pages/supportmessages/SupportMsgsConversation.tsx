@@ -1,5 +1,8 @@
 import { useTranslation } from "react-i18next";
 import Avatar from "/images/avatar.svg";
+import Link from "@/components/icons/chats/Link";
+import AvatarIcon from "@/components/icons/chats/Avatar";
+import SendIcon from "@/components/icons/chats/SendIcon";
 
 const SupportMsgsConversation = () => {
     const { t } = useTranslation("header");
@@ -35,10 +38,10 @@ const SupportMsgsConversation = () => {
     ];
 
     return (
-        <section className="py-4 px-4 max-w-2xl mx-auto">
+        <section className="relative py-4 px-4 max-w-2xl mx-auto">
         <h2 className="text-[#071739] text-[23px] font-bold text-center">{t('conversation')}</h2>
         <hr className="my-4"/>
-        <div className="space-y-6">
+        <div className="space-y-6 mb-52">
             {messages.map((msg) => (
             <div
                 key={msg.id}
@@ -69,6 +72,21 @@ const SupportMsgsConversation = () => {
                 </div>
             </div>
             ))}
+        </div>
+
+        <div className="relative left-0 w-full flex justify-center gap-3 px-4">
+            <input
+            type="text"
+            className="w-full h-12 bg-[#F6F6F6] rounded-3xl px-4 border border-[#DCDCDC]"
+            placeholder="اكتب رسالتك..."
+            />
+            <div className="absolute left-28 top-4">
+                <Link />
+            </div>
+            <div className="absolute left-20 top-4">
+                <AvatarIcon />
+            </div>
+            <SendIcon />
         </div>
         </section>
     );
