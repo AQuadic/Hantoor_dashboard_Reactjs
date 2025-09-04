@@ -28,5 +28,7 @@
 
     "faqDeleted": "Faq deleted successfully",
     "addedSuccessfully": "Added successfully",
-    "editedSuccessfully": "Edited successfully"
+    "editedSuccessfully": "Edited successfully",
+
+    "conversationDeleted": "Conversation deleted successfully"
 }

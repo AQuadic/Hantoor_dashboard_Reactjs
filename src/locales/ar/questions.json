@@ -29,5 +29,7 @@
 
     "faqDeleted": "تم حذف السؤال بنجاح",
     "addedSuccessfully": "تمت الاضافة بنجاح",
-    "editedSuccessfully": "تم التعديل بنجاح"
+    "editedSuccessfully": "تم التعديل بنجاح",
+
+    "conversationDeleted": "تم حذف المحادثة بنجاح"
 }
