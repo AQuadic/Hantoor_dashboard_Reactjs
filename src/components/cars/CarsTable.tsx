@@ -227,12 +227,11 @@ const CarsTable = ({
   };
 
   const getVehicleImage = (vehicle: Vehicle) => {
-    if (vehicle.image && !vehicle.image.startsWith("http")) {
-      // Clean double slashes and add base URL if needed
+    if (typeof vehicle.image === "string" && !vehicle.image.startsWith("http")) {
       const cleanPath = vehicle.image.replace(/\/+/g, "/");
       return cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`;
     }
-    return vehicle.image || carImage;
+    return typeof vehicle.image === "string" && vehicle.image ? vehicle.image : carImage;
   };
 
   // Helper function to safely get vehicle name (API returns name as string or VehicleName object)
