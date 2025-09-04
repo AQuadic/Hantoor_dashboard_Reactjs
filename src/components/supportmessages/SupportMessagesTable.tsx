@@ -9,6 +9,8 @@ import { getSupportConversations, Conversation, SupportConversationsResponse } f
 import { useState } from "react";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import toast from "react-hot-toast";
+import { deleteConversation } from "@/api/support/deleteConversation";
 
 interface SupportMessagesTableProps {
   page: number;
@@ -19,10 +21,16 @@ const SupportMessagesTable = ({ page, itemsPerPage }: SupportMessagesTableProps)
     const { t } = useTranslation("questions");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
 
-  const { data, isLoading } = useQuery<SupportConversationsResponse, Error>({
+  const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Error>({
     queryKey: ["supportConversations", page, itemsPerPage],
     queryFn: () => getSupportConversations({ page, per_page: itemsPerPage }),
   });
+
+    const handleDelete = async (id: number) => {
+    await deleteConversation(id);
+    toast.success(t("conversationDeleted"));
+    refetch();
+};
 
   if (isLoading) return <Loading />
   const supportMessages: Conversation[] = data?.data || [];
@@ -82,7 +90,7 @@ const SupportMessagesTable = ({ page, itemsPerPage }: SupportMessagesTableProps)
                     </button>
 
                     <div className="mt-2">
-                        <TableDeleteButton handleDelete={() => {}} />
+                        <TableDeleteButton handleDelete={() => handleDelete(message.id)} />
                     </div>
                     </TableCell>
                 </TableRow>
