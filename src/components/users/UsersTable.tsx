@@ -128,7 +128,7 @@ export function UserTable({ searchTerm = "", page, perPage, onDataLoaded }: User
               <Link to={`/users/edit/${user.id}`}>
                 <Edit />
               </Link>
-              <Link to="change-password">
+              <Link to={`/users/change-password/${user.id}`}>
                 <Password />
               </Link>
               <TableDeleteButton handleDelete={() => handleDelete(user.id)} />
