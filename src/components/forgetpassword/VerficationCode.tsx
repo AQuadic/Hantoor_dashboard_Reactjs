@@ -1,11 +1,80 @@
-import React from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next';
-import { Form, InputOtp } from '@heroui/react';
-import { Link } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 import DashboardButton from '../general/dashboard/DashboardButton';
+import toast from 'react-hot-toast';
+import { verifyAdmin, VerifyRequest } from '@/api/password/verify';
 
-const VerficationCode = () => {
-    const { t } = useTranslation("login");
+interface LocationState {
+  email?: string;
+  phone?: string;
+  phoneCountry?: string;
+}
+
+const VerificationCode = () => {
+  const { t } = useTranslation("login");
+  const navigate = useNavigate();
+  const location = useLocation();
+  const locationState = location.state as LocationState | null;
+
+  const [email] = useState(locationState?.email || localStorage.getItem('resetEmail') || '');
+  const [phone] = useState(locationState?.phone || localStorage.getItem('resetPhone') || '');
+  const [phoneCountry] = useState(locationState?.phoneCountry || localStorage.getItem('resetPhoneCountry') || 'EG');
+
+  const [otp, setOtp] = useState(['', '', '', '']);
+  const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
+
+  useEffect(() => {
+    inputsRef.current[0]?.focus();
+  }, []);
+
+  const handleChange = (index: number, value: string) => {
+    if (!/^\d*$/.test(value)) return;
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 3) {
+      inputsRef.current[index + 1]?.focus();
+    }
+  };
+
+const handleVerify = async () => {
+  const code = otp.join('');
+  if (code.length < 4) {
+    toast.error("Please enter the complete OTP code");
+    return;
+  }
+
+  const emailToSend = email?.trim() || undefined;
+  const phoneToSend = phone?.trim() || undefined;
+
+  if (!emailToSend && !phoneToSend) {
+    toast.error("Email or phone is required");
+    return;
+  }
+
+  const data: VerifyRequest = {
+    code,
+    type: "reset",
+    email: emailToSend,
+    phone: phoneToSend,
+    phone_country: phoneToSend ? phoneCountry : undefined,
+  };
+
+  try {
+    const response = await verifyAdmin(data);
+    toast.success(response.message || "Verification successful");
+
+    localStorage.removeItem('resetEmail');
+    localStorage.removeItem('resetPhone');
+    localStorage.removeItem('resetPhoneCountry');
+
+    navigate('/change-password');
+  } catch (error: any) {
+    toast.error(error.message || "Verification failed");
+  }
+};
 
     return (
     <section className="flex md:flex-row flex-col items-center justify-between gap-4 !bg-white">
@@ -15,36 +84,43 @@ const VerficationCode = () => {
             <div className="px-8 mx-auto lg:mt-0 mt-10">
                 <h1 className="text-[#1E1B1B] text-[30px] font-bold text-center">{t('forgetPassword')}</h1>
                 <p className="text-[#7D7D7D] text-[17px] text-center mt-[7px]">{t('codeSent')}</p>
-                <Form
-                    className="flex w-full flex-col items-start gap-4 mt-4.5"
-                    onSubmit={(e) => {
-                        e.preventDefault();
-                    }}
-                    >
-                    <InputOtp
-                        isRequired
-                        aria-label="OTP input field"
-                        length={4}
-                        name="otp"
-                        placeholder="Enter code"
-                        classNames={{
-                            segmentWrapper: "flex justify-center gap-2",
-                            segment: "md:w-[84px] w-[70px] h-[57px] border rounded text-center rounded-[12px] bg-white border border-[#E2E2E2] shadow-none",
-                        }}  
+
+                <div className="flex justify-center gap-2 mt-4">
+                  {otp.map((digit, index) => (
+                    <input
+                      key={index}
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={1}
+                      value={digit}
+                      ref={(el) => (inputsRef.current[index] = el)}
+                      onChange={(e) => handleChange(index, e.target.value)}
+                      className="md:w-[84px] w-[70px] h-[57px] text-center rounded-[12px] border border-[#E2E2E2] text-xl"
                     />
-                </Form>
-
-                <p className='text-[#7D7D7D] text-lg font-normal text-center mt-2'>00:45</p>
-
-                <div className='text-center mt-3 underline'>
-                    <Link to='/' className='text-[#2A32F8] text-[19px]'>{t('resend')}</Link>
+                  ))}
                 </div>
-                <Link to='/change-password' className="mt-[17px] flex items-center justify-center mx-auto">
-                    <DashboardButton titleAr={t('next')} titleEn='التالي' />
-                </Link>
-            </div>
-        </section>
+
+                <p className="text-[#7D7D7D] text-lg font-normal mt-2">00:45</p>
+
+                <div className="text-center mt-3 underline">
+                  <a
+                    href="#"
+                    className="text-[#2A32F8] text-[19px]"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      toast("Resend code clicked");
+                    }}
+                  >
+                    {t('resend')}
+                  </a>
+                </div>
+
+                <div className="mt-[17px] flex items-center justify-center mx-auto">
+                  <DashboardButton titleAr={t('next')} titleEn="التالي" onClick={handleVerify} />
+                </div>
+              </div>
+            </section>
     )
 }
 
-export default VerficationCode
+export default VerificationCode

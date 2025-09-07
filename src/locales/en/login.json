@@ -15,5 +15,6 @@
     "saveAndEnter": "Save and login",
     "emailRequired": "Email required",
     "passwordRequired": "Password required",
-    "recaptchaRequired": "Recaptcha required"
+    "recaptchaRequired": "Recaptcha required",
+    "resetPasswordSent": "Reset password sent"
 }

@@ -33,7 +33,14 @@ const ForgetPass = () => {
     try {
       await forgotPassword(data);
       toast.success(t('resetPasswordSent'));
-      navigate('/verification-code');
+
+      if (email) localStorage.setItem('resetEmail', email);
+      if (phone) localStorage.setItem('resetPhone', phone);
+      localStorage.setItem('resetPhoneCountry', phoneCountry);
+
+      navigate('/verification-code', {
+        state: { email, phone, phoneCountry }
+      });
     } catch (error: any) {
       toast.error(error.message || "Failed to send password reset");
     } finally {

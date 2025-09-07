@@ -15,5 +15,6 @@
     "saveAndEnter": "حفظ ودخول",
     "emailRequired": "البريد الإلكتروني مطلوب",
     "passwordRequired": "كلمة المرور مطلوبة",
-    "recaptchaRequired": "مطلوب إعادة التحقق"
+    "recaptchaRequired": "مطلوب إعادة التحقق",
+    "resetPasswordSent": "تم إرسال إعادة تعيين كلمة المرور"
 }
