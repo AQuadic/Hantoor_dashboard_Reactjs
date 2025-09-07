@@ -3,7 +3,6 @@ import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
-import ChangeLanguage from "../general/ChangeLanguage";
 import SearchBar from "../general/dashboard/SearchBar";
 
 interface BrandsHeaderProps {
@@ -50,7 +49,6 @@ const BrandsHeader: React.FC<BrandsHeaderProps> = ({
             variant="add"
           />
         </Link>
-        <ChangeLanguage />
       </div>
     </div>
   );

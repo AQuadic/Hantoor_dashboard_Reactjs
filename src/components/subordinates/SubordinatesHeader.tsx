@@ -3,16 +3,13 @@ import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
-import ChangeLanguage from "../general/ChangeLanguage";
 import SearchBar from "../general/dashboard/SearchBar";
 import TabsFilter from "../general/dashboard/TabsFilter";
 import { useTranslation } from "react-i18next";
 
 interface SubordinatesHeaderProps {
   selectedFilter: "Subordinates" | "Permissions";
-  setSelectedFilter: React.Dispatch<
-    React.SetStateAction<"Subordinates" | "Permissions">
-  >;
+  setSelectedFilter: React.Dispatch<React.SetStateAction<"Subordinates" | "Permissions">>;
   setTermAr: React.Dispatch<React.SetStateAction<string>>;
   setTermEn: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -55,7 +52,7 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
           <SearchBar
             termAr={""}
             termEn={""}
-            placeholder={t("searchBy")}
+            placeholder={t('searchBy')}
             setTermAr={setTermAr}
             setTermEn={setTermEn}
           />
@@ -65,22 +62,19 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
         </div>
         {selectedFilter === "Subordinates" ? (
           <Link to="/subordinates/add">
-            <DashboardButton
-              titleEn={"Add a new Subordinate"}
-              titleAr={"اضافة مسؤول فرعي جديد"}
-              variant="add"
-            />
+            <DashboardButton 
+              titleEn={"Add a new Subordinate"} 
+              titleAr={"اضافة مسؤول فرعي جديد"} 
+              variant="add" />
           </Link>
         ) : (
           <Link to="/subordinates/permissions/add">
-            <DashboardButton
+            <DashboardButton 
               titleEn={"Add new permission"}
-              titleAr={"اضافة صلاحية جديدة "}
-              variant="add"
-            />
+              titleAr={"اضافة صلاحية جديدة "}  
+              variant="add" />
           </Link>
         )}
-        <ChangeLanguage />
       </div>
     </div>
   );
