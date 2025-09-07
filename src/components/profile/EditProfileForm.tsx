@@ -5,6 +5,9 @@ import DashboardButton from "../general/dashboard/DashboardButton";
 import { countries } from "countries-list";
 import MobileInput from "../general/MobileInput";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getCurrentAdmin, GetCurrentAdminResponse } from "@/api/profile/getProfile";
+import Loading from "../general/Loading";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -29,6 +32,26 @@ const EditProfileForm = ({
     getCountryByIso2("EG")
   );
   const [phone, setPhone] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const { data, isLoading } = useQuery<GetCurrentAdminResponse>({
+    queryKey: ["currentAdmin"],
+    queryFn: getCurrentAdmin,
+  });
+
+  React.useEffect(() => {
+    if (data) {
+      setName(data.name || "");
+      setEmail(data.email || "");
+      if (data.phone) setPhone(data.phone);
+      if (data.phone_country) setSelectedCountry(getCountryByIso2(data.phone_country || "EG"));
+    }
+  }, [data]);
+
+
+  if (isLoading) return <Loading />
+
   return (
     <form className="p-8">
       <div className="p-8 bg-white rounded-2xl ">
@@ -45,6 +68,8 @@ const EditProfileForm = ({
             placeholder="محمد احمد"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <Input
             label={t("email")}
@@ -52,6 +77,8 @@ const EditProfileForm = ({
             placeholder="username@mail.com"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <MobileInput
             label={t("phone")}
