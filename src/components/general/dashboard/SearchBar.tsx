@@ -7,7 +7,8 @@ interface SearchBarProps {
   termEn: string;
   setTermAr: (value: string) => void;
   setTermEn: (value: string) => void;
-  placeholder?: string;
+  placeholderAr?: string;
+  placeholderEn?: string;
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
@@ -15,15 +16,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
   termEn,
   setTermAr,
   setTermEn,
-  placeholder = "Search...",
+  placeholderAr = "ابحث...",
+  placeholderEn = "Search...",
 }) => {
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
 
-  // Local state for instant input update
-  const [inputValue, setInputValue] = React.useState(
-    isArabic ? termAr : termEn
-  );
+  // Local state for instant input update, start with empty value
+  const [inputValue, setInputValue] = React.useState("");
 
   // Sync local state with parent value if language or parent value changes
   React.useEffect(() => {
@@ -45,6 +45,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
+
+  const placeholder = isArabic ? placeholderAr : placeholderEn;
 
   return (
     <div className="flex items-center border rounded-full border-gray-300 px-6 py-2 bg-[#F3F6F9]">

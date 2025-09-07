@@ -1,8 +1,8 @@
 import { useLocation, useParams, Link } from "react-router-dom";
-import DashboardDatePicker from '@/components/general/dashboard/DashboardDatePicker';
-import DashboardHeader from '@/components/general/dashboard/DashboardHeader';
-import SearchBar from '@/components/general/dashboard/SearchBar';
-import React from 'react';
+import DashboardDatePicker from "@/components/general/dashboard/DashboardDatePicker";
+import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
+import SearchBar from "@/components/general/dashboard/SearchBar";
+import React from "react";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import BanksTable from "@/components/financing/BanksTable";
 
@@ -29,7 +29,14 @@ const FinancingDetails = () => {
 
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
           <div className="flex-1">
-            <SearchBar termAr="ابحث بالاسم" termEn="Search by name" setTermAr={() => {}} setTermEn={() => {}} />
+            <SearchBar
+              termAr=""
+              termEn=""
+              setTermAr={() => {}}
+              setTermEn={() => {}}
+              placeholderAr="ابحث بالاسم"
+              placeholderEn="Search by name"
+            />
           </div>
           <div className="flex-1">
             <DashboardDatePicker />
@@ -37,7 +44,11 @@ const FinancingDetails = () => {
 
           {countryId && (
             <Link to={`/bank/add/${countryId}`}>
-              <DashboardButton titleAr="اضافة بنك جديد" titleEn="Add a new bank" variant="add" />
+              <DashboardButton
+                titleAr="اضافة بنك جديد"
+                titleEn="Add a new bank"
+                variant="add"
+              />
             </Link>
           )}
         </div>
