@@ -26,7 +26,7 @@ const AddNotification = () => {
   const [recieverType, setRecieverType] = useState<"all" | "selected">("all");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const navigate = useNavigate ();
-
+  const [search, setSearch] = useState("");
   const { data: countriesData, isLoading: countriesLoading } = useQuery({
     queryKey: ["countries"],
     queryFn: () => getCountries(),
@@ -38,15 +38,14 @@ const AddNotification = () => {
   ];
 
   const { data: usersData } = useQuery({
-  queryKey: ["admin-users", selectedCountry?.id],
+  queryKey: ["admin-users", selectedCountry?.id, search],
   queryFn: () =>
     getAdminUsers({
       country_id: selectedCountry?.id,
+      search,
     }),
     enabled: !!selectedCountry,
   });
-
-
 
   const handleSend = async () => {
     if (!selectedCountry) {
@@ -211,6 +210,8 @@ const AddNotification = () => {
             <input
               type="text"
               placeholder="ابحث..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               className="bg-[#F3F6F9] w-full pl-4 pr-10 py-[10px] text-sm text-right placeholder-[#606C7E] border border-[#0000001A] rounded-[10px] focus:outline-none"
             />
             <svg
