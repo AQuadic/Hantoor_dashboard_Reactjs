@@ -74,7 +74,7 @@ const AddUsers = () => {
           { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
           { titleAr: "المستخدمين", titleEn: "Users", link: "/users" },
           {
-            titleAr: "إضافة مستخدم جدبد",
+            titleAr: "إضافة مستخدم جديد",
             titleEn: "Add a new user",
             link: "/dashboard/addUsers",
           },
