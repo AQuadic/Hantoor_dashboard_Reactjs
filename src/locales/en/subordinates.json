@@ -22,5 +22,6 @@
     "adminActivated": "Admin activated successfully",
     "adminDeactivated": "Admin deactivated successfully",
     "searchBy": "Search by name, phone number, email",
-    "adminDeleted": "Admin deleted successfully"
+    "adminDeleted": "Admin deleted successfully",
+    "fillAllFieldes": "Please fill all fields"
 }

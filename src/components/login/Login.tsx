@@ -1,11 +1,10 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Email from "../icons/login/Email";
 import { Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@heroui/react";
-import ReCAPTCHA from "react-google-recaptcha";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import { useAuthStore } from "@/store/useAuthStore";
 
@@ -17,14 +16,12 @@ const Login = () => {
   const storeLoading = useAuthStore((state) => state.loading);
   const { t } = useTranslation("login");
   const navigate = useNavigate();
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   // Form state
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
   // UI state
   const [errors, setErrors] = useState<Record<string, string | null>>({});
@@ -46,11 +43,6 @@ const Login = () => {
         t("passwordTooShort") || "Password must be at least 6 characters";
     }
 
-    if (!recaptchaToken) {
-      newErrors.recaptcha =
-        t("recaptchaRequired") || "Please complete the reCAPTCHA";
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -66,7 +58,6 @@ const Login = () => {
       email,
       password,
       rememberMe,
-      recaptchaToken,
     };
 
     try {
@@ -81,45 +72,15 @@ const Login = () => {
         setErrors({
           general: "Invalid email or password",
         });
-        resetCaptcha();
       }
     } catch (error) {
       console.error("Login error:", error);
       setErrors({
         general: "Invalid email or password",
       });
-      resetCaptcha();
     }
   };
 
-  const onRecaptchaChange = (token: string | null) => {
-    setRecaptchaToken(token);
-    if (errors.recaptcha) {
-      setErrors((prev) => ({ ...prev, recaptcha: null }));
-    }
-  };
-
-  const onRecaptchaErrored = () => {
-    setRecaptchaToken(null);
-    setErrors((prev) => ({
-      ...prev,
-      recaptcha: t("recaptchaError") || "reCAPTCHA error. Please try again.",
-    }));
-  };
-
-  const onRecaptchaExpired = () => {
-    setRecaptchaToken(null);
-    setErrors((prev) => ({
-      ...prev,
-      recaptcha:
-        t("recaptchaExpired") || "reCAPTCHA expired. Please try again.",
-    }));
-  };
-
-  const resetCaptcha = () => {
-    recaptchaRef.current?.reset();
-    setRecaptchaToken(null);
-  };
 
   return (
     <section className="flex md:flex-row flex-col items-center justify-between gap-4 !bg-white">
@@ -217,27 +178,6 @@ const Login = () => {
               {t("rememberMe")}
             </p>
           </div>
-
-          {/* reCAPTCHA */}
-          <div className="mt-4 flex items-center justify-center">
-            {/*
-              Google reCAPTCHA test key is used for localhost development only.
-              This will show a "for testing only" message and is not valid for production.
-              For production, replace with your own site key from Google reCAPTCHA admin.
-            */}
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
-              onChange={onRecaptchaChange}
-              onErrored={onRecaptchaErrored}
-              onExpired={onRecaptchaExpired}
-            />
-          </div>
-          {errors.recaptcha && (
-            <p className="text-red-500 text-sm mt-1 text-center">
-              {errors.recaptcha}
-            </p>
-          )}
 
           {/* Login button */}
           <div className="flex items-center justify-center mt-[17px]">

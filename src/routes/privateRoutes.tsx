@@ -91,7 +91,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <EditUsers />,
   },
   {
-    path: "/users/change-password",
+    path: "/users/change-password/:id",
     element: <ChangePassword />,
   },
   // Brands routes - flattened

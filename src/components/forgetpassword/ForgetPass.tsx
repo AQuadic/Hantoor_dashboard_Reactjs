@@ -72,7 +72,7 @@ const ForgetPass = () => {
                     </div>
                 </div>
 
-                <div className="text-center mt-[17px]">
+                <div className="text-center flex justify-center mt-[17px]">
                 <DashboardButton titleAr="التالي" titleEn='Next' onClick={handleSubmit} />
             </div>
             </div>

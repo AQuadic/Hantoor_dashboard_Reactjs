@@ -4,7 +4,6 @@ export interface LoginPayload {
   email: string;
   password: string;
   rememberMe: boolean;
-  recaptchaToken: string | null;
 }
 
 export interface LoginResponse {
