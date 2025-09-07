@@ -60,6 +60,18 @@ export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: Sub
     }
   };
 
+  const formatDateTime = (dateStr: string | null) => {
+    if (!dateStr) return "-";
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+
+    return `${day}/${month}/${year} ${hours}:${minutes}`;
+  };
+
   if (isLoading) return <Loading />;
   if (!data?.data || data.data.length === 0) return <NoData />;
 
@@ -99,9 +111,9 @@ export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: Sub
             <TableCell>{admin.name}</TableCell>
             <TableCell>{admin.phone || "-"}</TableCell>
             <TableCell>{admin.email}</TableCell>
-            <TableCell>{admin.created_at}</TableCell>
+            <TableCell>{formatDateTime(admin.created_at)}</TableCell>
             <TableCell>-</TableCell>
-            <TableCell>{admin.updated_at}</TableCell>
+            <TableCell>{formatDateTime(admin.updated_at)}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch
                 isSelected={!!admin.isActive}
