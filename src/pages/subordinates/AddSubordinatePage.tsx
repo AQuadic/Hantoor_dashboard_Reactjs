@@ -70,6 +70,11 @@ const AddSubordinatePage = () => {
   }, [isEdit, managerId]);
 
   const handleSubmit = async () => {
+    if (!name.trim() || !phone.trim() || !email.trim() || (!isEdit && (!password || !confirmPassword))) {
+      toast.error(t("fillAllFieldes"));
+      return;
+    }
+
     if (!isEdit && password !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
