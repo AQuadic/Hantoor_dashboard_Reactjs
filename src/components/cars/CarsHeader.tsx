@@ -30,7 +30,8 @@ const CarsHeader = ({ searchTerm, setSearchTerm }: CarsHeaderProps) => {
             termEn={searchTerm || ""}
             setTermAr={setSearchTerm || (() => {})}
             setTermEn={setSearchTerm || (() => {})}
-            placeholder="ابحث باسم السيارة / اسم الوكيل"
+            placeholderAr="ابحث باسم السيارة / اسم الوكيل"
+            placeholderEn="Search by car name / agent name"
           />
         </div>
         <div className="flex-1">

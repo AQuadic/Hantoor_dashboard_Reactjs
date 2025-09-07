@@ -208,7 +208,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <SupportMessagesPage />,
   },
   {
-    path: "/support-messages/view",
+    path: "/support-messages/view/:id",
     element: <SupportMsgsConversation />,
   },
 

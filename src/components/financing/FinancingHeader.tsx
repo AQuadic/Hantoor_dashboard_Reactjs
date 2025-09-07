@@ -2,14 +2,12 @@ import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 
 interface FinancingHeaderProps {
   onSearch: (term: string) => void;
 }
 
 const FinancingHeader = ({ onSearch }: FinancingHeaderProps) => {
-  const { t } = useTranslation("financing");
   const [searchTermAr, setSearchTermAr] = useState("");
   const [searchTermEn, setSearchTermEn] = useState("");
 
@@ -41,7 +39,8 @@ const FinancingHeader = ({ onSearch }: FinancingHeaderProps) => {
             termEn={searchTermEn}
             setTermAr={handleSearchChangeAr}
             setTermEn={handleSearchChangeEn}
-            placeholder={t("searchByName")}
+            placeholderAr="ابحث بالاسم"
+            placeholderEn="Search by name"
           />
         </div>
         <div className="flex-1">

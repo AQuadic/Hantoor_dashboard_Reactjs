@@ -2,7 +2,6 @@ import React from "react";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
-import { useTranslation } from "react-i18next";
 
 interface ChatHeaderProps {
   setSearchTerm?: (term: string) => void;
@@ -13,8 +12,6 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
   setSearchTerm,
   searchTerm,
 }) => {
-  const { t } = useTranslation("chats");
-
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -33,7 +30,8 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
             termEn={searchTerm || ""}
             setTermAr={setSearchTerm || (() => {})}
             setTermEn={setSearchTerm || (() => {})}
-            placeholder={t("searchByName") || "Search by name"}
+            placeholderAr="ابحث بالاسم"
+            placeholderEn="Search by name"
           />
         </div>
         <div className="flex-1">

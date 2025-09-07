@@ -36,7 +36,8 @@ const BrandsHeader: React.FC<BrandsHeaderProps> = ({
             termEn={termEn}
             setTermAr={setTermAr}
             setTermEn={setTermEn}
-            placeholder="ابحث بالاسم / Search by name"
+            placeholderAr="ابحث بالاسم"
+            placeholderEn="Search by name"
           />
         </div>
         <div className="flex-1">

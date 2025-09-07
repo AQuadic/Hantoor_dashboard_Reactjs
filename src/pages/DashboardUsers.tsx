@@ -5,18 +5,16 @@ import SearchBar from "@/components/general/dashboard/SearchBar";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import UserSelects from "@/components/users/UserSelects";
 import { UserTable } from "@/components/users/UsersTable";
-import { useTranslation } from "react-i18next";
+import { AdminUsersResponse } from "@/api/users/getUsers";
 import { Link } from "react-router";
 import { useState } from "react";
 
 const DashboardUsers = () => {
-  const { t } = useTranslation("users");
-
   const [searchTermAr, setSearchTermAr] = useState("");
   const [searchTermEn, setSearchTermEn] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
-  const [meta, setMeta] = useState<any>(null);
+  const [meta, setMeta] = useState<AdminUsersResponse["meta"] | null>(null);
 
   const activeSearchTerm = searchTermEn || searchTermAr;
 
@@ -41,7 +39,8 @@ const DashboardUsers = () => {
             <SearchBar
               termAr={searchTermAr}
               termEn={searchTermEn}
-              placeholder={t("searchBy")}
+              placeholderAr="ابحث"
+              placeholderEn="Search"
               setTermAr={setSearchTermAr}
               setTermEn={setSearchTermEn}
             />
@@ -67,7 +66,7 @@ const DashboardUsers = () => {
           perPage={perPage}
           onDataLoaded={setMeta}
         />
-        {meta && meta.total > 0 && (
+        {meta && (meta.total ?? 0) > 0 && (
           <TablePagination
             currentPage={meta.current_page}
             setCurrentPage={setCurrentPage}

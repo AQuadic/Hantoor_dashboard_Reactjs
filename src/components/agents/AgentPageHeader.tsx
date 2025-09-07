@@ -3,14 +3,12 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardButton from "../general/dashboard/DashboardButton";
-import { useTranslation } from "react-i18next";
 
 interface AgentPageHeaderProps {
   setSearchTerm: (term: string) => void;
 }
 
 const AgentPageHeader: React.FC<AgentPageHeaderProps> = ({ setSearchTerm }) => {
-  const { t } = useTranslation("agents");
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -28,7 +26,8 @@ const AgentPageHeader: React.FC<AgentPageHeaderProps> = ({ setSearchTerm }) => {
             termEn={""}
             setTermAr={setSearchTerm}
             setTermEn={setSearchTerm}
-            placeholder={t("searchPlaceholder", "ابحث بالاسم / Search by name")}
+            placeholderAr="ابحث بالاسم"
+            placeholderEn="Search by name"
           />
         </div>
         <div className="flex-1">

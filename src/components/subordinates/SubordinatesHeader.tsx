@@ -5,11 +5,12 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import TabsFilter from "../general/dashboard/TabsFilter";
-import { useTranslation } from "react-i18next";
 
 interface SubordinatesHeaderProps {
   selectedFilter: "Subordinates" | "Permissions";
-  setSelectedFilter: React.Dispatch<React.SetStateAction<"Subordinates" | "Permissions">>;
+  setSelectedFilter: React.Dispatch<
+    React.SetStateAction<"Subordinates" | "Permissions">
+  >;
   setTermAr: React.Dispatch<React.SetStateAction<string>>;
   setTermEn: React.Dispatch<React.SetStateAction<string>>;
 }
@@ -20,7 +21,6 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
   setTermAr,
   setTermEn,
 }) => {
-  const { t } = useTranslation("subordinates");
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -52,7 +52,8 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
           <SearchBar
             termAr={""}
             termEn={""}
-            placeholder={t('searchBy')}
+            placeholderAr="ابحث"
+            placeholderEn="Search"
             setTermAr={setTermAr}
             setTermEn={setTermEn}
           />
@@ -62,17 +63,19 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
         </div>
         {selectedFilter === "Subordinates" ? (
           <Link to="/subordinates/add">
-            <DashboardButton 
-              titleEn={"Add a new Subordinate"} 
-              titleAr={"اضافة مسؤول فرعي جديد"} 
-              variant="add" />
+            <DashboardButton
+              titleEn={"Add a new Subordinate"}
+              titleAr={"اضافة مسؤول فرعي جديد"}
+              variant="add"
+            />
           </Link>
         ) : (
           <Link to="/subordinates/permissions/add">
-            <DashboardButton 
+            <DashboardButton
               titleEn={"Add new permission"}
-              titleAr={"اضافة صلاحية جديدة "}  
-              variant="add" />
+              titleAr={"اضافة صلاحية جديدة "}
+              variant="add"
+            />
           </Link>
         )}
       </div>
