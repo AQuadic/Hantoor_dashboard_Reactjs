@@ -64,11 +64,12 @@ const handleVerify = async () => {
 
   try {
     const response = await verifyAdmin(data);
-    toast.success(response.message || "Verification successful");
 
-    localStorage.removeItem('resetEmail');
-    localStorage.removeItem('resetPhone');
-    localStorage.removeItem('resetPhoneCountry');
+    if (response.reset_token) {
+      localStorage.setItem('resetToken', response.reset_token);
+    }
+
+    toast.success(response.message || "Verification successful");
 
     navigate('/change-password');
   } catch (error: any) {
