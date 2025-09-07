@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useLocation } from 'react-router';
 import DashboardButton from '../general/dashboard/DashboardButton';
 import toast from 'react-hot-toast';
 import { verifyAdmin, VerifyRequest } from '@/api/password/verify';
+import { resend, ResendRequest as AdminResendRequest } from '@/api/password/resendcode';
+import { resend as resendUser } from '@/api/password/resendcode';
 
 interface LocationState {
   email?: string;
@@ -18,14 +20,30 @@ const VerificationCode = () => {
   const locationState = location.state as LocationState | null;
 
   const [email] = useState(locationState?.email || localStorage.getItem('resetEmail') || '');
-  const [phone] = useState(locationState?.phone || localStorage.getItem('resetPhone') || '');
+  const [phone, setPhone] = useState(locationState?.phone || localStorage.getItem('resetPhone') || '');
   const [phoneCountry] = useState(locationState?.phoneCountry || localStorage.getItem('resetPhoneCountry') || 'EG');
 
   const [otp, setOtp] = useState(['', '', '', '']);
   const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
 
+  const [resendTimer, setResendTimer] = useState(45);
+  const [resendDisabled, setResendDisabled] = useState(true);
+
   useEffect(() => {
     inputsRef.current[0]?.focus();
+
+    const interval = setInterval(() => {
+      setResendTimer(prev => {
+        if (prev <= 1) {
+          clearInterval(interval);
+          setResendDisabled(false);
+          return 45;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleChange = (index: number, value: string) => {
@@ -73,8 +91,57 @@ const handleVerify = async () => {
 
     navigate('/change-password');
   } catch (error: any) {
-    toast.error(error.message || "Verification failed");
+    toast.error(error?.response?.data?.message || error.message || "Verification failed");
   }
+};
+
+  const handleResend = async () => {
+  const emailToSend = email?.trim();
+  const phoneToSend = phone?.trim();
+
+  if (phoneToSend) {
+    const data: AdminResendRequest = {
+      phone: phoneToSend,
+      phone_country: phoneCountry,
+      type: "verify",
+      email: emailToSend,
+    };
+    try {
+      const response = await resend(data);
+      toast.success(response.message || "Verification code resent successfully");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed to resend code");
+    }
+  } else if (emailToSend) {
+    type UserResendRequest = {
+      email: string;
+      type: "verify" | "new";
+    };
+    const data: UserResendRequest = {
+      email: emailToSend,
+      type: "verify",
+    };
+    try {
+      const response = await resendUser(data);
+      toast.success(response.message || "Verification code resent successfully via email");
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed to resend code via email");
+    }
+  } else {
+    toast.error("Email or phone is required to resend code");
+  }
+
+  setResendDisabled(true);
+  let timer = 45;
+  const interval = setInterval(() => {
+    timer--;
+    setResendTimer(timer);
+    if (timer <= 0) {
+      clearInterval(interval);
+      setResendDisabled(false);
+      setResendTimer(45);
+    }
+  }, 1000);
 };
 
     return (
@@ -101,19 +168,16 @@ const handleVerify = async () => {
                   ))}
                 </div>
 
-                <p className="text-[#7D7D7D] text-lg font-normal mt-2">00:45</p>
+                <p className="text-[#7D7D7D] text-center text-lg font-normal mt-2">00:{resendTimer < 10 ? `0${resendTimer}` : resendTimer}</p>
 
                 <div className="text-center mt-3 underline">
-                  <a
-                    href="#"
-                    className="text-[#2A32F8] text-[19px]"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      toast("Resend code clicked");
-                    }}
+                  <button
+                    disabled={resendDisabled}
+                    className={`text-[19px] ${resendDisabled ? 'text-gray-400' : 'text-[#2A32F8]'}`}
+                    onClick={handleResend}
                   >
-                    {t('resend')}
-                  </a>
+                  {t('resend')}
+                  </button>
                 </div>
 
                 <div className="mt-[17px] flex items-center justify-center mx-auto">
