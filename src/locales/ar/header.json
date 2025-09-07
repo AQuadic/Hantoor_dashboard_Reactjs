@@ -10,5 +10,6 @@
     "notes": "الملاحظات",
     "clientData": "بيانات العميل",
 
-    "noDataAvailable": "لا توجد بيانات متاحة"
+    "noDataAvailable": "لا توجد بيانات متاحة",
+    "Unknown": "غير معروف"
 }

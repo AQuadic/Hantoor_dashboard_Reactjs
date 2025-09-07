@@ -1,5 +1,8 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { getAdminStats, AdminStatsResponse } from "@/api/stats/getStats";
+import Loading from "../general/Loading";
 
 interface UserData {
   label: string;
@@ -13,15 +16,39 @@ interface CartesianPoint {
   y: number;
 }
 
+const COLORS = ["#2A32F8", "#FEA54D", "#37BF40", "#47BDF8", "#8948E6", "#BE2E8E"];
+
 const NOUsers = () => {
-  const data: UserData[] = [
-    { label: "السعودية", value: 130, color: "#2A32F8", percentage: 18.6 },
-    { label: "مصر", value: 120, color: "#FEA54D", percentage: 17.2 },
-    { label: "الإمارات", value: 230, color: "#37BF40", percentage: 32.9 },
-    { label: "الكويت", value: 73, color: "#47BDF8", percentage: 10.5 },
-    { label: "قطر", value: 90, color: "#8948E6", percentage: 12.9 },
-    { label: "البحرين", value: 55, color: "#BE2E8E", percentage: 7.9 },
-  ];
+  const { t, i18n } = useTranslation("header");
+  const isArabic = i18n.language === "ar";
+
+  const { data: stats, isLoading } = useQuery<AdminStatsResponse>({
+    queryKey: ["adminStats"],
+    queryFn: getAdminStats,
+  });
+
+  const data: UserData[] = useMemo(() => {
+    if (!stats?.users_per_country) return [];
+
+    const total = stats.users_per_country.reduce(
+      (sum, item) => sum + item.user_count,
+      0
+    );
+
+    return stats.users_per_country.map((item, index) => {
+      const label =
+        item.country?.name?.[isArabic ? "ar" : "en"] ?? t("Unknown");
+      const value = item.user_count;
+      const percentage = total > 0 ? (value / total) * 100 : 0;
+
+      return {
+        label,
+        value,
+        color: COLORS[index % COLORS.length],
+        percentage,
+      };
+    });
+  }, [stats, isArabic, t]);
 
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
@@ -95,7 +122,7 @@ const NOUsers = () => {
     };
   });
 
-  const { t } = useTranslation("header");
+  if (isLoading) return <Loading />
 
   return (
     <section className="w-[251px] h-full bg-[#FFFFFF] rounded-[15px] mt-[15px] p-6">
@@ -126,8 +153,8 @@ const NOUsers = () => {
             className="absolute inset-0 flex items-center justify-center"
           >
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-800">698</div>
-              <div className="text-sm text-[#2A32F8] font-medium">+25%</div>
+              <div className="text-3xl font-bold text-gray-800">{total}</div>
+              <div className="text-sm text-[#2A32F8] font-medium">Users</div>
             </div>
           </div>
         </div>

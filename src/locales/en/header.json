@@ -10,5 +10,6 @@
     "notes": "Notes",
     "clientData": "Client Data",
 
-    "noDataAvailable": "No data available"
+    "noDataAvailable": "No data available",
+    "Unknown": "Unknown"
 }
