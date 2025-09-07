@@ -6,7 +6,7 @@
   "email": "Email",
   "phone": "Phone number",
   "password": "Password",
-  "confirmPassword": "Confirm password",
+  "confirmPassword": "Confirm new password",
   "selectAll": "Select all",
 
   "image": "Image",
@@ -26,5 +26,8 @@
   "userDeleted": "User deleted successfully",
   "searchBy": "Search by name, mobile number, email",
   "userUpdated": "User updated successfully",
-  "currentPassword": "Current password"
+  "currentPassword": "Current password",
+  "allFieldsRequired": "All fields are required",
+  "passwordsNotMatch": "Password doesn't match",
+  "newPassword": "New password"
 }

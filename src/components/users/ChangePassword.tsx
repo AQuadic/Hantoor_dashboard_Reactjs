@@ -74,7 +74,7 @@ const ChangePassword = () => {
                         {t("currentPassword")}
                         </h2>
                         <div
-                        className="absolute top-9.5 rtl:left-5 ltr:right-5 cursor-pointer"
+                        className="absolute top-7 rtl:left-5 ltr:right-5 cursor-pointer"
                         onClick={() => setShowCurrentPassword((prev) => !prev)}
                         >
                         {showCurrentPassword ? <Eye size={20} /> : <EyeOff size={20} />}
@@ -92,10 +92,10 @@ const ChangePassword = () => {
                         placeholder="********************"
                         />
                         <h2 className="text-[#000000] text-[15px] absolute top-2 rtl:right-4 ltr:left-4">
-                        {t("password")}
+                        {t("newPassword")}
                         </h2>
                         <div
-                        className="absolute top-9.5 rtl:left-5 ltr:right-5 cursor-pointer"
+                        className="absolute top-7 rtl:left-5 ltr:right-5 cursor-pointer"
                         onClick={() => setShowPassword((prev) => !prev)}
                         >
                         {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
@@ -116,7 +116,7 @@ const ChangePassword = () => {
                     <h2 className="text-[#000000] text-[15px] absolute top-2 rtl:right-4 ltr:left-4">
                         {t('confirmPassword')}
                     </h2>
-                    <div className="absolute top-9.5 rtl:left-5 ltr:right-5 cursor-pointer"onClick={() => setShowConfirmPassword((prev) => !prev)}>
+                    <div className="absolute top-7 rtl:left-5 ltr:right-5 cursor-pointer"onClick={() => setShowConfirmPassword((prev) => !prev)}>
                         {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
                     </div>
                     </div>
