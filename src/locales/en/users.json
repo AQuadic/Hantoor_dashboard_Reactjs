@@ -25,5 +25,6 @@
   "userAdded": "User added successfully",
   "userDeleted": "User deleted successfully",
   "searchBy": "Search by name, mobile number, email",
-  "userUpdated": "User updated successfully"
+  "userUpdated": "User updated successfully",
+  "currentPassword": "Current password"
 }
