@@ -34,15 +34,6 @@ const SupportMsgsConversation = () => {
   const [newMessage, setNewMessage] = useState<string>("");
   const [mediaFile, setMediaFile] = useState<File | null>(null);
 
-  // Validation after hooks
-  if (!id || isNaN(conversationId) || conversationId <= 0) {
-    return (
-      <div className="p-4 text-center text-red-500">
-        Invalid conversation ID
-      </div>
-    );
-  }
-
   const messages = useMemo(() => {
     if (!messagesResponse) return [];
     return messagesResponse.data
@@ -62,6 +53,15 @@ const SupportMsgsConversation = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  // Validation after hooks
+  if (!id || isNaN(conversationId) || conversationId <= 0) {
+    return (
+      <div className="p-4 text-center text-red-500">
+        Invalid conversation ID
+      </div>
+    );
+  }
 
   if (isLoading) return <Loading />;
   if (error || !messagesResponse) {
