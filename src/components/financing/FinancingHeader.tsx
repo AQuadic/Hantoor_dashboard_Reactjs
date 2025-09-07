@@ -1,6 +1,7 @@
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
+import ChangeLanguage from "../general/ChangeLanguage";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -47,6 +48,7 @@ const FinancingHeader = ({ onSearch }: FinancingHeaderProps) => {
         <div className="flex-1">
           <DashboardDatePicker />
         </div>
+        <ChangeLanguage />
       </div>
     </div>
   );

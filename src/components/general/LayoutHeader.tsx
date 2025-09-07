@@ -3,7 +3,6 @@ import React from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import ProfileIcon from "../icons/header/ProfileIcon";
-import ChangeLanguage from "./ChangeLanguage";
 
 const LayoutHeader = () => {
   const {
@@ -25,9 +24,6 @@ const LayoutHeader = () => {
           <p className="text-xs opacity-50">اخر ظهور 22/03/2025- 08:30 PM</p>
         </div>
       </Link>
-      <div className="w-px h-12 bg-neutral-300"></div>
-
-      <ChangeLanguage />
     </header>
   );
 };

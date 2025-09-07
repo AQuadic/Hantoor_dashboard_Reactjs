@@ -2,6 +2,7 @@ import React from "react";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
+import ChangeLanguage from "../general/ChangeLanguage";
 import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import CarsSelect from "./CarsSelect";
@@ -43,6 +44,7 @@ const CarsHeader = ({ searchTerm, setSearchTerm }: CarsHeaderProps) => {
             variant="add"
           />
         </Link>
+        <ChangeLanguage />
       </div>
       <CarsSelect />
     </div>

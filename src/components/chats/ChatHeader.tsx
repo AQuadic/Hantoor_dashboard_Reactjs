@@ -2,6 +2,7 @@ import React from "react";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
+import ChangeLanguage from "../general/ChangeLanguage";
 import { useTranslation } from "react-i18next";
 
 interface ChatHeaderProps {
@@ -39,6 +40,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker />
         </div>
+        <ChangeLanguage />
       </div>
     </div>
   );
