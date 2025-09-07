@@ -85,7 +85,15 @@ const CountriesTable = ({
               </TableCell>
               <TableCell style={{ textAlign: "center" }}>0</TableCell>
               <TableCell className="w-full">
-                {new Date(country.created_at).toLocaleString()}
+                {new Date(country.created_at).toLocaleString("en-GB", {
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  hour12: false,
+                })}
               </TableCell>
               <TableCell className="flex gap-[7px] items-center">
                 <Switch
