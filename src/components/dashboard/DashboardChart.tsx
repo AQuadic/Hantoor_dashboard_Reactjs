@@ -8,22 +8,8 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { useTranslation } from "react-i18next";
-
-const chartData = [
-  { day: "مصر", cars: 25 },
-  { day: "قطر", cars: 60 },
-  { day: "السعودية", cars: 35 },
-  { day: "الامارات", cars: 70 },
-  { day: "مصر", cars: 45 },
-  { day: "قطر", cars: 20 },
-  { day: "السعودية", cars: 55 },
-  { day: "المغرب", cars: 30 },
-  { day: "البحرين", cars: 65 },
-  { day: "قطر", cars: 15 },
-  { day: "السعودية", cars: 50 },
-  { day: "مصر", cars: 40 },
-  { day: "الامارات", cars: 75 },
-];
+import { useQuery } from "@tanstack/react-query";
+import { getAdminStats } from "@/api/stats/getStats";
 
 const chartConfig = {
   cars: {
@@ -33,7 +19,20 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const DashboardChart = () => {
-  const { t } = useTranslation("header");
+  const { t, i18n } = useTranslation("header");
+  const isArabic = i18n.language === "ar";
+
+  const { data } = useQuery({
+    queryKey: ["adminStats"],
+    queryFn: getAdminStats,
+  });
+
+  const chartData =
+    data?.vehicles_per_country?.map((item: any) => ({
+      day: isArabic ? item.country?.name?.ar : item.country?.name?.en,
+      cars: item.vehicle_count,
+    })) || [];
+
   return (
     <section
       className="h-auto bg-[#FFFFFF] py-4 px-7 mt-[15px] rounded-[15px] flex-1"
@@ -78,8 +77,7 @@ const DashboardChart = () => {
             tickLine={false}
             axisLine={false}
             tick={{ fontSize: 10, fill: "#6b7280" }}
-            domain={[0, 100]}
-            tickCount={6}
+            domain={[0, "dataMax + 2"]}
             width={30}
           />
 
@@ -90,9 +88,7 @@ const DashboardChart = () => {
             fill="url(#blueGradient)"
             radius={[8, 8, 8, 8]}
             barSize={12}
-            background={{
-              fill: "#E0E7FF",
-            }}
+            background={{ fill: "#E0E7FF" }}
           />
         </BarChart>
       </ChartContainer>
