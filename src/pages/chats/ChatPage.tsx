@@ -56,14 +56,8 @@ const ChatPage = () => {
   });
 
   const handleDelete = (id: number) => {
-    if (
-      window.confirm(
-        t("confirmDeleteConversation") ||
-          "Are you sure you want to delete this conversation?"
-      )
-    ) {
-      deleteConversationMutation.mutate(id);
-    }
+    // Deletion confirmation is handled by the table's DeleteModal.
+    deleteConversationMutation.mutate(id);
   };
 
   if (isLoading && !conversationsData) {

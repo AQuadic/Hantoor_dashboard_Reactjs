@@ -48,6 +48,17 @@ applyTo: "\*\*"
 
 - **Build Tool**: Vite v7.0.5
 - **TypeScript**: All compilation errors resolved
+
+# 2025-09-08: FIXED BUILD ERRORS - Casing and payload type fixes
+
+- Task completed: Fixed TypeScript build errors that prevented the project from compiling.
+
+- Changes made:
+
+  - Normalized import paths that mistakenly used `pricefrom`/`priceto` to the actual folders `priceFrom`/`priceTo` to resolve TS1261 casing conflicts on Windows.
+  - Added optional `currency_text?: { ar: string; en: string }` to `CountryPayload` in `src/api/countries/editCountry.ts` so `EditCountries.tsx` update payload matches the API and TypeScript types.
+
+- Verification: Ran `npm run build` (tsc + vite build). TypeScript errors resolved and Vite build completed successfully.
 - **Bundle Output**: 2.45MB main bundle (with gzip compression to 726KB)
 - **Modules Transformed**: 5,126 modules successfully processed
 

@@ -12,12 +12,15 @@ import {
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { getPriceFrom, PriceFromResponse } from "@/api/models/pricefrom/getPriceFrom";
+import {
+  getPriceFrom,
+  PriceFromResponse,
+} from "@/api/models/priceFrom/getPriceFrom";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
-import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
+import { deletePriceFrom } from "@/api/models/priceFrom/deletePriceFrom";
 import toast from "react-hot-toast";
-import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
+import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
 import { useEffect } from "react";
 
 interface PriceFromTableProps {
@@ -32,16 +35,21 @@ interface PriceFromTableProps {
   }) => void;
 }
 
-export function PriceFromTable({ search = "", page, setPagination }: PriceFromTableProps) {
+export function PriceFromTable({
+  search = "",
+  page,
+  setPagination,
+}: PriceFromTableProps) {
   const { t } = useTranslation("models");
 
-const { data, isLoading, refetch } = useQuery<PriceFromResponse>({
-  queryKey: ["pricefrom", page, search],
-  queryFn: () => getPriceFrom({ page, search }),
-  placeholderData: (previousData: PriceFromResponse | undefined) => previousData,
-});
+  const { data, isLoading, refetch } = useQuery<PriceFromResponse>({
+    queryKey: ["pricefrom", page, search],
+    queryFn: () => getPriceFrom({ page, search }),
+    placeholderData: (previousData: PriceFromResponse | undefined) =>
+      previousData,
+  });
 
-const priceFromList = data?.data ?? [];
+  const priceFromList = data?.data ?? [];
 
   useEffect(() => {
     if (data) {
@@ -65,7 +73,9 @@ const priceFromList = data?.data ?? [];
     try {
       const newStatus = current === 1 ? 0 : 1;
       await updatePriceFrom(id, { is_active: newStatus });
-      toast.success(newStatus === 1 ? t("priceActivated") : t("priceDeactivated"));
+      toast.success(
+        newStatus === 1 ? t("priceActivated") : t("priceDeactivated")
+      );
       refetch();
     } catch {
       toast.error(t("error"));
@@ -87,7 +97,7 @@ const priceFromList = data?.data ?? [];
       <TableBody>
         {priceFromList.map((price, index) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
-          <TableCell>{data ? data.from + index : index + 1}</TableCell>
+            <TableCell>{data ? data.from + index : index + 1}</TableCell>
             <TableCell className="w-full">{price.name}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch
@@ -99,7 +109,9 @@ const priceFromList = data?.data ?? [];
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(price.id)} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(price.id)}
+                />
               </div>
             </TableCell>
           </TableRow>

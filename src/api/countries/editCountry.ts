@@ -7,6 +7,7 @@ export interface CountryPayload {
   };
   code?: string;
   currency?: string;
+  currency_text?: { ar: string; en: string };
   service_fee?: string;
   service_duration?: string;
   service_duration_type?: "day" | "month" | "year";

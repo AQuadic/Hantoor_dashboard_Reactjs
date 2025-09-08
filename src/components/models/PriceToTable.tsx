@@ -16,9 +16,9 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import { getPriceTo, PriceToResponse } from "@/api/models/priceto/getPriceTo";
-import { deletePriceTo } from "@/api/models/priceto/deletePriceTo";
-import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
+import { getPriceTo, PriceToResponse } from "@/api/models/priceTo/getPriceTo";
+import { deletePriceTo } from "@/api/models/priceTo/deletePriceTo";
+import { updatePriceTo } from "@/api/models/priceTo/updatePriceTo";
 
 interface PriceToTableProps {
   search?: string;
@@ -32,16 +32,21 @@ interface PriceToTableProps {
   }) => void;
 }
 
-export function PriceToTable({ search = "", page, setPagination }: PriceToTableProps) {
+export function PriceToTable({
+  search = "",
+  page,
+  setPagination,
+}: PriceToTableProps) {
   const { t } = useTranslation("models");
 
-const { data, isLoading, refetch } = useQuery<PriceToResponse>({
-  queryKey: ["priceto", page, search],
-  queryFn: () => getPriceTo({ page, search }),
-  placeholderData: (previousData: PriceToResponse | undefined) => previousData,
-});
+  const { data, isLoading, refetch } = useQuery<PriceToResponse>({
+    queryKey: ["priceto", page, search],
+    queryFn: () => getPriceTo({ page, search }),
+    placeholderData: (previousData: PriceToResponse | undefined) =>
+      previousData,
+  });
 
-const priceToList = data?.data ?? [];
+  const priceToList = data?.data ?? [];
 
   useEffect(() => {
     if (data) {
@@ -65,7 +70,9 @@ const priceToList = data?.data ?? [];
     try {
       const newStatus = current === 1 ? 0 : 1;
       await updatePriceTo(id, { is_active: newStatus });
-      toast.success(newStatus === 1 ? t("priceActivated") : t("priceDeactivated"));
+      toast.success(
+        newStatus === 1 ? t("priceActivated") : t("priceDeactivated")
+      );
       refetch();
     } catch {
       toast.error(t("error"));
@@ -80,8 +87,8 @@ const priceToList = data?.data ?? [];
       <TableHeader>
         <TableRow>
           <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">{t('priceTo')}</TableHead>
-          <TableHead className="text-right">{t('status')}</TableHead>
+          <TableHead className="text-right">{t("priceTo")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -99,7 +106,9 @@ const priceToList = data?.data ?? [];
               </Link>
 
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(price.id)} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(price.id)}
+                />
               </div>
             </TableCell>
           </TableRow>

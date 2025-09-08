@@ -7,7 +7,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
+import { updatePriceTo } from "@/api/models/priceTo/updatePriceTo";
 
 const EditPriceTo = () => {
   const { t, i18n } = useTranslation("models");
@@ -20,7 +20,11 @@ const EditPriceTo = () => {
 
   const isEdit = Boolean(priceId);
 
-  const { data: countriesData, isLoading, isError } = useQuery({
+  const {
+    data: countriesData,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["countries"],
     queryFn: () => getCountries(),
   });
@@ -34,14 +38,14 @@ const EditPriceTo = () => {
     try {
       await updatePriceTo(priceId, { name: priceAr || priceEn });
       toast.success(t("priceUpdated"));
-      navigate("/models?section=Price To")
+      navigate("/models?section=Price To");
     } catch (error: any) {
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message);
-    } else {
-      toast.error(t("error"));
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(t("error"));
+      }
     }
-  }
   };
 
   return (
@@ -61,7 +65,7 @@ const EditPriceTo = () => {
             link: "/models",
           },
           {
-            titleAr:"تعديل السعر",
+            titleAr: "تعديل السعر",
             titleEn: "Edit the price",
             link: isEdit ? `/price-from/to/${priceId}` : "/price-from/add",
           },
@@ -72,7 +76,7 @@ const EditPriceTo = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label={t('arPrice')}
+                label={t("arPrice")}
                 variant="bordered"
                 placeholder=" 100.000"
                 classNames={{ label: "mb-2 text-base" }}
@@ -80,7 +84,7 @@ const EditPriceTo = () => {
                 value={priceAr}
                 onChange={(e) => setPriceAr(e.target.value)}
               />
-            <Select
+              <Select
                 className="mt-4"
                 size="lg"
                 variant="bordered"
@@ -95,22 +99,18 @@ const EditPriceTo = () => {
                   <SelectItem
                     key={country.id}
                     textValue={
-                      i18n.language === "ar"
-                        ? country.name.ar
-                        : country.name.en
+                      i18n.language === "ar" ? country.name.ar : country.name.en
                     }
                   >
-                    {i18n.language === "ar"
-                      ? country.name.ar
-                      : country.name.en}
+                    {i18n.language === "ar" ? country.name.ar : country.name.en}
                   </SelectItem>
                 ))}
               </Select>
             </div>
             <Input
-              label={t('enPrice')}
+              label={t("enPrice")}
               variant="bordered"
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
               className="flex-1"
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
@@ -119,7 +119,7 @@ const EditPriceTo = () => {
             />
           </div>
 
-              <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
+          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
         </div>
       </div>
     </div>
