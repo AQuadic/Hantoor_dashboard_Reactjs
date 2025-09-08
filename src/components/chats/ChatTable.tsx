@@ -15,7 +15,6 @@ import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   updateConversationStatus,
-  deleteConversation,
   type Conversation,
 } from "@/api/chats/fetchConversations";
 import { toast } from "react-hot-toast";
@@ -57,9 +56,13 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
     },
   });
 
-  // Mutation for deleting conversation
+  // Mutation for deleting conversation (used only when parent doesn't provide onDelete)
   const deleteConversationMutation = useMutation({
-    mutationFn: deleteConversation,
+    mutationFn: async (id: number) => {
+      // lazy-import to avoid unused import when parent handles deletions
+      const mod = await import("@/api/chats/fetchConversations");
+      return mod.deleteConversation(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
       toast.success(
@@ -80,6 +83,13 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
 
   // Handle delete conversation
   const handleDelete = (conversationId: number) => {
+    // If parent provided an onDelete handler, delegate deletion (and confirmation) to it
+    if (onDelete) {
+      onDelete(conversationId);
+      return;
+    }
+
+    // Fallback: confirm and delete locally when no parent handler is provided
     if (
       window.confirm(
         t("confirmDeleteConversation") ||
@@ -87,7 +97,6 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
       )
     ) {
       deleteConversationMutation.mutate(conversationId);
-      if (onDelete) onDelete(conversationId);
     }
   };
 
