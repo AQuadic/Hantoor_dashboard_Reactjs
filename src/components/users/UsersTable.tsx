@@ -14,7 +14,11 @@ import { Switch, Select, SelectItem } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import userPlaceholder from "/images/users/user1.svg";
-import { AdminUser, AdminUsersResponse, getAdminUsers } from "@/api/users/getUsers";
+import {
+  AdminUser,
+  AdminUsersResponse,
+  getAdminUsers,
+} from "@/api/users/getUsers";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { deleteUser } from "@/api/users/deleteUser";
@@ -27,7 +31,12 @@ interface UserTableProps {
   onDataLoaded: (meta: AdminUsersResponse["meta"]) => void;
 }
 
-export function UserTable({ searchTerm = "", page, perPage, onDataLoaded }: UserTableProps) {
+export function UserTable({
+  searchTerm = "",
+  page,
+  perPage,
+  onDataLoaded,
+}: UserTableProps) {
   const { t } = useTranslation("users");
 
   const { data, isLoading, refetch } = useQuery({
@@ -42,6 +51,14 @@ export function UserTable({ searchTerm = "", page, perPage, onDataLoaded }: User
   });
 
   const users: AdminUser[] = data?.data || [];
+
+  const formatDate = (date?: string) => {
+    if (!date) return t("invalidDate", { defaultValue: "Invalid Date" });
+    const d = new Date(date);
+    return isNaN(d.getTime())
+      ? t("invalidDate", { defaultValue: "Invalid Date" })
+      : d.toLocaleString();
+  };
 
   if (data?.meta) {
     onDataLoaded(data.meta);
@@ -96,7 +113,7 @@ export function UserTable({ searchTerm = "", page, perPage, onDataLoaded }: User
             <TableCell>{user.name}</TableCell>
             <TableCell dir="ltr">{user.phone || "-"}</TableCell>
             <TableCell>{user.email || "-"}</TableCell>
-            <TableCell>{new Date(user.created_at).toLocaleString()}</TableCell>
+            <TableCell>{formatDate(user.created_at)}</TableCell>
             <TableCell>{user.signup_with}</TableCell>
             <TableCell>{user.country ? user.country.name.en : "-"}</TableCell>
             <TableCell>{user.id}</TableCell>
@@ -104,9 +121,7 @@ export function UserTable({ searchTerm = "", page, perPage, onDataLoaded }: User
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
-            <TableCell>
-              22/03/2024- 08:30 PM
-            </TableCell>
+            <TableCell>22/03/2024- 08:30 PM</TableCell>
             <TableCell>
               <div className="w-[160px]">
                 <Select

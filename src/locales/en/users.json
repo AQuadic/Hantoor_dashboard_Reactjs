@@ -29,5 +29,6 @@
   "currentPassword": "Current password",
   "allFieldsRequired": "All fields are required",
   "passwordsNotMatch": "Password doesn't match",
-  "newPassword": "New password"
+  "newPassword": "New password",
+  "invalidDate": "Invalid Date"
 }
