@@ -1,7 +1,6 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
-// import DashboardPhoneInput from "@/components/general/dashboard/DashboardPhoneInput";
 import ImageInput from "@/components/general/ImageInput";
 import MobileInput from "@/components/general/MobileInput";
 import { Select, SelectItem } from "@heroui/react";
@@ -25,6 +24,13 @@ const getCountryByIso2 = (iso2: string) => {
 };
 
 const AddSubordinatePage = () => {
+  const extractErrorMessage = (err: unknown) => {
+    if (!err) return "";
+    if (typeof err === "string") return err;
+    const maybe = err as Record<string, unknown>;
+    return typeof maybe.message === "string" ? maybe.message : "";
+  };
+
   const [profileImage, setProfileImage] = React.useState<File | null>(null);
   const params = useParams();
   const managerId = params.id;
@@ -56,13 +62,21 @@ const AddSubordinatePage = () => {
 
         setName(data.name || "");
         setEmail(data.email || "");
-        setPhone(data.mobile || "");
-      } catch (error: any) {
-        toast.error(
-          error.response?.data?.message ||
-            error.message ||
-            "Failed to load admin data"
-        );
+        // Prefill phone number and country for edit mode.
+        const phoneVal =
+          data.phone ||
+          data.phone_national ||
+          data.phone_e164 ||
+          data.phone_normalized ||
+          data.mobile ||
+          "";
+        setPhone(phoneVal);
+        if (data.phone_country) {
+          setSelectedCountry(getCountryByIso2(data.phone_country));
+        }
+      } catch (err: unknown) {
+        const message = extractErrorMessage(err) || "Failed to load admin data";
+        toast.error(message);
       }
     };
 
@@ -70,7 +84,12 @@ const AddSubordinatePage = () => {
   }, [isEdit, managerId]);
 
   const handleSubmit = async () => {
-    if (!name.trim() || !phone.trim() || !email.trim() || (!isEdit && (!password || !confirmPassword))) {
+    if (
+      !name.trim() ||
+      !phone.trim() ||
+      !email.trim() ||
+      (!isEdit && (!password || !confirmPassword))
+    ) {
       toast.error(t("fillAllFieldes"));
       return;
     }
@@ -89,7 +108,10 @@ const AddSubordinatePage = () => {
           email,
           phone,
           phone_country: selectedCountry.iso2,
-          ...(password ? { password, password_confirmation: confirmPassword } : {}),
+          ...(password
+            ? { password, password_confirmation: confirmPassword }
+            : {}),
+          image: profileImage,
         });
       } else {
         await createAdmin({
@@ -107,9 +129,10 @@ const AddSubordinatePage = () => {
         isEdit ? t("adminUpdatedSuccessfully") : t("adminAddedSuccessfully")
       );
       navigate("/subordinates");
-    } catch (error: any) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Something went wrong");
+    } catch (err: unknown) {
+      console.error(err);
+      const message = extractErrorMessage(err) || "Something went wrong";
+      toast.error(message);
     } finally {
       setIsSubmitting(false);
     }
