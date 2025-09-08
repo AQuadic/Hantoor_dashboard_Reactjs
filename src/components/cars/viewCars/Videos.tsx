@@ -1,9 +1,28 @@
-import React from 'react'
+import { VehicleVideo } from "@/api/vehicles/getVehicleById";
+import React from "react";
 
-const Videos = () => {
+interface VideosProps {
+  video?: VehicleVideo | null;
+}
+
+const Videos: React.FC<VideosProps> = ({ video }) => {
     return (
         <section className="mt-4 flex flex-wrap gap-4 md:mx-8 mx-0">
-            <img src="../../../../public/images/carVideo.png" alt="Video" />
+            {video?.url ? (
+                <video
+                src={video.url}
+                controls
+                className="w-full md:w-1/2 lg:w-1/3 rounded-lg"
+                >
+                Your browser does not support the video tag.
+                </video>
+            ) : (
+                <img
+                src="/images/carVideo.png"
+                alt="Video placeholder"
+                className="w-full md:w-1/2 lg:w-1/3 rounded-lg"
+                />
+            )}
         </section>
     )
 }

@@ -12,12 +12,13 @@ import Edit from "@/components/icons/general/Edit";
 import { useTranslation } from "react-i18next";
 import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import {getRequestFinancing } from "@/api/financing/fetchFinancing";
+import { getRequestFinancing, FinancingItem } from "@/api/financing/fetchFinancing";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
 import { deleteFinancing } from "@/api/financing/deleteFinancing";
 import toast from "react-hot-toast";
+import { updateRequestFinancing } from "@/api/financing/editFinancing";
 
 const InsuranceTable = () => {
   const { t, i18n } = useTranslation("setting");
@@ -47,6 +48,28 @@ const { data: financingItems = [], isLoading: financingLoading, refetch } = useQ
       refetch();
     };
 
+  const handleToggle = async (item: FinancingItem) => {
+    const prevState = item.is_active;
+    try {
+      const newState = !item.is_active;
+      item.is_active = newState;
+
+      await updateRequestFinancing({
+        id: item.id,
+        phone: item.phone,
+        country_id: item.country_id,
+        is_active: newState,
+      });
+
+      toast.success(t("statusUpdated") || "Status updated");
+      refetch();
+    } catch (err) {
+      item.is_active = prevState;
+      toast.error(t("somethingWentWrong") || "Failed to update status");
+      console.error(err);
+    }
+  };
+
   if (financingLoading || countriesLoading) {
     return <Loading />;
   }
@@ -72,7 +95,10 @@ const { data: financingItems = [], isLoading: financingLoading, refetch } = useQ
                 <TableCell dir="ltr">{item.phone}</TableCell>
                 <TableCell className="w-full">{getCountryName(item.country_id)}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
-                <Switch defaultSelected={!!item.is_active} />
+                  <Switch
+                    isSelected={!!item.is_active}
+                    onChange={() => handleToggle(item)}
+                  />
                 <Link to={`/setting/edit-whatsapp/${item.id}`}>
                     <Edit />
                 </Link>
