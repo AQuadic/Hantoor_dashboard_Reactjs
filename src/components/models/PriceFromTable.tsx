@@ -15,12 +15,12 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getPriceFrom,
   PriceFromResponse,
-} from "@/api/models/priceFrom/getPriceFrom";
+} from "@/api/models/pricefrom/getPriceFrom";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
-import { deletePriceFrom } from "@/api/models/priceFrom/deletePriceFrom";
+import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
 import toast from "react-hot-toast";
-import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
+import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
 import { useEffect } from "react";
 
 interface PriceFromTableProps {
