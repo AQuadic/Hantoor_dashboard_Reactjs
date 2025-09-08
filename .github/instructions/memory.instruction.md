@@ -4,6 +4,58 @@ applyTo: "\*\*"
 
 # ---
 
+# 2025-09-08: RENT TO OWN SECTION ENHANCEMENT - Layout Updated to Match Design
+
+**TASK COMPLETED**: Successfully updated the "إيجار منتهي بالتملك" (Rent to Own) section layout to match the design with 4 input fields.
+
+## Final Layout Implementation ✅
+
+### **Row 1: Duration Fields (2 fields)**
+- Arabic Duration: "المدة (باللغة العربية)" - connected to `rent_to_own_duration`
+- English Duration: "المدة (باللغة الانجليزية)" - connected to `rent_to_own_duration_en`
+- Both fields side by side with 50% width each
+
+### **Row 2: WhatsApp and Price Fields (2 fields)**
+- WhatsApp Number: "رقم الواتساب" - uses DashboardPhoneInput component
+- Rent-to-Own Price: "السعر للإيجار المنتهي بالتملك" - connected to `rent_to_own_price`
+- Both fields side by side with 50% width each
+
+## Technical Implementation ✅
+
+### **Form Context Updates**
+- Added `rent_to_own_duration_en` field to VehicleFormState interface
+- Updated default form values to include English duration field
+- Proper type safety maintained with TypeScript
+
+### **Component Structure**
+- Clean 2x2 grid layout matching the design
+- Conditional rendering when rent-to-own switch is enabled
+- Consistent styling with other form sections
+- Proper spacing and responsive design
+
+### **Integration Points**
+- Form data persistence for all 4 fields
+- WhatsApp phone input with country selection
+- Number validation for price field
+- Text inputs for duration fields
+
+## Fields Summary
+
+1. **Arabic Duration** (`rent_to_own_duration`) - Text input
+2. **English Duration** (`rent_to_own_duration_en`) - Text input  
+3. **WhatsApp Number** (`rent_to_own_whatsapp`) - Phone input with country selector
+4. **Price** (`rent_to_own_price`) - Number input
+
+## Translation Keys Used ✅
+
+- `rentToOwn`: "إيجار منتهي بالتملك"
+- `arDuration`: "المدة (باللغة العربية)" 
+- `enDuration`: "المدة (باللغة الانجليزية)"
+- `whatsappNumber`: "رقم الواتساب"
+- `rentToOwnPrice`: "السعر للإيجار المنتهي بالتملك"
+
+The layout now perfectly matches the design with 4 input fields arranged in 2 rows of 2 fields each.
+
 # 2025-08-27: BUILD ISSUES FIXED - TypeScript Compilation Errors Resolved
 
 **TASK COMPLETED**: Successfully fixed all build-breaking TypeScript errors in the React dashboard project.
