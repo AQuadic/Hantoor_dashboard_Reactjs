@@ -34,6 +34,14 @@ export interface Offer {
   updated_at?: string;
 }
 
+export interface EngineVolume {
+  id: number;
+  name: { ar: string; en: string };
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Package {
   id: number;
   vehicle_id: number;
@@ -91,7 +99,7 @@ export interface Vehicle {
   offers: Offer[];
   accessories: Accessory[];
   packages: Package[];
-
+  engine_volume?: EngineVolume | null;
 
   // Related objects (can be null if not loaded)
   brand: {

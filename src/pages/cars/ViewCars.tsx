@@ -51,7 +51,9 @@ const ViewCars = () => {
             transition={{ duration: 0.3 }}
           >
             {selectedFilter === "About Car" && vehicle && <AboutCar vehicle={vehicle} />}
-            {selectedFilter === "Specifications" && <Specifications  />}
+            {selectedFilter === "Specifications" && vehicle && (
+              <Specifications vehicle={vehicle} />
+            )}
             {selectedFilter === "Maintenance Packages" && (
               <MaintenancePackages packages={vehicle?.packages || []} />
             )}

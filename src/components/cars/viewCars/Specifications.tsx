@@ -1,41 +1,50 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-const Specifications = () => {
-    const specifications = [
+import { Vehicle } from "@/api/vehicles/getVehicleById";
+import { useTranslation } from "react-i18next";
+
+interface SpecificationsProps {
+  vehicle: Vehicle;
+}
+
+const Specifications = ({ vehicle }: SpecificationsProps) => {
+  const { i18n } = useTranslation();
+  const lang = i18n.language as "ar" | "en";
+
+  const specifications = [
     {
-      brand: "تويوتا",
-      category: "Runner 4",
-      type: "Extreme",
-      structure: "SUV",
-      model: "2025",
-      seates: "4",
-      engineType: "بنزين",
-      engineSize: "1200 CC",
-      power: "رياضية",
-    }
+      brand: vehicle.brand?.name[lang] || "-",
+      category: (vehicle.vehicle_class?.name as Record<"ar" | "en", string>)?.[lang] || "-",
+      type: (vehicle.vehicle_model?.name as Record<"ar" | "en", string>)?.[lang] || "-",
+      structure: (vehicle.vehicle_body_type?.name as Record<"ar" | "en", string>)?.[lang] || "-",
+      model: (vehicle.vehicle_type?.name as Record<"ar" | "en", string>)?.[lang] || "-",
+      seates: (vehicle.number_of_seat as any)?.name?.[lang] || "-",
+      engineType: (vehicle.engine_type as any)?.name?.[lang] || "-",
+      engineSize: (vehicle.engine_volume as any)?.name?.[lang] || "-",
+      power: "-",
+    },
   ];
 
   return (
     <section className="md:mx-8 mx-0">
-        <div className="w-full">
+      <div className="w-full">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-right">الماركة</TableHead>
-              <TableHead className="text-right">الفئة</TableHead>
-              <TableHead className="text-right">النوع</TableHead>
-              <TableHead className="text-right">نوع الهيكل</TableHead>
-              <TableHead className="text-right">الموديل</TableHead>
-              <TableHead className="text-right">عدد المقاعد</TableHead>
-              <TableHead className="text-right">نوع الماكينة</TableHead>
-              <TableHead className="text-right">حجم الماكينة</TableHead>
-              <TableHead className="text-right">نوع قوة الماكينة</TableHead>
-
+              <TableHead className="text-right">{lang === "ar" ? "الماركة" : "Brand"}</TableHead>
+              <TableHead className="text-right">{lang === "ar" ? "الفئة" : "Category"}</TableHead>
+              <TableHead className="text-right">{lang === "ar" ? "النوع" : "Type"}</TableHead>
+              <TableHead className="text-right">{lang === "ar" ? "نوع الهيكل" : "Structure"}</TableHead>
+              <TableHead className="text-right">{lang === "ar" ? "الموديل" : "Model"}</TableHead>
+              <TableHead className="text-right">{lang === "ar" ? "عدد المقاعد" : "Seats"}</TableHead>
+              <TableHead className="text-right">{lang === "ar" ? "نوع الماكينة" : "Engine Type"}</TableHead>
+              <TableHead className="text-right">{lang === "ar" ? "حجم الماكينة" : "Engine Size"}</TableHead>
+              <TableHead className="text-right">{lang === "ar" ? "نوع قوة الماكينة" : "Power"}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {specifications.map((specification) => (
-              <TableRow noBackgroundColumns={1}>
+            {specifications.map((specification, idx) => (
+              <TableRow key={idx} noBackgroundColumns={1}>
                 <TableCell>{specification.brand}</TableCell>
                 <TableCell>{specification.category}</TableCell>
                 <TableCell>{specification.type}</TableCell>
@@ -45,7 +54,7 @@ const Specifications = () => {
                 <TableCell>{specification.engineType}</TableCell>
                 <TableCell>{specification.engineSize}</TableCell>
                 <TableCell>{specification.power}</TableCell>
-                <TableCell className=""></TableCell>
+                <TableCell></TableCell>
               </TableRow>
             ))}
           </TableBody>
