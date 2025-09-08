@@ -69,7 +69,7 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
                     {notification.image && "url" in notification.image ? (
                     <img src={notification.image.url} alt="Notification" className="w-16 h-16 object-cover rounded-md" />
                     ) : (
-                    <span>No image</span>
+                    <div className="w-10 h-10 bg-gray-100 rounded-md"></div>
                     )}
                 </TableCell>
                 <TableCell>{i18n.language === "ar" ? notification.title.ar : notification.title.en}</TableCell>
