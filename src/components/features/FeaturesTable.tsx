@@ -96,7 +96,7 @@ const FeaturesTable: React.FC<Props> = ({ features, refetch }) => {
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch
-                isSelected={feature.is_active === 1}
+                isSelected={feature.is_active === 1 || feature.is_active === true}
                 isDisabled={updatingId === feature.id}
                 onChange={() => handleToggle(feature)}
               />

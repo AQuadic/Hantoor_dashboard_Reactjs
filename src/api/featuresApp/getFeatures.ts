@@ -11,7 +11,7 @@ export interface FeatureImage {
 export interface Feature {
   id: number;
   description: { ar: string; en: string };
-  is_active: number;
+  is_active: number | boolean;
   created_at: string;
   updated_at: string;
   image: FeatureImage | null;

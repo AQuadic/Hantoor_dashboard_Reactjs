@@ -80,5 +80,6 @@
   "imageAdded": "Slider uploaded successfully",
   "profileAdded": "Profile page added successfully",
   "profileDeleted": "Profile deleted successfully",
-  "profileUpdated": "Profile updated successfully"
+  "profileUpdated": "Profile updated successfully",
+  "statusUpdated": "status updated successfully"
 }
