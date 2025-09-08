@@ -34,6 +34,24 @@ export interface Offer {
   updated_at?: string;
 }
 
+export interface Package {
+  id: number;
+  vehicle_id: number;
+  name: { ar: string; en: string };
+  price: number;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface ImagesAd {
+  id: number;
+  uuid: string;
+  url: string;
+  size: number;
+  responsive_urls: string[];
+}
+
 export interface Vehicle {
   id: number;
   name: { ar: string; en: string };
@@ -66,13 +84,14 @@ export interface Vehicle {
   // Arrays
   additional_images: string[];
   image: string | null;
-  images_ads: string[];
+  images_ads: ImagesAd[];
   video: string[];
   images: string[];
   features: unknown[];
   offers: Offer[];
   accessories: Accessory[];
-  packages: unknown[];
+  packages: Package[];
+
 
   // Related objects (can be null if not loaded)
   brand: {

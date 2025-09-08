@@ -53,7 +53,7 @@ const ViewCars = () => {
             {selectedFilter === "About Car" && <AboutCar  />}
             {selectedFilter === "Specifications" && <Specifications  />}
             {selectedFilter === "Maintenance Packages" && (
-              <MaintenancePackages  />
+              <MaintenancePackages packages={vehicle?.packages || []} />
             )}
             {selectedFilter === "Accessories" && (
               <Accessories accessories={vehicle?.accessories || []} />
@@ -64,7 +64,9 @@ const ViewCars = () => {
             {selectedFilter === "Lease to Own" && <LeaseToOwn  />}
             {selectedFilter === "Additional Images" && <AdditionalImages  />}
             {selectedFilter === "Videos" && <Videos  />}
-            {selectedFilter === "Ad Images" && <AdImages  />}
+            {selectedFilter === "Ad Images" && vehicle?.images_ads && (
+              <AdImages imagesAds={vehicle.images_ads} />
+            )}
           </motion.div>
         </AnimatePresence>
       </div>

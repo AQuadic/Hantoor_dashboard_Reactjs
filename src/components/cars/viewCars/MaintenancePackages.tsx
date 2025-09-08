@@ -8,27 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Switch } from "@heroui/react";
-const MaintenancePackages = () => {
-  const packages = [
-    {
-      id: 1,
-      duration: "1 سنة أو 20,000 كم",
-      price: "1000 درهم",
-      status: true,
-    },
-    {
-      id: 2,
-      duration: "سنتين أو 40,000 كم",
-      price: "2000 درهم",
-      status: true,
-    },
-    {
-      id: 3,
-      duration: "3 سنوات أو 60,000 كم",
-      price: "3000 درهم",
-      status: false,
-    },
-  ];
+import { Vehicle } from "@/api/vehicles/getVehicleById";
+import NoData from "@/components/general/NoData";
+
+interface MaintenancePackagesProps {
+  packages: Vehicle["packages"];
+}
+
+const MaintenancePackages = ({ packages }: MaintenancePackagesProps) => {
+  if (!packages || packages.length === 0) {
+    return <NoData />;
+  }
 
   return (
     <section className="md:mx-8 mx-0">
@@ -47,11 +37,10 @@ const MaintenancePackages = () => {
             {packages.map((pkg) => (
               <TableRow key={pkg.id} noBackgroundColumns={1}>
                 <TableCell>{pkg.id}</TableCell>
-                <TableCell>{pkg.duration}</TableCell>
-                <TableCell className="w-full">{pkg.price}</TableCell>
-
+                <TableCell>{pkg.name.ar || pkg.name.en || "-"}</TableCell>
+                <TableCell className="w-full">{pkg.price} درهم</TableCell>
                 <TableCell className="flex items-center gap-2">
-                  <Switch />
+                  <Switch isSelected={pkg.is_active} />
                   <TableDeleteButton handleDelete={() => {}} />
                 </TableCell>
               </TableRow>
