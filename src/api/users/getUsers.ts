@@ -1,5 +1,13 @@
 import { axios } from "@/lib/axios";
 
+export interface Country {
+  id: number;
+  name: { ar: string; en: string };
+  code: string;
+  currency: string;
+  is_active: boolean;
+}
+
 export interface AdminUser {
   id: number;
   name: string;
@@ -10,6 +18,8 @@ export interface AdminUser {
   city_id?: number;
   created_at: string;
   updated_at: string;
+  country?: Country | null;
+  is_active: boolean; 
 }
 
 export interface AdminUsersResponse {

@@ -98,7 +98,7 @@ export function UserTable({ searchTerm = "", page, perPage, onDataLoaded }: User
             <TableCell>{user.email || "-"}</TableCell>
             <TableCell>{new Date(user.created_at).toLocaleString()}</TableCell>
             <TableCell>{user.signup_with}</TableCell>
-            <TableCell>{user.country_id || "-"}</TableCell>
+            <TableCell>{user.country ? user.country.name.en : "-"}</TableCell>
             <TableCell>{user.id}</TableCell>
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
