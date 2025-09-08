@@ -23,5 +23,8 @@
     "adminDeactivated": "Admin deactivated successfully",
     "searchBy": "Search by name, phone number, email",
     "adminDeleted": "Admin deleted successfully",
-    "fillAllFieldes": "Please fill all fields"
+    "fillAllFieldes": "Please fill all fields",
+    "passwordRequired": "Password fields are required",
+    "passwordsDoNotMatch": "Passwords don't match",
+    "passwordChangedSuccess": "Password changed successfully"
 }

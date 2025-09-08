@@ -23,5 +23,8 @@
     "adminDeactivated": "تم إلغاء تفعيل المسؤول بنجاح",
     "searchBy": "ابحث بالاسم, رقم الجوال, البريد الالكتروني",
     "adminDeleted": "تم حذف المسؤول بنجاح",
-    "fillAllFieldes": "يرجى ملء جميع الحقول المطلوبة *"
+    "fillAllFieldes": "يرجى ملء جميع الحقول المطلوبة *",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+    "passwordChangedSuccess": "تم تغيير كلمة المرور بنجاح"
 }
