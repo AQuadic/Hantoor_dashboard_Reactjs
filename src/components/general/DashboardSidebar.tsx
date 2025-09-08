@@ -74,6 +74,11 @@ const DashboardSidebar = () => {
     } catch {
       void 0;
     }
+    try {
+      sessionStorage.removeItem("hantoor_token");
+    } catch {
+      void 0;
+    }
 
     navigate("/login");
   };
@@ -308,9 +313,7 @@ const DashboardSidebar = () => {
               <div
                 key={index}
                 className={`block mt-4 rounded-md ${
-                  isDesktopCollapsed
-                    ? "px-0 py-2 flex justify-center"
-                    : "px-8"
+                  isDesktopCollapsed ? "px-0 py-2 flex justify-center" : "px-8"
                 }`}
                 title={isDesktopCollapsed ? getLinkLabel(link) : ""}
               >

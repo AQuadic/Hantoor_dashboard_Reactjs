@@ -6,7 +6,15 @@ import Cookies from "js-cookie";
 // TODO: Add proper AxiosRequestConfig type if available in your axios version
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function authRequestInterceptor(config: any) {
-  const token = Cookies.get("hantoor_token");
+  let token = undefined;
+  try {
+    token = sessionStorage.getItem("hantoor_token") || undefined;
+  } catch {
+    // ignore sessionStorage errors
+  }
+  if (!token) {
+    token = Cookies.get("hantoor_token");
+  }
   const language =
     typeof window !== "undefined"
       ? localStorage.getItem("language") || "en"

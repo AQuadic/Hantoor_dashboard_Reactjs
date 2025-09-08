@@ -18,6 +18,7 @@ export interface AuthState {
   isAuthenticated: boolean;
   loading: boolean;
   error: string | null;
+  rememberMe: boolean;
   login: (payload: LoginPayload) => Promise<LoginResponse | null>;
   logout: () => void;
   initialize: () => void;
@@ -31,6 +32,7 @@ export const useAuthStore = create<AuthState>()(
       isAuthenticated: false,
       loading: false,
       error: null,
+      rememberMe: false,
       login: async (payload: LoginPayload) => {
         set({ loading: true, error: null });
         try {
@@ -40,10 +42,17 @@ export const useAuthStore = create<AuthState>()(
           const token = data.token || data.access_token;
 
           if (token && data.user) {
-            // Store token in cookies for route guards and axios interceptor
-            Cookies.set("hantoor_token", token, {
-              expires: payload.rememberMe ? 30 : 1, // 30 days if remember me, 1 day otherwise
-            });
+            // Store token: persistent cookie when rememberMe is true,
+            // otherwise keep token in sessionStorage so it is cleared when the tab is closed.
+            if (payload.rememberMe) {
+              Cookies.set("hantoor_token", token, { expires: 30 });
+            } else {
+              try {
+                sessionStorage.setItem("hantoor_token", token);
+              } catch {
+                // ignore sessionStorage errors
+              }
+            }
 
             set({
               user: data.user as unknown as User,
@@ -51,7 +60,16 @@ export const useAuthStore = create<AuthState>()(
               isAuthenticated: true,
               loading: false,
               error: null,
+              rememberMe: !!payload.rememberMe,
             });
+            // If user did NOT select rememberMe, ensure we don't persist auth to localStorage
+            if (!payload.rememberMe) {
+              try {
+                localStorage.removeItem("auth-storage");
+              } catch {
+                // ignore localStorage errors
+              }
+            }
             return data;
           } else {
             set({
@@ -94,18 +112,75 @@ export const useAuthStore = create<AuthState>()(
       logout: () => {
         // Clear cookie and Zustand state
         Cookies.remove("hantoor_token");
-        set({ user: null, token: null, isAuthenticated: false, error: null });
+        try {
+          sessionStorage.removeItem("hantoor_token");
+        } catch {
+          // ignore
+        }
+        set({
+          user: null,
+          token: null,
+          isAuthenticated: false,
+          error: null,
+          rememberMe: false,
+        });
       },
       initialize: () => {
-        // Check for existing token in cookies on app start
+        // First check sessionStorage (tab-scoped) for a non-remembered token
+        try {
+          const sessionToken = sessionStorage.getItem("hantoor_token");
+          if (sessionToken) {
+            set({ token: sessionToken, isAuthenticated: true });
+            return;
+          }
+        } catch {
+          // ignore sessionStorage errors
+        }
+
+        // Fallback to cookie (rememberMe persistent token)
         const token = Cookies.get("hantoor_token");
         if (token) {
           set({ token, isAuthenticated: true });
+          return;
+        }
+
+        // Also attempt to restore persisted state only if rememberMe was true
+        try {
+          const raw = localStorage.getItem("auth-storage");
+          if (raw) {
+            const parsed = JSON.parse(raw) as Partial<AuthState> | null;
+            if (parsed && parsed.rememberMe && parsed.token) {
+              set({
+                user: (parsed.user as User) ?? null,
+                token: parsed.token ?? null,
+                isAuthenticated: !!parsed.token,
+              });
+            } else if (parsed && !parsed.rememberMe) {
+              // cleanup any stale persisted auth
+              localStorage.removeItem("auth-storage");
+            }
+          }
+        } catch {
+          // ignore localStorage parse errors
         }
       },
     }),
     {
       name: "auth-storage", // unique name for localStorage
+      // Only persist auth data when rememberMe is true. When not remembering, do not keep token/user in storage.
+      partialize: (state: AuthState) => {
+        // state may include rememberMe flag; only persist token and user when rememberMe is true
+        // Persist rememberMe flag itself so UI can reflect user's last choice
+        if (state.rememberMe) {
+          return {
+            user: state.user,
+            token: state.token,
+            isAuthenticated: state.isAuthenticated,
+            rememberMe: state.rememberMe,
+          };
+        }
+        return { rememberMe: false };
+      },
     }
   )
 );

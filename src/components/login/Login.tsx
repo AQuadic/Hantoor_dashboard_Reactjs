@@ -21,7 +21,14 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(() => {
+    try {
+      const saved = localStorage.getItem("hantoor_remember_me");
+      return saved === "true";
+    } catch {
+      return false; // Default to false if there's an error
+    }
+  });
 
   // UI state
   const [errors, setErrors] = useState<Record<string, string | null>>({});
@@ -31,16 +38,21 @@ const Login = () => {
     const newErrors: Record<string, string> = {};
 
     if (!email) {
-      newErrors.email = t("emailRequired") || "Email is required";
+      newErrors.email = t("emailRequired", {
+        defaultValue: "Email is required",
+      });
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newErrors.email = t("emailInvalid") || "Email is invalid";
+      newErrors.email = t("emailInvalid", { defaultValue: "Email is invalid" });
     }
 
     if (!password) {
-      newErrors.password = t("passwordRequired") || "Password is required";
+      newErrors.password = t("passwordRequired", {
+        defaultValue: "Password is required",
+      });
     } else if (password.length < 6) {
-      newErrors.password =
-        t("passwordTooShort") || "Password must be at least 6 characters";
+      newErrors.password = t("passwordTooShort", {
+        defaultValue: "Password must be at least 6 characters",
+      });
     }
 
     setErrors(newErrors);
@@ -66,21 +78,33 @@ const Login = () => {
 
       if (result) {
         // Login successful - navigate to dashboard
+        // Persist the rememberMe choice so the checkbox reflects user's preference next time
+        try {
+          localStorage.setItem(
+            "hantoor_remember_me",
+            rememberMe ? "true" : "false"
+          );
+        } catch {
+          // ignore localStorage errors
+        }
         navigate("/", { replace: true });
       } else {
         // Login failed - error should be in store
         setErrors({
-          general: "Invalid email or password",
+          general: t("invalidCredentials", {
+            defaultValue: "Invalid email or password",
+          }),
         });
       }
     } catch (error) {
       console.error("Login error:", error);
       setErrors({
-        general: "Invalid email or password",
+        general: t("invalidCredentials", {
+          defaultValue: "Invalid email or password",
+        }),
       });
     }
   };
-
 
   return (
     <section className="flex md:flex-row flex-col items-center justify-between gap-4 !bg-white">
@@ -156,12 +180,14 @@ const Login = () => {
             <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
               {t("password")}
             </h2>
-            <div
-              className="absolute top-9 rtl:left-5 ltr:right-5 cursor-pointer text-gray-500"
+            <button
+              type="button"
+              aria-label={showPassword ? "Hide password" : "Show password"}
               onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute top-9 rtl:left-5 ltr:right-5 cursor-pointer text-gray-500"
             >
               {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-            </div>
+            </button>
             {errors.password && (
               <p className="text-red-500 text-sm mt-1">{errors.password}</p>
             )}
@@ -185,6 +211,7 @@ const Login = () => {
               titleEn={storeLoading ? t("loading") || "Loading..." : t("enter")}
               titleAr={storeLoading ? "جاري التحميل..." : "دخول"}
               type="submit"
+              isLoading={storeLoading}
             />
           </div>
 
