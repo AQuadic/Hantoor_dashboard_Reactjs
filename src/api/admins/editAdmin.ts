@@ -1,4 +1,4 @@
- import { axios } from "@/lib/axios";
+import { axios } from "@/lib/axios";
 
 export interface UpdateAdminPayload {
   name?: string;
@@ -8,6 +8,7 @@ export interface UpdateAdminPayload {
   password?: string;
   password_confirmation?: string;
   isActive?: boolean;
+  image?: File | null;
 }
 
 export interface Admin {
@@ -24,6 +25,29 @@ export async function updateAdmin(
   adminId: string | number,
   payload: UpdateAdminPayload
 ): Promise<Admin> {
-  const response = await axios.post<Admin>(`/admin/${adminId}`, payload);
+  const formData = new FormData();
+
+  if (payload.name !== undefined) formData.append("name", String(payload.name));
+  if (payload.email !== undefined)
+    formData.append("email", String(payload.email));
+  if (payload.phone !== undefined)
+    formData.append("phone", String(payload.phone));
+  if (payload.phone_country !== undefined)
+    formData.append("phone_country", String(payload.phone_country));
+  if (payload.password !== undefined)
+    formData.append("password", String(payload.password));
+  if (payload.password_confirmation !== undefined)
+    formData.append(
+      "password_confirmation",
+      String(payload.password_confirmation)
+    );
+  if (payload.isActive !== undefined)
+    formData.append("is_active", payload.isActive ? "1" : "0");
+  if (payload.image) formData.append("image", payload.image);
+
+  const response = await axios.post<Admin>(`/admin/${adminId}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
   return response.data;
 }
