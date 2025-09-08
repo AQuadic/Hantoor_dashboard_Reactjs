@@ -20,8 +20,8 @@ const AddProfile = () => {
     const [arBody, setArBody] = useState('');
     const [enBody, setEnBody] = useState('');
     const [countries, setCountries] = useState<Country[]>([]);
-    const [, setLoading] = useState(false);
     const navigate = useNavigate ();
+    const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -49,15 +49,15 @@ const AddProfile = () => {
     };
 
     try {
-      setLoading(true);
+      setIsLoading(true);
       const result = await createOnboarding(data);
       toast.success(t('profileAdded'));
-      navigate("/settings?section=Informational+Pages")
+      navigate("/settings?section=Informational+Pages");
       console.log(result);
     } catch (err: any) {
       toast.error(err.response?.data?.message || 'Something went wrong');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -146,7 +146,11 @@ const AddProfile = () => {
             </div>
     
             <div className="mt-4">
-                <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit}/>
+              <DashboardButton
+                titleAr={isLoading ? "جارٍ الإضافة..." : "اضافة"}
+                titleEn={isLoading ? "Adding..." : "Add"}
+                onClick={handleSubmit}
+              />
             </div>
             </div>
         </div>
