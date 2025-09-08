@@ -94,9 +94,23 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
               )}
               <p className="text-lg text-[#606060]">{getdispbByLang(vehicle?.brand?.name)}</p>
             </div>
+
             <p className="text-xl font-bold text-primary">
+              {vehicle?.price
+                ? `${Number(vehicle.price) - (Number(vehicle.price) * (vehicle.discount_value || 0)) / 100} درهم`
+                : "0 درهم"}
+            </p>
+
+            <p className="text-[17px] font-bold text-[#606060] line-through">
               {vehicle?.price ? `${vehicle.price} درهم` : "0 درهم"}
             </p>
+
+            <div className="flex items-center w-[70px] h-[30px] bg-[#FF1B5412] rounded-[67px]">
+                  <img src="/images/percentage.gif" alt="%"  className="w-[26px] h-[26px]"/>
+                <p className="text-[#FF1C55] text-[15px] font-normal px-2">
+                  {vehicle?.discount_value}%
+                </p>
+            </div>
 
             {/* {(vehicle?.vehicle_model?.name || vehicle?.vehicle_type?.name || vehicle?.vehicle_class?.name) && (
               <div className="flex gap-4 mt-2 text-sm text-[#606060]">
