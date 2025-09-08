@@ -157,7 +157,7 @@ const AddSubordinatePage = () => {
           <div className="flex md:flex-row flex-col gap-4">
             <div className="w-full">
               <DashboardInput
-                label={t("name")}
+                label={`${t("name")} *`}
                 value={name}
                 onChange={setName}
                 placeholder="محمد احمد"
@@ -165,7 +165,7 @@ const AddSubordinatePage = () => {
             </div>
             <div className="w-full">
               <MobileInput
-                label={t("phoneNumber")}
+                label={`${t("phoneNumber")} *`}
                 selectedCountry={selectedCountry}
                 setSelectedCountry={setSelectedCountry}
                 phone={phone}
@@ -177,7 +177,7 @@ const AddSubordinatePage = () => {
           <div className="flex md:flex-row flex-col gap-4">
             <div className="w-full">
               <DashboardInput
-                label={t("email")}
+                label={`${t("email")} *`}
                 value={email}
                 onChange={setEmail}
                 placeholder="username@mail.com"
@@ -204,13 +204,13 @@ const AddSubordinatePage = () => {
           {!isEdit && (
             <div className="flex md:flex-row flex-col gap-4">
               <DashboardInput
-                label={t("password")}
+                label={`${t("password")} *`}
                 value={password}
                 onChange={setPassword}
                 placeholder="••••••••••••••••"
               />
               <DashboardInput
-                label={t("confirmPassword")}
+                label={`${t("confirmPassword")} *`}
                 value={confirmPassword}
                 onChange={setConfirmPassword}
                 placeholder="••••••••••••••••"

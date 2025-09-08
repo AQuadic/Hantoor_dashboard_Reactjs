@@ -37,7 +37,6 @@ import AddSubordinatePage from "@/pages/subordinates/AddSubordinatePage";
 import SubordinatesChangePassword from "@/pages/subordinates/SubordinateChangePasswordPage";
 import SubordinatesPage from "@/pages/subordinates/SubordinatesPage";
 import SupportMessagesPage from "@/pages/supportmessages/SupportMessagesPage";
-import SupportMsgsConversation from "@/pages/supportmessages/SupportMsgsConversation";
 import AddQuestions from "@/pages/technicalsupport/AddQuestion";
 import EditQuestion from "@/pages/technicalsupport/EditQuestion";
 import TechnicalSupport from "@/pages/technicalsupport/TechnicalSupport";
@@ -72,6 +71,7 @@ import NotificationDetails from "@/pages/notification/NotificationDetails";
 import AddNotification from "@/pages/notification/AddNotification";
 import ViewCars from "@/pages/cars/ViewCars";
 import ViewAgent from "@/pages/cars/ViewAgent";
+import SupportMsgsConversationWrapper from "@/pages/supportmessages/SupportMsgsConversationWrapper";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
@@ -209,7 +209,7 @@ export const privateRoutes: RouteTypes[] = [
   },
   {
     path: "/support-messages/view/:id",
-    element: <SupportMsgsConversation />,
+    element: <SupportMsgsConversationWrapper />,
   },
 
   // Contact-us route
