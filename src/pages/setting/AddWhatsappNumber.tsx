@@ -49,7 +49,12 @@ const AddWhatsappNumber = () => {
       navigate("/settings?section=Insurance+Price+Request+Button");
 
     } catch (err: any) {
-      toast.error(err.message || t("somethingWentWrong"));
+      const errorMessage =
+        err.response?.data?.message || 
+        err.message || 
+        t("somethingWentWrong");
+
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
