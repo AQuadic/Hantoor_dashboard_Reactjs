@@ -17,6 +17,23 @@ export interface Accessory {
   updated_at?: string;
 }
 
+export interface Offer {
+  id: number;
+  vehicle_id: number;
+  name: { ar: string; en: string };
+  description: { ar: string; en: string };
+  is_active: boolean;
+  image?: {
+    id: number;
+    uuid: string;
+    size: number;
+    url: string;
+    responsive_urls: string[];
+  } | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Vehicle {
   id: number;
   name: { ar: string; en: string };
@@ -53,7 +70,7 @@ export interface Vehicle {
   video: string[];
   images: string[];
   features: unknown[];
-  offers: unknown[];
+  offers: Offer[];
   accessories: Accessory[];
   packages: unknown[];
 

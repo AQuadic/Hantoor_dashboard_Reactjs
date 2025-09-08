@@ -58,7 +58,9 @@ const ViewCars = () => {
             {selectedFilter === "Accessories" && (
               <Accessories accessories={vehicle?.accessories || []} />
             )}
-            {selectedFilter === "Offers" && <Offers  />}
+            {selectedFilter === "Offers" && (
+              <Offers offers={vehicle?.offers || []} />
+            )}
             {selectedFilter === "Lease to Own" && <LeaseToOwn  />}
             {selectedFilter === "Additional Images" && <AdditionalImages  />}
             {selectedFilter === "Videos" && <Videos  />}

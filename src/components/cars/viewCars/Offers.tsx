@@ -1,4 +1,3 @@
-import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import {
   Table,
   TableBody,
@@ -8,53 +7,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Switch } from "@heroui/react";
+import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
+import { Offer } from "@/api/vehicles/getVehicleById";
 
-const offers = [
-  {
-    id: 1,
-    name: "تسجيل مجاني",
-    details: "-",
-    image: "/images/offers/offer1.png",
-    status: true,
-  },
-  {
-    id: 2,
-    name: "تحليل مجاني",
-    details: "-",
-    image: "/images/offers/offer2.png",
-    status: true,
-  },
-  {
-    id: 3,
-    name: "كاش باك",
-    details: "-",
-    image: "/images/offers/offer3.png",
-    status: false,
-  },
-  {
-    id: 4,
-    name: "بنزين مجاني",
-    details: "20.0 لتر",
-    image: "/images/offers/offer4.png",
-    status: false,
-  },
-  {
-    id: 5,
-    name: "تامين مجاني",
-    details: "40.000 كم",
-    image: "/images/offers/offer5.png",
-    status: true,
-  },
-  {
-    id: 6,
-    name: "صيانة مجانية",
-    details: "3 سنوات",
-    image: "/images/offers/offer6.png",
-    status: true,
-  },
-];
-
-const Offers = () => (
+const Offers = ({ offers }: { offers: Offer[] }) => (
   <section className="md:mx-8 mx-0">
     <div className="w-full">
       <Table>
@@ -63,7 +19,7 @@ const Offers = () => (
             <TableHead className="text-right ">#</TableHead>
             <TableHead className="text-right ">الصورة</TableHead>
             <TableHead className="text-right w-[10%]">الاسم</TableHead>
-            <TableHead className="text-right w-[10%]">تفاصيل</TableHead>
+            <TableHead className="text-right w-full">تفاصيل</TableHead>
             <TableHead className="text-right">الحالة</TableHead>
             <TableHead className="text-right"></TableHead>
           </TableRow>
@@ -72,18 +28,24 @@ const Offers = () => (
           {offers.map((offer) => (
             <TableRow key={offer.id} noBackgroundColumns={1}>
               <TableCell className="">{offer.id}</TableCell>
-              <TableCell className="">image</TableCell>
-              <TableCell className="w-[10%]">
-                {typeof offer.name === "string"
-                  ? offer.name
-                  : (offer.name as { ar: string; en: string })?.ar ||
-                    (offer.name as { ar: string; en: string })?.en ||
-                    "-"}
+              <TableCell>
+                {offer.image?.url ? (
+                  <img
+                    src={offer.image.url}
+                    alt={offer.name.ar || offer.name.en || "offer"}
+                    className="w-16 h-16 object-cover rounded"
+                  />
+                ) : (
+                  <span>-</span>
+                )}
               </TableCell>
-              <TableCell className=" w-full">{offer.details}</TableCell>
+              <TableCell>
+                {offer.name.ar || offer.name.en || "-"}
+              </TableCell>
+              <TableCell>{offer.description.ar || offer.description.en || "-"}</TableCell>
 
               <TableCell className="flex items-center gap-2">
-                <Switch />
+                <Switch isSelected={offer.is_active} />
                 <TableDeleteButton handleDelete={() => {}} />
               </TableCell>
             </TableRow>
