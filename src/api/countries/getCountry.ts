@@ -64,3 +64,25 @@ export async function getCountries(
 
   return response.data;
 }
+
+/**
+ * Fetch all countries by following pagination until there is no next link.
+ * Returns a flat array of Country objects.
+ */
+export async function getAllCountries(
+  searchTerm: string = ""
+): Promise<Country[]> {
+  const all: Country[] = [];
+  let page = 1;
+
+  while (true) {
+    const resp = await getCountries(page, searchTerm);
+    all.push(...resp.data);
+    if (!resp.links?.next) break;
+    page++;
+    // defensive: if last_page is present, stop when page exceeds it
+    if (resp.meta?.last_page && page > resp.meta.last_page) break;
+  }
+
+  return all;
+}

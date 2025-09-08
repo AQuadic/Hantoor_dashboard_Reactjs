@@ -9,39 +9,48 @@ import { Eye, EyeOff } from "lucide-react";
 import { createAdminUser, CreateAdminUserPayload } from "@/api/users/addUser";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import { CountriesResponse, getCountries } from "@/api/countries/getCountry";
+import { Country, getAllCountries } from "@/api/countries/getCountry";
 import { useNavigate } from "react-router";
 
-const getCountryByIso2 = (iso2: string) => {
+type SelectedCountry = { iso2: string; name: string; phone: string[] };
+
+const getCountryByIso2 = (iso2: string): SelectedCountry => {
   const country = countries[iso2 as keyof typeof countries];
   if (!country) return { iso2: "EG", name: "Egypt", phone: ["20"] };
   return {
     iso2,
     name: country.name,
-    phone: [country.phone],
+    phone: [String(country.phone)],
   };
 };
 
 const AddUsers = () => {
-  const { t } = useTranslation("users");
-  const [selectedCountry, setSelectedCountry] = useState(
+  const { t, i18n } = useTranslation("users");
+  const [selectedCountry, setSelectedCountry] = useState<SelectedCountry>(
     getCountryByIso2("EG")
   );
+  const [selectedCountryId, setSelectedCountryId] = useState<
+    string | undefined
+  >(undefined);
   const [phone, setPhone] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [image] = useState<File | null>(null);
-  const [countryId] = useState("");
+  // removed unused countryId state; we use selectedCountryId instead
   const [cityId] = useState("");
   const navigate = useNavigate();
-  const { data: countriesData } = useQuery<CountriesResponse>({
-    queryKey: ["countries"],
-    queryFn: () => getCountries(1),
+  // Fetch all countries (follow pagination) so the select shows every item
+  const { data: allCountries } = useQuery<Country[]>({
+    queryKey: ["countries", "all"],
+    queryFn: () => getAllCountries(),
   });
+
+  // no paginated query needed here — we use allCountries which follows pagination
 
   const handleSubmit = async () => {
     const payload: CreateAdminUserPayload = {
@@ -50,18 +59,21 @@ const AddUsers = () => {
       phone,
       phone_country: selectedCountry.iso2,
       image: image || undefined,
-      country_id: countryId || undefined,
+      country_id: selectedCountryId ? String(selectedCountryId) : undefined,
       city_id: cityId || undefined,
       password: password || undefined,
       password_confirmation: confirmPassword || undefined,
     };
 
     try {
+      setIsSubmitting(true);
       await createAdminUser(payload);
       toast.success(t("userAdded"));
       navigate("/users");
     } catch {
       toast.error("Failed to create user.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -130,12 +142,8 @@ const AddUsers = () => {
           {/* Country */}
           <div className="relative w-full mt-[18px]">
             <Select
-              items={
-                countriesData?.data.map((c) => ({
-                  key: c.id.toString(),
-                  label: c.name.ar,
-                })) || []
-              }
+              items={allCountries || []}
+              selectedKeys={selectedCountryId ? [selectedCountryId] : []}
               label={t("country")}
               placeholder={t("all")}
               classNames={{
@@ -143,22 +151,34 @@ const AddUsers = () => {
                 label: "!text-[15px] !text-[#000000]",
                 listbox: "bg-white shadow-md",
               }}
-              onVolumeChange={(event) => {
-                const value = (event.target as HTMLSelectElement).value;
-                const country = countriesData?.data.find(
+              onSelectionChange={(keys) => {
+                const value = Array.from(keys)[0] as string | undefined;
+                if (!value) return;
+                setSelectedCountryId(value);
+                const country = allCountries?.find(
                   (c) => c.id.toString() === value
                 );
                 if (country) {
-                  // Transform API Country to expected format
                   setSelectedCountry({
-                    iso2: country.code,
-                    name: country.name.en,
-                    phone: [country.code], // Using country code as phone prefix fallback
+                    iso2: country.code || selectedCountry.iso2,
+                    name:
+                      (country.name && (country.name.ar || country.name.en)) ||
+                      country.name?.en ||
+                      selectedCountry.name,
+                    phone: country.code
+                      ? [String(country.code)]
+                      : selectedCountry.phone,
                   });
                 }
               }}
             >
-              {(country) => <SelectItem>{country.label}</SelectItem>}
+              {(country) => (
+                <SelectItem key={country.id.toString()}>
+                  {i18n.language === "ar"
+                    ? country.name.ar || country.name.en
+                    : country.name.en}
+                </SelectItem>
+              )}
             </Select>
           </div>
 
@@ -176,12 +196,14 @@ const AddUsers = () => {
             <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
               {t("password")}
             </h2>
-            <div
+            <button
+              type="button"
+              aria-label={showPassword ? t("hidePassword") : t("showPassword")}
               className="absolute top-9.5 rtl:left-5 ltr:right-5 cursor-pointer"
               onClick={() => setShowPassword((prev) => !prev)}
             >
               {showPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-            </div>
+            </button>
           </div>
         </div>
 
@@ -199,12 +221,16 @@ const AddUsers = () => {
           <h2 className="text-[#000000] text-[15px] absolute top-5 rtl:right-4 ltr:left-4">
             {t("confirmPassword")}
           </h2>
-          <div
+          <button
+            type="button"
+            aria-label={
+              showConfirmPassword ? t("hidePassword") : t("showPassword")
+            }
             className="absolute top-9.5 rtl:left-5 ltr:right-5 cursor-pointer"
             onClick={() => setShowConfirmPassword((prev) => !prev)}
           >
             {showConfirmPassword ? <Eye size={20} /> : <EyeOff size={20} />}
-          </div>
+          </button>
         </div>
 
         <div className="mt-4">
@@ -212,6 +238,7 @@ const AddUsers = () => {
             titleAr={"اضافة"}
             titleEn={"Save"}
             onClick={handleSubmit}
+            isLoading={isSubmitting}
           />
         </div>
       </div>
