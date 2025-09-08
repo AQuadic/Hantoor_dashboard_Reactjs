@@ -235,7 +235,7 @@ const VerificationCode = () => {
           {t("codeSent")}
         </p>
 
-        <div className="flex justify-center gap-2 mt-4">
+        <div className="flex justify-center gap-2 mt-4" dir="ltr">
           {otp.map((digit, index) => (
             <input
               key={`digit-${index}-${digit}`}
