@@ -50,7 +50,7 @@ const ViewCars = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {selectedFilter === "About Car" && <AboutCar  />}
+            {selectedFilter === "About Car" && vehicle && <AboutCar vehicle={vehicle} />}
             {selectedFilter === "Specifications" && <Specifications  />}
             {selectedFilter === "Maintenance Packages" && (
               <MaintenancePackages packages={vehicle?.packages || []} />

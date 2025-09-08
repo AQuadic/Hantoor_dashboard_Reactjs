@@ -1,24 +1,35 @@
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import Edit from "@/components/icons/general/Edit";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Link } from "react-router";
-const AboutCar = () => {
+import { Vehicle } from "@/api/vehicles/getVehicleById";
+import { useTranslation } from "react-i18next";
+
+interface AboutCarProps {
+  vehicle: Vehicle;
+}
+
+const AboutCar = ({ vehicle }: AboutCarProps) => {
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
+
   const insuranceData = [
     {
-      id: 1,
-      taxIncluded: "نعم",
-      warrantyIncluded: "نعم",
-      insuranceIncluded: "نعم",
-      agentName: "الشركة الدولية التجارية",
-      leaseToOwn: "يوجد",
-      addedAt: "22/03/2024- 08:30 PM",
+      id: vehicle.id,
+      taxIncluded: vehicle.is_include_tax ? (lang === "ar" ? "نعم" : "Yes") : (lang === "ar" ? "لا" : "No"),
+      warrantyIncluded: vehicle.is_include_warranty ? (lang === "ar" ? "نعم" : "Yes") : (lang === "ar" ? "لا" : "No"),
+      insuranceIncluded: vehicle.is_Insurance_warranty ? (lang === "ar" ? "نعم" : "Yes") : (lang === "ar" ? "لا" : "No"),
+      agentName: (vehicle.agent as any)?.name?.[lang] || "-",
+      leaseToOwn: vehicle.is_rent_to_own ? (lang === "ar" ? "يوجد" : "Yes") : (lang === "ar" ? "لا يوجد" : "No"),
+      addedAt: vehicle.created_at
+        ? new Date(vehicle.created_at).toLocaleString(lang === "ar" ? "ar-EG" : "en-US", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        : "-",
     },
   ];
 
