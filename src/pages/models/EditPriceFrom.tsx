@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
-import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
+import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
 import toast from "react-hot-toast";
 
 const EditPriceFrom = () => {
@@ -20,7 +20,11 @@ const EditPriceFrom = () => {
 
   const isEdit = Boolean(priceId);
 
-  const { data: countriesData, isLoading, isError } = useQuery({
+  const {
+    data: countriesData,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["countries"],
     queryFn: () => getCountries(),
   });
@@ -34,14 +38,14 @@ const EditPriceFrom = () => {
     try {
       await updatePriceFrom(priceId, { name: priceAr || priceEn });
       toast.success(t("priceUpdated"));
-      navigate("/models?section=Price From")
+      navigate("/models?section=Price From");
     } catch (error: any) {
-    if (error.response?.data?.message) {
-      toast.error(error.response.data.message);
-    } else {
-      toast.error(t("error"));
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(t("error"));
+      }
     }
-  }
   };
 
   return (
@@ -61,7 +65,7 @@ const EditPriceFrom = () => {
             link: "/models",
           },
           {
-            titleAr:"تعديل السعر",
+            titleAr: "تعديل السعر",
             titleEn: "Edit the price",
             link: isEdit ? `/price-from/edit/${priceId}` : "/price-from/add",
           },
@@ -72,9 +76,9 @@ const EditPriceFrom = () => {
           <div className="flex gap-4">
             <div className="flex-1">
               <Input
-                label={t('arPrice')}
+                label={t("arPrice")}
                 variant="bordered"
-              placeholder={t('writeHere')}
+                placeholder={t("writeHere")}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
                 value={priceAr}
@@ -95,22 +99,18 @@ const EditPriceFrom = () => {
                   <SelectItem
                     key={country.id}
                     textValue={
-                      i18n.language === "ar"
-                        ? country.name.ar
-                        : country.name.en
+                      i18n.language === "ar" ? country.name.ar : country.name.en
                     }
                   >
-                    {i18n.language === "ar"
-                      ? country.name.ar
-                      : country.name.en}
+                    {i18n.language === "ar" ? country.name.ar : country.name.en}
                   </SelectItem>
                 ))}
               </Select>
             </div>
             <Input
-              label={t('enPrice')}
+              label={t("enPrice")}
               variant="bordered"
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
               className="flex-1"
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
@@ -119,11 +119,7 @@ const EditPriceFrom = () => {
             />
           </div>
 
-          <DashboardButton
-            titleAr="حفظ"
-            titleEn="Save"
-            onClick={handleSave}
-          />
+          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
         </div>
       </div>
     </div>
