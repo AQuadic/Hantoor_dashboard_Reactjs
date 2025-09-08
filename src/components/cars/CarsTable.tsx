@@ -66,6 +66,10 @@ const CarsTable = ({
       // Only add search if it has a meaningful value
       if (searchTerm && searchTerm.trim() !== "") {
         queryFilters.search = searchTerm.trim();
+        // Add search_type when search is present (required by API)
+        if (!queryFilters.search_type) {
+          queryFilters.search_type = "name"; // Default search type
+        }
       }
 
       return fetchVehicles(currentPage, {
@@ -227,11 +231,16 @@ const CarsTable = ({
   };
 
   const getVehicleImage = (vehicle: Vehicle) => {
-    if (typeof vehicle.image === "string" && !vehicle.image.startsWith("http")) {
+    if (
+      typeof vehicle.image === "string" &&
+      !vehicle.image.startsWith("http")
+    ) {
       const cleanPath = vehicle.image.replace(/\/+/g, "/");
       return cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`;
     }
-    return typeof vehicle.image === "string" && vehicle.image ? vehicle.image : carImage;
+    return typeof vehicle.image === "string" && vehicle.image
+      ? vehicle.image
+      : carImage;
   };
 
   // Helper function to safely get vehicle name (API returns name as string or VehicleName object)
@@ -239,7 +248,6 @@ const CarsTable = ({
     if (typeof name === "string") return name || "-"; // just return string
     return i18n.language === "ar" ? name.ar || "-" : name.en || "-";
   };
-
 
   // Translate boolean-ish values to localized Yes/No
   const translateYesNo = (val: unknown) => {
@@ -280,7 +288,7 @@ const CarsTable = ({
       ? (vehiclesData as VehiclesApiResponse).data
       : [];
 
-      if (!vehicles.length) return <NoData />;
+  if (!vehicles.length) return <NoData />;
 
   return (
     <div className="relative flex">
@@ -330,9 +338,7 @@ const CarsTable = ({
                     }}
                   />
                 </TableCell>
-                <TableCell>
-                  {getVehicleDisplayName(vehicle.name)}
-                </TableCell>
+                <TableCell>{getVehicleDisplayName(vehicle.name)}</TableCell>
                 <TableCell>
                   {vehicle.brand?.name[i18n.language as "ar" | "en"]}
                 </TableCell>

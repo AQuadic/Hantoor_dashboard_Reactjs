@@ -106,7 +106,6 @@ const AddCarsForm = () => {
         rent_to_own_duration: vehicle.rent_to_own_duration
           ? safeToString(vehicle.rent_to_own_duration)
           : "",
-        rent_to_own_duration_en: "", // This field is UI-only, not stored in API
         rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp
           ? safeToString(vehicle.rent_to_own_whatsapp)
           : "",

@@ -208,6 +208,8 @@ export interface VehicleFilters {
   engine_volume_id?: number;
   vehicle_model_id?: number[];
   vehicle_body_type_id?: number[];
+  is_offer?: boolean;
+  is_discount?: boolean;
   price_from?: number;
   price_to?: number;
   price_range?: "under_500" | "500_to_800" | "above_800";
@@ -216,6 +218,9 @@ export interface VehicleFilters {
   sort_order?: "asc" | "desc";
   per_page?: number;
   search?: string;
+  search_type?: string;
+  order_by?: "new" | "low_price" | "high_price";
+  is_active?: boolean;
 }
 
 // Request payload for creating vehicles (using FormData for file uploads)
@@ -297,6 +302,21 @@ export async function fetchVehicles(
   }
   if (filters.search && filters.search.trim() !== "") {
     params.search = filters.search.trim();
+  }
+  if (filters.search_type) {
+    params.search_type = filters.search_type;
+  }
+  if (filters.order_by) {
+    params.order_by = filters.order_by;
+  }
+  if (filters.is_active !== undefined) {
+    params.is_active = filters.is_active ? 1 : 0;
+  }
+  if (filters.is_offer !== undefined) {
+    params.is_offer = filters.is_offer ? 1 : 0;
+  }
+  if (filters.is_discount !== undefined) {
+    params.is_discount = filters.is_discount ? 1 : 0;
   }
 
   // Handle array parameters

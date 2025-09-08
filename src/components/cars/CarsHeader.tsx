@@ -5,13 +5,21 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import CarsSelect from "./CarsSelect";
+import { type VehicleFilters } from "@/api/vehicles";
 
 interface CarsHeaderProps {
   searchTerm?: string;
   setSearchTerm?: (term: string) => void;
+  filters?: VehicleFilters;
+  onFilterChange?: (newFilters: Partial<VehicleFilters>) => void;
 }
 
-const CarsHeader = ({ searchTerm, setSearchTerm }: CarsHeaderProps) => {
+const CarsHeader = ({
+  searchTerm,
+  setSearchTerm,
+  filters,
+  onFilterChange,
+}: CarsHeaderProps) => {
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -45,7 +53,7 @@ const CarsHeader = ({ searchTerm, setSearchTerm }: CarsHeaderProps) => {
           />
         </Link>
       </div>
-      <CarsSelect />
+      <CarsSelect filters={filters} onFilterChange={onFilterChange} />
     </div>
   );
 };

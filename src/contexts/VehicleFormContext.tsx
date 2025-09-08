@@ -13,7 +13,6 @@ interface VehicleFormState extends Omit<CreateVehiclePayload, "name"> {
   id?: number;
   nameAr: string;
   nameEn: string;
-  rent_to_own_duration_en?: string; // Additional field for English duration
   mainImage?: File | string | null;
   videoFile?: File | string | null;
   carImages: VehicleImage[];
@@ -73,7 +72,6 @@ const initialFormState: VehicleFormState = {
   is_include_warranty: false,
   is_rent_to_own: false,
   rent_to_own_duration: "",
-  rent_to_own_duration_en: "",
   rent_to_own_whatsapp: "",
   rent_to_own_price: "",
   country_id: "",
