@@ -6,25 +6,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import accessoriesImg from "/images/accessories.png";
-import accessoriesImg2 from "/images/accessories2.png";
 import { Switch } from "@heroui/react";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
+import { Accessory } from "@/api/vehicles/getVehicleById";
 
-const Accessories = () => {
-  const accessories = [
-    {
-      image: accessoriesImg,
-      name: "فامية",
-      price: "500 درهم",
-    },
-    {
-      image: accessoriesImg2,
-      name: "سيراميك",
-      price: "500 درهم",
-    },
-  ];
-
+const Accessories = ({ accessories }: { accessories: Accessory[] }) => {
   return (
     <section className="md:mx-8 mx-0">
       <div className="w-full">
@@ -41,30 +27,25 @@ const Accessories = () => {
           </TableHeader>
           <TableBody>
             {accessories.map((accessory, index) => (
-              <TableRow key={index} noBackgroundColumns={1}>
+              <TableRow key={accessory.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
-                  <img
-                    src={accessory.image}
-                    alt={
-                      typeof accessory.name === "string"
-                        ? accessory.name
-                        : (accessory.name as { ar: string; en: string })?.ar ||
-                          (accessory.name as { ar: string; en: string })?.en ||
-                          "accessory"
-                    }
-                  />
+                  {accessory.image?.url ? (
+                    <img
+                      src={accessory.image.url}
+                      alt={accessory.name.ar || accessory.name.en || "accessory"}
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                  ) : (
+                    <span>-</span>
+                  )}
                 </TableCell>
                 <TableCell>
-                  {typeof accessory.name === "string"
-                    ? accessory.name
-                    : (accessory.name as { ar: string; en: string })?.ar ||
-                      (accessory.name as { ar: string; en: string })?.en ||
-                      "-"}
+                  {accessory.name.ar || accessory.name.en || "-"}
                 </TableCell>
-                <TableCell className="w-full">{accessory.price}</TableCell>
+                <TableCell className="w-full">{accessory.price} درهم</TableCell>
                 <TableCell className="flex items-center gap-[7px]">
-                  <Switch />
+                  <Switch isSelected={accessory.is_active} />
                   <div className="mt-2">
                     <TableDeleteButton handleDelete={() => {}} />
                   </div>

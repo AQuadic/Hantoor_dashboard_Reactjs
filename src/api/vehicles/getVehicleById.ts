@@ -1,5 +1,22 @@
 import { axios } from "@/lib/axios";
 
+export interface Accessory {
+  id: number;
+  vehicle_id: number;
+  name: { ar: string; en: string };
+  price: number;
+  is_active: boolean;
+  image?: {
+    id: number;
+    uuid: string;
+    size: number;
+    url: string;
+    responsive_urls: string[];
+  };
+  created_at?: string;
+  updated_at?: string;
+}
+
 export interface Vehicle {
   id: number;
   name: { ar: string; en: string };
@@ -27,6 +44,7 @@ export interface Vehicle {
   rent_to_own_price: string | null;
   created_at: string | null;
   updated_at: string | null;
+  is_active: boolean;
 
   // Arrays
   additional_images: string[];
@@ -36,7 +54,7 @@ export interface Vehicle {
   images: string[];
   features: unknown[];
   offers: unknown[];
-  accessories: unknown[];
+  accessories: Accessory[];
   packages: unknown[];
 
   // Related objects (can be null if not loaded)
