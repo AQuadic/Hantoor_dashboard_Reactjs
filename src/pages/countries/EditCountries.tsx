@@ -59,7 +59,8 @@ const EditCountries = () => {
       setLoading(true);
       await updateCountry(Number(id), {
         name: { ar: arCountry, en: enCountry },
-        currency: enCurrency.trim() || arCurrency.trim(),
+        // Ensure API receives currency text in both languages
+        currency_text: { ar: arCurrency.trim(), en: enCurrency.trim() },
         service_fee: serviceFee,
         service_duration: serviceDuration,
         service_duration_type: serviceDurationType,

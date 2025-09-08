@@ -751,6 +751,11 @@ Tasks completed during this session:
 - ✅ Added proper error handling and empty data validation
 - ✅ Project running successfully on localhost:5175
 
+## 2025-09-08: Countries - Ensure currency_text sent on update ✅
+
+- Updated `src/pages/countries/EditCountries.tsx` to send `currency_text: { ar, en }` in the update payload when calling `updateCountry`.
+- Reason: API expects `currency_text` as an object with both Arabic and English strings; this aligns update behavior with create (`AddCountries.tsx`) and preserves bilingual data.
+
 2025-08-24: Fixed models/AddCategories.tsx to ensure selected vehicle type id is sent as a numeric value in the create payload. Change summary:
 
 - Converted `selectedCarType` state from string to number
