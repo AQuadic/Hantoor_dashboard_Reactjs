@@ -1,14 +1,28 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Switch } from "@heroui/react";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
+import { Vehicle } from "@/api/vehicles/getVehicleById";
+import NoData from "@/components/general/NoData";
 
-const LeaseToOwn = () => {
-  const rentToOwn = [
-    {
-      duration: "3 سنوات",
-      price: "500 درهم",
-    },
-  ];
+interface LeaseToOwnProps {
+  vehicle?: Vehicle;
+}
+
+const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
+  if (!vehicle) return <NoData />; 
+
+  const rentToOwnData = vehicle.is_rent_to_own
+    ? [
+        {
+          duration: vehicle.rent_to_own_duration
+            ? `${vehicle.rent_to_own_duration} سنة`
+            : "-",
+          price: vehicle.rent_to_own_price
+            ? `${vehicle.rent_to_own_price} درهم`
+            : "-",
+        },
+      ]
+    : [];
 
   return (
     <section className="md:mx-8 mx-0">
@@ -23,13 +37,13 @@ const LeaseToOwn = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rentToOwn.map((accessory, index) => (
+            {rentToOwnData.map((item, index) => (
               <TableRow key={index} noBackgroundColumns={1}>
-                <TableCell className="">{accessory.price}</TableCell>
-                <TableCell className="w-full">{accessory.duration}</TableCell>
+                <TableCell>{item.price}</TableCell>
+                <TableCell className="w-full">{item.duration}</TableCell>
                 <TableCell className="flex items-center gap-[7px]">
-                  <Switch />
-                  <img src="/images/whatsapp.svg" alt="" />
+                  <Switch defaultChecked={vehicle.is_rent_to_own} />
+                  <img src="/images/whatsapp.svg" alt="WhatsApp" />
                   <div className="mt-2">
                     <TableDeleteButton handleDelete={() => {}} />
                   </div>
