@@ -60,6 +60,15 @@ export interface ImagesAd {
   responsive_urls: string[];
 }
 
+export interface VehicleVideo {
+  id: number;
+  uuid: string;
+  size: number;
+  url: string;
+  responsive_urls: string[];
+  views: number | null;
+}
+
 export interface Vehicle {
   id: number;
   name: { ar: string; en: string };
@@ -93,7 +102,7 @@ export interface Vehicle {
   additional_images: string[];
   image: string | null;
   images_ads: ImagesAd[];
-  video: string[];
+  video?: VehicleVideo | null;
   images: string[];
   features: unknown[];
   offers: Offer[];
