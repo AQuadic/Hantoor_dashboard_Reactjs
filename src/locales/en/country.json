@@ -22,5 +22,6 @@
     "currencyCode": "Currency code",
     "countryActivated": "Country activated successfully",
     "countryDeactivated": "Country deactivated successfully",
-    "countryUpdatedSuccessfully": "Country updated successfully"
+    "countryUpdatedSuccessfully": "Country updated successfully",
+    "AED": "AED"
 }

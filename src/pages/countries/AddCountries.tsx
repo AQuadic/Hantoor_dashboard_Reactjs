@@ -26,8 +26,7 @@ const handleSubmit = async () => {
   try {
     setLoading(true);
 
-    // تنظيف الكود
-    const cleanCode = code.trim().toUpperCase().slice(0, 3); // يحافظ على 3 أحرف فقط
+    const cleanCode = code.trim().toUpperCase().slice(0, 3);
     const cleanCurrencyCode = currencyCode.trim().toUpperCase().slice(0, 3);
 
     await storeCountry({
@@ -174,7 +173,7 @@ const handleSubmit = async () => {
             label={t("currencyCode")}
             value={currencyCode}
             onChange={setCurrencyCode}
-            placeholder="AED"
+            placeholder={t("AED")}
           />
         </div>
         </div>
