@@ -33,7 +33,8 @@ export const updateAdminUser = async (
     if (payload.name) formData.append("name", payload.name);
     if (payload.email) formData.append("email", payload.email);
     if (payload.phone) formData.append("phone", payload.phone);
-    if (payload.phone_country) formData.append("phone_country", payload.phone_country);
+    if (payload.phone_country)
+      formData.append("phone_country", payload.phone_country);
     if (payload.image) formData.append("image", payload.image);
     if (payload.language) formData.append("language", payload.language);
     if (payload.country_id) formData.append("country_id", payload.country_id);
@@ -52,7 +53,10 @@ export const updateAdminUser = async (
 
     return response.data;
   } catch (error: any) {
-    console.error("Error updating admin user:", error.response || error.message);
+    console.error(
+      "Error updating admin user:",
+      error.response || error.message
+    );
     throw error;
   }
 };

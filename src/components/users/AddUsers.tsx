@@ -65,13 +65,40 @@ const AddUsers = () => {
       password_confirmation: confirmPassword || undefined,
     };
 
+    const getDisplayMessage = (raw: string) => {
+      if (!raw) return t("somethingWentWrong");
+      // If we have a translation key for common backend messages, use it.
+      // defaultValue ensures we fall back to backend text if translation is missing.
+      if (i18n.language === "ar") {
+        if (
+          raw.includes("linked to an account") ||
+          raw.includes("already linked")
+        )
+          return t("phoneAlreadyLinked", { defaultValue: raw });
+      }
+      return raw;
+    };
+
+    const formatAndShowError = (err: unknown) => {
+      const e = err as { response?: any; message?: string };
+      const rawMessage =
+        e?.response?.data?.message ||
+        (e?.response?.data?.errors &&
+          Object.values(e.response.data.errors).flat()[0]) ||
+        e?.message ||
+        t("somethingWentWrong");
+
+      const message = getDisplayMessage(String(rawMessage));
+      toast.error(message);
+    };
+
     try {
       setIsSubmitting(true);
       await createAdminUser(payload);
       toast.success(t("userAdded"));
       navigate("/users");
-    } catch {
-      toast.error("Failed to create user.");
+    } catch (error: any) {
+      formatAndShowError(error);
     } finally {
       setIsSubmitting(false);
     }

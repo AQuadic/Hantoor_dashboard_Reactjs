@@ -45,6 +45,7 @@ const EditUsers = () => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!userId) return;
@@ -70,19 +71,39 @@ const EditUsers = () => {
       country_id: selectedCountryId || undefined,
     };
 
+    const getDisplayMessage = (raw: string) => {
+      if (!raw) return t("somethingWentWrong");
+      if (
+        raw.includes("linked to an account") ||
+        raw.includes("already linked")
+      )
+        return t("phoneAlreadyLinked", { defaultValue: raw });
+      return raw;
+    };
+
+    const formatAndShowError = (err: unknown) => {
+      const e = err as { response?: any; message?: string };
+      const rawMessage =
+        e?.response?.data?.message ||
+        (e?.response?.data?.errors &&
+          Object.values(e.response.data.errors).flat()[0]) ||
+        e?.message ||
+        t("somethingWentWrong");
+      const message = getDisplayMessage(String(rawMessage));
+      console.error("Failed to update user:", e?.response || e?.message);
+      toast.error(message);
+    };
+
     try {
+      setIsSubmitting(true);
       const updatedUser = await updateAdminUser(userId, payload);
       console.log("User updated:", updatedUser);
-      toast.success(t('userUpdated'));
-      navigate("/users")
-    } catch (error: any) {
-      const message =
-        error?.response?.data?.message ||
-        error?.response?.data?.errors?.[0]?.message ||
-        error?.message ||
-        "Failed to update user";
-      console.error("Failed to update user:", error.response || error.message);
-      toast.error(message);
+      toast.success(t("userUpdated"));
+      navigate("/users");
+    } catch (err: unknown) {
+      formatAndShowError(err);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -189,6 +210,7 @@ const EditUsers = () => {
             titleAr={"حفظ"}
             titleEn={"Save"}
             onClick={handleSubmit}
+            isLoading={isSubmitting}
           />
         </div>
       </div>

@@ -35,7 +35,10 @@ export const createAdminUser = async (payload: CreateAdminUserPayload) => {
     });
     return response.data;
   } catch (error: any) {
-    console.error("Error creating admin user:", error.response?.data || error.message);
+    console.error(
+      "Error creating admin user:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
