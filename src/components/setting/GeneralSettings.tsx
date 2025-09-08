@@ -1,10 +1,11 @@
 import { Input } from '@heroui/react'
-import React from 'react'
+import React, { useEffect } from 'react'
 import DashboardButton from '../general/dashboard/DashboardButton'
 import ImageInput from '../general/ImageInput'
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
 import { updateSettings } from '@/api/setting/updateSetting';
+import { GeneralSettingsResponse, getSettings } from '@/api/setting/getSetting';
 
 const GeneralSettings = () => {
     const { t } = useTranslation("setting");
@@ -25,6 +26,36 @@ const GeneralSettings = () => {
         iphone_version: '',
         iphone_date: '',
     });
+
+    useEffect(() => {
+    const fetchSettings = async () => {
+        try {
+        const data: GeneralSettingsResponse = await getSettings();
+        setFields({
+            no_videos: data.no_videos,
+            text_features_ar: data.text_features_ar,
+            text_features_en: data.text_features_en,
+            advanced_search_ar: data.advanced_search_ar,
+            advanced_search_en: data.advanced_search_en,
+            financing_text_ar: data.financing_text_ar,
+            financing_text_en: data.financing_text_en,
+            android_link: data.android_link,
+            android_version: data.android_version,
+            publish_date: data.publish_date,
+            iphone_link: data.iphone_link,
+            iphone_version: data.iphone_version,
+            iphone_date: data.iphone_date,
+        });
+        if (data.profile_image) {
+            setProfileImage(null); // Or handle URL display
+        }
+        } catch (error: any) {
+        toast.error(error.message || "Failed to load settings");
+        }
+    };
+
+    fetchSettings();
+    }, []);
 
     const handleInputChange = (key: string, value: string) => {
         setFields(prev => ({ ...prev, [key]: value }));
