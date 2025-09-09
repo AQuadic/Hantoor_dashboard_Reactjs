@@ -81,5 +81,6 @@
   "profileAdded": "Profile page added successfully",
   "profileDeleted": "Profile deleted successfully",
   "profileUpdated": "Profile updated successfully",
-  "statusUpdated": "status updated successfully"
+  "statusUpdated": "status updated successfully",
+  "requestFinancingExists": "Request Financing already exists with this country."
 }

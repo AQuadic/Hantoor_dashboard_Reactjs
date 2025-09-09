@@ -48,14 +48,18 @@ const AddWhatsappNumber = () => {
       setSelectedCountry(null);
       navigate("/settings?section=Insurance+Price+Request+Button");
 
-    } catch (err: any) {
-      const errorMessage =
-        err.response?.data?.message || 
-        err.message || 
-        t("somethingWentWrong");
+    }catch (err: any) {
+        const apiMessage = err.response?.data?.message || err.message;
 
-      toast.error(errorMessage);
-    } finally {
+        let errorMessage = t("somethingWentWrong");
+
+        if (apiMessage === "Request Financing already exists with this country.") {
+          errorMessage = t("requestFinancingExists");
+        }
+
+        toast.error(errorMessage);
+      }
+    finally {
       setLoading(false);
     }
   };
