@@ -3,8 +3,20 @@ import { axios } from "@/lib/axios";
 export interface Slider {
   id: number;
   name: string | null;
-  ar_image: string | null;
-  en_image: string | null;
+  ar_image: {
+    file_name: string;
+    mime_type: string;
+    url: string;
+    responsive_urls: string[];
+    uuid: string;
+  } | null;
+  en_image: {
+    file_name: string;
+    mime_type: string;
+    url: string;
+    responsive_urls: string[];
+    uuid: string;
+  } | null;
 }
 
 export interface GetSlidersResponse {

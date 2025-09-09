@@ -88,7 +88,7 @@ const AdvertisingImages = () => {
                     {data?.map((slider: Slider) => (
                         <div key={slider.id} className="relative">
                         <img
-                            src={slider.ar_image || "/images/placeholder.png"}
+                            src={slider.ar_image?.url || "/images/placeholder.png"}
                             className="w-[378px] h-[169px]"
                             alt={slider.name || `Slider ${slider.id}`}
                             />
