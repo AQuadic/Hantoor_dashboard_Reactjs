@@ -43,9 +43,9 @@ const ForgetPass = () => {
       if (phone) localStorage.setItem("resetPhone", phone);
       localStorage.setItem("resetPhoneCountry", phoneCountry);
 
-      // navigate("/verification-code", {
-      //   state: { email, phone, phoneCountry },
-      // });
+      navigate("/verification-code", {
+        state: { email, phone, phoneCountry },
+      });
     } catch (error: any) {
       // Prefer server-provided message when available
       let errorMsg = t("resetPasswordFailed", "Failed to send password reset");
