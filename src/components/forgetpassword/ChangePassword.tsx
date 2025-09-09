@@ -3,11 +3,8 @@ import { useTranslation } from "react-i18next";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import PasswordInput from "../general/PasswordInput";
 import toast from "react-hot-toast";
-import {
-  resetPassword,
-  ResetPasswordRequest,
-} from "@/api/password/resetPassword";
 import { useNavigate } from "react-router-dom";
+import { changePassword, ChangePasswordRequest } from "@/api/password/changePassword";
 
 const ChangePassword = () => {
   const { t } = useTranslation("login");
@@ -53,7 +50,7 @@ const ChangePassword = () => {
     }
     if (!resetToken) return;
 
-    const data: ResetPasswordRequest = {
+    const data: ChangePasswordRequest = {
       password,
       password_confirmation: passwordConfirm,
       reset_token: resetToken,
@@ -64,7 +61,7 @@ const ChangePassword = () => {
 
     setLoading(true);
     try {
-      const response = await resetPassword(data);
+      const response = await changePassword(data);
       toast.success(response.message || "Password changed successfully");
 
       localStorage.removeItem("resetToken");

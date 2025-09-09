@@ -3,27 +3,32 @@ import { axios } from "@/lib/axios";
 export interface ChangePasswordRequest {
   password: string;
   password_confirmation: string;
+
+  reset_token?: string;
+  email?: string;
+  phone?: string;
+  phone_country?: string;
+
+  current_password?: string;
+
+  firebase_token?: string;
 }
 
 export interface ChangePasswordResponse {
   message: string;
+  success?: boolean;
+  [key: string]: any;
 }
 
 export const changePassword = async (
-  userId: string | number,
   data: ChangePasswordRequest
 ): Promise<ChangePasswordResponse> => {
-  const formData = new FormData();
-
-  formData.append("password", data.password);
-  formData.append("password_confirmation", data.password_confirmation);
-
   const response = await axios.post<ChangePasswordResponse>(
-    `/user/admin/${userId}`,
-    formData,
+    "/admin/change_password",
+    data,
     {
       headers: {
-        "Content-Type": "multipart/form-data",
+        "Content-Type": "application/json",
         Accept: "application/json",
       },
     }
