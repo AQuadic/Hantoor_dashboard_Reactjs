@@ -25,5 +25,6 @@
     "notificationDeleted": "تم حذف الإشعار بنجاح",
     "searchByName": "ابحث بالاسم",
 
-    "noClients": "لا يوجد عملاء"
+    "noClients": "لا يوجد عملاء",
+    "selectCountry": "يرجي اختيار البلد"
 }

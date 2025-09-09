@@ -25,5 +25,6 @@
     "notificationDeleted": "Notifiaction deleted successfully",
     "searchByName": "Search by name",
 
-    "noClients": "No clients"
+    "noClients": "No clients",
+    "selectCountry": "Please select a country"
 }
