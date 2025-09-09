@@ -15,11 +15,14 @@ export interface Conversation {
 export interface SupportConversationsResponse {
   data: Conversation[];
   current_page: number;
-  last_page: number;
-  per_page: number;
   from: number | null;
   to: number | null;
-  total: number;
+  per_page: string;
+  first_page_url: string;
+  next_page_url: string | null;
+  prev_page_url: string | null;
+  path: string;
+  current_page_url: string;
 }
 
 export interface GetSupportConversationsParams {
@@ -39,9 +42,6 @@ export async function getSupportConversations(
     },
     params,
   });
-
-  console.log("Request URL:", response.config.url, "Params:", params);
-  console.log("Response:", response.data);
 
   return response.data as SupportConversationsResponse;
 }

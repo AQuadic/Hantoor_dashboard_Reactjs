@@ -38,9 +38,9 @@ const deserialize = (body: string): CustomElement[] => {
 };
 
 // Helper: Serialize Slate value to string
-const serialize = (value: Descendant[]): string => {
-  return JSON.stringify(value);
-};
+// const serialize = (value: Descendant[]): string => {
+//   return JSON.stringify(value);
+// };
 // Props for ToolbarDropdown
 type DropdownProps = {
   value: string;
@@ -50,7 +50,7 @@ type DropdownProps = {
 import React, { useCallback, useMemo } from "react";
 import {
   createEditor,
-  Descendant,
+  // Descendant,
   Editor,
   Element as SlateElement,
   Transforms,
@@ -537,9 +537,9 @@ const DashboardTextEditor = ({
   );
 
   // Handle controlled value
-  const handleChange = (val: Descendant[]) => {
-    setBody(serialize(val));
-  };
+  // const handleChange = (val: Descendant[]) => {
+  //   setBody(serialize(val));
+  // };
 
   // Get initial font size/color from marks for placeholder/first input
   const marks = Editor.marks(editor) as Record<string, unknown> | null;
@@ -573,9 +573,13 @@ const DashboardTextEditor = ({
         ></div>
         <Toolbar editor={editor} />
         <Slate
+          key={body}
           editor={editor}
           initialValue={initialValue}
-          onChange={handleChange}
+          onChange={(value) => {
+            const plainText = value.map((n: any) => n.children.map((c: any) => c.text).join("")).join("\n");
+            setBody(plainText);
+          }}
         >
           <Editable
             renderElement={renderElement}

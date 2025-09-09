@@ -45,6 +45,7 @@ const AddQuestions = () => {
 
     const payload: CreateFAQPayload = {
       type,
+      country_id: countryId,
       question: { ar: arQuestion, en: enQuestion },
       answer: { ar: arBody, en: enBody },
     };

@@ -13,10 +13,10 @@ export interface FAQAnswer {
 }
 
 export interface CreateFAQPayload {
-  country_id?: string;
+  country_id: string;
   type: FAQType;
-  question?: FAQQuestion;
-  answer?: FAQAnswer;
+  question: FAQQuestion;
+  answer: FAQAnswer;
 }
 
 export interface CreateFAQResponse {

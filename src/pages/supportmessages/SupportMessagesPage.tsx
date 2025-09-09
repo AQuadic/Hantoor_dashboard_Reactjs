@@ -9,19 +9,23 @@ const SupportMessagesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const { data } = useQuery<SupportConversationsResponse, Error>({
+  const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Error>({
     queryKey: ["supportConversations", currentPage, itemsPerPage],
     queryFn: () => getSupportConversations({ page: currentPage, per_page: itemsPerPage }),
   });
 
-  const totalItems = data?.total || 0;
-  const totalPages = data?.last_page || 1;
+const totalItems = data?.to || data?.data.length || 0;
+const totalPages = Math.ceil(totalItems / Number(data?.per_page || itemsPerPage));
 
   return (
     <div>
       <SupportMessagesHeader />
       <div className="px-2 md:px-8">
-        <SupportMessagesTable page={currentPage} itemsPerPage={itemsPerPage} />
+        <SupportMessagesTable
+          conversations={data?.data || []}
+          isLoading={isLoading}
+          refetch={refetch}
+        />
 
         {totalItems > 0 && (
           <TablePagination
