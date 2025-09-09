@@ -4,7 +4,10 @@ import DashboardButton from "../general/dashboard/DashboardButton";
 import PasswordInput from "../general/PasswordInput";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { changePassword, ChangePasswordRequest } from "@/api/password/changePassword";
+import {
+  changePassword,
+  ChangePasswordRequest,
+} from "@/api/password/changePassword";
 
 const ChangePassword = () => {
   const { t } = useTranslation("login");
@@ -12,7 +15,7 @@ const ChangePassword = () => {
 
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [resetToken, setResetToken] = useState<string | null>(null);
   const [email, setEmail] = useState<string>("");
@@ -40,6 +43,10 @@ const ChangePassword = () => {
   }, [navigate]);
 
   const handleSavePassword = async () => {
+    if (loading) {
+      return; // prevent duplicate submissions
+    }
+
     if (!password || !passwordConfirm) {
       toast.error("Please fill in all fields");
       return;
@@ -64,12 +71,21 @@ const ChangePassword = () => {
       const response = await changePassword(data);
       toast.success(response.message || "Password changed successfully");
 
-      localStorage.removeItem("resetToken");
-      localStorage.removeItem("resetEmail");
-      localStorage.removeItem("resetPhone");
-      localStorage.removeItem("resetPhoneCountry");
-
+      // Navigate first, then clear reset-related localStorage after a short delay.
+      // This avoids a race where another concurrent mount (React StrictMode double-mount
+      // in development) reads localStorage after we've cleared it and incorrectly
+      // redirects the user back to the forget-password page.
       navigate("/login");
+      setTimeout(() => {
+        try {
+          localStorage.removeItem("resetToken");
+          localStorage.removeItem("resetEmail");
+          localStorage.removeItem("resetPhone");
+          localStorage.removeItem("resetPhoneCountry");
+        } catch {
+          // ignore storage errors
+        }
+      }, 120);
     } catch (error: unknown) {
       const errorMessage =
         error && typeof error === "object" && "message" in error
@@ -114,6 +130,7 @@ const ChangePassword = () => {
             titleAr={"حفظ ودخول"}
             titleEn={"Save and enter"}
             onClick={handleSavePassword}
+            isLoading={loading}
           />
         </div>
       </div>
