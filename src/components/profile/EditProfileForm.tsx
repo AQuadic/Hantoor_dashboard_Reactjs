@@ -6,7 +6,10 @@ import { countries } from "countries-list";
 import MobileInput from "../general/MobileInput";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { getCurrentAdmin, GetCurrentAdminResponse } from "@/api/profile/getProfile";
+import {
+  getCurrentAdmin,
+  GetCurrentAdminResponse,
+} from "@/api/profile/getProfile";
 import Loading from "../general/Loading";
 import { updateAdmin } from "@/api/admins/editAdmin";
 import toast from "react-hot-toast";
@@ -51,12 +54,12 @@ const EditProfileForm = ({
       setName(data.name || "");
       setEmail(data.email || "");
       if (data.phone) setPhone(data.phone);
-      if (data.phone_country) setSelectedCountry(getCountryByIso2(data.phone_country || "EG"));
+      if (data.phone_country)
+        setSelectedCountry(getCountryByIso2(data.phone_country || "EG"));
     }
   }, [data]);
 
-
-  if (isLoading) return <Loading />
+  if (isLoading) return <Loading />;
 
   const handleSaveMainData = async () => {
     if (!data) return;
@@ -69,18 +72,18 @@ const EditProfileForm = ({
         phone_country: selectedCountry.iso2,
         image: profileImage,
       });
-      toast.success(t('profileUpdated'));
+      toast.success(t("profileUpdated"));
     } catch (err: any) {
       const message = err.response?.data?.message;
 
       if (message?.includes("phone")) {
-        toast.error(t('validation.phone'));
+        toast.error(t("validation.phone"));
       } else if (message?.includes("email")) {
-        toast.error(t('validation.email'));
+        toast.error(t("validation.email"));
       } else if (message?.includes("name")) {
-        toast.error(t('validation.name')); 
+        toast.error(t("validation.name"));
       } else {
-        toast.error(message || t('profileUpdateFailed'));
+        toast.error(message || t("profileUpdateFailed"));
       }
     } finally {
       setLoading(false);
@@ -91,12 +94,12 @@ const EditProfileForm = ({
     if (!data) return;
 
     if (!newPassword || !confirmPassword) {
-      toast.error(t('enterNewPassword'));
+      toast.error(t("enterNewPassword"));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      toast.error(t('passwordnotMatch'));
+      toast.error(t("passwordnotMatch"));
       return;
     }
     try {
@@ -105,11 +108,10 @@ const EditProfileForm = ({
         password: newPassword,
         password_confirmation: confirmPassword,
       });
-      toast.success(t('passwordUpdated'));
+      toast.success(t("passwordUpdated"));
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Failed to update password");
-    }
-      finally {
+    } finally {
       setLoading(false);
     }
   };
@@ -118,7 +120,11 @@ const EditProfileForm = ({
     <form className="p-8" onSubmit={(e) => e.preventDefault()}>
       <div className="p-8 bg-white rounded-2xl ">
         <h3 className="mb-4 text-lg font-bold">{t("profileImage")}</h3>
-        <ImageInput image={profileImage} setImage={setProfileImage} />
+        <ImageInput
+          image={profileImage}
+          setImage={setProfileImage}
+          existingImageUrl={data?.image?.url}
+        />
       </div>
       <div className="flex gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
         <div className="flex flex-col flex-1 gap-4">
@@ -149,7 +155,11 @@ const EditProfileForm = ({
             phone={phone}
             setPhone={setPhone}
           />
-          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSaveMainData}/>
+          <DashboardButton
+            titleAr="حفظ"
+            titleEn="Save"
+            onClick={handleSaveMainData}
+          />
         </div>
         <div className="flex flex-col flex-1 gap-4">
           <h3 className="mb-2 text-lg font-bold">{t("password")}</h3>
@@ -180,7 +190,11 @@ const EditProfileForm = ({
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSavePassword}/>
+          <DashboardButton
+            titleAr="حفظ"
+            titleEn="Save"
+            onClick={handleSavePassword}
+          />
         </div>
       </div>
     </form>
