@@ -708,6 +708,13 @@ if (filters.search && filters.search.trim() !== "") {
 }
 ```
 
+## 2025-09-09: PasswordInput autofill fix
+
+- **Change**: Updated `src/components/general/PasswordInput.tsx` to add `autoComplete="new-password"` and `name="new-password"` to prevent browsers from autofilling password fields with the word "password" or saved credentials unintentionally.
+- **Reason**: Some browsers/agents were pre-populating password inputs with the literal string "password" on page load. Setting `autoComplete` to `new-password` prevents autofill for existing saved passwords and ensures the inputs start empty.
+- **Files Modified**:
+  - `src/components/general/PasswordInput.tsx` - added `autoComplete` and `name` props to Input component
+
 #### **Component Layer (CarsHeader.tsx):**
 
 ```typescript

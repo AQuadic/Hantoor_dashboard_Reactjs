@@ -99,6 +99,10 @@ export default function PasswordInput({
       }
       label={label}
       placeholder="*********"
+      // prevent browser autofill from inserting a saved/placeholder password
+      autoComplete="new-password"
+      // stable name for password inputs (recommended for new password fields)
+      name="new-password"
       type={isVisible ? "text" : "password"}
       variant="bordered"
     />
