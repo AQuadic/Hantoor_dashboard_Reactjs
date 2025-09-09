@@ -573,20 +573,20 @@ const DashboardTextEditor = ({
         ></div>
         <Toolbar editor={editor} />
         <Slate
-          key={body}
-          editor={editor}
-          initialValue={initialValue}
-          onChange={(value) => {
-            const plainText = value.map((n: any) => n.children.map((c: any) => c.text).join("")).join("\n");
-            setBody(plainText);
-          }}
-        >
+        key={body}
+        editor={editor}
+        initialValue={initialValue}
+        onChange={(value) => {
+          const plainText = value.map((n: any) => n.children.map((c: any) => c.text).join("")).join("\n");
+          setBody(plainText);
+        }}
+      >
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}
-            placeholder="لوريم إيبسوم طريقة لكتابة النصوص في النشر والتصميم الجرافيكي يستخدم بشكل شائع لتوضيح الشكل الجرافيكي للمستند أو الخط دون الاعتماد على محتوى ذي معنى. يمكن استخدام لوريم إيبسوم قبل نشر النسخة النهائية"
+            placeholder="اكتب هنا"
             className={css`
-              min-height: 200px;
+              min-height: 208px;
               padding: 16px;
               font-size: ${fontSize};
               color: ${color};
