@@ -107,7 +107,7 @@ const AddUsers = () => {
   return (
     <section>
       <DashboardHeader
-        titleAr={"إضافة مستخدم جدبد"}
+        titleAr={"إضافة مستخدم جديد"}
         titleEn={"Add a new user"}
         items={[
           { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },

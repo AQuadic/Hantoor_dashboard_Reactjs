@@ -69,6 +69,14 @@ export interface VehicleVideo {
   views: number | null;
 }
 
+export interface AdditionalImage {
+  id: number;
+  uuid: string;
+  size: number;
+  url: string;
+  responsive_urls: string[];
+}
+
 export interface Vehicle {
   id: number;
   name: { ar: string; en: string };
@@ -99,7 +107,7 @@ export interface Vehicle {
   is_active: boolean;
 
   // Arrays
-  additional_images: string[];
+  additional_images: AdditionalImage[];
   image: string | null;
   images_ads: ImagesAd[];
   video?: VehicleVideo | null;
