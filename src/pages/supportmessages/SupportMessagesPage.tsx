@@ -7,19 +7,29 @@ import { getSupportConversations, SupportConversationsResponse } from "@/api/sup
 
 const SupportMessagesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState(""); // <-- new search term
   const itemsPerPage = 5;
+const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Error>({
+  queryKey: ["supportConversations", currentPage, itemsPerPage, searchTerm],
+  queryFn: () =>
+    getSupportConversations({ 
+      page: currentPage, 
+      per_page: itemsPerPage, 
+      title: searchTerm 
+    }),
+});
 
-  const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Error>({
-    queryKey: ["supportConversations", currentPage, itemsPerPage],
-    queryFn: () => getSupportConversations({ page: currentPage, per_page: itemsPerPage }),
-  });
 
-const totalItems = data?.to || data?.data.length || 0;
-const totalPages = Math.ceil(totalItems / Number(data?.per_page || itemsPerPage));
+  const totalItems = data?.to || data?.data.length || 0;
+  const totalPages = Math.ceil(totalItems / Number(data?.per_page || itemsPerPage));
+  
 
   return (
     <div>
-      <SupportMessagesHeader />
+      <SupportMessagesHeader
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
       <div className="px-2 md:px-8">
         <SupportMessagesTable
           conversations={data?.data || []}
