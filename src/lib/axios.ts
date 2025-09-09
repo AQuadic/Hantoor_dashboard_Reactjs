@@ -48,7 +48,8 @@ axios.interceptors.response.use(
       error.response &&
       error.response.status === 401 &&
       typeof window !== "undefined" &&
-      !window.location.href.includes("login")
+      !window.location.href.includes("login") &&
+      !window.location.href.includes("forget-password")
     ) {
       Cookies.remove("hantoor_token");
       window.location.href = "/login";
