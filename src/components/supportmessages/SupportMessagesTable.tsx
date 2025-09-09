@@ -1,11 +1,10 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
 import View from "../icons/general/View";
 import SupportMsgsConversation from "@/pages/supportmessages/SupportMsgsConversation";
 import { useTranslation } from "react-i18next";
-import { getSupportConversations, Conversation, SupportConversationsResponse } from "@/api/support/getConversations";
+import { Conversation } from "@/api/support/getConversations";
 import { useState } from "react";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
@@ -14,20 +13,16 @@ import { deleteConversation } from "@/api/support/deleteConversation";
 import { updateConversation } from "@/api/support/updateConversation";
 
 interface SupportMessagesTableProps {
-  page: number;
-  itemsPerPage: number;
+  conversations: Conversation[];
+  isLoading: boolean;
+  refetch: () => void;
 }
 
-const SupportMessagesTable = ({ page, itemsPerPage }: SupportMessagesTableProps) => {
+const SupportMessagesTable = ({ conversations, isLoading, refetch }: SupportMessagesTableProps) => {
     const { t } = useTranslation("questions");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
     const [notesMap, setNotesMap] = useState<Record<number, string>>({});
     const [activeMap, setActiveMap] = useState<Record<number, boolean>>({});
-
-  const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Error>({
-    queryKey: ["supportConversations", page, itemsPerPage],
-    queryFn: () => getSupportConversations({ page, per_page: itemsPerPage }),
-  });
 
     const handleDelete = async (id: number) => {
     await deleteConversation(id);
@@ -50,8 +45,7 @@ const SupportMessagesTable = ({ page, itemsPerPage }: SupportMessagesTableProps)
   };
 
   if (isLoading) return <Loading />
-  const supportMessages: Conversation[] = data?.data || [];
-  if (!supportMessages.length) return <NoData />;
+  if (!conversations.length) return <NoData />;
 
     return (
         <div className="relative flex">
@@ -69,7 +63,7 @@ const SupportMessagesTable = ({ page, itemsPerPage }: SupportMessagesTableProps)
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {supportMessages.map((message, index) => (
+                {conversations.map((message, index) => (
                 <TableRow key={message.id} noBackgroundColumns={1}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{message.id}</TableCell>
