@@ -153,63 +153,125 @@ const AddBank = () => {
   const buildFinanceArray = () => {
     const finance: BankFinance[] = [];
 
+    // helpers
+    const parseInteger = (val: string) => {
+      if (!val && val !== "0") return undefined;
+      const digits = String(val).replace(/\D/g, "");
+      if (!digits) return undefined;
+      const n = Number(digits);
+      return Number.isFinite(n) ? n : undefined;
+    };
+
+    const resolveOption = (
+      list: { key: string; label: string }[],
+      selected?: string
+    ) => {
+      if (!selected) return undefined;
+      const found = list.find(
+        (l) => l.key === selected || l.label === selected
+      );
+      if (found) return { key: found.key, label: found.label };
+      // fallback: treat selected as key
+      return { key: selected, label: selected };
+    };
+
     // Add expatriate 1 if fields are filled
+    const v1_from = parseInteger(visitorSalaryFrom);
+    const v1_to = parseInteger(visitorSalaryTo);
+    const v1_duration =
+      resolveOption(authorities, visitorDuration) ||
+      resolveOption(authorities, authorities[0].key);
+    const v1_employer =
+      resolveOption(Workplaces, visitorWorkplace) ||
+      resolveOption(Workplaces, Workplaces[0].key);
+
     if (
-      visitorSalaryFrom ||
-      visitorSalaryTo ||
+      v1_from !== undefined ||
+      v1_to !== undefined ||
       visitorInterestAmount ||
       visitorDuration ||
       visitorWorkplace
     ) {
-      finance.push({
+      const entry: BankFinance = {
         type: "expatriate",
-        salary_from: visitorSalaryFrom ? Number(visitorSalaryFrom) : undefined,
-        salary_to: visitorSalaryTo ? Number(visitorSalaryTo) : undefined,
-        duration: visitorDuration || "",
-        employer: visitorWorkplace || "",
+        salary_from: v1_from,
+        salary_to: v1_to,
+        duration: v1_duration
+          ? { key: v1_duration.key, label: v1_duration.label }
+          : "",
+        employer: v1_employer
+          ? { key: v1_employer.key, label: v1_employer.label }
+          : "",
         value: visitorInterestAmount || undefined,
         is_active: true,
-      });
+      };
+      finance.push(entry);
     }
 
     // Add expatriate 2 if fields are filled
+    const v2_from = parseInteger(visitorSalaryFrom2);
+    const v2_to = parseInteger(visitorSalaryTo2);
+    const v2_duration =
+      resolveOption(authorities, visitorDuration2) ||
+      resolveOption(authorities, authorities[0].key);
+    const v2_employer =
+      resolveOption(Workplaces, visitorWorkplace2) ||
+      resolveOption(Workplaces, Workplaces[0].key);
+
     if (
-      visitorSalaryFrom2 ||
-      visitorSalaryTo2 ||
+      v2_from !== undefined ||
+      v2_to !== undefined ||
       visitorInterestAmount2 ||
       visitorDuration2 ||
       visitorWorkplace2
     ) {
-      finance.push({
+      const entry: BankFinance = {
         type: "expatriate",
-        salary_from: visitorSalaryFrom2
-          ? Number(visitorSalaryFrom2)
-          : undefined,
-        salary_to: visitorSalaryTo2 ? Number(visitorSalaryTo2) : undefined,
-        duration: visitorDuration2 || "",
-        employer: visitorWorkplace2 || "",
+        salary_from: v2_from,
+        salary_to: v2_to,
+        duration: v2_duration
+          ? { key: v2_duration.key, label: v2_duration.label }
+          : "",
+        employer: v2_employer
+          ? { key: v2_employer.key, label: v2_employer.label }
+          : "",
         value: visitorInterestAmount2 || undefined,
         is_active: true,
-      });
+      };
+      finance.push(entry);
     }
 
     // Add citizen if fields are filled
+    const c_from = parseInteger(citizenSalaryFrom);
+    const c_to = parseInteger(citizenSalaryTo);
+    const c_duration =
+      resolveOption(authorities, citizenDuration) ||
+      resolveOption(authorities, authorities[0].key);
+    const c_employer =
+      resolveOption(Workplaces, citizenWorkplace) ||
+      resolveOption(Workplaces, Workplaces[0].key);
+
     if (
-      citizenSalaryFrom ||
-      citizenSalaryTo ||
+      c_from !== undefined ||
+      c_to !== undefined ||
       citizenInterestAmount ||
       citizenDuration ||
       citizenWorkplace
     ) {
-      finance.push({
+      const entry: BankFinance = {
         type: "citizen",
-        salary_from: citizenSalaryFrom ? Number(citizenSalaryFrom) : undefined,
-        salary_to: citizenSalaryTo ? Number(citizenSalaryTo) : undefined,
-        duration: citizenDuration || "",
-        employer: citizenWorkplace || "",
+        salary_from: c_from,
+        salary_to: c_to,
+        duration: c_duration
+          ? { key: c_duration.key, label: c_duration.label }
+          : "",
+        employer: c_employer
+          ? { key: c_employer.key, label: c_employer.label }
+          : "",
         value: citizenInterestAmount || undefined,
         is_active: true,
-      });
+      };
+      finance.push(entry);
     }
 
     return finance;
