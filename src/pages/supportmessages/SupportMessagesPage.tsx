@@ -18,12 +18,12 @@ const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Erro
       search: searchTerm 
     }),
 });
-  const totalItems = data?.to || data?.data.length || 0;
-  const totalPages = Math.ceil(totalItems / Number(data?.per_page || itemsPerPage));
-  
-  const filteredConversations = data?.data.filter((c) =>
-    c.id.toString().includes(searchTerm)
-  ) || [];
+const filteredConversations = data?.data.filter((c) =>
+  c.id.toString().includes(searchTerm)
+) || [];
+
+const totalItems = filteredConversations.length;
+const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   return (
     <div>
