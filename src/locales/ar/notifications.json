@@ -26,5 +26,6 @@
     "searchByName": "ابحث بالاسم",
 
     "noClients": "لا يوجد عملاء",
-    "selectCountry": "يرجي اختيار البلد"
+    "selectCountry": "يرجي اختيار البلد",
+    "search": "ابحث..."
 }

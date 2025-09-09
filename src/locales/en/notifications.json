@@ -26,5 +26,6 @@
     "searchByName": "Search by name",
 
     "noClients": "No clients",
-    "selectCountry": "Please select a country"
+    "selectCountry": "Please select a country",
+    "search": "Search ..."
 }

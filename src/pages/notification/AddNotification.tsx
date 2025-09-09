@@ -127,12 +127,12 @@ const AddNotification = () => {
                 id="arabic-description"
                 value={arDescription}
                 onChange={(e) => setArDescription(e.target.value)}
-                placeholder={t("lorem")}
+                placeholder={t("writeHere")}
                 className="peer w-full h-[191px] rounded-[12px] border border-[#E2E2E2] p-4 pt-8 focus:outline-none"
               />
               <label
                 htmlFor="arabic-description"
-                className="absolute right-4 top-3 text-[#606C7E] text-sm transition-all duration-200 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#000000] peer-focus:top-3 peer-focus:text-sm peer-focus:text-[#606C7E]"
+                className="absolute rtl:right-4 ltr:left-4 top-3 text-[#606C7E] text-sm transition-all duration-200 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#000000] peer-focus:top-3 peer-focus:text-sm peer-focus:text-[#606C7E]"
               >
                 {t("arDescription")}
               </label>
@@ -142,12 +142,12 @@ const AddNotification = () => {
                 id="english-description"
                 value={enDescription}
                 onChange={(e) => setEnDescription(e.target.value)}
-                placeholder={t("lorem")}
+                placeholder={t("writeHere")}
                 className="peer w-full h-[191px] rounded-[12px] border border-[#E2E2E2] p-4 pt-8 focus:outline-none"
               />
               <label
                 htmlFor="english-description"
-                className="absolute right-4 top-3 text-[#606C7E] text-sm transition-all duration-200 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#000000] peer-focus:top-3 peer-focus:text-sm peer-focus:text-[#606C7E]"
+                className="absolute rtl:right-4 ltr:left-4 top-3 text-[#606C7E] text-sm transition-all duration-200 peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-placeholder-shown:text-[#000000] peer-focus:top-3 peer-focus:text-sm peer-focus:text-[#606C7E]"
               >
                 {t("enDescription")}
               </label>
@@ -209,10 +209,10 @@ const AddNotification = () => {
           <div className="relative w-full mb-4">
             <input
               type="text"
-              placeholder="ابحث..."
+              placeholder= {t('search')}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="bg-[#F3F6F9] w-full pl-4 pr-10 py-[10px] text-sm text-right placeholder-[#606C7E] border border-[#0000001A] rounded-[10px] focus:outline-none"
+              className="bg-[#F3F6F9] w-full pl-4 pr-10 py-[10px] text-sm rtl:text-right placeholder-[#606C7E] border border-[#0000001A] rounded-[10px] focus:outline-none"
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
