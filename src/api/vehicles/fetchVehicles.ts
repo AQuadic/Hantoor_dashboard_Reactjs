@@ -131,12 +131,12 @@ export interface Vehicle {
   engine_volume_id?: number; // Added as it might be present in some responses
   price: string;
   is_discount: boolean | null;
-  discount_value: string | null;
+  discount_value: string | number | null;
   discount_date: string | null;
   is_include_tax: boolean;
   is_Insurance_warranty: boolean;
   is_include_warranty: boolean;
-  views: number;
+  views: number | null;
   is_rent_to_own: boolean;
   rent_to_own_duration: number | null;
   rent_to_own_whatsapp: string | null;
@@ -145,13 +145,15 @@ export interface Vehicle {
   status?: number; // Backend status field (1 for active, 0 for inactive)
   created_at: string | null;
   updated_at: string | null;
+  favorites_count?: number;
+  is_favorite?: boolean;
 
-  // Related data
-  additional_images: VehicleImage[];
-  image: string | null;
-  images_ads: VehicleImage[];
-  video: string[];
-  images: VehicleImage[];
+  // Related data - updated to match actual API response
+  additional_images: VehicleImageObject[];
+  image: VehicleImageObject | null;
+  images_ads: VehicleImageObject[];
+  video: VehicleImageObject | null;
+  images?: VehicleImage[];
   features: VehicleFeature[];
   offers: VehicleOffer[];
   accessories: VehicleAccessory[];
@@ -165,6 +167,33 @@ export interface Vehicle {
   brand_origin: BrandOrigin | null;
   number_of_seat: NumberOfSeat | null;
   engine_type: EngineType | null;
+  engine_volume?: {
+    id: number;
+    name: VehicleName;
+    is_active: number;
+    created_at: string;
+    updated_at: string;
+  } | null;
+  country?: {
+    id: number;
+    tenant_id: string | null;
+    name: VehicleName;
+    code: string;
+    currency: string | null;
+    usd_rate: string | null;
+    tax_rate: string | null;
+    language_code: string | null;
+    boundaries: string | null;
+    shipping_service_ids: string | null;
+    shipping_provider: string | null;
+    created_at: string;
+    updated_at: string;
+    is_active: boolean;
+    currency_text: VehicleName;
+    service_fee: string;
+    service_duration: string;
+    service_duration_type: string;
+  } | null;
 }
 
 // API Response interface for paginated results
@@ -358,10 +387,19 @@ export interface VehicleApiResponseWrapper {
 // Fetch single vehicle by ID
 export async function fetchVehicleById(id: number): Promise<Vehicle> {
   const response = await axios.get(`/admin/vehicle/${id}`);
-  const responseData = response.data as VehicleApiResponseWrapper;
 
-  // Extract the nested data from the wrapper
-  return responseData.data;
+  // Check if response has a wrapped structure with data field
+  if (
+    response.data &&
+    typeof response.data === "object" &&
+    "data" in response.data
+  ) {
+    const responseData = response.data as VehicleApiResponseWrapper;
+    return responseData.data;
+  }
+
+  // Otherwise, assume the response is the vehicle object directly
+  return response.data as Vehicle;
 }
 
 // Create new vehicle

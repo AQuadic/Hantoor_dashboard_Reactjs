@@ -14,6 +14,8 @@ interface VideoInputProps {
   video: File | null;
   setVideo: React.Dispatch<React.SetStateAction<File | null>>;
   isRounded?: boolean;
+  existingVideoUrl?: string;
+  onRemoveVideo?: (e?: React.MouseEvent) => void;
 }
 
 const VideoInput: React.FC<VideoInputProps> = ({
@@ -22,6 +24,8 @@ const VideoInput: React.FC<VideoInputProps> = ({
   video,
   setVideo,
   isRounded = false,
+  existingVideoUrl,
+  onRemoveVideo,
 }) => {
   const { t } = useTranslation("setting");
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
@@ -41,12 +45,15 @@ const VideoInput: React.FC<VideoInputProps> = ({
       return () => {
         URL.revokeObjectURL(url);
       };
+    } else if (existingVideoUrl) {
+      setVideoPreview(existingVideoUrl);
+      setIsLoaded(false);
     } else {
       setVideoPreview(null);
       setIsPlaying(false);
       setIsLoaded(false);
     }
-  }, [video]);
+  }, [video, existingVideoUrl]);
 
   // Handle file selection
   const handleFileSelect = (file: File) => {
@@ -229,7 +236,7 @@ const VideoInput: React.FC<VideoInputProps> = ({
               alt="Add Video"
               className="w-[36px] h-[36px]"
             />
-            <p className="text-lg text-primary underline">{t('addVideo')}</p>
+            <p className="text-lg text-primary underline">{t("addVideo")}</p>
           </div>
         )}
       </div>
