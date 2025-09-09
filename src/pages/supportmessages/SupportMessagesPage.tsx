@@ -18,11 +18,12 @@ const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Erro
       search: searchTerm 
     }),
 });
-
-
   const totalItems = data?.to || data?.data.length || 0;
   const totalPages = Math.ceil(totalItems / Number(data?.per_page || itemsPerPage));
   
+  const filteredConversations = data?.data.filter((c) =>
+    c.id.toString().includes(searchTerm)
+  ) || [];
 
   return (
     <div>
@@ -32,7 +33,7 @@ const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Erro
       />
       <div className="px-2 md:px-8">
         <SupportMessagesTable
-          conversations={data?.data || []}
+          conversations={filteredConversations}
           isLoading={isLoading}
           refetch={refetch}
         />
