@@ -15,7 +15,7 @@ const { data, isLoading, refetch } = useQuery<SupportConversationsResponse, Erro
     getSupportConversations({ 
       page: currentPage, 
       per_page: itemsPerPage, 
-      title: searchTerm 
+      search: searchTerm 
     }),
 });
 
