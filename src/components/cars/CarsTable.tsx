@@ -231,16 +231,24 @@ const CarsTable = ({
   };
 
   const getVehicleImage = (vehicle: Vehicle) => {
-    if (
-      typeof vehicle.image === "string" &&
-      !vehicle.image.startsWith("http")
-    ) {
-      const cleanPath = vehicle.image.replace(/\/+/g, "/");
-      return cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`;
+    // Handle object-based image returned by API
+    if (vehicle.image && typeof vehicle.image === "object") {
+      // VehicleImageObject has a `url` field
+      const imgObj = vehicle.image as { url?: string };
+      if (imgObj.url) return imgObj.url;
     }
-    return typeof vehicle.image === "string" && vehicle.image
-      ? vehicle.image
-      : carImage;
+
+    // Legacy/string image support (in case some items use plain URLs)
+    if (typeof vehicle.image === "string") {
+      const imgStr = vehicle.image as string;
+      if (!imgStr.startsWith("http")) {
+        const cleanPath = imgStr.replace(/\/+/g, "/");
+        return cleanPath.startsWith("/") ? cleanPath : `/${cleanPath}`;
+      }
+      return imgStr;
+    }
+
+    return carImage;
   };
 
   // Helper function to safely get vehicle name (API returns name as string or VehicleName object)
