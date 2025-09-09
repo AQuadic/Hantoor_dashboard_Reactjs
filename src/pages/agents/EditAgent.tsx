@@ -120,7 +120,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
 
   const handleSubmit = () => {
     if (!arName || !enName) {
-      toast.error(t("pleaseFilAllFields"));
+      toast.error(t("pleaseFillAllFields"));
       return;
     }
 
@@ -242,7 +242,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
             </label>
             <div className="pointer-events-none absolute ltr:right-5 rtl:left-5 top-1/2 -translate-y-1/2 text-gray-400">
               <DropdownArrow />
-          </div>
+            </div>
           </div>
         </div>
         <hr className="my-[11px]" />

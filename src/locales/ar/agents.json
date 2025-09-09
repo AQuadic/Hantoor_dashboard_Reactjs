@@ -28,7 +28,7 @@
 
   "addedShowrooms": "تم اضافة معارض البيع",
   "addedCenters": "تم اضافة مراكز الصيانة",
-  "pleaseFillAllFields": "يرجى ملء جميع الحقول",
+  "pleaseFillAllFields": "يرجى إكمال جميع الحقول المطلوبة",
   "pleaseSelectBrand": "يرجى اختيار الماركة",
   "centerMissingRequiredFields": "يرجى ملء جميع الحقول المطلوبة لمركز الصيانة أو المعرض",
   "pleaseAddAtLeastOneCenterOrShowroom": "يرجى إضافة مركز صيانة واحد على الأقل أو معرض بيع",

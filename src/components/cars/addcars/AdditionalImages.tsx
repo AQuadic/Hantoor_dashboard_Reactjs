@@ -4,7 +4,7 @@ import { Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
 
-const CarAdvertisingImages = () => {
+const AdditionalImages = () => {
   const { t } = useTranslation("cars");
   const { formData, updateField } = useVehicleForm();
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
@@ -14,18 +14,18 @@ const CarAdvertisingImages = () => {
       e.stopPropagation();
     }
     const updatedImages =
-      formData?.adsImages?.filter((_, index) => index !== indexToRemove) || [];
-    updateField?.("adsImages", updatedImages);
+      formData?.carImages?.filter((_, index) => index !== indexToRemove) || [];
+    updateField?.("carImages", updatedImages);
   };
 
-  // Convert adsImages (VehicleImage[]) to File[] for MultiImageInput
+  // Convert carImages (VehicleImage[]) to File[] for MultiImageInput
   const convertedImages = useMemo(() => {
-    if (!formData?.adsImages) return null;
-    const files = formData.adsImages
+    if (!formData?.carImages) return null;
+    const files = formData.carImages
       .map((img) => img.image)
       .filter((img): img is File => img instanceof File);
     return files.length > 0 ? files : null;
-  }, [formData?.adsImages]);
+  }, [formData?.carImages]);
 
   useEffect(() => {
     if (convertedImages && convertedImages.length > 0) {
@@ -51,8 +51,8 @@ const CarAdvertisingImages = () => {
   return (
     <section>
       <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
-        <h1 className="text-lg text-[#2A32F8] font-bold mb-4">
-          {t("advertisingImages") || "صور الإعلانات"}
+        <h1 className="text-lg text-primary font-bold mb-2">
+          {t("additionalImages") || "الصور الإضافية"}
         </h1>
         <div className="flex flex-col gap-4">
           <MultiImageInput
@@ -64,38 +64,38 @@ const CarAdvertisingImages = () => {
                 const vehicleImages = newImages.map((img) => ({
                   image: img,
                 }));
-                updateField?.("adsImages", vehicleImages);
+                updateField?.("carImages", vehicleImages);
               } else {
-                updateField?.("adsImages", []);
+                updateField?.("carImages", []);
               }
             }}
-            height={169}
+            height={160}
           />
         </div>
       </div>
       {convertedImages && convertedImages.length > 0 && (
         <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
-          <h1 className="text-lg text-[#2A32F8] font-bold mb-2">
-            {t("advertisingImagesPreview") || "معاينة صور الإعلانات"}
+          <h1 className="text-lg text-primary font-bold mb-2">
+            {t("additionalImagesPreview") || "معاينة الصور الإضافية"}
           </h1>
           {/* Image Gallery */}
           <div className="mt-6 flex flex-wrap gap-4">
             {imagePreviews.map((preview, index) => (
               <div
-                key={`ads-image-${index}-${preview.slice(-10)}`}
+                key={`additional-image-${index}-${preview.slice(-10)}`}
                 className={`bg-white rounded-lg
                 relative overflow-hidden border border-gray-200 w-[210px]
            h-[160px]`}
               >
                 <img
                   src={preview}
-                  alt={`Advertising Preview ${index + 1}`}
+                  alt={`Additional Preview ${index + 1}`}
                   className="w-full h-full object-cover"
                 />
                 <button
                   onClick={(e) => handleRemoveImage(index, e)}
                   className="absolute top-2 right-2 bg-black text-white rounded-full p-1 transition-colors duration-200 z-10 hover:bg-gray-800"
-                  aria-label="Remove advertising image"
+                  aria-label="Remove additional image"
                 >
                   <Trash2 size={16} />
                 </button>
@@ -108,4 +108,4 @@ const CarAdvertisingImages = () => {
   );
 };
 
-export default CarAdvertisingImages;
+export default AdditionalImages;

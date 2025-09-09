@@ -25,8 +25,110 @@ applyTo: "\*\*"
 
 ### 2. **UsersTable.tsx - Missing Image Property** ✅
 
-- **Problem**: `AdminUser` interface doesn't include `image` property
-- **Root Cause**: Accessing `user.image` on type that doesn't have this property
+- **Problem**: `AdminUser` interface doesn't include `image` property -**STATUS**: FULLY RESOLVED - No more infinite language change loops, modal navigation works normally
+
+## Current Task: Vehicle Images Array Handling
+
+**TASK**: Ensure additional_images and ads_images arrays are properly handled in frontend and API requests when adding cars.
+
+### API Requirements
+
+- `additional_images` (string[]) - optional array for additional vehicle images
+- `ads_images` (string[]) - optional array for advertising images
+- Both should be sent as File objects in FormData format
+
+### Current Implementation Analysis
+
+#### Frontend State (VehicleFormContext)
+
+✅ **CORRECTLY IMPLEMENTED**:
+
+- `additionalImages: VehicleImage[]` - properly defined in form state
+- `adsImages: VehicleImage[]` - properly defined in form state
+- Context methods: `addAdditionalImage`, `updateAdditionalImage`, `removeAdditionalImage`
+- Context methods: `addAdsImage`, `updateAdsImage`, `removeAdsImage`
+
+#### API Layer (fetchVehicles.ts)
+
+✅ **CORRECTLY IMPLEMENTED**:
+
+- `CreateVehiclePayload` includes `additional_images?: VehicleImage[]` and `ads_images?: VehicleImage[]`
+- FormData creation properly handles both arrays:
+
+  ```typescript
+  if (data.additional_images?.length) {
+    data.additional_images.forEach((img, index) => {
+      if (img.image instanceof File) {
+        formData.append(`additional_images[${index}][image]`, img.image);
+      }
+    });
+  }
+
+  if (data.ads_images?.length) {
+    data.ads_images.forEach((img, index) => {
+      if (img.image instanceof File) {
+        formData.append(`ads_images[${index}][image]`, img.image);
+      }
+    });
+  }
+  ```
+
+#### Missing Components
+
+❌ **ISSUE IDENTIFIED**: No UI component for managing additional images separately from main car images
+
+### Solution Plan - COMPLETED ✅
+
+1. ✅ Create AdditionalImages component for managing additional_images array
+2. ✅ Update PhotosAndVideos component to handle additional images section
+3. ✅ Verify API payload creation includes both image arrays
+4. ✅ Test image upload and form submission
+
+### Implementation Details - COMPLETED ✅
+
+**Problem Identified**: The MultiImageInput in PhotosAndVideos was storing images in `carImages` instead of `additionalImages`, and the API payload mapping was incorrect.
+
+**Solution Applied**:
+
+- Updated PhotosAndVideos component to store MultiImageInput images in `additionalImages`
+- Updated AdditionalImages component to store images in `carImages`
+- Fixed API payload mapping:
+  - `formData.carImages` → `images` API field (from AdditionalImages component)
+  - `formData.additionalImages` → `additional_images` API field (from PhotosAndVideos MultiImageInput)
+  - `formData.adsImages` → `ads_images` API field (from CarAdvertisingImages component)
+- Updated AddCars.tsx to correctly map API response when editing vehicles
+
+**Files Modified**:
+
+- ✅ `src/components/cars/addcars/PhotosAndVideos.tsx` - Now updates `additionalImages` field
+- ✅ `src/components/cars/addcars/AdditionalImages.tsx` - Now updates `carImages` field
+- ✅ `src/contexts/VehicleFormContext.tsx` - Fixed API payload mapping
+- ✅ `src/pages/cars/AddCars.tsx` - Fixed form data loading for edit mode
+
+**API Payload Structure** (Working correctly):
+
+```typescript
+// FormData sent to API
+images[0][image] = File; // from AdditionalImages component
+additional_images[0][image] = File; // from PhotosAndVideos MultiImageInput
+ads_images[0][image] = File; // from CarAdvertisingImages component
+```
+
+2025-08-27: **FIXED NAVIGATION BLOCKING ISSUE IN MODELPAGE** - RESOLVED ✅
+
+**Issue**: Unable to navigate away from models page - browser back button and navigation completely blocked
+**Root Cause**:
+
+- Aggressive useEffect was constantly updating URL search parameters on every render
+- setSearchParams was being called repeatedly, interfering with browser navigation history
+- URL updates were creating navigation conflicts that prevented leaving the page
+
+**Solution Applied**:
+
+1. ✅ Removed automatic URL parameter updates that were blocking navigation
+2. ✅ Converted URL management functions to only update local state
+3. ✅ Removed problematic useEffect that was calling setSearchParams continuously Accessing `user.image` on type that doesn't have this property
+
 - **Solution**: Removed the conditional image access and used placeholder directly:
   ```typescript
   src = { userPlaceholder }; // Instead of user.image || userPlaceholder

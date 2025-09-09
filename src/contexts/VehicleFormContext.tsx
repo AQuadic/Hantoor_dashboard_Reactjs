@@ -353,8 +353,7 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
         formData.mainImage instanceof File ? formData.mainImage : undefined,
       video:
         formData.videoFile instanceof File ? formData.videoFile : undefined,
-      images: formData.carImages,
-      additional_images: formData.additionalImages,
+      additional_images: formData.additionalImages, // From PhotosAndVideos MultiImageInput
       ads_images: formData.adsImages,
       offers: formData.offers,
       packages: formData.packages,

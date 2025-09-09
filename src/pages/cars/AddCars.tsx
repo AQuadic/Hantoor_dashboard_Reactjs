@@ -145,10 +145,10 @@ const AddCarsForm = () => {
         packages: vehicle.packages || [],
         features: vehicle.features || [],
         accessories: vehicle.accessories || [],
-        carImages: convertToVehicleImages(vehicle.images || []),
+        carImages: [], // Not used anymore
         additionalImages: convertToVehicleImages(
           vehicle.additional_images || []
-        ),
+        ), // PhotosAndVideos MultiImageInput -> additional_images API field
         adsImages: convertToVehicleImages(vehicle.images_ads || []),
       };
 
@@ -208,7 +208,9 @@ const AddCarsForm = () => {
 
   const handleSubmit = () => {
     if (!formData.nameAr || !formData.nameEn) {
-      toast.error(t("pleaseFilAllFields") || "Please fill all required fields");
+      toast.error(
+        t("pleaseFillAllFields") || "Please complete all required fields"
+      );
       return;
     }
 
@@ -227,9 +229,7 @@ const AddCarsForm = () => {
   };
 
   if (isLoading && isEdit) {
-    return (
-      <Loading />
-    );
+    return <Loading />;
   }
 
   return (

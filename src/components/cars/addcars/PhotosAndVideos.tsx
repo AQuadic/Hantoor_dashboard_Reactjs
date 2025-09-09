@@ -16,18 +16,20 @@ const PhotosAndVideos = () => {
       e.stopPropagation();
     }
     const updatedImages =
-      formData?.carImages?.filter((_, index) => index !== indexToRemove) || [];
-    updateField?.("carImages", updatedImages);
+      formData?.additionalImages?.filter(
+        (_, index) => index !== indexToRemove
+      ) || [];
+    updateField?.("additionalImages", updatedImages);
   };
 
-  // Convert carImages (VehicleImage[]) to File[] for MultiImageInput
+  // Convert additionalImages (VehicleImage[]) to File[] for MultiImageInput
   const convertedImages = useMemo(() => {
-    return (
-      (formData?.carImages
-        ?.map((img) => img.image)
-        .filter((img) => img instanceof File) as File[]) || null
-    );
-  }, [formData?.carImages]);
+    if (!formData?.additionalImages) return null;
+    const files = formData.additionalImages
+      .map((img) => img.image)
+      .filter((img): img is File => img instanceof File);
+    return files.length > 0 ? files : null;
+  }, [formData?.additionalImages]);
 
   useEffect(() => {
     if (convertedImages && convertedImages.length > 0) {
@@ -79,9 +81,9 @@ const PhotosAndVideos = () => {
                   const vehicleImages = newImages.map((img) => ({
                     image: img,
                   }));
-                  updateField?.("carImages", vehicleImages);
+                  updateField?.("additionalImages", vehicleImages);
                 } else {
-                  updateField?.("carImages", []);
+                  updateField?.("additionalImages", []);
                 }
               }}
               height={110}
@@ -109,7 +111,7 @@ const PhotosAndVideos = () => {
           <div className="mt-6 flex flex-wrap gap-4">
             {imagePreviews.map((preview, index) => (
               <div
-                key={index}
+                key={`additional-preview-${index}-${preview.slice(-10)}`}
                 className={`bg-white rounded-lg
                 relative overflow-hidden border border-gray-200 w-[210px]
            h-[160px]`}

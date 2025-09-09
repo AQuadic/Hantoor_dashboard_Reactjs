@@ -76,7 +76,7 @@
 
   "views": "Number of Views",
   "vehicleUpdatedSuccess": "Vehicle updated successfully",
-  "pleaseFillAllFields": "Please fill all fields",
+  "pleaseFillAllFields": "Please complete all required fields",
   "pleaseEnterPrice": "Please enter price",
   "vehicleCreatedSuccess": "Vehicle created successfully"
 }
