@@ -5,7 +5,6 @@ import { useQuery } from "@tanstack/react-query";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
-import Delete from "@/components/icons/setting/Delete";
 import { editFeature } from "@/api/featuresApp/editFeatures";
 import toast from "react-hot-toast";
 import Loading from "@/components/general/Loading";
@@ -27,14 +26,24 @@ const EditFeatures = () => {
   const [arDescription, setArDescription] = useState("");
   const [enDescription, setEnDescription] = useState("");
   const [isActive, setIsActive] = useState(true);
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (feature) {
       setArDescription(feature.description.ar);
       setEnDescription(feature.description.en);
       setIsActive(feature.is_active);
+      // set existing image url so ImageInput can show the current image
+      // API sometimes returns image as string (url) or as object with a url field
+      const raw = feature as unknown as { image?: string | { url?: string } };
+      const img = raw.image;
+      if (img) {
+        setExistingImageUrl(typeof img === "string" ? img : img.url ?? null);
+      } else {
+        setExistingImageUrl(null);
+      }
     }
   }, [feature]);
 
@@ -54,11 +63,16 @@ const EditFeatures = () => {
       });
       toast.success(t("featuedUpdated"));
       navigate("/settings?section=App Features");
-    } catch (err: any) {
-      const errorMsg =
-        err?.response?.data?.message ||
-        err?.message ||
-        t("somethingWentWrong");
+    } catch (err: unknown) {
+      const defaultMsg = t("somethingWentWrong");
+      let errorMsg = defaultMsg;
+      if (err && typeof err === "object") {
+        const e = err as {
+          response?: { data?: { message?: string } };
+          message?: string;
+        };
+        errorMsg = e.response?.data?.message || e.message || defaultMsg;
+      }
       toast.error(errorMsg);
     } finally {
       setLoading(false);
@@ -68,7 +82,7 @@ const EditFeatures = () => {
   if (isLoading) return <Loading />;
 
   return (
-      <div>
+    <div>
       <div className="pt-0 pb-2 bg-white ">
         <DashboardHeader
           titleAr="تعديل المميزات"
@@ -85,7 +99,11 @@ const EditFeatures = () => {
         <ImageInput
           image={profileImage}
           setImage={setProfileImage}
-          // placeholderText={t("addGIF")}
+          existingImageUrl={existingImageUrl ?? undefined}
+          onRemoveImage={() => {
+            setExistingImageUrl(null);
+            setProfileImage(null);
+          }}
         />
       </div>
       <div className="p-8 bg-white rounded-2xl mt-[18px] mx-8">
@@ -110,7 +128,12 @@ const EditFeatures = () => {
           </div>
         </div>
         <div className="mt-5">
-          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
+          <DashboardButton
+            titleAr="حفظ"
+            titleEn="Save"
+            onClick={handleSave}
+            isLoading={loading}
+          />
         </div>
       </div>
     </div>

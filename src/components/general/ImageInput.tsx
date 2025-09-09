@@ -92,10 +92,15 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   // Handle remove image
   const handleRemoveImage = (e: React.MouseEvent) => {
+    // Prevent the click from bubbling to the container which opens the file dialog
+    e.stopPropagation();
+
     if (onRemoveImage) {
-      onRemoveImage(e);
+      // Call parent callback without forwarding the raw event so parent
+      // handlers that don't accept an event won't be affected.
+      // Parent is responsible for clearing any existingImageUrl state.
+      onRemoveImage();
     } else {
-      e.stopPropagation();
       setImage(null);
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
