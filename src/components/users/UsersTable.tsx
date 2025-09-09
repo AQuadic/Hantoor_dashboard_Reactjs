@@ -88,7 +88,6 @@ export function UserTable({
           </TableHead>
           <TableHead className="text-right">{t("country")}</TableHead>
           <TableHead className="text-right">{t("NOSearches")}</TableHead>
-          <TableHead className="text-right">{t("paymentMethod")}</TableHead>
           <TableHead className="text-right">{t("numberOfInsurance")}</TableHead>
           <TableHead className="text-right">{t("carNumbers")}</TableHead>
           <TableHead className="text-right">{t("currency")}</TableHead>
@@ -117,7 +116,6 @@ export function UserTable({
             <TableCell>{user.signup_with}</TableCell>
             <TableCell>{user.country ? user.country.name.en : "-"}</TableCell>
             <TableCell>{user.id}</TableCell>
-            <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
