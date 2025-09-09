@@ -6,5 +6,8 @@
     "currentPassword": "كلمة المرور الحالية",
     "newPassword": "كلمة المرور الجديدة",
     "confirmPassword": "تأكيد كلمة المرور",
-    "password": "كلمة المرور"
+    "password": "كلمة المرور",
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح!",
+    "passwordnotMatch": "كلمات المرور غير متطابقة",
+    "passwordUpdated": "تم تحديث كلمة المرور بنجاح!"
 }

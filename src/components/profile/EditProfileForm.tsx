@@ -8,6 +8,8 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentAdmin, GetCurrentAdminResponse } from "@/api/profile/getProfile";
 import Loading from "../general/Loading";
+import { updateAdmin } from "@/api/admins/editAdmin";
+import toast from "react-hot-toast";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -34,6 +36,10 @@ const EditProfileForm = ({
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [, setLoading] = useState(false);
 
   const { data, isLoading } = useQuery<GetCurrentAdminResponse>({
     queryKey: ["currentAdmin"],
@@ -52,8 +58,48 @@ const EditProfileForm = ({
 
   if (isLoading) return <Loading />
 
+  const handleSaveMainData = async () => {
+    if (!data) return;
+    try {
+      setLoading(true);
+      await updateAdmin(data.id, {
+        name,
+        email,
+        phone,
+        phone_country: selectedCountry.iso2,
+        image: profileImage,
+      });
+      toast.success(t('profileUpdated'));
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSavePassword = async () => {
+    if (!data) return;
+    if (newPassword !== confirmPassword) {
+      toast.error(t('passwordnotMatch'));
+      return;
+    }
+    try {
+      setLoading(true);
+      await updateAdmin(data.id, {
+        password: newPassword,
+        password_confirmation: confirmPassword,
+      });
+      toast.success(t('passwordUpdated'));
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to update password");
+    }
+      finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <form className="p-8">
+    <form className="p-8" onSubmit={(e) => e.preventDefault()}>
       <div className="p-8 bg-white rounded-2xl ">
         <h3 className="mb-4 text-lg font-bold">{t("profileImage")}</h3>
         <ImageInput image={profileImage} setImage={setProfileImage} />
@@ -87,7 +133,7 @@ const EditProfileForm = ({
             phone={phone}
             setPhone={setPhone}
           />
-          <DashboardButton titleAr=" حفظ" titleEn="Save" />
+          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSaveMainData}/>
         </div>
         <div className="flex flex-col flex-1 gap-4">
           <h3 className="mb-2 text-lg font-bold">{t("password")}</h3>
@@ -97,6 +143,8 @@ const EditProfileForm = ({
             placeholder="********"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
           />
           <Input
             label={t("newPassword")}
@@ -104,6 +152,8 @@ const EditProfileForm = ({
             placeholder="********"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
           />
           <Input
             label={t("confirmPassword")}
@@ -111,8 +161,10 @@ const EditProfileForm = ({
             placeholder="********"
             classNames={{ label: "mb-2 text-[15px] !text-[#080808]" }}
             size="lg"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
-          <DashboardButton titleAr=" حفظ" titleEn="Save" />
+          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSavePassword}/>
         </div>
       </div>
     </form>
