@@ -11,6 +11,7 @@ export interface FaqPayload {
     ar?: string;
     en?: string;
   };
+  is_active?: number;
 }
 
 export interface FaqResponse {

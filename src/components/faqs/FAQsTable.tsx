@@ -13,6 +13,7 @@ import { deleteFAQ } from "@/api/faq/deleteFaq";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import { updateFaq } from "@/api/faq/editFaq";
 
 interface FAQsTableProps {
   data?: FAQ[];
@@ -29,6 +30,21 @@ const FAQsTable = ({ data, from = 1, isLoading = false, refetch }: FAQsTableProp
     await deleteFAQ(id);
     toast.success(t("faqDeleted"));
     refetch();
+    };
+  const handleToggleSwitch = async (faq: FAQ, currentValue: boolean) => {
+    try {
+      await updateFaq(faq.id.toString(), {
+        country_id: faq.country_id?.toString(),
+        type: faq.type,
+        question: faq.question,
+        answer: faq.answer,
+        is_active: faq.is_active ? 0 : 1,
+      });
+      toast.success(t("statusUpdated"));
+      refetch();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || t("somethingWentWrong"));
+    }
   };
 
   if (isLoading) return <Loading />;
@@ -63,7 +79,11 @@ const FAQsTable = ({ data, from = 1, isLoading = false, refetch }: FAQsTableProp
                   className="flex gap-[7px] items-center"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <Switch />
+                  <Switch
+                      isSelected={!!faq.is_active}
+                      onChange={() => handleToggleSwitch(faq, !!faq.is_active)}
+                    />
+
                   <button onClick={() => setOpenFaqId(faq.id)}>
                     <View />
                   </button>

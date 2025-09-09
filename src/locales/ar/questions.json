@@ -32,5 +32,7 @@
     "editedSuccessfully": "تم التعديل بنجاح",
 
     "conversationDeleted": "تم حذف المحادثة بنجاح",
-    "conversationUpdated": "تم تحديث المحادثة بنجاح"
+    "conversationUpdated": "تم تحديث المحادثة بنجاح",
+
+    "statusUpdated": "تم تحديث الحالة بنجاح"
 }
