@@ -56,8 +56,8 @@ const FAQsTable = ({ data, from = 1, isLoading = false, refetch }: FAQsTableProp
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{i18n.language === "ar" ? faq.question.ar : faq.question.en}</TableCell>
                 <TableCell>{faq.country_id || "-"}</TableCell>
-                <TableCell>-</TableCell>
-                <TableCell>-</TableCell>
+                <TableCell>{faq.useful_uses_count}</TableCell>
+                <TableCell>{faq.unuseful_uses_count}</TableCell>
                 <TableCell className="w-full">{new Date(faq.created_at).toLocaleString()}</TableCell>
                 <TableCell
                   className="flex gap-[7px] items-center"

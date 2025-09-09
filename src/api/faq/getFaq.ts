@@ -15,6 +15,8 @@ export interface FAQ {
   order_column?: number;
   created_at: string;
   updated_at?: string;
+  useful_uses_count: number;
+  unuseful_uses_count: number
 }
 
 export interface FAQsResponse {
