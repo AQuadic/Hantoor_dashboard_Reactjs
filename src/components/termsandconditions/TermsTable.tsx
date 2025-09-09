@@ -56,6 +56,12 @@ const TermsTable = ({ data, isLoading, refetch }: TermsTableProps) => {
     return "";
   };
 
+  const truncateText = (text: string, maxLength: number = 100) => {
+    if (text.length <= maxLength) return text;
+    return text.slice(0, maxLength) + "...";
+  };
+
+
   const handleDelete = async (id: number) => {
     await deletePage(id);
     toast.success(t("pageDeleted"));
@@ -79,7 +85,9 @@ const TermsTable = ({ data, isLoading, refetch }: TermsTableProps) => {
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{page.title?.[lang] || page.title?.en}</TableCell>
                 <TableCell>{getCountryName(page.country_id)}</TableCell>
-                <TableCell>{parseDescription(page.description?.[lang])}</TableCell>
+                <TableCell>
+                  {truncateText(parseDescription(page.description?.[lang]), 100)}
+                </TableCell>
                 <TableCell className="flex gap-[7px] items-center">
                 <Link to={`/profile/edit-termsandconditions/${page.id}`}>
                     <Edit />
