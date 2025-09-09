@@ -171,8 +171,10 @@ export async function fetchAgentById(id: number): Promise<Agent> {
         ? { ar: raw.name, en: raw.name }
         : raw.name ?? { ar: "", en: "" };
 
-    const centers = Array.isArray(raw.centers)
-      ? raw.centers.map((c: any) => ({
+    const rawCenters = raw.centers ?? raw.service_centers;
+
+    const centers = Array.isArray(rawCenters)
+      ? rawCenters.map((c: any) => ({
           ...c,
           name:
             typeof c.name === "string"
@@ -189,7 +191,7 @@ export async function fetchAgentById(id: number): Promise<Agent> {
               ? "show_room"
               : c.type,
         }))
-      : undefined;
+      : [];
 
     const is_active =
       raw.is_active === 1 || raw.is_active === true
@@ -214,6 +216,7 @@ export async function fetchAgentById(id: number): Promise<Agent> {
 
   return normalized;
 }
+
 
 // Create new agent
 export async function createAgent(data: CreateAgentPayload): Promise<Agent> {
