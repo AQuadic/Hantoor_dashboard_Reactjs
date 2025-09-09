@@ -50,7 +50,7 @@ const TermsTable = ({ data, isLoading, refetch }: TermsTableProps) => {
           .join("\n");
       }
     } catch {
-      return desc;
+      return desc.replace(/<[^>]+>/g, "").trim();
     }
 
     return "";
