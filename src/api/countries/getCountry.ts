@@ -23,6 +23,33 @@ export interface Country {
   updated_at?: string;
 }
 
+/**
+ * Raw API response shape (matches the API payload exactly).
+ * Note: some numeric values may be returned as strings (eg. per_page).
+ */
+export interface ApiCountriesResponse {
+  data: Country[];
+  links: {
+    first: string | null;
+    last: string | null;
+    prev: string | null;
+    next: string | null;
+  };
+  meta: {
+    current_page: number | string;
+    current_page_url: string;
+    from: number | string;
+    path: string;
+    per_page: number | string;
+    to: number | string;
+    last_page?: number | string | null;
+    total?: number | string | null;
+  };
+}
+
+/**
+ * Normalized response used by the frontend code: numeric pagination fields are converted to numbers.
+ */
 export interface CountriesResponse {
   data: Country[];
   links: {
@@ -38,8 +65,8 @@ export interface CountriesResponse {
     path: string;
     per_page: number;
     to: number;
-    last_page?: number;
-    total?: number;
+    last_page?: number | null;
+    total?: number | null;
   };
 }
 
@@ -51,18 +78,43 @@ export async function getCountries(
 
   const params: Record<string, string | number> = {
     page: pageNum,
-    per_page: 15,
+    per_page: 5,
   };
 
   if (searchTerm && searchTerm.trim()) {
     params.search = searchTerm.trim();
   }
 
-  const response = await axios.get<CountriesResponse>("/admin/country", {
+  // Fetch raw API response
+  const response = await axios.get<ApiCountriesResponse>("/admin/country", {
     params,
   });
 
-  return response.data;
+  const apiData = response.data;
+
+  // Normalize numeric meta fields which may come back as strings from the API
+  const meta = {
+    current_page: Number(apiData.meta.current_page ?? pageNum),
+    current_page_url: apiData.meta.current_page_url,
+    from: Number(apiData.meta.from ?? 0),
+    path: apiData.meta.path,
+    per_page: Number(apiData.meta.per_page ?? 15),
+    to: Number(apiData.meta.to ?? 0),
+    last_page:
+      apiData.meta.last_page !== undefined && apiData.meta.last_page !== null
+        ? Number(apiData.meta.last_page)
+        : undefined,
+    total:
+      apiData.meta.total !== undefined && apiData.meta.total !== null
+        ? Number(apiData.meta.total)
+        : undefined,
+  };
+
+  return {
+    data: apiData.data,
+    links: apiData.links,
+    meta,
+  };
 }
 
 /**
