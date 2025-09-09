@@ -12,16 +12,15 @@ applyTo: "\*\*"
 
 ### 1. **AddUsers.tsx - Country Type Mismatch** ✅
 
-  ```typescript
-  setSelectedCountry({
-    iso2: country.code,
-    name: country.name.en,
-    phone: [country.code],
-  });
-  ```
+```typescript
+setSelectedCountry({
+  iso2: country.code,
+  name: country.name.en,
+  phone: [country.code],
+});
+```
 
 ### 2. **UsersTable.tsx - Missing Image Property** ✅
-
 
 ## Current Task: Vehicle Images Array Handling
 
@@ -29,36 +28,33 @@ applyTo: "\*\*"
 
 ### API Requirements
 
-
 ### Current Implementation Analysis
 
 #### Frontend State (VehicleFormContext)
 
 ✅ **CORRECTLY IMPLEMENTED**:
 
-
 #### API Layer (fetchVehicles.ts)
 
 ✅ **CORRECTLY IMPLEMENTED**:
 
+```typescript
+if (data.additional_images?.length) {
+  data.additional_images.forEach((img, index) => {
+    if (img.image instanceof File) {
+      formData.append(`additional_images[${index}][image]`, img.image);
+    }
+  });
+}
 
-  ```typescript
-  if (data.additional_images?.length) {
-    data.additional_images.forEach((img, index) => {
-      if (img.image instanceof File) {
-        formData.append(`additional_images[${index}][image]`, img.image);
-      }
-    });
-  }
-
-  if (data.ads_images?.length) {
-    data.ads_images.forEach((img, index) => {
-      if (img.image instanceof File) {
-        formData.append(`ads_images[${index}][image]`, img.image);
-      }
-    });
-  }
-  ```
+if (data.ads_images?.length) {
+  data.ads_images.forEach((img, index) => {
+    if (img.image instanceof File) {
+      formData.append(`ads_images[${index}][image]`, img.image);
+    }
+  });
+}
+```
 
 #### Missing Components
 
@@ -77,12 +73,11 @@ applyTo: "\*\*"
 
 **Solution Applied**:
 
-  - `formData.carImages` → `images` API field (from AdditionalImages component)
-  - `formData.additionalImages` → `additional_images` API field (from PhotosAndVideos MultiImageInput)
-  - `formData.adsImages` → `ads_images` API field (from CarAdvertisingImages component)
+- `formData.carImages` → `images` API field (from AdditionalImages component)
+- `formData.additionalImages` → `additional_images` API field (from PhotosAndVideos MultiImageInput)
+- `formData.adsImages` → `ads_images` API field (from CarAdvertisingImages component)
 
 **Files Modified**:
-
 
 **API Payload Structure** (Working correctly):
 
@@ -100,7 +95,7 @@ ads_images[0][image] = File; // from CarAdvertisingImages component
 - Aggressive useEffect was constantly updating URL search parameters on every render
 - setSearchParams was being called repeatedly, interfering with browser navigation history
 - URL updates were creating navigation conflicts that prevented leaving the page
-**Solution Applied**:
+  **Solution Applied**:
 
 1. ✅ Removed automatic URL parameter updates that were blocking navigation
 2. ✅ Converted URL management functions to only update local state

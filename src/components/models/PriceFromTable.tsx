@@ -95,27 +95,32 @@ export function PriceFromTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {priceFromList.map((price, index) => (
-          <TableRow key={price.id} noBackgroundColumns={1}>
-            <TableCell>{data ? data.from + index : index + 1}</TableCell>
-            <TableCell className="w-full">{price.name}</TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={price.is_active === 1}
-                onChange={() => handleToggleStatus(price.id, price.is_active)}
-              />
-              <Link to={`/price-from/edit/${price.id}`}>
-                <Edit />
-              </Link>
-
-              <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(price.id)}
+        {priceFromList.map(
+          (
+            price: { id: number; name: string; is_active: number },
+            index: number
+          ) => (
+            <TableRow key={price.id} noBackgroundColumns={1}>
+              <TableCell>{data ? data.from + index : index + 1}</TableCell>
+              <TableCell className="w-full">{price.name}</TableCell>
+              <TableCell className="flex gap-[7px] items-center">
+                <Switch
+                  isSelected={price.is_active === 1}
+                  onChange={() => handleToggleStatus(price.id, price.is_active)}
                 />
-              </div>
-            </TableCell>
-          </TableRow>
-        ))}
+                <Link to={`/price-from/edit/${price.id}`}>
+                  <Edit />
+                </Link>
+
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(price.id)}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+          )
+        )}
       </TableBody>
     </Table>
   );
