@@ -4,7 +4,7 @@ import { Input, Select, SelectItem } from "@heroui/react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
-import { createPriceFrom } from "@/api/models/priceFrom/addPriceFrom";
+import { createPriceFrom } from "@/api/models/pricefrom/addPriceFrom";
 import { useQuery } from "@tanstack/react-query";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import toast from "react-hot-toast";
