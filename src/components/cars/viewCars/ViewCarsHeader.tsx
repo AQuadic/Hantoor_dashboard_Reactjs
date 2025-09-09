@@ -14,12 +14,12 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
   setSelectedFilter,
   vehicle,
 }) => {
-  const { t, i18n } = useTranslation('cars');
+  const { t, i18n } = useTranslation("cars");
   const getdispbByLang = (name?: { ar?: string; en?: string }) => {
-  if (!name) return "undefined";
-  const lang = i18n.language as 'ar' | 'en';
-  return name[lang] || name.ar || name.en || "undefined";
-};
+    if (!name) return "undefined";
+    const lang = i18n.language as "ar" | "en";
+    return name[lang] || name.ar || name.en || "undefined";
+  };
 
   const filtersData = [
     {
@@ -96,12 +96,18 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
                   alt={`${getdispbByLang(vehicle?.brand?.name)} Logo`}
                 />
               )}
-              <p className="text-lg text-[#606060]">{getdispbByLang(vehicle?.brand?.name)}</p>
+              <p className="text-lg text-[#606060]">
+                {getdispbByLang(vehicle?.brand?.name)}
+              </p>
             </div>
 
             <p className="text-xl font-bold text-primary">
               {vehicle?.price
-                ? `${Number(vehicle.price) - (Number(vehicle.price) * (vehicle.discount_value || 0)) / 100} درهم`
+                ? `${
+                    Number(vehicle.price) -
+                    (Number(vehicle.price) * (vehicle.discount_value || 0)) /
+                      100
+                  } درهم`
                 : "0 درهم"}
             </p>
 
@@ -110,10 +116,14 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
             </p>
 
             <div className="flex items-center w-[70px] h-[30px] bg-[#FF1B5412] rounded-[67px]">
-                  <img src="/images/percentage.gif" alt="%"  className="w-[26px] h-[26px]"/>
-                <p className="text-[#FF1C55] text-[15px] font-normal px-2">
-                  {vehicle?.discount_value}%
-                </p>
+              <img
+                src="/images/percentage.gif"
+                alt="%"
+                className="w-[26px] h-[26px]"
+              />
+              <p className="text-[#FF1C55] text-[15px] font-normal px-2">
+                {vehicle?.discount_value}%
+              </p>
             </div>
 
             {/* {(vehicle?.vehicle_model?.name || vehicle?.vehicle_type?.name || vehicle?.vehicle_class?.name) && (
@@ -143,12 +153,16 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
 
         <div className="flex flex-col gap-1.5">
           <div className="flex flex-col p-4 border rounded-2xl">
-            <p className="text-2xl text-primary font-bold">{vehicle?.favorites || 0}</p>
-            <p className="text-sm text-[#64748B]">{t('favTimes')}</p>
+            <p className="text-2xl text-primary font-bold">
+              {vehicle?.favorites || 0}
+            </p>
+            <p className="text-sm text-[#64748B]">{t("favTimes")}</p>
           </div>
           <div className="flex flex-col p-4 border rounded-2xl mt-1.5">
-            <p className="text-2xl text-primary font-bold">{vehicle?.views || 0}</p>
-            <p className="text-sm text-[#64748B]">{t('views')}</p>
+            <p className="text-2xl text-primary font-bold">
+              {vehicle?.views || 0}
+            </p>
+            <p className="text-sm text-[#64748B]">{t("views")}</p>
           </div>
         </div>
       </div>
