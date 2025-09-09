@@ -17,6 +17,7 @@ export interface FAQ {
   updated_at?: string;
   useful_uses_count: number;
   unuseful_uses_count: number
+  is_active?: boolean;
 }
 
 export interface FAQsResponse {
