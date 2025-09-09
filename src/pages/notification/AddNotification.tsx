@@ -205,6 +205,7 @@ const AddNotification = () => {
           </div>
         </div>
 
+        {recieverType === "selected" && (
         <div className="xl:w-[506px] h-full bg-white rounded-[15px] p-[17px] xl:mt-0 mt-4">
           <div className="relative w-full mb-4">
             <input
@@ -263,7 +264,7 @@ const AddNotification = () => {
                             prev.filter((id) => id !== user.id.toString())
                           );
                       }}
-                      disabled={recieverType === "all"}
+                      disabled={(recieverType as "all" | "selected") === "all"}
                     />
                   </td>
                   <td className="py-3 pr-2">
@@ -273,7 +274,6 @@ const AddNotification = () => {
                       className="w-[52px] h-[51px] rounded-full"
                     />
                   </td>
-
                   <td className="py-3 pr-2 text-[#071739] font-normal">
                     {user.name}
                   </td>
@@ -286,6 +286,7 @@ const AddNotification = () => {
             </tbody>
           </table>
         </div>
+        )}
       </div>
       {showPopup && <SuccessPopup onClose={() => setShowPopup(false)} />}
     </section>
