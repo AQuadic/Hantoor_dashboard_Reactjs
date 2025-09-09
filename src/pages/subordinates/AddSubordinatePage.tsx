@@ -27,8 +27,36 @@ const AddSubordinatePage = () => {
   const extractErrorMessage = (err: unknown) => {
     if (!err) return "";
     if (typeof err === "string") return err;
-    const maybe = err as Record<string, unknown>;
-    return typeof maybe.message === "string" ? maybe.message : "";
+
+    const e = err as any;
+
+    // axios-style response with structured data
+    if (e.response && e.response.data) {
+      const data = e.response.data;
+
+      // data may be a simple string
+      if (typeof data === "string") return data;
+
+      // common API shape: { message: string | string[], errors: { field: string[] } }
+      if (data.message) {
+        if (typeof data.message === "string") return data.message;
+        if (Array.isArray(data.message)) return data.message.join(" - ");
+      }
+
+      if (data.errors && typeof data.errors === "object") {
+        const messages: string[] = [];
+        Object.values(data.errors).forEach((val: any) => {
+          if (Array.isArray(val)) messages.push(...val.map(String));
+          else if (typeof val === "string") messages.push(val);
+        });
+        if (messages.length) return messages.join(" - ");
+      }
+    }
+
+    // fallback to error.message (e.g. axios's 'Request failed with status code 422')
+    if (typeof e.message === "string") return e.message;
+
+    return "";
   };
 
   const [profileImage, setProfileImage] = React.useState<File | null>(null);

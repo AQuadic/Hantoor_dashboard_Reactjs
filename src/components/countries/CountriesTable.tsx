@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { useState, useEffect } from "react";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import Edit from "../icons/general/Edit";
 import {
@@ -34,6 +35,12 @@ const CountriesTable = ({
 }: CountriesTableProps) => {
   const { t, i18n } = useTranslation("country");
 
+  const [localCountries, setLocalCountries] = useState(countries);
+
+  useEffect(() => {
+    setLocalCountries(countries);
+  }, [countries]);
+
   const handleDelete = async (id: number) => {
     await deleteCountry(id);
     toast.success(t("countryDeleted"));
@@ -41,6 +48,12 @@ const CountriesTable = ({
   };
 
   const handleToggleStatus = async (country: Country) => {
+    // Optimistic update
+    const updatedCountries = localCountries.map((c) =>
+      c.id === country.id ? { ...c, is_active: !c.is_active } : c
+    );
+    setLocalCountries(updatedCountries);
+
     try {
       await updateCountry(country.id, {
         is_active: !country.is_active,
@@ -48,15 +61,17 @@ const CountriesTable = ({
       toast.success(
         !country.is_active ? t("countryActivated") : t("countryDeactivated")
       );
-      refetch();
+      // refetch(); // optional
     } catch (error) {
       console.error(error);
       toast.error(t("somethingWentWrong"));
+      // Revert
+      setLocalCountries(countries);
     }
   };
 
   if (isLoading) return <Loading />;
-  if (countries.length === 0) return <NoData />;
+  if (localCountries.length === 0) return <NoData />;
 
   return (
     <Table>
@@ -71,7 +86,7 @@ const CountriesTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {countries.map((country, index) => {
+        {localCountries.map((country, index) => {
           return (
             <TableRow key={country.id} noBackgroundColumns={1}>
               <TableCell>{index + 1}</TableCell>
