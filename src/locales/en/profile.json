@@ -6,5 +6,8 @@
     "currentPassword": "Current Password",
     "newPassword": "New Password",
     "confirmPassword": "Confirm Password",
-    "password": "Password"
+    "password": "Password",
+    "profileUpdated": "Profile updated successfully!",
+    "passwordnotMatch": "Passwords do not match",
+    "passwordUpdated": "Password updated successfully!"
 }
