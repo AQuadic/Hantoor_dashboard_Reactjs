@@ -71,7 +71,7 @@ const VerificationCode = () => {
   const handleVerify = async () => {
     const code = otp.join("");
     if (code.length < 4) {
-      toast.error("Please enter the complete OTP code");
+      toast.error(t("otpIncomplete"));
       return;
     }
 
@@ -79,7 +79,7 @@ const VerificationCode = () => {
     const phoneToSend = phone?.trim() || undefined;
 
     if (!emailToSend && !phoneToSend) {
-      toast.error("Email or phone is required");
+      toast.error(t("emailOrPhoneRequired"));
       return;
     }
 
@@ -98,7 +98,7 @@ const VerificationCode = () => {
         localStorage.setItem("resetToken", response.reset_token);
       }
 
-      toast.success(response.message || "Verification successful");
+      toast.success(response.message || t("verificationSuccess"));
 
       navigate("/change-password");
     } catch (error: unknown) {
@@ -123,7 +123,7 @@ const VerificationCode = () => {
             return (error as { message: string }).message;
           }
         }
-        return "Verification failed";
+        return t("verificationFailed");
       })();
       toast.error(errorMessage);
     }
@@ -142,9 +142,7 @@ const VerificationCode = () => {
       };
       try {
         const response = await resend(data);
-        toast.success(
-          response.message || "Verification code resent successfully"
-        );
+        toast.success(response.message || t("resendSuccess"));
       } catch (error: unknown) {
         const errorMessage = (() => {
           if (
@@ -164,7 +162,7 @@ const VerificationCode = () => {
               return (responseData as { message: string }).message;
             }
           }
-          return "Failed to resend code";
+          return t("resendFailed");
         })();
         toast.error(errorMessage);
       }
@@ -179,9 +177,7 @@ const VerificationCode = () => {
       };
       try {
         const response = await resendUser(data);
-        toast.success(
-          response.message || "Verification code resent successfully via email"
-        );
+        toast.success(response.message || t("resendEmailSuccess"));
       } catch (error: unknown) {
         const errorMessage = (() => {
           if (
@@ -201,12 +197,12 @@ const VerificationCode = () => {
               return (responseData as { message: string }).message;
             }
           }
-          return "Failed to resend code via email";
+          return t("resendEmailFailed");
         })();
         toast.error(errorMessage);
       }
     } else {
-      toast.error("Email or phone is required to resend code");
+      toast.error(t("resendRequired"));
     }
 
     setResendDisabled(true);

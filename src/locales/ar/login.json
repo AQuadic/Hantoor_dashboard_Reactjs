@@ -24,5 +24,13 @@
   "resetPasswordFailed": "فشل إرسال إعادة تعيين كلمة المرور",
   "emailNotFound": "لا يوجد حساب مرتبط بهذا البريد الإلكتروني",
   "phoneNotFound": "لا يوجد حساب مرتبط بهذا الرقم",
-  "requestFailed": "فشل الطلب"
+  "requestFailed": "فشل الطلب",
+  "otpIncomplete": "الرجاء إدخال رمز التحقق الكامل",
+  "verificationSuccess": "تم التحقق بنجاح",
+  "verificationFailed": "فشل التحقق",
+  "resendSuccess": "تم إعادة إرسال رمز التحقق بنجاح",
+  "resendFailed": "فشل إعادة إرسال الرمز",
+  "resendEmailSuccess": "تم إعادة إرسال رمز التحقق عبر البريد الإلكتروني بنجاح",
+  "resendEmailFailed": "فشل إعادة إرسال الرمز عبر البريد الإلكتروني",
+  "resendRequired": "البريد الإلكتروني أو رقم الهاتف مطلوب لإعادة إرسال الرمز"
 }

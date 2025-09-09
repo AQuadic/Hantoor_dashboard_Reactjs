@@ -24,5 +24,13 @@
   "resetPasswordFailed": "Failed to send password reset",
   "emailNotFound": "No account found with this email",
   "phoneNotFound": "No account found with this phone number",
-  "requestFailed": "Request failed"
+  "requestFailed": "Request failed",
+  "otpIncomplete": "Please enter the complete OTP code",
+  "verificationSuccess": "Verification successful",
+  "verificationFailed": "Verification failed",
+  "resendSuccess": "Verification code resent successfully",
+  "resendFailed": "Failed to resend code",
+  "resendEmailSuccess": "Verification code resent successfully via email",
+  "resendEmailFailed": "Failed to resend code via email",
+  "resendRequired": "Email or phone is required to resend code"
 }
