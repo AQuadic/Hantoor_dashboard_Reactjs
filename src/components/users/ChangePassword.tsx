@@ -36,7 +36,7 @@ const ChangePassword = () => {
     try {
       setLoading(true);
 
-      const response = await changePassword(user.id, {
+      const response = await changePassword({
         password,
         password_confirmation: passwordConfirmation,
       });

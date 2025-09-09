@@ -77,7 +77,11 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
             width={338}
             height={175}
             className="object-cover w-[338px] h-[175px] rounded-xl"
-            src={vehicle?.image || vehicle?.additional_images?.[0] || "/images/carDetails.png"}
+            src={
+              vehicle?.image ||
+              vehicle?.additional_images?.[0]?.url ||
+              "/images/carDetails.png"
+            }
             alt="Vehicle"
           />
           <div className="flex flex-col gap-1.5">

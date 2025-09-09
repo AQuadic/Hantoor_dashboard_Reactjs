@@ -16,9 +16,9 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import { getPriceTo, PriceToResponse } from "@/api/models/priceto/getPriceTo";
-import { deletePriceTo } from "@/api/models/priceto/deletePriceTo";
-import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
+import { getPriceTo, PriceToResponse } from "@/api/models/priceTo/getPriceTo";
+import { deletePriceTo } from "@/api/models/priceTo/deletePriceTo";
+import { updatePriceTo } from "@/api/models/priceTo/updatePriceTo";
 
 interface PriceToTableProps {
   search?: string;
