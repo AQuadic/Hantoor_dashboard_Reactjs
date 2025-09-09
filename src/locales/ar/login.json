@@ -15,9 +15,14 @@
   "saveAndEnter": "حفظ ودخول",
   "emailRequired": "البريد الإلكتروني مطلوب",
   "emailInvalid": "البريد الإلكتروني غير صالح",
+  "emailOrPhoneRequired": "الرجاء إدخال البريد الإلكتروني أو رقم الهاتف",
   "passwordRequired": "كلمة المرور مطلوبة",
   "passwordTooShort": "يجب أن تتكون كلمة المرور من 6 أحرف على الأقل",
   "invalidCredentials": "البريد الإلكتروني أو كلمة المرور غير صحيحة",
   "recaptchaRequired": "مطلوب إعادة التحقق",
-  "resetPasswordSent": "تم إرسال إعادة تعيين كلمة المرور"
+  "resetPasswordSent": "تم إرسال إعادة تعيين كلمة المرور",
+  "resetPasswordFailed": "فشل إرسال إعادة تعيين كلمة المرور",
+  "emailNotFound": "لا يوجد حساب مرتبط بهذا البريد الإلكتروني",
+  "phoneNotFound": "لا يوجد حساب مرتبط بهذا الرقم",
+  "requestFailed": "فشل الطلب"
 }
