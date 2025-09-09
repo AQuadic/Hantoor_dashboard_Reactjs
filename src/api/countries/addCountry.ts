@@ -8,7 +8,7 @@ export interface CountryPayload {
   service_fee?: string; 
   service_duration_type?: "day" | "month" | "year";
   service_duration?: string;
-  is_active?: boolean;
+  is_active?: boolean; 
 }
 
 
