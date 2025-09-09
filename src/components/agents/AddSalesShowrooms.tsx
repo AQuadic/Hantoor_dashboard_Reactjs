@@ -177,7 +177,7 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
                       );
                     }
                   }}
-                  phone={center.whatsapp.replace(/^\d+\s*/, "")}
+                  phone={(center.whatsapp || "").replace(/^\d+\s*/, "")}
                   setPhone={(val: string) =>
                     handleShowroomChange(
                       index,

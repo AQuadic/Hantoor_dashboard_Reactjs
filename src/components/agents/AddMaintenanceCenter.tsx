@@ -177,7 +177,7 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
                       );
                     }
                   }}
-                  phone={center.whatsapp.replace(/^\d+\s*/, "")}
+                  phone={(center.whatsapp || "").replace(/^\d+\s*/, "")}
                   setPhone={(val: string) =>
                     handleCenterChange(
                       index,
