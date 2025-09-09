@@ -71,7 +71,17 @@ const EditProfileForm = ({
       });
       toast.success(t('profileUpdated'));
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to update profile");
+      const message = err.response?.data?.message;
+
+      if (message?.includes("phone")) {
+        toast.error(t('validation.phone'));
+      } else if (message?.includes("email")) {
+        toast.error(t('validation.email'));
+      } else if (message?.includes("name")) {
+        toast.error(t('validation.name')); 
+      } else {
+        toast.error(message || t('profileUpdateFailed'));
+      }
     } finally {
       setLoading(false);
     }
@@ -79,6 +89,12 @@ const EditProfileForm = ({
 
   const handleSavePassword = async () => {
     if (!data) return;
+
+    if (!newPassword || !confirmPassword) {
+      toast.error(t('enterNewPassword'));
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       toast.error(t('passwordnotMatch'));
       return;

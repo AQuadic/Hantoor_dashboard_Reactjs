@@ -9,5 +9,12 @@
     "password": "Password",
     "profileUpdated": "Profile updated successfully!",
     "passwordnotMatch": "Passwords do not match",
-    "passwordUpdated": "Password updated successfully!"
+    "passwordUpdated": "Password updated successfully!",
+    "enterNewPassword": "Please enter a new password",
+    "validation": {
+    "phone": "Please enter your phone number",
+    "email": "Please enter a valid email",
+    "name": "Please enter your name"
+    },
+    "profileUpdateFailed": "Failed to update profile"
 }
