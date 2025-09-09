@@ -16,6 +16,7 @@ const FAQsPage = () => {
         pagination: "normal",
         page,
         type: "Frequent Questions",
+        search
       }),
   });
 

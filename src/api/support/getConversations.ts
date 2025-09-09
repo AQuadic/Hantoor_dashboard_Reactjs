@@ -30,6 +30,7 @@ export interface GetSupportConversationsParams {
   with_messages?: boolean;
   per_page?: number;
   page?: number;
+  search?: string;
 }
 
 export async function getSupportConversations(

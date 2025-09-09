@@ -4,7 +4,12 @@ import DashboardDatePicker from '../general/dashboard/DashboardDatePicker'
 import { Select, SelectItem} from "@heroui/react";
 import { useTranslation } from 'react-i18next';
 
-const SupportMessagesHeader = () => {
+interface SupportMessagesHeaderProps {
+  searchTerm: string;
+  setSearchTerm: (term: string) => void;
+}
+
+const SupportMessagesHeader = ({ searchTerm, setSearchTerm }: SupportMessagesHeaderProps) => {
     const countries = [
         {key: "1", label: "مصر"},
         {key: "2", label: "مصر"},
@@ -28,10 +33,11 @@ const SupportMessagesHeader = () => {
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
             <div className="flex-1">
             <SearchBar
-                termAr={"ابحث بالاسم"}
-                termEn={"Search by name"}
-                setTermAr={() => {}} 
-                setTermEn={() => {}} 
+                termAr={searchTerm}
+                termEn={searchTerm}
+                placeholderAr={t("searchByName")}
+                setTermAr={setSearchTerm}
+                setTermEn={setSearchTerm}
                 />
             </div>
             <div className="flex-1">

@@ -49,7 +49,7 @@ const AddNotification = () => {
 
   const handleSend = async () => {
     if (!selectedCountry) {
-      toast.error("Please select a country");
+      toast.error(t('selectCountry'));
       return;
     }
 
