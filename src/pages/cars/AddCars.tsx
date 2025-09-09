@@ -48,22 +48,40 @@ const AddCarsForm = () => {
     if (vehicle && isEdit) {
       console.log("Loading vehicle data:", vehicle); // Debug log
 
-      // Helper function to convert string URL to VehicleImage array
+      // Helper function to convert VehicleImageObject to VehicleImage array
       const convertToVehicleImages = (images: unknown[]): VehicleImage[] => {
         if (!Array.isArray(images)) return [];
-        return images.map((img, index) => ({
-          id: (img as { id?: number }).id || index,
-          image:
-            (img as { url?: string; image?: string }).url ||
-            (img as { url?: string; image?: string }).image ||
-            String(img),
-        }));
+        return images.map((img, index) => {
+          // Handle VehicleImageObject structure
+          if (img && typeof img === "object" && "url" in img) {
+            const imageObj = img as { id?: number; url?: string };
+            return {
+              id: imageObj.id || index,
+              image: imageObj.url || "",
+            };
+          }
+          // Handle direct string URLs
+          return {
+            id: index,
+            image: String(img),
+          };
+        });
       };
 
-      // Helper function to handle video array (API returns array, we need first item)
-      const getVideoFile = (videoArray: string[]): string | null => {
-        if (Array.isArray(videoArray) && videoArray.length > 0) {
-          return videoArray[0];
+      // Helper function to get video URL from VehicleImageObject
+      const getVideoFile = (videoObj: unknown): string | null => {
+        if (videoObj && typeof videoObj === "object" && "url" in videoObj) {
+          const video = videoObj as { url?: string };
+          return video.url || null;
+        }
+        return null;
+      };
+
+      // Helper function to get main image URL from VehicleImageObject
+      const getMainImageUrl = (imageObj: unknown): string | null => {
+        if (imageObj && typeof imageObj === "object" && "url" in imageObj) {
+          const image = imageObj as { url?: string };
+          return image.url || null;
         }
         return null;
       };
@@ -139,7 +157,7 @@ const AddCarsForm = () => {
         engine_volume_id: vehicle.engine_volume_id
           ? safeToString(vehicle.engine_volume_id)
           : "",
-        mainImage: vehicle.image,
+        mainImage: getMainImageUrl(vehicle.image),
         videoFile: getVideoFile(vehicle.video),
         offers: vehicle.offers || [],
         packages: vehicle.packages || [],
@@ -155,7 +173,8 @@ const AddCarsForm = () => {
       console.log("Setting form data:", formDataToSet); // Debug log
       setFormData(formDataToSet);
     }
-  }, [vehicle, isEdit, setFormData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vehicle, isEdit]);
 
   // Create vehicle mutation
   const createVehicleMutation = useMutation({
