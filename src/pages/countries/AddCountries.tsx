@@ -40,6 +40,7 @@ const handleSubmit = async () => {
       is_active: true,
     });
 
+    toast.dismiss();
     toast.success(t("countryAddedSuccessfully"));
     navigate("/countries");
 
@@ -63,6 +64,7 @@ const handleSubmit = async () => {
       message = e.response?.data?.message || e.message || message;
     }
 
+    toast.dismiss();
     toast.error(message);
   } finally {
     setLoading(false);
@@ -178,7 +180,7 @@ const handleSubmit = async () => {
         </div>
         </div>
 
-        <div className="mt-4">
+        <div className={loading ? "pointer-events-none opacity-70 mt-4" : "mt-4"}>
           <DashboardButton
             titleAr={loading ? "جاري الاضافة..." : "اضافة"}
             titleEn={loading ? "Adding..." : "Add"}
