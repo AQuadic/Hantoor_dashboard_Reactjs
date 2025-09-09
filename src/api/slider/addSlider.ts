@@ -5,6 +5,7 @@ export interface CreateSliderPayload {
   imageAr: File;
   imageEn: File;
   is_active?: boolean;
+  name: string
 }
 
 export interface CreateSliderResponse {
@@ -22,6 +23,7 @@ export const createSlider = async (
 ): Promise<CreateSliderResponse> => {
   const formData = new FormData();
   formData.append("title", payload.title);
+  formData.append("name", payload.name);
   formData.append("image[ar]", payload.imageAr);
   formData.append("image[en]", payload.imageEn);
   if (payload.is_active !== undefined) {

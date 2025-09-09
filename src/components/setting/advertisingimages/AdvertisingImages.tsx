@@ -31,7 +31,7 @@ const AdvertisingImages = () => {
     setUploadError(null);
 
     try {
-        await createSlider({ title: "New Slider", imageAr: file, imageEn: file });
+        await createSlider({name: "slider", title: "New Slider", imageAr: file, imageEn: file });
         toast.success(t('imageAdded'));
         setPreview(null);
         refetch();
