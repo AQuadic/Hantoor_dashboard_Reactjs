@@ -78,5 +78,6 @@
   "vehicleUpdatedSuccess": "تم تحديث السيارة بنجاح",
   "pleaseFillAllFields": "يرجى إكمال جميع الحقول المطلوبة",
   "pleaseEnterPrice": "يرجى إدخال السعر",
-  "vehicleCreatedSuccess": "تم اضافة السيارة بنجاح"
+  "vehicleCreatedSuccess": "تم اضافة السيارة بنجاح",
+  "vehicleDeletedSuccess": "تم حذف السيارة بنجاح"
 }

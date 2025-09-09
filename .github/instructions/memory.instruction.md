@@ -680,13 +680,6 @@ if (filters.search && filters.search.trim() !== "") {
 }
 ```
 
-## 2025-09-09: PasswordInput autofill fix
-
-- **Change**: Updated `src/components/general/PasswordInput.tsx` to add `autoComplete="new-password"` and `name="new-password"` to prevent browsers from autofilling password fields with the word "password" or saved credentials unintentionally.
-- **Reason**: Some browsers/agents were pre-populating password inputs with the literal string "password" on page load. Setting `autoComplete` to `new-password` prevents autofill for existing saved passwords and ensures the inputs start empty.
-- **Files Modified**:
-  - `src/components/general/PasswordInput.tsx` - added `autoComplete` and `name` props to Input component
-
 #### **Component Layer (CarsHeader.tsx):**
 
 ```typescript
@@ -1012,3 +1005,10 @@ Created wrapper interfaces and modified all API functions to extract nested data
 - ✅ **Refresh preserves state** - page refresh keeps user on same tab
 - ✅ **Navigation still works** - no blocking issues when going back/forward
 - ✅ **Best of both worlds** - functional URL updates without navigation problems
+
+## 2025-09-09: Added vehicleDeletedSuccess translation keys
+
+- Added `vehicleDeletedSuccess` to `src/locales/en/cars.json` with value: "Vehicle deleted successfully"
+- Added `vehicleDeletedSuccess` to `src/locales/ar/cars.json` with value: "تم حذف السيارة بنجاح"
+- Purpose: Fix toast message shown after deleting a vehicle in `src/components/cars/CarsTable.tsx` so it uses correct localized strings.
+- Verified: `CarsTable` uses `useTranslation('cars')` and the new keys will be picked up by the existing t("vehicleDeletedSuccess") call.

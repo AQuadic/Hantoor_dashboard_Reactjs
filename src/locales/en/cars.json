@@ -78,5 +78,6 @@
   "vehicleUpdatedSuccess": "Vehicle updated successfully",
   "pleaseFillAllFields": "Please complete all required fields",
   "pleaseEnterPrice": "Please enter price",
-  "vehicleCreatedSuccess": "Vehicle created successfully"
+  "vehicleCreatedSuccess": "Vehicle created successfully",
+  "vehicleDeletedSuccess": "Vehicle deleted successfully"
 }
