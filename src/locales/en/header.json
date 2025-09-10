@@ -11,5 +11,7 @@
     "clientData": "Client Data",
 
     "noDataAvailable": "No data available",
-    "Unknown": "Unknown"
+    "Unknown": "Unknown",
+
+    "users": "Users"
 }
