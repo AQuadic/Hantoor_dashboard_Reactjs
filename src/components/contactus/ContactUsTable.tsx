@@ -13,6 +13,7 @@ import NoData from "../general/NoData";
 import { deleteSuggestions } from "@/api/suggestions/deleteSuggestion";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
+import { updateSuggestion } from "@/api/suggestions/getSuggestionsById";
 
 type ContactUsTableProps = {
   page: number;
@@ -59,6 +60,16 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
         refetch();
     };
 
+    const handleToggleStar = async (id: number, current: boolean) => {
+    try {
+        await updateSuggestion(id, { is_starred: !current });
+        toast.success(current ? t("removedFromStarred") : t("addedToStarred"));
+        refetch();
+    } catch {
+        toast.error(t("error"));
+    }
+    };
+
     return (
         <div className="">
         <div className="w-full">
@@ -101,7 +112,10 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
                     <button onClick={() => setOpenMessageId(message.id)}>
                         <View />
                     </button>
-                    <Star />
+                    <button onClick={() => handleToggleStar(message.id, !!message.is_starred)}>
+                    <Star className={message.is_starred ? "text-yellow-400" : "text-gray-400"} />
+                    </button>
+
                     <div className="mt-2">
                         <TableDeleteButton handleDelete={() => handleDelete(message.id)} />
                     </div>

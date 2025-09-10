@@ -17,10 +17,25 @@ export interface Suggestion {
   read_at: string | null;
   created_at: string;
   updated_at: string;
+  is_starred: boolean;
 }
 
 export const getSuggestion = async (id: string): Promise<Suggestion> => {
   const response = await axios.get<Suggestion>(`/admin/suggestions/${id}`, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
+
+  return response.data;
+};
+
+export const updateSuggestion = async (
+  id: number | string,
+  payload: Partial<Suggestion>
+): Promise<Suggestion> => {
+  const response = await axios.post<Suggestion>(`/admin/suggestions/${id}`, payload, {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

@@ -3,5 +3,7 @@
     "phoneNumber": "رقم الجوال",
     "email": "البريد الالكتروني",
     "country": "البلد",
-    "replayViaEmail": "الرد عن طريق البريد"
+    "replayViaEmail": "الرد عن طريق البريد",
+    "addedToStarred": "تمت الإضافة إلى المفضلة",
+    "removedFromStarred": "تمت الإزالة من المفضلة"
 }

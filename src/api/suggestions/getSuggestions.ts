@@ -12,6 +12,7 @@ export interface Suggestion {
   city: string;
   status: string;
   type: string;
+  is_starred: boolean;
 }
 
 export interface SuggestionsResponse {

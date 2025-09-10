@@ -3,5 +3,7 @@
     "phoneNumber": "Phone number",
     "email": "Email",
     "country": "Country",
-    "replayViaEmail": "Reply via email"
+    "replayViaEmail": "Reply via email",
+    "addedToStarred": "Added to starred",
+    "removedFromStarred": "Removed from starred"
 }
