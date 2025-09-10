@@ -4,13 +4,13 @@ import DashboardButton from '../general/dashboard/DashboardButton'
 import ImageInput from '../general/ImageInput'
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-hot-toast';
-import { updateSettings } from '@/api/setting/updateSetting';
+import { updateSettings, UpdateSettingsPayload } from '@/api/setting/updateSetting';
 import { GeneralSettingsResponse, getSettings } from '@/api/setting/getSetting';
 
 const GeneralSettings = () => {
     const { t } = useTranslation("setting");
     const [profileImage, setProfileImage] = React.useState<File | null>(null);
-    const [ ,setLoading] = React.useState(false);
+    const [, setLoading] = React.useState(false);
     const [fields, setFields] = React.useState({
         no_videos: '',
         text_features_ar: '',
@@ -47,26 +47,22 @@ const GeneralSettings = () => {
             iphone_date: data.iphone_date,
         });
         if (data.profile_image) {
-            setProfileImage(null); // Or handle URL display
+            setProfileImage(null); 
         }
-        } catch (error: any) {
+    } catch (error: any) {
         toast.error(error.message || "Failed to load settings");
-        }
-    };
-
+    }
+};
     fetchSettings();
-    }, []);
+}, []);
 
-    const handleInputChange = (key: string, value: string) => {
-        setFields(prev => ({ ...prev, [key]: value }));
-    };
+const handleInputChange = (key: string, value: string) => {
+    setFields(prev => ({ ...prev, [key]: value }));
+};
 
 const handleSave = async (keys: string[]) => {
-    // Check if any required field is empty
     const emptyFields = keys.filter(key => {
-        if (key === 'profile_image') {
-            return !profileImage;
-        }
+        if (key === 'profile_image') return !profileImage;
         return !fields[key as keyof typeof fields]?.trim();
     });
 
@@ -75,13 +71,59 @@ const handleSave = async (keys: string[]) => {
         return;
     }
 
-    // Build payload
-    const payload: Record<string, any> = {};
+    const payload: UpdateSettingsPayload = {};
+
     keys.forEach(key => {
-        if (key === 'profile_image') {
-            payload[key] = profileImage;
-        } else {
-            payload[key] = fields[key as keyof typeof fields];
+        switch (key) {
+            case 'no_videos':
+                payload.ads_per_search = Number(fields.no_videos);
+                break;
+            case 'text_features_ar':
+            case 'text_features_en':
+                payload.featuresText = {
+                    ar: fields.text_features_ar,
+                    en: fields.text_features_en
+                };
+
+                break;
+                break;
+            case 'advanced_search_ar':
+            case 'advanced_search_en':
+                payload.AdvancedSearch = {
+                    ar: fields.advanced_search_ar,
+                    en: fields.advanced_search_en,
+                };
+                break;
+            case 'financing_text_ar':
+            case 'financing_text_en':
+                payload.financeText = {
+                    ar: fields.financing_text_ar,
+                    en: fields.financing_text_en,
+                };
+                break;
+            case 'android_link':
+            case 'android_version':
+            case 'publish_date':
+                payload.app = payload.app || {};
+                payload.app.android = {
+                    link: fields.android_link,
+                    version: fields.android_version,
+                    release_date: fields.publish_date,
+                };
+                break;
+            case 'iphone_link':
+            case 'iphone_version':
+            case 'iphone_date':
+                payload.app = payload.app || {};
+                payload.app.ios = {
+                    link: fields.iphone_link,
+                    version: fields.iphone_version,
+                    release_date: fields.iphone_date,
+                };
+                break;
+            case 'profile_image':
+                payload.site_name = fields.no_videos;
+                break;
         }
     });
 

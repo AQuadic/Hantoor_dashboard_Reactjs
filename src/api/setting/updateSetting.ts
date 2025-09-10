@@ -1,52 +1,53 @@
 import { axios } from "@/lib/axios";
+export interface LocalizedText {
+  en?: string;
+  ar?: string;
+}
+
+export interface AppInfo {
+  link?: string;
+  version?: string;
+  release_date?: string;
+}
+
+export interface AppSettings {
+  ios?: AppInfo;
+  android?: AppInfo;
+}
 
 export interface UpdateSettingsPayload {
-  no_videos?: string;
-  text_features_ar?: string;
-  text_features_en?: string;
-  advanced_search_ar?: string;
-  advanced_search_en?: string;
-  financing_text_ar?: string;
-  financing_text_en?: string;
-  android_link?: string;
-  android_version?: string;
-  publish_date?: string;
-  iphone_link?: string;
-  iphone_version?: string;
-  iphone_date?: string;
-  profile_image?: File | null;
+  site_name?: string;
+  site_active?: boolean;
+  ads_per_search?: number;
+  featuresText?: LocalizedText;
+  AdvancedSearch?: LocalizedText;
+  financeText?: LocalizedText;
+  app?: AppSettings;
 }
 
-export interface ApiResponse<T = any> {
-  success: boolean;
-  message: string;
-  data?: T;
+export interface UpdateSettingsResponse {
+  success?: boolean;
+  message?: string;
+  data?: any; 
 }
 
-export const updateSettings = async (
+export async function updateSettings(
   payload: UpdateSettingsPayload
-): Promise<ApiResponse> => {
+): Promise<UpdateSettingsResponse> {
   try {
-    const formData = new FormData();
-
-    Object.entries(payload).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        if (key === "profile_image" && value instanceof File) {
-          formData.append(key, value);
-        } else {
-          formData.append(key, value as string);
-        }
+    const response = await axios.put<UpdateSettingsResponse>(
+      "/admin/setting",
+      payload,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
       }
-    });
-
-    const response = await axios.put<ApiResponse>("admin/setting", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-
+    );
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.message || "Failed to update settings");
+    console.error("Error updating settings:", error.response?.data || error.message);
+    throw error;
   }
-};
+}
