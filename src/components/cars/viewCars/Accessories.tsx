@@ -10,8 +10,10 @@ import { Switch } from "@heroui/react";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import { Accessory } from "@/api/vehicles/getVehicleById";
 import { deleteAccessories } from "@/api/vehicles/accessories/deleteAccessories";
+import { updateAccessory } from "@/api/vehicles/accessories/updateAccessories";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
 import NoData from "@/components/general/NoData";
 
 interface AccessoriesProps {
@@ -21,13 +23,47 @@ interface AccessoriesProps {
 
 const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
   const { t } = useTranslation("cars");
+
+  const [localAccessories, setLocalAccessories] = useState<Accessory[]>(accessories);
+
+  useEffect(() => {
+    setLocalAccessories(accessories);
+  }, [accessories]);
+
   const handleDelete = async (id: number) => {
-    await deleteAccessories(id);
-    toast.success(t("accessoriesDeleted"));
-    refetch();
+    try {
+      await deleteAccessories(id);
+      toast.success(t("accessoriesDeleted"));
+      refetch();
+    } catch {
+      toast.error(t("somethingWentWrong"));
+    }
   };
 
-  if (!accessories || accessories.length === 0) {
+  const handleToggleActive = async (accessory: Accessory) => {
+    try {
+      const updated = await updateAccessory(accessory.id, {
+        name: accessory.name,
+        price: String(accessory.price),
+        is_active: !accessory.is_active,
+      });
+
+      setLocalAccessories((prev) =>
+        prev.map((a) => (a.id === accessory.id ? { ...a, is_active: updated.is_active } : a))
+      );
+
+      toast.success(
+        updated.is_active ? t("vehicleStatusUpdated") : t("vehicleStatusUpdated")
+      );
+
+      refetch();
+    } catch (error) {
+      console.error(error);
+      toast.error(t("somethingWentWrong"));
+    }
+  };
+
+  if (!localAccessories || localAccessories.length === 0) {
     return <NoData />;
   }
 
@@ -46,7 +82,7 @@ const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {accessories.map((accessory, index) => (
+            {localAccessories.map((accessory, index) => (
               <TableRow key={accessory.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
@@ -65,7 +101,10 @@ const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
                 </TableCell>
                 <TableCell className="w-full">{accessory.price} درهم</TableCell>
                 <TableCell className="flex items-center gap-[7px]">
-                  <Switch isSelected={accessory.is_active} />
+                  <Switch
+                    isSelected={accessory.is_active}
+                    onValueChange={() => handleToggleActive(accessory)}
+                  />
                   <div className="mt-2">
                     <TableDeleteButton handleDelete={() => handleDelete(accessory.id)} />
                   </div>
