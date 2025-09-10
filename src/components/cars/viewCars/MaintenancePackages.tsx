@@ -11,8 +11,10 @@ import { Switch } from "@heroui/react";
 import { Vehicle } from "@/api/vehicles/getVehicleById";
 import NoData from "@/components/general/NoData";
 import { deletePackages } from "@/api/vehicles/packages/deletePackages";
+import { updatePackage } from "@/api/vehicles/packages/updatePackage";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 
 interface MaintenancePackagesProps {
   packages: Vehicle["packages"];
@@ -21,8 +23,13 @@ interface MaintenancePackagesProps {
 
 const MaintenancePackages = ({ packages, refetch }: MaintenancePackagesProps) => {
   const { t } = useTranslation("cars");
+  const [localPackages, setLocalPackages] = useState(packages);
 
-  if (!packages || packages.length === 0) {
+  useEffect(() => {
+    setLocalPackages(packages);
+  }, [packages]);
+
+  if (!localPackages || localPackages.length === 0) {
     return <NoData />;
   }
 
@@ -30,6 +37,35 @@ const MaintenancePackages = ({ packages, refetch }: MaintenancePackagesProps) =>
     await deletePackages(id);
     toast.success(t("packageSizeDeleted"));
     refetch();
+    };
+
+  const handleToggleActive = async (pkg: Vehicle["packages"][0]) => {
+    try {
+      const updated = await updatePackage(pkg.id, {
+        name: pkg.name,
+        price: String(pkg.price),
+        is_active: !pkg.is_active,
+      });
+
+      setLocalPackages((prev) =>
+        prev.map((p) => (p.id === pkg.id ? { ...p, is_active: updated.is_active } : p))
+      );
+
+      toast.success(
+        updated.is_active ? t("activatedSuccessfully") : t("deactivatedSuccessfully")
+      );
+
+      setTimeout(() => {
+        refetch();
+      }, 0);
+    } catch (error: any) {
+      console.error(error);
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error(t("somethingWentWrong"));
+      }
+    }
   };
 
   return (
@@ -46,13 +82,16 @@ const MaintenancePackages = ({ packages, refetch }: MaintenancePackagesProps) =>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {packages.map((pkg) => (
+            {localPackages.map((pkg) => (
               <TableRow key={pkg.id} noBackgroundColumns={1}>
                 <TableCell>{pkg.id}</TableCell>
                 <TableCell>{pkg.name.ar || pkg.name.en || "-"}</TableCell>
                 <TableCell className="w-full">{pkg.price} درهم</TableCell>
                 <TableCell className="flex items-center gap-2">
-                  <Switch isSelected={pkg.is_active} />
+                  <Switch
+                    isSelected={pkg.is_active}
+                    onValueChange={() => handleToggleActive(pkg)} // 👈 use onValueChange instead of onChange
+                  />
                   <TableDeleteButton handleDelete={() => handleDelete(pkg.id)} />
                 </TableCell>
               </TableRow>
