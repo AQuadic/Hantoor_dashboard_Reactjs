@@ -10,7 +10,7 @@ type AgentFilterType = "MaintenanceCenters" | "SalesShowrooms";
 const AgentsDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
   const [selectedFilter, setSelectedFilter] = useState<AgentFilterType>("MaintenanceCenters");
-  const [agent, setAgent] = useState<Agent | null>(null);
+  const [agent, setAgent] = useState<Agent | undefined>(undefined);
 
   useEffect(() => {
     if (!id) return;
@@ -32,12 +32,13 @@ const AgentsDetailsPage = () => {
             <AgentsHeader 
                 selectedFilter={selectedFilter}
                 setSelectedFilter={setSelectedFilter}
+                agent={agent}
             />
             <div className="px-2 md:px-8 relative min-h-[300px]">
                 {selectedFilter === "MaintenanceCenters" ? (
-                <MaintenanceCentersTable agent={agent} />
+                <MaintenanceCentersTable agent={agent ?? null} />
                 ) : (
-                <SalesShowroomsTable agent={agent} />
+                <SalesShowroomsTable agent={agent ?? null} />
                 )}
             </div>
         </div>
