@@ -1,4 +1,10 @@
-import React, { createContext, useState, ReactNode, useContext } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  useCallback,
+  useState,
+  useContext,
+} from "react";
 import {
   type CreateVehiclePayload,
   type UpdateVehiclePayload,
@@ -13,6 +19,7 @@ interface VehicleFormState extends Omit<CreateVehiclePayload, "name"> {
   id?: number;
   nameAr: string;
   nameEn: string;
+  rent_to_own_duration_en?: string; // Additional field for English duration
   mainImage?: File | string | null;
   videoFile?: File | string | null;
   carImages: VehicleImage[];
@@ -72,6 +79,7 @@ const initialFormState: VehicleFormState = {
   is_include_warranty: false,
   is_rent_to_own: false,
   rent_to_own_duration: "",
+  rent_to_own_duration_en: "",
   rent_to_own_whatsapp: "",
   rent_to_own_price: "",
   country_id: "",
@@ -114,19 +122,22 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
     ...initialData,
   });
 
-  const setFormData = (data: Partial<VehicleFormState>) => {
+  const setFormData = useCallback((data: Partial<VehicleFormState>) => {
     setFormDataState((prev) => ({ ...prev, ...data }));
-  };
+  }, []);
 
-  const updateField = <K extends keyof VehicleFormState>(
-    field: K,
-    value: VehicleFormState[K]
-  ) => {
-    setFormDataState((prev) => ({ ...prev, [field]: value }));
-  };
+  const updateField = useCallback(
+    <K extends keyof VehicleFormState>(
+      field: K,
+      value: VehicleFormState[K]
+    ) => {
+      setFormDataState((prev) => ({ ...prev, [field]: value }));
+    },
+    []
+  );
 
   // Features management
-  const addFeature = () => {
+  const addFeature = useCallback(() => {
     const newFeature: VehicleFeature = {
       name: { ar: "", en: "" },
       description: { ar: "", en: "" },
@@ -137,27 +148,30 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       ...prev,
       features: [...(prev.features || []), newFeature],
     }));
-  };
+  }, []);
 
-  const updateFeature = (index: number, feature: Partial<VehicleFeature>) => {
-    setFormDataState((prev) => ({
-      ...prev,
-      features:
-        prev.features?.map((f, i) =>
-          i === index ? { ...f, ...feature } : f
-        ) || [],
-    }));
-  };
+  const updateFeature = useCallback(
+    (index: number, feature: Partial<VehicleFeature>) => {
+      setFormDataState((prev) => ({
+        ...prev,
+        features:
+          prev.features?.map((f, i) =>
+            i === index ? { ...f, ...feature } : f
+          ) || [],
+      }));
+    },
+    []
+  );
 
-  const removeFeature = (index: number) => {
+  const removeFeature = useCallback((index: number) => {
     setFormDataState((prev) => ({
       ...prev,
       features: prev.features?.filter((_, i) => i !== index) || [],
     }));
-  };
+  }, []);
 
   // Offers management
-  const addOffer = () => {
+  const addOffer = useCallback(() => {
     const newOffer: VehicleOffer = {
       name: { ar: "", en: "" },
       description: { ar: "", en: "" },
@@ -168,26 +182,29 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       ...prev,
       offers: [...(prev.offers || []), newOffer],
     }));
-  };
+  }, []);
 
-  const updateOffer = (index: number, offer: Partial<VehicleOffer>) => {
-    setFormDataState((prev) => ({
-      ...prev,
-      offers:
-        prev.offers?.map((o, i) => (i === index ? { ...o, ...offer } : o)) ||
-        [],
-    }));
-  };
+  const updateOffer = useCallback(
+    (index: number, offer: Partial<VehicleOffer>) => {
+      setFormDataState((prev) => ({
+        ...prev,
+        offers:
+          prev.offers?.map((o, i) => (i === index ? { ...o, ...offer } : o)) ||
+          [],
+      }));
+    },
+    []
+  );
 
-  const removeOffer = (index: number) => {
+  const removeOffer = useCallback((index: number) => {
     setFormDataState((prev) => ({
       ...prev,
       offers: prev.offers?.filter((_, i) => i !== index) || [],
     }));
-  };
+  }, []);
 
   // Accessories management
-  const addAccessory = () => {
+  const addAccessory = useCallback(() => {
     const newAccessory: VehicleAccessory = {
       name: { ar: "", en: "" },
       price: "",
@@ -198,30 +215,30 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       ...prev,
       accessories: [...(prev.accessories || []), newAccessory],
     }));
-  };
+  }, []);
 
-  const updateAccessory = (
-    index: number,
-    accessory: Partial<VehicleAccessory>
-  ) => {
-    setFormDataState((prev) => ({
-      ...prev,
-      accessories:
-        prev.accessories?.map((a, i) =>
-          i === index ? { ...a, ...accessory } : a
-        ) || [],
-    }));
-  };
+  const updateAccessory = useCallback(
+    (index: number, accessory: Partial<VehicleAccessory>) => {
+      setFormDataState((prev) => ({
+        ...prev,
+        accessories:
+          prev.accessories?.map((a, i) =>
+            i === index ? { ...a, ...accessory } : a
+          ) || [],
+      }));
+    },
+    []
+  );
 
-  const removeAccessory = (index: number) => {
+  const removeAccessory = useCallback((index: number) => {
     setFormDataState((prev) => ({
       ...prev,
       accessories: prev.accessories?.filter((_, i) => i !== index) || [],
     }));
-  };
+  }, []);
 
   // Packages management
-  const addPackage = () => {
+  const addPackage = useCallback(() => {
     const newPackage: VehiclePackage = {
       name: { ar: "", en: "" },
       price: "",
@@ -231,100 +248,106 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       ...prev,
       packages: [...(prev.packages || []), newPackage],
     }));
-  };
+  }, []);
 
-  const updatePackage = (index: number, pkg: Partial<VehiclePackage>) => {
-    setFormDataState((prev) => ({
-      ...prev,
-      packages:
-        prev.packages?.map((p, i) => (i === index ? { ...p, ...pkg } : p)) ||
-        [],
-    }));
-  };
+  const updatePackage = useCallback(
+    (index: number, pkg: Partial<VehiclePackage>) => {
+      setFormDataState((prev) => ({
+        ...prev,
+        packages:
+          prev.packages?.map((p, i) => (i === index ? { ...p, ...pkg } : p)) ||
+          [],
+      }));
+    },
+    []
+  );
 
-  const removePackage = (index: number) => {
+  const removePackage = useCallback((index: number) => {
     setFormDataState((prev) => ({
       ...prev,
       packages: prev.packages?.filter((_, i) => i !== index) || [],
     }));
-  };
+  }, []);
 
   // Car images management
-  const addCarImage = () => {
+  const addCarImage = useCallback(() => {
     const newImage: VehicleImage = { image: "" };
     setFormDataState((prev) => ({
       ...prev,
       carImages: [...prev.carImages, newImage],
     }));
-  };
+  }, []);
 
-  const updateCarImage = (index: number, image: VehicleImage) => {
+  const updateCarImage = useCallback((index: number, image: VehicleImage) => {
     setFormDataState((prev) => ({
       ...prev,
       carImages: prev.carImages.map((img, i) => (i === index ? image : img)),
     }));
-  };
+  }, []);
 
-  const removeCarImage = (index: number) => {
+  const removeCarImage = useCallback((index: number) => {
     setFormDataState((prev) => ({
       ...prev,
       carImages: prev.carImages.filter((_, i) => i !== index),
     }));
-  };
+  }, []);
 
   // Additional images management
-  const addAdditionalImage = () => {
+  const addAdditionalImage = useCallback(() => {
     const newImage: VehicleImage = { image: "" };
     setFormDataState((prev) => ({
       ...prev,
       additionalImages: [...prev.additionalImages, newImage],
     }));
-  };
+  }, []);
 
-  const updateAdditionalImage = (index: number, image: VehicleImage) => {
-    setFormDataState((prev) => ({
-      ...prev,
-      additionalImages: prev.additionalImages.map((img, i) =>
-        i === index ? image : img
-      ),
-    }));
-  };
+  const updateAdditionalImage = useCallback(
+    (index: number, image: VehicleImage) => {
+      setFormDataState((prev) => ({
+        ...prev,
+        additionalImages: prev.additionalImages.map((img, i) =>
+          i === index ? image : img
+        ),
+      }));
+    },
+    []
+  );
 
-  const removeAdditionalImage = (index: number) => {
+  const removeAdditionalImage = useCallback((index: number) => {
     setFormDataState((prev) => ({
       ...prev,
       additionalImages: prev.additionalImages.filter((_, i) => i !== index),
     }));
-  };
+  }, []);
 
   // Ads images management
-  const addAdsImage = () => {
+  const addAdsImage = useCallback(() => {
     const newImage: VehicleImage = { image: "" };
     setFormDataState((prev) => ({
       ...prev,
       adsImages: [...prev.adsImages, newImage],
     }));
-  };
+  }, []);
 
-  const updateAdsImage = (index: number, image: VehicleImage) => {
+  const updateAdsImage = useCallback((index: number, image: VehicleImage) => {
     setFormDataState((prev) => ({
       ...prev,
       adsImages: prev.adsImages.map((img, i) => (i === index ? image : img)),
     }));
-  };
+  }, []);
 
-  const removeAdsImage = (index: number) => {
+  const removeAdsImage = useCallback((index: number) => {
     setFormDataState((prev) => ({
       ...prev,
       adsImages: prev.adsImages.filter((_, i) => i !== index),
     }));
-  };
+  }, []);
 
-  const resetForm = () => {
+  const resetForm = useCallback(() => {
     setFormDataState(initialFormState);
-  };
+  }, []);
 
-  const getCreatePayload = (): CreateVehiclePayload => {
+  const getCreatePayload = useCallback((): CreateVehiclePayload => {
     return {
       name: { ar: formData.nameAr, en: formData.nameEn },
       country_id: formData.country_id,
@@ -353,6 +376,7 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
         formData.mainImage instanceof File ? formData.mainImage : undefined,
       video:
         formData.videoFile instanceof File ? formData.videoFile : undefined,
+      images: formData.carImages,
       additional_images: formData.additionalImages, // From PhotosAndVideos MultiImageInput
       ads_images: formData.adsImages,
       offers: formData.offers,
@@ -360,48 +384,79 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       features: formData.features,
       accessories: formData.accessories,
     };
-  };
+  }, [formData]);
 
-  const getUpdatePayload = (): UpdateVehiclePayload => {
+  const getUpdatePayload = useCallback((): UpdateVehiclePayload => {
     return {
       ...getCreatePayload(),
       id: formData.id || 0,
     };
-  };
+  }, [getCreatePayload, formData.id]);
 
-  const value: VehicleFormContextType = {
-    formData,
-    setFormData,
-    updateField,
-    features: formData.features || [],
-    addFeature,
-    updateFeature,
-    removeFeature,
-    offers: formData.offers || [],
-    addOffer,
-    updateOffer,
-    removeOffer,
-    accessories: formData.accessories || [],
-    addAccessory,
-    updateAccessory,
-    removeAccessory,
-    packages: formData.packages || [],
-    addPackage,
-    updatePackage,
-    removePackage,
-    addCarImage,
-    updateCarImage,
-    removeCarImage,
-    addAdditionalImage,
-    updateAdditionalImage,
-    removeAdditionalImage,
-    addAdsImage,
-    updateAdsImage,
-    removeAdsImage,
-    resetForm,
-    getCreatePayload,
-    getUpdatePayload,
-  };
+  const value: VehicleFormContextType = React.useMemo(
+    () => ({
+      formData,
+      setFormData,
+      updateField,
+      features: formData.features || [],
+      addFeature,
+      updateFeature,
+      removeFeature,
+      offers: formData.offers || [],
+      addOffer,
+      updateOffer,
+      removeOffer,
+      accessories: formData.accessories || [],
+      addAccessory,
+      updateAccessory,
+      removeAccessory,
+      packages: formData.packages || [],
+      addPackage,
+      updatePackage,
+      removePackage,
+      addCarImage,
+      updateCarImage,
+      removeCarImage,
+      addAdditionalImage,
+      updateAdditionalImage,
+      removeAdditionalImage,
+      addAdsImage,
+      updateAdsImage,
+      removeAdsImage,
+      resetForm,
+      getCreatePayload,
+      getUpdatePayload,
+    }),
+    [
+      formData,
+      setFormData,
+      updateField,
+      addFeature,
+      updateFeature,
+      removeFeature,
+      addOffer,
+      updateOffer,
+      removeOffer,
+      addAccessory,
+      updateAccessory,
+      removeAccessory,
+      addPackage,
+      updatePackage,
+      removePackage,
+      addCarImage,
+      updateCarImage,
+      removeCarImage,
+      addAdditionalImage,
+      updateAdditionalImage,
+      removeAdditionalImage,
+      addAdsImage,
+      updateAdsImage,
+      removeAdsImage,
+      resetForm,
+      getCreatePayload,
+      getUpdatePayload,
+    ]
+  );
 
   return (
     <VehicleFormContext.Provider value={value}>
@@ -410,7 +465,9 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
   );
 };
 
-// Custom hook to use the vehicle form context
+// Note: a separate hook `src/hooks/useVehicleForm.ts` provides the consumer hook.
+
+// Provide a convenience export so code importing from the context file still works
 export const useVehicleForm = () => {
   const context = useContext(VehicleFormContext);
   if (context === null) {

@@ -119,6 +119,20 @@ setSelectedCountry({
 
 ✅ **CORRECTLY IMPLEMENTED**:
 
+## 2025-09-10: Rent-to-own UI & payload update
+
+- Files changed:
+
+  - `src/components/cars/addcars/RentToOwn.tsx` — Replaced minimal toggle with full UI: Arabic/English duration inputs, WhatsApp MobileInput (country + phone), rent price field, and wired updates to form context.
+  - `src/contexts/VehicleFormContext.tsx` — Added `rent_to_own_duration_en` to form state, ensured `is_rent_to_own`, `rent_to_own_duration`, `rent_to_own_whatsapp`, and `rent_to_own_price` are included in create/update payloads, and added `images: carImages` so gallery images are sent to API.
+
+- Notes:
+  - WhatsApp phone value is kept in component state and syncs to context via `updateField` effect.
+  - `rent_to_own_duration_en` is UI-only and not sent to API (kept for English display editing).
+  - Context value is memoized and update helpers are wrapped with `useCallback` to stabilize references.
+
+This entry records the small, low-risk changes made to ship rent-to-own data to the backend.
+
 ```typescript
 if (data.additional_images?.length) {
   data.additional_images.forEach((img, index) => {
