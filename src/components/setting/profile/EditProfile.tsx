@@ -39,24 +39,36 @@ const EditProfile: React.FC = () => {
 
 
     useEffect(() => {
-    if (profile?.data) {
-        const detail = profile.data;
-        setArTitle(detail.title?.ar ?? "");
-        setEnTitle(detail.title?.en ?? "");
-        setArBody(detail.description?.ar ?? "");
-        setEnBody(detail.description?.en ?? "");
-        setCountryId(detail.country_id?.toString() ?? "");
+        if (profile?.data) {
+            const detail = profile.data;
 
-        if (detail.image && typeof detail.image === "string") {
-        fetch(detail.image)
-            .then(res => res.blob())
-            .then(blob => {
-            const file = new File([blob], "profile.jpg", { type: blob.type });
-            setProfileImage(file);
-            });
+            setArTitle(detail.title?.ar ?? "");
+            setEnTitle(detail.title?.en ?? "");
+            setArBody(detail.description?.ar ?? "");
+            setEnBody(detail.description?.en ?? "");
+            setCountryId(detail.country_id?.toString() ?? "");
+
+            if (detail.image) {
+            let imageUrl: string | undefined;
+
+            if (typeof detail.image === "string") {
+                imageUrl = detail.image;
+            } else if (typeof detail.image === "object" && detail.image.url) {
+                imageUrl = detail.image.url;
+            }
+
+            if (imageUrl) {
+                fetch(imageUrl)
+                .then((res) => res.blob())
+                .then((blob) => {
+                    const file = new File([blob], "profile.jpg", { type: blob.type });
+                    setProfileImage(file);
+                });
+            }
+            }
         }
-    }
     }, [profile]);
+
 
   if (isLoading) return <Loading />
   if (!profile) return <NoData />
@@ -97,10 +109,15 @@ const EditProfile: React.FC = () => {
                 </div>
             <div className='h-full bg-[#FFFFFF] rounded-[15px] mx-8 px-[29px] py-5 mt-[11px]'>
                 <h2 className='text-[#2A32F8] text-[17px] font-bold mb-3'>{t('profileImage')}</h2>
-                <ImageInput 
-                image={profileImage} 
-                setImage={setProfileImage} 
-                />
+                <ImageInput
+                    image={profileImage}
+                    setImage={setProfileImage}
+                    existingImageUrl={
+                        typeof profile?.data?.image === "object"
+                        ? profile.data.image?.url
+                        : profile?.data?.image
+                    }
+                    />
             </div> 
             <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
                 <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
