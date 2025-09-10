@@ -26,7 +26,7 @@ export const fetchMessages = async (
 ): Promise<MessagesApiResponse> => {
   const response = await axios.get(`/admin/vehicle/conversation/messages`, {
     params: {
-      conversation_id: conversationId,
+  conversation_id: conversationId,
       page,
       per_page: perPage,
     },
@@ -60,6 +60,53 @@ export const fetchMessages = async (
   };
 
   const metaRaw = (raw.meta as Meta) || (response.data as Meta);
+
+  return {
+    data,
+    current_page: metaRaw?.current_page || 1,
+    from: metaRaw?.from ?? 0,
+    last_page: metaRaw?.last_page || 1,
+    per_page: metaRaw?.per_page || perPage,
+    to: metaRaw?.to ?? 0,
+    total: metaRaw?.total || 0,
+  } as MessagesApiResponse;
+};
+
+// Fetch messages by vehicle id (new API parameter: vehicle_id)
+export const fetchMessagesByVehicle = async (
+  vehicleId: number,
+  page: number = 1,
+  perPage: number = 20
+): Promise<MessagesApiResponse> => {
+  const response = await axios.get(`/admin/vehicle/conversation/messages`, {
+    params: {
+      vehicle_id: vehicleId,
+      page,
+      per_page: perPage,
+    },
+  });
+
+  const raw = response.data as {
+    data?: unknown;
+    meta?: {
+      current_page?: number;
+      from?: number | null;
+      last_page?: number;
+      per_page?: number;
+      to?: number | null;
+      total?: number;
+    };
+  };
+
+  const data: Message[] = Array.isArray(raw.data) ? (raw.data as Message[]) : [];
+  const metaRaw = (raw.meta as {
+    current_page?: number;
+    from?: number | null;
+    last_page?: number;
+    per_page?: number;
+    to?: number | null;
+    total?: number;
+  }) || (response.data as any);
 
   return {
     data,

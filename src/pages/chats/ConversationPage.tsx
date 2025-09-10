@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchMessages,
+  fetchMessagesByVehicle,
   deleteMessage,
   toggleConversationStatus,
   type Message,
@@ -19,11 +20,13 @@ import Loading from "@/components/general/Loading";
 import { useState, useEffect } from "react";
 
 interface ConversationPageProps {
-  conversationId: number | null;
+  conversationId?: number | null;
+  vehicleId?: number | null; // new optional prop
 }
 
 const ConversationPage: React.FC<ConversationPageProps> = ({
-  conversationId,
+  conversationId = null,
+  vehicleId = null,
 }) => {
   const { t, i18n } = useTranslation("chats");
   const queryClient = useQueryClient();
@@ -50,30 +53,40 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     });
   };
 
-  // Fetch messages for the conversation
+  // Fetch messages for the conversation or vehicle
+  const queryKey = vehicleId ? ["messages", "vehicle", vehicleId] : ["messages", conversationId];
+
   const {
     data: messagesData,
     isLoading: isLoadingMessages,
     error: messagesError,
   } = useQuery({
-    queryKey: ["messages", conversationId],
-    queryFn: () => fetchMessages(conversationId!, 1, 3),
-    enabled: !!conversationId,
+    queryKey,
+    queryFn: () =>
+      vehicleId
+        ? fetchMessagesByVehicle(vehicleId!, 1, 3)
+        : fetchMessages(conversationId!, 1, 3),
+    enabled: !!(conversationId || vehicleId),
   });
 
   // Find current conversation data from the conversations cache
+  // Attempt to find conversation data from cache. If vehicleId is provided,
+  // try to locate a conversation whose vehicle_id matches. This keeps the UI working
+  // when opening from a vehicle row where only vehicle id is known.
   useEffect(() => {
+    const cachedConversations =
+      queryClient.getQueryData<ConversationsApiResponse>(["conversations"]);
+    if (!cachedConversations?.data) return;
+
+    let found: Conversation | undefined;
     if (conversationId) {
-      const cachedConversations =
-        queryClient.getQueryData<ConversationsApiResponse>(["conversations"]);
-      if (cachedConversations?.data) {
-        const conversation = cachedConversations.data.find(
-          (c: Conversation) => c.id === conversationId
-        );
-        setCurrentConversation(conversation || null);
-      }
+      found = cachedConversations.data.find((c: Conversation) => c.id === conversationId);
+    } else if (vehicleId) {
+      found = cachedConversations.data.find((c: Conversation) => c.vehicle_id === vehicleId);
     }
-  }, [conversationId, queryClient]);
+
+    setCurrentConversation(found || null);
+  }, [conversationId, vehicleId, queryClient]);
 
   // Delete message mutation
   const deleteMessageMutation = useMutation({
