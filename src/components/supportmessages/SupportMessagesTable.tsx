@@ -19,7 +19,7 @@ interface SupportMessagesTableProps {
 }
 
 const SupportMessagesTable = ({ conversations, isLoading, refetch }: SupportMessagesTableProps) => {
-    const { t } = useTranslation("questions");
+    const { t, i18n } = useTranslation("questions");
     const [openMessageId, setOpenMessageId] = useState<number | null>(null);
     const [notesMap, setNotesMap] = useState<Record<number, string>>({});
     const [activeMap, setActiveMap] = useState<Record<number, boolean>>({});
@@ -65,15 +65,17 @@ const SupportMessagesTable = ({ conversations, isLoading, refetch }: SupportMess
             </TableHeader>
             <TableBody>
                 {conversations.map((message, index) => (
-                <TableRow key={message.id} noBackgroundColumns={1}>
+                    <TableRow key={message.id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{message.id}</TableCell>
                     <TableCell>{message.country_id || "-"}</TableCell>
-                    <TableCell>{message.title}</TableCell>
-                    <TableCell>{message.name}</TableCell>
+                    <TableCell>
+                        {i18n.language === "ar" ? message.faq.question.ar : message.faq.question.en}
+                    </TableCell>
+                    <TableCell>{message.user.name}</TableCell>
                     <TableCell className="w-full">
                         <div dir="ltr">
-                            {message.phone}
+                            {message.user.phone}
                         </div>
                     </TableCell>
                     <TableCell

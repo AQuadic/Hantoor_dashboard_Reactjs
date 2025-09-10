@@ -2,14 +2,40 @@ import { axios } from "@/lib/axios";
 
 export interface Conversation {
   id: number;
-  title: string;
-  country_id: number | null;
+  user_id: number;
+  faq_id: number;
+  status: string;
+  notes: string;
+  is_active: number;
   created_at: string;
   updated_at: string;
-  phone: string;
-  name:string;
-  notes: string
-  is_active: number
+  country_id: number | null;
+  user: {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+  };
+
+  faq: {
+    id: number;
+    question: {
+      ar: string;
+      en: string;
+    };
+    answer: {
+      ar: string;
+      en: string;
+    };
+    type: string;
+    is_active: number;
+    order_column?: number;
+    country_id?: number;
+    useful_uses_count?: number;
+    unuseful_uses_count?: number;
+    created_at: string;
+    updated_at: string;
+  };
 }
 
 export interface SupportConversationsResponse {
