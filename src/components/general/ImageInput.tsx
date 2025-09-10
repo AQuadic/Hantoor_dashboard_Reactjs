@@ -11,7 +11,10 @@ import { useTranslation } from "react-i18next";
 interface ImageInputProps {
   width?: number;
   height?: number;
-  image: File | null;
+  // image may be a File when user picked a file, or a string URL when
+  // the parent provides an existing image from the API. Keep setImage
+  // typed to File | null to remain compatible with existing callers.
+  image: File | string | null | undefined;
   setImage: React.Dispatch<React.SetStateAction<File | null>>;
   isRounded?: boolean;
   placeholderText?: string;
@@ -38,12 +41,22 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   // Create preview when image changes
   useEffect(() => {
-    if (image) {
+    // If parent passed a File instance, use FileReader to create a data URL.
+    // If parent passed a string (URL), use it directly as the preview.
+    let cancelled = false;
+    if (image instanceof File) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setImagePreview(e.target?.result as string);
+        if (!cancelled) setImagePreview(e.target?.result as string);
       };
       reader.readAsDataURL(image);
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    if (typeof image === "string" && image) {
+      setImagePreview(image);
     } else if (existingImageUrl) {
       setImagePreview(existingImageUrl);
     } else {
