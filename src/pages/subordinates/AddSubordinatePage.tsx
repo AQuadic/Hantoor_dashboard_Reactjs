@@ -60,6 +60,8 @@ const AddSubordinatePage = () => {
   };
 
   const [profileImage, setProfileImage] = React.useState<File | null>(null);
+  const [existingImageUrl, setExistingImageUrl] = useState<string | undefined>(undefined);
+
   const params = useParams();
   const managerId = params.id;
   const isEdit = Boolean(managerId);
@@ -102,6 +104,10 @@ const AddSubordinatePage = () => {
         if (data.phone_country) {
           setSelectedCountry(getCountryByIso2(data.phone_country));
         }
+
+        if (data.image?.url) {
+          setExistingImageUrl(data.image.url);
+        }
       } catch (err: unknown) {
         const message = extractErrorMessage(err) || "Failed to load admin data";
         toast.error(message);
@@ -110,6 +116,11 @@ const AddSubordinatePage = () => {
 
     fetchAdmin();
   }, [isEdit, managerId]);
+
+  const handleRemoveImage = () => {
+    setProfileImage(null);
+    setExistingImageUrl(undefined);
+  };
 
   const handleSubmit = async () => {
     if (
@@ -199,7 +210,12 @@ const AddSubordinatePage = () => {
       <div className="flex flex-col gap-8 p-8">
         <div className="p-8 bg-white rounded-2xl">
           <h3 className="mb-4 text-lg font-bold">{t("personalImage")}</h3>
-          <ImageInput image={profileImage} setImage={setProfileImage} />
+          <ImageInput
+            image={profileImage}
+            setImage={setProfileImage}
+            existingImageUrl={existingImageUrl}
+            onRemoveImage={handleRemoveImage}
+          />
         </div>
 
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
