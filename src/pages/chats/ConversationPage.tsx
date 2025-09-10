@@ -54,7 +54,9 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
   };
 
   // Fetch messages for the conversation or vehicle
-  const queryKey = vehicleId ? ["messages", "vehicle", vehicleId] : ["messages", conversationId];
+  const queryKey = vehicleId
+    ? ["messages", "vehicle", vehicleId]
+    : ["messages", conversationId];
 
   const {
     data: messagesData,
@@ -80,9 +82,13 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
 
     let found: Conversation | undefined;
     if (conversationId) {
-      found = cachedConversations.data.find((c: Conversation) => c.id === conversationId);
+      found = cachedConversations.data.find(
+        (c: Conversation) => c.id === conversationId
+      );
     } else if (vehicleId) {
-      found = cachedConversations.data.find((c: Conversation) => c.vehicle_id === vehicleId);
+      found = cachedConversations.data.find(
+        (c: Conversation) => c.vehicle_id === vehicleId
+      );
     }
 
     setCurrentConversation(found || null);

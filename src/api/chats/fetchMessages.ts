@@ -26,7 +26,7 @@ export const fetchMessages = async (
 ): Promise<MessagesApiResponse> => {
   const response = await axios.get(`/admin/vehicle/conversation/messages`, {
     params: {
-  conversation_id: conversationId,
+      conversation_id: conversationId,
       page,
       per_page: perPage,
     },
@@ -98,15 +98,18 @@ export const fetchMessagesByVehicle = async (
     };
   };
 
-  const data: Message[] = Array.isArray(raw.data) ? (raw.data as Message[]) : [];
-  const metaRaw = (raw.meta as {
-    current_page?: number;
-    from?: number | null;
-    last_page?: number;
-    per_page?: number;
-    to?: number | null;
-    total?: number;
-  }) || (response.data as any);
+  const data: Message[] = Array.isArray(raw.data)
+    ? (raw.data as Message[])
+    : [];
+  const metaRaw =
+    (raw.meta as {
+      current_page?: number;
+      from?: number | null;
+      last_page?: number;
+      per_page?: number;
+      to?: number | null;
+      total?: number;
+    }) || (response.data as any);
 
   return {
     data,
