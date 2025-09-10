@@ -33,6 +33,7 @@ const SupportMessagesTable = ({ conversations, isLoading, refetch }: SupportMess
   const handleUpdate = async (id: number, updates: { notes?: string; status?: string; is_active?: boolean }) => {
     try {
       await updateConversation(id, updates);
+      toast.dismiss()
       toast.success(t("conversationUpdated"));
       refetch();
     } catch (err: any) {
