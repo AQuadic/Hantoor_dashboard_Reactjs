@@ -85,5 +85,6 @@
   "vehicleStatusUpdated": "تم تحديث الحالة بنجاح",
 
   "packageDeleted": "تم حذف الباقة بنجاح",
-  "accessoriesDeleted": "تم حذف الإكسسوار بنجاح"
+  "accessoriesDeleted": "تم حذف الإكسسوار بنجاح",
+  "offerDeleted": "تم حذف الأوفر بنجاح"
 }

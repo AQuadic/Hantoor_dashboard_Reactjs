@@ -85,5 +85,6 @@
   "vehicleStatusUpdated": "Status updated successfully",
 
   "packageDeleted": "Package deleted successfully",
-  "accessoriesDeleted": "Accessories deleted successfully"
+  "accessoriesDeleted": "Accessories deleted successfully",
+  "offerDeleted": "Offer deleted successfully"
 }
