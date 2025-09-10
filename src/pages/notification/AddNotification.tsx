@@ -169,11 +169,14 @@ const AddNotification = () => {
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               >
-                {(countriesData?.data || []).map((c) => (
-                  <SelectItem key={c.id} textValue={c.name.en}>
-                    {i18n.language === "ar" ? c.name.ar : c.name.en}
-                  </SelectItem>
-                ))}
+                {(countriesData?.data || []).map((c) => {
+                  const displayName = i18n.language === "ar" ? c.name.ar : c.name.en;
+                  return (
+                    <SelectItem key={c.id} textValue={displayName}>
+                      {displayName}
+                    </SelectItem>
+                  );
+                })}
               </Select>
             )}
 
