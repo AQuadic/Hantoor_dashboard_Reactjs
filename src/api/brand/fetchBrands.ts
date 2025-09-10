@@ -31,6 +31,7 @@ export interface Brand {
   created_at?: string;
   updated_at?: string;
   count?: number;
+  vehicles_count?: number
 }
 
 export interface BrandsApiResponse {

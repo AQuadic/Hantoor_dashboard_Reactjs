@@ -49,6 +49,7 @@ interface Brand {
   is_active: boolean | number;
   image?: BrandImage;
   count?: number;
+  vehicles_count?: number;
 }
 
 interface BrandsTableProps {
@@ -152,7 +153,7 @@ export function BrandsTable({ brands, refetch, isLoading }: BrandsTableProps) {
               <TableCell>
                 {i18n.language === "ar" ? brand.name.ar : brand.name.en}
               </TableCell>
-              <TableCell className="w-full">{brand.count ?? "-"}</TableCell>
+              <TableCell className="w-full">{brand.vehicles_count ?? "-"}</TableCell>
               <TableCell className="flex gap-[7px] items-center">
                 <Switch
                   isSelected={Boolean(brand.is_active)}
