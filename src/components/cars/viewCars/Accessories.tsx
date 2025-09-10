@@ -9,8 +9,28 @@ import {
 import { Switch } from "@heroui/react";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import { Accessory } from "@/api/vehicles/getVehicleById";
+import { deleteAccessories } from "@/api/vehicles/accessories/deleteAccessories";
+import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
+import NoData from "@/components/general/NoData";
 
-const Accessories = ({ accessories }: { accessories: Accessory[] }) => {
+interface AccessoriesProps {
+  accessories: Accessory[];
+  refetch: () => void;
+}
+
+const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
+  const { t } = useTranslation("cars");
+  const handleDelete = async (id: number) => {
+    await deleteAccessories(id);
+    toast.success(t("accessoriesDeleted"));
+    refetch();
+  };
+
+  if (!accessories || accessories.length === 0) {
+    return <NoData />;
+  }
+
   return (
     <section className="md:mx-8 mx-0">
       <div className="w-full">
@@ -47,7 +67,7 @@ const Accessories = ({ accessories }: { accessories: Accessory[] }) => {
                 <TableCell className="flex items-center gap-[7px]">
                   <Switch isSelected={accessory.is_active} />
                   <div className="mt-2">
-                    <TableDeleteButton handleDelete={() => {}} />
+                    <TableDeleteButton handleDelete={() => handleDelete(accessory.id)} />
                   </div>
                 </TableCell>
               </TableRow>

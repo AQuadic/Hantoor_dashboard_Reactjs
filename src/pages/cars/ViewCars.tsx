@@ -23,7 +23,7 @@ const ViewCars = () => {
   const vehicleId = params.id ? Number(params.id) : null;
 
 
-  const { data: vehicle, isLoading } = useQuery<Vehicle>({
+  const { data: vehicle, isLoading, refetch } = useQuery<Vehicle>({
     queryKey: ["vehicle", vehicleId],
     queryFn: async () => {
       const result = await getVehicleById(vehicleId!);
@@ -55,10 +55,10 @@ const ViewCars = () => {
               <Specifications vehicle={vehicle} />
             )}
             {selectedFilter === "Maintenance Packages" && (
-              <MaintenancePackages packages={vehicle?.packages || []} />
+              <MaintenancePackages packages={vehicle?.packages || []} refetch={refetch} />
             )}
             {selectedFilter === "Accessories" && (
-              <Accessories accessories={vehicle?.accessories || []} />
+              <Accessories accessories={vehicle?.accessories || []} refetch={refetch}/>
             )}
             {selectedFilter === "Offers" && (
               <Offers offers={vehicle?.offers || []} />

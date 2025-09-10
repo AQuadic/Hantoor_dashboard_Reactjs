@@ -35,7 +35,7 @@ const MaintenancePackages = ({ packages, refetch }: MaintenancePackagesProps) =>
 
     const handleDelete = async (id: number) => {
     await deletePackages(id);
-    toast.success(t("packageSizeDeleted"));
+    toast.success(t("packageDeleted"));
     refetch();
     };
 
@@ -52,7 +52,7 @@ const MaintenancePackages = ({ packages, refetch }: MaintenancePackagesProps) =>
       );
 
       toast.success(
-        updated.is_active ? t("activatedSuccessfully") : t("deactivatedSuccessfully")
+        updated.is_active ? t("vehicleStatusUpdated") : t("vehicleStatusUpdated")
       );
 
       setTimeout(() => {

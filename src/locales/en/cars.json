@@ -82,5 +82,8 @@
   "vehicleCreatedSuccess": "Vehicle created successfully",
   "vehicleDeletedSuccess": "Vehicle deleted successfully",
 
-  "vehicleStatusUpdated": "Status updated successfully"
+  "vehicleStatusUpdated": "Status updated successfully",
+
+  "packageDeleted": "Package deleted successfully",
+  "accessoriesDeleted": "Accessories deleted successfully"
 }

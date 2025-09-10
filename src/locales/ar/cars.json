@@ -82,5 +82,8 @@
   "vehicleCreatedSuccess": "تم اضافة السيارة بنجاح",
   "vehicleDeletedSuccess": "تم حذف السيارة بنجاح",
 
-  "vehicleStatusUpdated": "تم تحديث الحالة بنجاح"
+  "vehicleStatusUpdated": "تم تحديث الحالة بنجاح",
+
+  "packageDeleted": "تم حذف الباقة بنجاح",
+  "accessoriesDeleted": "تم حذف الإكسسوار بنجاح"
 }
