@@ -173,7 +173,7 @@ const AddBrand = () => {
         });
         setProfileImage(null);
         setExistingImageUrl(undefined);
-        toast.success(t("brandImageDeleted", "Image deleted successfully"));
+        toast.success(t("brandImageDeleted", t('imageDeleted')));
       } catch {
         toast.error(t("brandImageDeleteFailed", "Failed to delete image"));
       }
