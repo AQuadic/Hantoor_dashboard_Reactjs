@@ -10,15 +10,27 @@ import {
 import { Switch } from "@heroui/react";
 import { Vehicle } from "@/api/vehicles/getVehicleById";
 import NoData from "@/components/general/NoData";
+import { deletePackages } from "@/api/vehicles/packages/deletePackages";
+import toast from "react-hot-toast";
+import { useTranslation } from "react-i18next";
 
 interface MaintenancePackagesProps {
   packages: Vehicle["packages"];
+  refetch: () => void
 }
 
-const MaintenancePackages = ({ packages }: MaintenancePackagesProps) => {
+const MaintenancePackages = ({ packages, refetch }: MaintenancePackagesProps) => {
+  const { t } = useTranslation("cars");
+
   if (!packages || packages.length === 0) {
     return <NoData />;
   }
+
+    const handleDelete = async (id: number) => {
+    await deletePackages(id);
+    toast.success(t("packageSizeDeleted"));
+    refetch();
+  };
 
   return (
     <section className="md:mx-8 mx-0">
@@ -41,7 +53,7 @@ const MaintenancePackages = ({ packages }: MaintenancePackagesProps) => {
                 <TableCell className="w-full">{pkg.price} درهم</TableCell>
                 <TableCell className="flex items-center gap-2">
                   <Switch isSelected={pkg.is_active} />
-                  <TableDeleteButton handleDelete={() => {}} />
+                  <TableDeleteButton handleDelete={() => handleDelete(pkg.id)} />
                 </TableCell>
               </TableRow>
             ))}
