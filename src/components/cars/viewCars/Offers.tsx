@@ -15,11 +15,16 @@ import { useQueryClient } from "@tanstack/react-query";
 import { deleteOffers } from "@/api/vehicles/offers/deleteOffer";
 import { updateOffer, UpdateOfferRequest } from "@/api/vehicles/offers/updateOffers";
 import { useState } from "react";
+import NoData from "@/components/general/NoData";
 
 const Offers = ({ offers }: { offers: Offer[] }) => {
   const { t } = useTranslation("cars");
   const queryClient = useQueryClient();
   const [localOffers, setLocalOffers] = useState<Offer[]>(offers);
+
+  if (!localOffers || localOffers.length === 0) {
+    return <NoData />;
+  }
 
   const handleDelete = async (id: number) => {
     try {
