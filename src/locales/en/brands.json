@@ -16,5 +16,6 @@
   "brandDeactivated": "Brand deactivated successfully",
   "brandStatusUpdateFailed": "Failed to update brand status. Please try again later.",
   "noImage": "No image",
-  "noDataAvailable": "لا توجد بيانات متاحة"
+  "noDataAvailable": "No data available",
+  "imageDeleted": "Image deleted successfully"
 }

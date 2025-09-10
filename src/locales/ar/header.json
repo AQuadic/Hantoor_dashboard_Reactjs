@@ -11,5 +11,7 @@
     "clientData": "بيانات العميل",
 
     "noDataAvailable": "لا توجد بيانات متاحة",
-    "Unknown": "غير معروف"
+    "Unknown": "غير معروف",
+
+    "users": "مستخدمين"
 }

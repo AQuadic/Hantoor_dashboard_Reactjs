@@ -1,9 +1,11 @@
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import Edit from "@/components/icons/general/Edit";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Vehicle } from "@/api/vehicles/getVehicleById";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-hot-toast";
+import { deleteVehicle } from "@/api/vehicles";
 
 interface AboutCarProps {
   vehicle: Vehicle;
@@ -12,7 +14,7 @@ interface AboutCarProps {
 const AboutCar = ({ vehicle }: AboutCarProps) => {
   const { i18n } = useTranslation();
   const lang = i18n.language;
-
+  const navigate = useNavigate ()
   const insuranceData = [
     {
       id: vehicle.id,
@@ -32,6 +34,19 @@ const AboutCar = ({ vehicle }: AboutCarProps) => {
         : "-",
     },
   ];
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteVehicle(id);
+      toast.success(lang === "ar" ? "تم حذف السيارة بنجاح" : "Vehicle deleted successfully");
+      navigate("/cars")
+    } catch (error: any) {
+      const message =
+        error.response?.data?.message || error.message || (lang === "ar" ? "حدث خطأ أثناء الحذف" : "Error deleting vehicle");
+
+      toast.error(message);
+    }
+  };
 
   return (
     <section className="md:mx-8 mx-0">
@@ -83,8 +98,10 @@ const AboutCar = ({ vehicle }: AboutCarProps) => {
                 <TableCell className="min-w-[15%]">{row.leaseToOwn}</TableCell>
                 <TableCell className="w-full">{row.addedAt}</TableCell>
                 <TableCell className=" flex items-center gap-2">
-                  <Edit />
-                  <TableDeleteButton handleDelete={() => {}} />
+                  <Link to={`/cars/edit/${vehicle.id}`}>
+                    <Edit />
+                  </Link>
+                  <TableDeleteButton handleDelete={() => handleDelete(vehicle.id)} />
                 </TableCell>
               </TableRow>
             ))}

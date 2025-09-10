@@ -116,8 +116,8 @@ export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: Sub
             <TableCell>{formatDateTime(admin.updated_at)}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch
-                isSelected={!!admin.isActive}
-                onChange={() => handleToggleStatus(admin.id, !!admin.isActive)}
+                isSelected={!!admin.is_active}
+                onChange={() => handleToggleStatus(admin.id, !!admin.is_active)}
               />
               <Link to={`/subordinates/${admin.id}`}>
                 <Edit />

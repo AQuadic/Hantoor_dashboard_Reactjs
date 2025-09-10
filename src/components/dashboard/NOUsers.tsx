@@ -154,7 +154,7 @@ const NOUsers = () => {
           >
             <div className="text-center">
               <div className="text-3xl font-bold text-gray-800">{total}</div>
-              <div className="text-sm text-[#2A32F8] font-medium">Users</div>
+              <div className="text-sm text-[#2A32F8] font-medium">{t('users')}</div>
             </div>
           </div>
         </div>
