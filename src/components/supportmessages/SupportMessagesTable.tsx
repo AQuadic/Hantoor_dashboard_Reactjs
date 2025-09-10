@@ -65,7 +65,7 @@ const SupportMessagesTable = ({ conversations, isLoading, refetch }: SupportMess
             </TableHeader>
             <TableBody>
                 {conversations.map((message, index) => (
-                    <TableRow key={message.id}>
+                    <TableRow key={message.id} noBackgroundColumns={1}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{message.id}</TableCell>
                     <TableCell>{message.country_id || "-"}</TableCell>
