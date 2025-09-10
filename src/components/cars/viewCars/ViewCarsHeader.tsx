@@ -71,14 +71,14 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
           { titleAr: "تفاصيل السيارة", titleEn: "Car details" },
         ]}
       />
-      <div className="px-9 bg-white mb-4 flex justify-between">
-        <div className="flex gap-4 ">
+      <div className="px-9 bg-white mb-4 flex flex-wrap justify-between gap-4">
+        <div className="flex flex-wrap gap-4 ">
           <img
             width={338}
             height={175}
             className="object-cover w-[338px] h-[175px] rounded-xl"
             src={
-              vehicle?.image ||
+              vehicle?.image?.url ||
               vehicle?.additional_images?.[0]?.url ||
               "/images/carDetails.png"
             }

@@ -108,7 +108,13 @@ export interface Vehicle {
 
   // Arrays
   additional_images: AdditionalImage[];
-  image: string | null;
+  image: {
+  id: number;
+  uuid: string;
+  size: number;
+  url: string;
+  responsive_urls: string[];
+} | null;
   images_ads: ImagesAd[];
   video?: VehicleVideo | null;
   images: string[];
