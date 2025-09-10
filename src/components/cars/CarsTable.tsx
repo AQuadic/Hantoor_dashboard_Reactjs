@@ -139,6 +139,7 @@ const CarsTable = ({
     mutationFn: ({ id, isActive }: { id: number; isActive: boolean }) =>
       toggleVehicleStatus(id, isActive),
     onSuccess: () => {
+      toast.dismiss();
       toast.success(t("vehicleStatusUpdated") || "Vehicle status updated");
       queryClient.invalidateQueries({ queryKey: ["vehicles"] });
     },
