@@ -83,7 +83,9 @@ const AboutCar = ({ vehicle }: AboutCarProps) => {
                 <TableCell className="min-w-[15%]">{row.leaseToOwn}</TableCell>
                 <TableCell className="w-full">{row.addedAt}</TableCell>
                 <TableCell className=" flex items-center gap-2">
-                  <Edit />
+                  <Link to={`/cars/edit/${vehicle.id}`}>
+                    <Edit />
+                  </Link>
                   <TableDeleteButton handleDelete={() => {}} />
                 </TableCell>
               </TableRow>
