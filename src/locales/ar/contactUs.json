@@ -5,5 +5,6 @@
     "country": "البلد",
     "replayViaEmail": "الرد عن طريق البريد",
     "addedToStarred": "تمت الإضافة إلى المفضلة",
-    "removedFromStarred": "تمت الإزالة من المفضلة"
+    "removedFromStarred": "تمت الإزالة من المفضلة",
+    "suggestionDeleted": "تم الحذف بنجاح"
 }

@@ -90,7 +90,7 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
                 <TableRow key={message.id} noBackgroundColumns={1}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{message.name}</TableCell>
-                    <TableCell>{message.phone}</TableCell>
+                    <TableCell dir="ltr">{message.phone}</TableCell>
                     <TableCell>{message.email}</TableCell>
                     <TableCell>{message.city}</TableCell>
                     <TableCell className="flex items-center gap-2">
