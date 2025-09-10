@@ -14,9 +14,16 @@ const MaintenanceCentersTable: React.FC<Props> = ({ agent }) => {
     return <p className="mt-6 text-gray-500">Loading agent details...</p>;
   }
 
+  const maintenanceCenters =
+    agent.service_centers?.filter((center) => center.type === "1") ?? [];
+
+  if (maintenanceCenters.length === 0) {
+    return <p className="mt-6 text-gray-500">No maintenance centers found.</p>;
+  }
+
   return (
     <section className="mt-6 space-y-4">
-      {agent.service_centers?.map((center) => (
+      {maintenanceCenters.map((center) => (
         <div
           key={center.id}
           className="w-full h-[76px] bg-[#FFFFFF] border border-[#DEDEDE] rounded-[13px]"

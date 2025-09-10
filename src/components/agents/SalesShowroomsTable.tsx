@@ -15,7 +15,7 @@ const SalesShowroomsTable: React.FC<Props> = ({ agent }) => {
   }
 
   const showrooms =
-    agent.service_centers?.filter((center) => center.type === "showroom") ?? [];
+    agent.service_centers?.filter((center) => center.type === "2") ?? [];
 
   if (showrooms.length === 0) {
     return (
@@ -41,10 +41,30 @@ const SalesShowroomsTable: React.FC<Props> = ({ agent }) => {
             </div>
 
             <div className="flex items-center gap-4">
-                <Location />
-                <img src="/images/whatsapp.svg" />
-                <img src="/images/phone.svg" />
-              </div>
+              {showroom.link_google_map && (
+                <a
+                  href={showroom.link_google_map}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Location />
+                </a>
+              )}
+              {showroom.phone && (
+                <>
+                  <a href={`tel:${showroom.phone}`}>
+                    <img src="/images/phone.svg" alt="Phone" />
+                  </a>
+                  <a
+                    href={`https://wa.me/${showroom.phone}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <img src="/images/whatsapp.svg" alt="WhatsApp" />
+                  </a>
+                </>
+              )}
+            </div>
           </div>
         </div>
       ))}
