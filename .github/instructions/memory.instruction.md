@@ -30,6 +30,12 @@ applyTo: "**"
 - Different routes can have different parameter names
 - FinancingDetails uses `:id` parameter correctly
 - AddBank uses `:countryId` parameter correctly
+
+## 2025-09-11: SWITCHED FINANCING ENDPOINT TO /admin/financing ✅
+
+- Created `src/api/financing/getFinancingWithBanks.ts` which queries `/admin/financing` to return countries along with banks metadata.
+- Updated `src/pages/financing/FinancingPage.tsx` to import the new API function.
+
 - Both components are implemented correctly for their respective routes
 - The naming inconsistency between routes is intentional based on context
 

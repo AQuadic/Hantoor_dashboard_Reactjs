@@ -3,7 +3,7 @@ import FinancingTable from "@/components/financing/FinancingTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { getFinancingCountries } from "@/api/financing/getFinancing";
+import { getFinancingCountries } from "@/api/financing/getFinancingWithBanks";
 
 const FinancingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
