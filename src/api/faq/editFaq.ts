@@ -30,16 +30,15 @@ export interface FaqResponse {
   updated_at?: string;
 }
 
-export async function updateFaq(id: string, data: FaqPayload): Promise<FaqResponse> {
-  const response = await axios.post<FaqResponse>(
-    `/admin/faqs/${id}`,
-    data,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-    }
-  );
+export async function updateFaq(
+  id: string,
+  data: FaqPayload
+): Promise<FaqResponse> {
+  const response = await axios.post<FaqResponse>(`/admin/faqs/${id}`, data, {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  });
   return response.data;
 }
