@@ -39,6 +39,10 @@ applyTo: "**"
 - Both components are implemented correctly for their respective routes
 - The naming inconsistency between routes is intentional based on context
 
+# 2025-09-11: Banks API pagination change
+
+- Updated `src/components/financing/BanksTable.tsx` to request paginated banks from the API by setting `pagination: true` when calling `getBanks` so the backend returns the paginated response instead of the full list (`/admin/banks?country_id=20&pagination=true`).
+
 # 2025-09-10: FONT-BOLD ISSUE RESOLUTION - COMPLETED ✅
 
 **TASK COMPLETED**: Fixed font-bold utility class not working with custom "Helvetica Neue W23 for SKY Reg" font
