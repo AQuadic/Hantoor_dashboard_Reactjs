@@ -31,6 +31,10 @@ applyTo: "**"
 - FinancingDetails uses `:id` parameter correctly
 - AddBank uses `:countryId` parameter correctly
 
+# 2025-09-11: TRANSLATION - statusChanged key added ✅
+
+- Added `statusChanged` translation key to `src/locales/en/questions.json` and `src/locales/ar/questions.json` to support toast message when toggling FAQ status in TechnicalSupportTable.
+
 ## 2025-09-11: SWITCHED FINANCING ENDPOINT TO /admin/financing ✅
 
 - Created `src/api/financing/getFinancingWithBanks.ts` which queries `/admin/financing` to return countries along with banks metadata.
