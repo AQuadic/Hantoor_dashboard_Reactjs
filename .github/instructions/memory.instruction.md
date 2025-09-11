@@ -151,6 +151,13 @@ if (data.ads_images?.length) {
 }
 ```
 
+2025-09-11: Translation fix - rentToOwnPrice
+
+- Added `rentToOwnPrice` translation key to `src/locales/en/cars.json` as "Rent-to-Own Price" and to `src/locales/ar/cars.json` as "سعر الإيجار منتهي بالتملك".
+
+This fixes the label shown in the RentToOwn component for Arabic and English locales.
+
+
 #### Missing Components
 
 ❌ **ISSUE IDENTIFIED**: No UI component for managing additional images separately from main car images
