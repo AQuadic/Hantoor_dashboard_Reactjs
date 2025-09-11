@@ -9,6 +9,8 @@ export interface UpdateAdminPayload {
   password_confirmation?: string;
   isActive?: boolean;
   image?: File | null;
+  // If true, instruct server to remove existing image
+  remove_image?: boolean;
 }
 
 export interface Admin {
@@ -44,6 +46,7 @@ export async function updateAdmin(
   if (payload.isActive !== undefined)
     formData.append("is_active", payload.isActive ? "1" : "0");
   if (payload.image) formData.append("image", payload.image);
+  if (payload.remove_image) formData.append("remove_image", "1");
 
   const response = await axios.post<Admin>(`/admin/${adminId}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },

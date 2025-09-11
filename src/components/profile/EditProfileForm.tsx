@@ -43,6 +43,12 @@ const EditProfileForm = ({
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [, setLoading] = useState(false);
+  // Local state to track existing image URL so we can clear it in the UI
+  const [existingImageUrlState, setExistingImageUrlState] = useState<
+    string | null
+  >(null);
+  // Flag to indicate user removed the existing image; sent to API to remove server-side image
+  const [removeExistingImage, setRemoveExistingImage] = useState(false);
 
   const { data, isLoading } = useQuery<GetCurrentAdminResponse>({
     queryKey: ["currentAdmin"],
@@ -56,8 +62,29 @@ const EditProfileForm = ({
       if (data.phone) setPhone(data.phone);
       if (data.phone_country)
         setSelectedCountry(getCountryByIso2(data.phone_country || "EG"));
+      // Initialize existing image URL from API data
+      setExistingImageUrlState(data.image?.url || null);
+      setRemoveExistingImage(false);
     }
   }, [data]);
+
+  // If user selects a new file, we should clear the "remove existing image" flag
+  React.useEffect(() => {
+    if (profileImage) {
+      setRemoveExistingImage(false);
+      // keep existingImageUrlState as null since new preview will be used
+    }
+  }, [profileImage]);
+
+  // Called when the user clicks the remove button on the ImageInput
+  const handleRemoveImage = () => {
+    // Clear the local existing image URL so the UI switches to empty state
+    setExistingImageUrlState(null);
+    // Mark that the existing image should be removed on next save
+    setRemoveExistingImage(true);
+    // Clear any selected local File
+    setProfileImage(null);
+  };
 
   if (isLoading) return <Loading />;
 
@@ -71,6 +98,8 @@ const EditProfileForm = ({
         phone,
         phone_country: selectedCountry.iso2,
         image: profileImage,
+        // Tell the API to remove the existing image if the user removed it in the UI
+        remove_image: removeExistingImage,
       });
       toast.success(t("profileUpdated"));
     } catch (err: any) {
@@ -123,7 +152,10 @@ const EditProfileForm = ({
         <ImageInput
           image={profileImage}
           setImage={setProfileImage}
-          existingImageUrl={data?.image?.url}
+          // Pass the existing image URL we track locally so it can be shown
+          existingImageUrl={existingImageUrlState || undefined}
+          // When the user removes the image, clear local state and mark for removal
+          onRemoveImage={handleRemoveImage}
         />
       </div>
       <div className="flex gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
