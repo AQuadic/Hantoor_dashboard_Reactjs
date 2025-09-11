@@ -32,7 +32,15 @@ export async function updateBrand({
   }
   if (typeof is_active === "number")
     formData.append("is_active", String(is_active));
-  if (image) formData.append("image", image);
+  // If image === null, append a null-like value so the server recognizes
+  // that the image should be deleted. If image is a File, append it normally.
+  if (image === null) {
+    // Sending the string 'null' is a common way to indicate removal in
+    // multipart/form-data; backend can treat this as a deletion flag.
+    formData.append("image", "null");
+  } else if (image) {
+    formData.append("image", image);
+  }
 
   const response = await axios.post(`/admin/brands/${id}`, formData, {
     headers: {

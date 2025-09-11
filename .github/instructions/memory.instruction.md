@@ -85,6 +85,14 @@ body * {
 
 **STATUS**: Font-bold functionality is now completely resolved and working correctly.
 
+## 2025-09-11: Brand image deletion via updateBrand(image: null) - Completed
+
+- Change: When removing an existing brand image in edit mode, the frontend now sends image: null in the multipart/form-data payload via `updateBrand` so the backend can detect and delete the image. The `updateBrand` API helper appends the string "null" for the `image` field when image === null.
+- Files modified:
+  - `src/api/brand/updateBrand.ts` — appends formData.append('image', 'null') when image === null; otherwise appends File.
+  - `src/pages/brands/AddBrand.tsx` — removed unused `deleteBrandImage` import and updated the remove-image handler to call `updateBrand({ id, name, image: null })` in edit mode.
+- Verification: Local TypeScript checks show no errors in modified files; a full build (`npm run build`) failed due to unrelated casing issues elsewhere in the repo (not caused by these changes).
+
 # 2025-08-27: BUILD ISSUES FIXED - TypeScript Compilation Errors Resolved
 
 **TASK COMPLETED**: Successfully fixed all build-breaking TypeScript errors in the React dashboard project.
