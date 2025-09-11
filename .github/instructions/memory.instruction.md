@@ -157,7 +157,6 @@ if (data.ads_images?.length) {
 
 This fixes the label shown in the RentToOwn component for Arabic and English locales.
 
-
 #### Missing Components
 
 ❌ **ISSUE IDENTIFIED**: No UI component for managing additional images separately from main car images
