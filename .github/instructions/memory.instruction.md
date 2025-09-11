@@ -972,6 +972,15 @@ Todo List (Table Padding Enhancement):
 - [x] Step 11: Check for problems and ensure robustness
 ```
 
+## 2025-09-11: Prevent deleting brand image in Edit Brand UI
+
+- Task: Hide the image delete button when editing a brand so the user can only replace the image, not delete it.
+- Files changed:
+  - `src/components/general/ImageInput.tsx` — added `canRemove?: boolean` prop and conditional rendering so callers can disable the remove button.
+  - `src/pages/brands/AddBrand.tsx` — pass `canRemove={!isEdit}` to `ImageInput` and removed the delete handler and unused import so existing brand images cannot be deleted in edit mode.
+- Result: In edit mode the remove (X) button is hidden; user can still upload a new image which will replace the existing one, but cannot delete the image entirely from the UI.
+- Verified: Code updated in workspace; lint warnings shown but change is confined to UI behavior.
+
 Current: All steps complete. Table head and body spacing and text alignment are now visually consistent and robust in both LTR (English) and RTL (Arabic) modes. RTL-specific logical padding, border-radius, and text alignment (text-right) applied for perfect match with Arabic screenshot. Task finished.
 
 2025-08-12: Brands search feature implementation plan:

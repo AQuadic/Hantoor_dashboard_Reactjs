@@ -18,7 +18,6 @@ import ImageInput from "@/components/general/ImageInput";
 import React, { useState, useEffect } from "react";
 import { postBrand } from "@/api/brand/postBrand";
 import { fetchBrandById, updateBrand } from "@/api/brand/updateBrand";
-import { deleteBrandImage } from "@/api/brand/deleteBrandImage";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
@@ -159,29 +158,7 @@ const AddBrand = () => {
     return <div>Loading brand data...</div>;
   }
 
-  // Remove image handler for X icon (used by ImageInput)
-  const handleRemoveImage = async (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    // If editing and there is an existing image, send updateBrand with image: null
-    if (isEdit && existingImageUrl && brandId) {
-      try {
-        await updateBrand({
-          id: Number(brandId),
-          name: { ar: arBrand, en: enBrand },
-          image: null,
-          // is_active removed
-        });
-        setProfileImage(null);
-        setExistingImageUrl(undefined);
-        toast.success(t("brandImageDeleted", t('imageDeleted')));
-      } catch {
-        toast.error(t("brandImageDeleteFailed", "Failed to delete image"));
-      }
-    } else {
-      setProfileImage(null);
-      setExistingImageUrl(undefined);
-    }
-  };
+  // In edit mode we disallow removing the existing image; parent will pass canRemove
 
   return (
     <div>
@@ -211,9 +188,8 @@ const AddBrand = () => {
               image={profileImage}
               setImage={setProfileImage}
               existingImageUrl={existingImageUrl}
-              // Override the X icon's remove handler for edit mode
-              // @ts-ignore
-              onRemoveImage={handleRemoveImage}
+              // In edit mode we hide the remove button but still allow uploading a new image
+              canRemove={!isEdit}
             />
             {/* No spinner overlay needed since we removed the delete logic */}
           </div>

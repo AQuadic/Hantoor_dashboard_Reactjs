@@ -20,6 +20,7 @@ interface ImageInputProps {
   placeholderText?: string;
   existingImageUrl?: string;
   onRemoveImage?: (e?: React.MouseEvent) => void;
+  canRemove?: boolean;
 }
 
 const ImageInput: React.FC<ImageInputProps> = ({
@@ -31,6 +32,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
   placeholderText,
   existingImageUrl,
   onRemoveImage,
+  canRemove = true,
 }) => {
   const { t } = useTranslation("setting");
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -145,7 +147,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
         />
 
         {/* Remove button - show when image or existingImageUrl is present */}
-        {(image || (existingImageUrl && imagePreview)) && (
+        {(image || (existingImageUrl && imagePreview)) && canRemove && (
           <button
             onClick={handleRemoveImage}
             className={`absolute ${
