@@ -18,7 +18,7 @@ import ImageInput from "@/components/general/ImageInput";
 import React, { useState, useEffect } from "react";
 import { postBrand } from "@/api/brand/postBrand";
 import { fetchBrandById, updateBrand } from "@/api/brand/updateBrand";
-// deleteBrandImage import removed; use updateBrand with image: null to delete image
+import { deleteBrandImage } from "@/api/brand/deleteBrandImage";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
@@ -165,17 +165,17 @@ const AddBrand = () => {
     // If editing and there is an existing image, send updateBrand with image: null
     if (isEdit && existingImageUrl && brandId) {
       try {
-        // Send image: null to indicate deletion
         await updateBrand({
           id: Number(brandId),
           name: { ar: arBrand, en: enBrand },
           image: null,
+          // is_active removed
         });
         setProfileImage(null);
         setExistingImageUrl(undefined);
-        toast.success(t("brandImageDeleted") || "Image deleted");
+        toast.success(t("brandImageDeleted", t('imageDeleted')));
       } catch {
-        toast.error(t("brandImageDeleteFailed") || "Failed to delete image");
+        toast.error(t("brandImageDeleteFailed", "Failed to delete image"));
       }
     } else {
       setProfileImage(null);
