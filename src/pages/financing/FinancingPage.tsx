@@ -4,18 +4,26 @@ import TablePagination from "@/components/general/dashboard/table/TablePaginatio
 import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { getFinancingCountries } from "@/api/financing/getFinancingWithBanks";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const FinancingPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
 
   const {
     data: financingData,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["financing", currentPage, searchTerm],
-    queryFn: () => getFinancingCountries(currentPage, searchTerm),
+    queryKey: ["financing", currentPage, searchTerm, dateParams],
+    queryFn: () =>
+      getFinancingCountries(
+        currentPage,
+        searchTerm,
+        dateParams.from_date,
+        dateParams.to_date
+      ),
     placeholderData: (previousData) => previousData,
   });
 
@@ -30,7 +38,11 @@ const FinancingPage = () => {
 
   return (
     <div>
-      <FinancingHeader onSearch={handleSearch} />
+      <FinancingHeader
+        onSearch={handleSearch}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+      />
       <div className="px-2 md:px-8">
         <FinancingTable
           data={financingData?.data || []}

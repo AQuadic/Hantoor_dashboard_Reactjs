@@ -3,6 +3,7 @@ import { useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
+import { useDatePicker } from "@/hooks/useDatePicker";
 import ModelHeader from "@/components/models/ModelHeader";
 import { ModelTable } from "@/components/models/ModelTable";
 import { StructureTable } from "@/components/models/StructureTable";
@@ -55,6 +56,7 @@ const BrandsPage = () => {
   );
 
   const [search, setSearch] = useState("");
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
   const [paginationMeta, setPaginationMeta] = useState({
     totalPages: 1,
     totalItems: 0,
@@ -123,9 +125,9 @@ const BrandsPage = () => {
         return (
           <>
             <PriceFromTable
-            page={currentPage}
-            search={search} 
-            setPagination={handleSetPagination}
+              page={currentPage}
+              search={search}
+              setPagination={handleSetPagination}
             />
           </>
         );
@@ -156,11 +158,13 @@ const BrandsPage = () => {
           />
         );
       case "Price To":
-        return <PriceToTable
-                search={search}
-              page={currentPage}
-              setPagination={handleSetPagination}
-          />;
+        return (
+          <PriceToTable
+            search={search}
+            page={currentPage}
+            setPagination={handleSetPagination}
+          />
+        );
       default:
         return (
           <>
@@ -181,6 +185,8 @@ const BrandsPage = () => {
         setSelectedFilter={handleTabChange}
         search={search}
         setSearch={setSearch}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
       />
       <div className="px-2 md:px-8 relative min-h-[300px]">
         <AnimatePresence mode="wait">

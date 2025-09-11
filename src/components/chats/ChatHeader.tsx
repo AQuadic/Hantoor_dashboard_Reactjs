@@ -2,15 +2,21 @@ import React from "react";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
+import { RangeValue } from "@heroui/react";
+import { CalendarDate } from "@internationalized/date";
 
 interface ChatHeaderProps {
   setSearchTerm?: (term: string) => void;
   searchTerm?: string;
+  dateRange?: RangeValue<CalendarDate> | null;
+  setDateRange?: (range: RangeValue<CalendarDate> | null) => void;
 }
 
 const ChatHeader: React.FC<ChatHeaderProps> = ({
   setSearchTerm,
   searchTerm,
+  dateRange,
+  setDateRange,
 }) => {
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
@@ -35,7 +41,7 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker />
+          <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
       </div>
     </div>

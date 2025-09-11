@@ -74,13 +74,24 @@ export interface ConversationsApiResponse {
 // Fetch all conversations with optional filters
 export async function fetchConversations(
   page: number = 1,
-  searchTerm: string = ""
+  searchTerm: string = "",
+  from_date?: string,
+  to_date?: string
 ): Promise<ConversationsApiResponse> {
   const params: Record<string, string | number | boolean> = { page };
 
   if (searchTerm) {
     params.search = searchTerm;
   }
+
+  if (from_date) {
+    params.from_date = from_date;
+  }
+
+  if (to_date) {
+    params.to_date = to_date;
+  }
+
   params.with_vehicle = 1;
   const response = await axios.get("/admin/vehicle/conversation", { params });
 

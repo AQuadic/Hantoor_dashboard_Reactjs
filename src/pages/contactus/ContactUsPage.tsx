@@ -2,25 +2,30 @@ import { useState } from "react";
 import ContactUsHeader from "@/components/contactus/ContactUsHeader";
 import ContactUsTable from "@/components/contactus/ContactUsTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const ContactUsPage = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
-  const [search, setSearch] = useState(""); 
+  const [search, setSearch] = useState("");
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
 
   return (
     <div>
-      <ContactUsHeader 
-        search={search} 
-        setSearch={setSearch} 
+      <ContactUsHeader
+        search={search}
+        setSearch={setSearch}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
       />
       <div className="px-2 md:px-8">
         <ContactUsTable
           page={page}
           perPage={perPage}
           search={search}
+          dateParams={dateParams}
           setTotalPages={setTotalPages}
           setPerPage={setPerPage}
           setTotalItems={setTotalItems}
@@ -43,6 +48,5 @@ const ContactUsPage = () => {
     </div>
   );
 };
-
 
 export default ContactUsPage;

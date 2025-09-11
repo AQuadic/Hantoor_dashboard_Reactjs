@@ -4,19 +4,22 @@ import TechnicalsupportHeader from "@/components/technicalsupport/Technicalsuppo
 import TechnicalSupportTable from "@/components/technicalsupport/TechnicalSupportTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import { getFAQs, FAQsResponse } from "@/api/faq/getFaq";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const TechnicalSupport = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
 
   const { data, isLoading, refetch } = useQuery<FAQsResponse, Error>({
-    queryKey: ["TechnicalSupportFAQs", page, search],
+    queryKey: ["TechnicalSupportFAQs", page, search, dateParams],
     queryFn: () =>
       getFAQs({
         pagination: "normal",
         page,
         type: "Technical Support Questions",
         search,
+        ...dateParams,
       }),
   });
 
@@ -29,7 +32,12 @@ const TechnicalSupport = () => {
 
   return (
     <div>
-      <TechnicalsupportHeader search={search} setSearch={setSearch} /> {/* pass props */}
+      <TechnicalsupportHeader
+        search={search}
+        setSearch={setSearch}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+      />
       <div className="px-2 md:px-8">
         <TechnicalSupportTable
           data={faqs}
@@ -55,6 +63,5 @@ const TechnicalSupport = () => {
     </div>
   );
 };
-
 
 export default TechnicalSupport;

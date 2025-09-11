@@ -3,18 +3,28 @@ import { useQuery } from "@tanstack/react-query";
 import NotificationsHeader from "@/components/notifactions/NotificationsHeader";
 import NotificationTable from "@/components/notifactions/NotificationTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
-import { BroadcastNotificationsResponse, getBroadcastNotifications } from "@/api/notifications/getNotifications";
+import {
+  BroadcastNotificationsResponse,
+  getBroadcastNotifications,
+} from "@/api/notifications/getNotifications";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const NotificationPage = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
 
-  const { data: notificationsData, isLoading, refetch } = useQuery<BroadcastNotificationsResponse, Error>({
-    queryKey: ["notifications", page, searchTerm],
+  const {
+    data: notificationsData,
+    isLoading,
+    refetch,
+  } = useQuery<BroadcastNotificationsResponse, Error>({
+    queryKey: ["notifications", page, searchTerm, dateParams],
     queryFn: () =>
       getBroadcastNotifications({
         pagination: "normal",
         search: searchTerm,
+        ...dateParams,
       }),
   });
 
@@ -27,7 +37,11 @@ const NotificationPage = () => {
 
   return (
     <div>
-      <NotificationsHeader onSearch={setSearchTerm} />
+      <NotificationsHeader
+        onSearch={setSearchTerm}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+      />
       <div className="px-2 md:px-8">
         <NotificationTable
           data={notifications}

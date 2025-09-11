@@ -45,7 +45,9 @@ export interface FinancingResponse {
 
 export async function getFinancingCountries(
   page: number = 1,
-  searchTerm: string = ""
+  searchTerm: string = "",
+  from_date?: string,
+  to_date?: string
 ): Promise<FinancingResponse> {
   const pageNum = Number(page);
 
@@ -57,6 +59,14 @@ export async function getFinancingCountries(
 
   if (searchTerm?.trim()) {
     params.search = searchTerm.trim();
+  }
+
+  if (from_date) {
+    params.from_date = from_date;
+  }
+
+  if (to_date) {
+    params.to_date = to_date;
   }
 
   // Use the financing endpoint which returns countries with banks information

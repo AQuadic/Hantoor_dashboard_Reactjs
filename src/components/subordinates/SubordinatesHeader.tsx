@@ -5,6 +5,8 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import TabsFilter from "../general/dashboard/TabsFilter";
+import { RangeValue } from "@heroui/react";
+import { CalendarDate } from "@internationalized/date";
 
 interface SubordinatesHeaderProps {
   selectedFilter: "Subordinates" | "Permissions";
@@ -13,6 +15,8 @@ interface SubordinatesHeaderProps {
   >;
   setTermAr: React.Dispatch<React.SetStateAction<string>>;
   setTermEn: React.Dispatch<React.SetStateAction<string>>;
+  dateRange: RangeValue<CalendarDate> | null;
+  setDateRange: (range: RangeValue<CalendarDate> | null) => void;
 }
 
 const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
@@ -20,6 +24,8 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
   setSelectedFilter,
   setTermAr,
   setTermEn,
+  dateRange,
+  setDateRange,
 }) => {
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
@@ -59,7 +65,7 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker />
+          <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
         {selectedFilter === "Subordinates" ? (
           <Link to="/subordinates/add">

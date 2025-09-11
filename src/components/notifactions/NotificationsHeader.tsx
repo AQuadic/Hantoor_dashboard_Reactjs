@@ -4,13 +4,19 @@ import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import { Link } from "react-router";
+import { RangeValue } from "@heroui/react";
+import { CalendarDate } from "@internationalized/date";
 
 interface NotificationsHeaderProps {
   onSearch: (term: string) => void;
+  dateRange?: RangeValue<CalendarDate> | null;
+  setDateRange?: (range: RangeValue<CalendarDate> | null) => void;
 }
 
 const NotificationsHeader: React.FC<NotificationsHeaderProps> = ({
   onSearch,
+  dateRange,
+  setDateRange,
 }) => {
   const handleSearch = (value: string) => {
     onSearch(value);
@@ -39,7 +45,7 @@ const NotificationsHeader: React.FC<NotificationsHeaderProps> = ({
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker />
+          <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
         <Link to="/notifications/add">
           <DashboardButton

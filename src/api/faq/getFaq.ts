@@ -16,7 +16,7 @@ export interface FAQ {
   created_at: string;
   updated_at?: string;
   useful_uses_count: number;
-  unuseful_uses_count: number
+  unuseful_uses_count: number;
   is_active?: boolean;
 }
 
@@ -43,10 +43,14 @@ export interface GetFAQsParams {
   pagination?: "simple" | "normal" | "none";
   page?: number;
   type?: "Frequent Questions" | "Technical Support Questions";
-  search?: string
+  search?: string;
+  from_date?: string;
+  to_date?: string;
 }
 
-export async function getFAQs(params: GetFAQsParams = {}): Promise<FAQsResponse> {
+export async function getFAQs(
+  params: GetFAQsParams = {}
+): Promise<FAQsResponse> {
   const response = await axios.get<FAQsResponse>("/admin/faqs", {
     params,
     headers: {

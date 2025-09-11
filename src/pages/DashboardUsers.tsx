@@ -6,6 +6,7 @@ import TablePagination from "@/components/general/dashboard/table/TablePaginatio
 import UserSelects from "@/components/users/UserSelects";
 import { UserTable } from "@/components/users/UsersTable";
 import { AdminUsersResponse } from "@/api/users/getUsers";
+import { useDatePicker } from "@/hooks/useDatePicker";
 import { Link } from "react-router";
 import { useState } from "react";
 
@@ -15,6 +16,7 @@ const DashboardUsers = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(10);
   const [meta, setMeta] = useState<AdminUsersResponse["meta"] | null>(null);
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
 
   const activeSearchTerm = searchTermEn || searchTermAr;
 
@@ -46,7 +48,7 @@ const DashboardUsers = () => {
             />
           </div>
           <div className="flex-1">
-            <DashboardDatePicker />
+            <DashboardDatePicker value={dateRange} onChange={setDateRange} />
           </div>
           <Link to="/users/add">
             <DashboardButton
@@ -64,6 +66,7 @@ const DashboardUsers = () => {
           searchTerm={activeSearchTerm}
           page={currentPage}
           perPage={perPage}
+          dateParams={dateParams}
           onDataLoaded={setMeta}
         />
         {meta && (meta.total ?? 0) > 0 && (

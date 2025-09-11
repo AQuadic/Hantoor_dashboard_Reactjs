@@ -3,6 +3,7 @@ import CarsTable from "@/components/cars/CarsTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import React, { useState } from "react";
 import { type VehiclesApiResponse, type VehicleFilters } from "@/api/vehicles";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const CarsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,6 +11,7 @@ const CarsPage = () => {
   const [vehiclesData, setVehiclesData] = useState<VehiclesApiResponse | null>(
     null
   );
+  const { dateRange, setDateRange } = useDatePicker();
 
   // Filter states
   const [filters, setFilters] = useState<VehicleFilters>({
@@ -50,6 +52,8 @@ const CarsPage = () => {
         setSearchTerm={setSearchTerm}
         filters={filters}
         onFilterChange={handleFilterChange}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
       />
       <div className="px-2 md:px-8">
         <CarsTable

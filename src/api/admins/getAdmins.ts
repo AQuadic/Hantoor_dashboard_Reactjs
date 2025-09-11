@@ -17,7 +17,7 @@ export interface Admin {
   isActive?: boolean;
   created_at: string;
   updated_at: string;
-  is_active: boolean
+  is_active: boolean;
 }
 
 export interface Admin {
@@ -36,6 +36,8 @@ export interface GetAdminsParams {
   pagination?: "simple" | "normal" | "none";
   per_page?: number;
   page?: number;
+  from_date?: string;
+  to_date?: string;
 }
 
 export interface PaginatedResponse<T> {

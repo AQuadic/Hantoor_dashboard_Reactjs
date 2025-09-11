@@ -4,19 +4,26 @@ import FAQsHeader from "@/components/faqs/FAQsHeader";
 import FAQsTable from "@/components/faqs/FAQsTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import { getFAQs, FAQsResponse } from "@/api/faq/getFaq";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const FAQsPage = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
 
-  const { data: faqsData, isLoading, refetch } = useQuery<FAQsResponse, Error>({
-    queryKey: ["FrequentQuestions", page, search],
+  const {
+    data: faqsData,
+    isLoading,
+    refetch,
+  } = useQuery<FAQsResponse, Error>({
+    queryKey: ["FrequentQuestions", page, search, dateParams],
     queryFn: () =>
       getFAQs({
         pagination: "normal",
         page,
         type: "Frequent Questions",
-        search
+        search,
+        ...dateParams,
       }),
   });
 
@@ -29,9 +36,19 @@ const FAQsPage = () => {
 
   return (
     <div>
-      <FAQsHeader search={search} setSearch={setSearch} />
+      <FAQsHeader
+        search={search}
+        setSearch={setSearch}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+      />
       <div className="px-2 md:px-8">
-        <FAQsTable data={faqs} from={from} isLoading={isLoading} refetch={refetch} />
+        <FAQsTable
+          data={faqs}
+          from={from}
+          isLoading={isLoading}
+          refetch={refetch}
+        />
 
         <div className="mt-4">
           {totalItems > 0 && (

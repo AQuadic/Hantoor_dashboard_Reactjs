@@ -4,13 +4,22 @@ import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import { Link } from "react-router";
+import { RangeValue } from "@heroui/react";
+import { CalendarDate } from "@internationalized/date";
 
 type FAQsHeaderProps = {
   search: string;
   setSearch: (value: string) => void;
+  dateRange?: RangeValue<CalendarDate> | null;
+  setDateRange?: (range: RangeValue<CalendarDate> | null) => void;
 };
 
-const FAQsHeader: React.FC<FAQsHeaderProps> = ({ search, setSearch }) => {
+const FAQsHeader: React.FC<FAQsHeaderProps> = ({
+  search,
+  setSearch,
+  dateRange,
+  setDateRange,
+}) => {
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -34,7 +43,7 @@ const FAQsHeader: React.FC<FAQsHeaderProps> = ({ search, setSearch }) => {
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker />
+          <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
         <Link to="/faq/add">
           <DashboardButton

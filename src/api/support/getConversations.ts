@@ -57,6 +57,8 @@ export interface GetSupportConversationsParams {
   per_page?: number;
   page?: number;
   search?: string;
+  from_date?: string;
+  to_date?: string;
 }
 
 export async function getSupportConversations(

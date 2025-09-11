@@ -2,12 +2,20 @@ import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import { useState } from "react";
+import { RangeValue } from "@heroui/react";
+import { CalendarDate } from "@internationalized/date";
 
 interface FinancingHeaderProps {
   onSearch: (term: string) => void;
+  dateRange?: RangeValue<CalendarDate> | null;
+  setDateRange?: (range: RangeValue<CalendarDate> | null) => void;
 }
 
-const FinancingHeader = ({ onSearch }: FinancingHeaderProps) => {
+const FinancingHeader = ({
+  onSearch,
+  dateRange,
+  setDateRange,
+}: FinancingHeaderProps) => {
   const [searchTermAr, setSearchTermAr] = useState("");
   const [searchTermEn, setSearchTermEn] = useState("");
 
@@ -44,7 +52,7 @@ const FinancingHeader = ({ onSearch }: FinancingHeaderProps) => {
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker />
+          <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
       </div>
     </div>

@@ -6,12 +6,16 @@ import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import CarsSelect from "./CarsSelect";
 import { type VehicleFilters } from "@/api/vehicles";
+import { RangeValue } from "@heroui/react";
+import { CalendarDate } from "@internationalized/date";
 
 interface CarsHeaderProps {
   searchTerm?: string;
   setSearchTerm?: (term: string) => void;
   filters?: VehicleFilters;
   onFilterChange?: (newFilters: Partial<VehicleFilters>) => void;
+  dateRange?: RangeValue<CalendarDate> | null;
+  setDateRange?: (range: RangeValue<CalendarDate> | null) => void;
 }
 
 const CarsHeader = ({
@@ -19,6 +23,8 @@ const CarsHeader = ({
   setSearchTerm,
   filters,
   onFilterChange,
+  dateRange,
+  setDateRange,
 }: CarsHeaderProps) => {
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
@@ -43,7 +49,7 @@ const CarsHeader = ({
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker />
+          <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
         <Link to="/cars/add">
           <DashboardButton

@@ -19,34 +19,38 @@ import {
   AdminUsersResponse,
   getAdminUsers,
 } from "@/api/users/getUsers";
+import { DateFilterParams } from "@/utils/dateUtils";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { deleteUser } from "@/api/users/deleteUser";
 import toast from "react-hot-toast";
 
 interface UserTableProps {
-  searchTerm?: string;
-  page: number;
-  perPage: number;
-  onDataLoaded: (meta: AdminUsersResponse["meta"]) => void;
+  readonly searchTerm?: string;
+  readonly page: number;
+  readonly perPage: number;
+  readonly dateParams?: DateFilterParams;
+  readonly onDataLoaded: (meta: AdminUsersResponse["meta"]) => void;
 }
 
 export function UserTable({
   searchTerm = "",
   page,
   perPage,
+  dateParams = {},
   onDataLoaded,
 }: UserTableProps) {
   const { t } = useTranslation("users");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["adminUsers", searchTerm, page, perPage],
+    queryKey: ["adminUsers", searchTerm, page, perPage, dateParams],
     queryFn: () =>
       getAdminUsers({
         search: searchTerm || undefined,
         page,
         per_page: perPage,
         pagination: "normal",
+        ...dateParams,
       }),
   });
 

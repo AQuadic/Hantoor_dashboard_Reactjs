@@ -31,7 +31,7 @@ export interface Brand {
   created_at?: string;
   updated_at?: string;
   count?: number;
-  vehicles_count?: number
+  vehicles_count?: number;
 }
 
 export interface BrandsApiResponse {
@@ -51,10 +51,14 @@ export interface BrandsApiResponse {
 
 export async function fetchBrands(
   page: number = 1,
-  searchTerm: string = ""
+  searchTerm: string = "",
+  from_date?: string,
+  to_date?: string
 ): Promise<BrandsApiResponse> {
   const params: Record<string, string | number> = { page };
   if (searchTerm) params.search = searchTerm;
+  if (from_date) params.from_date = from_date;
+  if (to_date) params.to_date = to_date;
   const response = await axios.get(`/admin/brands`, { params });
   return response.data as BrandsApiResponse;
 }

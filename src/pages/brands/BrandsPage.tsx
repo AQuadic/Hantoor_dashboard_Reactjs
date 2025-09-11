@@ -5,19 +5,31 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchBrands, BrandsApiResponse } from "@/api/brand/fetchBrands";
 import { useTranslation } from "react-i18next";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const BrandsPage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchTermAr, setSearchTermAr] = React.useState("");
   const [searchTermEn, setSearchTermEn] = React.useState("");
+  const {
+    dateRange: brandDateRange,
+    setDateRange: setBrandDateRange,
+    dateParams,
+  } = useDatePicker();
 
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
   const searchTerm = isArabic ? searchTermAr : searchTermEn;
 
   const { data, refetch, isLoading, error } = useQuery<BrandsApiResponse>({
-    queryKey: ["brands", currentPage, searchTerm],
-    queryFn: () => fetchBrands(currentPage, searchTerm),
+    queryKey: ["brands", currentPage, searchTerm, dateParams],
+    queryFn: () =>
+      fetchBrands(
+        currentPage,
+        searchTerm,
+        dateParams.from_date,
+        dateParams.to_date
+      ),
     placeholderData: undefined,
   });
 
@@ -38,19 +50,25 @@ const BrandsPage = () => {
         termEn={searchTermEn}
         setTermAr={setSearchTermAr}
         setTermEn={setSearchTermEn}
+        dateRange={brandDateRange}
+        setDateRange={setBrandDateRange}
       />
       <div className="px-2 md:px-8">
-        <BrandsTable brands={data?.data ?? []} refetch={refetch} isLoading={isLoading}  />
-        {data?.data && data.data.length > 0 && (
-        <TablePagination
-          currentPage={data?.current_page ?? currentPage}
-          setCurrentPage={setCurrentPage}
-          totalPages={data?.last_page ?? 1}
-          totalItems={data?.total ?? 0}
-          itemsPerPage={data?.per_page ?? 15}
-          from={data?.from ?? 0}
-          to={data?.to ?? 0}
+        <BrandsTable
+          brands={data?.data ?? []}
+          refetch={refetch}
+          isLoading={isLoading}
         />
+        {data?.data && data.data.length > 0 && (
+          <TablePagination
+            currentPage={data?.current_page ?? currentPage}
+            setCurrentPage={setCurrentPage}
+            totalPages={data?.last_page ?? 1}
+            totalItems={data?.total ?? 0}
+            itemsPerPage={data?.per_page ?? 15}
+            from={data?.from ?? 0}
+            to={data?.to ?? 0}
+          />
         )}
       </div>
     </section>

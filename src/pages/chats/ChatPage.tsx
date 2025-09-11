@@ -11,20 +11,28 @@ import {
 } from "@/api/chats/fetchConversations";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const ChatPage = () => {
   const { t } = useTranslation("chats");
   const queryClient = useQueryClient();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
 
   const {
     data: conversationsData,
     isLoading,
     error,
   } = useQuery<ConversationsApiResponse>({
-    queryKey: ["conversations", currentPage, searchTerm],
-    queryFn: () => fetchConversations(currentPage, searchTerm),
+    queryKey: ["conversations", currentPage, searchTerm, dateParams],
+    queryFn: () =>
+      fetchConversations(
+        currentPage,
+        searchTerm,
+        dateParams.from_date,
+        dateParams.to_date
+      ),
     placeholderData: (previousData) => previousData, // Keep previous data while fetching new page
   });
 
@@ -81,7 +89,12 @@ const ChatPage = () => {
 
   return (
     <div>
-      <ChatHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} />
+      <ChatHeader
+        setSearchTerm={setSearchTerm}
+        searchTerm={searchTerm}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+      />
       <div className="px-2 md:px-8">
         <ChatTable
           conversations={conversationsData?.data || []}

@@ -4,20 +4,25 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import TabsFilter from "../general/dashboard/TabsFilter";
-import { Select, SelectItem } from "@heroui/react";
+import { Select, SelectItem, RangeValue } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { CalendarDate } from "@internationalized/date";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
   setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
+  dateRange?: RangeValue<CalendarDate> | null;
+  setDateRange?: (range: RangeValue<CalendarDate> | null) => void;
 }
 
 const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
   setSearch,
+  dateRange,
+  setDateRange,
 }) => {
   const { t } = useTranslation("users");
 
@@ -135,7 +140,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker />
+          <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
         <Link to={currentFilter.link}>
           <DashboardButton

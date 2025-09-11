@@ -5,19 +5,27 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getCountries, CountriesResponse } from "@/api/countries/getCountry";
 import { useTranslation } from "react-i18next";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const CountriesPage = () => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [searchTermAr, setSearchTermAr] = React.useState("");
   const [searchTermEn, setSearchTermEn] = React.useState("");
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
 
   const { i18n } = useTranslation();
   const isArabic = i18n.language === "ar";
   const searchTerm = isArabic ? searchTermAr : searchTermEn;
 
   const { data, refetch, isLoading, error } = useQuery<CountriesResponse>({
-    queryKey: ["countries", currentPage, searchTerm],
-    queryFn: () => getCountries(currentPage, searchTerm),
+    queryKey: ["countries", currentPage, searchTerm, dateParams],
+    queryFn: () =>
+      getCountries(
+        currentPage,
+        searchTerm,
+        dateParams.from_date,
+        dateParams.to_date
+      ),
     placeholderData: undefined,
   });
 
@@ -32,6 +40,8 @@ const CountriesPage = () => {
         termEn={searchTermEn}
         setTermAr={setSearchTermAr}
         setTermEn={setSearchTermEn}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
       />
       <div className="px-2 md:px-8">
         <CountriesTable
