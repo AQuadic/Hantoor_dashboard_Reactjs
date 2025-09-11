@@ -2,6 +2,37 @@
 applyTo: "**"
 ---
 
+# 2025-09-11: ROUTE PARAMETER INCONSISTENCY ANALYSIS ✅
+
+**ISSUE IDENTIFIED**: Route parameter naming inconsistency across components
+
+## Route Analysis ✅
+
+**FinancingDetails Route**: `/financing/details/:id` - Parameter named `id` ✅
+**AddBank Route**: `/bank/add/:countryId` - Parameter named `countryId` ✅
+
+## Component Usage Analysis
+
+**FinancingDetails Component**:
+
+- Route: `/financing/details/:id`
+- Usage: `useParams<{ id: string }>()` - **CORRECT** ✅
+- Parameter access: `params.id` - **CORRECT** ✅
+
+**AddBank Component**:
+
+- Route: `/bank/add/:countryId`
+- Usage: `useParams<{ countryId: string }>()` - **CORRECT** ✅
+- Parameter access: `params.countryId` - **CORRECT** ✅
+
+## Key Learning
+
+- Different routes can have different parameter names
+- FinancingDetails uses `:id` parameter correctly
+- AddBank uses `:countryId` parameter correctly
+- Both components are implemented correctly for their respective routes
+- The naming inconsistency between routes is intentional based on context
+
 # 2025-09-10: FONT-BOLD ISSUE RESOLUTION - COMPLETED ✅
 
 **TASK COMPLETED**: Fixed font-bold utility class not working with custom "Helvetica Neue W23 for SKY Reg" font

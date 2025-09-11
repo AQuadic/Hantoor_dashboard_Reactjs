@@ -11,7 +11,6 @@ import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { toast } from "react-hot-toast";
 import { getCountries } from "@/api/countries/getCountry";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { getRequestFinancingById } from "@/api/financing/getFinancinyById";
 import {
   BankFinance,
   createBank,
@@ -39,16 +38,22 @@ const AddBank = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const countryIdFromLocation = location.state?.countryId;
-  const countryNameFromLocation = location.state?.countryName;
+  const params = useParams<{ countryId: string }>();
+  console.log("Rendering AddBank", params.countryId);
+
+  // Mirror FinancingDetails: prefer location.state country/countryId, fall back to URL param
+  const country = location.state?.country;
+  const countryId = location.state?.countryId || params.countryId;
+
+  console.log(countryId);
 
   const [arBankName, setArBankName] = useState("");
   const [enBankName, setEnBankName] = useState("");
   const [selectedCountryId, setSelectedCountryId] = useState<string>(
-    countryIdFromLocation?.toString() || ""
+    countryId ? String(countryId) : ""
   );
   const [displayCountryName, setDisplayCountryName] = useState<string>(
-    countryNameFromLocation || ""
+    country || ""
   );
 
   // Visitor Data
@@ -84,34 +89,21 @@ const AddBank = () => {
     { key: "2", label: "جهة خاصة" },
   ];
 
-  const { id } = useParams();
-
   useEffect(() => {
     const fetchCountries = async () => {
       try {
         const response = await getCountries(1, "");
 
-        let countryId = countryIdFromLocation;
-
-        if (!countryId && id) {
-          const request = await getRequestFinancingById(Number(id));
-
-          if (request && "country_id" in request) {
-            countryId = request.country_id;
+        if (countryId) {
+          const found = response.data.find((c) => c.id === Number(countryId));
+          if (found) {
+            setDisplayCountryName(found.name[i18n.language as "ar" | "en"]);
           }
+          setSelectedCountryId(String(countryId));
+          return;
         }
 
-        if (countryId && response.data.length > 0) {
-          const foundCountry = response.data.find(
-            (c) => c.id === Number(countryId)
-          );
-          if (foundCountry) {
-            setSelectedCountryId(foundCountry.id.toString());
-            setDisplayCountryName(
-              foundCountry.name[i18n.language as "ar" | "en"]
-            );
-          }
-        } else if (response.data.length > 0) {
+        if (response.data.length > 0) {
           const fallbackCountry = response.data[0];
           setSelectedCountryId(fallbackCountry.id.toString());
           setDisplayCountryName(
@@ -124,7 +116,7 @@ const AddBank = () => {
       }
     };
     fetchCountries();
-  }, [id, i18n.language, countryIdFromLocation]);
+  }, [countryId, i18n.language]);
 
   const validateForm = () => {
     if (!arBankName.trim()) {
@@ -297,7 +289,13 @@ const AddBank = () => {
         finance,
       };
 
+      // Debug: log payload being sent
+      console.debug("AddBank:submitting payload", payload);
+
       const response = await createBank(payload);
+
+      // Debug: log response
+      console.debug("AddBank:createBank:response", response);
 
       if (response.success) {
         toast.success(response.message || "Bank added successfully!");
