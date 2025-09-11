@@ -1,5 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
+import { useQueryClient } from "@tanstack/react-query";
+import { deleteFinancing } from "@/api/financing/deleteFinancing";
+import toast from "react-hot-toast";
 import {
   Table,
   TableBody,
@@ -41,9 +44,42 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
     });
   };
 
-  if (isLoading) return <div className="py-8 text-center">{isArabic ? "جاري التحميل..." : "Loading..."}</div>;
-  if (error) return <div className="py-8 text-center text-red-500">{isArabic ? "حدث خطأ" : "Error"}</div>;
-  if (!data || data.length === 0) return <div className="py-8 text-center text-gray-500">{isArabic ? "لا توجد بيانات" : "No data"}</div>;
+  const queryClient = useQueryClient();
+
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteFinancing(id);
+      // Invalidate financing queries to refetch updated list
+      queryClient.invalidateQueries({ queryKey: ["financing"] });
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error("Failed to delete financing:", err);
+      // Show localized toast error
+      toast.error(
+        (t("deleteFailed") as string) ||
+          (isArabic ? "فشل الحذف" : "Delete failed")
+      );
+    }
+  };
+
+  if (isLoading)
+    return (
+      <div className="py-8 text-center">
+        {isArabic ? "جاري التحميل..." : "Loading..."}
+      </div>
+    );
+  if (error)
+    return (
+      <div className="py-8 text-center text-red-500">
+        {isArabic ? "حدث خطأ" : "Error"}
+      </div>
+    );
+  if (!data || data.length === 0)
+    return (
+      <div className="py-8 text-center text-gray-500">
+        {isArabic ? "لا توجد بيانات" : "No data"}
+      </div>
+    );
 
   return (
     <Table>
@@ -59,15 +95,22 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
         {data.map((country, index) => (
           <TableRow key={country.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{isArabic ? country.name.ar : country.name.en}</TableCell>
+            <TableCell>
+              {isArabic ? country.name.ar : country.name.en}
+            </TableCell>
             <TableCell className="w-full">{country.banks_count}</TableCell>
             <TableCell className="flex items-center gap-2">
               <Switch defaultSelected={country.is_active} />
-              <div className="cursor-pointer" onClick={() => handleViewCountry(country)}>
+              <div
+                className="cursor-pointer"
+                onClick={() => handleViewCountry(country)}
+              >
                 <View />
               </div>
               <div>
-                <TableDeleteButton handleDelete={() => console.log("Delete:", country.id)} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(country.id)}
+                />
               </div>
             </TableCell>
           </TableRow>
