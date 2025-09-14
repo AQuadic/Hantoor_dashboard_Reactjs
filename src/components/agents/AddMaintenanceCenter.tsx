@@ -160,6 +160,19 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
                 />
               </div>
             </div>
+            {/* Google Map Link */}
+            <div className="flex flex-col md:flex-row gap-[15px] mt-4">
+              <div className="w-full">
+                <DashboardInput
+                  label={t("linkGoogleMap")}
+                  value={center.link_google_map || ""}
+                  onChange={(val) =>
+                    handleCenterChange(index, "link_google_map", val)
+                  }
+                  placeholder="https://maps.google.com/..."
+                />
+              </div>
+            </div>
             <div className="flex flex-col md:flex-row gap-[15px] mt-4">
               <div className="relative w-full">
                 <MobileInput

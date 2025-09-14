@@ -31,6 +31,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
   const [emailLink, setEmailLink] = useState("");
+  const [website, setWebsite] = useState("");
   // brands removed: this form no longer requires selecting a brand
   const [centers, setCenters] = useState<AgentCenter[]>([
     {
@@ -124,6 +125,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         whatsapp: string;
         type: string;
         is_active: string;
+        link_google_map?: string;
       }
     > = {};
     validCenters.forEach((center, idx) => {
@@ -140,8 +142,9 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         },
         phone: center.phone,
         whatsapp: center.whatsapp,
-        type: typeCode,
+        type: center.type,
         is_active: center.is_active ? "1" : "0",
+        link_google_map: center.link_google_map || ""
       };
     });
 
@@ -152,6 +155,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       },
       is_active: "1", // Always send as string "1"
       link: emailLink,
+      website,
       // brand_id intentionally omitted (brand removed from UI)
       // centersPayload uses numeric-string type codes ("1" | "2"); cast to match CreateAgentPayload
       centers: centersPayload as unknown as CreateAgentPayload["centers"],
@@ -201,10 +205,10 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
           {/* Link */}
           <div className="relative w-full">
             <DashboardInput
-              label={t("emailLink")}
-              value={emailLink}
-              onChange={setEmailLink}
-              placeholder={t("writeHere")}
+              label={t("website")}
+              value={website}
+              onChange={setWebsite}
+              placeholder="https://example.com"
             />
           </div>
 

@@ -20,6 +20,7 @@ export interface AgentCenter {
   whatsapp: string;
   name: AgentName;
   description: CenterDescription;
+  link_google_map?: string;
   created_at?: string;
   updated_at?: string;
 }
@@ -63,6 +64,7 @@ export interface CreateAgentPayload {
   name: AgentName;
   is_active?: string;
   link?: string;
+  website?: string;
   brand_id?: number;
   centers?: {
     [key: number]: {

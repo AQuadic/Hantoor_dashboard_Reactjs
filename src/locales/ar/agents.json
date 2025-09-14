@@ -42,5 +42,6 @@
   "loading": "جاري التحميل...",
   "removeCenter": "إزالة المركز",
   "agentStatusUpdated": "تم تحديث حالة الوكيل بنجاح",
-  "agentStatusUpdateError": "خطأ في تحديث حالة الوكيل"
+  "agentStatusUpdateError": "خطأ في تحديث حالة الوكيل",
+  "website": "الموقع الإلكتروني"
 }
