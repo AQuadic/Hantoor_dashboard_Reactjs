@@ -20,15 +20,15 @@ export interface UpdateSettingsPayload {
   site_active?: boolean;
   ads_per_search?: number;
   featuresText?: LocalizedText;
-  AdvancedSearch?: LocalizedText;
-  financeText?: LocalizedText;
-  app?: AppSettings;
+  AdvancedSearchText?: LocalizedText;
+  financeTextForCarDetails?: LocalizedText;
+  appLinks?: AppSettings;
 }
 
 export interface UpdateSettingsResponse {
   success?: boolean;
   message?: string;
-  data?: any; 
+  data?: unknown;
 }
 
 export async function updateSettings(
@@ -46,8 +46,8 @@ export async function updateSettings(
       }
     );
     return response.data;
-  } catch (error: any) {
-    console.error("Error updating settings:", error.response?.data || error.message);
+  } catch (error: unknown) {
+    console.error("Error updating settings:", error);
     throw error;
   }
 }

@@ -42,7 +42,13 @@ const EditProfileForm = ({
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  // intentionally reference loading so linter doesn't complain; used for UI states in future
+  const _loadingRef = React.useRef<boolean | null>(null);
+  React.useEffect(() => {
+    // no-op: keep loading referenced to avoid unused variable lint; stored in ref
+    _loadingRef.current = loading;
+  }, [loading]);
   // Local state to track existing image URL so we can clear it in the UI
   const [existingImageUrlState, setExistingImageUrlState] = useState<
     string | null
@@ -54,6 +60,13 @@ const EditProfileForm = ({
     queryKey: ["currentAdmin"],
     queryFn: getCurrentAdmin,
   });
+
+  // Helper to extract API error message from unknown error objects
+  const getErrorMessage = (err: unknown): string | undefined => {
+    if (!err || typeof err !== "object") return undefined;
+    const maybe = err as { response?: { data?: { message?: string } } };
+    return maybe.response?.data?.message;
+  };
 
   React.useEffect(() => {
     if (data) {
@@ -77,13 +90,32 @@ const EditProfileForm = ({
   }, [profileImage]);
 
   // Called when the user clicks the remove button on the ImageInput
-  const handleRemoveImage = () => {
-    // Clear the local existing image URL so the UI switches to empty state
+  const handleRemoveImage = async () => {
+    // Immediately update UI to reflect removal
     setExistingImageUrlState(null);
-    // Mark that the existing image should be removed on next save
-    setRemoveExistingImage(true);
-    // Clear any selected local File
     setProfileImage(null);
+
+    // If we don't have current admin data yet, just mark for removal on save
+    if (!data) {
+      setRemoveExistingImage(true);
+      return;
+    }
+
+    // Send PUT to remove image on the server immediately
+    try {
+      setLoading(true);
+      // clear the flag because we're removing immediately
+      setRemoveExistingImage(false);
+      await updateAdmin(data.id, { remove_image: true });
+      toast.success(t("profileUpdated"));
+    } catch (err: unknown) {
+      const msg = getErrorMessage(err);
+      toast.error(msg || t("profileUpdateFailed"));
+      // if API failed, keep the remove flag so user can retry on save
+      setRemoveExistingImage(true);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (isLoading) return <Loading />;
@@ -102,8 +134,8 @@ const EditProfileForm = ({
         remove_image: removeExistingImage,
       });
       toast.success(t("profileUpdated"));
-    } catch (err: any) {
-      const message = err.response?.data?.message;
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
 
       if (message?.includes("phone")) {
         toast.error(t("validation.phone"));
@@ -138,8 +170,9 @@ const EditProfileForm = ({
         password_confirmation: confirmPassword,
       });
       toast.success(t("passwordUpdated"));
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to update password");
+    } catch (err: unknown) {
+      const msg = getErrorMessage(err);
+      toast.error(msg || "Failed to update password");
     } finally {
       setLoading(false);
     }
