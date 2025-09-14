@@ -66,6 +66,7 @@ const EditBank = () => {
   const [visitorSalaryTo, setVisitorSalaryTo] = useState("");
   const [visitorSalaryFrom, setVisitorSalaryFrom] = useState("");
   const [visitorSalaryFrom2, setVisitorSalaryFrom2] = useState("");
+  const [visitorDuration, setVisitorDuration] = useState("");
   const [visitorInterestAmount, setVisitorInterestAmount] = useState("");
   const [visitorInterestAmount2, setVisitorInterestAmount2] = useState("");
   const [visitorSalaryTo2, setVisitorSalaryTo2] = useState("");
@@ -106,16 +107,16 @@ const EditBank = () => {
       const citizens = data.finance?.filter((f) => f.type === "citizen") || [];
 
       if (expatriates.length > 0) {
-        setVisitorData(
-          expatriates.map((exp) => ({
-            salaryFrom: exp.salary_from?.toString() || "",
-            salaryTo: exp.salary_to?.toString() || "",
-            interestAmount: exp.value || "",
-            duration: exp.duration || "",
-            workplace: exp.employer || "",
-          }))
-        );
-      } else {
+      const firstExp = expatriates[0];
+      setVisitorSalaryFrom(firstExp.salary_from?.toString() || "");
+      setVisitorSalaryTo(firstExp.salary_to?.toString() || "");
+      setVisitorInterestAmount(firstExp.value?.toString() || "");
+      setVisitorSalaryFrom2(expatriates[1]?.salary_from?.toString() || "");
+      setVisitorSalaryTo2(expatriates[1]?.salary_to?.toString() || "");
+      setVisitorDuration(expatriates[0].duration || "");
+      setVisitorInterestAmount2(expatriates[1]?.value?.toString() || "");
+    }
+  else {
         setVisitorData([
           {
             salaryFrom: "",
@@ -192,7 +193,7 @@ const EditBank = () => {
           </div>
         </div>
         <div className="flex flex-wrap gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
-          <div>
+          <div className="flex flex-col flex-1">
             <div className="flex flex-col flex-1 gap-4">
               <h3 className=" text-lg font-bold text-[#2A32F8]">
                 {t("visitorData")}
@@ -220,9 +221,11 @@ const EditBank = () => {
                 placeholder="1 سنة"
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
+                selectedKeys={visitorDuration ? [visitorDuration] : []}
+                onChange={(e) => setVisitorDuration(e.target.value)}
               >
                 {authorities.map((authority) => (
-                  <SelectItem key={authority.key} textValue={authority.label}>
+                  <SelectItem key={authority.key} textValue={authority.key}>
                     {authority.label}
                   </SelectItem>
                 ))}
@@ -251,7 +254,9 @@ const EditBank = () => {
             <div className="flex flex-col flex-1 gap-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className=" text-lg font-bold text-[#2A32F8]"></h3>
+                  <h3 className=" text-lg font-bold text-[#2A32F8]">
+                    {t("visitorData")}
+                  </h3>
                   <h2 className="text-[15px] font-bold text-[#1E1B1B] mt-2">
                     {t("salaryRang")}
                   </h2>
@@ -340,11 +345,11 @@ const EditBank = () => {
               placeholder="1 سنة"
               classNames={{ label: "mb-2 text-base !text-[#080808]" }}
               size="lg"
-              selectedKeys={citizenDuration ? [citizenDuration] : []}
-              onChange={(e) => setCitizenDuration(e.target.value)}
+              selectedKeys={visitorDuration ? [visitorDuration] : []}
+              onChange={(e) => setVisitorDuration(e.target.value)}
             >
               {authorities.map((authority) => (
-                <SelectItem key={authority.key} textValue={authority.label}>
+                <SelectItem key={authority.key} textValue={authority.key}>
                   {authority.label}
                 </SelectItem>
               ))}
