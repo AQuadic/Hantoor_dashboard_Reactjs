@@ -60,22 +60,24 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       queryClient.invalidateQueries({ queryKey: ["agents"] });
       navigate("/agents");
     },
-    onError: (error: unknown) => {
-      let errorMessage = t("agentCreationError");
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else if (
-        typeof error === "object" &&
-        error !== null &&
-        "response" in error
-      ) {
-        const responseError = error as {
-          response?: { data?: { message?: string } };
-        };
-        errorMessage = responseError.response?.data?.message || errorMessage;
-      }
-      toast.error(errorMessage);
-    },
+    onError: (error: any) => {
+  let errorMessage = t("agentCreationError");
+
+  if (error.response) {
+    const data = error.response.data;
+    if (data?.message) {
+      errorMessage = data.message;
+    }
+    if (data?.errors) {
+      const allErrors = Object.values(data.errors).flat() as string[];
+      errorMessage = allErrors.join(" - ");
+    }
+  } else if (error instanceof Error) {
+    errorMessage = error.message;
+  }
+
+  toast.error(errorMessage);
+},
   });
 
   const handleSubmit = () => {
