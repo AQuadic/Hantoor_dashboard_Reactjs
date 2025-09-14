@@ -925,6 +925,8 @@ Current status: Implementing fixes for delete modal, status toggle, and search f
 - Maintained consistent state management patterns between Add and Edit components
 - All functionality tested and confirmed working with successful build
 
+Note: On 2025-09-14 the brand selection was removed from the agents UI; AddAgent and EditAgent no longer include a brand select and brand_id is omitted from payloads.
+
 # 2025-09-14: SETTINGS API INTEGRATION - COMPLETED ✅
 
 **TASK COMPLETED**: Integrated settings values with API and implemented isolated form sections with individual loading states.

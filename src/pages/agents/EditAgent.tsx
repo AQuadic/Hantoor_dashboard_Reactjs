@@ -6,7 +6,7 @@ import DashboardInput from "@/components/general/DashboardInput";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { BrandsApiResponse, fetchBrands } from "@/api/brand/fetchBrands";
+// Brands removed from agent edit form
 import {
   fetchAgentById,
   updateAgent,
@@ -17,7 +17,7 @@ import {
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
-import DropdownArrow from "@/components/icons/dashboard/DropdownArrow";
+// DropdownArrow removed when brand select was removed
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
@@ -28,7 +28,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
 }) => {
-  const { t, i18n } = useTranslation("agents");
+  const { t } = useTranslation("agents");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { id } = useParams<{ id: string }>();
@@ -36,14 +36,10 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
   const [emailLink, setEmailLink] = useState("");
-  const [selectedBrandId, setSelectedBrandId] = useState<string>("");
+  // brand selection removed
   const [centers, setCenters] = useState<AgentCenter[]>([]);
 
-  const page = 1;
-  const { data: brands } = useQuery<BrandsApiResponse>({
-    queryKey: ["brands", page],
-    queryFn: ({ queryKey }) => fetchBrands(queryKey[1] as number),
-  });
+  // brands query removed
 
   const { data: agent, isLoading: isLoadingAgent } = useQuery<Agent>({
     queryKey: ["agent", id],
@@ -57,7 +53,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       setEnName(agent.name.en);
       // Prefer top-level website when available, otherwise fall back to link
       setEmailLink(agent?.website || agent.link || "");
-      setSelectedBrandId(agent.brand_id?.toString() || "");
+      // brand omitted from edit form
 
       // Initialize centers with at least one center and one showroom if none exist
       const existingCenters = agent.centers || [];
@@ -162,7 +158,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       },
       is_active: "1", // Changed from boolean to string
       link: emailLink,
-      brand_id: selectedBrandId ? Number(selectedBrandId) : undefined,
+      // brand_id intentionally omitted (brand removed from UI)
       centers: validCenters.length > 0 ? validCenters : undefined,
     };
 
@@ -222,30 +218,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
             />
           </div>
 
-          <div className="relative w-full">
-            <select
-              id="brand"
-              value={selectedBrandId}
-              onChange={(e) => setSelectedBrandId(e.target.value)}
-              className="peer block w-full rounded-2xl border border-gray-300 bg-transparent px-3 pt-5 pb-2 text-sm text-black h-[62px] appearance-none"
-            >
-              <option value="">{t("selectBrand")}</option>
-              {brands?.data?.map((brand) => (
-                <option key={brand.id} value={brand.id}>
-                  {i18n.language === "ar" ? brand.name.ar : brand.name.en}
-                </option>
-              ))}
-            </select>
-            <label
-              htmlFor="brand"
-              className="absolute ltr:left-3 rtl:right-3 top-2 text-gray-500 text-sm transition-all duration-200 peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-gray-700 peer-focus:text-sm"
-            >
-              {t("brand")}
-            </label>
-            <div className="pointer-events-none absolute ltr:right-5 rtl:left-5 top-1/2 -translate-y-1/2 text-gray-400">
-              <DropdownArrow />
-            </div>
-          </div>
+          <div className="relative w-full">{/* brand selection removed */}</div>
         </div>
         <hr className="my-[11px]" />
 
