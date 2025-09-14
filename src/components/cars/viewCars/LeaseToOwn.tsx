@@ -18,7 +18,7 @@ const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
             ? `${vehicle.rent_to_own_duration} سنة`
             : "-",
           price: vehicle.rent_to_own_price
-            ? `${vehicle.rent_to_own_price} درهم`
+            ? `${vehicle.rent_to_own_price}`
             : "-",
         },
       ]

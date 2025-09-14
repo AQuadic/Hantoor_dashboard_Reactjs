@@ -40,7 +40,7 @@ export function UserTable({
   dateParams = {},
   onDataLoaded,
 }: UserTableProps) {
-  const { t } = useTranslation("users");
+  const { t, i18n } = useTranslation("users");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["adminUsers", searchTerm, page, perPage, dateParams],
@@ -56,12 +56,28 @@ export function UserTable({
 
   const users: AdminUser[] = data?.data || [];
 
-  const formatDate = (date?: string) => {
-    if (!date) return t("invalidDate", { defaultValue: "Invalid Date" });
+  const formatDate = (date?: string, lang: string = "en") => {
+    if (!date) return "Invalid Date";
     const d = new Date(date);
-    return isNaN(d.getTime())
-      ? t("invalidDate", { defaultValue: "Invalid Date" })
-      : d.toLocaleString();
+    if (isNaN(d.getTime())) return "Invalid Date";
+
+    const isArabic = lang.startsWith("ar");
+
+    const formatted = new Intl.DateTimeFormat(isArabic ? "ar-EG" : "en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    }).format(d);
+
+    if (isArabic) {
+      return formatted.replace("ص", "ص").replace("م", "م");
+    }
+
+    return formatted;
   };
 
   if (data?.meta) {
@@ -116,7 +132,7 @@ export function UserTable({
             <TableCell>{user.name}</TableCell>
             <TableCell dir="ltr">{user.phone || "-"}</TableCell>
             <TableCell>{user.email || "-"}</TableCell>
-            <TableCell>{formatDate(user.created_at)}</TableCell>
+            <TableCell>{formatDate(user.created_at, i18n.language)}</TableCell>
             <TableCell>{user.signup_with}</TableCell>
             <TableCell>{user.country ? user.country.name.en : "-"}</TableCell>
             <TableCell>{user.id}</TableCell>
