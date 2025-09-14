@@ -20,15 +20,14 @@ import {
 import { useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
 import { deleteModel } from "@/api/models/models/deleteModel";
-import { fetchAgents } from "@/api/agents/fetchAgents";
 import Loading from "../general/Loading";
 import { editVehicleModel } from "@/api/models/models/editModel";
 import NoData from "../general/NoData";
 
 interface ModelTableProps {
-  page: number;
-  search: string;
-  setPagination: (meta: {
+  readonly page: number;
+  readonly search: string;
+  readonly setPagination: (meta: {
     totalPages: number;
     totalItems: number;
     itemsPerPage: number;
@@ -59,23 +58,18 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
   const paginationData = useMemo(() => {
     const from = models.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0;
     const to = models.length > 0 ? from + models.length - 1 : 0;
-    return { 
+    return {
       totalPages: Math.max(totalPages, 1),
-      totalItems: Math.max(totalItems, models.length), 
-      itemsPerPage, 
-      from, 
-      to 
+      totalItems: Math.max(totalItems, models.length),
+      itemsPerPage,
+      from,
+      to,
     };
   }, [totalPages, totalItems, itemsPerPage, models.length, currentPage]);
 
   useEffect(() => {
     setPagination(paginationData);
   }, [paginationData, setPagination]);
-
-  const { data: agentsData } = useQuery({
-    queryKey: ["agents-list"],
-    queryFn: () => fetchAgents(1, ""),
-  });
 
   const handleDelete = async (id: number) => {
     await deleteModel(id);
@@ -105,7 +99,6 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
         <TableRow>
           <TableHead className="text-right ">#</TableHead>
           <TableHead className="text-right">{t("model")}</TableHead>
-          <TableHead className="text-right">{t("agent")}</TableHead>
           <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
@@ -113,23 +106,10 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
         {models.map((model, index) => (
           <TableRow key={model.id} noBackgroundColumns={1}>
             <TableCell>{paginationData.from + index}</TableCell>
-            <TableCell>
+            <TableCell className="w-full">
               {i18n.language === "ar"
                 ? model.name.ar
                 : model.name.en || model.name.ar}
-            </TableCell>
-            <TableCell className="w-full">
-              {(() => {
-                const agent = agentsData?.data.find(
-                  (a) => a.id === model.agent_id
-                );
-                if (!agent) return "—";
-
-                if (typeof agent.name === "string") return agent.name;
-                return i18n.language.startsWith("ar")
-                  ? agent.name.ar
-                  : agent.name.en || agent.name.ar;
-              })()}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch

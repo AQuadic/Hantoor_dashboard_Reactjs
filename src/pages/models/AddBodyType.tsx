@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
-import { Input, Select, SelectItem } from "@heroui/react";
+import { Input } from "@heroui/react";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { getModels, GetModelsResponse } from "@/api/models/models/getModels";
 import { postVehicleBody } from "@/api/models/structureType/postStructure";
 
 const AddBodyType = () => {
-  const { t, i18n } = useTranslation("models");
-  const language = i18n.language || "en";
+  const { t } = useTranslation("models");
 
   const params = useParams();
   const brandId = params.id;
@@ -21,31 +18,19 @@ const AddBodyType = () => {
 
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
-  const [selectedModel, setSelectedModel] = useState<string>("");
-
-  // Fetch models for the select dropdown
-  const { data: modelsResponse = { data: [], meta: { totalItems: 0, totalPages: 1, itemsPerPage: 10, currentPage: 1 } }, isLoading } = useQuery<GetModelsResponse, Error>({
-    queryKey: ["models-list", 1, ""],
-    queryFn: ({ queryKey }) => {
-      const [_key, page = 1, search = ""] = queryKey as [string, number, string];
-      return getModels(page, 10, search);
-    },
-  });
-  const modelsData = modelsResponse.data ?? [];
 
   const handleSubmit = async () => {
-    if (!arName || !enName || !selectedModel) {
+    if (!arName || !enName) {
       toast.error(t("fillAllFields") || "Please fill all fields");
       return;
     }
 
     await postVehicleBody({
       name: { ar: arName, en: enName },
-      vehicle_model_id: selectedModel,
       is_active: true,
     });
 
-    toast.success(t('bodyTypeAdded'));
+    toast.success(t("bodyTypeAdded"));
     navigate("/models?section=Structure+Types&page=1");
   };
 
@@ -77,31 +62,13 @@ const AddBodyType = () => {
                 onChange={(e) => setArName(e.target.value)}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
-                />
-              <Select
-                className="mt-4"
-                size="lg"
-                variant="bordered"
-                label={t("model")}
-                selectedKeys={selectedModel ? [selectedModel] : []}
-                onSelectionChange={(keys) =>
-                  setSelectedModel(Array.from(keys)[0] as string)
-                }
-              >
-                {isLoading
-                  ? [<SelectItem key="loading">Loading...</SelectItem>]
-                  : modelsData.map((model) => (
-                      <SelectItem key={model.id} textValue={model.name[language as "ar" | "en"]}>
-                        {model.name[language as "ar" | "en"]}
-                      </SelectItem>
-                    ))}
-              </Select>
+              />
             </div>
 
             <Input
               label={t("enStructureName")}
               variant="bordered"
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
               value={enName}
               onChange={(e) => setEnName(e.target.value)}
               className="flex-1"
@@ -110,7 +77,11 @@ const AddBodyType = () => {
             />
           </div>
 
-          <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit} />
+          <DashboardButton
+            titleAr="اضافة"
+            titleEn="Add"
+            onClick={handleSubmit}
+          />
         </div>
       </div>
     </div>

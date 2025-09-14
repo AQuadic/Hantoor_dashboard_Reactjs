@@ -7,6 +7,7 @@ export interface UpdateCarTypePayload {
   };
   is_active?: boolean;
   vehicle_body_type_id?: string;
+  brand_id?: number;
 }
 
 export interface UpdateCarTypeResponse {

@@ -3,7 +3,6 @@ import { axios } from "@/lib/axios";
 export interface Model {
   id: number;
   name: { ar: string; en: string };
-  agent_id: number;
   is_active: boolean;
 }
 
@@ -39,7 +38,12 @@ export const getModels = async (
     console.error("Failed to fetch models:", error);
     return {
       data: [],
-      meta: { totalItems: 0, totalPages: 1, itemsPerPage: perPage, currentPage: page },
+      meta: {
+        totalItems: 0,
+        totalPages: 1,
+        itemsPerPage: perPage,
+        currentPage: page,
+      },
     };
   }
 };

@@ -7,6 +7,7 @@ export interface VehicleType {
     en: string;
   };
   body_type_id: number;
+  brand_id: number;
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -41,12 +42,15 @@ export type GetVehicleTypesResponse = GetVehicleTypesPaginated | VehicleType[];
 export const getVehicleTypes = async (
   params?: GetVehicleTypesParams
 ): Promise<GetVehicleTypesPaginated | VehicleType[]> => {
-  const response = await axios.get<GetVehicleTypesPaginated | VehicleType[]>("/admin/vehicle/type", {
-    params,
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    },
-  });
+  const response = await axios.get<GetVehicleTypesPaginated | VehicleType[]>(
+    "/admin/vehicle/type",
+    {
+      params,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }
+  );
   return response.data;
-}
+};

@@ -1,5 +1,6 @@
 import { addVehicleType } from "@/api/models/carTypes/addCarType";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
+import { fetchBrands } from "@/api/brand/fetchBrands";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input, Select, SelectItem } from "@heroui/react";
@@ -7,10 +8,14 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
+import { useQuery } from "@tanstack/react-query";
 
 const AddCarTypes = () => {
   const { t, i18n } = useTranslation("models");
-  const [selectedStructure, setSelectedStructure] = useState<string | null>(null);
+  const [selectedStructure, setSelectedStructure] = useState<string | null>(
+    null
+  );
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const params = useParams();
   const brandId = params.id;
   const [loading, setLoading] = useState(false);
@@ -21,8 +26,15 @@ const AddCarTypes = () => {
 
   const isEdit = Boolean(brandId);
 
-  const { data: structures, isLoading } = useVehicleBodies({
-    pagination: false,
+  const { data: structures, isLoading: isLoadingStructures } = useVehicleBodies(
+    {
+      pagination: false,
+    }
+  );
+
+  const { data: brandsResponse, isLoading: isLoadingBrands } = useQuery({
+    queryKey: ["brands-list"],
+    queryFn: () => fetchBrands(1, "", "", ""),
   });
 
   return (
@@ -42,7 +54,7 @@ const AddCarTypes = () => {
             link: "/",
           },
           {
-            titleAr:"اضافة نوع جديد",
+            titleAr: "اضافة نوع جديد",
             titleEn: "Add a new type",
             link: isEdit ? `/model/${brandId}` : "/brands/add",
           },
@@ -53,7 +65,7 @@ const AddCarTypes = () => {
           <div className="flex md:flex-row flex-col gap-4">
             <div className="flex-1">
               <Input
-                label={t('arType')}
+                label={t("arType")}
                 variant="bordered"
                 placeholder={t("writeHere")}
                 classNames={{ label: "mb-2 text-base" }}
@@ -65,15 +77,18 @@ const AddCarTypes = () => {
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
-                label={t('structure')}
-                isLoading={isLoading}
+                label={t("structure")}
+                isLoading={isLoadingStructures}
                 selectedKeys={selectedStructure ? [selectedStructure] : []}
                 onSelectionChange={(keys) => {
                   const key = Array.from(keys)[0] as string;
                   setSelectedStructure(key);
                 }}
               >
-                {(Array.isArray(structures) ? structures : (structures?.data ?? [])).map((structure) => (
+                {(Array.isArray(structures)
+                  ? structures
+                  : structures?.data ?? []
+                ).map((structure) => (
                   <SelectItem
                     key={structure.id.toString()}
                     textValue={structure.name[i18n.language as "ar" | "en"]}
@@ -82,11 +97,32 @@ const AddCarTypes = () => {
                   </SelectItem>
                 ))}
               </Select>
+              <Select
+                className="mt-4"
+                size={"lg"}
+                variant="bordered"
+                label={t("brand")}
+                isLoading={isLoadingBrands}
+                selectedKeys={selectedBrand ? [selectedBrand] : []}
+                onSelectionChange={(keys) => {
+                  const key = Array.from(keys)[0] as string;
+                  setSelectedBrand(key);
+                }}
+              >
+                {(brandsResponse?.data ?? []).map((brand) => (
+                  <SelectItem
+                    key={brand.id.toString()}
+                    textValue={brand.name[i18n.language as "ar" | "en"]}
+                  >
+                    {brand.name[i18n.language as "ar" | "en"]}
+                  </SelectItem>
+                ))}
+              </Select>
             </div>
             <Input
-              label={t('enType')}
+              label={t("enType")}
               variant="bordered"
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
               className="flex-1"
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
@@ -104,6 +140,10 @@ const AddCarTypes = () => {
                 toast.error(t("structure") + " " + t("isRequired"));
                 return;
               }
+              if (!selectedBrand) {
+                toast.error(t("brand") + " " + t("isRequired"));
+                return;
+              }
 
               setLoading(true);
               try {
@@ -113,15 +153,16 @@ const AddCarTypes = () => {
                     en: enType,
                   },
                   body_type_id: Number(selectedStructure),
+                  brand_id: Number(selectedBrand),
                   is_active: true,
                 });
                 toast.success(t("carTypeAdded"));
                 navigate("/models?section=Car Types");
-              } catch (error: any) {
+              } catch (error: unknown) {
                 const errorMsg =
-                  error?.response?.data?.message ||
-                  error?.message ||
-                  t("somethingWentWrong");
+                  error instanceof Error
+                    ? error.message
+                    : t("somethingWentWrong");
                 toast.error(errorMsg);
               } finally {
                 setLoading(false);

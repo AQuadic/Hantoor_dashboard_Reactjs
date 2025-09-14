@@ -6,7 +6,6 @@ export interface VehicleModel {
     en: string;
   };
   is_active?: boolean;
-  agent_id: string;
 }
 
 export interface VehicleModelResponse {

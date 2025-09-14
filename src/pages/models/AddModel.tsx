@@ -1,21 +1,16 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
-import { Select, SelectItem } from "@heroui/react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
-import { useQuery } from "@tanstack/react-query";
-import { fetchAgents } from "@/api/agents/fetchAgents";
-import Loading from "@/components/general/Loading";
 import { postVehicleModel } from "@/api/models/models/addModels";
 import toast from "react-hot-toast";
 
 const AddBrand = () => {
-  const [selectedAgent, setSelectedAgent] = useState<string>("");
   const [arModelName, setArModelName] = useState("");
   const [enModelName, setEnModelName] = useState("");
-  const [, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const params = useParams();
@@ -23,42 +18,33 @@ const AddBrand = () => {
 
   const isEdit = Boolean(brandId);
 
-  const { t, i18n } = useTranslation("models");
-  const language = i18n.language || "en";
+  const { t } = useTranslation("models");
 
-  const { data: agentsData, isLoading } = useQuery({
-    queryKey: ["agents-list"],
-    queryFn: () => fetchAgents(1, ""), 
-  });
+  const handleSubmit = async () => {
+    if (!arModelName || !enModelName) {
+      toast.error(t("fillAllFields") || "Please fill all fields");
+      return;
+    }
 
-const handleSubmit = async () => {
-  if (!arModelName || !enModelName || !selectedAgent) {
-    toast.error(t("fillAllFields") || "Please fill all fields");
-    return;
-  }
+    try {
+      setIsSubmitting(true);
 
-  try {
-    setIsSubmitting(true);
+      await postVehicleModel({
+        name: { ar: arModelName, en: enModelName },
+        is_active: true,
+      });
 
-    await postVehicleModel({
-      name: { ar: arModelName, en: enModelName },
-      is_active: true,
-      agent_id: selectedAgent,
-    });
-
-    toast.success(t('modelAddedSuccessfully'));
-    navigate("/models");
-    setArModelName("");
-    setEnModelName("");
-    setSelectedAgent("");
-  } catch (error) {
-    console.error(error);
-    toast.error("Something went wrong");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+      toast.success(t("modelAddedSuccessfully"));
+      navigate("/models");
+      setArModelName("");
+      setEnModelName("");
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div>
@@ -86,38 +72,12 @@ const handleSubmit = async () => {
       <div className="flex flex-col gap-8 md:p-8 p-2">
         <div className="flex flex-col gap-4 md:p-8 p-2 bg-white rounded-2xl">
           <div className="flex md:flex-row flex-col gap-4">
-            <div className="flex-1">
-              <DashboardInput
-                label={t("arModelName")}
-                value={arModelName}
-                onChange={setArModelName}
-                placeholder={t("writeHere")}
-              />
-
-              {isLoading ? (
-                <Loading />
-              ) : (
-                <Select
-                  className="mt-4"
-                  size={"lg"}
-                  variant="bordered"
-                  label={t("agent")}
-                  selectedKeys={selectedAgent ? [selectedAgent] : []}
-                  onSelectionChange={(keys) =>
-                    setSelectedAgent(Array.from(keys)[0] as string)
-                  }
-                >
-                  {(agentsData?.data || []).map((agent: any) => (
-                    <SelectItem
-                      key={agent.id}
-                      textValue={agent.name?.[language]}
-                    >
-                      {agent.name?.[language]}
-                    </SelectItem>
-                  ))}
-                </Select>
-              )}
-            </div>
+            <DashboardInput
+              label={t("arModelName")}
+              value={arModelName}
+              onChange={setArModelName}
+              placeholder={t("writeHere")}
+            />
             <DashboardInput
               label={t("enModelName")}
               value={enModelName}
@@ -126,7 +86,11 @@ const handleSubmit = async () => {
             />
           </div>
 
-          <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit}/>
+          <DashboardButton
+            titleAr="اضافة"
+            titleEn="Add"
+            onClick={handleSubmit}
+          />
         </div>
       </div>
     </div>

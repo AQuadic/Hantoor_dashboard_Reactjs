@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 
 export interface GetVehicleBodiesParams {
   search?: string;
-  vehicle_model_id?: number;
   pagination?: boolean;
 }
 
@@ -16,7 +15,6 @@ export interface VehicleBody {
   is_active: boolean | number;
   created_at: string;
   updated_at: string;
-  vehicle_model_id: number;
 }
 
 export interface VehicleBodiesPaginated {
