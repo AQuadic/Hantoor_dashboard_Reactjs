@@ -274,9 +274,9 @@ export interface CreateVehiclePayload {
   is_Insurance_warranty?: boolean;
   is_include_warranty?: boolean;
   is_rent_to_own?: boolean;
-  rent_to_own_duration?: string;
-  rent_to_own_whatsapp?: string;
-  rent_to_own_price?: string;
+  rent_to_own_duration?: string | null;
+  rent_to_own_whatsapp?: string | null;
+  rent_to_own_price?: string | null;
   is_active?: boolean;
   status?: string; // Status field as string for FormData
 

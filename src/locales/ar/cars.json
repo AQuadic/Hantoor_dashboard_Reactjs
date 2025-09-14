@@ -87,5 +87,6 @@
 
   "packageDeleted": "تم حذف الباقة بنجاح",
   "accessoriesDeleted": "تم حذف الإكسسوار بنجاح",
-  "offerDeleted": "تم حذف الأوفر بنجاح"
+  "offerDeleted": "تم حذف الأوفر بنجاح",
+  "rentToOwnDeleted": "تم حذف بيانات التقسيط بنجاح"
 }
