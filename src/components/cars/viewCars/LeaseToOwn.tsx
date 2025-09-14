@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Switch } from "@heroui/react";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
@@ -15,6 +16,45 @@ interface LeaseToOwnProps {
 const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
   const { t } = useTranslation("cars");
   const queryClient = useQueryClient();
+
+  const [isRentToOwn, setIsRentToOwn] = useState(vehicle?.is_rent_to_own || false);
+  const [loading, setLoading] = useState(false);
+
+  const handleToggle = async () => {
+    if (!vehicle) return;
+
+    setLoading(true);
+    const newValue = !isRentToOwn;
+    try {
+      await updateVehicle(vehicle.id, {
+        id: vehicle.id,
+        name: typeof vehicle.name === "string" ? { ar: vehicle.name, en: vehicle.name } : vehicle.name,
+        country_id: vehicle.country_id?.toString(),
+        brand_id: vehicle.brand_id?.toString(),
+        agent_id: vehicle.agent_id?.toString(),
+        vehicle_model_id: vehicle.vehicle_model_id?.toString(),
+        vehicle_body_type_id: vehicle.vehicle_body_type_id?.toString(),
+        vehicle_type_id: vehicle.vehicle_type_id?.toString(),
+        vehicle_class_id: vehicle.vehicle_class_id?.toString(),
+        brand_origin_id: vehicle.brand_origin_id?.toString(),
+        number_of_seat_id: vehicle.number_of_seat_id?.toString(),
+        engine_type_id: vehicle.engine_type_id?.toString(),
+
+        is_rent_to_own: newValue,
+        rent_to_own_price: vehicle.rent_to_own_price,
+        rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp,
+      });
+
+      setIsRentToOwn(newValue); 
+      toast.dismiss()
+      toast.success(t("vehicleStatusUpdated"));
+      queryClient.invalidateQueries({ queryKey: ["vehicle", vehicle.id] });
+    } catch {
+      toast.error(t("error"));
+    } finally {
+      setLoading(false);
+    }
+  };
 
 const handleDelete = async () => {
   if (!vehicle) return;
@@ -52,16 +92,13 @@ const handleDelete = async () => {
 
   if (!vehicle) return <NoData />;
 
-  const rentToOwnData = vehicle.is_rent_to_own
-    ? [
-        {
-          duration: vehicle.rent_to_own_duration
-            ? `${vehicle.rent_to_own_duration} سنة`
-            : "-",
-          price: vehicle.rent_to_own_price || "-",
-        },
-      ]
-    : [];
+  const rentToOwnData = [
+    {
+      duration: isRentToOwn ? `${vehicle.rent_to_own_duration} سنة` : "-",
+      price: isRentToOwn ? vehicle.rent_to_own_price || "-" : "-",
+    },
+  ];
+
 
   return (
     <section className="md:mx-8 mx-0">
@@ -82,7 +119,7 @@ const handleDelete = async () => {
                 <TableCell className="w-full">{item.duration}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-[7px]">
-                    <Switch checked={vehicle.is_rent_to_own} readOnly />
+                    <Switch checked={isRentToOwn} onChange={handleToggle} disabled={loading} />
 
                     {vehicle.rent_to_own_whatsapp && (
                       <a
