@@ -781,6 +781,14 @@ if (filters.search && filters.search.trim() !== "") {
 }
 ```
 
+## 2025-09-14: Show website and WhatsApp on Edit Agent page ✅
+
+- Purpose: Display the agent's website and WhatsApp number on the Edit Agent page so admins can view and edit them.
+- Files changed:
+  - `src/pages/agents/EditAgent.tsx` — Added `whatsappNumber` state and a `DashboardInput` to show WhatsApp; prefills `emailLink` from `agent.website || agent.link`.
+  - `src/api/agents/fetchAgents.ts` — Added optional `website` and `whatsapp` fields to the `Agent` interface and populated them during normalization.
+- Verification: `EditAgent.tsx` passes local TypeScript checks; UI now renders website and WhatsApp fields when editing an agent.
+
 #### **Component Layer (CarsHeader.tsx):**
 
 ```typescript

@@ -31,6 +31,8 @@ export interface Agent {
   // backend may return 1/0 or boolean; accept both
   is_active: boolean | number;
   link?: string;
+  website?: string;
+  whatsapp?: string;
   brand_id?: number;
   centers?: AgentCenter[];
   // list endpoint may return counts instead of full centers array
@@ -140,6 +142,8 @@ export async function fetchAgents(
       name,
       is_active,
       link: item.link,
+      website: item.website,
+      whatsapp: item.whatsapp,
       brand_id: item.brand_id,
       centers,
       centers_count: item.centers_count,
@@ -205,6 +209,8 @@ export async function fetchAgentById(id: number): Promise<Agent> {
       name,
       is_active,
       link: raw.link,
+      website: raw.website,
+      whatsapp: raw.whatsapp,
       brand_id: raw.brand_id,
       centers,
       centers_count: raw.centers_count,
@@ -216,7 +222,6 @@ export async function fetchAgentById(id: number): Promise<Agent> {
 
   return normalized;
 }
-
 
 // Create new agent
 export async function createAgent(data: CreateAgentPayload): Promise<Agent> {

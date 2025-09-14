@@ -12,6 +12,7 @@ import {
   updateAgent,
   UpdateAgentPayload,
   AgentCenter,
+  Agent,
 } from "@/api/agents/fetchAgents";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import { useNavigate, useParams } from "react-router-dom";
@@ -44,7 +45,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
     queryFn: ({ queryKey }) => fetchBrands(queryKey[1] as number),
   });
 
-  const { data: agent, isLoading: isLoadingAgent } = useQuery({
+  const { data: agent, isLoading: isLoadingAgent } = useQuery<Agent>({
     queryKey: ["agent", id],
     queryFn: () => fetchAgentById(Number(id)),
     enabled: !!id,
@@ -54,7 +55,8 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
     if (agent) {
       setArName(agent.name.ar);
       setEnName(agent.name.en);
-      setEmailLink(agent.link || "");
+      // Prefer top-level website when available, otherwise fall back to link
+      setEmailLink(agent?.website || agent.link || "");
       setSelectedBrandId(agent.brand_id?.toString() || "");
 
       // Initialize centers with at least one center and one showroom if none exist

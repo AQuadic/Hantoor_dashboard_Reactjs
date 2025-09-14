@@ -3,8 +3,11 @@ import Add from "../icons/banks/Add";
 import { useTranslation } from "react-i18next";
 import MobileInput from "../general/MobileInput";
 import { AgentCenter } from "@/api/agents/fetchAgents";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+
+// Default country used for WhatsApp inputs when no country code is present
+const DEFAULT_COUNTRY = { iso2: "EG", name: "Egypt", phone: ["20"] };
 
 interface AddMaintenanceCenterProps {
   centers: AgentCenter[];
@@ -20,10 +23,33 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
   const { t } = useTranslation("agents");
 
   // Country state for WhatsApp input per center
-  const defaultCountry = { iso2: "EG", name: "Egypt", phone: ["20"] };
   const [whatsappCountries, setWhatsappCountries] = useState(
-    centers.map(() => defaultCountry)
+    centers.map((c) => {
+      // Try to parse existing whatsapp like "20 1025474376" to set country
+      if (c?.whatsapp) {
+        const m = /^(\d+)\s+(.+)$/.exec(String(c.whatsapp));
+        if (m) {
+          return { iso2: "EG", name: "Egypt", phone: [m[1]] };
+        }
+      }
+      return DEFAULT_COUNTRY;
+    })
   );
+
+  // Keep whatsappCountries in sync when centers prop changes (e.g., on load)
+  useEffect(() => {
+    setWhatsappCountries(
+      centers.map((c) => {
+        if (c?.whatsapp) {
+          const m = /^(\d+)\s+(.+)$/.exec(String(c.whatsapp));
+          if (m) {
+            return { iso2: "EG", name: "Egypt", phone: [m[1]] };
+          }
+        }
+        return DEFAULT_COUNTRY;
+      })
+    );
+  }, [centers]);
 
   // Add a new empty center form
   const handleAddCenter = () => {
@@ -38,7 +64,7 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
         is_active: "1", // Changed from boolean to string
       },
     ]);
-    setWhatsappCountries([...whatsappCountries, defaultCountry]);
+    setWhatsappCountries([...whatsappCountries, DEFAULT_COUNTRY]);
   };
 
   // Update a field in a specific center
@@ -78,7 +104,10 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
     <div className="bg-white mt-6 rounded-[15px] ">
       <div className="flex flex-col gap-6">
         {centers.map((center, index) => (
-          <div key={index} className="border p-4 rounded-lg relative">
+          <div
+            key={center.id ?? index}
+            className="border p-4 rounded-lg relative"
+          >
             <button
               type="button"
               className="absolute -top-3 -right-3 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-sm transition-all border border-white"
@@ -155,7 +184,7 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
                     defaultValue: "رقم الواتساب",
                   })}
                   labelClassName="font-normal"
-                  selectedCountry={whatsappCountries[index] || defaultCountry}
+                  selectedCountry={whatsappCountries[index] || DEFAULT_COUNTRY}
                   setSelectedCountry={(country: {
                     iso2: string;
                     name: string;
@@ -166,8 +195,8 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
                     setWhatsappCountries(newCountries);
                     // If a number is already present, update the value with new country code
                     if (centers[index].whatsapp) {
-                      const number = centers[index].whatsapp.replace(
-                        /^\d+\s*/,
+                      const number = String(centers[index].whatsapp).replace(
+                        /^\d+\s+/, // only remove digits when followed by space (country code)
                         ""
                       );
                       handleCenterChange(
@@ -177,13 +206,13 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
                       );
                     }
                   }}
-                  phone={(center.whatsapp || "").replace(/^\d+\s*/, "")}
+                  phone={(center.whatsapp || "").replace(/^\d+\s+/, "")}
                   setPhone={(val: string) =>
                     handleCenterChange(
                       index,
                       "whatsapp",
                       `${
-                        (whatsappCountries[index] || defaultCountry).phone[0]
+                        (whatsappCountries[index] || DEFAULT_COUNTRY).phone[0]
                       } ${val}`
                     )
                   }
@@ -193,13 +222,14 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
           </div>
         ))}
       </div>
-      <div
-        className="w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer mt-5"
+      <button
+        type="button"
+        className="w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] mt-5"
         onClick={handleAddCenter}
       >
         <Add />
         <p className="text-[#2A32F8] text-base">{t("addMaintenanceCenter")}</p>
-      </div>
+      </button>
     </div>
   );
 };
