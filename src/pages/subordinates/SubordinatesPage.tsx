@@ -115,6 +115,7 @@ const SubordinatesPage = () => {
                 currentPage={subordinatesCurrentPage}
                 itemsPerPage={subordinatesItemsPerPage}
                 searchTerm={searchTermAr || searchTermEn}
+                dateParams={dateParams}
               />
               {subordinatesTotalItems > 0 && (
                 <TablePagination

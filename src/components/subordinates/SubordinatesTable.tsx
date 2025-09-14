@@ -13,6 +13,7 @@ import {
 import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { getAdmins } from "@/api/admins/getAdmins";
+import type { DateFilterParams } from "@/utils/dateUtils";
 import { deleteAdmin } from "@/api/admins/deleteAdmin";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
@@ -21,22 +22,29 @@ import NoData from "../general/NoData";
 import { updateAdmin } from "@/api/admins/editAdmin";
 
 interface SubordinatesTableProps {
-  currentPage: number;
-  itemsPerPage: number;
-  searchTerm?: string;
+  readonly currentPage: number;
+  readonly itemsPerPage: number;
+  readonly searchTerm?: string;
+  readonly dateParams?: DateFilterParams;
 }
 
-export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: SubordinatesTableProps) {
+export function SubordinatesTable({
+  currentPage,
+  itemsPerPage,
+  searchTerm,
+  dateParams,
+}: SubordinatesTableProps) {
   const { t } = useTranslation("subordinates");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["admins", currentPage, itemsPerPage, searchTerm],
+    queryKey: ["admins", currentPage, itemsPerPage, searchTerm, dateParams],
     queryFn: () =>
       getAdmins({
         search: searchTerm,
         pagination: "normal",
         per_page: itemsPerPage,
         page: currentPage,
+        ...(dateParams || {}),
       }),
   });
 
@@ -85,7 +93,9 @@ export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: Sub
           <TableHead className="text-right">{t("phoneNumber")}</TableHead>
           <TableHead className="text-right">{t("email")}</TableHead>
           <TableHead className="text-right">{t("dateTime")}</TableHead>
-          <TableHead className="text-right">{t("administrativePositions")}</TableHead>
+          <TableHead className="text-right">
+            {t("administrativePositions")}
+          </TableHead>
           <TableHead className="text-right">{t("lastLogin")}</TableHead>
           <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
@@ -126,7 +136,9 @@ export function SubordinatesTable({ currentPage, itemsPerPage, searchTerm }: Sub
                 <Password />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(admin.id)} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(admin.id)}
+                />
               </div>
             </TableCell>
           </TableRow>
