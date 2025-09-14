@@ -27,5 +27,6 @@
 
     "noClients": "No clients",
     "selectCountry": "Please select a country",
-    "search": "Search ..."
+    "search": "Search ...",
+    "noImage": "No Image"
 }
