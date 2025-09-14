@@ -79,6 +79,9 @@ const EditBank = () => {
   const [citizenInterestAmount, setCitizenInterestAmount] = useState("");
   const [citizenDuration, setCitizenDuration] = useState("");
   const [citizenWorkplace, setCitizenWorkplace] = useState("");
+
+  const [profileImageUrl, setProfileImageUrl] = useState<string>("");
+
   const navigate = useNavigate ()
   const authorities = [
     { key: "1", label: "1 سنة" },
@@ -117,6 +120,10 @@ const EditBank = () => {
       setVisitorSalaryTo2(expatriates[1]?.salary_to?.toString() || "");
       setVisitorDuration(expatriates[0].duration || "");
       setVisitorInterestAmount2(expatriates[1]?.value?.toString() || "");
+    }
+
+    if (data.image?.url) {
+      setProfileImageUrl(data.image.url);
     }
   else {
         setVisitorData([
@@ -221,7 +228,11 @@ const handleUpdateBank = async () => {
           <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">
             {t("bankLogo")}
           </h3>
-          <ImageInput image={profileImage} setImage={setProfileImage} />
+          <ImageInput
+            image={profileImage}
+            setImage={setProfileImage}
+            existingImageUrl={data?.image?.url}
+          />
           <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
             {/* Arabic bank */}
             <div className="relative w-full">

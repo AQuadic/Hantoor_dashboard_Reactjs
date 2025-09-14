@@ -15,6 +15,14 @@ export interface BankFinance {
   is_active: boolean;
 }
 
+export interface BankImage {
+  id: number;
+  uuid: string;
+  url: string;
+  size: number;
+  responsive_urls: string[];
+}
+
 export interface Bank {
   id: number;
   name: BankName;
@@ -22,7 +30,7 @@ export interface Bank {
   phone: string;
   phone_country?: string;
   is_active: boolean;
-  image?: string | null;
+  image?: BankImage | null;
   finance?: BankFinance[];
   created_at: string;
   updated_at: string;
