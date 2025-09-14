@@ -36,11 +36,17 @@ const NotificationDetails = () => {
 
             <div className='md:px-8 px-2 mt-1 flex xl:flex-row flex-col gap-[33px]'>
                 <div className='flex-1'>
-                    <img
-                    src={data.image?.url ?? "/images/carDetails.png"}
-                    alt="Notification"
-                    className="w-full max-h-[400px] object-cover rounded-lg"
-                    />
+                    {data.image?.url ? (
+                        <img
+                        src={data.image.url}
+                        alt="Notification"
+                        className="w-full max-h-[400px] object-cover rounded-lg"
+                        />
+                        ) : (
+                        <div className="w-full h-[400px] bg-gray-100 rounded-lg flex items-center justify-center">
+                            <h1 className='text-[#3d3b3b] font-medium text-l'>{t('noImage')}</h1>
+                        </div>
+                        )}
                     <h1 className='text-[#2A32F8] text-2xl font-bold mt-[13px]'>
                     {t('thecountry')} <span>{i18n.language === "ar" ? data.country?.name.ar : data.country?.name.en}</span>
                     </h1>

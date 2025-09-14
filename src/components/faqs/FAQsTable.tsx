@@ -14,6 +14,8 @@ import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { updateFaq } from "@/api/faq/editFaq";
+import { useQuery } from "@tanstack/react-query";
+import { Country, getCountries } from "@/api/countries/getCountry";
 
 interface FAQsTableProps {
   data?: FAQ[];
@@ -47,6 +49,21 @@ const FAQsTable = ({ data, from = 1, isLoading = false, refetch }: FAQsTableProp
     }
   };
 
+    const { data: countriesData } = useQuery({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(1, ""),
+  });
+
+  const countries: Country[] = countriesData?.data ?? [];
+
+  const getCountryName = (id?: number | null) => {
+  if (!id) return "-";
+  const country = countries.find((c) => c.id === id);
+  if (!country) return "-";
+  return i18n.language === "ar" ? country.name.ar : country.name.en;
+};
+
+
   if (isLoading) return <Loading />;
   if (!data || data.length === 0) return <NoData />;
 
@@ -71,7 +88,7 @@ const FAQsTable = ({ data, from = 1, isLoading = false, refetch }: FAQsTableProp
               <TableRow key={faq.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{i18n.language === "ar" ? faq.question.ar : faq.question.en}</TableCell>
-                <TableCell>{faq.country_id || "-"}</TableCell>
+                <TableCell>{getCountryName(faq.country_id)}</TableCell>
                 <TableCell>{faq.useful_uses_count}</TableCell>
                 <TableCell>{faq.unuseful_uses_count}</TableCell>
                 <TableCell className="w-full">{new Date(faq.created_at).toLocaleString()}</TableCell>
