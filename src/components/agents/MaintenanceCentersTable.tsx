@@ -15,8 +15,12 @@ const MaintenanceCentersTable: React.FC<Props> = ({ agent }) => {
     return <p className="mt-6 text-gray-500">Loading agent details...</p>;
   }
 
+  const allowedTypes = ["center", "1"];
+
   const maintenanceCenters =
-    agent.service_centers?.filter((center) => center.type === "1") ?? [];
+    agent.service_centers?.filter((center) =>
+      allowedTypes.includes(center.type?.toString().toLowerCase())
+    ) ?? [];
 
   if (maintenanceCenters.length === 0) {
     return <NoData />;
