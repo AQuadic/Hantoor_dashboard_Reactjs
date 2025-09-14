@@ -93,7 +93,12 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
       </TableHeader>
       <TableBody>
         {data.map((country, index) => (
-          <TableRow key={country.id} noBackgroundColumns={1}>
+          <TableRow
+            key={country.id}
+            noBackgroundColumns={1}
+            className="cursor-pointer"
+            onClick={() => handleViewCountry(country)}
+          >
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               {isArabic ? country.name.ar : country.name.en}
