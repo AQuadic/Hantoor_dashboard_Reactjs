@@ -1,6 +1,7 @@
 import Location from "../icons/agents/Location";
 import { Agent } from "@/api/agents/getAgentById";
 import { useTranslation } from "react-i18next";
+import NoData from "../general/NoData";
 
 interface Props {
   agent: Agent | null;
@@ -18,7 +19,7 @@ const MaintenanceCentersTable: React.FC<Props> = ({ agent }) => {
     agent.service_centers?.filter((center) => center.type === "1") ?? [];
 
   if (maintenanceCenters.length === 0) {
-    return <p className="mt-6 text-gray-500">No maintenance centers found.</p>;
+    return <NoData />;
   }
 
   return (
