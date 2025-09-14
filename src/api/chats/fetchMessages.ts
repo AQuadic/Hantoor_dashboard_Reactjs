@@ -78,13 +78,7 @@ export const fetchMessagesByVehicle = async (
   page: number = 1,
   perPage: number = 20
 ): Promise<MessagesApiResponse> => {
-  const response = await axios.get(`/admin/vehicle/conversation/messages`, {
-    params: {
-      vehicle_id: vehicleId,
-      page,
-      per_page: perPage,
-    },
-  });
+  const response = await axios.get(`/admin/vehicle/conversation/${vehicleId}`);
 
   const raw = response.data as {
     data?: unknown;
