@@ -9,6 +9,7 @@ import { getConversationMessages } from "@/api/support/getConversationById";
 import { sendMessage } from "@/api/support/sendMessage";
 import Loading from "@/components/general/Loading";
 import toast from "react-hot-toast";
+import EmojiPicker, { EmojiClickData } from "emoji-picker-react";
 
 interface SupportMsgsConversationProps {
   conversationId: number;
@@ -20,6 +21,7 @@ const SupportMsgsConversation = ({
   const { t } = useTranslation("header");
   const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const emojiRef = useRef<HTMLDivElement | null>(null);
 
   const { data: messagesResponse, isLoading, error } = useQuery({
     queryKey: ["conversation-messages", conversationId],
@@ -32,30 +34,53 @@ const SupportMsgsConversation = ({
 
   const [newMessage, setNewMessage] = useState<string>("");
   const [mediaFile, setMediaFile] = useState<File | null>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
   const messages = useMemo(() => {
     if (!messagesResponse) return [];
     return messagesResponse.data
       .slice()
       .reverse()
-      .map((msg) => ({
-        id: msg.id,
-        name: msg.userable?.name || "User",
-        text: msg.message,
-        time: new Date(msg.created_at).toLocaleTimeString(),
-        isSender:
-          msg.userable_type.includes("Admin") ||
-          msg.userable_type === "admin",
-        image:
+      .map((msg) => {
+        const attachment =
           typeof msg.image === "string"
             ? msg.image
-            : msg.image?.url || msg.image?.responsive_urls?.[0] || null,
-      }));
+            : (msg.image as any)?.url ||
+              (msg.image as any)?.responsive_urls?.[0] ||
+              null;
+
+        return {
+          id: msg.id,
+          name: msg.userable?.name || "User",
+          text: msg.message,
+          time: new Date(msg.created_at).toLocaleTimeString(),
+          isSender:
+            msg.userable_type.includes("Admin") ||
+            msg.userable_type === "admin",
+          attachment,
+          avatar: Avatar,
+        };
+      });
   }, [messagesResponse]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        emojiRef.current &&
+        !emojiRef.current.contains(event.target as Node)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   if (isLoading) return <Loading />;
   if (error || !messagesResponse) {
@@ -86,6 +111,9 @@ const SupportMsgsConversation = ({
     }
     };
 
+  const handleEmojiClick = (emojiData: EmojiClickData) => {
+    setNewMessage((prev) => prev + emojiData.emoji);
+  };
 
     return (
         <section className="relative py-4 px-4 h-full flex flex-col">
@@ -100,7 +128,7 @@ const SupportMsgsConversation = ({
                 {!msg.isSender && (
                 <div className="w-10 h-10 ml-2 flex-shrink-0">
                     <img
-                    src={msg.image || Avatar}
+                    src={msg.avatar}
                     alt="avatar"
                     className="w-10 h-10 rounded-full"
                     />
@@ -120,9 +148,9 @@ const SupportMsgsConversation = ({
                     }`}
                 >
                     {msg.text && <p>{msg.text}</p>}
-                    {msg.image && (
+                    {msg.attachment && (
                       <img
-                        src={msg.image}
+                        src={msg.attachment}
                         alt="attachment"
                         className="mt-2 rounded-lg max-w-[200px] max-h-[200px] object-cover"
                       />
@@ -178,8 +206,22 @@ const SupportMsgsConversation = ({
             <Link />
             </label>
 
-            <div className="absolute left-3 top-1/2 -translate-y-1/2">
-            <AvatarIcon />
+            <div
+              className="absolute left-3 top-1/2 -translate-y-1/2"
+              ref={emojiRef}
+            >
+              <button
+                type="button"
+                onClick={() => setShowEmojiPicker((prev) => !prev)}
+              >
+                <AvatarIcon />
+              </button>
+
+              {showEmojiPicker && (
+                <div className="absolute bottom-12 left-0 z-50 bg-white shadow-lg rounded-xl">
+                  <EmojiPicker onEmojiClick={handleEmojiClick} />
+                </div>
+              )}
             </div>
         </div>
 
