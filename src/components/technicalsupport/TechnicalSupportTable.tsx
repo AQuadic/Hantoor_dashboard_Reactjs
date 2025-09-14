@@ -27,7 +27,7 @@ interface TechnicalSupportTableProps {
 
 const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
   const { data, isLoading, refetch } = props;
-  const { t } = useTranslation("questions");
+  const { t, i18n } = useTranslation("questions");
 
   if (isLoading) return <Loading />;
   if (!data.length) return <NoData />;
@@ -82,7 +82,17 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
             <TableCell>{question.country_id ?? "-"}</TableCell>
             <TableCell>{0}</TableCell>
             <TableCell className="w-full">
-              {new Date(question.created_at).toLocaleString()}
+              {new Date(question.created_at).toLocaleString(
+                i18n.language === "ar" ? "ar-EG" : "en-US",
+                {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                }
+              )}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch
