@@ -187,18 +187,31 @@ const AddCarsForm = () => {
       navigate("/cars");
     },
     onError: (error: unknown) => {
+      // Prefer server-provided message for 422 validation errors
       let errorMessage = t("vehicleCreationError") || "Error creating vehicle";
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else if (
-        typeof error === "object" &&
-        error !== null &&
-        "response" in error
-      ) {
-        const responseError = error as {
-          response?: { data?: { message?: string } };
-        };
-        errorMessage = responseError.response?.data?.message || errorMessage;
+      try {
+        const maybeErr = error as { response?: unknown } | undefined;
+        const resp = maybeErr?.response as
+          | { status?: number; data?: unknown }
+          | undefined;
+        if (resp?.status === 422) {
+          const data = resp.data as Record<string, unknown> | undefined;
+          if (typeof data?.message === "string") {
+            errorMessage = data.message;
+          } else if (data?.errors && typeof data.errors === "object") {
+            const values = Object.values(data.errors as Record<string, unknown>)
+              .flat()
+              .map((v) => (Array.isArray(v) ? v.join(" ") : String(v)));
+            errorMessage = values.join(" ");
+          }
+        } else if (error instanceof Error) {
+          errorMessage = error.message;
+        } else {
+          const data = resp?.data as Record<string, unknown> | undefined;
+          if (typeof data?.message === "string") errorMessage = data.message;
+        }
+      } catch {
+        /* ignore and fall back to default message */
       }
       toast.error(errorMessage);
     },
@@ -217,9 +230,32 @@ const AddCarsForm = () => {
       navigate("/cars");
     },
     onError: (error: unknown) => {
+      // Prefer server-provided message for 422 validation errors
       let errorMessage = t("vehicleUpdateError") || "Error updating vehicle";
-      if (error instanceof Error) {
-        errorMessage = error.message;
+      try {
+        const maybeErr = error as { response?: unknown } | undefined;
+        const resp = maybeErr?.response as
+          | { status?: number; data?: unknown }
+          | undefined;
+        if (resp?.status === 422) {
+          const data = resp.data as Record<string, unknown> | undefined;
+          const serverMessage = data?.message as string | undefined;
+          if (serverMessage) {
+            errorMessage = serverMessage;
+          } else if (data?.errors && typeof data.errors === "object") {
+            const values = Object.values(data.errors as Record<string, unknown>)
+              .flat()
+              .map((v) => (Array.isArray(v) ? v.join(" ") : String(v)));
+            errorMessage = values.join(" ");
+          }
+        } else if (error instanceof Error) {
+          errorMessage = error.message;
+        } else {
+          const data = resp?.data as Record<string, unknown> | undefined;
+          if (typeof data?.message === "string") errorMessage = data.message;
+        }
+      } catch {
+        /* ignore and fall back to default message */
       }
       toast.error(errorMessage);
     },
