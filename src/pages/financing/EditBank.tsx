@@ -385,7 +385,7 @@ const handleUpdateBank = async () => {
                 <Add />
                 <p className="text-[#2A32F8] text-base">{t("addMoreData")}</p>
               </div>
-              <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleUpdateBank} />
+              <DashboardButton titleAr="تعديل" titleEn="Edit" onClick={handleUpdateBank} />
             </div>
           </div>
 
