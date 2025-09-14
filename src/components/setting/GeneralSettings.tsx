@@ -48,36 +48,19 @@ const GeneralSettings = () => {
 
         // Map API response to local fields used by the UI
         setFields({
-          no_videos: data.ads_per_search?.toString() ?? data.no_videos ?? "",
-          text_features_ar:
-            data.featuresText?.ar ?? data.text_features_ar ?? "",
-          text_features_en:
-            data.featuresText?.en ?? data.text_features_en ?? "",
-          advanced_search_ar:
-            data.AdvancedSearchText?.ar ?? data.advanced_search_ar ?? "",
-          advanced_search_en:
-            data.AdvancedSearchText?.en ?? data.advanced_search_en ?? "",
-          financing_text_ar:
-            data.financeTextForCarDetails?.[0]?.ar ??
-            data.financing_text_ar ??
-            "",
-          financing_text_en:
-            data.financeTextForCarDetails?.[0]?.en ??
-            data.financing_text_en ??
-            "",
-          android_link:
-            data.appLinks?.[0]?.android?.link ?? data.android_link ?? "",
-          android_version:
-            data.appLinks?.[0]?.android?.version ?? data.android_version ?? "",
-          publish_date:
-            data.appLinks?.[0]?.android?.release_date ??
-            data.publish_date ??
-            "",
-          iphone_link: data.appLinks?.[0]?.ios?.link ?? data.iphone_link ?? "",
-          iphone_version:
-            data.appLinks?.[0]?.ios?.version ?? data.iphone_version ?? "",
-          iphone_date:
-            data.appLinks?.[0]?.ios?.release_date ?? data.iphone_date ?? "",
+          no_videos: data.ads_per_search?.toString() ?? "",
+          text_features_ar: data.featuresText?.ar ?? "",
+          text_features_en: data.featuresText?.en ?? "",
+          advanced_search_ar: data.AdvancedSearchText?.ar ?? "",
+          advanced_search_en: data.AdvancedSearchText?.en ?? "",
+          financing_text_ar: data.financeTextForCarDetails?.ar ?? "",
+          financing_text_en: data.financeTextForCarDetails?.en ?? "",
+          android_link: data.appLinks?.android?.link ?? "",
+          android_version: data.appLinks?.android?.version ?? "",
+          publish_date: data.appLinks?.android?.release_date ?? "",
+          iphone_link: data.appLinks?.ios?.link ?? "",
+          iphone_version: data.appLinks?.ios?.version ?? "",
+          iphone_date: data.appLinks?.ios?.release_date ?? "",
         });
 
         if (data.profile_image) {

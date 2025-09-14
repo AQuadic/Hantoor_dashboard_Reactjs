@@ -12,11 +12,12 @@ export interface GeneralSettingsResponse {
   ads_per_search?: number;
   featuresText?: { en?: string; ar?: string };
   AdvancedSearchText?: { en?: string; ar?: string };
-  financeTextForCarDetails?: Array<{ ar?: string; en?: string }>;
+  financeTextForCarDetails?: { ar?: string; en?: string };
 
-  appLinks?: Array<{ android?: AppLinkInfo; ios?: AppLinkInfo }>;
-  profile_image?: string; // URL
-  // keep legacy fields for backward compatibility (some endpoints/clients expect these)
+
+  appLinks?: { android?: AppLinkInfo; ios?: AppLinkInfo };
+  profile_image?: string;
+
   no_videos?: string;
   text_features_ar?: string;
   text_features_en?: string;
