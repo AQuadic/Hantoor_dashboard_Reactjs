@@ -39,6 +39,9 @@ export const updateAdminUser = async (
     if (payload.language) formData.append("language", payload.language);
     if (payload.country_id) formData.append("country_id", payload.country_id);
     if (payload.city_id) formData.append("city_id", payload.city_id);
+    // Some backends expect form override for PUT via _method
+    // Append _method=PUT so server treats this POST as an update
+    formData.append("_method", "PUT");
 
     const response = await axios.post<AdminUser>(
       `/user/admin/${user}`,
@@ -52,11 +55,12 @@ export const updateAdminUser = async (
     );
 
     return response.data;
-  } catch (error: any) {
-    console.error(
-      "Error updating admin user:",
-      error.response || error.message
-    );
+  } catch (error: unknown) {
+    try {
+      console.error("Error updating admin user:", JSON.stringify(error));
+    } catch {
+      console.error("Error updating admin user:", error);
+    }
     throw error;
   }
 };

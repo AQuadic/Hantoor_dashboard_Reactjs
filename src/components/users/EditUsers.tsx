@@ -11,6 +11,7 @@ import MobileInput from "../general/MobileInput";
 import { countries } from "countries-list";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
+import ImageInput from "../general/ImageInput";
 import Loading from "../general/Loading";
 import { useNavigate } from "react-router";
 
@@ -36,7 +37,10 @@ const EditUsers = () => {
     getCountryByIso2("EG")
   );
   const [phone, setPhone] = useState("");
-  const [image] = useState<File | null>(null);
+  const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [existingImageUrl, setExistingImageUrl] = useState<string | undefined>(
+    undefined
+  );
   const [selectedCountryId, setSelectedCountryId] = useState<string>("");
 
   const { data: countriesData } = useQuery<CountriesResponse>({
@@ -50,14 +54,44 @@ const EditUsers = () => {
   useEffect(() => {
     if (!userId) return;
     getAdminUser(userId)
-      .then((user: AdminUser) => {
+      .then((user: AdminUser & { media?: Array<{ url?: string }> }) => {
         setName(user.name);
         setEmail(user.email || "");
         setPhone(user.phone || "");
         if (user.country_id) setSelectedCountryId(user.country_id.toString());
+        if (user.media && Array.isArray(user.media) && user.media.length > 0) {
+          setExistingImageUrl(user.media[0].url);
+        }
       })
       .finally(() => setLoading(false));
   }, [userId]);
+
+  const safeStringify = (v: unknown) => {
+    try {
+      return typeof v === "string" ? v : JSON.stringify(v);
+    } catch {
+      return undefined;
+    }
+  };
+
+  const getDisplayMessage = (raw: string) => {
+    if (!raw) return t("somethingWentWrong");
+    if (raw.includes("linked to an account") || raw.includes("already linked"))
+      return t("phoneAlreadyLinked", { defaultValue: raw });
+    return raw;
+  };
+
+  const formatAndShowError = (err: unknown) => {
+    let message = t("somethingWentWrong");
+    if (typeof err === "string") message = err;
+    else if (err instanceof Error && err.message) message = err.message;
+    else {
+      const s = safeStringify(err);
+      if (s && s !== "{}") message = s;
+    }
+    console.error("Failed to update user:", err);
+    toast.error(getDisplayMessage(message));
+  };
 
   const handleSubmit = async () => {
     if (!userId) return toast.error("User ID is missing!");
@@ -67,36 +101,16 @@ const EditUsers = () => {
       email,
       phone,
       phone_country: selectedCountry.iso2,
-      image: image || undefined,
       country_id: selectedCountryId || undefined,
-    };
-
-    const getDisplayMessage = (raw: string) => {
-      if (!raw) return t("somethingWentWrong");
-      if (
-        raw.includes("linked to an account") ||
-        raw.includes("already linked")
-      )
-        return t("phoneAlreadyLinked", { defaultValue: raw });
-      return raw;
-    };
-
-    const formatAndShowError = (err: unknown) => {
-      const e = err as { response?: any; message?: string };
-      const rawMessage =
-        e?.response?.data?.message ||
-        (e?.response?.data?.errors &&
-          Object.values(e.response.data.errors).flat()[0]) ||
-        e?.message ||
-        t("somethingWentWrong");
-      const message = getDisplayMessage(String(rawMessage));
-      console.error("Failed to update user:", e?.response || e?.message);
-      toast.error(message);
     };
 
     try {
       setIsSubmitting(true);
-      const updatedUser = await updateAdminUser(userId, payload);
+      const payloadWithImage: UpdateAdminUserPayload = {
+        ...payload,
+        image: profileImage || undefined,
+      };
+      const updatedUser = await updateAdminUser(userId, payloadWithImage);
       console.log("User updated:", updatedUser);
       toast.success(t("userUpdated"));
       navigate("/users");
@@ -108,6 +122,7 @@ const EditUsers = () => {
   };
 
   if (loading) return <Loading />;
+
   return (
     <section>
       <DashboardHeader
@@ -125,6 +140,18 @@ const EditUsers = () => {
       />
 
       <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
+        <div className="p-8 bg-white rounded-2xl mb-4">
+          <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">
+            {t("profileImage")}
+          </h3>
+          <div className="relative">
+            <ImageInput
+              image={profileImage ?? existingImageUrl}
+              setImage={setProfileImage}
+              existingImageUrl={existingImageUrl}
+            />
+          </div>
+        </div>
         {/* Name */}
         <div className="relative">
           <input
@@ -168,6 +195,9 @@ const EditUsers = () => {
             <div className="absolute top-9 left-5"></div>
           </div>
         </div>
+
+        {/* image input is rendered at the top of the form */}
+
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Country */}
           <div className="relative md:w-1/2 w-full mt-[18px] rtl:pl-2 ltr:pr-2">
@@ -191,7 +221,6 @@ const EditUsers = () => {
                   (c) => c.id.toString() === value
                 );
                 if (country) {
-                  // Transform API Country to expected format used by MobileInput
                   setSelectedCountry({
                     iso2: country.code,
                     name: country.name.en,
