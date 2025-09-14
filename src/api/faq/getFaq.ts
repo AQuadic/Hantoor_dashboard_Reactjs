@@ -12,6 +12,13 @@ export interface FAQ {
     en: string;
   };
   country_id?: number | null;
+  country?: {
+    id: number;
+    name: {
+      ar: string;
+      en: string;
+    };
+  };
   order_column?: number;
   created_at: string;
   updated_at?: string;
@@ -52,7 +59,10 @@ export async function getFAQs(
   params: GetFAQsParams = {}
 ): Promise<FAQsResponse> {
   const response = await axios.get<FAQsResponse>("/admin/faqs", {
-    params,
+    params: {
+      ...params,
+      with_country: true,
+    },
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

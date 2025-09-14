@@ -79,7 +79,11 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
           <TableRow key={question.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>{question.question.ar}</TableCell>
-            <TableCell>{question.country_id ?? "-"}</TableCell>
+            <TableCell>
+              {question.country
+                ? question.country.name[i18n.language as "ar" | "en"]
+                : "-"}
+            </TableCell>
             <TableCell>{0}</TableCell>
             <TableCell className="w-full">
               {new Date(question.created_at).toLocaleString(
