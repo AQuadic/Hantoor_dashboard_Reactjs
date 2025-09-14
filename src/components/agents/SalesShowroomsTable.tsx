@@ -14,13 +14,15 @@ const SalesShowroomsTable: React.FC<Props> = ({ agent }) => {
     return <p className="mt-6 text-gray-500">Loading agent details...</p>;
   }
 
+  const allowedTypes = ["show_room", "2"];
+
   const showrooms =
-    agent.service_centers?.filter((center) => center.type === "2") ?? [];
+    agent.service_centers?.filter((center) =>
+      allowedTypes.includes(center.type?.toString().toLowerCase())
+    ) ?? [];
 
   if (showrooms.length === 0) {
-    return (
-      <NoData />
-    );
+    return <NoData />;
   }
 
   return (
