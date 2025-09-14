@@ -26,6 +26,22 @@ import toast from "react-hot-toast";
 const AddBrand = () => {
   const { t, i18n } = useTranslation("brands");
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [removeImage, setRemoveImage] = useState(false);
+  // wrapper so uploading a new image clears the remove flag
+  const handleSetImage = (file: React.SetStateAction<File | null>): void => {
+    // Support functional updater or direct value to match setState signature
+    if (typeof file === "function") {
+      const updater = file as (prev: File | null) => File | null;
+      setProfileImage((prev) => {
+        const next = updater(prev);
+        if (next) setRemoveImage(false);
+        return next;
+      });
+    } else {
+      setProfileImage(file);
+      if (file) setRemoveImage(false);
+    }
+  };
   const [arBrand, setArBrand] = useState("");
   const [enBrand, setEnBrand] = useState("");
   // Removed isActive state
@@ -76,18 +92,22 @@ const AddBrand = () => {
   // React Query: mutation for add/edit
   const mutation = useMutation<BrandResponse, Error, void>({
     mutationFn: async () => {
+      // Build payloads conditionally: only include `image` when a File is present
       if (isEdit && brandId) {
-        return (await updateBrand({
+        const payload: any = {
           id: Number(brandId),
           name: { ar: arBrand, en: enBrand },
-          image: profileImage,
-          // is_active removed
-        })) as BrandResponse;
+        };
+        if (profileImage instanceof File) payload.image = profileImage;
+        if (removeImage) payload.remove_image = true;
+        return (await updateBrand(payload)) as BrandResponse;
       } else {
-        return (await postBrand({
+        const payload: any = {
           name: { ar: arBrand, en: enBrand },
-          image: profileImage,
-        })) as BrandResponse;
+        };
+        if (profileImage instanceof File) payload.image = profileImage;
+        if (removeImage) payload.remove_image = true;
+        return (await postBrand(payload)) as BrandResponse;
       }
     },
     onMutate: () => {
@@ -150,6 +170,17 @@ const AddBrand = () => {
       );
       return;
     }
+
+    // If editing and the user removed the existing image without uploading a replacement,
+    // block submission and show an error toast instead of sending the request.
+    if (isEdit && removeImage && !profileImage) {
+      toast.error(
+        i18n.language === "ar"
+          ? "لقد قمت بحذف الصورة، يرجى رفع صورة جديدة قبل الحفظ."
+          : "You removed the image — please upload a new image before saving."
+      );
+      return;
+    }
     mutation.mutate();
   };
 
@@ -186,12 +217,18 @@ const AddBrand = () => {
           <div className="relative">
             <ImageInput
               image={profileImage}
-              setImage={setProfileImage}
+              setImage={handleSetImage}
               existingImageUrl={existingImageUrl}
-              // In edit mode we hide the remove button but still allow uploading a new image
-              canRemove={!isEdit}
+              // Allow removing the image in both add and edit modes
+              canRemove={true}
+              onRemoveImage={() => {
+                // clear both preview and existing URL when user removes image
+                setProfileImage(null);
+                setExistingImageUrl(undefined);
+                setRemoveImage(true);
+              }}
             />
-            {/* No spinner overlay needed since we removed the delete logic */}
+            {/* ImageInput handles removal itself; no extra remove button here */}
           </div>
         </div>
         <div className="flex flex-col gap-4 md:p-8 p-2 bg-white rounded-2xl">
