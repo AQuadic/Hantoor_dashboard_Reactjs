@@ -5,6 +5,14 @@ export interface Userable {
   name: string;
 }
 
+export interface MessageImage {
+  id: number;
+  uuid: string;
+  size: number;
+  url: string;
+  responsive_urls: string[];
+}
+
 export interface Message {
   id: number;
   support_conversation_id: number;
@@ -12,7 +20,7 @@ export interface Message {
   userable_type: string;
   userable_id: number;
   reply_message_id: number | null;
-  image: string | null;
+  image: string | MessageImage | null;
   created_at: string;
   updated_at: string;
   userable: Userable;

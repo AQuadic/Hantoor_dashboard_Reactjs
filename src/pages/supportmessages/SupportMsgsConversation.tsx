@@ -46,7 +46,10 @@ const SupportMsgsConversation = ({
         isSender:
           msg.userable_type.includes("Admin") ||
           msg.userable_type === "admin",
-        image: msg.image,
+        image:
+          typeof msg.image === "string"
+            ? msg.image
+            : msg.image?.url || msg.image?.responsive_urls?.[0] || null,
       }));
   }, [messagesResponse]);
 
@@ -65,7 +68,7 @@ const SupportMsgsConversation = ({
     try {
         await sendMessage({
         conversation_id: conversationId,
-        message: newMessage,
+        message: newMessage || " ",
         media: mediaFile || undefined,
         });
         toast.success(t("messageSent"));
@@ -73,7 +76,13 @@ const SupportMsgsConversation = ({
         setMediaFile(null);
         queryClient.invalidateQueries({ queryKey: ["conversation-messages", conversationId] });
     } catch (err: any) {
-        toast.error(err?.message || t("error"));
+      const apiError =
+        err?.response?.data?.message ||
+        err?.response?.data?.errors?.message?.[0] ||
+        err?.message || 
+        t("error");
+
+      toast.error(apiError);
     }
     };
 
@@ -104,13 +113,20 @@ const SupportMsgsConversation = ({
                 </div>
 
                 <div
-                    className={`rounded-xl px-4 py-2 max-w-xs text-sm ${
+                    className={`rounded-xl px-4 py-2 max-w-xs text-sm break-words ${
                     msg.isSender
                         ? "bg-blue-600 text-white"
                         : "bg-[#F1F1F1] text-[#000000]"
                     }`}
                 >
-                    {msg.text}
+                    {msg.text && <p>{msg.text}</p>}
+                    {msg.image && (
+                      <img
+                        src={msg.image}
+                        alt="attachment"
+                        className="mt-2 rounded-lg max-w-[200px] max-h-[200px] object-cover"
+                      />
+                    )}
                 </div>
 
                 <div className="text-[10px] text-gray-500 mt-1 text-right">
@@ -121,6 +137,21 @@ const SupportMsgsConversation = ({
             ))}
             <div ref={messagesEndRef} />
         </div>
+          {mediaFile && (
+          <div className="mt-2 flex items-center gap-2">
+            <img
+              src={URL.createObjectURL(mediaFile)}
+              alt="preview"
+              className="w-16 h-16 rounded-lg object-cover border"
+            />
+            <button
+              onClick={() => setMediaFile(null)}
+              className="text-red-500 text-sm"
+            >
+              ✕
+            </button>
+          </div>
+        )}
 
         <div className="flex items-center gap-2 mt-auto">
         <div className="relative flex-1">
