@@ -7,6 +7,7 @@ import { countries } from "countries-list";
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { createAdminUser, CreateAdminUserPayload } from "@/api/users/addUser";
+import ImageInput from "@/components/general/ImageInput";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import { Country, getAllCountries } from "@/api/countries/getCountry";
@@ -40,7 +41,8 @@ const AddUsers = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [image] = useState<File | null>(null);
+  // image state replaced by profileImage below
+  const [profileImage, setProfileImage] = useState<File | null>(null);
   // removed unused countryId state; we use selectedCountryId instead
   const [cityId] = useState("");
   const navigate = useNavigate();
@@ -58,7 +60,7 @@ const AddUsers = () => {
       email: email || undefined,
       phone,
       phone_country: selectedCountry.iso2,
-      image: image || undefined,
+      image: profileImage || undefined,
       country_id: selectedCountryId ? String(selectedCountryId) : undefined,
       city_id: cityId || undefined,
       password: password || undefined,
@@ -79,17 +81,36 @@ const AddUsers = () => {
       return raw;
     };
 
-    const formatAndShowError = (err: unknown) => {
-      const e = err as { response?: any; message?: string };
-      const rawMessage =
-        e?.response?.data?.message ||
-        (e?.response?.data?.errors &&
-          Object.values(e.response.data.errors).flat()[0]) ||
-        e?.message ||
-        t("somethingWentWrong");
+    const safeStringify = (v: unknown) => {
+      try {
+        return typeof v === "string" ? v : JSON.stringify(v);
+      } catch {
+        return undefined;
+      }
+    };
 
-      const message = getDisplayMessage(String(rawMessage));
-      toast.error(message);
+    const extractBackendMessage = (err: unknown): string | undefined => {
+      // Prefer axios response data when present (backend message / validation errors)
+      const respData = (err as { response?: { data?: unknown } })?.response
+        ?.data;
+      if (respData) {
+        if (typeof respData === "string") return respData;
+        const obj = respData as Record<string, unknown>;
+        if (typeof obj.message === "string") return obj.message;
+        const firstErr = obj.errors && Object.values(obj.errors)[0];
+        if (Array.isArray(firstErr) && typeof firstErr[0] === "string")
+          return firstErr[0];
+      }
+      if (err instanceof Error && err.message) return err.message;
+      if (typeof err === "string") return err;
+      return undefined;
+    };
+
+    const formatAndShowError = (err: unknown) => {
+      const backendMsg = extractBackendMessage(err);
+      const rawMessage =
+        backendMsg ?? safeStringify(err) ?? t("somethingWentWrong");
+      toast.error(getDisplayMessage(String(rawMessage)));
     };
 
     try {
@@ -97,7 +118,7 @@ const AddUsers = () => {
       await createAdminUser(payload);
       toast.success(t("userAdded"));
       navigate("/users");
-    } catch (error: any) {
+    } catch (error: unknown) {
       formatAndShowError(error);
     } finally {
       setIsSubmitting(false);
@@ -121,6 +142,15 @@ const AddUsers = () => {
       />
 
       <div className=" bg-white mt-3 rounded-[15px] py-[19px] px-[29px] mx-8">
+        <div className="p-8 bg-white rounded-2xl mb-4">
+          <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">
+            {t("profileImage")}
+          </h3>
+          <div className="relative">
+            <ImageInput image={profileImage} setImage={setProfileImage} />
+          </div>
+        </div>
+
         {/* Name */}
         <div className="relative">
           <input

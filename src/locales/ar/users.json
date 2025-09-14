@@ -30,5 +30,6 @@
   "allFieldsRequired": "يرجي ملء جميع الحقول",
   "passwordsNotMatch": "كلمة المرور غير متطابقة",
   "newPassword": "كلمة المرور الجديدة",
-  "invalidDate": "تاريخ غير صالح"
+  "invalidDate": "تاريخ غير صالح",
+  "profileImage": "الصورة الشخصية"
 }

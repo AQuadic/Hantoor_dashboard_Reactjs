@@ -30,5 +30,6 @@
   "allFieldsRequired": "All fields are required",
   "passwordsNotMatch": "Password doesn't match",
   "newPassword": "New password",
-  "invalidDate": "Invalid Date"
+  "invalidDate": "Invalid Date",
+  "profileImage": "Profile Image"
 }
