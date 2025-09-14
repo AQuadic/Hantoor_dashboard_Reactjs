@@ -9,11 +9,13 @@ import Add from "@/components/icons/banks/Add";
 import Delete from "@/components/icons/banks/Delete";
 import { useTranslation } from "react-i18next";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
 import { getBankById } from "@/api/bank/getBankById";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
+import { updateBankById, UpdateBankPayload } from "@/api/bank/editBank";
+import toast from "react-hot-toast";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -78,6 +80,9 @@ const EditBank = () => {
   const [citizenDuration, setCitizenDuration] = useState("");
   const [citizenWorkplace, setCitizenWorkplace] = useState("");
 
+  const [profileImageUrl, setProfileImageUrl] = useState<string>("");
+
+  const navigate = useNavigate ()
   const authorities = [
     { key: "1", label: "1 سنة" },
     { key: "2", label: "سنتين" },
@@ -116,6 +121,10 @@ const EditBank = () => {
       setVisitorDuration(expatriates[0].duration || "");
       setVisitorInterestAmount2(expatriates[1]?.value?.toString() || "");
     }
+
+    if (data.image?.url) {
+      setProfileImageUrl(data.image.url);
+    }
   else {
         setVisitorData([
           {
@@ -139,6 +148,64 @@ const EditBank = () => {
     }
   }, [data]);
 
+const queryClient = useQueryClient();
+
+const handleUpdateBank = async () => {
+  const payload: UpdateBankPayload = {
+    name: { ar: arBankName, en: enBankName },
+    country_id: selectedCountry.iso2 === "EG" ? 1 : 0,
+    phone: phone,
+    phone_country: selectedCountry.iso2,
+    image: profileImage,
+    finance: [
+      {
+        type: "expatriate",
+        salary_from: Number(visitorSalaryFrom),
+        salary_to: Number(visitorSalaryTo),
+        duration: visitorDuration,
+        employer: "",
+        value: visitorInterestAmount,
+      },
+      {
+        type: "expatriate",
+        salary_from: Number(visitorSalaryFrom2),
+        salary_to: Number(visitorSalaryTo2),
+        duration: visitorDuration,
+        employer: "",
+        value: visitorInterestAmount2,
+      },
+      {
+        type: "citizen",
+        salary_from: Number(citizenSalaryFrom),
+        salary_to: Number(citizenSalaryTo),
+        duration: citizenDuration,
+        employer: citizenWorkplace,
+        value: citizenInterestAmount,
+      },
+    ],
+  };
+
+  try {
+    const res = await updateBankById(Number(id), payload);
+
+    if (res.success) {
+    toast.success("Bank updated successfully!");
+    navigate(`/financing/details/${id}`);
+
+    if (id) {
+      queryClient.invalidateQueries({
+        queryKey: ["bank", Number(id)],
+      });
+    }
+  } else {
+    toast.error(res.message || "Failed to update bank");
+  }
+  } catch (error: any) {
+    console.error("Update bank error:", error.response?.data || error);
+    toast.error(error.response?.data?.message || "error");
+  }
+};
+
   if (isLoading) return <Loading />;
   if (error) return <NoData />;
 
@@ -161,7 +228,11 @@ const EditBank = () => {
           <h3 className="mb-4 text-lg font-bold text-[#2A32F8]">
             {t("bankLogo")}
           </h3>
-          <ImageInput image={profileImage} setImage={setProfileImage} />
+          <ImageInput
+            image={profileImage}
+            setImage={setProfileImage}
+            existingImageUrl={data?.image?.url}
+          />
           <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
             {/* Arabic bank */}
             <div className="relative w-full">
@@ -314,7 +385,7 @@ const EditBank = () => {
                 <Add />
                 <p className="text-[#2A32F8] text-base">{t("addMoreData")}</p>
               </div>
-              <DashboardButton titleAr="اضافة" titleEn="Add" />
+              <DashboardButton titleAr="تعديل" titleEn="Edit" onClick={handleUpdateBank} />
             </div>
           </div>
 
@@ -379,7 +450,7 @@ const EditBank = () => {
               <Add />
               <p className="text-[#2A32F8] text-base">{t("addMoreData")}</p>
             </div>
-            <DashboardButton titleAr="اضافة" titleEn="Add" />
+            {/* <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleUpdateBank} /> */}
           </div>
         </div>
       </form>

@@ -16,6 +16,7 @@ import {
   createBank,
   CreateBankPayload,
 } from "@/api/bank/postBank";
+import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -76,6 +77,7 @@ const AddBank = () => {
   const [citizenDuration, setCitizenDuration] = useState("");
   const [citizenWorkplace, setCitizenWorkplace] = useState("");
 
+  const [showVisitor2, setShowVisitor2] = useState(true); 
   const authorities = [
     { key: "1", label: "1 سنة" },
     { key: "2", label: "سنتين" },
@@ -392,7 +394,7 @@ const AddBank = () => {
           </div>
         </div>
         <div className="flex flex-wrap gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
-          <div>
+          <div className="flex flex-col flex-1">
             <div className="flex flex-col flex-1 gap-4">
               <h3 className=" text-lg font-bold text-[#2A32F8]">
                 {t("visitorData")}
@@ -452,17 +454,19 @@ const AddBank = () => {
               />
             </div>
             <hr className="my-4" />
+
+          {showVisitor2 && (
             <div className="flex flex-col flex-1 gap-4">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className=" text-lg font-bold text-[#2A32F8]">
-                    Expatriate 2
+                    {t('visitorData')}
                   </h3>
                   <h2 className="text-[15px] font-bold text-[#1E1B1B] mt-2">
                     {t("salaryRang")}
                   </h2>
                 </div>
-                <Delete />
+                <TableDeleteButton handleDelete={() => setShowVisitor2(false)} />
               </div>
               <div className="flex items-center gap-[9px]">
                 <DashboardInput
@@ -515,6 +519,7 @@ const AddBank = () => {
                 placeholder="5%"
               />
             </div>
+          )}
           </div>
 
           <div className="flex flex-col flex-1 gap-4">

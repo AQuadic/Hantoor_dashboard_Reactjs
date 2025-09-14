@@ -586,6 +586,7 @@ export async function updateVehicle(
   id: number,
   data: UpdateVehiclePayload
 ): Promise<Vehicle> {
+try {
   const formData = new FormData();
 
   // Add method override for PUT
@@ -763,6 +764,11 @@ export async function updateVehicle(
   });
   const responseData = response.data as VehicleApiResponseWrapper;
   return responseData.data;
+} catch (error: any) {
+    throw new Error(
+      error.response?.data?.message || "Failed to update vehicle"
+    );
+}
 }
 
 // Delete vehicle
