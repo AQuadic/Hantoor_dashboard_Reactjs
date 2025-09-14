@@ -124,7 +124,7 @@ export function UserTable({
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               <img
-                src={userPlaceholder}
+                src={user.image?.url || userPlaceholder}
                 alt={user.name}
                 className="w-[52.3px] h-[51px] rounded-full"
               />

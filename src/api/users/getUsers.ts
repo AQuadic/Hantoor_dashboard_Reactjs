@@ -8,6 +8,14 @@ export interface Country {
   is_active: boolean;
 }
 
+export interface AdminUserImage {
+  url: string;
+  file_name: string;
+  mime_type: string;
+  uuid: string;
+  responsive_urls: string[];
+}
+
 export interface AdminUser {
   id: number;
   name: string;
@@ -20,6 +28,7 @@ export interface AdminUser {
   updated_at: string;
   country?: Country | null;
   is_active: boolean; 
+  image?: AdminUserImage | null; 
 }
 
 export interface AdminUsersResponse {
