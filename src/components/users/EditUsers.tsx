@@ -81,16 +81,27 @@ const EditUsers = () => {
     return raw;
   };
 
-  const formatAndShowError = (err: unknown) => {
-    let message = t("somethingWentWrong");
-    if (typeof err === "string") message = err;
-    else if (err instanceof Error && err.message) message = err.message;
-    else {
-      const s = safeStringify(err);
-      if (s && s !== "{}") message = s;
+  const extractBackendMessage = (err: unknown): string | undefined => {
+    const respData = (err as { response?: { data?: unknown } })?.response?.data;
+    if (respData) {
+      if (typeof respData === "string") return respData;
+      const obj = respData as Record<string, unknown>;
+      if (typeof obj.message === "string") return obj.message;
+      const firstErr = obj.errors && Object.values(obj.errors)[0];
+      if (Array.isArray(firstErr) && typeof firstErr[0] === "string")
+        return firstErr[0];
     }
+    if (err instanceof Error && err.message) return err.message;
+    if (typeof err === "string") return err;
+    return undefined;
+  };
+
+  const formatAndShowError = (err: unknown) => {
+    const backendMsg = extractBackendMessage(err);
+    const rawMessage =
+      backendMsg ?? safeStringify(err) ?? t("somethingWentWrong");
     console.error("Failed to update user:", err);
-    toast.error(getDisplayMessage(message));
+    toast.error(getDisplayMessage(String(rawMessage)));
   };
 
   const handleSubmit = async () => {
