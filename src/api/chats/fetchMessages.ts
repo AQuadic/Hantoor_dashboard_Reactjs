@@ -1,5 +1,13 @@
 import { axios } from "@/lib/axios";
 
+export interface User {
+  id: number;
+  name: string;
+  image?: string | null;
+  last_online?: string | null;
+  created_at?: string
+}
+
 export interface Message {
   id: number;
   conversation_id: number;
@@ -7,6 +15,7 @@ export interface Message {
   message: string;
   created_at: string;
   updated_at: string;
+  user?: User;
 }
 
 export interface MessagesApiResponse {

@@ -193,8 +193,6 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
       <hr className="my-4" />
 
       {/* Vehicle Info */}
-      {currentConversation?.vehicle && (
-        <>
           <div className="flex flex-wrap items-center justify-between rounded-lg p-2 mb-4">
             <div className="flex items-center gap-3">
               <img
@@ -203,17 +201,17 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
                 className="w-[104px] h-[71px] rounded-lg object-cover mr-2"
               />
               <div>
-                <p className="text-[17px] font-bold">
+                {/* <p className="text-[17px] font-bold">
                   {getLocalizedName(currentConversation.vehicle.name)}
                 </p>
                 <p className="text-base text-[#000000]">
                   {getLocalizedName(currentConversation.vehicle.brand?.name)}
-                </p>
+                </p> */}
               </div>
             </div>
             <div className="flex items-center gap-[14px] md:mt-0 mt-4">
               <Switch
-                checked={Boolean(currentConversation.is_active)}
+                // checked={Boolean(currentConversation.is_active)}
                 onChange={handleToggleStatus}
                 disabled={toggleStatusMutation.isPending}
               />
@@ -221,8 +219,6 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
             </div>
           </div>
           <hr className="my-4" />
-        </>
-      )}
 
       {/* Messages */}
       <div className="space-y-4">
@@ -239,12 +235,12 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
               {/* Name + Time + Bubble */}
               <div>
                 <p className="text-xs font-medium text-[#071739]">
-                  {message.sender_type === "admin"
+                  {message.user?.name || (message.sender_type === "admin"
                     ? t("admin") || "Admin"
-                    : t("user") || "User"}
+                    : t("user") || "User")}
                 </p>
                 <p className="text-[10px] text-gray-400 mb-1">
-                  {formatTime(message.created_at)}
+                  {message.user?.created_at}
                 </p>
 
                 <div className="flex items-center gap-3">
