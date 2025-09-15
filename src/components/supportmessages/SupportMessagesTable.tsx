@@ -68,7 +68,11 @@ const SupportMessagesTable = ({ conversations, isLoading, refetch }: SupportMess
                     <TableRow key={message.id} noBackgroundColumns={1}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{message.id}</TableCell>
-                    <TableCell>{message.country_id || "-"}</TableCell>
+                    <TableCell>
+                        {message.faq.country
+                        ? (i18n.language === "ar" ? message.faq.country.name.ar : message.faq.country.name.en)
+                        : "-"}
+                    </TableCell>
                     <TableCell>
                         {i18n.language === "ar" ? message.faq.question.ar : message.faq.question.en}
                     </TableCell>

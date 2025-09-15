@@ -35,6 +35,16 @@ export interface Conversation {
     unuseful_uses_count?: number;
     created_at: string;
     updated_at: string;
+    country?: {
+      id: number;
+      name: { ar: string; en: string };
+      code: string;
+      currency: string;
+      currency_text: { ar: string; en: string };
+      is_active: boolean;
+      created_at: string;
+      updated_at: string;
+    };
   };
 }
 
