@@ -80,6 +80,30 @@ export function UserTable({
     return formatted;
   };
 
+  const formatLastOnline = (date?: string, lang: string = "en") => {
+  if (!date) return "-";
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return "-";
+
+  const isArabic = lang.startsWith("ar");
+
+  const formatted = new Intl.DateTimeFormat(
+    isArabic ? "ar-EG" : "en-US",
+    {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    }
+  ).format(d);
+
+  return formatted;
+};
+
+
   if (data?.meta) {
     onDataLoaded(data.meta);
   }
@@ -139,7 +163,7 @@ export function UserTable({
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
-            <TableCell>22/03/2024- 08:30 PM</TableCell>
+            <TableCell>{formatLastOnline(user.last_online, i18n.language)}</TableCell>
             <TableCell>
               <div className="w-[160px]">
                 <Select

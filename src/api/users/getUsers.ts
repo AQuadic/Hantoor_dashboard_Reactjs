@@ -26,6 +26,7 @@ export interface AdminUser {
   city_id?: number;
   created_at: string;
   updated_at: string;
+  last_online: string;
   country?: Country | null;
   is_active: boolean; 
   image?: AdminUserImage | null; 
