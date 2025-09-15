@@ -10,14 +10,18 @@ import {
   deleteMessage,
   toggleConversationStatus,
   type Message,
+  MessagesApiResponse,
 } from "@/api/chats/fetchMessages";
 import {
+  deleteConversation,
   type Conversation,
   type ConversationsApiResponse,
 } from "@/api/chats/fetchConversations";
 import { toast } from "react-hot-toast";
 import Loading from "@/components/general/Loading";
 import { useState, useEffect } from "react";
+import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
+import { deleteVehicleConversation } from "@/api/chats/deleteConversation";
 
 interface ConversationPageProps {
   conversationId?: number | null;
@@ -62,12 +66,23 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     data: messagesData,
     isLoading: isLoadingMessages,
     error: messagesError,
-  } = useQuery({
+    refetch,
+  } = useQuery<MessagesApiResponse>({
     queryKey,
     queryFn: () =>
-      vehicleId
+      conversationId
+        ? fetchMessages(conversationId!, 1, 3)
+        : vehicleId
         ? fetchMessagesByVehicle(vehicleId!, 1, 3)
-        : fetchMessages(conversationId!, 1, 3),
+        : Promise.resolve({
+            data: [],
+            current_page: 1,
+            last_page: 1,
+            per_page: 3,
+            from: 0,
+            to: 0,
+            total: 0,
+          }),
     enabled: !!(conversationId || vehicleId),
   });
 
@@ -159,6 +174,17 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
       isActive: !(currentConversation?.is_active ?? false),
     });
   };
+  const handleDeleteConversation = async (id: number) => {
+  try {
+    await deleteVehicleConversation(id);
+    toast.success(t("conversationDeleted") || "Conversation deleted successfully");
+    refetch();
+    queryClient.invalidateQueries({ queryKey: ["conversations"] });
+  } catch {
+    toast.error(t("conversationDeleteFailed") || "Failed to delete conversation");
+  }
+};
+
 
   if (!conversationId) {
     return (
@@ -222,7 +248,13 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
                 onChange={handleToggleStatus}
                 disabled={toggleStatusMutation.isPending}
               />
-              <Delete />
+              <TableDeleteButton
+                handleDelete={() => {
+                  const idToDelete = conversationId || currentConversation?.id;
+                  if (!idToDelete) return;
+                  handleDeleteConversation(idToDelete);
+                }}
+              />
             </div>
           </div>
           <hr className="my-4" />
