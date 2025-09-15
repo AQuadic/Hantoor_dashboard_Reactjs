@@ -228,13 +228,18 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
           </div>
         ) : (
           messages.map((message: Message) => (
-            <div key={message.id} className="flex items-start gap-2">
+            <div key={message.id} className="flex flex-col items-start gap-2">
+              <div className="flex items-start gap-2">
               {/* Avatar */}
-              <img src={Avatar} alt="avatar" className="w-8 h-8 rounded-full" />
+              <img
+                src={message.user?.image || Avatar}
+                alt={message.user?.name || "User"}
+                className="w-8 h-8 rounded-full"
+              />
 
               {/* Name + Time + Bubble */}
               <div>
-                <p className="text-xs font-medium text-[#071739]">
+                <p className="text-[15.24px] font-bold text-[#071739]">
                   {message.user?.name || (message.sender_type === "admin"
                     ? t("admin") || "Admin"
                     : t("user") || "User")}
@@ -244,8 +249,19 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
                 </p>
 
                 <div className="flex items-center gap-3">
-                  <div className="bg-[#1C1C1E] text-white rounded-2xl px-3 py-2 max-w-xs text-sm">
+                  <div className="bg-[#1C1C1E] md:w-[351px] text-white px-3 py-2 max-w-xs text-sm rounded-tl-[23.45px] rounded-tr-[9.38px] rounded-br-[23.45px] rounded-bl-[9.38px]">
                     {message.message}
+                      {/* Reply Message */}
+                      {message.reply_message && (
+                        <>
+                    <div className="w-full h-px bg-[#3F3F3F] my-1.5"></div>
+                        <div className="flex items-start gap-2 ml-10 mt-1">
+                          <div className="text-[#FFFFFF] text-[16.42px] leading-[24.62px] font-normal">
+                            {message.reply_message.message}
+                          </div>
+                        </div>
+                        </>
+                      )}
                   </div>
                   <button
                     onClick={() => handleDeleteMessage(message.id)}
@@ -253,6 +269,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
                   >
                     <Delete />
                   </button>
+                  </div>
                 </div>
               </div>
             </div>

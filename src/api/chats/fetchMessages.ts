@@ -8,6 +8,14 @@ export interface User {
   created_at?: string
 }
 
+export interface ReplyMessage {
+  id: number;
+  conversation_id: number;
+  message: string;
+  created_at: string;
+  user?: User;
+}
+
 export interface Message {
   id: number;
   conversation_id: number;
@@ -16,6 +24,7 @@ export interface Message {
   created_at: string;
   updated_at: string;
   user?: User;
+  reply_message?: ReplyMessage | null;
 }
 
 export interface MessagesApiResponse {
