@@ -145,12 +145,19 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
   };
 
   const handleToggleStatus = () => {
-    if (conversationId && currentConversation) {
-      toggleStatusMutation.mutate({
-        conversationId,
-        isActive: !currentConversation.is_active,
+    const idToUse = conversationId || currentConversation?.id;
+    if (!idToUse) return;
+    if (currentConversation) {
+      setCurrentConversation({
+        ...currentConversation,
+        is_active: !currentConversation.is_active,
       });
     }
+
+    toggleStatusMutation.mutate({
+      conversationId: idToUse,
+      isActive: !(currentConversation?.is_active ?? false),
+    });
   };
 
   if (!conversationId) {
@@ -211,7 +218,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
             </div>
             <div className="flex items-center gap-[14px] md:mt-0 mt-4">
               <Switch
-                // checked={Boolean(currentConversation.is_active)}
+                checked={Boolean(currentConversation?.is_active)}
                 onChange={handleToggleStatus}
                 disabled={toggleStatusMutation.isPending}
               />
