@@ -34,7 +34,16 @@ const SupportMessagesPage = () => {
       }),
   });
   const filteredConversations =
-    data?.data.filter((c) => c.id.toString().includes(searchTerm)) || [];
+    data?.data.filter((c) => {
+      const search = searchTerm.toLowerCase();
+      return (
+        c.id.toString().includes(search) ||
+        c.user.name.toLowerCase().includes(search) ||
+        c.user.phone.toLowerCase().includes(search) ||
+        c.faq.question.ar.toLowerCase().includes(search) ||
+        c.faq.question.en.toLowerCase().includes(search)
+      );
+    }) || [];
 
   const totalItems = filteredConversations.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
