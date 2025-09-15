@@ -57,7 +57,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     });
   };
 
-  // Fetch messages for the conversation or vehicle
+  // Fetch messages based on conversationId or vehicleId
   const queryKey = vehicleId
     ? ["messages", "vehicle", vehicleId]
     : ["messages", conversationId];
@@ -69,22 +69,22 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     refetch,
   } = useQuery<MessagesApiResponse>({
     queryKey,
-    queryFn: () =>
-      conversationId
-        ? fetchMessages(conversationId!, 1, 3)
-        : vehicleId
-        ? fetchMessagesByVehicle(vehicleId!, 1, 3)
-        : Promise.resolve({
-            data: [],
-            current_page: 1,
-            last_page: 1,
-            per_page: 3,
-            from: 0,
-            to: 0,
-            total: 0,
-          }),
+    queryFn: () => {
+      if (conversationId) return fetchMessages(conversationId, 1, 20);
+      if (vehicleId) return fetchMessagesByVehicle(vehicleId, 1, 20);
+      return Promise.resolve({
+        data: [],
+        current_page: 1,
+        last_page: 1,
+        per_page: 20,
+        from: 0,
+        to: 0,
+        total: 0,
+      });
+    },
     enabled: !!(conversationId || vehicleId),
   });
+  
 
   // Find current conversation data from the conversations cache
   // Attempt to find conversation data from cache. If vehicleId is provided,
@@ -288,19 +288,18 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
                 </p>
 
                 <div className="flex items-center gap-3">
-                  <div className="bg-[#1C1C1E] md:w-[351px] text-white px-3 py-2 max-w-xs text-sm rounded-tl-[23.45px] rounded-tr-[9.38px] rounded-br-[23.45px] rounded-bl-[9.38px]">
-                    {message.message}
-                      {/* Reply Message */}
+                  <div className="bg-[#1C1C1E] md:w-[351px] text-white px-3 py-2 max-w-xs text-sm rounded-tl-[23.45px] rounded-tr-[9.38px] rounded-br-[23.45px] rounded-bl-[9.38px]">{/* Reply Message */}
                       {message.reply_message && (
                         <>
-                    <div className="w-full h-px bg-[#3F3F3F] my-1.5"></div>
                         <div className="flex items-start gap-2 ml-10 mt-1">
                           <div className="text-[#FFFFFF] text-[16.42px] leading-[24.62px] font-normal">
                             {message.reply_message.message}
                           </div>
                         </div>
-                        </>
+                    <div className="w-full h-px bg-[#3F3F3F] my-1.5"></div>
+                      </>
                       )}
+                    {message.message}
                   </div>
                   <button
                     onClick={() => handleDeleteMessage(message.id)}
