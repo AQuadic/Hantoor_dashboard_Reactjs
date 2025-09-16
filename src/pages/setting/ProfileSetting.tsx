@@ -1,14 +1,16 @@
-import ProfileHeader from '@/components/setting/profile/ProfileHeader'
-import ProfileTable from '@/components/setting/profile/ProfileTable'
-import React from 'react'
+import ProfileHeader from "@/components/setting/profile/ProfileHeader";
+import ProfileTable from "@/components/setting/profile/ProfileTable";
+import React, { useState } from "react";
 
 const ProfileSetting = () => {
-    return (
-        <div className='px-2 md:px-8'>
-            <ProfileHeader />
-            <ProfileTable />
-        </div>
-    )
-}
+  const [countryId, setCountryId] = useState<string>("");
 
-export default ProfileSetting
+  return (
+    <div className="px-2 md:px-8">
+      <ProfileHeader countryId={countryId} setCountryId={setCountryId} />
+      <ProfileTable countryId={countryId} />
+    </div>
+  );
+};
+
+export default ProfileSetting;

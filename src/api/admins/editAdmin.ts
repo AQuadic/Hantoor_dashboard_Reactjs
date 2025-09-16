@@ -46,7 +46,9 @@ export async function updateAdmin(
   if (payload.isActive !== undefined)
     formData.append("is_active", payload.isActive ? "1" : "0");
   if (payload.image) formData.append("image", payload.image);
-  if (payload.remove_image) formData.append("remove_image", "1");
+  // If remove_image is provided, always include it in the form data as '1' or '0'
+  if (payload.remove_image !== undefined)
+    formData.append("remove_image", payload.remove_image ? "1" : "0");
 
   const response = await axios.post<Admin>(`/admin/${adminId}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },

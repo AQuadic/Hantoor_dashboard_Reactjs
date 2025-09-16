@@ -202,6 +202,12 @@ if (data.ads_images?.length) {
 
 This fixes the label shown in the RentToOwn component for Arabic and English locales.
 
+# 2025-09-16: Make remove_image explicit in updateAdmin API helper ✅
+
+- Problem: When the UI removed the existing image and immediately called the API, the helper only appended `remove_image` if truthy, which meant `true` worked but there was no explicit handling if callers passed falsy values; also callers sometimes expect the API to receive a numeric flag ("1").
+- Change: Updated `src/api/admins/editAdmin.ts` to append `remove_image` as '1' or '0' whenever the payload includes the flag, using `if (payload.remove_image !== undefined) formData.append('remove_image', payload.remove_image ? '1' : '0')`.
+- Result: The server now receives an explicit instruction to remove or keep the existing image whenever the client intends to specify it. This prevents ambiguous/omitted flags in multipart requests.
+
 #### Missing Components
 
 ❌ **ISSUE IDENTIFIED**: No UI component for managing additional images separately from main car images
