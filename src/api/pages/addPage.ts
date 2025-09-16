@@ -3,6 +3,7 @@ import { axios } from "@/lib/axios";
 export interface RequestBody {
   is_active?: boolean;
   order_column?: number;
+  country_id?: number;
   title?: {
     ar?: string;
     en: string;
