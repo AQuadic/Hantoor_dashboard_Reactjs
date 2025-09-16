@@ -99,11 +99,20 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
   // Delete message mutation
   const deleteMessageMutation = useMutation({
     mutationFn: deleteMessage,
-    onSuccess: () => {
+    onSuccess: (_, messageId: number) => {
       toast.success(
         t("messageDeletedSuccess") || "Message deleted successfully"
       );
-      queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
+
+      setCurrentConversation((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          messages: prev.messages.filter((msg) => msg.id !== messageId),
+        };
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["conversation", conversationId] });
     },
     onError: () => {
       toast.error(t("messageDeleteFailed") || "Failed to delete message");
