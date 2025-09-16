@@ -4,7 +4,37 @@
 @source "../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}";
 
 /* ONLINE WEB FONT IMPORT - Helvetica Neue W23 with proper weight support */
-@import url(https://db.onlinewebfonts.com/c/2c458bc98aac2311643f30a231a7ea30?family=Helvetica+Neue+W23+for+SKY+Bd);
+
+/* Local Helvetica Neue W23 for SKY font-face definitions with correct folder structure */
+@font-face {
+  font-family: "Helvetica Neue W23 for SKY";
+  src: url("/fonts/regular/2e6ae3642c879522873a28ede1eaac69.eot");
+  src: url("/fonts/regular/2e6ae3642c879522873a28ede1eaac69.eot?#iefix")
+      format("embedded-opentype"),
+    url("/fonts/regular/2e6ae3642c879522873a28ede1eaac69.woff2") format("woff2"),
+    url("/fonts/regular/2e6ae3642c879522873a28ede1eaac69.woff") format("woff"),
+    url("/fonts/regular/2e6ae3642c879522873a28ede1eaac69.ttf") format("truetype"),
+    url("/fonts/regular/2e6ae3642c879522873a28ede1eaac69.svg#Helvetica Neue W23 for SKY Reg")
+      format("svg");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Helvetica Neue W23 for SKY";
+  src: url("/fonts/bold/2c458bc98aac2311643f30a231a7ea30.eot");
+  src: url("/fonts/bold/2c458bc98aac2311643f30a231a7ea30.eot?#iefix")
+      format("embedded-opentype"),
+    url("/fonts/bold/2c458bc98aac2311643f30a231a7ea30.woff2") format("woff2"),
+    url("/fonts/bold/2c458bc98aac2311643f30a231a7ea30.woff") format("woff"),
+    url("/fonts/bold/2c458bc98aac2311643f30a231a7ea30.ttf") format("truetype"),
+    url("/fonts/bold/2c458bc98aac2311643f30a231a7ea30.svg#Helvetica Neue W23 for SKY Bd")
+      format("svg");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
 
 @custom-variant dark (&:is(.dark *));
 
@@ -96,11 +126,12 @@
   --sidebar-ring: oklch(0.708 0 0);
 
   /* Primary font stack - uses online font with robust Arabic fallbacks */
-  --font-primary: "Helvetica Neue W23 for SKY Bd", "Helvetica Neue",
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans",
-    "Noto Sans Arabic", "Arabic UI Display", "Geeza Pro", "Baghdad", Tahoma,
-    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
-    "Noto Color Emoji";
+
+  /* Use local font as primary, with robust fallbacks */
+  --font-primary: "Helvetica Neue W23 for SKY", "Helvetica Neue", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Arabic",
+    "Arabic UI Display", "Geeza Pro", "Baghdad", Tahoma, Arial, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
   /* Enhanced fallback for systems without Helvetica Neue - Arabic optimized */
   --font-fallback: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -109,7 +140,7 @@
     "Segoe UI Symbol", "Noto Color Emoji";
 
   /* Arabic-specific font stack for RTL content */
-  --font-arabic: "Helvetica Neue W23 for SKY Bd", "Noto Sans Arabic",
+  --font-arabic: "Helvetica Neue W23 for SKY", "Noto Sans Arabic",
     "Arabic UI Display", "Geeza Pro", "Baghdad", Tahoma, "Segoe UI",
     "Arial Unicode MS", Arial, sans-serif;
 }
@@ -191,7 +222,7 @@
   h5,
   h6 {
     font-family: var(--font-primary);
-    font-weight: 700; /* Bold weight - will be synthesized if missing */
+    font-weight: 700; /* Use bold variant only for headings */
     font-synthesis: weight; /* Ensure bold synthesis is enabled */
   }
 
@@ -200,7 +231,7 @@
   b,
   .font-bold {
     font-family: var(--font-primary);
-    font-weight: 700; /* Force bold weight */
+    font-weight: 700; /* Use bold variant for strong/b/bold */
     font-synthesis: weight; /* Enable bold synthesis */
     font-synthesis-weight: auto; /* Explicit auto for webkit browsers */
   }
