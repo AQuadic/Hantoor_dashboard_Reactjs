@@ -43,7 +43,11 @@ const parseDescription = (desc: string) => {
   }
 };
 
-const ProfileTable = () => {
+interface Props {
+  countryId?: string;
+}
+
+const ProfileTable = ({ countryId }: Props) => {
   const { t, i18n } = useTranslation("setting");
 
   const {
@@ -51,8 +55,8 @@ const ProfileTable = () => {
     isLoading,
     refetch,
   } = useQuery<OnboardingItem[]>({
-    queryKey: ["onboardings"],
-    queryFn: () => getOnboardings({ pagination: "none" }),
+    queryKey: ["onboardings", countryId],
+    queryFn: () => getOnboardings({ pagination: "none", country_id: countryId ? Number(countryId) : undefined }),
   });
 
   if (isLoading) return <Loading />;
