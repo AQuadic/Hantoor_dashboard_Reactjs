@@ -217,7 +217,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
           <div className="flex flex-wrap items-center justify-between rounded-lg p-2 mb-4">
             <div className="flex items-center gap-3">
               <img
-                src={conversation?.vehicle?.image || carImage}
+                src={conversation?.vehicle?.image?.url || carImage}
                 alt="car"
                 className="w-[104px] h-[71px] rounded-lg object-cover mr-2"
               />

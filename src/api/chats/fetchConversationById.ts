@@ -22,9 +22,19 @@ export interface Message {
   user: User | null;
 }
 
+export interface VehicleImage {
+  id: number;
+  uuid: string;
+  url: string;
+  responsive_urls: string[];
+  size: number;
+  name: { ar: string; en: string };
+  vehicle_id: number;
+}
+
 export interface Vehicle {
   id: number;
-  image: string | null;
+  image: VehicleImage | null;
   name: { ar: string; en: string };
 }
 
