@@ -183,6 +183,8 @@ const AddProfile = () => {
             titleAr={isLoading ? "جارٍ الإضافة..." : "اضافة"}
             titleEn={isLoading ? "Adding..." : "Add"}
             onClick={handleSubmit}
+            isLoading={isLoading}
+            type="button"
           />
         </div>
       </div>

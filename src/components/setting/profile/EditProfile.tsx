@@ -32,6 +32,7 @@ const EditProfile: React.FC = () => {
   const [existingImageUrl, setExistingImageUrl] = useState<string | undefined>(
     undefined
   );
+  const [isSaving, setIsSaving] = useState(false);
   const [arTitle, setArTitle] = useState("");
   const [enTitle, setEnTitle] = useState("");
   const [arBody, setArBody] = useState("");
@@ -85,6 +86,7 @@ const EditProfile: React.FC = () => {
 
   const handleSave = async () => {
     try {
+      setIsSaving(true);
       // Require either an existing image (url) or a newly selected file
       if (!existingImageUrl && !profileImage) {
         toast.error(t("pleaseAddImage") || "Please add an image");
@@ -112,6 +114,8 @@ const EditProfile: React.FC = () => {
         console.error("Update failed:", err);
         toast.error("Failed to update profile.");
       }
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -211,7 +215,12 @@ const EditProfile: React.FC = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
+          <DashboardButton
+            titleAr="حفظ"
+            titleEn="Save"
+            onClick={handleSave}
+            isLoading={isSaving}
+          />
         </div>
       </div>
     </div>
