@@ -27,32 +27,60 @@ export async function updateAdmin(
   adminId: string | number,
   payload: UpdateAdminPayload
 ): Promise<Admin> {
-  const formData = new FormData();
+  // If there's a File to upload, send multipart/form-data with a real PUT request.
+  // Otherwise send a standard JSON PUT request (no multipart boundary, no _method).
 
-  if (payload.name !== undefined) formData.append("name", String(payload.name));
-  if (payload.email !== undefined)
-    formData.append("email", String(payload.email));
-  if (payload.phone !== undefined)
-    formData.append("phone", String(payload.phone));
+  const hasFile = !!payload.image;
+
+  if (hasFile) {
+    const formData = new FormData();
+    if (payload.name !== undefined)
+      formData.append("name", String(payload.name));
+    if (payload.email !== undefined)
+      formData.append("email", String(payload.email));
+    if (payload.phone !== undefined)
+      formData.append("phone", String(payload.phone));
+    if (payload.phone_country !== undefined)
+      formData.append("phone_country", String(payload.phone_country));
+    if (payload.password !== undefined)
+      formData.append("password", String(payload.password));
+    if (payload.password_confirmation !== undefined)
+      formData.append(
+        "password_confirmation",
+        String(payload.password_confirmation)
+      );
+    if (payload.isActive !== undefined)
+      formData.append("is_active", payload.isActive ? "1" : "0");
+    // append image file
+    if (payload.image) formData.append("image", payload.image);
+    // include explicit remove_image flag if provided
+    if (payload.remove_image !== undefined)
+      formData.append("remove_image", payload.remove_image ? "1" : "0");
+
+    // Use PUT with FormData; do NOT manually set Content-Type so the browser/axios
+    // can include the proper multipart boundary.
+    const response = await axios.put<Admin>(`/admin/${adminId}`, formData);
+    return response.data;
+  }
+
+  // No file: send JSON body via PUT to avoid multipart boundaries and _method field
+  const jsonBody: Record<string, unknown> = {};
+  if (payload.name !== undefined) jsonBody.name = payload.name;
+  if (payload.email !== undefined) jsonBody.email = payload.email;
+  if (payload.phone !== undefined) jsonBody.phone = payload.phone;
   if (payload.phone_country !== undefined)
-    formData.append("phone_country", String(payload.phone_country));
-  if (payload.password !== undefined)
-    formData.append("password", String(payload.password));
+    jsonBody.phone_country = payload.phone_country;
+  if (payload.password !== undefined) jsonBody.password = payload.password;
   if (payload.password_confirmation !== undefined)
-    formData.append(
-      "password_confirmation",
-      String(payload.password_confirmation)
-    );
+    jsonBody.password_confirmation = payload.password_confirmation;
   if (payload.isActive !== undefined)
-    formData.append("is_active", payload.isActive ? "1" : "0");
-  if (payload.image) formData.append("image", payload.image);
-  // If remove_image is provided, always include it in the form data as '1' or '0'
+    jsonBody.is_active = payload.isActive ? "1" : "0";
   if (payload.remove_image !== undefined)
-    formData.append("remove_image", payload.remove_image ? "1" : "0");
+    jsonBody.remove_image = payload.remove_image ? "1" : "0";
 
-  const response = await axios.post<Admin>(`/admin/${adminId}`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  // No file: send JSON body with a real PUT request so axios sets
+  // Content-Type: application/json automatically and no multipart header is sent.
+  const response = await axios.post<Admin>(`/admin/${adminId}`, jsonBody);
 
   return response.data;
 }
