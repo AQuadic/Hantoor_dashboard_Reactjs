@@ -80,7 +80,6 @@ export async function getCountries(
 
   const params: Record<string, string | number> = {
     page: pageNum,
-    per_page: 5,
   };
 
   if (searchTerm && searchTerm.trim()) {
