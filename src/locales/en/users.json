@@ -31,5 +31,6 @@
   "passwordsNotMatch": "Password doesn't match",
   "newPassword": "New password",
   "invalidDate": "Invalid Date",
-  "profileImage": "Profile Image"
+  "profileImage": "Profile Image",
+  "statusUpdated": "Status updated successfully"
 }

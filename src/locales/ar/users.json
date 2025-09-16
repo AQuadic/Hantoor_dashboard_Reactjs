@@ -31,5 +31,6 @@
   "passwordsNotMatch": "كلمة المرور غير متطابقة",
   "newPassword": "كلمة المرور الجديدة",
   "invalidDate": "تاريخ غير صالح",
-  "profileImage": "الصورة الشخصية"
+  "profileImage": "الصورة الشخصية",
+  "statusUpdated": "تم تحديث الحالة بنجاح"
 }

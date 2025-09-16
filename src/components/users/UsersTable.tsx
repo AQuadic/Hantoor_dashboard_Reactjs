@@ -24,6 +24,7 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { deleteUser } from "@/api/users/deleteUser";
 import toast from "react-hot-toast";
+import { updateAdminUser } from "@/api/users/editUsers";
 
 interface UserTableProps {
   readonly searchTerm?: string;
@@ -181,7 +182,23 @@ export function UserTable({
               </div>
             </TableCell>
             <TableCell className="flex items-center gap-[7px]">
-              <Switch />
+              <Switch
+                isSelected={user.is_active}
+                onChange={async (e) => {
+                  try {
+                    await updateAdminUser(user.id, { is_active: e.target.checked });
+                    toast.dismiss()
+                    toast.success(t('statusUpdated'));
+                    refetch();
+                  } catch (error: any) {
+                    const message =
+                      error?.response?.data?.message ||
+                      error?.message ||
+                      t("error");
+                    toast.error(message);
+                  }
+                }}
+              />
               <Link to={`/users/edit/${user.id}`}>
                 <Edit />
               </Link>

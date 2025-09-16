@@ -9,6 +9,7 @@ export interface UpdateAdminUserPayload {
   language?: "ar" | "en";
   country_id?: string;
   city_id?: string;
+  is_active?: boolean;
 }
 
 export interface AdminUser {
@@ -39,7 +40,9 @@ export const updateAdminUser = async (
     if (payload.language) formData.append("language", payload.language);
     if (payload.country_id) formData.append("country_id", payload.country_id);
     if (payload.city_id) formData.append("city_id", payload.city_id);
-
+    if (payload.is_active !== undefined) {
+      formData.append("is_active", String(payload.is_active ? 1 : 0));
+    }
     const response = await axios.post<AdminUser>(
       `/user/admin/${userId}`,
       formData,
