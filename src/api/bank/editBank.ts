@@ -25,66 +25,63 @@ export interface UpdateBankPayload {
 }
 
 export interface ApiResponse<T = any> {
-  success: boolean;
   message: string;
   data?: T;
 }
 
-export const updateBankById = async (
+export async function updateBankById(
   id: number,
-  payload: UpdateBankPayload
-): Promise<ApiResponse> => {
-  try {
-    const formData = new FormData();
+  data: UpdateBankPayload
+): Promise<ApiResponse> {
+  const formData = new FormData();
 
-    formData.append("name", JSON.stringify(payload.name));
-    formData.append("name[ar]", payload.name.ar);
-    formData.append("name[en]", payload.name.en);
-    
-    formData.append("country_id", payload.country_id.toString());
-    formData.append("phone", payload.phone);
-    
-    if (payload.phone_country) {
-      formData.append("phone_country", payload.phone_country);
-    }
-    
-    if (typeof payload.is_active !== "undefined") {
-      formData.append("is_active", String(payload.is_active));
-    }
-    
-    if (payload.image) {
-      formData.append("image", payload.image);
-    }
+  const fields: { key: string; value?: any }[] = [
+    { key: "name[ar]", value: data.name.ar },
+    { key: "name[en]", value: data.name.en },
+    { key: "country_id", value: data.country_id },
+    { key: "phone", value: data.phone },
+    { key: "phone_country", value: data.phone_country },
+    { key: "is_active", value: data.is_active },
+  ];
 
-    if (payload.finance && payload.finance.length > 0) {
-      payload.finance.forEach((f, index) => {
-        if (f.value) formData.append(`finance[${index}][value]`, f.value);
-        if (f.type) formData.append(`finance[${index}][type]`, f.type);
-        if (f.salary_from !== undefined) formData.append(`finance[${index}][salary_from]`, f.salary_from.toString());
-        if (f.salary_to !== undefined) formData.append(`finance[${index}][salary_to]`, f.salary_to.toString());
-        formData.append(`finance[${index}][duration]`, f.duration);
-        formData.append(`finance[${index}][employer]`, f.employer);
-      });
+  fields.forEach(({ key, value }) => {
+    if (value !== undefined && value !== null && value !== "") {
+      formData.append(key, value.toString());
     }
+  });
 
-    console.log("FormData contents:");
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
-    const response = await axios.patch<ApiResponse>(`/admin/banks/${id}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Accept: "application/json",
-      },
-    });
-
-    return response.data;
-  } catch (error: any) {
-    console.error("API Error:", error.response?.data);
-    return {
-      success: false,
-      message: error.response?.data?.message || "Something went wrong",
-    };
+  if (data.image) {
+    formData.append("image", data.image);
   }
-};
+
+  if (data.finance && data.finance.length > 0) {
+    data.finance.forEach((f, index) => {
+      const financeFields: { key: string; value?: any }[] = [
+        { key: `finance[${index}][value]`, value: f.value },
+        { key: `finance[${index}][type]`, value: f.type },
+        { key: `finance[${index}][salary_from]`, value: f.salary_from },
+        { key: `finance[${index}][salary_to]`, value: f.salary_to },
+        { key: `finance[${index}][duration]`, value: f.duration },
+        { key: `finance[${index}][employer]`, value: f.employer },
+      ];
+
+      financeFields.forEach(({ key, value }) => {
+        if (value !== undefined && value !== null && value !== "") {
+          formData.append(key, value.toString());
+        }
+      });
+    });
+  }
+
+  // add put method
+  formData.append("_method", "put");
+
+  const response = await axios.post<ApiResponse>(`/admin/banks/${id}`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Accept: "application/json",
+    },
+  });
+
+  return response.data;
+}
