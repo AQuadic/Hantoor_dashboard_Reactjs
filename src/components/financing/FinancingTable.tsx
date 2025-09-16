@@ -113,10 +113,12 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
                 <View />
               </div>
               {country.banks_count > 0 && (
-                <div>
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(country.id)}
-                  />
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                >
+                  <TableDeleteButton handleDelete={() => handleDelete(country.id)} />
                 </div>
               )}
             </TableCell>
