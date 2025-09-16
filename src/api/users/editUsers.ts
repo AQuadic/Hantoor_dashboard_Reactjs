@@ -10,6 +10,7 @@ export interface UpdateAdminUserPayload {
   country_id?: string;
   city_id?: string;
   is_active?: boolean;
+  blocked_until?: string | null;
 }
 
 export interface AdminUser {
@@ -42,6 +43,13 @@ export const updateAdminUser = async (
     if (payload.city_id) formData.append("city_id", payload.city_id);
     if (payload.is_active !== undefined) {
       formData.append("is_active", String(payload.is_active ? 1 : 0));
+    }
+    if (payload.blocked_until !== undefined) {
+      if (payload.blocked_until === null) {
+        formData.append("blocked_until", "");
+      } else {
+        formData.append("blocked_until", payload.blocked_until);
+      }
     }
     const response = await axios.post<AdminUser>(
       `/user/admin/${userId}`,
