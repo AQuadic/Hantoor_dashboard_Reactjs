@@ -9,8 +9,8 @@ import { getCurrentAdmin, GetCurrentAdminResponse } from "@/api/profile/getProfi
 
 const LayoutHeader = () => {
   const {
-    i18n: { language },
-  } = useTranslation();
+    i18n: { language },t
+  } = useTranslation('profile');
 
   const { data: admin, isLoading } = useQuery<GetCurrentAdminResponse>({
     queryKey: ["currentAdmin"],
@@ -37,7 +37,16 @@ const LayoutHeader = () => {
             )}
           </p>
           <p className="text-xs opacity-50">
-            اخر ظهور 22/03/2025- 08:30 PM
+            {t('lastOnline')}{' '}
+            {admin?.last_online
+              ? new Date(admin.last_online).toLocaleString(language === 'ar' ? 'ar-EG' : 'en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                })
+              : '...'}
           </p>
         </div>
       </Link>
