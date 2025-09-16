@@ -16,6 +16,7 @@ export interface VehicleType {
 export interface GetVehicleTypesParams {
   search?: string;
   body_type_id?: number;
+  brand_id?: number;
   pagination?: boolean;
   page?: number;
   per_page?: number;
