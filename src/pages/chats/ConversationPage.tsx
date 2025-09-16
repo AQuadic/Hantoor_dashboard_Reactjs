@@ -5,15 +5,10 @@ import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  fetchMessages,
-  fetchMessagesByVehicle,
   deleteMessage,
   toggleConversationStatus,
-  type Message,
-  MessagesApiResponse,
 } from "@/api/chats/fetchMessages";
 import {
-  deleteConversation,
   type Conversation,
   type ConversationsApiResponse,
 } from "@/api/chats/fetchConversations";
@@ -22,6 +17,7 @@ import Loading from "@/components/general/Loading";
 import { useState, useEffect } from "react";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 import { deleteVehicleConversation } from "@/api/chats/deleteConversation";
+import { ConversationApiResponse, fetchConversation } from "@/api/chats/fetchConversationById";
 
 interface ConversationPageProps {
   conversationId?: number | null;
@@ -63,27 +59,18 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     : ["messages", conversationId];
 
   const {
-    data: messagesData,
-    isLoading: isLoadingMessages,
-    error: messagesError,
-    refetch,
-  } = useQuery<MessagesApiResponse>({
-    queryKey,
-    queryFn: () => {
-      if (conversationId) return fetchMessages(conversationId, 1, 20);
-      if (vehicleId) return fetchMessagesByVehicle(vehicleId, 1, 20);
-      return Promise.resolve({
-        data: [],
-        current_page: 1,
-        last_page: 1,
-        per_page: 20,
-        from: 0,
-        to: 0,
-        total: 0,
-      });
-    },
-    enabled: !!(conversationId || vehicleId),
-  });
+  data: conversationData,
+  isLoading: isLoadingConversation,
+  error: conversationError,
+  refetch,
+} = useQuery<ConversationApiResponse>({
+  queryKey: ["conversation", conversationId],
+  queryFn: () => {
+    if (conversationId) return fetchConversation(conversationId);
+    return Promise.reject("No conversation id");
+  },
+  enabled: !!conversationId,
+});
   
 
   // Find current conversation data from the conversations cache
@@ -199,11 +186,11 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     );
   }
 
-  if (isLoadingMessages) {
+  if (isLoadingConversation) {
     return <Loading />;
   }
 
-  if (messagesError) {
+  if (conversationError) {
     return (
       <section className="bg-white mx-auto p-4">
         <h2 className="text-[#071739] text-lg font-bold text-center mb-4">
@@ -216,7 +203,8 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     );
   }
 
-  const messages = messagesData?.data || [];
+  const conversation = conversationData?.conversation;
+  const messages = conversation?.messages || [];
 
   return (
     <section className="bg-white mx-auto p-4">
@@ -229,17 +217,14 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
           <div className="flex flex-wrap items-center justify-between rounded-lg p-2 mb-4">
             <div className="flex items-center gap-3">
               <img
-                src={carImage}
+                src={conversation?.vehicle?.image || carImage}
                 alt="car"
                 className="w-[104px] h-[71px] rounded-lg object-cover mr-2"
               />
               <div>
-                {/* <p className="text-[17px] font-bold">
-                  {getLocalizedName(currentConversation.vehicle.name)}
+                <p className="text-[17px] font-bold">
+                  {getLocalizedName(conversation?.vehicle?.name)}
                 </p>
-                <p className="text-base text-[#000000]">
-                  {getLocalizedName(currentConversation.vehicle.brand?.name)}
-                </p> */}
               </div>
             </div>
             <div className="flex items-center gap-[14px] md:mt-0 mt-4">
@@ -266,7 +251,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
             {t("noMessagesFound") || "No messages found"}
           </div>
         ) : (
-          messages.map((message: Message) => (
+          messages.map((message) => (
             <div key={message.id} className="flex flex-col items-start gap-2">
               <div className="flex items-start gap-2">
               {/* Avatar */}
@@ -279,16 +264,15 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
               {/* Name + Time + Bubble */}
               <div>
                 <p className="text-[15.24px] font-bold text-[#071739]">
-                  {message.user?.name || (message.sender_type === "admin"
-                    ? t("admin") || "Admin"
-                    : t("user") || "User")}
+                  {message.user?.name ||
+                    (t("user") || "User")}
                 </p>
                 <p className="text-[10px] text-gray-400 mb-1">
-                  {message.user?.created_at}
+                  {formatTime(message.created_at)}
                 </p>
 
                 <div className="flex items-center gap-3">
-                  <div className="bg-[#1C1C1E] md:w-[351px] text-white px-3 py-2 max-w-xs text-sm rounded-tl-[23.45px] rounded-tr-[9.38px] rounded-br-[23.45px] rounded-bl-[9.38px]">{/* Reply Message */}
+                  <div className="bg-[#1C1C1E] md:w-[351px] text-white px-3 py-2 max-w-xs text-sm rounded-tl-[23.45px] rounded-tr-[9.38px] rounded-br-[23.45px] rounded-bl-[9.38px]">
                       {message.reply_message && (
                         <>
                         <div className="flex items-start gap-2 ml-10 mt-1">
