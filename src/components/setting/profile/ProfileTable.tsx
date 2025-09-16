@@ -56,7 +56,11 @@ const ProfileTable = ({ countryId }: Props) => {
     refetch,
   } = useQuery<OnboardingItem[]>({
     queryKey: ["onboardings", countryId],
-    queryFn: () => getOnboardings({ pagination: "none", country_id: countryId ? Number(countryId) : undefined }),
+    queryFn: () =>
+      getOnboardings({
+        pagination: "none",
+        country_id: countryId ? Number(countryId) : undefined,
+      }),
   });
 
   if (isLoading) return <Loading />;
