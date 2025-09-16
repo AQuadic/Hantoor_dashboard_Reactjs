@@ -44,22 +44,24 @@ export interface BroadcastNotification {
 }
 
 export interface BroadcastNotificationsResponse {
+  current_page: number;
   data: BroadcastNotification[];
-  meta: {
-    current_page: number;
-    from: number;
-    to: number;
-    per_page: number;
-    total: number;
-    last_page: number;
+  from: number;
+  last_page: number;
+  per_page: number;
+  to: number;
+  total: number;
+  first_page_url?: string;
+  last_page_url?: string;
+  next_page_url?: string | null;
+  prev_page_url?: string | null;
   };
-}
-
 
 export interface BroadcastNotificationsQuery {
   search?: string;
   pagination?: "simple" | "normal" | "none";
   per_page?: number;
+  page?: number;
   from_date?: string;
   to_date?: string;  
 }
