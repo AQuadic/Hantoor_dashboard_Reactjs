@@ -28,5 +28,7 @@
   "bankNameTitle": "اسم البنك",
   "interestValue": "قيمة الفائدة",
   "bankDeleted": "تم حذف البنك",
-  "deleteFailed": "فشل الحذف"
+  "deleteFailed": "فشل الحذف",
+  "privateParty": "جهة خاصة",
+  "government": "جهة حكومية"
 }

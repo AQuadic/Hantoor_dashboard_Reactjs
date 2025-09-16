@@ -16,6 +16,7 @@ import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
 import { updateBankById, UpdateBankPayload } from "@/api/bank/editBank";
 import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom"; // استيراد useLocation
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -30,6 +31,7 @@ const getCountryByIso2 = (iso2: string) => {
 const EditBank = () => {
   const { t } = useTranslation("financing");
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["bank", id],
@@ -99,8 +101,8 @@ const EditBank = () => {
   ];
 
   const entities = [
-    { key: "private_party", label: "جهة خاصة" },
-    { key: "government", label: "جهة حكومية" },
+    { key: "private_party", label: t("privateParty") },
+    { key: "government", label: t("government") },
   ];
 
 
@@ -202,7 +204,10 @@ const handleUpdateBank = async () => {
 
       queryClient.setQueryData(["bank", Number(id)], res.data);
 
-      navigate(`/financing/details/${id}`);
+      const fromDetailsId = location.state?.fromDetailsId;
+      const backId = fromDetailsId || id;
+      navigate(`/financing/details/${backId}`);
+
     } else {
       toast.error(res.message || "Failed to update bank");
     }
@@ -317,7 +322,7 @@ const handleUpdateBank = async () => {
               >
                 {Workplaces.map((workplace) => (
                   <SelectItem key={workplace.key} textValue={workplace.key}>
-                    {workplace.label}
+                    {t(workplace.label)}
                   </SelectItem>
                 ))}
               </Select>

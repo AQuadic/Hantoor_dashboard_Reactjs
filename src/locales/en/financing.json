@@ -28,5 +28,7 @@
   "bankNameTitle": "Bank name",
   "interestValue": "Interest value",
   "bankDeleted": "Bank deleted successfully",
-  "deleteFailed": "Delete failed"
+  "deleteFailed": "Delete failed",
+  "privateParty": "Private Party",
+  "government": "Government"
 }
