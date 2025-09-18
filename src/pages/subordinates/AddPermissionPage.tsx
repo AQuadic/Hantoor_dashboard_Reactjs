@@ -24,7 +24,9 @@ const AddPermissionPage = () => {
 
   // State for role name and selected permissions
   const [roleName, setRoleName] = React.useState("");
-  const [selectedPermissions, setSelectedPermissions] = React.useState<string[]>([]);
+  const [selectedPermissions, setSelectedPermissions] = React.useState<
+    string[]
+  >([]);
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   // Fetch permissions list
@@ -44,7 +46,9 @@ const AddPermissionPage = () => {
   const createMutation = useMutation({
     mutationFn: createRole,
     onSuccess: () => {
-      toast.success(t("roleCreatedSuccessfully") || "Role created successfully");
+      toast.success(
+        t("roleCreatedSuccessfully") || "Role created successfully"
+      );
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       // Reset form or navigate away
       setRoleName("");
@@ -58,10 +62,17 @@ const AddPermissionPage = () => {
 
   // Update role mutation
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: { name: string; permissions: string[] } }) => 
-      updateRole(id, data),
+    mutationFn: ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: { name: string; permissions: string[] };
+    }) => updateRole(id, data),
     onSuccess: () => {
-      toast.success(t("roleUpdatedSuccessfully") || "Role updated successfully");
+      toast.success(
+        t("roleUpdatedSuccessfully") || "Role updated successfully"
+      );
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       queryClient.invalidateQueries({ queryKey: ["role", roleId] });
     },
@@ -87,22 +98,30 @@ const AddPermissionPage = () => {
   };
 
   // Handle permission changes
-  const handlePermissionChange = (sectionKey: string, updatedPermissions: PermissionStateTypes[]) => {
+  const handlePermissionChange = (
+    sectionKey: string,
+    updatedPermissions: PermissionStateTypes[]
+  ) => {
     // Get the original permission names from this section
     const sectionData = permissionsData?.permissions?.[sectionKey] || [];
-    
+
     // Map updated permissions back to original permission names
     const sectionPermissionNames = updatedPermissions
-      .map((p, index) => ({ 
-        original: sectionData[index], 
-        isSelected: p.isSelected 
+      .map((p, index) => ({
+        original: sectionData[index],
+        isSelected: p.isSelected,
       }))
-      .filter(p => p.isSelected)
-      .map(p => p.original);
-    
+      .filter((p) => p.isSelected)
+      .map((p) => p.original);
+
     // Update selected permissions for this section
-    const otherSectionsPermissions = selectedPermissions.filter(p => !sectionData.includes(p));
-    setSelectedPermissions([...otherSectionsPermissions, ...sectionPermissionNames]);
+    const otherSectionsPermissions = selectedPermissions.filter(
+      (p) => !sectionData.includes(p)
+    );
+    setSelectedPermissions([
+      ...otherSectionsPermissions,
+      ...sectionPermissionNames,
+    ]);
   };
 
   // Handle form submission
@@ -113,7 +132,10 @@ const AddPermissionPage = () => {
     }
 
     if (selectedPermissions.length === 0) {
-      toast.error(t("selectAtLeastOnePermission") || "Please select at least one permission");
+      toast.error(
+        t("selectAtLeastOnePermission") ||
+          "Please select at least one permission"
+      );
       return;
     }
 
@@ -173,31 +195,37 @@ const AddPermissionPage = () => {
         {/* Permissions from API */}
         {permissionsData?.permissions && (
           <div className="space-y-6">
-            {Object.entries(permissionsData.permissions).map(([sectionKey, permissions]) => (
-              <div key={sectionKey} className="space-y-4">
-                <PermissionsCard
-                  titleAr={formatSectionName(sectionKey)}
-                  titleEn={formatSectionName(sectionKey)}
-                  selectedPermissions={permissions.map(permission => ({
-                    permission: {
-                      titleAr: permission.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
-                      titleEn: permission.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
-                    },
-                    isSelected: selectedPermissions.includes(permission),
-                  }))}
-                  setSelectedPermissions={(updatedPermissions) => 
-                    handlePermissionChange(sectionKey, updatedPermissions)
-                  }
-                />
-              </div>
-            ))}
+            {Object.entries(permissionsData.permissions).map(
+              ([sectionKey, permissions]) => (
+                <div key={sectionKey} className="space-y-4">
+                  <PermissionsCard
+                    titleAr={formatSectionName(sectionKey)}
+                    titleEn={formatSectionName(sectionKey)}
+                    selectedPermissions={permissions.map((permission) => ({
+                      permission: {
+                        titleAr: permission
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (l) => l.toUpperCase()),
+                        titleEn: permission
+                          .replace(/_/g, " ")
+                          .replace(/\b\w/g, (l) => l.toUpperCase()),
+                      },
+                      isSelected: selectedPermissions.includes(permission),
+                    }))}
+                    setSelectedPermissions={(updatedPermissions) =>
+                      handlePermissionChange(sectionKey, updatedPermissions)
+                    }
+                  />
+                </div>
+              )
+            )}
           </div>
         )}
 
         {(() => {
           let buttonTitleAr: string;
           let buttonTitleEn: string;
-          
+
           if (isSubmitting) {
             buttonTitleAr = "جاري الحفظ...";
             buttonTitleEn = "Saving...";
@@ -208,9 +236,9 @@ const AddPermissionPage = () => {
             buttonTitleAr = "اضافة";
             buttonTitleEn = "Add";
           }
-          
+
           return (
-            <DashboardButton 
+            <DashboardButton
               titleAr={buttonTitleAr}
               titleEn={buttonTitleEn}
               onClick={handleSubmit}
