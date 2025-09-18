@@ -17,7 +17,6 @@ import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 
-import DashboardButton from "../general/dashboard/DashboardButton";
 import { useState } from "react";
 import RoleModal from "./RoleModal";
 
@@ -70,12 +69,6 @@ export function PermissionsTable({
 
   const handleDelete = async (roleId: number) => {
     await deleteMutation.mutateAsync(roleId);
-  };
-
-  const handleCreateRole = () => {
-    setModalMode("create");
-    setSelectedRoleId(null);
-    setIsModalOpen(true);
   };
 
   const handleEditRole = (roleId: number) => {
