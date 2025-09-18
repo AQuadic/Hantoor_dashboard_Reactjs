@@ -7,6 +7,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAdmins } from "@/api/admins/getAdmins";
+import { getRoles } from "@/api/roles/getRoles";
 
 const SubordinatesPage = () => {
   const [selectedFilter, setSelectedFilter] = useState<
@@ -46,7 +47,7 @@ const SubordinatesPage = () => {
 
   const { data: permissionsData } = useQuery({
     queryKey: [
-      "permissions",
+      "roles",
       permissionsCurrentPage,
       permissionsItemsPerPage,
       searchTermAr,
@@ -54,7 +55,7 @@ const SubordinatesPage = () => {
       dateParams,
     ],
     queryFn: () =>
-      getAdmins({
+      getRoles({
         search:
           selectedFilter === "Permissions" ? searchTermEn || searchTermAr : "",
         pagination: "normal",
@@ -138,9 +139,10 @@ const SubordinatesPage = () => {
               transition={{ duration: 0.3 }}
             >
               <PermissionsTable
-              // currentPage={permissionsCurrentPage}
-              // itemsPerPage={permissionsItemsPerPage}
-              // searchTerm={searchTermAr || searchTermEn}
+                currentPage={permissionsCurrentPage}
+                itemsPerPage={permissionsItemsPerPage}
+                searchTerm={searchTermAr || searchTermEn}
+                dateParams={dateParams}
               />
               {permissionsTotalItems > 0 && (
                 <TablePagination

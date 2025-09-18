@@ -1,5 +1,3 @@
-import { Switch } from "@heroui/react";
-import { Link } from "react-router";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import Edit from "../icons/general/Edit";
 import {
@@ -10,63 +8,151 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getRoles, type Role } from "@/api/roles/getRoles";
+import { deleteRole } from "@/api/roles/deleteRole";
+import type { DateFilterParams } from "@/utils/dateUtils";
+import { useTranslation } from "react-i18next";
+import toast from "react-hot-toast";
+import Loading from "../general/Loading";
+import NoData from "../general/NoData";
 
-export function PermissionsTable() {
-  const permissions = [
-    {
-      id: 1,
-      name: "مدير",
-      managersCount: 12,
-      isActive: true,
+import DashboardButton from "../general/dashboard/DashboardButton";
+import { useState } from "react";
+import RoleModal from "./RoleModal";
+
+interface PermissionsTableProps {
+  readonly currentPage: number;
+  readonly itemsPerPage: number;
+  readonly searchTerm?: string;
+  readonly dateParams?: DateFilterParams;
+}
+
+export function PermissionsTable({
+  currentPage,
+  itemsPerPage,
+  searchTerm,
+  dateParams,
+}: PermissionsTableProps) {
+  const { t } = useTranslation("subordinates");
+  const queryClient = useQueryClient();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<"create" | "edit">("create");
+  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
+
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["roles", currentPage, itemsPerPage, searchTerm, dateParams],
+    queryFn: () =>
+      getRoles({
+        search: searchTerm,
+        pagination: "normal",
+        per_page: itemsPerPage,
+        page: currentPage,
+        ...(dateParams || {}),
+      }),
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: deleteRole,
+    onSuccess: () => {
+      toast.success(
+        t("roleDeletedSuccessfully") || "Role deleted successfully"
+      );
+      queryClient.invalidateQueries({ queryKey: ["roles"] });
+      refetch();
     },
-    {
-      id: 2,
-      name: "سكرتير",
-      managersCount: 29,
-      isActive: false,
+    onError: (error) => {
+      console.error("Error deleting role:", error);
+      toast.error(t("failedToDeleteRole") || "Failed to delete role");
     },
-    {
-      id: 3,
-      name: "عامل",
-      managersCount: 10,
-      isActive: true,
-    },
-    {
-      id: 4,
-      name: "مسؤول",
-      managersCount: 23,
-      isActive: false,
-    },
-  ];
+  });
+
+  const handleDelete = async (roleId: number) => {
+    await deleteMutation.mutateAsync(roleId);
+  };
+
+  const handleCreateRole = () => {
+    setModalMode("create");
+    setSelectedRoleId(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditRole = (roleId: number) => {
+    setModalMode("edit");
+    setSelectedRoleId(roleId);
+    setIsModalOpen(true);
+  };
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!data?.data?.length) {
+    return (
+      <div className="flex flex-col items-center justify-center py-12">
+        <NoData />
+        <p className="mt-4 text-gray-500">
+          {t("noRolesFound") || "No roles found"}
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-right">#</TableHead>
-          <TableHead className="text-right">الاسم</TableHead>
-          <TableHead className="text-right">عدد المسؤولين</TableHead>
-          <TableHead className="text-right">الحالة</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {permissions.map((permission, index) => (
-          <TableRow key={permission.id}>
-            <TableCell>{index + 1}</TableCell>
-            <TableCell className="w-1/10">{permission.name}</TableCell>
-            <TableCell className="w-full">{permission.managersCount}</TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch defaultSelected={permission.isActive} />
-              <Link to={`/subordinates/permissions/${permission.id}`}>
-                <Edit />
-              </Link>
-              <div className="mt-2">
-                <TableDeleteButton handleDelete={() => {}} />
-              </div>
-            </TableCell>
+    <>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">{t("roles") || "Roles"}</h2>
+        <DashboardButton
+          titleEn="Add Role"
+          titleAr="إضافة دور"
+          variant="add"
+          onClick={handleCreateRole}
+        />
+      </div>
+
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-right">#</TableHead>
+            <TableHead className="text-right">{t("name") || "Name"}</TableHead>
+            <TableHead className="text-right">
+              {t("permissions") || "Permissions"}
+            </TableHead>
+            <TableHead className="text-right">
+              {t("actions") || "Actions"}
+            </TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {data.data.map((role: Role, index: number) => (
+            <TableRow key={role.id}>
+              <TableCell>
+                {(currentPage - 1) * itemsPerPage + index + 1}
+              </TableCell>
+              <TableCell className="font-medium">{role.name}</TableCell>
+              <TableCell>
+                <span className="text-sm text-gray-600">
+                  {role.permissions.length} {t("permissions") || "permissions"}
+                </span>
+              </TableCell>
+              <TableCell className="flex gap-2 items-center">
+                <button onClick={() => handleEditRole(role.id)}>
+                  <Edit />
+                </button>
+                <TableDeleteButton handleDelete={() => handleDelete(role.id)} />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <RoleModal
+        isOpen={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        roleId={selectedRoleId}
+        mode={modalMode}
+      />
+    </>
   );
 }
