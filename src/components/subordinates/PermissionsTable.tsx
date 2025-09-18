@@ -17,8 +17,7 @@ import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 
-import { useState } from "react";
-import RoleModal from "./RoleModal";
+import { useNavigate } from "react-router";
 
 interface PermissionsTableProps {
   readonly currentPage: number;
@@ -36,9 +35,7 @@ export function PermissionsTable({
   const { t } = useTranslation("subordinates");
   const queryClient = useQueryClient();
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState<"create" | "edit">("create");
-  const [selectedRoleId, setSelectedRoleId] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["roles", currentPage, itemsPerPage, searchTerm, dateParams],
@@ -72,9 +69,8 @@ export function PermissionsTable({
   };
 
   const handleEditRole = (roleId: number) => {
-    setModalMode("edit");
-    setSelectedRoleId(roleId);
-    setIsModalOpen(true);
+    // Redirect to the add/edit permission page which handles both create and edit
+    navigate(`/subordinates/permissions/${roleId}`);
   };
 
   if (isLoading) {
@@ -130,12 +126,7 @@ export function PermissionsTable({
         </TableBody>
       </Table>
 
-      <RoleModal
-        isOpen={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        roleId={selectedRoleId}
-        mode={modalMode}
-      />
+      {/* Editing handled on separate page: /permissions/:id */}
     </>
   );
 }

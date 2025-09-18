@@ -1,7 +1,7 @@
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
 import React from "react";
-import { useParams } from "react-router";
+import { useParams, useNavigate } from "react-router";
 import PermissionsCard from "@/components/subordinates/PermissionsCard";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import { useTranslation } from "react-i18next";
@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 const AddPermissionPage = () => {
   const params = useParams();
   const roleId = params.id;
+  const navigate = useNavigate();
 
   const isEdit = Boolean(roleId);
   const { t } = useTranslation();
@@ -35,6 +36,13 @@ const AddPermissionPage = () => {
     queryFn: getPermissions,
   });
 
+  // Debug log when permissions data changes
+  React.useEffect(() => {
+    if (permissionsData) {
+      console.log("Permissions loaded:", permissionsData);
+    }
+  }, [permissionsData]);
+
   // Fetch role data when editing
   const { data: roleData, isLoading: isLoadingRole } = useQuery({
     queryKey: ["role", roleId],
@@ -50,13 +58,14 @@ const AddPermissionPage = () => {
         t("roleCreatedSuccessfully") || "Role created successfully"
       );
       queryClient.invalidateQueries({ queryKey: ["roles"] });
-      // Reset form or navigate away
-      setRoleName("");
-      setSelectedPermissions([]);
+      // Navigate back to subordinates page with permissions tab
+      navigate("/subordinates");
     },
-    onError: (error) => {
+    onError: (error: unknown) => {
       console.error("Error creating role:", error);
-      toast.error(t("failedToCreateRole") || "Failed to create role");
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to create role";
+      toast.error(t("failedToCreateRole") || errorMessage);
     },
   });
 
@@ -75,16 +84,21 @@ const AddPermissionPage = () => {
       );
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       queryClient.invalidateQueries({ queryKey: ["role", roleId] });
+      // Navigate back to subordinates page with permissions tab
+      navigate("/subordinates");
     },
-    onError: (error) => {
+    onError: (error: unknown) => {
       console.error("Error updating role:", error);
-      toast.error(t("failedToUpdateRole") || "Failed to update role");
+      const errorMessage =
+        error instanceof Error ? error.message : "Failed to update role";
+      toast.error(t("failedToUpdateRole") || errorMessage);
     },
   });
 
   // Effect to populate form when editing
   React.useEffect(() => {
     if (isEdit && roleData) {
+      console.log("Loading existing role data:", roleData);
       setRoleName(roleData.name);
       setSelectedPermissions(roleData.permissions || []);
     }
@@ -118,10 +132,21 @@ const AddPermissionPage = () => {
     const otherSectionsPermissions = selectedPermissions.filter(
       (p) => !sectionData.includes(p)
     );
-    setSelectedPermissions([
+
+    const newSelectedPermissions = [
       ...otherSectionsPermissions,
       ...sectionPermissionNames,
-    ]);
+    ];
+
+    console.log("Permission change:", {
+      sectionKey,
+      sectionData,
+      sectionPermissionNames,
+      otherSectionsPermissions,
+      newSelectedPermissions,
+    });
+
+    setSelectedPermissions(newSelectedPermissions);
   };
 
   // Handle form submission
@@ -142,6 +167,13 @@ const AddPermissionPage = () => {
     setIsSubmitting(true);
 
     try {
+      console.log("Submitting role data:", {
+        name: roleName,
+        permissions: selectedPermissions,
+        isEdit,
+        roleId,
+      });
+
       if (isEdit && roleId) {
         await updateMutation.mutateAsync({
           id: Number(roleId),
@@ -156,7 +188,8 @@ const AddPermissionPage = () => {
           permissions: selectedPermissions,
         });
       }
-    } finally {
+    } catch (error) {
+      console.error("Form submission error:", error);
       setIsSubmitting(false);
     }
   };
