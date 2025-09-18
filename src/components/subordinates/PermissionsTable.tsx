@@ -8,6 +8,8 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
+import { Switch } from "@heroui/react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getRoles, type Role } from "@/api/roles/getRoles";
 import { deleteRole } from "@/api/roles/deleteRole";
@@ -33,6 +35,7 @@ export function PermissionsTable({
   dateParams,
 }: PermissionsTableProps) {
   const { t } = useTranslation("subordinates");
+  const [activeStates, setActiveStates] = useState<Record<number, boolean>>({});
   const queryClient = useQueryClient();
 
   const navigate = useNavigate();
@@ -48,6 +51,16 @@ export function PermissionsTable({
         ...(dateParams || {}),
       }),
   });
+
+  useEffect(() => {
+    // Initialize active state for each role. The API doesn't currently expose an `is_active` flag
+    // for roles, so we default to `true`. If the API adds such field later, switch to that.
+    const initial: Record<number, boolean> = {};
+    data?.data?.forEach((r: Role) => {
+      initial[r.id] = true;
+    });
+    setActiveStates(initial);
+  }, [data]);
 
   const deleteMutation = useMutation({
     mutationFn: deleteRole,
@@ -99,7 +112,7 @@ export function PermissionsTable({
               {t("permissions") || "Permissions"}
             </TableHead>
             <TableHead className="text-right">
-              {t("actions") || "Actions"}
+              {t("status") || "Status"}
             </TableHead>
           </TableRow>
         </TableHeader>
@@ -116,6 +129,18 @@ export function PermissionsTable({
                 </span>
               </TableCell>
               <TableCell className="flex gap-2 items-center">
+                <Switch
+                  isSelected={!!activeStates[role.id]}
+                  onChange={() => {
+                    const current = !!activeStates[role.id];
+                    setActiveStates((s) => ({ ...s, [role.id]: !current }));
+                    toast.success(
+                      !current
+                        ? t("roleActivated") || "Role activated"
+                        : t("roleDeactivated") || "Role deactivated"
+                    );
+                  }}
+                />
                 <button onClick={() => handleEditRole(role.id)}>
                   <Edit />
                 </button>
