@@ -133,21 +133,15 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
         center.description?.en
     );
 
-    if (validCenters.length === 0) {
-      toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
-      return;
-    }
+    const hasChanges =
+      arName !== agent?.name.ar ||
+      enName !== agent?.name.en ||
+      emailLink !== (agent?.website || agent?.link || "") ||
+      JSON.stringify(validCenters) !== JSON.stringify(agent?.centers || []);
 
-    // Check if at least one center OR one showroom exists
-    const hasValidCenter = validCenters.some(
-      (center) => center.type === "center"
-    );
-    const hasValidShowroom = validCenters.some(
-      (center) => center.type === "show_room"
-    );
-
-    if (!hasValidCenter && !hasValidShowroom) {
-      toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
+    if (!hasChanges) {
+      toast.success(t("agentUpdatedSuccess"));
+      navigate("/agents");
       return;
     }
 

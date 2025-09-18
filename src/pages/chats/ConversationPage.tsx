@@ -5,11 +5,8 @@ import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  fetchMessages,
-  fetchMessagesByVehicle,
   deleteMessage,
   toggleConversationStatus,
-  type Message,
 } from "@/api/chats/fetchMessages";
 import {
   type Conversation,
@@ -18,6 +15,9 @@ import {
 import { toast } from "react-hot-toast";
 import Loading from "@/components/general/Loading";
 import { useState, useEffect } from "react";
+import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
+import { deleteVehicleConversation } from "@/api/chats/deleteConversation";
+import { ConversationApiResponse, fetchConversation } from "@/api/chats/fetchConversationById";
 
 interface ConversationPageProps {
   conversationId?: number | null;
@@ -53,23 +53,25 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     });
   };
 
-  // Fetch messages for the conversation or vehicle
+  // Fetch messages based on conversationId or vehicleId
   const queryKey = vehicleId
     ? ["messages", "vehicle", vehicleId]
     : ["messages", conversationId];
 
   const {
-    data: messagesData,
-    isLoading: isLoadingMessages,
-    error: messagesError,
-  } = useQuery({
-    queryKey,
-    queryFn: () =>
-      vehicleId
-        ? fetchMessagesByVehicle(vehicleId!, 1, 3)
-        : fetchMessages(conversationId!, 1, 3),
-    enabled: !!(conversationId || vehicleId),
-  });
+  data: conversationData,
+  isLoading: isLoadingConversation,
+  error: conversationError,
+  refetch,
+} = useQuery<ConversationApiResponse>({
+  queryKey: ["conversation", conversationId],
+  queryFn: () => {
+    if (conversationId) return fetchConversation(conversationId);
+    return Promise.reject("No conversation id");
+  },
+  enabled: !!conversationId,
+});
+  
 
   // Find current conversation data from the conversations cache
   // Attempt to find conversation data from cache. If vehicleId is provided,
@@ -97,11 +99,20 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
   // Delete message mutation
   const deleteMessageMutation = useMutation({
     mutationFn: deleteMessage,
-    onSuccess: () => {
+    onSuccess: (_, messageId: number) => {
       toast.success(
         t("messageDeletedSuccess") || "Message deleted successfully"
       );
-      queryClient.invalidateQueries({ queryKey: ["messages", conversationId] });
+
+      setCurrentConversation((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          messages: prev.messages.filter((msg) => msg.id !== messageId),
+        };
+      });
+
+      queryClient.invalidateQueries({ queryKey: ["conversation", conversationId] });
     },
     onError: () => {
       toast.error(t("messageDeleteFailed") || "Failed to delete message");
@@ -145,13 +156,31 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
   };
 
   const handleToggleStatus = () => {
-    if (conversationId && currentConversation) {
-      toggleStatusMutation.mutate({
-        conversationId,
-        isActive: !currentConversation.is_active,
+    const idToUse = conversationId || currentConversation?.id;
+    if (!idToUse) return;
+    if (currentConversation) {
+      setCurrentConversation({
+        ...currentConversation,
+        is_active: !currentConversation.is_active,
       });
     }
+
+    toggleStatusMutation.mutate({
+      conversationId: idToUse,
+      isActive: !(currentConversation?.is_active ?? false),
+    });
   };
+  const handleDeleteConversation = async (id: number) => {
+  try {
+    await deleteVehicleConversation(id);
+    toast.success(t("conversationDeleted") || "Conversation deleted successfully");
+    refetch();
+    queryClient.invalidateQueries({ queryKey: ["conversations"] });
+  } catch {
+    toast.error(t("conversationDeleteFailed") || "Failed to delete conversation");
+  }
+};
+
 
   if (!conversationId) {
     return (
@@ -166,11 +195,11 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     );
   }
 
-  if (isLoadingMessages) {
+  if (isLoadingConversation) {
     return <Loading />;
   }
 
-  if (messagesError) {
+  if (conversationError) {
     return (
       <section className="bg-white mx-auto p-4">
         <h2 className="text-[#071739] text-lg font-bold text-center mb-4">
@@ -183,7 +212,8 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     );
   }
 
-  const messages = messagesData?.data || [];
+  const conversation = conversationData?.conversation;
+  const messages = conversation?.messages || [];
 
   return (
     <section className="bg-white mx-auto p-4">
@@ -193,36 +223,35 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
       <hr className="my-4" />
 
       {/* Vehicle Info */}
-      {currentConversation?.vehicle && (
-        <>
           <div className="flex flex-wrap items-center justify-between rounded-lg p-2 mb-4">
             <div className="flex items-center gap-3">
               <img
-                src={carImage}
+                src={conversation?.vehicle?.image?.url || carImage}
                 alt="car"
                 className="w-[104px] h-[71px] rounded-lg object-cover mr-2"
               />
               <div>
                 <p className="text-[17px] font-bold">
-                  {getLocalizedName(currentConversation.vehicle.name)}
-                </p>
-                <p className="text-base text-[#000000]">
-                  {getLocalizedName(currentConversation.vehicle.brand?.name)}
+                  {getLocalizedName(conversation?.vehicle?.name)}
                 </p>
               </div>
             </div>
             <div className="flex items-center gap-[14px] md:mt-0 mt-4">
               <Switch
-                checked={Boolean(currentConversation.is_active)}
+                checked={Boolean(currentConversation?.is_active)}
                 onChange={handleToggleStatus}
                 disabled={toggleStatusMutation.isPending}
               />
-              <Delete />
+              <TableDeleteButton
+                handleDelete={() => {
+                  const idToDelete = conversationId || currentConversation?.id;
+                  if (!idToDelete) return;
+                  handleDeleteConversation(idToDelete);
+                }}
+              />
             </div>
           </div>
           <hr className="my-4" />
-        </>
-      )}
 
       {/* Messages */}
       <div className="space-y-4">
@@ -231,24 +260,38 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
             {t("noMessagesFound") || "No messages found"}
           </div>
         ) : (
-          messages.map((message: Message) => (
-            <div key={message.id} className="flex items-start gap-2">
+          messages.map((message) => (
+            <div key={message.id} className="flex flex-col items-start gap-2">
+              <div className="flex items-start gap-2">
               {/* Avatar */}
-              <img src={Avatar} alt="avatar" className="w-8 h-8 rounded-full" />
+              <img
+                src={message.user?.image || Avatar}
+                alt={message.user?.name || "User"}
+                className="w-8 h-8 rounded-full"
+              />
 
               {/* Name + Time + Bubble */}
               <div>
-                <p className="text-xs font-medium text-[#071739]">
-                  {message.sender_type === "admin"
-                    ? t("admin") || "Admin"
-                    : t("user") || "User"}
+                <p className="text-[15.24px] font-bold text-[#071739]">
+                  {message.user?.name ||
+                    (t("user") || "User")}
                 </p>
                 <p className="text-[10px] text-gray-400 mb-1">
                   {formatTime(message.created_at)}
                 </p>
 
                 <div className="flex items-center gap-3">
-                  <div className="bg-[#1C1C1E] text-white rounded-2xl px-3 py-2 max-w-xs text-sm">
+                  <div className="bg-[#1C1C1E] md:w-[351px] text-white px-3 py-2 max-w-xs text-sm rounded-tl-[23.45px] rounded-tr-[9.38px] rounded-br-[23.45px] rounded-bl-[9.38px]">
+                      {message.reply_message && (
+                        <>
+                        <div className="flex items-start gap-2 ml-10 mt-1">
+                          <div className="text-[#FFFFFF] text-[16.42px] leading-[24.62px] font-normal">
+                            {message.reply_message.message}
+                          </div>
+                        </div>
+                    <div className="w-full h-px bg-[#3F3F3F] my-1.5"></div>
+                      </>
+                      )}
                     {message.message}
                   </div>
                   <button
@@ -257,6 +300,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
                   >
                     <Delete />
                   </button>
+                  </div>
                 </div>
               </div>
             </div>

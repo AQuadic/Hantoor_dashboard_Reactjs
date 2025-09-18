@@ -16,6 +16,7 @@ import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
 import { updateBankById, UpdateBankPayload } from "@/api/bank/editBank";
 import toast from "react-hot-toast";
+import { useLocation } from "react-router-dom"; // استيراد useLocation
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -30,6 +31,7 @@ const getCountryByIso2 = (iso2: string) => {
 const EditBank = () => {
   const { t } = useTranslation("financing");
   const { id } = useParams<{ id: string }>();
+  const location = useLocation();
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["bank", id],
@@ -72,6 +74,8 @@ const EditBank = () => {
   const [visitorInterestAmount, setVisitorInterestAmount] = useState("");
   const [visitorInterestAmount2, setVisitorInterestAmount2] = useState("");
   const [visitorSalaryTo2, setVisitorSalaryTo2] = useState("");
+  const [visitorWorkplace, setVisitorWorkplace] = useState("");
+  const [visitorWorkplace2, setVisitorWorkplace2] = useState("");
 
   // Citizen data states
   const [citizenSalaryFrom, setCitizenSalaryFrom] = useState("");
@@ -91,15 +95,16 @@ const EditBank = () => {
     { key: "5", label: "5 سنوات" },
   ];
 
-  const entities = [
-    { key: "1", label: "جهة حكومية" },
-    { key: "2", label: "جهة خاصة" },
+  const Workplaces = [
+    { key: "private_party", label: "جهة خاصة" },
+    { key: "government", label: "جهة حكومية" },
   ];
 
-  const Workplaces = [
-    { key: "1", label: "جهة حكومية" },
-    { key: "2", label: "جهة خاصة" },
+  const entities = [
+    { key: "private_party", label: t("privateParty") },
+    { key: "government", label: t("government") },
   ];
+
 
   useEffect(() => {
     if (data) {
@@ -153,8 +158,8 @@ const queryClient = useQueryClient();
 const handleUpdateBank = async () => {
   const payload: UpdateBankPayload = {
     name: { ar: arBankName, en: enBankName },
-    country_id: selectedCountry.iso2 === "EG" ? 1 : 0,
-    phone: phone,
+    country_id: data?.country_id || 1,
+    phone,
     phone_country: selectedCountry.iso2,
     image: profileImage,
     finance: [
@@ -163,7 +168,7 @@ const handleUpdateBank = async () => {
         salary_from: Number(visitorSalaryFrom),
         salary_to: Number(visitorSalaryTo),
         duration: visitorDuration,
-        employer: "",
+        employer: visitorWorkplace,
         value: visitorInterestAmount,
       },
       {
@@ -171,7 +176,7 @@ const handleUpdateBank = async () => {
         salary_from: Number(visitorSalaryFrom2),
         salary_to: Number(visitorSalaryTo2),
         duration: visitorDuration,
-        employer: "",
+        employer: visitorWorkplace2,
         value: visitorInterestAmount2,
       },
       {
@@ -185,26 +190,33 @@ const handleUpdateBank = async () => {
     ],
   };
 
+  const missingEmployer = payload.finance?.some((f) => !f.employer || f.employer.trim() === "");
+  if (missingEmployer) {
+    toast.error("برجاء إدخال جهة العمل لكل التمويلات قبل الحفظ");
+    return;
+  }
+
   try {
     const res = await updateBankById(Number(id), payload);
 
-    if (res.success) {
-    toast.success("Bank updated successfully!");
-    navigate(`/financing/details/${id}`);
+    if (res.message === "Updated successfully") {
+      toast.success(res.message);
 
-    if (id) {
-      queryClient.invalidateQueries({
-        queryKey: ["bank", Number(id)],
-      });
+      queryClient.setQueryData(["bank", Number(id)], res.data);
+
+      const fromDetailsId = location.state?.fromDetailsId;
+      const backId = fromDetailsId || id;
+      navigate(`/financing/details/${backId}`);
+
+    } else {
+      toast.error(res.message || "Failed to update bank");
     }
-  } else {
-    toast.error(res.message || "Failed to update bank");
-  }
   } catch (error: any) {
     console.error("Update bank error:", error.response?.data || error);
-    toast.error(error.response?.data?.message || "error");
+    toast.error(error.response?.data?.message || "حدث خطأ ما");
   }
 };
+
 
   if (isLoading) return <Loading />;
   if (error) return <NoData />;
@@ -304,13 +316,13 @@ const handleUpdateBank = async () => {
               <Select
                 label={t("Workplace")}
                 variant="bordered"
-                placeholder="جهة حكومية"
-                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
+                selectedKeys={visitorWorkplace ? [visitorWorkplace] : []}
+                onChange={(e) => setVisitorWorkplace(e.target.value)}
               >
-                {entities.map((entitiy) => (
-                  <SelectItem key={entitiy.key} textValue={entitiy.label}>
-                    {entitiy.label}
+                {Workplaces.map((workplace) => (
+                  <SelectItem key={workplace.key} textValue={workplace.key}>
+                    {t(workplace.label)}
                   </SelectItem>
                 ))}
               </Select>
@@ -365,11 +377,12 @@ const handleUpdateBank = async () => {
                 label={t("Workplace")}
                 variant="bordered"
                 placeholder="جهة حكومية"
-                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
+                selectedKeys={visitorWorkplace2 ? [visitorWorkplace2] : []}
+                onChange={(e) => setVisitorWorkplace2(e.target.value)}
               >
                 {Workplaces.map((workplace) => (
-                  <SelectItem key={workplace.key} textValue={workplace.label}>
+                  <SelectItem key={workplace.key} textValue={workplace.key}>
                     {workplace.label}
                   </SelectItem>
                 ))}

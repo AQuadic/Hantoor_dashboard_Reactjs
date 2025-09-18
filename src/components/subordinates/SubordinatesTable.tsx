@@ -34,7 +34,7 @@ export function SubordinatesTable({
   searchTerm,
   dateParams,
 }: SubordinatesTableProps) {
-  const { t } = useTranslation("subordinates");
+  const { t, i18n } = useTranslation("subordinates");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["admins", currentPage, itemsPerPage, searchTerm, dateParams],
@@ -123,7 +123,20 @@ export function SubordinatesTable({
             <TableCell>{admin.email}</TableCell>
             <TableCell>{formatDateTime(admin.created_at)}</TableCell>
             <TableCell>-</TableCell>
-            <TableCell>{formatDateTime(admin.updated_at)}</TableCell>
+            <TableCell>
+            {admin?.last_online
+              ? new Date(admin.last_online).toLocaleString(
+                  i18n.language === 'ar' ? 'ar-EG' : 'en-US',
+                  {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }
+                )
+              : '...'}
+          </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch
                 isSelected={!!admin.is_active}

@@ -122,23 +122,28 @@ const AddBank = () => {
 
   const validateForm = () => {
     if (!arBankName.trim()) {
-      toast.error("Arabic bank name is required");
+      toast.dismiss()
+      toast.error(t('arabicBankName'));
       return false;
     }
     if (!enBankName.trim()) {
-      toast.error("English bank name is required");
+      toast.dismiss()
+      toast.error(t('englishBankName'));
       return false;
     }
     if (!phone.trim()) {
-      toast.error("Phone number is required");
+      toast.dismiss()
+      toast.error(t('phoneRequired'));
       return false;
     }
     if (phone.length > 20) {
-      toast.error("Phone must not be greater than 20 characters");
+      toast.dismiss()
+      toast.error(t('phoneGreaterThan'));
       return false;
     }
     if (!selectedCountryId) {
-      toast.error("Country is required");
+      toast.dismiss()
+      toast.error(t('countryRequired'));
       return false;
     }
     return true;

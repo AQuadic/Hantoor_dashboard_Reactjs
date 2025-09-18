@@ -28,5 +28,12 @@
   "bankNameTitle": "اسم البنك",
   "interestValue": "قيمة الفائدة",
   "bankDeleted": "تم حذف البنك",
-  "deleteFailed": "فشل الحذف"
+  "deleteFailed": "فشل الحذف",
+  "privateParty": "جهة خاصة",
+  "government": "جهة حكومية",
+  "arabicBankName": "الاسم العربي للبنك مطلوب",
+  "englishBankName": "الاسم الإنجليزي للبنك مطلوب",
+  "phoneRequired": "رقم الهاتف مطلوب",
+  "phoneGreaterThan": "يجب ألا يزيد رقم الهاتف عن 20 حرفًا",
+  "countryRequired": "الدولة مطلوبة"
 }

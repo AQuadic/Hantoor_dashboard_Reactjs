@@ -24,16 +24,17 @@ const NotificationPage = () => {
       getBroadcastNotifications({
         pagination: "normal",
         search: searchTerm,
+        page,
         ...dateParams,
       }),
   });
 
   const notifications = notificationsData?.data || [];
-  const perPage = notificationsData?.meta?.per_page || 10;
-  const totalItems = notificationsData?.meta?.total || notifications.length;
-  const totalPages = notificationsData?.meta?.last_page || 1;
-  const from = notificationsData?.meta?.from || 1;
-  const to = notificationsData?.meta?.to || notifications.length;
+  const perPage = notificationsData?.per_page || 10;
+  const totalItems = notificationsData?.total || notifications.length;
+  const totalPages = notificationsData?.last_page || 1;
+  const from = notificationsData?.from || 1;
+  const to = notificationsData?.to || notifications.length;
 
   return (
     <div>

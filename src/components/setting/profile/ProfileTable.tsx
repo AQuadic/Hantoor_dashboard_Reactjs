@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../../ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../ui/table";
 import TableDeleteButton from "../../general/dashboard/table/TableDeleteButton";
 import Edit from "../../icons/general/Edit";
 import { useTranslation } from "react-i18next";
@@ -19,15 +26,14 @@ interface PortableTextBlock {
   children: PortableTextChild[];
 }
 
-
 const parseDescription = (desc: string) => {
   try {
     const blocks: PortableTextBlock[] = JSON.parse(desc);
     if (!Array.isArray(blocks)) return desc;
     return blocks
-      .map(block => {
+      .map((block) => {
         if (block.type === "paragraph" && Array.isArray(block.children)) {
-          return block.children.map(child => child.text).join("");
+          return block.children.map((child) => child.text).join("");
         }
         return "";
       })
@@ -37,73 +43,95 @@ const parseDescription = (desc: string) => {
   }
 };
 
-const ProfileTable = () => {
-    const { t, i18n } = useTranslation("setting");
+interface Props {
+  countryId?: string;
+}
 
-    const { data: profiles, isLoading, refetch } = useQuery<OnboardingItem[]>({
-    queryKey: ["onboardings"],
-    queryFn: () => getOnboardings({ pagination: "none" }),
-    });
+const ProfileTable = ({ countryId }: Props) => {
+  const { t, i18n } = useTranslation("setting");
 
-    if (isLoading) return <Loading />
-    if (!profiles || profiles.length === 0) return <NoData />
+  const {
+    data: profiles,
+    isLoading,
+    refetch,
+  } = useQuery<OnboardingItem[]>({
+    queryKey: ["onboardings", countryId],
+    queryFn: () =>
+      getOnboardings({
+        pagination: "none",
+        country_id: countryId ? Number(countryId) : undefined,
+      }),
+  });
 
-    const handleDelete = async (id: number) => {
+  if (isLoading) return <Loading />;
+  if (!profiles || profiles.length === 0) return <NoData />;
+
+  const handleDelete = async (id: number) => {
     await deleteProfile(id);
     toast.success(t("profileDeleted"));
     refetch();
   };
 
-    return (
-        <Table>
-        <TableHeader>
-            <TableRow>
-            <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">{t('image')}</TableHead>
-            <TableHead className="text-right">{t('textTitle')}</TableHead>
-            <TableHead className="text-right">{t('country')}</TableHead>
-            <TableHead className="text-right">{t('description')}</TableHead>
-            <TableHead className="text-right">{t('status')}</TableHead>
-            </TableRow>
-        </TableHeader>
-        <TableBody>
-            {profiles.map((profile: OnboardingItem, index: number) => (
-            <TableRow key={profile.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
-                {profile.image ? (
-                    typeof profile.image === "string" ? (
-                    <img src={profile.image} alt={profile.title.en} className="w-20 h-20 object-cover" />
-                    ) : (
-                    <img src={profile.image.url} alt={profile.title.en} className="w-20 h-20 object-cover" />
-                    )
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="text-right">#</TableHead>
+          <TableHead className="text-right">{t("image")}</TableHead>
+          <TableHead className="text-right">{t("textTitle")}</TableHead>
+          <TableHead className="text-right">{t("country")}</TableHead>
+          <TableHead className="text-right">{t("description")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {profiles.map((profile: OnboardingItem, index: number) => (
+          <TableRow key={profile.id} noBackgroundColumns={1}>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell>
+              {profile.image ? (
+                typeof profile.image === "string" ? (
+                  <img
+                    src={profile.image}
+                    alt={profile.title.en}
+                    className="w-20 h-20 object-cover"
+                  />
                 ) : (
-                    <div className="text-gray-400">
-                    No Image
-                    </div>
-                )}
-                </TableCell>
-                <TableCell>{i18n.language === "ar" ? profile.title.ar : profile.title.en}</TableCell>
-                <TableCell>{profile.country_id}</TableCell>
-                <TableCell className="w-full">
-                {i18n.language === "ar"
-                    ? parseDescription(profile.description.ar)
-                    : parseDescription(profile.description.en)}
-                </TableCell>
-                <TableCell className="flex gap-[7px] items-center">
-                <Link to={`/profile/edit/${profile.id}`}>
-                    <Edit />
-                </Link>
+                  <img
+                    src={profile.image.url}
+                    alt={profile.title.en}
+                    className="w-20 h-20 object-cover"
+                  />
+                )
+              ) : (
+                <div className="text-gray-400">No Image</div>
+              )}
+            </TableCell>
+            <TableCell>
+              {i18n.language === "ar" ? profile.title.ar : profile.title.en}
+            </TableCell>
+            <TableCell>{profile.country_id}</TableCell>
+            <TableCell className="w-full">
+              {i18n.language === "ar"
+                ? parseDescription(profile.description.ar)
+                : parseDescription(profile.description.en)}
+            </TableCell>
+            <TableCell className="flex gap-[7px] items-center">
+              <Link to={`/profile/edit/${profile.id}`}>
+                <Edit />
+              </Link>
 
-                <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(profile.id)} />
-                </div>
-                </TableCell>
-            </TableRow>
-            ))}
-        </TableBody>
-        </Table>
-    )
-}
+              <div className="mt-2">
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(profile.id)}
+                />
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
 
-export default ProfileTable
+export default ProfileTable;

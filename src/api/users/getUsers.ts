@@ -26,9 +26,11 @@ export interface AdminUser {
   city_id?: number;
   created_at: string;
   updated_at: string;
+  last_online: string;
   country?: Country | null;
-  is_active: boolean; 
-  image?: AdminUserImage | null; 
+  is_active: boolean;
+  image?: AdminUserImage | null;
+  blocked_until?: string | null;
 }
 
 export interface AdminUsersResponse {
@@ -59,10 +61,12 @@ export interface GetAdminUsersParams {
   per_page?: number;
   page?: number;
   from_date?: string;
-  to_date?: string;  
+  to_date?: string;
 }
 
-export async function getAdminUsers(params: GetAdminUsersParams = {}): Promise<AdminUsersResponse> {
+export async function getAdminUsers(
+  params: GetAdminUsersParams = {}
+): Promise<AdminUsersResponse> {
   const response = await axios.get<AdminUsersResponse>("/user/admin", {
     params,
     headers: {

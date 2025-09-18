@@ -118,9 +118,13 @@ const BanksTable = ({ countryId }: BanksTableProps) => {
               </TableCell>
               <TableCell className="flex gap-[7px] items-center">
                 <Switch defaultSelected={Boolean(bank.is_active)} />
-                <Link to={`/bank/edit/${bank.id}`}>
-                  <Edit />
-                </Link>
+                <Link 
+                    to={`/bank/edit/${bank.id}`} 
+                    state={{ fromDetailsId: bank.country_id }}
+                  >
+                    <Edit />
+                  </Link>
+
                 <div className="mt-2">
                   <TableDeleteButton
                     handleDelete={() => handleDelete(bank.id)}

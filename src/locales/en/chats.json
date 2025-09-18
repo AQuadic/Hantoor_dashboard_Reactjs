@@ -20,5 +20,6 @@
   "conversationDeleteFailed": "Failed to delete conversation",
   "conversationDeleteError": "Failed to delete conversation",
   "confirmDeleteConversation": "Are you sure you want to delete this conversation?",
-  "errorLoadingConversations": "Error loading conversations"
+  "errorLoadingConversations": "Error loading conversations",
+  "conversationDeleted": "Conversation deleted successfully"
 }

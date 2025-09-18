@@ -11,7 +11,7 @@ import {
   GetCurrentAdminResponse,
 } from "@/api/profile/getProfile";
 import Loading from "../general/Loading";
-import { updateAdmin } from "@/api/admins/editAdmin";
+import { updateProfile } from "@/api/profile/updateProfile";
 import toast from "react-hot-toast";
 
 const getCountryByIso2 = (iso2: string) => {
@@ -106,7 +106,7 @@ const EditProfileForm = ({
       setLoading(true);
       // clear the flag because we're removing immediately
       setRemoveExistingImage(false);
-      await updateAdmin(data.id, { remove_image: true });
+      await updateProfile({ remove_image: true });
       toast.success(t("profileUpdated"));
     } catch (err: unknown) {
       const msg = getErrorMessage(err);
@@ -124,7 +124,7 @@ const EditProfileForm = ({
     if (!data) return;
     try {
       setLoading(true);
-      await updateAdmin(data.id, {
+      await updateProfile({
         name,
         email,
         phone,
@@ -165,7 +165,7 @@ const EditProfileForm = ({
     }
     try {
       setLoading(true);
-      await updateAdmin(data.id, {
+      await updateProfile({
         password: newPassword,
         password_confirmation: confirmPassword,
       });

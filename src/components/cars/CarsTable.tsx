@@ -52,6 +52,7 @@ const CarsTable = ({
   const [localStatusMap, setLocalStatusMap] = useState<Record<number, boolean>>(
     {}
   );
+const [openConversationId, setOpenConversationId] = useState<number | null>(null);
 
   // Fetch vehicles with filters
   const {
@@ -86,6 +87,21 @@ const CarsTable = ({
       toast.error(t("errorFetchingVehicles") || "Error fetching vehicles");
     }
   }, [error, t]);
+  
+  useEffect(() => {
+    if (openChatId !== null && vehiclesData?.data) {
+      const vehicle = vehiclesData.data.find(
+        (v) => v.id === openChatId
+      ) as Vehicle & { conversation?: { id: number } } | undefined;
+
+      if (vehicle?.conversation) {
+        setOpenConversationId(vehicle.conversation.id);
+      } else {
+        setOpenConversationId(null);
+      }
+    }
+  }, [openChatId, vehiclesData]);
+
 
   // Call onDataChange when data changes
   useEffect(() => {
@@ -434,7 +450,7 @@ const CarsTable = ({
               transition={{ duration: 0.3 }}
               className="fixed top-0 right-0 h-full md:w-[493px] w-[300px] bg-white shadow-lg z-50 overflow-y-auto"
             >
-              <ConversationPage vehicleId={openChatId} conversationId={null} />
+            <ConversationPage conversationId={openConversationId!} />
             </motion.div>
           </>
         )}

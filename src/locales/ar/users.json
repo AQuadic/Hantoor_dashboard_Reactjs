@@ -6,7 +6,7 @@
   "email": "البريد الالكنتروني",
   "phone": "رقم الجوال",
   "password": "كلمة المرور",
-  "confirmPassword": "تأكيد كلمة المرور الجديدة",
+  "confirmPassword": "تأكيد كلمة المرور ",
   "selectAll": "تحدد الكل",
 
   "image": "الصورة",
@@ -31,5 +31,6 @@
   "passwordsNotMatch": "كلمة المرور غير متطابقة",
   "newPassword": "كلمة المرور الجديدة",
   "invalidDate": "تاريخ غير صالح",
-  "profileImage": "الصورة الشخصية"
+  "profileImage": "الصورة الشخصية",
+  "statusUpdated": "تم تحديث الحالة بنجاح"
 }

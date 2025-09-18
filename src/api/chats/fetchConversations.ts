@@ -1,4 +1,5 @@
 import { axios } from "@/lib/axios";
+import { Message } from "./fetchConversationById";
 
 // Vehicle conversation interface
 export interface Conversation {
@@ -47,6 +48,7 @@ export interface Conversation {
     country_id: number | null;
   };
   users_count?: number;
+  messages: Message[];
 }
 
 // API Response interface for paginated results

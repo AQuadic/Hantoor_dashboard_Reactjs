@@ -16,5 +16,6 @@
     "email": "Please enter a valid email",
     "name": "Please enter your name"
     },
-    "profileUpdateFailed": "Failed to update profile"
+    "profileUpdateFailed": "Failed to update profile",
+    "lastOnline":"Last online"
 }

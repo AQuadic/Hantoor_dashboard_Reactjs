@@ -117,16 +117,25 @@ export const useVehicleBodies = (): UseDropdownData<VehicleBody> => {
 };
 
 // Vehicle Types hook
-export const useVehicleTypes = (): UseDropdownData<VehicleType> => {
+export const useVehicleTypes = (
+  brandId?: string | number
+): UseDropdownData<VehicleType> => {
+  const parsedBrandId =
+    brandId !== undefined && brandId !== null && brandId !== ""
+      ? Number(brandId)
+      : undefined;
+
   const { data, isLoading, error, refetch } = useQuery<
     GetVehicleTypesResponseAPI,
     Error,
     VehicleType[]
   >({
-    queryKey: ["vehicleTypes"],
-    queryFn: () => getVehicleTypes({ pagination: false }),
+    queryKey: ["vehicleTypes", parsedBrandId ?? "all"],
+    queryFn: () =>
+      getVehicleTypes({ pagination: false, brand_id: parsedBrandId }),
     select: (response) =>
       Array.isArray(response) ? response : response.data || [],
+    enabled: parsedBrandId !== undefined, // only fetch when brand provided
   });
 
   return {
@@ -224,6 +233,7 @@ export const useAllDropdownData = () => {
   const brands = useBrands();
   const agents = useAgents();
   const models = useModels();
+  // vehicleTypes can be requested with an optional brand id via the hook below
   const vehicleTypes = useVehicleTypes();
   const vehicleClasses = useVehicleClasses();
   const brandOrigins = useBrandOrigins();

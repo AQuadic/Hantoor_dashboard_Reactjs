@@ -28,5 +28,13 @@
   "bankNameTitle": "Bank name",
   "interestValue": "Interest value",
   "bankDeleted": "Bank deleted successfully",
-  "deleteFailed": "Delete failed"
+  "deleteFailed": "Delete failed",
+  "privateParty": "Private Party",
+  "government": "Government",
+
+  "arabicBankName": "Arabic bank name is required",
+  "englishBankName": "English bank name is required",
+  "phoneRequired": "Phone number is required",
+  "phoneGreaterThan": "Phone must not be greater than 20 characters",
+  "countryRequired": "Country is required"
 }

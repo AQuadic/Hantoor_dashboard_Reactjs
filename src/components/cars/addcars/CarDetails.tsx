@@ -6,7 +6,7 @@ import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
 import { VehicleFeature } from "@/api/vehicles/fetchVehicles";
-import { useAllDropdownData } from "@/hooks/useDropdownData";
+import { useAllDropdownData, useVehicleTypes } from "@/hooks/useDropdownData";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 
@@ -24,13 +24,17 @@ const CarDetails = () => {
     brands,
     agents,
     models,
-    vehicleTypes,
+    // vehicleTypes will be fetched separately with selected brand
     vehicleClasses,
     brandOrigins,
     seats,
     engineTypes,
     engineSizes,
   } = useAllDropdownData();
+
+  // Fetch vehicle types based on selected brand from formData
+  const selectedBrandId = formData?.brand_id;
+  const vehicleTypes = useVehicleTypes(selectedBrandId);
 
   // Fetch vehicle bodies - use same approach as Models page
   const { data: vehicleBodiesData, isLoading: vehicleBodiesLoading } =
@@ -150,7 +154,7 @@ const CarDetails = () => {
         >
           {agents.data.map((agent) => (
             <SelectItem key={agent.id.toString()}>
-                {agent.name[i18n.language as "ar" | "en"]}
+              {agent.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
@@ -172,7 +176,7 @@ const CarDetails = () => {
         >
           {models.data.map((model) => (
             <SelectItem key={model.id.toString()}>
-                {model?.name[i18n.language as "ar" | "en"]}
+              {model?.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
@@ -196,7 +200,7 @@ const CarDetails = () => {
         >
           {vehicleBodies.data.map((body) => (
             <SelectItem key={body.id.toString()}>
-                {body.name[i18n.language as "ar" | "en"]}
+              {body.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
@@ -204,7 +208,11 @@ const CarDetails = () => {
         <Select
           label={t("type")}
           variant="bordered"
-          placeholder={t("choose")}
+          placeholder={
+            selectedBrandId
+              ? t("choose")
+              : t("selectBrandFirst") || "Select brand first"
+          }
           classNames={{ label: "mb-2 text-base" }}
           size="lg"
           selectedKeys={
@@ -215,10 +223,11 @@ const CarDetails = () => {
             updateField?.("vehicle_type_id", value);
           }}
           isLoading={vehicleTypes.isLoading}
+          disabled={!selectedBrandId}
         >
           {vehicleTypes.data.map((type) => (
             <SelectItem key={type.id.toString()}>
-                  {type.name[i18n.language as "ar" | "en"]}
+              {type.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
@@ -262,7 +271,7 @@ const CarDetails = () => {
         >
           {brandOrigins.data.map((origin) => (
             <SelectItem key={origin.id.toString()}>
-                  {origin.name[i18n.language as "ar" | "en"]}
+              {origin.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>

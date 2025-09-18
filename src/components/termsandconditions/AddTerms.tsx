@@ -19,7 +19,7 @@ const AddTerms = () => {
     const [enTitle, setEnTitle] = useState("");
     const [isActive, ] = useState(false);
     const [orderColumn, ] = useState<number | undefined>(undefined);
-    const [, setCountryId] = useState<number | undefined>(undefined);
+    const [countryId, setCountryId] = useState<number | undefined>(undefined);
     const navigate = useNavigate ()
     const { data: countriesResponse, isLoading, isError } = useQuery({
     queryKey: ['countries'],
@@ -39,6 +39,7 @@ const AddTerms = () => {
         ar: arBody || undefined,
         en: enBody,
       },
+      country_id: countryId,
     };
 
     try {

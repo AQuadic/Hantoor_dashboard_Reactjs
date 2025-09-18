@@ -17,6 +17,7 @@ export interface Admin {
   isActive?: boolean;
   created_at: string;
   updated_at: string;
+  last_online: string;
   is_active: boolean;
 }
 

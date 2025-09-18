@@ -39,16 +39,23 @@ export async function updateOnboarding(
   }
 
   if (data.description) {
-    if (data.description.ar) formData.append("description[ar]", data.description.ar);
-    if (data.description.en) formData.append("description[en]", data.description.en);
+    if (data.description.ar)
+      formData.append("description[ar]", data.description.ar);
+    if (data.description.en)
+      formData.append("description[en]", data.description.en);
   }
+  formData.append("_method", "put");
 
-  const response = await axios.patch(`/admin/setting/onboarding/${id}`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Accept: "application/json",
-    },
-  });
+  const response = await axios.post(
+    `/admin/setting/onboarding/${id}`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Accept: "application/json",
+      },
+    }
+  );
 
   return response.data;
 }

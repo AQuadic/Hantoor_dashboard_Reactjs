@@ -20,5 +20,6 @@
   "conversationDeleteFailed": "فشل في حذف المحادثة",
   "conversationDeleteError": "فشل في حذف المحادثة",
   "confirmDeleteConversation": "هل أنت متأكد من حذف هذه المحادثة؟",
-  "errorLoadingConversations": "خطأ في تحميل المحادثات"
+  "errorLoadingConversations": "خطأ في تحميل المحادثات",
+  "conversationDeleted": "تم حذف المحادثة بنجاح"
 }

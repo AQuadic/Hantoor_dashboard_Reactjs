@@ -9,6 +9,8 @@ export interface UpdateAdminUserPayload {
   language?: "ar" | "en";
   country_id?: string;
   city_id?: string;
+  is_active?: boolean;
+  blocked_until?: string | null;
 }
 
 export interface AdminUser {
@@ -24,7 +26,7 @@ export interface AdminUser {
 }
 
 export const updateAdminUser = async (
-  user: string | number,
+  userId: string | number,
   payload: UpdateAdminUserPayload
 ): Promise<AdminUser> => {
   try {
@@ -39,12 +41,18 @@ export const updateAdminUser = async (
     if (payload.language) formData.append("language", payload.language);
     if (payload.country_id) formData.append("country_id", payload.country_id);
     if (payload.city_id) formData.append("city_id", payload.city_id);
-    // Some backends expect form override for PUT via _method
-    // Append _method=PUT so server treats this POST as an update
-    formData.append("_method", "PUT");
-
+    if (payload.is_active !== undefined) {
+      formData.append("is_active", String(payload.is_active ? 1 : 0));
+    }
+    if (payload.blocked_until !== undefined) {
+      if (payload.blocked_until === null) {
+        formData.append("blocked_until", "");
+      } else {
+        formData.append("blocked_until", payload.blocked_until);
+      }
+    }
     const response = await axios.post<AdminUser>(
-      `/user/admin/${user}`,
+      `/user/admin/${userId}`,
       formData,
       {
         headers: {

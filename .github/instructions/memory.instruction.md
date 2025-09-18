@@ -202,6 +202,12 @@ if (data.ads_images?.length) {
 
 This fixes the label shown in the RentToOwn component for Arabic and English locales.
 
+# 2025-09-16: Make remove_image explicit in updateAdmin API helper ✅
+
+- Problem: When the UI removed the existing image and immediately called the API, the helper only appended `remove_image` if truthy, which meant `true` worked but there was no explicit handling if callers passed falsy values; also callers sometimes expect the API to receive a numeric flag ("1").
+- Change: Updated `src/api/admins/editAdmin.ts` to append `remove_image` as '1' or '0' whenever the payload includes the flag, using `if (payload.remove_image !== undefined) formData.append('remove_image', payload.remove_image ? '1' : '0')`.
+- Result: The server now receives an explicit instruction to remove or keep the existing image whenever the client intends to specify it. This prevents ambiguous/omitted flags in multipart requests.
+
 #### Missing Components
 
 ❌ **ISSUE IDENTIFIED**: No UI component for managing additional images separately from main car images
@@ -781,14 +787,6 @@ if (filters.search && filters.search.trim() !== "") {
 }
 ```
 
-## 2025-09-14: Show website and WhatsApp on Edit Agent page ✅
-
-- Purpose: Display the agent's website and WhatsApp number on the Edit Agent page so admins can view and edit them.
-- Files changed:
-  - `src/pages/agents/EditAgent.tsx` — Added `whatsappNumber` state and a `DashboardInput` to show WhatsApp; prefills `emailLink` from `agent.website || agent.link`.
-  - `src/api/agents/fetchAgents.ts` — Added optional `website` and `whatsapp` fields to the `Agent` interface and populated them during normalization.
-- Verification: `EditAgent.tsx` passes local TypeScript checks; UI now renders website and WhatsApp fields when editing an agent.
-
 #### **Component Layer (CarsHeader.tsx):**
 
 ```typescript
@@ -1013,3 +1011,9 @@ const handleSave = async (
 - All TypeScript interfaces aligned with backend API contracts
 
 **STATUS**: Settings functionality is now fully operational with proper form isolation and individual loading states.
+
+# 2025-09-16: Profile update endpoint switched to POST /admin/update ✅
+
+- Created `src/api/profile/updateProfile.ts` to POST `/admin/update`, supporting both JSON and multipart with `image` and `remove_image` flag.
+- Refactored `src/components/profile/EditProfileForm.tsx` to use `updateProfile` instead of `updateAdmin`, removing dependency on adminId for current user updates.
+- Preserved existing error handling and toasts; ensured remove image action works immediately and on save.

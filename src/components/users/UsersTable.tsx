@@ -10,10 +10,12 @@ import {
 import Edit from "../icons/general/Edit";
 import Password from "../icons/general/Password";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import { Switch, Select, SelectItem } from "@heroui/react";
+import { Switch } from "@heroui/react";
+import { DatePicker } from "@heroui/date-picker";
+import { CalendarDate } from "@internationalized/date";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import userPlaceholder from "/images/users/user1.svg";
+const userPlaceholder = "/images/users/user1.svg";
 import {
   AdminUser,
   AdminUsersResponse,
@@ -24,6 +26,7 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { deleteUser } from "@/api/users/deleteUser";
 import toast from "react-hot-toast";
+import { updateAdminUser } from "@/api/users/editUsers";
 
 interface UserTableProps {
   readonly searchTerm?: string;
@@ -78,6 +81,48 @@ export function UserTable({
     }
 
     return formatted;
+  };
+
+  const formatLastOnline = (date?: string, lang: string = "en") => {
+    if (!date) return "-";
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return "-";
+
+    const isArabic = lang.startsWith("ar");
+
+    const formatted = new Intl.DateTimeFormat(isArabic ? "ar-EG" : "en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    }).format(d);
+
+    return formatted;
+  };
+
+  const toCalendarDate = (dateString?: string): CalendarDate | undefined => {
+    if (!dateString) return undefined;
+    const d = new Date(dateString);
+    if (isNaN(d.getTime())) return undefined;
+    // CalendarDate expects yyyy-mm-dd
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    try {
+      return new CalendarDate(y, Number(m), Number(day));
+    } catch {
+      return undefined;
+    }
+  };
+
+  const calendarDateToISO = (cd?: CalendarDate | null): string | undefined => {
+    if (!cd) return undefined;
+    // cd.toString() returns yyyy-mm-dd
+    // append time to mark end of day as blocked until
+    return `${cd.toString()}T23:59:59Z`;
   };
 
   if (data?.meta) {
@@ -139,25 +184,65 @@ export function UserTable({
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
-            <TableCell>22/03/2024- 08:30 PM</TableCell>
             <TableCell>
-              <div className="w-[160px]">
-                <Select
-                  items={[{ key: "1", label: "حدد المدة" }]}
-                  label="حدد المدة"
-                  classNames={{
-                    trigger:
-                      "h-9 !h-9 min-h-9 bg-white border !py-5 rounded-[5px]",
-                    label: "text-sm text-gray-700",
-                    listbox: "bg-white shadow-md",
+              {formatLastOnline(user.last_online, i18n.language)}
+            </TableCell>
+            <TableCell>
+              <div className="w-[160px]" dir="ltr">
+                <DatePicker
+                  aria-label="blocked until"
+                  value={toCalendarDate(user.blocked_until ?? undefined)}
+                  onChange={async (val) => {
+                    const iso = calendarDateToISO(val);
+                    try {
+                      const payload: import("@/api/users/editUsers").UpdateAdminUserPayload =
+                        iso ? { blocked_until: iso } : {};
+                      await updateAdminUser(user.id, payload);
+                      toast.success(t("statusUpdated"));
+                      refetch();
+                    } catch (err) {
+                      const errorLike = err as
+                        | {
+                            response?: { data?: { message?: string } };
+                            message?: string;
+                          }
+                        | undefined;
+                      const message =
+                        errorLike?.response?.data?.message ||
+                        errorLike?.message ||
+                        t("error");
+                      toast.error(message);
+                    }
                   }}
-                >
-                  {(option) => <SelectItem>{option.label}</SelectItem>}
-                </Select>
+                />
               </div>
             </TableCell>
             <TableCell className="flex items-center gap-[7px]">
-              <Switch />
+              <Switch
+                isSelected={user.is_active}
+                onChange={async (e) => {
+                  try {
+                    await updateAdminUser(user.id, {
+                      is_active: e.target.checked,
+                    });
+                    toast.dismiss();
+                    toast.success(t("statusUpdated"));
+                    refetch();
+                  } catch (err) {
+                    const errorLike = err as
+                      | {
+                          response?: { data?: { message?: string } };
+                          message?: string;
+                        }
+                      | undefined;
+                    const message =
+                      errorLike?.response?.data?.message ||
+                      errorLike?.message ||
+                      t("error");
+                    toast.error(message);
+                  }
+                }}
+              />
               <Link to={`/users/edit/${user.id}`}>
                 <Edit />
               </Link>
