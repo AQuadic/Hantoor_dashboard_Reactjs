@@ -65,8 +65,8 @@ const EditTerms = () => {
       await updatePage(id!, body);
       toast.success(t('pageUpdatedSuccessfully'));
       navigate('/settings?section=Terms+and+Conditions');
-    } catch (error) {
-      toast.error(t('errorUpdatingPage'));
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || t('errorUpdatingPage'));
       console.error('Update Page Error:', error);
     }
   };
