@@ -101,16 +101,6 @@ export function PermissionsTable({
 
   return (
     <>
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">{t("roles") || "Roles"}</h2>
-        <DashboardButton
-          titleEn="Add Role"
-          titleAr="إضافة دور"
-          variant="add"
-          onClick={handleCreateRole}
-        />
-      </div>
-
       <Table>
         <TableHeader>
           <TableRow>
