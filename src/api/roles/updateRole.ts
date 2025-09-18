@@ -16,6 +16,6 @@ export async function updateRole(
   id: string | number,
   data: UpdateRoleRequest
 ): Promise<UpdateRoleResponse> {
-  const response = await axios.post(`/api/admin/roles/${id}`, data);
+  const response = await axios.post(`/admin/roles/${id}`, data);
   return response.data as UpdateRoleResponse;
 }

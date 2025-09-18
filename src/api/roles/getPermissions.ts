@@ -7,6 +7,6 @@ export interface PermissionsResponse {
 }
 
 export async function getPermissions(): Promise<PermissionsResponse> {
-  const response = await axios.get("/api/admin/permissions");
+  const response = await axios.get("/admin/permissions");
   return response.data as PermissionsResponse;
 }

@@ -15,6 +15,6 @@ export interface CreateRoleResponse {
 export async function createRole(
   data: CreateRoleRequest
 ): Promise<CreateRoleResponse> {
-  const response = await axios.post("/api/admin/roles/new", data);
+  const response = await axios.post("/admin/roles/new", data);
   return response.data as CreateRoleResponse;
 }

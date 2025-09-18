@@ -116,7 +116,7 @@ export function PermissionsTable({
           <TableRow>
             <TableHead className="text-right">#</TableHead>
             <TableHead className="text-right">{t("name") || "Name"}</TableHead>
-            <TableHead className="text-right">
+            <TableHead className="text-right w-full">
               {t("permissions") || "Permissions"}
             </TableHead>
             <TableHead className="text-right">

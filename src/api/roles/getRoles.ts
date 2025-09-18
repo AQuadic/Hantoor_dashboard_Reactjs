@@ -28,7 +28,7 @@ export interface GetRolesParams extends Partial<DateFilterParams> {
 export async function getRoles(
   params: GetRolesParams = {}
 ): Promise<GetRolesResponse> {
-  const response = await axios.get("/api/admin/roles", {
+  const response = await axios.get("/admin/roles", {
     params: {
       ...params,
     },
