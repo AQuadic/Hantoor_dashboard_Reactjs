@@ -13,6 +13,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getRoles, type Role } from "@/api/roles/getRoles";
 import { deleteRole } from "@/api/roles/deleteRole";
+import { updateRole } from "@/api/roles/updateRole";
 import type { DateFilterParams } from "@/utils/dateUtils";
 import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
@@ -53,11 +54,10 @@ export function PermissionsTable({
   });
 
   useEffect(() => {
-    // Initialize active state for each role. The API doesn't currently expose an `is_active` flag
-    // for roles, so we default to `true`. If the API adds such field later, switch to that.
+    // Initialize active state for each role using the API-provided is_active if present
     const initial: Record<number, boolean> = {};
     data?.data?.forEach((r: Role) => {
-      initial[r.id] = true;
+      initial[r.id] = !!r.is_active;
     });
     setActiveStates(initial);
   }, [data]);
@@ -131,14 +131,25 @@ export function PermissionsTable({
               <TableCell className="flex gap-2 items-center">
                 <Switch
                   isSelected={!!activeStates[role.id]}
-                  onChange={() => {
+                  onChange={async () => {
                     const current = !!activeStates[role.id];
-                    setActiveStates((s) => ({ ...s, [role.id]: !current }));
-                    toast.success(
-                      !current
-                        ? t("roleActivated") || "Role activated"
-                        : t("roleDeactivated") || "Role deactivated"
-                    );
+                    try {
+                      await updateRole(role.id, { is_active: !current });
+                      setActiveStates((s) => ({ ...s, [role.id]: !current }));
+                      toast.success(
+                        !current
+                          ? t("roleActivated") || "Role activated"
+                          : t("roleDeactivated") || "Role deactivated"
+                      );
+                      queryClient.invalidateQueries({ queryKey: ["roles"] });
+                      refetch();
+                    } catch (error) {
+                      console.error(
+                        "Failed to update role active state",
+                        error
+                      );
+                      toast.error(t("error") || "Error");
+                    }
                   }}
                 />
                 <button onClick={() => handleEditRole(role.id)}>

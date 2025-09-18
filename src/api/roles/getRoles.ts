@@ -6,6 +6,7 @@ export interface Role {
   name: string;
   guard_name: string;
   permissions: string[];
+  is_active?: boolean;
 }
 
 export interface GetRolesResponse {

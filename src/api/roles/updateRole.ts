@@ -3,6 +3,7 @@ import { axios } from "@/lib/axios";
 export interface UpdateRoleRequest {
   name?: string;
   permissions?: string[];
+  is_active?: boolean;
 }
 
 export interface UpdateRoleResponse {
