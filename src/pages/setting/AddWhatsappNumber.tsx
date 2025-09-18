@@ -109,7 +109,10 @@ const AddWhatsappNumber = () => {
             <DashboardInput
               label={t("whatsappNumber")}
               value={phone}
-              onChange={setPhone}
+              onChange={(val: string) => {
+                const numericValue = val.replace(/\D/g, "");
+                setPhone(numericValue);
+              }}
               placeholder={t("writeHere")}
             />
           </div>
