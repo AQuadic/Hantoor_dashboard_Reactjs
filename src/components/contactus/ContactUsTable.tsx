@@ -54,6 +54,9 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
       getSuggestions({ page, per_page: perPage, search, ...dateParams }),
   });
 
+  // track ids that are currently being toggled to prevent duplicate presses
+  const [togglingIds, setTogglingIds] = useState<number[]>([]);
+
   useEffect(() => {
     if (data) {
       setTotalPages(data.meta.last_page);
@@ -75,12 +78,17 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
   };
 
   const handleToggleStar = async (id: number, current: boolean) => {
+    if (togglingIds.includes(id)) return; // already toggling
+
+    setTogglingIds((s) => [...s, id]);
     try {
       await updateSuggestion(id, { is_starred: !current });
       toast.success(current ? t("removedFromStarred") : t("addedToStarred"));
       refetch();
     } catch {
       toast.error(t("error"));
+    } finally {
+      setTogglingIds((s) => s.filter((i) => i !== id));
     }
   };
 
@@ -128,6 +136,13 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
                   <button
                     onClick={() =>
                       handleToggleStar(message.id, !!message.is_starred)
+                    }
+                    disabled={togglingIds.includes(message.id)}
+                    aria-busy={togglingIds.includes(message.id)}
+                    className={
+                      togglingIds.includes(message.id)
+                        ? "opacity-60 cursor-not-allowed"
+                        : ""
                     }
                   >
                     <Star

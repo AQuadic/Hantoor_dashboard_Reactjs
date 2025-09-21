@@ -20,9 +20,9 @@ const TermsAndConditions = () => {
       try {
         const all = await getAllCountries();
         if (!mounted) return;
-  setCountries(all);
-  // default to All (null) so the header Select shows 'All' and fetches all pages
-  setSelectedCountryId(null);
+        setCountries(all);
+        // default to All (null) so the header Select shows 'All' and fetches all pages
+        setSelectedCountryId(null);
       } catch (err) {
         console.error("Failed to fetch countries", err);
       }
@@ -43,8 +43,8 @@ const TermsAndConditions = () => {
         pagination: "normal",
         ...(selectedCountryId ? { country_id: selectedCountryId } : {}),
       }),
-  // enable once countries are loaded; when selectedCountryId is null ("All") we still want to fetch all pages
-  enabled: countries !== null,
+    // enable once countries are loaded; when selectedCountryId is null ("All") we still want to fetch all pages
+    enabled: countries !== null,
   });
 
   const pages = pagesData?.data || [];
