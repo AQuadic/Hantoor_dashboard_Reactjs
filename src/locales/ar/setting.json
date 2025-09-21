@@ -84,5 +84,6 @@
   "profileDeleted": "تم حذف الصفحة بنجاح",
   "profileUpdated": "تم تحديث الصفحة بنجاح",
   "statusUpdated": "تم تحديث الحالة بنجاح",
-  "requestFinancingExists": "طلب التمويل موجود بالفعل لهذا البلد."
+  "requestFinancingExists": "طلب التمويل موجود بالفعل لهذا البلد.",
+  "all": "الكل"
 }
