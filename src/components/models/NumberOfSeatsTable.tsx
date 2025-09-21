@@ -22,6 +22,7 @@ import NoData from "../general/NoData";
 interface NumberOfSeatsTableProps {
   search?: string;
   page?: number;
+  dateParams?: { from_date?: string; to_date?: string };
   setPagination?: (meta: {
     totalPages: number;
     totalItems: number;
@@ -34,17 +35,15 @@ interface NumberOfSeatsTableProps {
 export function NumberOfSeatsTable({
   search = "",
   page = 1,
+  dateParams,
   setPagination,
 }: NumberOfSeatsTableProps) {
   const { t, i18n } = useTranslation("models");
-  const {
-    data: seats,
-    isLoading,
-    refetch,
-  } = useQuery<numOfSeats[]>({
-    queryKey: ["seats", page, search],
+
+  const { data: seats, isLoading, refetch } = useQuery<numOfSeats[]>({
+    queryKey: ["seats", page, search, dateParams],
     queryFn: async () => {
-      const r = await getSeatsPaginated({ page, search });
+      const r = await getSeatsPaginated({ page, search, ...dateParams });
       if (setPagination) {
         const total = r.total ?? 0;
         const per_page = r.per_page ?? (r.data?.length || 10);

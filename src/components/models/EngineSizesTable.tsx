@@ -25,6 +25,7 @@ import NoData from "../general/NoData";
 interface EngineSizesTableProps {
   search?: string;
   page?: number;
+  dateParams?: { from_date?: string; to_date?: string };
   setPagination?: (meta: {
     totalPages: number;
     totalItems: number;
@@ -34,20 +35,18 @@ interface EngineSizesTableProps {
   }) => void;
 }
 
+
 export function EngineSizesTable({
   search = "",
   page = 1,
+  dateParams,
   setPagination,
 }: EngineSizesTableProps) {
   const { t, i18n } = useTranslation("models");
-  const {
-    data: engineSize,
-    isLoading,
-    refetch,
-  } = useQuery<EngineSize[]>({
-    queryKey: ["engineSize", page, search],
+  const { data: engineSize, isLoading, refetch } = useQuery<EngineSize[]>({
+    queryKey: ["engineSize", page, search, dateParams],
     queryFn: async () => {
-      const r = await getEngineSizePaginated({ page, search });
+      const r = await getEngineSizePaginated({ page, search, ...dateParams });
       if (setPagination) {
         const total = r.total ?? 0;
         const per_page = r.per_page ?? (r.data?.length || 10);

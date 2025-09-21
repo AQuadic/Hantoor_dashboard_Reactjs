@@ -25,6 +25,7 @@ import NoData from "../general/NoData";
 interface EngineTypesTableProps {
   search?: string;
   page?: number;
+  dateParams?: { from_date?: string; to_date?: string }; // <-- add date filter
   setPagination?: (meta: {
     totalPages: number;
     totalItems: number;
@@ -38,16 +39,13 @@ export function EngineTypesTable({
   search = "",
   page = 1,
   setPagination,
+  dateParams,
 }: EngineTypesTableProps) {
   const { t } = useTranslation("models");
-  const {
-    data: engineTypes,
-    isLoading,
-    refetch,
-  } = useQuery<EngineType[]>({
-    queryKey: ["engineTypes", page, search],
+  const { data: engineTypes, isLoading, refetch } = useQuery<EngineType[]>({
+    queryKey: ["engineTypes", page, search, dateParams],
     queryFn: async () => {
-      const r = await getEngineTypePaginated({ page, search });
+      const r = await getEngineTypePaginated({ page, search, ...dateParams });
       if (setPagination) {
         const total = r.total ?? 0;
         const per_page = r.per_page ?? (r.data?.length || 10);
