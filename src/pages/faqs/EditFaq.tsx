@@ -116,6 +116,7 @@ const EditFaq = () => {
           {/* Country */}
           <div className="md:w-1/2 w-full">
               <Select
+                value={countryId}
                 onValueChange={(value) => setCountryId(value)}
                 disabled={countriesLoading || !countriesData?.data?.length}
               >

@@ -208,28 +208,21 @@ const [openConversationId, setOpenConversationId] = useState<number | null>(null
     );
   };
 
-  const formatDate = (dateString: string) => {
-    try {
-      const date = new Date(dateString);
-      // Use the current i18n language but force Latin numerals for Arabic locales
-      const baseLocale = i18n?.language || "en-US";
-      const locale = baseLocale.startsWith("ar")
-        ? // Use Unicode locale extension to force Latin digits (nu=latn)
-          `${baseLocale}-u-nu-latn`
-        : baseLocale;
+const formatDate = (dateString: string) => {
+  if (!dateString) return "-";
+  const date = new Date(dateString);
 
-      // Use toLocaleString so date and time are both included
-      return date.toLocaleString(locale, {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-    } catch {
-      return dateString;
-    }
-  };
+  return date.toLocaleString(i18n.language === "ar" ? "ar-EG" : "en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+};
+
 
   const formatPrice = (price: string) => {
     try {

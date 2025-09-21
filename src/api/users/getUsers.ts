@@ -28,6 +28,7 @@ export interface AdminUser {
   updated_at: string;
   last_online: string;
   country?: Country | null;
+  search_histories_count?: string;
   is_active: boolean;
   image?: AdminUserImage | null;
   blocked_until?: string | null;
