@@ -32,6 +32,7 @@ import Loading from "../general/Loading";
 interface CategoriesTableProps {
   search?: string;
   page: number;
+  dateParams?: { from_date?: string; to_date?: string };
   setPagination: (meta: {
     totalPages: number;
     totalItems: number;
@@ -44,6 +45,7 @@ interface CategoriesTableProps {
 export function CategoriesTable({
   search,
   page,
+  dateParams,
   setPagination,
 }: CategoriesTableProps) {
   const { t, i18n } = useTranslation("models");
@@ -51,12 +53,13 @@ export function CategoriesTable({
   const { data: classesResponse, refetch, isLoading } = useQuery<
     GetVehicleClassesPaginated | VehicleClass[]
   >({
-    queryKey: ["vehicleClasses", search, page],
+    queryKey: ["vehicleClasses", search, page, dateParams],
     queryFn: () =>
       getVehicleClasses({
         search,
         pagination: true,
         page,
+        ...dateParams,
       }),
   });
 

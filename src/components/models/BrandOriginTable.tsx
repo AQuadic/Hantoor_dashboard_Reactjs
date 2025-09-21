@@ -25,6 +25,7 @@ import NoData from "../general/NoData";
 interface BrandOriginTableProps {
   search?: string;
   page?: number;
+  dateParams?: { from_date?: string; to_date?: string };
   setPagination?: (meta: {
     totalPages: number;
     totalItems: number;
@@ -38,15 +39,16 @@ export function BrandOriginTable({
   search = "",
   page = 1,
   setPagination,
+  dateParams,
 }: BrandOriginTableProps) {
   const { i18n, t } = useTranslation("models");
   const currentLang = i18n.language;
 
-  const { data, isLoading, refetch } = useQuery<BrandOriginType[]>({
-    queryKey: ["brandOrigins", page, search],
+  const { data, isLoading, refetch } = useQuery({
+    queryKey: ["brandOrigins", page, search, dateParams], 
     queryFn: async () => {
-      const r = await getBrandOriginPaginated({ page, search });
-      // propagate pagination metadata to parent
+      const r = await getBrandOriginPaginated({ page, search, ...dateParams });
+
       if (setPagination) {
         const total = r.total ?? 0;
         const per_page = r.per_page ?? (r.data?.length || 10);
@@ -59,6 +61,7 @@ export function BrandOriginTable({
           to: r.to ?? r.data?.length ?? 0,
         });
       }
+
       return r.data;
     },
   });
