@@ -17,6 +17,7 @@ import { updateBrand } from "@/api/brand/updateBrand";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import TableImagePlaceholder from "../general/TableImagePlaceholder";
 
 interface BrandImage {
   id: number;
@@ -147,7 +148,7 @@ export function BrandsTable({ brands, refetch, isLoading }: BrandsTableProps) {
                     );
                   })()
                 ) : (
-                  <span>{t("noImage")}</span>
+                    <TableImagePlaceholder className="w-10 h-10" />
                 )}
               </TableCell>
               <TableCell>

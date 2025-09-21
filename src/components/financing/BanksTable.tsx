@@ -19,6 +19,7 @@ import { deleteBank } from "@/api/bank/deleteBank";
 import toast from "react-hot-toast";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import { useState } from "react";
+import TableImagePlaceholder from "../general/TableImagePlaceholder";
 
 interface BanksTableProps {
   countryId?: string | number;
@@ -86,22 +87,33 @@ const BanksTable = ({ countryId }: BanksTableProps) => {
               <TableCell>{index + 1}</TableCell>
               <TableCell>
                 {(() => {
-                  if (!bank.image) return "-";
-                  if (typeof bank.image === "string")
+                  if (!bank.image) {
+                    return <TableImagePlaceholder className="w-10 h-10" />;
+                  }
+                  if (typeof bank.image === "string") {
                     return (
                       <img
                         src={bank.image}
                         alt={bank.name?.ar || bank.name?.en || "bank-image"}
                         className="w-10 h-10 object-contain rounded"
+                        onError={(e) => {
+                          e.currentTarget.src = "/images/admin/admin1.svg";
+                        }}
                       />
                     );
+                  }
                   const imgObj = bank.image as { url?: string };
-                  return (
+                  return imgObj?.url ? (
                     <img
-                      src={imgObj.url || ""}
+                      src={imgObj.url}
                       alt={bank.name?.ar || bank.name?.en || "bank-image"}
                       className="w-10 h-10 object-contain rounded"
+                      onError={(e) => {
+                        e.currentTarget.src = "/images/admin/admin1.svg";
+                      }}
                     />
+                  ) : (
+                    <TableImagePlaceholder className="w-10 h-10" />
                   );
                 })()}
               </TableCell>

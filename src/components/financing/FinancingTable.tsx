@@ -14,6 +14,7 @@ import {
 import { Switch } from "@heroui/react";
 import View from "../icons/general/View";
 import { useTranslation } from "react-i18next";
+import Delete from "../icons/general/Delete";
 
 export interface FinancingCountry {
   id: number;
@@ -112,15 +113,23 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
               >
                 <View />
               </div>
-              {country.banks_count > 0 && (
                 <div
+                  className={country.banks_count === 0 ? "opacity-50 cursor-not-allowed" : ""}
                   onClick={(e) => {
-                    e.stopPropagation();
+                    if (country.banks_count === 0) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
                   }}
                 >
-                  <TableDeleteButton handleDelete={() => handleDelete(country.id)} />
+                  {country.banks_count > 0 ? (
+                    <TableDeleteButton handleDelete={() => handleDelete(country.id)} />
+                  ) : (
+                    <button disabled className="cursor-not-allowed">
+                      <Delete />
+                    </button>
+                  )}
                 </div>
-              )}
             </TableCell>
           </TableRow>
         ))}
