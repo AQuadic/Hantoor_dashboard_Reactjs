@@ -7,7 +7,7 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
+import { updatePriceTo } from "@/api/models/priceTo/updatePriceTo";
 import { getPriceToById } from "@/api/models/priceTo/getPricToById";
 
 const EditPriceTo = () => {
