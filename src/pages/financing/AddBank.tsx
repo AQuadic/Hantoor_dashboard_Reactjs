@@ -3,9 +3,9 @@ import ImageInput from "@/components/general/ImageInput";
 import MobileInput from "@/components/general/MobileInput";
 import DashboardInput from "@/components/general/DashboardInput";
 import { Select, SelectItem } from "@heroui/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { countries } from "countries-list";
-import Delete from "@/components/icons/banks/Delete";
+
 import { useTranslation } from "react-i18next";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { toast } from "react-hot-toast";
@@ -16,7 +16,7 @@ import {
   createBank,
   CreateBankPayload,
 } from "@/api/bank/postBank";
-import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
+import DeleteModal from "@/components/general/DeleteModal";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -36,6 +36,11 @@ const AddBank = () => {
   const [phone, setPhone] = useState("");
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [deleteModal, setDeleteModal] = useState<{
+    isOpen: boolean;
+    type: "visitor" | "citizen";
+    id: string;
+  }>({ isOpen: false, type: "visitor", id: "" });
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,27 +62,48 @@ const AddBank = () => {
     country || ""
   );
 
-  // Visitor Data
-  const [visitorSalaryFrom, setVisitorSalaryFrom] = useState("");
-  const [visitorSalaryTo, setVisitorSalaryTo] = useState("");
-  const [visitorInterestAmount, setVisitorInterestAmount] = useState("");
-  const [visitorDuration, setVisitorDuration] = useState("");
-  const [visitorWorkplace, setVisitorWorkplace] = useState("");
+  // Visitor Data - Dynamic Array
+  interface VisitorData {
+    id: string;
+    salaryFrom: string;
+    salaryTo: string;
+    interestAmount: string;
+    duration: string;
+    workplace: string;
+  }
 
-  const [visitorSalaryFrom2, setVisitorSalaryFrom2] = useState("");
-  const [visitorSalaryTo2, setVisitorSalaryTo2] = useState("");
-  const [visitorInterestAmount2, setVisitorInterestAmount2] = useState("");
-  const [visitorDuration2, setVisitorDuration2] = useState("");
-  const [visitorWorkplace2, setVisitorWorkplace2] = useState("");
+  const [visitorDataList, setVisitorDataList] = useState<VisitorData[]>([
+    {
+      id: "visitor-1",
+      salaryFrom: "",
+      salaryTo: "",
+      interestAmount: "",
+      duration: "",
+      workplace: "",
+    },
+  ]);
 
-  // Citizen Data
-  const [citizenSalaryFrom, setCitizenSalaryFrom] = useState("");
-  const [citizenSalaryTo, setCitizenSalaryTo] = useState("");
-  const [citizenInterestAmount, setCitizenInterestAmount] = useState("");
-  const [citizenDuration, setCitizenDuration] = useState("");
-  const [citizenWorkplace, setCitizenWorkplace] = useState("");
+  // Citizen Data - Dynamic Array
+  interface CitizenData {
+    id: string;
+    salaryFrom: string;
+    salaryTo: string;
+    interestAmount: string;
+    duration: string;
+    workplace: string;
+  }
 
-  const [showVisitor2, setShowVisitor2] = useState(true); 
+  const [citizenDataList, setCitizenDataList] = useState<CitizenData[]>([
+    {
+      id: "citizen-1",
+      salaryFrom: "",
+      salaryTo: "",
+      interestAmount: "",
+      duration: "",
+      workplace: "",
+    },
+  ]);
+
   const authorities = [
     { key: "1", label: "1 سنة" },
     { key: "2", label: "سنتين" },
@@ -90,6 +116,80 @@ const AddBank = () => {
     { key: "1", label: "جهة حكومية" },
     { key: "2", label: "جهة خاصة" },
   ];
+
+  // Functions to manage visitor data
+  const isDeletingRef = useRef(false);
+
+  const addVisitorData = () => {
+    const newVisitorData: VisitorData = {
+      id: `visitor-${Date.now()}`,
+      salaryFrom: "",
+      salaryTo: "",
+      interestAmount: "",
+      duration: "",
+      workplace: "",
+    };
+    setVisitorDataList([...visitorDataList, newVisitorData]);
+  };
+
+  const showDeleteModal = (type: "visitor" | "citizen", id: string) => {
+    setDeleteModal({ isOpen: true, type, id });
+  };
+
+  const handleDelete = () => {
+    isDeletingRef.current = true;
+
+    if (deleteModal.type === "visitor" && visitorDataList.length > 1) {
+      setVisitorDataList(
+        visitorDataList.filter((item) => item.id !== deleteModal.id)
+      );
+    } else if (deleteModal.type === "citizen" && citizenDataList.length > 1) {
+      setCitizenDataList(
+        citizenDataList.filter((item) => item.id !== deleteModal.id)
+      );
+    }
+
+    setTimeout(() => {
+      isDeletingRef.current = false;
+    }, 50);
+  };
+
+  const updateVisitorData = (
+    id: string,
+    field: keyof VisitorData,
+    value: string
+  ) => {
+    setVisitorDataList(
+      visitorDataList.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
+    );
+  };
+
+  // Functions to manage citizen data
+  const addCitizenData = () => {
+    const newCitizenData: CitizenData = {
+      id: `citizen-${Date.now()}`,
+      salaryFrom: "",
+      salaryTo: "",
+      interestAmount: "",
+      duration: "",
+      workplace: "",
+    };
+    setCitizenDataList([...citizenDataList, newCitizenData]);
+  };
+
+  const updateCitizenData = (
+    id: string,
+    field: keyof CitizenData,
+    value: string
+  ) => {
+    setCitizenDataList(
+      citizenDataList.map((item) =>
+        item.id === id ? { ...item, [field]: value } : item
+      )
+    );
+  };
 
   useEffect(() => {
     const fetchCountries = async () => {
@@ -121,31 +221,139 @@ const AddBank = () => {
   }, [countryId, i18n.language]);
 
   const validateForm = () => {
+    // Basic bank information validation
     if (!arBankName.trim()) {
-      toast.dismiss()
-      toast.error(t('arabicBankName'));
+      toast.dismiss();
+      toast.error(t("arabicBankName"));
       return false;
     }
     if (!enBankName.trim()) {
-      toast.dismiss()
-      toast.error(t('englishBankName'));
+      toast.dismiss();
+      toast.error(t("englishBankName"));
       return false;
     }
     if (!phone.trim()) {
-      toast.dismiss()
-      toast.error(t('phoneRequired'));
+      toast.dismiss();
+      toast.error(t("phoneRequired"));
       return false;
     }
     if (phone.length > 20) {
-      toast.dismiss()
-      toast.error(t('phoneGreaterThan'));
+      toast.dismiss();
+      toast.error(t("phoneGreaterThan"));
       return false;
     }
     if (!selectedCountryId) {
-      toast.dismiss()
-      toast.error(t('countryRequired'));
+      toast.dismiss();
+      toast.error(t("countryRequired"));
       return false;
     }
+
+    // Validate visitor data
+    for (let i = 0; i < visitorDataList.length; i++) {
+      const visitor = visitorDataList[i];
+      const position = i + 1;
+
+      if (!visitor.salaryFrom.trim()) {
+        toast.dismiss();
+        toast.error(t("visitorSalaryFromRequired", { position }));
+        return false;
+      }
+      if (!visitor.salaryTo.trim()) {
+        toast.dismiss();
+        toast.error(t("visitorSalaryToRequired", { position }));
+        return false;
+      }
+
+      // Check if salary fields are numeric
+      const salaryFrom = parseInt(visitor.salaryFrom.replace(/\D/g, ""));
+      const salaryTo = parseInt(visitor.salaryTo.replace(/\D/g, ""));
+
+      if (isNaN(salaryFrom) || salaryFrom <= 0) {
+        toast.dismiss();
+        toast.error(t("visitorSalaryFromNumeric", { position }));
+        return false;
+      }
+      if (isNaN(salaryTo) || salaryTo <= 0) {
+        toast.dismiss();
+        toast.error(t("visitorSalaryToNumeric", { position }));
+        return false;
+      }
+      if (salaryFrom >= salaryTo) {
+        toast.dismiss();
+        toast.error(t("salaryFromLessThanTo", { position }));
+        return false;
+      }
+
+      if (!visitor.duration) {
+        toast.dismiss();
+        toast.error(t("visitorDurationRequired", { position }));
+        return false;
+      }
+      if (!visitor.workplace) {
+        toast.dismiss();
+        toast.error(t("visitorWorkplaceRequired", { position }));
+        return false;
+      }
+      if (!visitor.interestAmount.trim()) {
+        toast.dismiss();
+        toast.error(t("visitorInterestRequired", { position }));
+        return false;
+      }
+    }
+
+    // Validate citizen data
+    for (let i = 0; i < citizenDataList.length; i++) {
+      const citizen = citizenDataList[i];
+      const position = i + 1;
+
+      if (!citizen.salaryFrom.trim()) {
+        toast.dismiss();
+        toast.error(t("citizenSalaryFromRequired", { position }));
+        return false;
+      }
+      if (!citizen.salaryTo.trim()) {
+        toast.dismiss();
+        toast.error(t("citizenSalaryToRequired", { position }));
+        return false;
+      }
+
+      // Check if salary fields are numeric
+      const salaryFrom = parseInt(citizen.salaryFrom.replace(/\D/g, ""));
+      const salaryTo = parseInt(citizen.salaryTo.replace(/\D/g, ""));
+
+      if (isNaN(salaryFrom) || salaryFrom <= 0) {
+        toast.dismiss();
+        toast.error(t("citizenSalaryFromNumeric", { position }));
+        return false;
+      }
+      if (isNaN(salaryTo) || salaryTo <= 0) {
+        toast.dismiss();
+        toast.error(t("citizenSalaryToNumeric", { position }));
+        return false;
+      }
+      if (salaryFrom >= salaryTo) {
+        toast.dismiss();
+        toast.error(t("salaryFromLessThanTo", { position }));
+        return false;
+      }
+
+      if (!citizen.duration) {
+        toast.dismiss();
+        toast.error(t("citizenDurationRequired", { position }));
+        return false;
+      }
+      if (!citizen.workplace) {
+        toast.dismiss();
+        toast.error(t("citizenWorkplaceRequired", { position }));
+        return false;
+      }
+      if (!citizen.interestAmount.trim()) {
+        toast.dismiss();
+        toast.error(t("citizenInterestRequired", { position }));
+        return false;
+      }
+    }
+
     return true;
   };
 
@@ -174,104 +382,75 @@ const AddBank = () => {
       return { key: selected, label: selected };
     };
 
-    // Add expatriate 1 if fields are filled
-    const v1_from = parseInteger(visitorSalaryFrom);
-    const v1_to = parseInteger(visitorSalaryTo);
-    const v1_duration =
-      resolveOption(authorities, visitorDuration) ||
-      resolveOption(authorities, authorities[0].key);
-    const v1_employer =
-      resolveOption(Workplaces, visitorWorkplace) ||
-      resolveOption(Workplaces, Workplaces[0].key);
+    // Add all visitor data entries as expatriate entries
+    visitorDataList.forEach((visitorData) => {
+      const v_from = parseInteger(visitorData.salaryFrom);
+      const v_to = parseInteger(visitorData.salaryTo);
+      const v_duration =
+        resolveOption(authorities, visitorData.duration) ||
+        resolveOption(authorities, authorities[0].key);
+      const v_employer =
+        resolveOption(Workplaces, visitorData.workplace) ||
+        resolveOption(Workplaces, Workplaces[0].key);
 
-    if (
-      v1_from !== undefined ||
-      v1_to !== undefined ||
-      visitorInterestAmount ||
-      visitorDuration ||
-      visitorWorkplace
-    ) {
-      const entry: BankFinance = {
-        type: "expatriate",
-        salary_from: v1_from,
-        salary_to: v1_to,
-        duration: v1_duration
-          ? { key: v1_duration.key, label: v1_duration.label }
-          : "",
-        employer: v1_employer
-          ? { key: v1_employer.key, label: v1_employer.label }
-          : "",
-        value: visitorInterestAmount || undefined,
-        is_active: true,
-      };
-      finance.push(entry);
-    }
+      if (
+        v_from !== undefined ||
+        v_to !== undefined ||
+        visitorData.interestAmount ||
+        visitorData.duration ||
+        visitorData.workplace
+      ) {
+        const entry: BankFinance = {
+          type: "expatriate",
+          salary_from: v_from,
+          salary_to: v_to,
+          duration: v_duration
+            ? { key: v_duration.key, label: v_duration.label }
+            : "",
+          employer: v_employer
+            ? { key: v_employer.key, label: v_employer.label }
+            : "",
+          value: visitorData.interestAmount || undefined,
+          is_active: true,
+        };
+        finance.push(entry);
+      }
+    });
 
-    // Add expatriate 2 if fields are filled
-    const v2_from = parseInteger(visitorSalaryFrom2);
-    const v2_to = parseInteger(visitorSalaryTo2);
-    const v2_duration =
-      resolveOption(authorities, visitorDuration2) ||
-      resolveOption(authorities, authorities[0].key);
-    const v2_employer =
-      resolveOption(Workplaces, visitorWorkplace2) ||
-      resolveOption(Workplaces, Workplaces[0].key);
+    // Add all citizen data entries
+    citizenDataList.forEach((citizenData) => {
+      const c_from = parseInteger(citizenData.salaryFrom);
+      const c_to = parseInteger(citizenData.salaryTo);
+      const c_duration =
+        resolveOption(authorities, citizenData.duration) ||
+        resolveOption(authorities, authorities[0].key);
+      const c_employer =
+        resolveOption(Workplaces, citizenData.workplace) ||
+        resolveOption(Workplaces, Workplaces[0].key);
 
-    if (
-      v2_from !== undefined ||
-      v2_to !== undefined ||
-      visitorInterestAmount2 ||
-      visitorDuration2 ||
-      visitorWorkplace2
-    ) {
-      const entry: BankFinance = {
-        type: "expatriate",
-        salary_from: v2_from,
-        salary_to: v2_to,
-        duration: v2_duration
-          ? { key: v2_duration.key, label: v2_duration.label }
-          : "",
-        employer: v2_employer
-          ? { key: v2_employer.key, label: v2_employer.label }
-          : "",
-        value: visitorInterestAmount2 || undefined,
-        is_active: true,
-      };
-      finance.push(entry);
-    }
-
-    // Add citizen if fields are filled
-    const c_from = parseInteger(citizenSalaryFrom);
-    const c_to = parseInteger(citizenSalaryTo);
-    const c_duration =
-      resolveOption(authorities, citizenDuration) ||
-      resolveOption(authorities, authorities[0].key);
-    const c_employer =
-      resolveOption(Workplaces, citizenWorkplace) ||
-      resolveOption(Workplaces, Workplaces[0].key);
-
-    if (
-      c_from !== undefined ||
-      c_to !== undefined ||
-      citizenInterestAmount ||
-      citizenDuration ||
-      citizenWorkplace
-    ) {
-      const entry: BankFinance = {
-        type: "citizen",
-        salary_from: c_from,
-        salary_to: c_to,
-        duration: c_duration
-          ? { key: c_duration.key, label: c_duration.label }
-          : "",
-        employer: c_employer
-          ? { key: c_employer.key, label: c_employer.label }
-          : "",
-        value: citizenInterestAmount || undefined,
-        is_active: true,
-      };
-      finance.push(entry);
-    }
+      if (
+        c_from !== undefined ||
+        c_to !== undefined ||
+        citizenData.interestAmount ||
+        citizenData.duration ||
+        citizenData.workplace
+      ) {
+        const entry: BankFinance = {
+          type: "citizen",
+          salary_from: c_from,
+          salary_to: c_to,
+          duration: c_duration
+            ? { key: c_duration.key, label: c_duration.label }
+            : "",
+          employer: c_employer
+            ? { key: c_employer.key, label: c_employer.label }
+            : "",
+          value: citizenData.interestAmount || undefined,
+          is_active: true,
+        };
+        finance.push(entry);
+      }
+    });
 
     return finance;
   };
@@ -279,7 +458,14 @@ const AddBank = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
+    // if a delete action just happened from a delete button, ignore this submit
+    if (isDeletingRef.current) {
+      return;
+    }
+
+    if (!validateForm()) {
+      return;
+    }
 
     setIsLoading(true);
 
@@ -305,7 +491,7 @@ const AddBank = () => {
       console.debug("AddBank:createBank:response", response);
 
       if (response.success) {
-        toast.success(response.message || "Bank added successfully!");
+        toast.success(response.message || t("bankAddedSuccessfully"));
         navigate(`/financing/details/${selectedCountryId}`, {
           state: {
             country: displayCountryName,
@@ -314,12 +500,11 @@ const AddBank = () => {
         });
         resetForm();
       } else {
-        toast.error(response.message || "Failed to add bank");
+        toast.error(response.message || t("failedToAddBank"));
       }
     } catch (error) {
-      toast.error(
-        (error as Error).message || "An error occurred while adding the bank"
-      );
+      console.error("AddBank error:", error);
+      toast.error(t("addBankError"));
     } finally {
       setIsLoading(false);
     }
@@ -330,21 +515,26 @@ const AddBank = () => {
     setEnBankName("");
     setPhone("");
     setProfileImage(null);
-    setVisitorSalaryFrom("");
-    setVisitorSalaryTo("");
-    setVisitorInterestAmount("");
-    setVisitorDuration("");
-    setVisitorWorkplace("");
-    setVisitorSalaryFrom2("");
-    setVisitorSalaryTo2("");
-    setVisitorInterestAmount2("");
-    setVisitorDuration2("");
-    setVisitorWorkplace2("");
-    setCitizenSalaryFrom("");
-    setCitizenSalaryTo("");
-    setCitizenInterestAmount("");
-    setCitizenDuration("");
-    setCitizenWorkplace("");
+    setVisitorDataList([
+      {
+        id: "visitor-1",
+        salaryFrom: "",
+        salaryTo: "",
+        interestAmount: "",
+        duration: "",
+        workplace: "",
+      },
+    ]);
+    setCitizenDataList([
+      {
+        id: "citizen-1",
+        salaryFrom: "",
+        salaryTo: "",
+        interestAmount: "",
+        duration: "",
+        workplace: "",
+      },
+    ]);
     setSelectedCountry(getCountryByIso2("EG"));
   };
 
@@ -399,91 +589,62 @@ const AddBank = () => {
           </div>
         </div>
         <div className="flex flex-wrap gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
-          <div className="flex flex-col flex-1">
-            <div className="flex flex-col flex-1 gap-4">
-              <h3 className=" text-lg font-bold text-[#2A32F8]">
-                {t("visitorData")}
-              </h3>
-              <h2 className="text-[15px] font-bold text-[#1E1B1B]">
-                {t("salaryRang")}
-              </h2>
-              <div className="flex items-center gap-[9px]">
-                <DashboardInput
-                  label={t("salaryFrom")}
-                  value={visitorSalaryFrom}
-                  onChange={setVisitorSalaryFrom}
-                  placeholder="5000 درهم"
-                />
-                <DashboardInput
-                  label={t("salaryTo")}
-                  value={visitorSalaryTo}
-                  onChange={setVisitorSalaryTo}
-                  placeholder="5000 درهم"
-                />
-              </div>
-              <Select
-                label={t("duration")}
-                variant="bordered"
-                placeholder="1 سنة"
-                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-                size="lg"
-                value={visitorDuration}
-                onChange={(e) => setVisitorDuration(e.target.value)}
-              >
-                {authorities.map((a) => (
-                  <SelectItem key={a.key} textValue={a.label}>
-                    {a.label}
-                  </SelectItem>
-                ))}
-              </Select>
-              <Select
-                label={t("Workplace")}
-                variant="bordered"
-                placeholder="جهة حكومية"
-                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-                size="lg"
-                value={visitorWorkplace}
-                onChange={(e) => setVisitorWorkplace(e.target.value)}
-              >
-                {Workplaces.map((w) => (
-                  <SelectItem key={w.key} textValue={w.label}>
-                    {w.label}
-                  </SelectItem>
-                ))}
-              </Select>
-              <DashboardInput
-                label={t("InterestAmount")}
-                value={visitorInterestAmount}
-                onChange={setVisitorInterestAmount}
-                placeholder="5%"
-              />
-            </div>
-            <hr className="my-4" />
-
-          {showVisitor2 && (
-            <div className="flex flex-col flex-1 gap-4">
+          {/* Dynamic Visitor Data Sections */}
+          {visitorDataList.map((visitorData, index) => (
+            <div
+              key={visitorData.id}
+              className="flex flex-col gap-4 max-w-[47%] flex-1"
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className=" text-lg font-bold text-[#2A32F8]">
-                    {t('visitorData')}
+                    {t("visitorData")}{" "}
+                    {visitorDataList.length > 1 && `(${index + 1})`}
                   </h3>
-                  <h2 className="text-[15px] font-bold text-[#1E1B1B] mt-2">
+                  <h2 className="text-[15px] font-bold text-[#1E1B1B]">
                     {t("salaryRang")}
                   </h2>
                 </div>
-                <TableDeleteButton handleDelete={() => setShowVisitor2(false)} />
+                {visitorDataList.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      showDeleteModal("visitor", visitorData.id);
+                    }}
+                    className="flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                )}
               </div>
               <div className="flex items-center gap-[9px]">
                 <DashboardInput
                   label={t("salaryFrom")}
-                  value={visitorSalaryFrom2}
-                  onChange={setVisitorSalaryFrom2}
+                  value={visitorData.salaryFrom}
+                  onChange={(value) =>
+                    updateVisitorData(visitorData.id, "salaryFrom", value)
+                  }
                   placeholder="5000 درهم"
                 />
                 <DashboardInput
                   label={t("salaryTo")}
-                  value={visitorSalaryTo2}
-                  onChange={setVisitorSalaryTo2}
+                  value={visitorData.salaryTo}
+                  onChange={(value) =>
+                    updateVisitorData(visitorData.id, "salaryTo", value)
+                  }
                   placeholder="5000 درهم"
                 />
               </div>
@@ -493,8 +654,10 @@ const AddBank = () => {
                 placeholder="1 سنة"
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                value={visitorDuration2}
-                onChange={(e) => setVisitorDuration2(e.target.value)}
+                value={visitorData.duration}
+                onChange={(e) =>
+                  updateVisitorData(visitorData.id, "duration", e.target.value)
+                }
               >
                 {authorities.map((a) => (
                   <SelectItem key={a.key} textValue={a.label}>
@@ -508,8 +671,10 @@ const AddBank = () => {
                 placeholder="جهة حكومية"
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                value={visitorWorkplace2}
-                onChange={(e) => setVisitorWorkplace2(e.target.value)}
+                value={visitorData.workplace}
+                onChange={(e) =>
+                  updateVisitorData(visitorData.id, "workplace", e.target.value)
+                }
               >
                 {Workplaces.map((w) => (
                   <SelectItem key={w.key} textValue={w.label}>
@@ -519,71 +684,143 @@ const AddBank = () => {
               </Select>
               <DashboardInput
                 label={t("InterestAmount")}
-                value={visitorInterestAmount2}
-                onChange={setVisitorInterestAmount2}
+                value={visitorData.interestAmount}
+                onChange={(value) =>
+                  updateVisitorData(visitorData.id, "interestAmount", value)
+                }
                 placeholder="5%"
               />
             </div>
-          )}
+          ))}
+
+          {/* Add New Visitor Data Button */}
+          <div className="flex justify-center w-full mt-6">
+            <button
+              type="button"
+              onClick={addVisitorData}
+              className="px-4 py-2 text-sm font-medium text-[#2A32F8] bg-white border border-[#2A32F8] rounded-lg hover:bg-[#2A32F8] hover:text-white transition-colors duration-200"
+            >
+              {i18n.language === "ar"
+                ? "+ إضافة بيانات وافد جديد"
+                : "+ Add visitor data"}
+            </button>
           </div>
 
-          <div className="flex flex-col flex-1 gap-4">
-            <h3 className=" text-lg font-bold text-[#2A32F8]">
-              {t("citizenData")}
-            </h3>
-            <h2 className="text-[15px] font-bold text-[#1E1B1B]">
-              {t("salaryRang")}
-            </h2>
-            <div className="flex items-center gap-[9px]">
+          {/* Dynamic Citizen Data Sections */}
+          {citizenDataList.map((citizenData, index) => (
+            <div
+              key={citizenData.id}
+              className="flex flex-col gap-4 max-w-[47%] flex-1"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className=" text-lg font-bold text-[#2A32F8]">
+                    {t("citizenData")}{" "}
+                    {citizenDataList.length > 1 && `(${index + 1})`}
+                  </h3>
+                  <h2 className="text-[15px] font-bold text-[#1E1B1B]">
+                    {t("salaryRang")}
+                  </h2>
+                </div>
+                {citizenDataList.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      showDeleteModal("citizen", citizenData.id);
+                    }}
+                    className="flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center gap-[9px]">
+                <DashboardInput
+                  label={t("salaryFrom")}
+                  value={citizenData.salaryFrom}
+                  onChange={(value) =>
+                    updateCitizenData(citizenData.id, "salaryFrom", value)
+                  }
+                  placeholder="5000 درهم"
+                />
+                <DashboardInput
+                  label={t("salaryTo")}
+                  value={citizenData.salaryTo}
+                  onChange={(value) =>
+                    updateCitizenData(citizenData.id, "salaryTo", value)
+                  }
+                  placeholder="5000 درهم"
+                />
+              </div>
+              <Select
+                label={t("duration")}
+                variant="bordered"
+                placeholder="1 سنة"
+                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
+                size="lg"
+                value={citizenData.duration}
+                onChange={(e) =>
+                  updateCitizenData(citizenData.id, "duration", e.target.value)
+                }
+              >
+                {authorities.map((a) => (
+                  <SelectItem key={a.key} textValue={a.label}>
+                    {a.label}
+                  </SelectItem>
+                ))}
+              </Select>
+              <Select
+                label={t("Workplace")}
+                variant="bordered"
+                placeholder="جهة حكومية"
+                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
+                size="lg"
+                value={citizenData.workplace}
+                onChange={(e) =>
+                  updateCitizenData(citizenData.id, "workplace", e.target.value)
+                }
+              >
+                {Workplaces.map((w) => (
+                  <SelectItem key={w.key} textValue={w.label}>
+                    {w.label}
+                  </SelectItem>
+                ))}
+              </Select>
               <DashboardInput
-                label={t("salaryFrom")}
-                value={citizenSalaryFrom}
-                onChange={setCitizenSalaryFrom}
-                placeholder="5000 درهم"
-              />
-              <DashboardInput
-                label={t("salaryTo")}
-                value={citizenSalaryTo}
-                onChange={setCitizenSalaryTo}
-                placeholder="5000 درهم"
+                label={t("InterestAmount")}
+                value={citizenData.interestAmount}
+                onChange={(value) =>
+                  updateCitizenData(citizenData.id, "interestAmount", value)
+                }
+                placeholder="5%"
               />
             </div>
-            <Select
-              label={t("duration")}
-              variant="bordered"
-              placeholder="1 سنة"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-              value={citizenDuration}
-              onChange={(e) => setCitizenDuration(e.target.value)}
+          ))}
+
+          {/* Add New Citizen Data Button */}
+          <div className="flex justify-center w-full mt-6">
+            <button
+              type="button"
+              onClick={addCitizenData}
+              className="px-4 py-2 text-sm font-medium text-[#2A32F8] bg-white border border-[#2A32F8] rounded-lg hover:bg-[#2A32F8] hover:text-white transition-colors duration-200"
             >
-              {authorities.map((a) => (
-                <SelectItem key={a.key} textValue={a.label}>
-                  {a.label}
-                </SelectItem>
-              ))}
-            </Select>
-            <Select
-              label={t("Workplace")}
-              variant="bordered"
-              placeholder="جهة حكومية"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-              value={citizenWorkplace}
-              onChange={(e) => setCitizenWorkplace(e.target.value)}
-            >
-              {Workplaces.map((w) => (
-                <SelectItem key={w.key} textValue={w.label}>
-                  {w.label}
-                </SelectItem>
-              ))}
-            </Select>
-            <DashboardInput
-              label={t("InterestAmount")}
-              value={citizenInterestAmount}
-              onChange={setCitizenInterestAmount}
-              placeholder="5%"
-            />
+              {i18n.language === "ar"
+                ? "+ إضافة بيانات مواطن جديد"
+                : "+ Add citizen data"}
+            </button>
           </div>
         </div>
 
@@ -595,6 +832,13 @@ const AddBank = () => {
           />
         </div>
       </form>
+
+      {/* Delete Modal */}
+      <DeleteModal
+        isOpen={deleteModal.isOpen}
+        onOpenChange={(isOpen) => setDeleteModal({ ...deleteModal, isOpen })}
+        handleDelete={handleDelete}
+      />
     </section>
   );
 };

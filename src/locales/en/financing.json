@@ -37,5 +37,31 @@
   "englishBankName": "English bank name is required",
   "phoneRequired": "Phone number is required",
   "phoneGreaterThan": "Phone must not be greater than 20 characters",
-  "countryRequired": "Country is required"
+  "countryRequired": "Country is required",
+
+  "visitorSalaryFromRequired": "Visitor data {{position}}: Salary from is required",
+  "visitorSalaryToRequired": "Visitor data {{position}}: Salary to is required",
+  "visitorSalaryFromNumeric": "Visitor data {{position}}: Salary from must be a valid positive number",
+  "visitorSalaryToNumeric": "Visitor data {{position}}: Salary to must be a valid positive number",
+  "visitorDurationRequired": "Visitor data {{position}}: Duration is required",
+  "visitorWorkplaceRequired": "Visitor data {{position}}: Workplace is required",
+  "visitorInterestRequired": "Visitor data {{position}}: Interest amount is required",
+
+  "citizenSalaryFromRequired": "Citizen data {{position}}: Salary from is required",
+  "citizenSalaryToRequired": "Citizen data {{position}}: Salary to is required",
+  "citizenSalaryFromNumeric": "Citizen data {{position}}: Salary from must be a valid positive number",
+  "citizenSalaryToNumeric": "Citizen data {{position}}: Salary to must be a valid positive number",
+  "citizenDurationRequired": "Citizen data {{position}}: Duration is required",
+  "citizenWorkplaceRequired": "Citizen data {{position}}: Workplace is required",
+  "citizenInterestRequired": "Citizen data {{position}}: Interest amount is required",
+
+  "salaryFromLessThanTo": "Entry {{position}}: Salary from must be less than salary to",
+
+  "bankAddedSuccessfully": "Bank added successfully!",
+  "failedToAddBank": "Failed to add bank",
+  "addBankError": "An error occurred while adding the bank",
+
+  "bankUpdatedSuccessfully": "Bank updated successfully!",
+  "failedToUpdateBank": "Failed to update bank",
+  "updateBankError": "An error occurred while updating the bank"
 }
