@@ -149,23 +149,17 @@ const SupportMessagesTable = ({
                           ...prev,
                           [message.id]: newValue,
                         }));
-
-                        // create a debounced updater per message id if not present
-                        if (!debouncedUpdaters.current[message.id]) {
-                          debouncedUpdaters.current[message.id] = debounce(
-                            (val: string) => {
-                              handleUpdate(message.id, { notes: val });
-                            },
-                            700
-                          );
+                      }}
+                      onBlur={() => {
+                        const value = notesMap[message.id] ?? message.notes;
+                        if (value && value.trim() !== "") {
+                          handleUpdate(message.id, { notes: value });
                         }
-
-                        // call the debounced updater (will wait until user stops typing)
-                        debouncedUpdaters.current[message.id](newValue);
                       }}
                       className="w-[150px] h-[37px] bg-[#FFFFFF] border border-[#D8D8D8] rounded-[10px] focus:outline-none px-3 placeholder:text-[13px]"
                       placeholder={t("yourNotes")}
                     />
+
                   </div>
 
                   <button onClick={() => setOpenMessageId(message.id)}>

@@ -63,16 +63,19 @@ const { data } = useQuery<Country[]>({
       </div>
       <div className="w-[160px] md:mx-8 mx-0 mt-2.5">
         <Select
-          items={countries.map((c) => ({
-            key: c.id.toString(),
-            label: i18n.language === "ar" ? c.name.ar : c.name.en,
-          }))}
+          items={[
+            { key: "all", label: t("all") },
+            ...countries.map((c) => ({
+              key: c.id.toString(),
+              label: i18n.language === "ar" ? c.name.ar : c.name.en,
+            })),
+          ]}
           label={t("country")}
           placeholder={t("all")}
-          selectedKeys={selectedCountry ? [selectedCountry] : []}
+          selectedKeys={selectedCountry ? [selectedCountry] : ["all"]}
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
-            setSelectedCountry(value || null);
+            setSelectedCountry(value === "all" ? null : value);
           }}
           classNames={{
             trigger: "h-[46px] min-h-[46px] bg-white border !py-6",
@@ -80,10 +83,9 @@ const { data } = useQuery<Country[]>({
             listbox: "bg-white shadow-md",
           }}
         >
-          {(country) => (
-            <SelectItem key={country.key}>{country.label}</SelectItem>
-          )}
+          {(country) => <SelectItem key={country.key}>{country.label}</SelectItem>}
         </Select>
+
       </div>
     </div>
   );
