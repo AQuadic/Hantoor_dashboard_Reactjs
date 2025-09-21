@@ -33,8 +33,18 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
 }) => {
   const { t, i18n } = useTranslation("agents");
   if (isLoading) return <Loading />;
-
   if (!agents || agents.length === 0) return <NoData />;
+
+  const handleCopy = (website?: string | null) => {
+    if (website) {
+      navigator.clipboard.writeText(website);
+      toast.dismiss();
+      toast.success(t("copiedSuccessfully"));
+    } else {
+      toast.dismiss();
+      toast.error(t("noWebsiteAvailable"));
+    }
+  };
 
   return (
     <Table>
@@ -78,7 +88,12 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
                   toast.success(t('statusUpdated'))
                 }}
               />
-              <Copy />
+              <button
+                onClick={() => handleCopy(agent.website)}
+                className="hover:opacity-75"
+              >
+                <Copy />
+              </button>
               <Link to={`/agent/details/${agent.id}`}>
                 <View />
               </Link>
