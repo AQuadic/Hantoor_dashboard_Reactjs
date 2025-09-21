@@ -12,6 +12,7 @@ import {
 } from "@/api/agents/fetchAgents";
 import { toast } from "react-hot-toast";
 import { useTranslation } from "react-i18next";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const AgentPage = () => {
   const { t } = useTranslation("agents");
@@ -19,6 +20,8 @@ const AgentPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
+  const [countryId, setCountryId] = useState<number | undefined>(undefined);
+  const { dateRange, setDateRange, dateParams } = useDatePicker();
 
   // Debounce search term updates
   useEffect(() => {
@@ -33,8 +36,11 @@ const AgentPage = () => {
   }, [searchTerm]);
 
   const { data: agentsData, isLoading } = useQuery({
-    queryKey: ["agents", currentPage, debouncedSearchTerm],
-    queryFn: () => fetchAgents(currentPage, debouncedSearchTerm),
+    queryKey: ["agents", currentPage, debouncedSearchTerm, dateParams],
+    queryFn: () =>
+      fetchAgents(currentPage, debouncedSearchTerm, {
+        ...dateParams,
+      }),
   });
 
   const deleteAgentMutation = useMutation({
@@ -64,10 +70,9 @@ const AgentPage = () => {
   const toggleStatusMutation = useMutation({
     mutationFn: ({ id, isActive }: { id: number; isActive: boolean }) =>
       toggleAgentStatus(id, isActive),
-    // Optimistic update: flip state immediately, rollback on error
     onMutate: async ({ id, isActive }: { id: number; isActive: boolean }) => {
       await queryClient.cancelQueries({ queryKey: ["agents"] });
-      const queryKey = ["agents", currentPage, debouncedSearchTerm];
+      const queryKey = ["agents", currentPage, debouncedSearchTerm, dateParams];
       const previous = queryClient.getQueryData<AgentsApiResponse | undefined>(
         queryKey
       );
@@ -125,13 +130,19 @@ const AgentPage = () => {
 
   return (
     <div>
-      <AgentPageHeader setSearchTerm={setSearchTerm} />
+      <AgentPageHeader
+        setSearchTerm={setSearchTerm}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        countryId={countryId}
+        setCountryId={setCountryId}
+      />
       <div className="px-2 md:px-8">
         <AgentPageTable
           agents={agentsData?.data || []}
           onDelete={handleDelete}
           onToggleActive={handleToggleActive}
-          isLoading={isLoading} 
+          isLoading={isLoading}
         />
         {agentsData?.data && agentsData.data.length > 0 && (
           <TablePagination

@@ -6,9 +6,17 @@ import DashboardButton from "../general/dashboard/DashboardButton";
 
 interface AgentPageHeaderProps {
   setSearchTerm: (term: string) => void;
+  dateRange: any;
+  setDateRange: (val: any) => void;
+  countryId?: number;
+  setCountryId: (val?: number) => void;
 }
 
-const AgentPageHeader: React.FC<AgentPageHeaderProps> = ({ setSearchTerm }) => {
+const AgentPageHeader: React.FC<AgentPageHeaderProps> = ({
+  setSearchTerm,
+  dateRange,
+  setDateRange,
+}) => {
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -31,7 +39,7 @@ const AgentPageHeader: React.FC<AgentPageHeaderProps> = ({ setSearchTerm }) => {
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker />
+          <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
         <Link to="/agent/add">
           <DashboardButton

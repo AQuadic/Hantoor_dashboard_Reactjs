@@ -84,27 +84,27 @@ export interface UpdateAgentPayload
   centers?: AgentCenter[];
 }
 
-// Fetch all agents with optional filters
+export interface FetchAgentsParams {
+  type?: "center" | "show_room";
+  from_date?: string;
+  to_date?: string;
+}
+
 export async function fetchAgents(
   page: number = 1,
   searchTerm: string = "",
-  type?: "center" | "show_room"
+  params?: FetchAgentsParams
 ): Promise<AgentsApiResponse> {
-  const params: Record<string, string | number> = { page };
+  const query: Record<string, string | number> = { page };
 
-  if (searchTerm) {
-    params.search = searchTerm;
-  }
+  if (searchTerm) query.search = searchTerm;
+  if (params?.type) query.type = params.type;
+  if (params?.from_date) query.from_date = params.from_date;
+  if (params?.to_date) query.to_date = params.to_date;
 
-  if (type) {
-    params.type = type;
-  }
-
-  const response = await axios.get("/admin/agents", { params });
-
+  const response = await axios.get("/admin/agents", { params: query });
   const raw = response.data as any;
 
-  // helper to normalize a single agent item coming from backend
   const normalizeAgent = (item: any): Agent => {
     const name =
       typeof item.name === "string"
@@ -122,7 +122,6 @@ export async function fetchAgents(
             typeof c.description === "string"
               ? { ar: c.description, en: c.description }
               : c.description ?? { ar: "", en: "" },
-          // normalize numeric/string codes to descriptive values when possible
           type:
             c.type === 1 || c.type === "1"
               ? "center"
@@ -155,15 +154,12 @@ export async function fetchAgents(
     } as Agent;
   };
 
-  const normalized: AgentsApiResponse = {
+  return {
     ...raw,
-    data: Array.isArray(raw.data)
-      ? raw.data.map((it: any) => normalizeAgent(it))
-      : [],
+    data: Array.isArray(raw.data) ? raw.data.map(normalizeAgent) : [],
   };
-
-  return normalized;
 }
+
 
 // Fetch single agent by ID
 export async function fetchAgentById(id: number): Promise<Agent> {
