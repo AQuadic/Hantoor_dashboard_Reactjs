@@ -185,7 +185,10 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
               transition={{ duration: 0.3 }}
               className="fixed top-0 right-0 h-full md:w-[493px] w-[300px] bg-white shadow-lg z-50 overflow-y-auto"
             >
-              <ConversationPage conversationId={openConversationId} />
+              <ConversationPage
+                conversationId={openConversationId}
+                onClose={() => setOpenConversationId(null)}
+              />
             </motion.div>
           </>
         )}

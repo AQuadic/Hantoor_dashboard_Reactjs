@@ -23,11 +23,13 @@ import {
 interface ConversationPageProps {
   conversationId?: number | null;
   vehicleId?: number | null; // new optional prop
+  onClose?: () => void; // callback to close the parent modal/sidebar
 }
 
 const ConversationPage: React.FC<ConversationPageProps> = ({
   conversationId = null,
   vehicleId = null,
+  onClose,
 }) => {
   const { t, i18n } = useTranslation("chats");
   const queryClient = useQueryClient();
@@ -164,6 +166,10 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
       toast.success(
         t("conversationDeleted") || "Conversation deleted successfully"
       );
+      // close parent modal/sidebar if provided
+      onClose?.();
+
+      // refresh data and caches
       refetch();
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
     } catch {
