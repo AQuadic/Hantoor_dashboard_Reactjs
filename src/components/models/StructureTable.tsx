@@ -23,8 +23,9 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 
 interface StructureTableProps {
-  search: string;
+  search?: string;
   page: number;
+  dateParams?: { from_date?: string; to_date?: string };
   setPagination: (meta: {
     totalPages: number;
     totalItems: number;
@@ -35,19 +36,21 @@ interface StructureTableProps {
 }
 
 export function StructureTable({
-  search,
+  search = "",
   setPagination,
-}: Readonly<StructureTableProps>) {
+  dateParams,
+}: StructureTableProps) {
   const { t, i18n } = useTranslation("models");
   const language = i18n.language as "ar" | "en";
 
   const {
     data: bodiesResponse,
     isLoading,
-    refetch,
+    refetch
   } = useVehicleBodies({
     pagination: true,
     search,
+    ...dateParams,
   });
 
   useEffect(() => {

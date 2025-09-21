@@ -80,6 +80,7 @@ const BrandsPage = () => {
               search={search}
               page={currentPage}
               setPagination={handleSetPagination}
+              dateParams={dateParams}
             />
           </>
         );
