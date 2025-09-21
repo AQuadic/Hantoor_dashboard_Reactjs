@@ -100,18 +100,28 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
     },
     onError: (error: unknown) => {
       let errorMessage = t("agentUpdateError");
-      if (error instanceof Error) {
-        errorMessage = error.message;
-      } else if (
+
+      if (
         typeof error === "object" &&
         error !== null &&
         "response" in error
       ) {
-        const responseError = error as {
-          response?: { data?: { message?: string } };
+        const axiosError = error as {
+          response?: {
+            data?: { message?: string; error?: string };
+          };
+          message?: string;
         };
-        errorMessage = responseError.response?.data?.message || errorMessage;
+
+        errorMessage =
+          axiosError.response?.data?.message ||
+          axiosError.response?.data?.error ||
+          axiosError.message ||
+          errorMessage;
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
       }
+
       toast.error(errorMessage);
     },
   });
@@ -153,7 +163,13 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       is_active: "1", // Changed from boolean to string
       link: emailLink,
       // brand_id intentionally omitted (brand removed from UI)
-      centers: validCenters.length > 0 ? validCenters : undefined,
+      centers:
+    validCenters.length > 0
+      ? validCenters.map((c) => ({
+          ...c,
+          is_active: c.is_active ?? "1",
+        }))
+      : undefined,
     };
 
     updateAgentMutation.mutate(payload);
