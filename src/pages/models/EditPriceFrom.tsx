@@ -3,11 +3,12 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input, Select, SelectItem } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
-import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
+import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
 import toast from "react-hot-toast";
+import { getPriceFromById } from "@/api/models/priceFrom/getPriceFromById";
 
 const EditPriceFrom = () => {
   const { t, i18n } = useTranslation("models");
@@ -20,14 +21,23 @@ const EditPriceFrom = () => {
 
   const isEdit = Boolean(priceId);
 
-  const {
-    data: countriesData,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: countriesData, isLoading, isError } = useQuery({
     queryKey: ["countries"],
     queryFn: () => getCountries(),
   });
+
+  const { data: priceData, isLoading: isPriceLoading } = useQuery({
+    queryKey: ["priceFrom", priceId],
+    queryFn: () => getPriceFromById(priceId),
+    enabled: isEdit, 
+  });
+
+  useEffect(() => {
+    if (priceData) {
+      setPriceAr(priceData.name);
+      setPriceEn(priceData.name);
+    }
+  }, [priceData]);
 
   const handleSave = async () => {
     if (!priceAr && !priceEn) {
@@ -36,7 +46,7 @@ const EditPriceFrom = () => {
     }
 
     try {
-      await updatePriceFrom(priceId, { name: priceAr || priceEn });
+      await updatePriceFrom(priceId, { name: priceAr }); 
       toast.success(t("priceUpdated"));
       navigate("/models?section=Price From");
     } catch (error: any) {
@@ -90,17 +100,13 @@ const EditPriceFrom = () => {
                 variant="bordered"
                 label={t("country")}
                 selectedKeys={selectedCountry ? [selectedCountry] : []}
-                onSelectionChange={(keys) =>
-                  setSelectedCountry(Array.from(keys)[0] as string)
-                }
-                isDisabled={isLoading || isError}
+                onSelectionChange={(keys) => setSelectedCountry(Array.from(keys)[0] as string)}
+                isDisabled={isLoading || isError || isPriceLoading}
               >
                 {(countriesData?.data || []).map((country: Country) => (
                   <SelectItem
                     key={country.id}
-                    textValue={
-                      i18n.language === "ar" ? country.name.ar : country.name.en
-                    }
+                    textValue={i18n.language === "ar" ? country.name.ar : country.name.en}
                   >
                     {i18n.language === "ar" ? country.name.ar : country.name.en}
                   </SelectItem>

@@ -86,5 +86,6 @@
     "priceDeleted": "تم حذف السعر بنجاح",
     "priceActivated": "تم تفعيل السعر بنجاح",
     "priceDeactivated": "تم إلغاء تفعيل السعر بنجاح",
-    "priceUpdated": "تم تعديل السعر بنجاح"
+    "priceUpdated": "تم تعديل السعر بنجاح",
+    "brand": "الماركة"
 }

@@ -1,5 +1,5 @@
 import { addVehicleType } from "@/api/models/carTypes/addCarType";
-import { useVehicleBodies } from "@/api/models/structureType/getStructure";
+// import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { fetchBrands } from "@/api/brand/fetchBrands";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
@@ -26,11 +26,11 @@ const AddCarTypes = () => {
 
   const isEdit = Boolean(brandId);
 
-  const { data: structures, isLoading: isLoadingStructures } = useVehicleBodies(
-    {
-      pagination: false,
-    }
-  );
+  // const { data: structures, isLoading: isLoadingStructures } = useVehicleBodies(
+  //   {
+  //     pagination: false,
+  //   }
+  // );
 
   const { data: brandsResponse, isLoading: isLoadingBrands } = useQuery({
     queryKey: ["brands-list"],
@@ -73,7 +73,7 @@ const AddCarTypes = () => {
                 value={arType}
                 onChange={(e) => setArType(e.target.value)}
               />
-              <Select
+              {/* <Select
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
@@ -96,7 +96,7 @@ const AddCarTypes = () => {
                     {structure.name[i18n.language as "ar" | "en"]}
                   </SelectItem>
                 ))}
-              </Select>
+              </Select> */}
               <Select
                 className="mt-4"
                 size={"lg"}
