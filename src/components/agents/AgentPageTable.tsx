@@ -16,6 +16,7 @@ import { Agent } from "@/api/agents/fetchAgents";
 import { useTranslation } from "react-i18next";
 import NoData from "../general/NoData";
 import Loading from "../general/Loading";
+import toast from "react-hot-toast";
 
 interface AgentPageTableProps {
   agents: Agent[];
@@ -71,9 +72,11 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
             >
               <Switch
                 isSelected={!!agent.is_active}
-                onValueChange={(isSelected) =>
-                  onToggleActive?.(agent.id, isSelected)
-                }
+                onValueChange={(isSelected) => {
+                  onToggleActive?.(agent.id, isSelected);
+                  toast.dismiss()
+                  toast.success(t('statusUpdated'))
+                }}
               />
               <Copy />
               <Link to={`/agent/details/${agent.id}`}>
