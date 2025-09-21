@@ -1,5 +1,4 @@
 import ImageInput from "@/components/general/ImageInput";
-// import VideoInput from "@/components/general/VideoInput";
 import Delete from "@/components/icons/advertise/Delete";
 import {
   Select,
@@ -8,28 +7,37 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { getSliders, Slider } from "@/api/slider/getSlider";
+import { getSliders, Slider, GetSlidersParams } from "@/api/slider/getSlider";
 import { createSlider } from "@/api/slider/addSlider";
 import { deleteSlider } from "@/api/slider/deleteSlider";
+import { getAllCountries, Country } from "@/api/countries/getCountry";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const AdvertisingImages = () => {
   const { t } = useTranslation("setting");
-  const [, setUploading] = useState(false);
-  const [, setUploadError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const [countries, setCountries] = useState<Country[] | null>(null);
+  const [selectedCountryId, setSelectedCountryId] = useState<number | null>(
+    null
+  );
 
   const { data, refetch } = useQuery({
-    queryKey: ["sliders"],
+    queryKey: ["sliders", selectedCountryId],
     queryFn: async () => {
-      const response = await getSliders();
+      const params: GetSlidersParams = {};
+      if (selectedCountryId) params.country_id = selectedCountryId;
+      const response = await getSliders(params);
       return response.data;
     },
+    enabled: selectedCountryId !== null,
   });
 
-  const [, setPreview] = useState<string | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
 
   const handleUpload = async (file: File) => {
     setPreview(URL.createObjectURL(file));
@@ -42,6 +50,7 @@ const AdvertisingImages = () => {
         title: "New Slider",
         imageAr: file,
         imageEn: file,
+        country_id: selectedCountryId ?? undefined,
       });
       toast.success(t("imageAdded"));
       setPreview(null);
@@ -52,6 +61,29 @@ const AdvertisingImages = () => {
       setUploading(false);
     }
   };
+
+  // Fetch countries on mount and default to first country
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const all = await getAllCountries();
+        if (!mounted) return;
+        setCountries(all);
+        if (all && all.length > 0) {
+          setSelectedCountryId(all[0].id);
+        } else {
+          setSelectedCountryId(null);
+        }
+      } catch (err) {
+        // Log so lint/typecheck doesn't complain about unused catch var
+        console.error("Failed to fetch countries", err);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const handleDelete = async (id: number) => {
     try {
@@ -66,7 +98,13 @@ const AdvertisingImages = () => {
   return (
     <div className="px-2 md:px-8">
       <div className="w-full">
-        <Select>
+        <Select
+          value={String(selectedCountryId ?? "")}
+          onValueChange={(val) => {
+            const id = val ? Number(val) : null;
+            setSelectedCountryId(id);
+          }}
+        >
           <SelectTrigger
             className="w-[160px] !h-[53px] rounded-[12px] mt-4 bg-white"
             dir="rtl"
@@ -74,9 +112,11 @@ const AdvertisingImages = () => {
             <SelectValue placeholder={t("country")} />
           </SelectTrigger>
           <SelectContent dir="rtl">
-            <SelectItem value="1">الجميع</SelectItem>
-            <SelectItem value="2">الجميع</SelectItem>
-            <SelectItem value="3">الجميع</SelectItem>
+            {countries?.map((c) => (
+              <SelectItem key={c.id} value={String(c.id)}>
+                {c.name.ar || c.name.en}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
@@ -86,7 +126,7 @@ const AdvertisingImages = () => {
         </h1>
         <div className="mt-[14px] flex flex-wrap items-center gap-[14px]">
           <ImageInput
-            image={null}
+            image={preview}
             setImage={(fileOrCallback) => {
               let file: File | null = null;
               if (typeof fileOrCallback === "function") {
@@ -98,6 +138,9 @@ const AdvertisingImages = () => {
             }}
             placeholderText={t("addPhoto")}
           />
+          <div className="sr-only" aria-hidden>
+            Uploading: {uploading ? "yes" : "no"}. Error: {uploadError}
+          </div>
           {data?.map((slider: Slider) => (
             <div key={slider.id} className="relative">
               <img
