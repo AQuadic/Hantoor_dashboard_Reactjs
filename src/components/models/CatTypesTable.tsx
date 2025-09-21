@@ -29,6 +29,7 @@ import NoData from "../general/NoData";
 interface CarTypesTableProps {
   search?: string;
   page: number;
+  dateParams?: { from_date?: string; to_date?: string };
   setPagination: (meta: {
     totalPages: number;
     totalItems: number;
@@ -42,23 +43,22 @@ export function CarTypesTable({
   search,
   page,
   setPagination,
+  dateParams,
 }: Readonly<CarTypesTableProps>) {
   const { t, i18n } = useTranslation("models");
   const queryClient = useQueryClient();
 
-  const {
-    data: carTypesResponse,
-    isLoading: isLoadingTypes,
-    error: errorTypes,
-  } = useQuery<GetVehicleTypesPaginated | VehicleType[], Error>({
-    queryKey: ["vehicleTypes", search, page],
-    queryFn: () =>
-      getVehicleTypes({
-        pagination: true,
-        search,
-        page,
-      }),
-  });
+  const { data: carTypesResponse, isLoading: isLoadingTypes, error: errorTypes } =
+    useQuery<GetVehicleTypesPaginated | VehicleType[], Error>({
+      queryKey: ["vehicleTypes", search, page, dateParams],
+      queryFn: () =>
+        getVehicleTypes({
+          pagination: true,
+          search,
+          page,
+          ...dateParams, 
+        }),
+    });
 
   const {
     data: brandsResponse,
