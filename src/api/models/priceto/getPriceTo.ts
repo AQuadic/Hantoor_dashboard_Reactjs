@@ -23,6 +23,8 @@ export interface GetPriceToParams {
   is_active?: boolean;
   page?: number;
   search?: string;
+  from_date?: string;
+  to_date?: string;
 }
 
 export async function getPriceTo(
@@ -32,6 +34,8 @@ export async function getPriceTo(
     params: {
       ...params,
       search: params?.search || undefined,
+      from_date: params?.from_date,
+      to_date: params?.to_date,
     },
   });
 

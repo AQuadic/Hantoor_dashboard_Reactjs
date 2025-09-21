@@ -29,10 +29,14 @@ export const getBrandOrigin = async (): Promise<BrandOrigin[]> => {
 export const getBrandOriginPaginated = async (params?: {
   page?: number;
   search?: string;
+  from_date?: string;
+  to_date?: string;
 }): Promise<BrandOriginResponse> => {
   const query: Record<string, any> = {};
   if (params?.page) query.page = params.page;
   if (params?.search) query.search = params.search;
+  if (params?.from_date) query.from_date = params.from_date;
+  if (params?.to_date) query.to_date = params.to_date;
 
   const res = await axios.get<BrandOriginResponse>("/admin/brand-origin", {
     params: query,

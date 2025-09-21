@@ -27,6 +27,7 @@ import NoData from "../general/NoData";
 interface ModelTableProps {
   readonly page: number;
   readonly search: string;
+  readonly dateParams?: { from_date?: string; to_date?: string }; // <-- add date filter
   readonly setPagination: (meta: {
     totalPages: number;
     totalItems: number;
@@ -36,7 +37,7 @@ interface ModelTableProps {
   }) => void;
 }
 
-export function ModelTable({ page, search, setPagination }: ModelTableProps) {
+export function ModelTable({ page, search, dateParams, setPagination }: ModelTableProps) {
   const { t, i18n } = useTranslation("models");
 
   const {
@@ -44,8 +45,8 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
     isLoading,
     refetch,
   } = useQuery<GetModelsResponse, Error>({
-    queryKey: ["models-list", page, search],
-    queryFn: () => getModels(page, 10, search),
+    queryKey: ["models-list", page, search, dateParams],
+    queryFn: () => getModels(page, 10, search, dateParams),
   });
 
   // Provide defaults if undefined
@@ -93,6 +94,11 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
   if (isLoading) return <Loading />;
   if (models.length === 0) return <NoData />;
 
+  const filtered = models.filter((model) => {
+    const name = i18n.language === "ar" ? model.name.ar : model.name.en || model.name.ar;
+    return name.toLowerCase().includes(search.toLowerCase());
+  });
+
   return (
     <Table>
       <TableHeader>
@@ -103,7 +109,7 @@ export function ModelTable({ page, search, setPagination }: ModelTableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {models.map((model, index) => (
+        {filtered.map((model, index) => (
           <TableRow key={model.id} noBackgroundColumns={1}>
             <TableCell>{paginationData.from + index}</TableCell>
             <TableCell className="w-full">
