@@ -250,6 +250,8 @@ export interface VehicleFilters {
   search_type?: string;
   order_by?: "new" | "low_price" | "high_price";
   is_active?: boolean;
+  from_date?: string;
+  to_date?: string;
 }
 
 // Request payload for creating vehicles (using FormData for file uploads)
@@ -369,6 +371,12 @@ export async function fetchVehicles(
   }
   if (filters.vehicle_class_id?.length) {
     params.vehicle_class_id = filters.vehicle_class_id;
+  }
+  if (filters.from_date) {
+  params.from_date = filters.from_date;
+  }
+  if (filters.to_date) {
+    params.to_date = filters.to_date;
   }
 
   const response = await axios.get("/admin/vehicle", { params });

@@ -73,17 +73,20 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
       />
       <div className="px-9 bg-white mb-4 flex flex-wrap justify-between gap-4">
         <div className="flex flex-wrap gap-4 ">
-          <img
-            width={338}
-            height={175}
-            className="object-cover w-[338px] h-[175px] rounded-xl"
-            src={
-              vehicle?.image?.url ||
-              vehicle?.additional_images?.[0]?.url ||
-              "/images/carDetails.png"
-            }
-            alt="Vehicle"
-          />
+          {vehicle?.image?.url || vehicle?.additional_images?.[0]?.url ? (
+            <img
+              width={338}
+              height={175}
+              className="object-cover w-[338px] h-[175px] rounded-xl"
+              src={vehicle?.image?.url || vehicle?.additional_images?.[0]?.url}
+              alt={vehicle?.name?.[i18n.language as "ar" | "en"] || "Vehicle"}
+            />
+          ) : (
+            <div className="w-[338px] h-[175px] rounded-xl bg-gray-200 flex items-center justify-center text-gray-400">
+              {t('noImage')}
+            </div>
+          )}
+
           <div className="flex flex-col gap-1.5">
             <h3 className="text-xl font-bold">
               {getdispbByLang(vehicle?.name)}

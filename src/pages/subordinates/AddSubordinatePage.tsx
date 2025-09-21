@@ -156,7 +156,7 @@ const AddSubordinatePage = () => {
     }
 
     if (!isEdit && password !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error(t('passwordsDoNotMatch'));
       return;
     }
 

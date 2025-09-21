@@ -21,7 +21,8 @@ export interface GetModelsResponse {
 export const getModels = async (
   page: number = 1,
   perPage: number = 10,
-  search: string = ""
+  search: string = "",
+  dateParams?: { from_date?: string; to_date?: string }
 ): Promise<GetModelsResponse> => {
   try {
     const res = await axios.get<GetModelsResponse>("/admin/vehicle/model", {
@@ -29,6 +30,7 @@ export const getModels = async (
         page,
         per_page: perPage,
         search,
+        ...dateParams, 
       },
     });
 

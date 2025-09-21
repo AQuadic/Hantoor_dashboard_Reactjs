@@ -84,5 +84,6 @@
   "profileDeleted": "Profile deleted successfully",
   "profileUpdated": "Profile updated successfully",
   "statusUpdated": "status updated successfully",
-  "requestFinancingExists": "Request Financing already exists with this country."
+  "requestFinancingExists": "Request Financing already exists with this country.",
+  "all": "All"
 }

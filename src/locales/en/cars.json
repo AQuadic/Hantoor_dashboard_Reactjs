@@ -89,5 +89,6 @@
   "packageDeleted": "Package deleted successfully",
   "accessoriesDeleted": "Accessories deleted successfully",
   "offerDeleted": "Offer deleted successfully",
-  "rentToOwnDeleted": "Rent-to-own data has been deleted successfully"
+  "rentToOwnDeleted": "Rent-to-own data has been deleted successfully",
+  "noImage": "No Image"
 }

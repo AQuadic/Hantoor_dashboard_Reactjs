@@ -49,7 +49,18 @@ const CarsHeader = ({
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker value={dateRange} onChange={setDateRange} />
+          <DashboardDatePicker value={dateRange} onChange={(range) => {
+            setDateRange?.(range);
+
+            if (onFilterChange) {
+              onFilterChange({
+                ...filters,
+                from_date: range?.start ? range.start.toString() : undefined,
+                to_date: range?.end ? range.end.toString() : undefined,
+              });
+            }
+          }} />
+
         </div>
         <Link to="/cars/add">
           <DashboardButton
