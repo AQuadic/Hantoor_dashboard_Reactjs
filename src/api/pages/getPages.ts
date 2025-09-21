@@ -4,6 +4,7 @@ export interface GetPagesParams {
   search?: string;
   pagination?: "simple" | "normal" | "none";
   per_page?: number;
+  country_id?: number;
 }
 
 export interface Page {
@@ -42,7 +43,9 @@ export interface PagesResponse {
   };
 }
 
-export const getPages = async (params?: GetPagesParams): Promise<PagesResponse> => {
+export const getPages = async (
+  params?: GetPagesParams
+): Promise<PagesResponse> => {
   const response = await axios.get<PagesResponse>("/admin/pages", {
     params,
     headers: {

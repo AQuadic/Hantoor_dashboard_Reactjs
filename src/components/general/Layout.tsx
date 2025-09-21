@@ -29,7 +29,7 @@ const Layout = () => {
         ref={(el) => {
           scrollContainerRef.current = el;
         }}
-        className="relative flex-1 overflow-y-auto pb-8"
+        className="relative flex-1 overflow-y-auto mb-8"
       >
         {!isLoginOrRelatedPage && <DashboardHeader />}
         {/* Animation container with relative positioning */}

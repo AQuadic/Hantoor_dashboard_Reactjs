@@ -5,7 +5,8 @@ export interface CreateSliderPayload {
   imageAr: File;
   imageEn: File;
   is_active?: boolean;
-  name: string
+  name: string;
+  country_id?: number;
 }
 
 export interface CreateSliderResponse {
@@ -24,6 +25,9 @@ export const createSlider = async (
   const formData = new FormData();
   formData.append("title", payload.title);
   formData.append("name", payload.name);
+  if (payload.country_id !== undefined) {
+    formData.append("country_id", String(payload.country_id));
+  }
   formData.append("image[ar]", payload.imageAr);
   formData.append("image[en]", payload.imageEn);
   if (payload.is_active !== undefined) {
