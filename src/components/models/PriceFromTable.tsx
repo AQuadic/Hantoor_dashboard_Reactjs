@@ -24,6 +24,7 @@ interface PriceFromTableProps {
   search?: string;
   page: number;
   countryId?: string | null;
+  dateParams?: { from_date?: string; to_date?: string };
   setPagination: (meta: {
     totalPages: number;
     totalItems: number;
@@ -37,17 +38,19 @@ export function PriceFromTable({
   search = "",
   page,
   setPagination,
-  countryId, 
+  countryId,
+  dateParams,
 }: PriceFromTableProps) {
   const { t } = useTranslation("models");
 
   const { data, isLoading, refetch } = useQuery<PriceFromResponse>({
-    queryKey: ["pricefrom", page, search, countryId],
+    queryKey: ["pricefrom", page, search, countryId, dateParams],
     queryFn: () =>
       getPriceFrom({
         page,
         search,
         country_id: countryId ? Number(countryId) : undefined,
+        ...dateParams,
       }),
   });
 

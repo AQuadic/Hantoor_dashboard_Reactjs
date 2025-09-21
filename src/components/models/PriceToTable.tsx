@@ -23,6 +23,7 @@ import { updatePriceTo } from "@/api/models/priceTo/updatePriceTo";
 interface PriceToTableProps {
   search?: string;
   page: number;
+  dateParams?: { from_date?: string; to_date?: string };
   setPagination: (meta: {
     totalPages: number;
     totalItems: number;
@@ -36,12 +37,13 @@ export function PriceToTable({
   search = "",
   page,
   setPagination,
+  dateParams,
 }: PriceToTableProps) {
   const { t } = useTranslation("models");
 
   const { data, isLoading, refetch } = useQuery<PriceToResponse>({
-    queryKey: ["priceto", page, search],
-    queryFn: () => getPriceTo({ page, search }),
+    queryKey: ["priceto", page, search, dateParams],
+    queryFn: () => getPriceTo({ page, search, ...dateParams }),
     placeholderData: (previousData: PriceToResponse | undefined) =>
       previousData,
   });

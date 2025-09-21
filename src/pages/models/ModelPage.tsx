@@ -131,6 +131,7 @@ const BrandsPage = () => {
               search={search}
               setPagination={handleSetPagination}
               countryId={selectedCountry}
+            dateParams={dateParams}
             />
           </>
         );
@@ -166,6 +167,7 @@ const BrandsPage = () => {
             search={search}
             page={currentPage}
             setPagination={handleSetPagination}
+            dateParams={dateParams}
           />
         );
       default:
