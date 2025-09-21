@@ -8,13 +8,27 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getCountries, Country } from "@/api/countries/getCountry";
-import { sendBroadcastNotification, BroadcastNotificationPayload } from "@/api/notifications/createNotification";
+import {
+  sendBroadcastNotification,
+  BroadcastNotificationPayload,
+} from "@/api/notifications/createNotification";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { getAdminUsers } from "@/api/users/getUsers";
 
 const AddNotification = () => {
   const { t, i18n } = useTranslation("notifications");
+
+  // Handler factory for checkbox changes to avoid deep nested inline functions
+  const handleUserCheckboxChange =
+    (userId: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+      const checked = e.target.checked;
+      if (checked) {
+        setSelectedUsers([...selectedUsers, userId]);
+      } else {
+        setSelectedUsers(selectedUsers.filter((id) => id !== userId));
+      }
+    };
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [showPopup, setShowPopup] = useState(false);
   const [arText, setArText] = useState("");
@@ -25,7 +39,7 @@ const AddNotification = () => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [recieverType, setRecieverType] = useState<"all" | "selected">("all");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-  const navigate = useNavigate ();
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const { data: countriesData, isLoading: countriesLoading } = useQuery({
     queryKey: ["countries"],
@@ -38,18 +52,18 @@ const AddNotification = () => {
   ];
 
   const { data: usersData } = useQuery({
-  queryKey: ["admin-users", selectedCountry?.id, search],
-  queryFn: () =>
-    getAdminUsers({
-      country_id: selectedCountry?.id,
-      search,
-    }),
+    queryKey: ["admin-users", selectedCountry?.id, search],
+    queryFn: () =>
+      getAdminUsers({
+        country_id: selectedCountry?.id,
+        search,
+      }),
     enabled: !!selectedCountry,
   });
 
   const handleSend = async () => {
     if (!selectedCountry) {
-      toast.error(t('selectCountry'));
+      toast.error(t("selectCountry"));
       return;
     }
 
@@ -65,12 +79,14 @@ const AddNotification = () => {
     try {
       await sendBroadcastNotification(payload);
       setShowPopup(true);
-      toast.success(t('notificationAddedSuccessfully'))
-      navigate("/notifications")
+      toast.success(t("notificationAddedSuccessfully"));
+      navigate("/notifications");
       setTimeout(() => setShowPopup(false), 2000);
-    } catch (error: any) {
-      if (error.response?.data?.message) {
-        toast.error(`Error: ${error.response.data.message}`);
+    } catch (err: unknown) {
+      type RpcError = { response?: { data?: { message?: string } } };
+      const errorObj = err as RpcError;
+      if (errorObj.response?.data?.message) {
+        toast.error(`Error: ${errorObj.response.data.message}`);
       } else {
         toast.error("Failed to send notification");
       }
@@ -163,14 +179,17 @@ const AddNotification = () => {
                 value={selectedCountry?.id.toString() || ""}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   const val = e.target.value;
-                  const country = countriesData?.data.find((c) => c.id.toString() === val);
+                  const country = countriesData?.data.find(
+                    (c) => c.id.toString() === val
+                  );
                   setSelectedCountry(country || null);
                 }}
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               >
                 {(countriesData?.data || []).map((c) => {
-                  const displayName = i18n.language === "ar" ? c.name.ar : c.name.en;
+                  const displayName =
+                    i18n.language === "ar" ? c.name.ar : c.name.en;
                   return (
                     <SelectItem key={c.id} textValue={displayName}>
                       {displayName}
@@ -209,86 +228,105 @@ const AddNotification = () => {
         </div>
 
         {recieverType === "selected" && (
-        <div className="xl:w-[506px] h-full bg-white rounded-[15px] p-[17px] xl:mt-0 mt-4">
-          <div className="relative w-full mb-4">
-            <input
-              type="text"
-              placeholder= {t('search')}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="bg-[#F3F6F9] w-full pl-4 pr-10 py-[10px] text-sm rtl:text-right placeholder-[#606C7E] border border-[#0000001A] rounded-[10px] focus:outline-none"
-            />
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#9CA3AF]"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-4.35-4.35M16 10a6 6 0 11-12 0 6 6 0 0112 0z"
-              />
-            </svg>
+          <div className="xl:w-[506px] h-full bg-white rounded-[15px] p-[17px] xl:mt-0 mt-4">
+            {!selectedCountry ? (
+              <div className="w-full py-8 flex items-center justify-center text-center text-sm text-[#606C7E]">
+                {i18n.language === "ar"
+                  ? "الرجاء اختيار الدولة لعرض المستخدمين"
+                  : "Please select a country to list users."}
+              </div>
+            ) : (
+              <>
+                {usersData && (usersData.data?.length ?? 0) === 0 ? (
+                  <div className="w-full py-8 flex items-center justify-center text-center text-sm text-[#606C7E]">
+                    {i18n.language === "ar"
+                      ? "لا يوجد مستخدمون في الدولة المختارة"
+                      : "No users found for the selected country."}
+                  </div>
+                ) : (
+                  <>
+                    <div className="relative w-full mb-4">
+                      <input
+                        type="text"
+                        placeholder={t("search")}
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="bg-[#F3F6F9] w-full pl-4 pr-10 py-[10px] text-sm rtl:text-right placeholder-[#606C7E] border border-[#0000001A] rounded-[10px] focus:outline-none"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#9CA3AF]"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M21 21l-4.35-4.35M16 10a6 6 0 11-12 0 6 6 0 0112 0z"
+                        />
+                      </svg>
+                    </div>
+
+                    <table className="w-full table-auto border-separate border-spacing-y-2">
+                      <thead>
+                        <tr className="bg-[#F0F4F7] h-9 rounded-[8px] text-right">
+                          <th className="w-[24px]"></th>
+                          <th className="pr-2 text-[#2A32F8] text-sm font-bold">
+                            {t("image")}
+                          </th>
+                          <th className="pr-2 text-[#2A32F8] text-sm font-bold">
+                            {t("name")}
+                          </th>
+                          <th className="pr-2 text-[#2A32F8] text-sm font-bold">
+                            {t("phone")}
+                          </th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        {(usersData?.data || []).map((user) => (
+                          <tr
+                            key={user.id}
+                            className="bg-white border-b border-[#E3E8EF] text-sm text-right"
+                          >
+                            <td className="align-middle">
+                              <Checkbox
+                                isSelected={selectedUsers.includes(
+                                  user.id.toString()
+                                )}
+                                onChange={handleUserCheckboxChange(
+                                  user.id.toString()
+                                )}
+                                disabled={
+                                  (recieverType as "all" | "selected") === "all"
+                                }
+                              />
+                            </td>
+                            <td className="py-3 pr-2">
+                              <img
+                                src="/images/user.svg"
+                                alt="user"
+                                className="w-[52px] h-[51px] rounded-full"
+                              />
+                            </td>
+                            <td className="py-3 pr-2 text-[#071739] font-normal">
+                              {user.name}
+                            </td>
+
+                            <td className="py-3 pr-2 text-[#606C7E]" dir="ltr">
+                              {user.phone}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </>
+                )}
+              </>
+            )}
           </div>
-
-          <table className="w-full table-auto border-separate border-spacing-y-2">
-            <thead>
-              <tr className="bg-[#F0F4F7] h-9 rounded-[8px] text-right">
-                <th className="w-[24px]"></th>
-                <th className="pr-2 text-[#2A32F8] text-sm font-bold">
-                  {t("image")}
-                </th>
-                <th className="pr-2 text-[#2A32F8] text-sm font-bold">
-                  {t("name")}
-                </th>
-                <th className="pr-2 text-[#2A32F8] text-sm font-bold">
-                  {t("phone")}
-                </th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {usersData?.data.map((user) => (
-                <tr
-                  key={user.id}
-                  className="bg-white border-b border-[#E3E8EF] text-sm text-right"
-                >
-                  <td className="align-middle">
-                    <Checkbox
-                      isSelected={selectedUsers.includes(user.id.toString())}
-                      onChange={(checked) => {
-                        if (checked)
-                          setSelectedUsers((prev) => [...prev, user.id.toString()]);
-                        else
-                          setSelectedUsers((prev) =>
-                            prev.filter((id) => id !== user.id.toString())
-                          );
-                      }}
-                      disabled={(recieverType as "all" | "selected") === "all"}
-                    />
-                  </td>
-                  <td className="py-3 pr-2">
-                    <img
-                      src="/images/user.svg"
-                      alt="user"
-                      className="w-[52px] h-[51px] rounded-full"
-                    />
-                  </td>
-                  <td className="py-3 pr-2 text-[#071739] font-normal">
-                    {user.name}
-                  </td>
-
-                  <td className="py-3 pr-2 text-[#606C7E]" dir="ltr">
-                    {user.phone}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
         )}
       </div>
       {showPopup && <SuccessPopup onClose={() => setShowPopup(false)} />}
