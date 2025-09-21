@@ -52,6 +52,13 @@ export interface AdminUsersResponse {
   };
 }
 
+export interface UserTableProps {
+  searchTerm?: string;
+  page: number;
+  perPage: number;
+  countryId?: number;
+}
+
 export interface GetAdminUsersParams {
   signup_with?: string;
   country_id?: number;

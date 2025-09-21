@@ -17,6 +17,8 @@ const DashboardUsers = () => {
   const [perPage] = useState(10);
   const [meta, setMeta] = useState<AdminUsersResponse["meta"] | null>(null);
   const { dateRange, setDateRange, dateParams } = useDatePicker();
+  const [countryId, setCountryId] = useState<number | undefined>(undefined);
+
 
   const activeSearchTerm = searchTermEn || searchTermAr;
 
@@ -59,7 +61,10 @@ const DashboardUsers = () => {
           </Link>
         </div>
 
-        <UserSelects />
+        <UserSelects
+          countryId={countryId}
+          setCountryId={setCountryId}
+        />
       </div>
       <div className="px-2 md:px-8">
         <UserTable
@@ -67,6 +72,7 @@ const DashboardUsers = () => {
           page={currentPage}
           perPage={perPage}
           dateParams={dateParams}
+          countryId={countryId} 
           onDataLoaded={setMeta}
         />
         {meta && (meta.total ?? 0) > 0 && (
