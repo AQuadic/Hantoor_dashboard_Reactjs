@@ -46,14 +46,20 @@ const AddSeats = () => {
               <DashboardInput
                 label={t("arSeatsNumbers")}
                 value={arSeatsNumbers}
-                onChange={setArSeatsNumbers}
+                onChange={(value: string) => {
+                  const numericValue = value.replace(/\D/g, "");
+                  setArSeatsNumbers(numericValue);
+                }}
                 placeholder={t("writeHere")}
               />
             </div>
             <DashboardInput
               label={t("enSeatsNumbers")}
               value={enSeatsNumbers}
-              onChange={setEnSeatsNumbers}
+              onChange={(value: string) => {
+                  const numericValue = value.replace(/\D/g, "");
+                  setEnSeatsNumbers(numericValue);
+                }}
               placeholder={t("writeHere")}
             />
           </div>
