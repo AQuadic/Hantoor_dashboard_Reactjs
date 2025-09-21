@@ -38,28 +38,28 @@ function TableBody({ className, ...props }: React.ComponentProps<"tbody">) {
 }
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  // const containerRef = React.useRef<HTMLDivElement>(null);
 
-  React.useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
+  // React.useEffect(() => {
+  //   const container = containerRef.current;
+  //   if (!container) return;
 
-    const handleWheel = (e: WheelEvent) => {
-      if (container.scrollWidth > container.clientWidth) {
-        e.preventDefault();
-        const scrollAmount = e.deltaY !== 0 ? e.deltaY : e.deltaX;
-        container.scrollLeft += scrollAmount;
-      }
-    };
-    container.addEventListener("wheel", handleWheel, { passive: false });
-    return () => {
-      container.removeEventListener("wheel", handleWheel);
-    };
-  }, []);
+  //   const handleWheel = (e: WheelEvent) => {
+  //     if (container.scrollWidth > container.clientWidth) {
+  //       e.preventDefault();
+  //       const scrollAmount = e.deltaY !== 0 ? e.deltaY : e.deltaX;
+  //       container.scrollLeft += scrollAmount;
+  //     }
+  //   };
+  //   container.addEventListener("wheel", handleWheel, { passive: false });
+  //   return () => {
+  //     container.removeEventListener("wheel", handleWheel);
+  //   };
+  // }, []);
 
   return (
     <div
-      ref={containerRef}
+      // ref={containerRef}
       data-slot="table-container"
       className="relative w-full overflow-x-auto"
       style={{ WebkitOverflowScrolling: "touch" }}
