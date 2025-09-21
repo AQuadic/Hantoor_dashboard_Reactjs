@@ -83,21 +83,14 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
 
   // Handle delete conversation
   const handleDelete = (conversationId: number) => {
-    // If parent provided an onDelete handler, delegate deletion (and confirmation) to it
+    // If parent provided an onDelete handler, delegate deletion (the parent will handle confirmation)
     if (onDelete) {
       onDelete(conversationId);
       return;
     }
 
-    // Fallback: confirm and delete locally when no parent handler is provided
-    if (
-      window.confirm(
-        t("confirmDeleteConversation") ||
-          "Are you sure you want to delete this conversation?"
-      )
-    ) {
-      deleteConversationMutation.mutate(conversationId);
-    }
+    // Fallback: open the DeleteModal via TableDeleteButton in the row (TableDeleteButton triggers the deletion)
+    deleteConversationMutation.mutate(conversationId);
   };
 
   // Handle opening chat slider
