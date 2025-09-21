@@ -16,6 +16,7 @@ import { Agent } from "@/api/agents/fetchAgents";
 import { useTranslation } from "react-i18next";
 import NoData from "../general/NoData";
 import Loading from "../general/Loading";
+import toast from "react-hot-toast";
 
 interface AgentPageTableProps {
   agents: Agent[];
@@ -32,8 +33,18 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
 }) => {
   const { t, i18n } = useTranslation("agents");
   if (isLoading) return <Loading />;
-
   if (!agents || agents.length === 0) return <NoData />;
+
+  const handleCopy = (website?: string | null) => {
+    if (website) {
+      navigator.clipboard.writeText(website);
+      toast.dismiss();
+      toast.success(t("copiedSuccessfully"));
+    } else {
+      toast.dismiss();
+      toast.error(t("noWebsiteAvailable"));
+    }
+  };
 
   return (
     <Table>
@@ -71,11 +82,18 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
             >
               <Switch
                 isSelected={!!agent.is_active}
-                onValueChange={(isSelected) =>
-                  onToggleActive?.(agent.id, isSelected)
-                }
+                onValueChange={(isSelected) => {
+                  onToggleActive?.(agent.id, isSelected);
+                  toast.dismiss()
+                  toast.success(t('statusUpdated'))
+                }}
               />
-              <Copy />
+              <button
+                onClick={() => handleCopy(agent.website)}
+                className="hover:opacity-75"
+              >
+                <Copy />
+              </button>
               <Link to={`/agent/details/${agent.id}`}>
                 <View />
               </Link>

@@ -15,7 +15,6 @@ import { DatePicker } from "@heroui/date-picker";
 import { CalendarDate } from "@internationalized/date";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-const userPlaceholder = "/images/users/user1.svg";
 import {
   AdminUser,
   AdminUsersResponse,
@@ -27,6 +26,7 @@ import NoData from "../general/NoData";
 import { deleteUser } from "@/api/users/deleteUser";
 import toast from "react-hot-toast";
 import { updateAdminUser } from "@/api/users/editUsers";
+import TableImagePlaceholder from "../general/TableImagePlaceholder";
 
 interface UserTableProps {
   readonly searchTerm?: string;
@@ -171,11 +171,15 @@ export function UserTable({
           <TableRow key={user.id} noBackgroundColumns={2}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
-              <img
-                src={user.image?.url || userPlaceholder}
-                alt={user.name}
-                className="w-[52.3px] h-[51px] rounded-full"
-              />
+              {user.image?.url ? (
+                <img
+                  src={user.image.url}
+                  alt={user.name}
+                  className="w-[52.3px] h-[51px] rounded-full"
+                />
+              ) : (
+                <TableImagePlaceholder className="w-10 h-10" />
+              )}
             </TableCell>
             <TableCell>{user.name}</TableCell>
             <TableCell dir="ltr">{user.phone || "-"}</TableCell>

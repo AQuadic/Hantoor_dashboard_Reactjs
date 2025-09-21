@@ -20,6 +20,7 @@ import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { updateAdmin } from "@/api/admins/editAdmin";
+import TableImagePlaceholder from "../general/TableImagePlaceholder";
 
 interface SubordinatesTableProps {
   readonly currentPage: number;
@@ -105,18 +106,23 @@ export function SubordinatesTable({
           <TableRow key={admin.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
-              <img
-                src={
-                  admin.image?.responsive_urls?.[0] ||
-                  admin.image?.url ||
-                  "/images/admin/admin1.svg"
-                }
-                alt={admin.name || "admin"}
-                className="w-10 h-10 rounded-full object-cover"
-                onError={(e) => {
-                  e.currentTarget.src = "/images/admin/admin1.svg";
-                }}
-              />
+              {admin.image?.responsive_urls?.[0] || admin.image?.url ? (
+                <img
+                  src={
+                    admin.image?.responsive_urls?.[0] ||
+                    admin.image?.url ||
+                    "/images/admin/admin1.svg"
+                  }
+                  alt={admin.name || "admin"}
+                  className="w-10 h-10 rounded-full object-cover"
+                  onError={(e) => {
+                    e.currentTarget.src = "/images/admin/admin1.svg";
+                  }}
+                />
+              ) : (
+                <TableImagePlaceholder className="w-10 h-10" />
+              )}
+
             </TableCell>
             <TableCell>{admin.name}</TableCell>
             <TableCell>{admin.phone || "-"}</TableCell>

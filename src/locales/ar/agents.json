@@ -43,5 +43,8 @@
   "removeCenter": "إزالة المركز",
   "agentStatusUpdated": "تم تحديث حالة الوكيل بنجاح",
   "agentStatusUpdateError": "خطأ في تحديث حالة الوكيل",
-  "website": "الموقع الإلكتروني"
+  "website": "الموقع الإلكتروني",
+  "statusUpdated": "تم تحديث الحالة بنجاح",
+  "copiedSuccessfully": "تم نسخ الرابط بنجاح",
+  "noWebsiteAvailable": "لا يوجد رابط"
 }

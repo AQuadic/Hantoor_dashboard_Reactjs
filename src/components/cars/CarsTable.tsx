@@ -31,6 +31,7 @@ import {
   VehicleName,
 } from "@/api/vehicles";
 import NoData from "../general/NoData";
+import TableImagePlaceholder from "../general/TableImagePlaceholder";
 
 interface CarsTableProps {
   currentPage: number;
@@ -265,7 +266,7 @@ const [openConversationId, setOpenConversationId] = useState<number | null>(null
       return imgStr;
     }
 
-    return carImage;
+    return undefined;
   };
 
   // Helper function to safely get vehicle name (API returns name as string or VehicleName object)
@@ -354,14 +355,18 @@ const [openConversationId, setOpenConversationId] = useState<number | null>(null
               <TableRow key={vehicle.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
+                {getVehicleImage(vehicle) ? (
                   <img
                     src={getVehicleImage(vehicle)}
                     alt={getVehicleDisplayName(vehicle.name)}
                     className="w-[93px] h-[60px] object-cover rounded"
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = carImage;
+                      (e.currentTarget as HTMLImageElement).src = carImage;
                     }}
                   />
+                ) : (
+                  <TableImagePlaceholder className="w-[93px] h-[60px]" />
+                )}
                 </TableCell>
                 <TableCell>{getVehicleDisplayName(vehicle.name)}</TableCell>
                 <TableCell>

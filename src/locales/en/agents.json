@@ -43,5 +43,8 @@
   "removeCenter": "Remove center",
   "agentStatusUpdated": "Agent status updated successfully",
   "agentStatusUpdateError": "Error updating agent status",
-  "website": "Website"
+  "website": "Website",
+  "statusUpdated": "Status updated successfully",
+  "copiedSuccessfully": "Link copied successfully",
+  "noWebsiteAvailable": "No link available"
 }
