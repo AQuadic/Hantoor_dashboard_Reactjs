@@ -29,6 +29,7 @@
   "interestValue": "Interest value",
   "bankDeleted": "Bank deleted successfully",
   "deleteFailed": "Delete failed",
+  "statusUpdated": "Status updated successfully",
   "privateParty": "Private Party",
   "government": "Government",
 

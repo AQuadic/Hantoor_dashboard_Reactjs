@@ -83,21 +83,14 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
 
   // Handle delete conversation
   const handleDelete = (conversationId: number) => {
-    // If parent provided an onDelete handler, delegate deletion (and confirmation) to it
+    // If parent provided an onDelete handler, delegate deletion (the parent will handle confirmation)
     if (onDelete) {
       onDelete(conversationId);
       return;
     }
 
-    // Fallback: confirm and delete locally when no parent handler is provided
-    if (
-      window.confirm(
-        t("confirmDeleteConversation") ||
-          "Are you sure you want to delete this conversation?"
-      )
-    ) {
-      deleteConversationMutation.mutate(conversationId);
-    }
+    // Fallback: open the DeleteModal via TableDeleteButton in the row (TableDeleteButton triggers the deletion)
+    deleteConversationMutation.mutate(conversationId);
   };
 
   // Handle opening chat slider
@@ -128,39 +121,44 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
                 </TableCell>
               </TableRow>
             ) : (
-              conversations.map((conversation, index) => (
-                <TableRow key={conversation.id} noBackgroundColumns={1}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>
-                    {getLocalizedName(conversation.vehicle?.name)}
-                  </TableCell>
-                  <TableCell>
-                    {getLocalizedName(conversation.vehicle?.brand?.name)}
-                  </TableCell>
-                  <TableCell className="w-full">
-                    {conversation.users_count ||
-                      conversation.followers_count ||
-                      "-"}
-                  </TableCell>
-                  <TableCell className="flex gap-[7px] items-center">
-                    <Switch
-                      checked={Boolean(conversation.is_active)}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleToggleActive(conversation.id, e.target.checked)
-                      }
-                      disabled={updateStatusMutation.isPending}
-                    />
-                    <button onClick={() => handleOpenChat(conversation.id)}>
-                      <ChatIcon />
-                    </button>
-                    <div className="mt-2">
-                      <TableDeleteButton
-                        handleDelete={() => handleDelete(conversation.id)}
+              conversations.map((conversation, index) => {
+                return (
+                  <TableRow key={conversation.id} noBackgroundColumns={1}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {getLocalizedName(conversation.vehicle?.name)}
+                    </TableCell>
+                    <TableCell>
+                      {getLocalizedName(conversation.vehicle?.brand?.name)}
+                    </TableCell>
+                    <TableCell className="w-full">
+                      {conversation.users_count ||
+                        conversation.followers_count ||
+                        "-"}
+                    </TableCell>
+                    <TableCell className="flex gap-[7px] items-center">
+                      <Switch
+                        isSelected={Boolean(conversation.is_active)}
+                        onChange={() =>
+                          handleToggleActive(
+                            conversation.id,
+                            !conversation.is_active
+                          )
+                        }
+                        isDisabled={updateStatusMutation.isPending}
                       />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+                      <button onClick={() => handleOpenChat(conversation.id)}>
+                        <ChatIcon />
+                      </button>
+                      <div className="mt-2">
+                        <TableDeleteButton
+                          handleDelete={() => handleDelete(conversation.id)}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>
@@ -187,7 +185,10 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
               transition={{ duration: 0.3 }}
               className="fixed top-0 right-0 h-full md:w-[493px] w-[300px] bg-white shadow-lg z-50 overflow-y-auto"
             >
-              <ConversationPage conversationId={openConversationId} />
+              <ConversationPage
+                conversationId={openConversationId}
+                onClose={() => setOpenConversationId(null)}
+              />
             </motion.div>
           </>
         )}

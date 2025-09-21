@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { X, Trash2, MoreVertical, Power, PowerOff } from "lucide-react";
+import { X, MoreVertical, Power, PowerOff } from "lucide-react";
 import {
   useMutation,
   useQueryClient,
@@ -14,6 +14,7 @@ import {
   type MessagesApiResponse,
 } from "@/api/chats/fetchMessages";
 import { type Conversation } from "@/api/chats/fetchConversations";
+import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
 
 interface ChatSliderProps {
   isOpen: boolean;
@@ -44,7 +45,7 @@ const ChatSlider: React.FC<ChatSliderProps> = ({
     queryFn: ({ pageParam = 1 }) =>
       conversation
         ? fetchMessages(conversation.id, pageParam as number, 20)
-        : Promise.reject("No conversation"),
+        : Promise.reject(new Error("No conversation")),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.current_page < lastPage.last_page
@@ -137,16 +138,7 @@ const ChatSlider: React.FC<ChatSliderProps> = ({
     }
   }, [messagesData, scrollToBottom, isFetchingNextPage]);
 
-  const handleDeleteMessage = (messageId: number) => {
-    if (
-      window.confirm(
-        t("confirmDeleteMessage") ||
-          "Are you sure you want to delete this message?"
-      )
-    ) {
-      deleteMessageMutation.mutate(messageId);
-    }
-  };
+  // message deletion is handled via TableDeleteButton (opens DeleteModal)
 
   const handleToggleStatus = () => {
     if (conversation) {
@@ -250,19 +242,27 @@ const ChatSlider: React.FC<ChatSliderProps> = ({
             </div>
           )}
 
-          {isLoading && allMessages.length === 0 ? (
+          {isLoading && allMessages.length === 0 && (
             <div className="flex justify-center items-center h-full">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
-          ) : error ? (
+          )}
+
+          {error && (
             <div className="text-center text-red-500 py-8">
               <p>{t("errorLoadingMessages") || "Error loading messages"}</p>
             </div>
-          ) : allMessages.length === 0 ? (
+          )}
+
+          {!isLoading && !error && allMessages.length === 0 && (
             <div className="text-center text-gray-500 py-8">
               <p>{t("noMessages") || "No messages in this conversation"}</p>
             </div>
-          ) : (
+          )}
+
+          {!isLoading &&
+            !error &&
+            allMessages.length > 0 &&
             allMessages.map((message) => (
               <div
                 key={message.id}
@@ -292,18 +292,19 @@ const ChatSlider: React.FC<ChatSliderProps> = ({
 
                   {/* Delete button - only show for admin messages */}
                   {message.sender_type === "admin" && (
-                    <button
-                      onClick={() => handleDeleteMessage(message.id)}
-                      className="absolute -top-2 -left-2 opacity-0 group-hover:opacity-100 transition-opacity bg-red-500 hover:bg-red-600 text-white rounded-full p-1"
-                      disabled={deleteMessageMutation.isPending}
-                    >
-                      <Trash2 size={12} />
-                    </button>
+                    <div className="absolute -top-2 -left-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <TableDeleteButton
+                        handleDelete={() =>
+                          deleteMessageMutation.mutate(message.id)
+                        }
+                        disabled={deleteMessageMutation.isPending}
+                        className="bg-red-500 hover:bg-red-600 text-white rounded-full p-1"
+                      />
+                    </div>
                   )}
                 </div>
               </div>
-            ))
-          )}
+            ))}
 
           {/* Scroll to bottom reference */}
           <div ref={messagesEndRef} />
