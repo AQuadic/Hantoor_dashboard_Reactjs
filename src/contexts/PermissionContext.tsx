@@ -4,6 +4,7 @@ import React, {
   useEffect,
   ReactNode,
   useMemo,
+  useRef,
 } from "react";
 import {
   PermissionContextType,
@@ -18,6 +19,7 @@ import {
   hasAllPermissions as utilHasAllPermissions,
   hasRole as utilHasRole,
 } from "@/utils/permissionUtils";
+import { useAuthStore } from "@/store/useAuthStore";
 
 // Action types for the reducer
 type PermissionAction =
@@ -46,12 +48,14 @@ const permissionReducer = (
 ): PermissionContextState => {
   switch (action.type) {
     case "FETCH_PERMISSIONS_START":
+      console.log("🔐 Permissions: Starting fetch...");
       return {
         ...state,
         isLoading: true,
         error: null,
       };
     case "FETCH_PERMISSIONS_SUCCESS":
+      console.log("🔐 Permissions: Fetch successful, updating state...");
       return {
         ...state,
         permissions: action.payload.permissions,
@@ -62,12 +66,14 @@ const permissionReducer = (
         lastFetched: new Date(),
       };
     case "FETCH_PERMISSIONS_ERROR":
+      console.log("🔐 Permissions: Fetch error:", action.payload);
       return {
         ...state,
         isLoading: false,
         error: action.payload,
       };
     case "CLEAR_PERMISSIONS":
+      console.log("🔐 Permissions: Clearing all permissions...");
       return {
         ...initialState,
       };
@@ -93,8 +99,31 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
 }) => {
   const [state, dispatch] = useReducer(permissionReducer, initialState);
 
+  // Get auth state from store
+  const { isAuthenticated, token } = useAuthStore();
+
+  // Use refs to store current auth values to avoid dependency issues
+  const authRef = useRef({ isAuthenticated, token });
+  authRef.current = { isAuthenticated, token };
+
+  // Flag to prevent multiple simultaneous fetches
+  const fetchingRef = useRef(false);
+
   // Internal fetch function to avoid dependency issues
   const fetchPermissionsInternal = useCallback(async () => {
+    // Check auth state from ref to avoid circular dependencies
+    if (!authRef.current.isAuthenticated || !authRef.current.token) {
+      console.log("🔐 Skipping permission fetch - user not authenticated");
+      return;
+    }
+
+    // Prevent multiple simultaneous fetches
+    if (fetchingRef.current) {
+      console.log("🔐 Skipping permission fetch - already in progress");
+      return;
+    }
+
+    fetchingRef.current = true;
     dispatch({ type: "FETCH_PERMISSIONS_START" });
 
     try {
@@ -154,6 +183,8 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
         payload: errorMessage,
       });
       console.error("Error fetching permissions:", error);
+    } finally {
+      fetchingRef.current = false;
     }
   }, []);
 
@@ -201,19 +232,46 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
     [state.roles]
   );
 
-  // Auto-fetch permissions on mount
+  // Combined effect to handle auth state changes and auto-fetch
   useEffect(() => {
-    const shouldFetch = autoFetch && !state.isLoaded && !state.isLoading;
-    if (shouldFetch) {
-      fetchPermissionsInternal();
+    console.log("🔐 Auth/State effect triggered:", {
+      isAuthenticated,
+      hasToken: !!token,
+      isLoaded: state.isLoaded,
+      isLoading: state.isLoading,
+      autoFetch,
+    });
+
+    if (isAuthenticated && token) {
+      // User is authenticated
+      if (!state.isLoaded && !state.isLoading) {
+        console.log("🔐 Fetching permissions for authenticated user...");
+        fetchPermissionsInternal();
+      }
+    } else if (state.isLoaded || state.permissions.length > 0) {
+      // User is not authenticated - clear permissions
+      console.log("🔐 Clearing permissions for unauthenticated user...");
+      dispatch({ type: "CLEAR_PERMISSIONS" });
     }
-  }, [autoFetch, state.isLoaded, state.isLoading, fetchPermissionsInternal]);
+  }, [
+    isAuthenticated,
+    token,
+    state.isLoaded,
+    state.isLoading,
+    state.permissions.length,
+    autoFetch,
+    fetchPermissionsInternal,
+  ]);
 
   // Auto-refresh functionality
   useEffect(() => {
     if (refreshInterval && refreshInterval > 0) {
       const interval = setInterval(() => {
-        if (!state.isLoading) {
+        if (
+          !state.isLoading &&
+          authRef.current.isAuthenticated &&
+          authRef.current.token
+        ) {
           fetchPermissionsInternal();
         }
       }, refreshInterval);

@@ -72,40 +72,66 @@ import AddNotification from "@/pages/notification/AddNotification";
 import ViewCars from "@/pages/cars/ViewCars";
 import ViewAgent from "@/pages/cars/ViewAgent";
 import SupportMsgsConversationWrapper from "@/pages/supportmessages/SupportMsgsConversationWrapper";
+import ForbiddenPage from "@/pages/errors/ForbiddenPage";
 export const privateRoutes: RouteTypes[] = [
   {
     path: "/",
     element: <DashboardPage />,
+    // Dashboard - no specific permissions required
   },
   // Users routes - flattened
   {
     path: "/users",
     element: <DashboardUsers />,
+    requiredPermissions: [
+      "user.view",
+      "user.create",
+      "user.edit",
+      "user.delete",
+    ],
+    requireAny: true,
   },
   {
     path: "/users/add",
     element: <AddUsers />,
+    requiredPermissions: ["user.create"],
+    requireAny: false,
   },
   {
     path: "/users/edit/:id",
     element: <EditUsers />,
+    requiredPermissions: ["user.edit"],
+    requireAny: false,
   },
   {
     path: "/users/change-password/:id",
     element: <ChangePassword />,
+    requiredPermissions: ["user.edit"],
+    requireAny: false,
   },
   // Brands routes - flattened
   {
     path: "/brands",
     element: <BrandsPage />,
+    requiredPermissions: [
+      "brand.view",
+      "brand.create",
+      "brand.edit",
+      "brand.delete",
+    ],
+    requireAny: true,
   },
   {
     path: "/brands/add",
     element: <AddBrand />,
+    requiredPermissions: ["brand.create"],
+    requireAny: false,
   },
   {
     path: "/brands/:id",
     element: <AddBrand />,
+    requiredPermissions: ["brand.edit"],
+    requireAny: false,
   },
   {
     path: "/profile",
@@ -116,65 +142,113 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/technical-support",
     element: <TechnicalSupport />,
+    requiredPermissions: [
+      "technical_support.view",
+      "technical_support.create",
+      "technical_support.edit",
+      "technical_support.delete",
+    ],
+    requireAny: true,
   },
   {
     path: "/technical-support/add",
     element: <AddQuestions />,
+    requiredPermissions: ["technical_support.create"],
+    requireAny: false,
   },
   {
     path: "/technical-support/edit/:id",
     element: <EditQuestion />,
+    requiredPermissions: ["technical_support.edit"],
+    requireAny: false,
   },
 
   // Countries route
   {
     path: "/countries",
     element: <CountriesPage />,
+    requiredPermissions: [
+      "country.view",
+      "country.create",
+      "country.edit",
+      "country.delete",
+    ],
+    requireAny: true,
   },
   {
     path: "/countries/edit/:id",
     element: <EditCountries />,
+    requiredPermissions: ["country.edit"],
+    requireAny: false,
   },
   {
     path: "/countries/add",
     element: <AddCountries />,
+    requiredPermissions: ["country.create"],
+    requireAny: false,
   },
   // Subordinates route
   {
     path: "/subordinates",
     element: <SubordinatesPage />,
+    requiredPermissions: [
+      "admin.view",
+      "admin.create",
+      "admin.edit",
+      "admin.delete",
+    ],
+    requireAny: true,
   },
 
   // FAQs route
   {
     path: "/faqs",
     element: <FAQsPage />,
+    requiredPermissions: ["faq.view", "faq.create", "faq.edit", "faq.delete"],
+    requireAny: true,
   },
   {
     path: "/faq/add",
     element: <AddFaq />,
+    requiredPermissions: ["faq.create"],
+    requireAny: false,
   },
   {
     path: "/faq/edit/:id",
     element: <EditFaq />,
+    requiredPermissions: ["faq.edit"],
+    requireAny: false,
   },
   {
     path: "/faq/details/:id",
     element: <FaqDetails faqId={0} />,
+    requiredPermissions: ["faq.view"],
+    requireAny: false,
   },
   {
     path: "/subordinates/add",
     element: <AddSubordinatePage />,
+    requiredPermissions: ["admin.create"],
+    requireAny: false,
   },
   {
     path: "/subordinates/:id",
     element: <AddSubordinatePage />,
+    requiredPermissions: ["admin.edit"],
+    requireAny: false,
   },
 
   // Financing route
   {
     path: "/financing",
     element: <FinancingPage />,
+    requiredPermissions: [
+      "financing.view",
+      "financing.create",
+      "financing.edit",
+      "financing.delete",
+    ],
+    requireAny: true,
   },
   {
     path: "/financing/details/:id",
@@ -412,5 +486,9 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/notifications/add/",
     element: <AddNotification />,
+  },
+  {
+    path: "/403",
+    element: <ForbiddenPage />,
   },
 ];

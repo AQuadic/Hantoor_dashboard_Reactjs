@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/general/Layout";
 import PrivateRouteGuard from "./guards/PrivateRouteGuard";
 import PublicRouteGuard from "./guards/PublicRouteGuard";
+import PermissionRouteGuard from "./guards/PermissionRouteGuard";
 import Providers from "./Providers";
 
 function App() {
@@ -14,7 +15,14 @@ function App() {
       <Route
         key={`${route.path}-${index}`}
         path={route.path}
-        element={route.element}
+        element={
+          <PermissionRouteGuard
+            requiredPermissions={route.requiredPermissions}
+            requireAny={route.requireAny}
+          >
+            {route.element}
+          </PermissionRouteGuard>
+        }
       >
         {route.children && renderRoutes(route.children)}
       </Route>

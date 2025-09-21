@@ -13,11 +13,11 @@ export const publicRoutes: RouteTypes[] = [
     path: "/forget-password",
     element: <ForgetPassword />,
   },
-    {
+  {
     path: "/verification-code",
     element: <VerficationCode />,
   },
-    {
+  {
     path: "/change-password",
     element: <CahngePassword />,
   },

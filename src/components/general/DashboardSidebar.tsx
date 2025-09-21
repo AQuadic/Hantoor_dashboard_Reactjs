@@ -1,8 +1,8 @@
-import { SidebarLinks } from "@/constants/SidebarLinks";
+import { useFilteredSidebarLinks } from "@/hooks/useFilteredSidebarLinks";
+import { useAuthStore } from "@/store/useAuthStore";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState, useRef, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 
 const DashboardSidebar = () => {
@@ -10,6 +10,12 @@ const DashboardSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const mobileSidebarRef = useRef<HTMLDivElement | null>(null);
   const { i18n } = useTranslation();
+
+  // Use filtered sidebar links based on user permissions
+  const filteredSidebarLinks = useFilteredSidebarLinks();
+
+  // Get logout function from auth store
+  const { logout } = useAuthStore();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
   const currentLang = i18n.language;
@@ -29,57 +35,11 @@ const DashboardSidebar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Remove common auth keys from both storages
-    const keys = [
-      "token",
-      "accessToken",
-      "refreshToken",
-      "user",
-      "userData",
-      "auth",
-      "authToken",
-    ];
-    keys.forEach((k) => {
-      try {
-        localStorage.removeItem(k);
-      } catch {
-        void 0;
-      }
-      try {
-        sessionStorage.removeItem(k);
-      } catch {
-        void 0;
-      }
-    });
-    // As a fallback, remove any possible persisted auth state prefixes
-    try {
-      Object.keys(localStorage).forEach((k) => {
-        if (
-          k.toLowerCase().includes("auth") ||
-          k.toLowerCase().includes("token") ||
-          k.toLowerCase().includes("user")
-        ) {
-          localStorage.removeItem(k);
-        }
-      });
-    } catch {
-      void 0;
-    }
-
-    // Remove cookie-based tokens (used by axios.ts)
-    try {
-      Cookies.remove("hantoor_token");
-      Cookies.remove("hantoorToken");
-      Cookies.remove("hantoor-token");
-    } catch {
-      void 0;
-    }
-    try {
-      sessionStorage.removeItem("hantoor_token");
-    } catch {
-      void 0;
-    }
-
+    // Use the auth store logout function which will automatically:
+    // 1. Clear the auth state
+    // 2. Remove cookies and session storage
+    // 3. Trigger permission clearing via the PermissionProvider
+    logout();
     navigate("/login");
   };
 
@@ -246,7 +206,7 @@ const DashboardSidebar = () => {
               </div>
 
               {/* Mobile Nav Links */}
-              {SidebarLinks.map((link, index) => (
+              {filteredSidebarLinks.map((link, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, x: 20 }}
@@ -308,7 +268,7 @@ const DashboardSidebar = () => {
           className="py-4"
           style={{ boxShadow: "10.27px 10.27px 51.33px 0px #64748B0A" }}
         >
-          {SidebarLinks.map((link, index) =>
+          {filteredSidebarLinks.map((link, index) =>
             link.linkEn === "Logout" ? (
               <div
                 key={index}

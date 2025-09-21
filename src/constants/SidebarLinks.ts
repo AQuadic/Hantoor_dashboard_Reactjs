@@ -32,13 +32,24 @@ import SupportMsgs from "@/components/icons/dashboard/SupportMsgs";
 import SupportQuestions from "@/components/icons/dashboard/SupportQuestions";
 import Users from "@/components/icons/dashboard/Users";
 
-export const SidebarLinks = [
+export interface SidebarLink {
+  icons: React.ComponentType;
+  activeIcon?: React.ComponentType;
+  linkAr: string;
+  linkEn: string;
+  path: string;
+  requiredPermissions?: string[]; // List of permissions required to access this link
+  requireAny?: boolean; // If true, user needs ANY of the permissions; if false, needs ALL
+}
+
+export const SidebarLinks: SidebarLink[] = [
   {
     icons: DashboardIcon,
     activeIcon: ActiveDashboard,
     linkAr: "لوحة التحكم",
     linkEn: "Dashboard",
     path: "/",
+    // Dashboard is always accessible - no permissions required
   },
   {
     icons: Subordinates,
@@ -46,6 +57,13 @@ export const SidebarLinks = [
     linkAr: "المسؤولين الفرعيين",
     linkEn: "Subordinates",
     path: "/subordinates",
+    requiredPermissions: [
+      "view_admin",
+      "create_admin",
+      "edit_admin",
+      "delete_admin",
+    ],
+    requireAny: true,
   },
   {
     icons: Users,
@@ -53,6 +71,14 @@ export const SidebarLinks = [
     linkAr: "المستخدمين",
     linkEn: "Users",
     path: "/users",
+    requiredPermissions: [
+      "view_user",
+      "create_user",
+      "edit_user",
+      "delete_user",
+      "block_user",
+    ],
+    requireAny: true,
   },
   {
     icons: Countries,
@@ -60,6 +86,13 @@ export const SidebarLinks = [
     linkAr: "البلاد",
     linkEn: "Countries",
     path: "/countries",
+    requiredPermissions: [
+      "view_country",
+      "create_country",
+      "edit_country",
+      "delete_country",
+    ],
+    requireAny: true,
   },
   {
     icons: Brands,
@@ -67,6 +100,13 @@ export const SidebarLinks = [
     linkAr: "الماركات",
     linkEn: "Brands",
     path: "/brands",
+    requiredPermissions: [
+      "view_brand",
+      "create_brand",
+      "edit_brand",
+      "delete_brand",
+    ],
+    requireAny: true,
   },
   {
     icons: Agents,
@@ -74,6 +114,13 @@ export const SidebarLinks = [
     linkAr: "الوكلاء",
     linkEn: "Agents",
     path: "/agents",
+    requiredPermissions: [
+      "view_agent",
+      "create_agent",
+      "edit_agent",
+      "delete_agent",
+    ],
+    requireAny: true,
   },
   {
     icons: CarSections,
@@ -81,6 +128,13 @@ export const SidebarLinks = [
     linkAr: "اقسام السيارات",
     linkEn: "Car Sections",
     path: "/models",
+    requiredPermissions: [
+      "view_model",
+      "create_model",
+      "edit_model",
+      "delete_model",
+    ],
+    requireAny: true,
   },
   {
     icons: Cars,
@@ -88,6 +142,8 @@ export const SidebarLinks = [
     linkAr: "السيارات",
     linkEn: "Cars",
     path: "/cars",
+    requiredPermissions: ["view_car", "create_car", "edit_car", "delete_car"],
+    requireAny: true,
   },
   {
     icons: Financing,
@@ -95,6 +151,13 @@ export const SidebarLinks = [
     linkAr: "التمويل",
     linkEn: "Financing",
     path: "/financing",
+    requiredPermissions: [
+      "view_financing",
+      "create_financing",
+      "edit_financing",
+      "delete_financing",
+    ],
+    requireAny: true,
   },
   {
     icons: Chats,
@@ -102,6 +165,13 @@ export const SidebarLinks = [
     linkAr: "المحادثات",
     linkEn: "Chats",
     path: "/chats",
+    requiredPermissions: [
+      "view_chat",
+      "create_chat",
+      "edit_chat",
+      "delete_chat",
+    ],
+    requireAny: true,
   },
   {
     icons: SupportQuestions,
@@ -109,6 +179,13 @@ export const SidebarLinks = [
     linkAr: "اسئلة الدعم الفني",
     linkEn: "Support Questions",
     path: "/technical-support",
+    requiredPermissions: [
+      "view_support_question",
+      "create_support_question",
+      "edit_support_question",
+      "delete_support_question",
+    ],
+    requireAny: true,
   },
   {
     icons: SupportMsgs,
@@ -116,6 +193,13 @@ export const SidebarLinks = [
     linkAr: "رسائل الدعم",
     linkEn: "Support Messages",
     path: "/support-messages",
+    requiredPermissions: [
+      "view_support_message",
+      "create_support_message",
+      "edit_support_message",
+      "delete_support_message",
+    ],
+    requireAny: true,
   },
   {
     icons: FAQs,
@@ -123,6 +207,8 @@ export const SidebarLinks = [
     linkAr: "الاسئلة الشائعة",
     linkEn: "FAQs",
     path: "/faqs",
+    requiredPermissions: ["view_faq", "create_faq", "edit_faq", "delete_faq"],
+    requireAny: true,
   },
   {
     icons: Notification,
@@ -130,6 +216,13 @@ export const SidebarLinks = [
     linkAr: "الاشعارات",
     linkEn: "Notifications",
     path: "/notifications",
+    requiredPermissions: [
+      "view_notification",
+      "create_notification",
+      "edit_notification",
+      "delete_notification",
+    ],
+    requireAny: true,
   },
   {
     icons: Contactus,
@@ -137,6 +230,13 @@ export const SidebarLinks = [
     linkAr: "تواصل معنا",
     linkEn: "Contact Us",
     path: "/contact-us",
+    requiredPermissions: [
+      "view_contact",
+      "create_contact",
+      "edit_contact",
+      "delete_contact",
+    ],
+    requireAny: true,
   },
   {
     icons: Setting,
@@ -144,11 +244,19 @@ export const SidebarLinks = [
     linkAr: "الاعدادات",
     linkEn: "Settings",
     path: "/settings",
+    requiredPermissions: [
+      "view_setting",
+      "create_setting",
+      "edit_setting",
+      "delete_setting",
+    ],
+    requireAny: true,
   },
   {
     icons: Logout,
     linkAr: "تسجيل الخروج",
     linkEn: "Logout",
     path: "/logout",
+    // Logout is always accessible - no permissions required
   },
 ];
