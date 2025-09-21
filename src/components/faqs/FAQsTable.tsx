@@ -63,6 +63,21 @@ const FAQsTable = ({ data, from = 1, isLoading = false, refetch }: FAQsTableProp
   return i18n.language === "ar" ? country.name.ar : country.name.en;
 };
 
+const formatDateTime = (dateString?: string | null) => {
+  if (!dateString) return "-";
+  const date = new Date(dateString);
+  return date.toLocaleString(i18n.language === "ar" ? "ar-EG" : "en-US", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  });
+};
+
+
 
   if (isLoading) return <Loading />;
   if (!data || data.length === 0) return <NoData />;
@@ -91,7 +106,9 @@ const FAQsTable = ({ data, from = 1, isLoading = false, refetch }: FAQsTableProp
                 <TableCell>{getCountryName(faq.country_id)}</TableCell>
                 <TableCell>{faq.useful_uses_count}</TableCell>
                 <TableCell>{faq.unuseful_uses_count}</TableCell>
-                <TableCell className="w-full">{new Date(faq.created_at).toLocaleString()}</TableCell>
+                <TableCell className="w-full">
+                  {formatDateTime(faq.created_at)}
+                </TableCell>
                 <TableCell
                   className="flex gap-[7px] items-center"
                   onClick={(e) => e.stopPropagation()}

@@ -69,16 +69,19 @@ export function SubordinatesTable({
     }
   };
 
-  const formatDateTime = (dateStr: string | null) => {
+  const formatDateTime = (dateStr: string | null, lang: string) => {
     if (!dateStr) return "-";
     const date = new Date(dateStr);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
 
-    return `${day}/${month}/${year} ${hours}:${minutes}`;
+    return date.toLocaleString(lang === "ar" ? "ar-EG" : "en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
   };
 
   if (isLoading) return <Loading />;
@@ -127,7 +130,7 @@ export function SubordinatesTable({
             <TableCell>{admin.name}</TableCell>
             <TableCell>{admin.phone || "-"}</TableCell>
             <TableCell>{admin.email}</TableCell>
-            <TableCell>{formatDateTime(admin.created_at)}</TableCell>
+            <TableCell>{formatDateTime(admin.created_at, i18n.language)}</TableCell>
             <TableCell>-</TableCell>
             <TableCell>
             {admin?.last_online
