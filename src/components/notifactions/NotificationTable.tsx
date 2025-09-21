@@ -1,10 +1,18 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import View from "../icons/general/View";
 import { useTranslation } from "react-i18next";
 import Loading from "../general/Loading";
+import TableImagePlaceholder from "../general/TableImagePlaceholder";
 import NoData from "../general/NoData";
 import { deleteNotification } from "@/api/notifications/deleteNotification";
 import toast from "react-hot-toast";
@@ -23,15 +31,17 @@ const NotificationTable: React.FC<NotificationTableProps> = ({
   isLoading,
   refetch,
 }) => {
-    const { t, i18n } = useTranslation("notifications");
-const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({});
+  const { t, i18n } = useTranslation("notifications");
+  const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>(
+    {}
+  );
 
-    const toggleExpand = (id: number) => {
-        setExpandedRows((prev) => ({
-        ...prev,
-        [id]: !prev[id],
-        }));
-    };
+  const toggleExpand = (id: number) => {
+    setExpandedRows((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
 
   const handleDelete = async (id: number) => {
     await deleteNotification(id);
@@ -39,72 +49,86 @@ const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>({})
     refetch();
   };
 
-  if (isLoading) return <Loading />
-  if (!data || data.length === 0) return <NoData />
+  if (isLoading) return <Loading />;
+  if (!data || data.length === 0) return <NoData />;
 
-    return (
-        <Table>
-        <TableHeader>
-            <TableRow>
-            <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">{t('image')}</TableHead>
-            <TableHead className="text-right">{t('textTitle')}</TableHead>
-            <TableHead className="text-right">{t('country')}</TableHead>
-            <TableHead className="text-right">{t('description')}</TableHead>
-            <TableHead className="text-right">{t('')}</TableHead>
-            </TableRow>
-        </TableHeader>
-        <TableBody>
-            {data.map((notification, index) => {
-            const isExpanded = expandedRows[notification.id];
-            const bodyText = i18n.language === "ar" ? notification.body.ar : notification.body.en;
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="text-right">#</TableHead>
+          <TableHead className="text-right">{t("image")}</TableHead>
+          <TableHead className="text-right">{t("textTitle")}</TableHead>
+          <TableHead className="text-right">{t("country")}</TableHead>
+          <TableHead className="text-right">{t("description")}</TableHead>
+          <TableHead className="text-right">{t("")}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {data.map((notification, index) => {
+          const isExpanded = expandedRows[notification.id];
+          const bodyText =
+            i18n.language === "ar"
+              ? notification.body.ar
+              : notification.body.en;
 
-            const shortDescription =
+          const shortDescription =
             bodyText.length > 50 ? bodyText.slice(0, 50) + "..." : bodyText;
 
-            return (
-                <TableRow key={notification.id} noBackgroundColumns={1}>
-                <TableCell>{from + index}</TableCell>
-                <TableCell>
-                    {notification.image && "url" in notification.image ? (
-                    <img src={notification.image.url} alt="Notification" className="w-16 h-16 object-cover rounded-md" />
-                    ) : (
-                    <div className="w-10 h-10 bg-gray-100 rounded-md"></div>
-                    )}
-                </TableCell>
-                <TableCell>{i18n.language === "ar" ? notification.title.ar : notification.title.en}</TableCell>
-                <TableCell>
+          return (
+            <TableRow key={notification.id} noBackgroundColumns={1}>
+              <TableCell>{from + index}</TableCell>
+              <TableCell>
+                {notification.image && "url" in notification.image ? (
+                  <img
+                    src={notification.image.url}
+                    alt="Notification"
+                    className="w-16 h-16 object-cover rounded-md"
+                  />
+                ) : (
+                  <TableImagePlaceholder className="w-10 h-10" />
+                )}
+              </TableCell>
+              <TableCell>
                 {i18n.language === "ar"
-                    ? notification.country?.name?.ar ?? "-"
-                    : notification.country?.name?.en ?? "-"}
-                </TableCell>
-                <TableCell className="w-full">
-                    {isExpanded ? bodyText : shortDescription}
-                    {bodyText.length > 50 && (
-                    <button
-                        className="text-blue-600 ml-2 hover:underline"
-                        onClick={() => toggleExpand(notification.id)}
-                    >
-                        {isExpanded ? t("showLess") : t("showMore")}
-                    </button>
-                    )}
-                </TableCell>
-                <TableCell
-                    className="flex gap-[7px] items-center"
-                    onClick={(e) => e.stopPropagation()}
-                >
-                    <Link to={`/notifications/details/${notification.id}`}>
-                    <View />
-                    </Link>
-                    <div className="mt-2">
-                    <TableDeleteButton handleDelete={() => handleDelete(notification.id)} />
-                    </div>
-                </TableCell>
-                </TableRow>
-            )})}
-        </TableBody>
-        </Table>
-    )
-}
+                  ? notification.title.ar
+                  : notification.title.en}
+              </TableCell>
+              <TableCell>
+                {i18n.language === "ar"
+                  ? notification.country?.name?.ar ?? "-"
+                  : notification.country?.name?.en ?? "-"}
+              </TableCell>
+              <TableCell className="w-full">
+                {isExpanded ? bodyText : shortDescription}
+                {bodyText.length > 50 && (
+                  <button
+                    className="text-blue-600 ml-2 hover:underline"
+                    onClick={() => toggleExpand(notification.id)}
+                  >
+                    {isExpanded ? t("showLess") : t("showMore")}
+                  </button>
+                )}
+              </TableCell>
+              <TableCell
+                className="flex gap-[7px] items-center"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Link to={`/notifications/details/${notification.id}`}>
+                  <View />
+                </Link>
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(notification.id)}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+          );
+        })}
+      </TableBody>
+    </Table>
+  );
+};
 
-export default NotificationTable
+export default NotificationTable;

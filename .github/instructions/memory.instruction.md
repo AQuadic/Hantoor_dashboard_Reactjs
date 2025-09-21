@@ -1016,4 +1016,9 @@ const handleSave = async (
 
 - Created `src/api/profile/updateProfile.ts` to POST `/admin/update`, supporting both JSON and multipart with `image` and `remove_image` flag.
 - Refactored `src/components/profile/EditProfileForm.tsx` to use `updateProfile` instead of `updateAdmin`, removing dependency on adminId for current user updates.
+
+# 2025-09-21: Table image placeholder component added ✅
+
+- Added `src/components/general/TableImagePlaceholder.tsx` — reusable placeholder component for table image cells when there's no image.
+- Updated `src/components/notifications/NotificationTable.tsx` to use the new placeholder instead of an empty div when a notification has no image.
 - Preserved existing error handling and toasts; ensured remove image action works immediately and on save.
