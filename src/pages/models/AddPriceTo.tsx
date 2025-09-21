@@ -1,5 +1,5 @@
 // import { Country, getCountries } from "@/api/countries/getCountry";
-import { createPriceTo } from "@/api/models/priceTo/addPriceTo";
+import { createPriceTo } from "@/api/models/priceto/addPriceTo";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input } from "@heroui/react";

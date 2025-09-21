@@ -7,8 +7,8 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import { updatePriceTo } from "@/api/models/priceTo/updatePriceTo";
-import { getPriceToById } from "@/api/models/priceTo/getPriceToById";
+import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
+import { getPriceToById } from "@/api/models/priceto/getPricToById";
 
 const EditPriceTo = () => {
   const { t, i18n } = useTranslation("models");
@@ -30,18 +30,18 @@ const EditPriceTo = () => {
     queryFn: () => getCountries(),
   });
 
-    const { data: priceData, isLoading: isPriceLoading } = useQuery({
-      queryKey: ["priceFrom", priceId],
-      queryFn: () => getPriceToById(priceId),
-      enabled: isEdit, 
-    });
-  
-    useEffect(() => {
-      if (priceData) {
-        setPriceAr(priceData.name);
-        setPriceEn(priceData.name);
-      }
-    }, [priceData]);
+  const { data: priceData, isLoading: isPriceLoading } = useQuery({
+    queryKey: ["priceFrom", priceId],
+    queryFn: () => getPriceToById(priceId),
+    enabled: isEdit,
+  });
+
+  useEffect(() => {
+    if (priceData) {
+      setPriceAr(priceData.name);
+      setPriceEn(priceData.name);
+    }
+  }, [priceData]);
 
   const handleSave = async () => {
     if (!priceAr && !priceEn) {
