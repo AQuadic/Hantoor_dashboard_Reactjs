@@ -3,6 +3,7 @@ import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteFinancing } from "@/api/financing/deleteFinancing";
 import toast from "react-hot-toast";
+import { toggleFinancingStatus } from "@/api/financing/toggleFinancingStatus";
 import {
   Table,
   TableBody,
@@ -46,6 +47,34 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
   };
 
   const queryClient = useQueryClient();
+
+  const handleToggleStatus = async (
+    country: FinancingCountry,
+    checked: boolean
+  ) => {
+    try {
+      await toggleFinancingStatus(country.id, checked);
+      toast.dismiss();
+      toast.success(
+        (t("statusUpdated") as string) ||
+          (isArabic ? "تم التحديث" : "Status updated")
+      );
+      // Invalidate financing queries to refresh the table
+      queryClient.invalidateQueries({ queryKey: ["financing"] });
+    } catch (err) {
+      const errorLike = err as
+        | {
+            response?: { data?: { message?: string } };
+            message?: string;
+          }
+        | undefined;
+      const message =
+        errorLike?.response?.data?.message ||
+        errorLike?.message ||
+        (isArabic ? "حدث خطأ" : "Error");
+      toast.error(message);
+    }
+  };
 
   const handleDelete = async (id: number) => {
     try {
@@ -106,30 +135,43 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
             </TableCell>
             <TableCell className="w-full">{country.banks_count}</TableCell>
             <TableCell className="flex items-center gap-2">
-              <Switch defaultSelected={country.is_active} />
+              <Switch
+                isSelected={country.is_active}
+                onChange={async (e) => {
+                  // Prevent row click navigation when toggling
+                  e.stopPropagation();
+                  await handleToggleStatus(country, e.target.checked);
+                }}
+              />
               <div
                 className="cursor-pointer"
                 onClick={() => handleViewCountry(country)}
               >
                 <View />
               </div>
-                <div
-                  className={country.banks_count === 0 ? "opacity-50 cursor-not-allowed" : ""}
-                  onClick={(e) => {
-                    if (country.banks_count === 0) {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }
-                  }}
-                >
-                  {country.banks_count > 0 ? (
-                    <TableDeleteButton handleDelete={() => handleDelete(country.id)} />
-                  ) : (
-                    <button disabled className="cursor-not-allowed">
-                      <Delete />
-                    </button>
-                  )}
-                </div>
+              <div
+                className={
+                  country.banks_count === 0
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }
+                onClick={(e) => {
+                  if (country.banks_count === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }
+                }}
+              >
+                {country.banks_count > 0 ? (
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(country.id)}
+                  />
+                ) : (
+                  <button disabled className="cursor-not-allowed">
+                    <Delete />
+                  </button>
+                )}
+              </div>
             </TableCell>
           </TableRow>
         ))}

@@ -29,6 +29,7 @@
   "interestValue": "قيمة الفائدة",
   "bankDeleted": "تم حذف البنك",
   "deleteFailed": "فشل الحذف",
+  "statusUpdated": "تم التحديث بنجاح",
   "privateParty": "جهة خاصة",
   "government": "جهة حكومية",
   "arabicBankName": "الاسم العربي للبنك مطلوب",
