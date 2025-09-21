@@ -86,5 +86,6 @@
     "priceDeleted": "Price deleted successfully",
     "priceActivated": "Price activated successfully",
     "priceDeactivated": "Price deactivated successfully",
-    "priceUpdated": "Price updated successfully"
+    "priceUpdated": "Price updated successfully",
+    "brand": "Brand"
 }

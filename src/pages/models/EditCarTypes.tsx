@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
-import { useVehicleBodies } from "@/api/models/structureType/getStructure";
+// import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { fetchBrands } from "@/api/brand/fetchBrands";
 import {
   updateCarType,
@@ -27,11 +27,11 @@ const EditCarTypes: React.FC = () => {
   const [selectedBrand, setSelectedBrand] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const {
-    data: vehicleBodies,
-    isLoading: loadingBodies,
-    error: loadError,
-  } = useVehicleBodies();
+  // const {
+  //   data: vehicleBodies,
+  //   isLoading: loadingBodies,
+  //   error: loadError,
+  // } = useVehicleBodies();
 
   const { data: brandsResponse, isLoading: isLoadingBrands } = useQuery({
     queryKey: ["brands-list"],
@@ -116,7 +116,7 @@ const EditCarTypes: React.FC = () => {
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
-              <Select
+              {/* <Select
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
@@ -133,7 +133,7 @@ const EditCarTypes: React.FC = () => {
                     {body.name[i18n.language as "ar" | "en"]}
                   </SelectItem>
                 ))}
-              </Select>
+              </Select> */}
               <Select
                 className="mt-4"
                 size={"lg"}
