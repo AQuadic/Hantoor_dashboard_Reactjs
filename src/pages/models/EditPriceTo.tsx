@@ -3,11 +3,12 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input, Select, SelectItem } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 import toast from "react-hot-toast";
 import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
+import { getPriceToById } from "@/api/models/priceTo/getPricToById";
 
 const EditPriceTo = () => {
   const { t, i18n } = useTranslation("models");
@@ -28,6 +29,19 @@ const EditPriceTo = () => {
     queryKey: ["countries"],
     queryFn: () => getCountries(),
   });
+
+    const { data: priceData, isLoading: isPriceLoading } = useQuery({
+      queryKey: ["priceFrom", priceId],
+      queryFn: () => getPriceToById(priceId),
+      enabled: isEdit, 
+    });
+  
+    useEffect(() => {
+      if (priceData) {
+        setPriceAr(priceData.name);
+        setPriceEn(priceData.name);
+      }
+    }, [priceData]);
 
   const handleSave = async () => {
     if (!priceAr && !priceEn) {
