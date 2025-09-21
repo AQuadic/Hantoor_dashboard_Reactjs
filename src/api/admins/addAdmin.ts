@@ -8,6 +8,7 @@ interface CreateAdminPayload {
   phone?: string;
   phone_country?: string;
   image?: File | null;
+  role?: string;
 }
 
 interface CreateAdminResponse {
@@ -29,7 +30,9 @@ export async function createAdmin(
   formData.append("password_confirmation", payload.password_confirmation);
 
   if (payload.phone) formData.append("phone", payload.phone);
-  if (payload.phone_country) formData.append("phone_country", payload.phone_country);
+  if (payload.phone_country)
+    formData.append("phone_country", payload.phone_country);
+  if (payload.role) formData.append("role", payload.role);
   if (payload.image) formData.append("image", payload.image);
 
   const response = await axios.post<CreateAdminResponse>("/admin", formData, {

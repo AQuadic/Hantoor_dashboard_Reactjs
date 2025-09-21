@@ -125,27 +125,32 @@ export function SubordinatesTable({
               ) : (
                 <TableImagePlaceholder className="w-10 h-10" />
               )}
-
             </TableCell>
             <TableCell>{admin.name}</TableCell>
             <TableCell>{admin.phone || "-"}</TableCell>
             <TableCell>{admin.email}</TableCell>
-            <TableCell>{formatDateTime(admin.created_at, i18n.language)}</TableCell>
-            <TableCell>-</TableCell>
             <TableCell>
-            {admin?.last_online
-              ? new Date(admin.last_online).toLocaleString(
-                  i18n.language === 'ar' ? 'ar-EG' : 'en-US',
-                  {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  }
-                )
-              : '...'}
-          </TableCell>
+              {formatDateTime(admin.created_at, i18n.language)}
+            </TableCell>
+            <TableCell>
+              {admin.roles && admin.roles.length > 0
+                ? admin.roles[0].name
+                : "-"}
+            </TableCell>
+            <TableCell>
+              {admin?.last_online
+                ? new Date(admin.last_online).toLocaleString(
+                    i18n.language === "ar" ? "ar-EG" : "en-US",
+                    {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }
+                  )
+                : "..."}
+            </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch
                 isSelected={!!admin.is_active}

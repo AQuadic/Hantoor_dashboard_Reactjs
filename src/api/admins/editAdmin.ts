@@ -9,6 +9,7 @@ export interface UpdateAdminPayload {
   password_confirmation?: string;
   isActive?: boolean;
   image?: File | null;
+  role?: string;
   // If true, instruct server to remove existing image
   remove_image?: boolean;
 }
@@ -51,6 +52,8 @@ export async function updateAdmin(
       );
     if (payload.isActive !== undefined)
       formData.append("is_active", payload.isActive ? "1" : "0");
+    if (payload.role !== undefined)
+      formData.append("role", String(payload.role));
     // append image file
     if (payload.image) formData.append("image", payload.image);
     // include explicit remove_image flag if provided
@@ -75,6 +78,7 @@ export async function updateAdmin(
     jsonBody.password_confirmation = payload.password_confirmation;
   if (payload.isActive !== undefined)
     jsonBody.is_active = payload.isActive ? "1" : "0";
+  if (payload.role !== undefined) jsonBody.role = payload.role;
   if (payload.remove_image !== undefined)
     jsonBody.remove_image = payload.remove_image ? "1" : "0";
 

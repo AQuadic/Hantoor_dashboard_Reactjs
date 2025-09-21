@@ -8,17 +8,10 @@ export interface AdminImage {
   responsive_urls: string[];
 }
 
-export interface Admin {
+export interface AdminRole {
   id: number;
   name: string;
-  email: string;
-  phone?: string | null;
-  image?: AdminImage | null;
-  isActive?: boolean;
-  created_at: string;
-  updated_at: string;
-  last_online: string;
-  is_active: boolean;
+  permissions: string[];
 }
 
 export interface Admin {
@@ -28,8 +21,11 @@ export interface Admin {
   phone?: string | null;
   image?: AdminImage | null;
   isActive?: boolean;
+  is_active: boolean;
   created_at: string;
   updated_at: string;
+  last_online: string;
+  roles?: AdminRole[] | null;
 }
 
 export interface GetAdminsParams {

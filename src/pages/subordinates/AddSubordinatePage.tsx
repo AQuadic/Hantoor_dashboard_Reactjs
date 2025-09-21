@@ -12,6 +12,7 @@ import { createAdmin } from "@/api/admins/addAdmin";
 import { getAdmin } from "@/api/admins/getAdminById";
 import toast from "react-hot-toast";
 import { updateAdmin } from "@/api/admins/editAdmin";
+import { getRoles, type Role } from "@/api/roles/getRoles";
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -60,7 +61,9 @@ const AddSubordinatePage = () => {
   };
 
   const [profileImage, setProfileImage] = React.useState<File | null>(null);
-  const [existingImageUrl, setExistingImageUrl] = useState<string | undefined>(undefined);
+  const [existingImageUrl, setExistingImageUrl] = useState<string | undefined>(
+    undefined
+  );
 
   const params = useParams();
   const managerId = params.id;
@@ -75,14 +78,28 @@ const AddSubordinatePage = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [selectedRole, setSelectedRole] = useState<string>("");
+  const [loadingRoles, setLoadingRoles] = useState(false);
   const navigate = useNavigate();
 
-  const authorities = [
-    { key: "manager", label: "مدير" },
-    { key: "secretary", label: "سكرتير" },
-    { key: "employee", label: "عامل" },
-    { key: "supervisor", label: "مسؤول" },
-  ];
+  // Fetch roles on component mount
+  useEffect(() => {
+    const fetchRoles = async () => {
+      try {
+        setLoadingRoles(true);
+        const rolesData = await getRoles({ pagination: "all" });
+        setRoles(rolesData.data);
+      } catch (err: unknown) {
+        const message = extractErrorMessage(err) || "Failed to load roles";
+        toast.error(message);
+      } finally {
+        setLoadingRoles(false);
+      }
+    };
+
+    fetchRoles();
+  }, []);
 
   useEffect(() => {
     const fetchAdmin = async () => {
@@ -107,6 +124,11 @@ const AddSubordinatePage = () => {
 
         if (data.image?.url) {
           setExistingImageUrl(data.image.url);
+        }
+
+        // Set role if available - roles is an array of objects with name property
+        if (data.roles && data.roles.length > 0) {
+          setSelectedRole(data.roles[0].name);
         }
       } catch (err: unknown) {
         const message = extractErrorMessage(err) || "Failed to load admin data";
@@ -150,6 +172,7 @@ const AddSubordinatePage = () => {
           ...(password
             ? { password, password_confirmation: confirmPassword }
             : {}),
+          ...(selectedRole ? { role: selectedRole } : {}),
           image: profileImage,
         });
       } else {
@@ -160,6 +183,7 @@ const AddSubordinatePage = () => {
           password_confirmation: confirmPassword,
           phone,
           phone_country: selectedCountry.iso2,
+          ...(selectedRole ? { role: selectedRole } : {}),
           image: profileImage,
         });
       }
@@ -257,10 +281,16 @@ const AddSubordinatePage = () => {
                 placeholder={t("choosePermission")}
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
+                selectedKeys={selectedRole ? [selectedRole] : []}
+                onSelectionChange={(keys) => {
+                  const selectedKey = Array.from(keys)[0] as string;
+                  setSelectedRole(selectedKey || "");
+                }}
+                isLoading={loadingRoles}
               >
-                {authorities.map((authority) => (
-                  <SelectItem key={authority.key} textValue={authority.label}>
-                    {authority.label}
+                {roles.map((role) => (
+                  <SelectItem key={role.name} textValue={role.name}>
+                    {role.name}
                   </SelectItem>
                 ))}
               </Select>
