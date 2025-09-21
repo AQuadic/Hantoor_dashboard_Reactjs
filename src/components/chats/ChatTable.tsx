@@ -121,39 +121,44 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
                 </TableCell>
               </TableRow>
             ) : (
-              conversations.map((conversation, index) => (
-                <TableRow key={conversation.id} noBackgroundColumns={1}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>
-                    {getLocalizedName(conversation.vehicle?.name)}
-                  </TableCell>
-                  <TableCell>
-                    {getLocalizedName(conversation.vehicle?.brand?.name)}
-                  </TableCell>
-                  <TableCell className="w-full">
-                    {conversation.users_count ||
-                      conversation.followers_count ||
-                      "-"}
-                  </TableCell>
-                  <TableCell className="flex gap-[7px] items-center">
-                    <Switch
-                      checked={Boolean(conversation.is_active)}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                        handleToggleActive(conversation.id, e.target.checked)
-                      }
-                      disabled={updateStatusMutation.isPending}
-                    />
-                    <button onClick={() => handleOpenChat(conversation.id)}>
-                      <ChatIcon />
-                    </button>
-                    <div className="mt-2">
-                      <TableDeleteButton
-                        handleDelete={() => handleDelete(conversation.id)}
+              conversations.map((conversation, index) => {
+                return (
+                  <TableRow key={conversation.id} noBackgroundColumns={1}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {getLocalizedName(conversation.vehicle?.name)}
+                    </TableCell>
+                    <TableCell>
+                      {getLocalizedName(conversation.vehicle?.brand?.name)}
+                    </TableCell>
+                    <TableCell className="w-full">
+                      {conversation.users_count ||
+                        conversation.followers_count ||
+                        "-"}
+                    </TableCell>
+                    <TableCell className="flex gap-[7px] items-center">
+                      <Switch
+                        isSelected={Boolean(conversation.is_active)}
+                        onChange={() =>
+                          handleToggleActive(
+                            conversation.id,
+                            !conversation.is_active
+                          )
+                        }
+                        isDisabled={updateStatusMutation.isPending}
                       />
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))
+                      <button onClick={() => handleOpenChat(conversation.id)}>
+                        <ChatIcon />
+                      </button>
+                      <div className="mt-2">
+                        <TableDeleteButton
+                          handleDelete={() => handleDelete(conversation.id)}
+                        />
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })
             )}
           </TableBody>
         </Table>
