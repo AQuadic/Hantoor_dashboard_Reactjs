@@ -80,8 +80,7 @@ const AddNotification = () => {
       await sendBroadcastNotification(payload);
       setShowPopup(true);
       toast.success(t("notificationAddedSuccessfully"));
-      navigate("/notifications");
-      setTimeout(() => setShowPopup(false), 2000);
+      // show success popup first; navigation will happen when user closes the popup
     } catch (err: unknown) {
       type RpcError = { response?: { data?: { message?: string } } };
       const errorObj = err as RpcError;
@@ -329,7 +328,14 @@ const AddNotification = () => {
           </div>
         )}
       </div>
-      {showPopup && <SuccessPopup onClose={() => setShowPopup(false)} />}
+      {showPopup && (
+        <SuccessPopup
+          onClose={() => {
+            setShowPopup(false);
+            navigate("/notifications");
+          }}
+        />
+      )}
     </section>
   );
 };
