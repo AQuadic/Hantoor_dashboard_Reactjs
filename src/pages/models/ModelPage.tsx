@@ -31,6 +31,7 @@ const BrandsPage = () => {
       const newTab = typeof value === "function" ? value(selectedTab) : value;
       setSelectedTab(newTab);
       setCurrentPage(1); // Reset page when changing tabs
+      setSearch("");
 
       // Update URL when user changes tab
       const newParams = new URLSearchParams(searchParams);
