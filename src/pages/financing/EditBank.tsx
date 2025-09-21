@@ -5,18 +5,17 @@ import DashboardInput from "@/components/general/DashboardInput";
 import { Select, SelectItem } from "@heroui/react";
 import React, { useState, useEffect } from "react";
 import { countries } from "countries-list";
-import Add from "@/components/icons/banks/Add";
-import Delete from "@/components/icons/banks/Delete";
+import DeleteModal from "@/components/general/DeleteModal";
 import { useTranslation } from "react-i18next";
+import i18n from "../../hooks/i18n";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getBankById } from "@/api/bank/getBankById";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
 import { updateBankById, UpdateBankPayload } from "@/api/bank/editBank";
 import toast from "react-hot-toast";
-import { useLocation } from "react-router-dom"; // استيراد useLocation
 
 const getCountryByIso2 = (iso2: string) => {
   const country = countries[iso2 as keyof typeof countries];
@@ -49,44 +48,36 @@ const EditBank = () => {
   const [arBankName, setArBankName] = useState("");
   const [enBankName, setEnBankName] = useState("");
 
-  // Visitor data states
-  const [visitorData, setVisitorData] = useState<
-    Array<{
-      salaryFrom: string;
-      salaryTo: string;
-      interestAmount: string;
-      duration: string;
-      workplace: string;
-    }>
-  >([
+  // Dynamic arrays for visitor data
+  const [visitorDataList, setVisitorDataList] = useState([
     {
       salaryFrom: "",
       salaryTo: "",
-      interestAmount: "",
+      employerName: "",
+      value: "",
       duration: "",
-      workplace: "",
     },
   ]);
-  const [visitorSalaryTo, setVisitorSalaryTo] = useState("");
-  const [visitorSalaryFrom, setVisitorSalaryFrom] = useState("");
-  const [visitorSalaryFrom2, setVisitorSalaryFrom2] = useState("");
-  const [visitorDuration, setVisitorDuration] = useState("");
-  const [visitorInterestAmount, setVisitorInterestAmount] = useState("");
-  const [visitorInterestAmount2, setVisitorInterestAmount2] = useState("");
-  const [visitorSalaryTo2, setVisitorSalaryTo2] = useState("");
-  const [visitorWorkplace, setVisitorWorkplace] = useState("");
-  const [visitorWorkplace2, setVisitorWorkplace2] = useState("");
 
-  // Citizen data states
-  const [citizenSalaryFrom, setCitizenSalaryFrom] = useState("");
-  const [citizenSalaryTo, setCitizenSalaryTo] = useState("");
-  const [citizenInterestAmount, setCitizenInterestAmount] = useState("");
-  const [citizenDuration, setCitizenDuration] = useState("");
-  const [citizenWorkplace, setCitizenWorkplace] = useState("");
+  // Dynamic arrays for citizen data
+  const [citizenDataList, setCitizenDataList] = useState([
+    {
+      salaryFrom: "",
+      salaryTo: "",
+      employerName: "",
+      value: "",
+      duration: "",
+    },
+  ]);
 
-  const [profileImageUrl, setProfileImageUrl] = useState<string>("");
+  // Delete modal states
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [deleteType, setDeleteType] = useState<"visitor" | "citizen" | null>(
+    null
+  );
 
-  const navigate = useNavigate ()
+  const navigate = useNavigate();
   const authorities = [
     { key: "1", label: "1 سنة" },
     { key: "2", label: "سنتين" },
@@ -105,7 +96,6 @@ const EditBank = () => {
     { key: "government", label: t("government") },
   ];
 
-
   useEffect(() => {
     if (data) {
       setArBankName(data.name.ar || "");
@@ -113,110 +103,306 @@ const EditBank = () => {
       setPhone(data.phone || "");
       setSelectedCountry(getCountryByIso2(data.phone_country || "EG"));
 
-      const expatriates = data.finance?.filter((f) => f.type === "expatriate") || [];
+      const expatriates =
+        data.finance?.filter((f) => f.type === "expatriate") || [];
       const citizens = data.finance?.filter((f) => f.type === "citizen") || [];
 
+      // Map expatriate data to visitor array
       if (expatriates.length > 0) {
-      const firstExp = expatriates[0];
-      setVisitorSalaryFrom(firstExp.salary_from?.toString() || "");
-      setVisitorSalaryTo(firstExp.salary_to?.toString() || "");
-      setVisitorInterestAmount(firstExp.value?.toString() || "");
-      setVisitorSalaryFrom2(expatriates[1]?.salary_from?.toString() || "");
-      setVisitorSalaryTo2(expatriates[1]?.salary_to?.toString() || "");
-      setVisitorDuration(expatriates[0].duration || "");
-      setVisitorInterestAmount2(expatriates[1]?.value?.toString() || "");
-    }
-
-    if (data.image?.url) {
-      setProfileImageUrl(data.image.url);
-    }
-  else {
-        setVisitorData([
+        const mappedVisitorData = expatriates.map((exp) => ({
+          salaryFrom: exp.salary_from?.toString() || "",
+          salaryTo: exp.salary_to?.toString() || "",
+          employerName: exp.employer || "",
+          value: exp.value?.toString() || "",
+          duration: exp.duration || "",
+        }));
+        setVisitorDataList(mappedVisitorData);
+      } else {
+        setVisitorDataList([
           {
             salaryFrom: "",
             salaryTo: "",
-            interestAmount: "",
+            employerName: "",
+            value: "",
             duration: "",
-            workplace: "",
           },
         ]);
       }
 
+      // Map citizen data to citizen array
       if (citizens.length > 0) {
-        const citizen = citizens[0];
-        setCitizenSalaryFrom(citizen.salary_from?.toString() || "");
-        setCitizenSalaryTo(citizen.salary_to?.toString() || "");
-        setCitizenInterestAmount(citizen.value || "");
-        setCitizenDuration(citizen.duration || "");
-        setCitizenWorkplace(citizen.employer || "");
+        const mappedCitizenData = citizens.map((citizen) => ({
+          salaryFrom: citizen.salary_from?.toString() || "",
+          salaryTo: citizen.salary_to?.toString() || "",
+          employerName: citizen.employer || "",
+          value: citizen.value?.toString() || "",
+          duration: citizen.duration || "",
+        }));
+        setCitizenDataList(mappedCitizenData);
+      } else {
+        setCitizenDataList([
+          {
+            salaryFrom: "",
+            salaryTo: "",
+            employerName: "",
+            value: "",
+            duration: "",
+          },
+        ]);
       }
+
+      // Note: image is handled by ImageInput component directly
     }
   }, [data]);
 
-const queryClient = useQueryClient();
-
-const handleUpdateBank = async () => {
-  const payload: UpdateBankPayload = {
-    name: { ar: arBankName, en: enBankName },
-    country_id: data?.country_id || 1,
-    phone,
-    phone_country: selectedCountry.iso2,
-    image: profileImage,
-    finance: [
+  // Handler functions for visitor data
+  const addVisitorData = () => {
+    setVisitorDataList([
+      ...visitorDataList,
       {
-        type: "expatriate",
-        salary_from: Number(visitorSalaryFrom),
-        salary_to: Number(visitorSalaryTo),
-        duration: visitorDuration,
-        employer: visitorWorkplace,
-        value: visitorInterestAmount,
+        salaryFrom: "",
+        salaryTo: "",
+        employerName: "",
+        value: "",
+        duration: "",
       },
-      {
-        type: "expatriate",
-        salary_from: Number(visitorSalaryFrom2),
-        salary_to: Number(visitorSalaryTo2),
-        duration: visitorDuration,
-        employer: visitorWorkplace2,
-        value: visitorInterestAmount2,
-      },
-      {
-        type: "citizen",
-        salary_from: Number(citizenSalaryFrom),
-        salary_to: Number(citizenSalaryTo),
-        duration: citizenDuration,
-        employer: citizenWorkplace,
-        value: citizenInterestAmount,
-      },
-    ],
+    ]);
   };
 
-  const missingEmployer = payload.finance?.some((f) => !f.employer || f.employer.trim() === "");
-  if (missingEmployer) {
-    toast.error("برجاء إدخال جهة العمل لكل التمويلات قبل الحفظ");
-    return;
-  }
-
-  try {
-    const res = await updateBankById(Number(id), payload);
-
-    if (res.message === "Updated successfully") {
-      toast.success(res.message);
-
-      queryClient.setQueryData(["bank", Number(id)], res.data);
-
-      const fromDetailsId = location.state?.fromDetailsId;
-      const backId = fromDetailsId || id;
-      navigate(`/financing/details/${backId}`);
-
-    } else {
-      toast.error(res.message || "Failed to update bank");
+  const removeVisitorData = (index: number) => {
+    if (visitorDataList.length > 1) {
+      const updatedList = visitorDataList.filter((_, i) => i !== index);
+      setVisitorDataList(updatedList);
     }
-  } catch (error: any) {
-    console.error("Update bank error:", error.response?.data || error);
-    toast.error(error.response?.data?.message || "حدث خطأ ما");
-  }
-};
+  };
 
+  const updateVisitorData = (index: number, field: string, value: string) => {
+    const updatedList = visitorDataList.map((item, i) =>
+      i === index ? { ...item, [field]: value } : item
+    );
+    setVisitorDataList(updatedList);
+  };
+
+  // Handler functions for citizen data
+  const addCitizenData = () => {
+    setCitizenDataList([
+      ...citizenDataList,
+      {
+        salaryFrom: "",
+        salaryTo: "",
+        employerName: "",
+        value: "",
+        duration: "",
+      },
+    ]);
+  };
+
+  const removeCitizenData = (index: number) => {
+    if (citizenDataList.length > 1) {
+      const updatedList = citizenDataList.filter((_, i) => i !== index);
+      setCitizenDataList(updatedList);
+    }
+  };
+
+  const updateCitizenData = (index: number, field: string, value: string) => {
+    const updatedList = citizenDataList.map((item, i) =>
+      i === index ? { ...item, [field]: value } : item
+    );
+    setCitizenDataList(updatedList);
+  };
+
+  // Delete modal handlers
+  const handleDeleteClick = (index: number, type: "visitor" | "citizen") => {
+    setDeleteIndex(index);
+    setDeleteType(type);
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (deleteIndex !== null && deleteType) {
+      if (deleteType === "visitor") {
+        removeVisitorData(deleteIndex);
+      } else {
+        removeCitizenData(deleteIndex);
+      }
+    }
+    setShowDeleteModal(false);
+    setDeleteIndex(null);
+    setDeleteType(null);
+  };
+
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setDeleteIndex(null);
+    setDeleteType(null);
+  };
+
+  const queryClient = useQueryClient();
+
+  const validateForm = () => {
+    // Basic bank information validation
+    if (!arBankName.trim()) {
+      toast.error(t("arabicBankName"));
+      return false;
+    }
+    if (!enBankName.trim()) {
+      toast.error(t("englishBankName"));
+      return false;
+    }
+    if (!phone.trim()) {
+      toast.error(t("phoneRequired"));
+      return false;
+    }
+    if (phone.length > 20) {
+      toast.error(t("phoneGreaterThan"));
+      return false;
+    }
+
+    // Validate visitor data
+    for (let i = 0; i < visitorDataList.length; i++) {
+      const visitor = visitorDataList[i];
+      const position = i + 1;
+
+      if (!visitor.salaryFrom.trim()) {
+        toast.error(t("visitorSalaryFromRequired", { position }));
+        return false;
+      }
+      if (!visitor.salaryTo.trim()) {
+        toast.error(t("visitorSalaryToRequired", { position }));
+        return false;
+      }
+
+      // Check if salary fields are numeric
+      const salaryFrom = parseInt(visitor.salaryFrom.replace(/\D/g, ""));
+      const salaryTo = parseInt(visitor.salaryTo.replace(/\D/g, ""));
+
+      if (isNaN(salaryFrom) || salaryFrom <= 0) {
+        toast.error(t("visitorSalaryFromNumeric", { position }));
+        return false;
+      }
+      if (isNaN(salaryTo) || salaryTo <= 0) {
+        toast.error(t("visitorSalaryToNumeric", { position }));
+        return false;
+      }
+      if (salaryFrom >= salaryTo) {
+        toast.error(t("salaryFromLessThanTo", { position }));
+        return false;
+      }
+
+      if (!visitor.duration) {
+        toast.error(t("visitorDurationRequired", { position }));
+        return false;
+      }
+      if (!visitor.employerName) {
+        toast.error(t("visitorWorkplaceRequired", { position }));
+        return false;
+      }
+      if (!visitor.value.trim()) {
+        toast.error(t("visitorInterestRequired", { position }));
+        return false;
+      }
+    }
+
+    // Validate citizen data
+    for (let i = 0; i < citizenDataList.length; i++) {
+      const citizen = citizenDataList[i];
+      const position = i + 1;
+
+      if (!citizen.salaryFrom.trim()) {
+        toast.error(t("citizenSalaryFromRequired", { position }));
+        return false;
+      }
+      if (!citizen.salaryTo.trim()) {
+        toast.error(t("citizenSalaryToRequired", { position }));
+        return false;
+      }
+
+      // Check if salary fields are numeric
+      const salaryFrom = parseInt(citizen.salaryFrom.replace(/\D/g, ""));
+      const salaryTo = parseInt(citizen.salaryTo.replace(/\D/g, ""));
+
+      if (isNaN(salaryFrom) || salaryFrom <= 0) {
+        toast.error(t("citizenSalaryFromNumeric", { position }));
+        return false;
+      }
+      if (isNaN(salaryTo) || salaryTo <= 0) {
+        toast.error(t("citizenSalaryToNumeric", { position }));
+        return false;
+      }
+      if (salaryFrom >= salaryTo) {
+        toast.error(t("salaryFromLessThanTo", { position }));
+        return false;
+      }
+
+      if (!citizen.duration) {
+        toast.error(t("citizenDurationRequired", { position }));
+        return false;
+      }
+      if (!citizen.employerName) {
+        toast.error(t("citizenWorkplaceRequired", { position }));
+        return false;
+      }
+      if (!citizen.value.trim()) {
+        toast.error(t("citizenInterestRequired", { position }));
+        return false;
+      }
+    }
+
+    return true;
+  };
+
+  const handleUpdateBank = async () => {
+    if (!validateForm()) {
+      return;
+    }
+    // Build finance array from dynamic arrays
+    const financeArray = [
+      ...visitorDataList.map((visitor) => ({
+        type: "expatriate" as const,
+        salary_from: Number(visitor.salaryFrom) || 0,
+        salary_to: Number(visitor.salaryTo) || 0,
+        duration: visitor.duration,
+        employer: visitor.employerName,
+        value: visitor.value,
+      })),
+      ...citizenDataList.map((citizen) => ({
+        type: "citizen" as const,
+        salary_from: Number(citizen.salaryFrom) || 0,
+        salary_to: Number(citizen.salaryTo) || 0,
+        duration: citizen.duration,
+        employer: citizen.employerName,
+        value: citizen.value,
+      })),
+    ];
+
+    const payload: UpdateBankPayload = {
+      name: { ar: arBankName, en: enBankName },
+      country_id: data?.country_id || 1,
+      phone,
+      phone_country: selectedCountry.iso2,
+      image: profileImage,
+      finance: financeArray,
+    };
+
+    try {
+      const res = await updateBankById(Number(id), payload);
+
+      if (res.message === "Updated successfully") {
+        toast.success(t("bankUpdatedSuccessfully"));
+
+        queryClient.setQueryData(["bank", Number(id)], res.data);
+
+        const fromDetailsId = location.state?.fromDetailsId;
+        const backId = fromDetailsId || id;
+        navigate(`/financing/details/${backId}`);
+      } else {
+        toast.error(res.message || t("failedToUpdateBank"));
+      }
+    } catch (error: unknown) {
+      console.error("Update bank error:", error);
+      toast.error(t("updateBankError"));
+    }
+  };
 
   if (isLoading) return <Loading />;
   if (error) return <NoData />;
@@ -276,25 +462,62 @@ const handleUpdateBank = async () => {
           </div>
         </div>
         <div className="flex flex-wrap gap-6 p-8 mt-8 bg-white rounded-2xl !text-base">
-          <div className="flex flex-col flex-1">
-            <div className="flex flex-col flex-1 gap-4">
-              <h3 className=" text-lg font-bold text-[#2A32F8]">
-                {t("visitorData")}
-              </h3>
-              <h2 className="text-[15px] font-bold text-[#1E1B1B]">
-                {t("salaryRang")}
-              </h2>
+          {/* Dynamic Visitor Data Sections */}
+          {visitorDataList.map((visitor, index) => (
+            <div
+              key={`visitor-${index}`}
+              className="flex flex-col gap-4 max-w-[47%] flex-1"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className=" text-lg font-bold text-[#2A32F8]">
+                    {t("visitorData")}{" "}
+                    {visitorDataList.length > 1 && `(${index + 1})`}
+                  </h3>
+                  <h2 className="text-[15px] font-bold text-[#1E1B1B]">
+                    {t("salaryRang")}
+                  </h2>
+                </div>
+                {visitorDataList.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleDeleteClick(index, "visitor");
+                    }}
+                    className="flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </div>
               <div className="flex items-center gap-[9px]">
                 <DashboardInput
                   label={t("salaryFrom")}
-                  value={visitorSalaryFrom}
-                  onChange={setVisitorSalaryFrom}
+                  value={visitor.salaryFrom}
+                  onChange={(value) =>
+                    updateVisitorData(index, "salaryFrom", value)
+                  }
                   placeholder="5000 درهم"
                 />
                 <DashboardInput
                   label={t("salaryTo")}
-                  value={visitorSalaryTo}
-                  onChange={setVisitorSalaryTo}
+                  value={visitor.salaryTo}
+                  onChange={(value) =>
+                    updateVisitorData(index, "salaryTo", value)
+                  }
                   placeholder="5000 درهم"
                 />
               </div>
@@ -304,8 +527,10 @@ const handleUpdateBank = async () => {
                 placeholder="1 سنة"
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                selectedKeys={visitorDuration ? [visitorDuration] : []}
-                onChange={(e) => setVisitorDuration(e.target.value)}
+                selectedKeys={visitor.duration ? [visitor.duration] : []}
+                onChange={(e) =>
+                  updateVisitorData(index, "duration", e.target.value)
+                }
               >
                 {authorities.map((authority) => (
                   <SelectItem key={authority.key} textValue={authority.key}>
@@ -316,47 +541,100 @@ const handleUpdateBank = async () => {
               <Select
                 label={t("Workplace")}
                 variant="bordered"
+                placeholder="جهة حكومية"
+                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                selectedKeys={visitorWorkplace ? [visitorWorkplace] : []}
-                onChange={(e) => setVisitorWorkplace(e.target.value)}
+                selectedKeys={
+                  visitor.employerName ? [visitor.employerName] : []
+                }
+                onChange={(e) =>
+                  updateVisitorData(index, "employerName", e.target.value)
+                }
               >
                 {Workplaces.map((workplace) => (
-                  <SelectItem key={workplace.key} textValue={workplace.key}>
-                    {t(workplace.label)}
+                  <SelectItem key={workplace.key} textValue={workplace.label}>
+                    {workplace.label}
                   </SelectItem>
                 ))}
               </Select>
               <DashboardInput
                 label={t("InterestAmount")}
-                value={visitorInterestAmount}
-                onChange={setVisitorInterestAmount}
+                value={visitor.value}
+                onChange={(value) => updateVisitorData(index, "value", value)}
                 placeholder="5%"
               />
             </div>
-            <hr className="my-4" />
-            <div className="flex flex-col flex-1 gap-4">
+          ))}
+
+          {/* Add New Visitor Data Button */}
+          <div className="flex justify-center w-full mt-6">
+            <button
+              type="button"
+              onClick={addVisitorData}
+              className="px-4 py-2 text-sm font-medium text-[#2A32F8] bg-white border border-[#2A32F8] rounded-lg hover:bg-[#2A32F8] hover:text-white transition-colors duration-200"
+            >
+              {i18n.language === "ar"
+                ? "+ إضافة بيانات وافد جديد"
+                : "+ Add visitor data"}
+            </button>
+          </div>
+
+          {/* Dynamic Citizen Data Sections */}
+          {citizenDataList.map((citizen, index) => (
+            <div
+              key={`citizen-${index}`}
+              className="flex flex-col gap-4 max-w-[47%] flex-1"
+            >
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className=" text-lg font-bold text-[#2A32F8]">
-                    {t("visitorData")}
+                    {t("citizenData")}{" "}
+                    {citizenDataList.length > 1 && `(${index + 1})`}
                   </h3>
-                  <h2 className="text-[15px] font-bold text-[#1E1B1B] mt-2">
+                  <h2 className="text-[15px] font-bold text-[#1E1B1B]">
                     {t("salaryRang")}
                   </h2>
                 </div>
-                <Delete />
+                {citizenDataList.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleDeleteClick(index, "citizen");
+                    }}
+                    className="flex items-center justify-center w-8 h-8 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors"
+                  >
+                    <svg
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                )}
               </div>
               <div className="flex items-center gap-[9px]">
                 <DashboardInput
                   label={t("salaryFrom")}
-                  value={visitorSalaryFrom2}
-                  onChange={setVisitorSalaryFrom2}
+                  value={citizen.salaryFrom}
+                  onChange={(value) =>
+                    updateCitizenData(index, "salaryFrom", value)
+                  }
                   placeholder="5000 درهم"
                 />
                 <DashboardInput
                   label={t("salaryTo")}
-                  value={visitorSalaryTo2}
-                  onChange={setVisitorSalaryTo2}
+                  value={citizen.salaryTo}
+                  onChange={(value) =>
+                    updateCitizenData(index, "salaryTo", value)
+                  }
                   placeholder="5000 درهم"
                 />
               </div>
@@ -366,9 +644,13 @@ const handleUpdateBank = async () => {
                 placeholder="1 سنة"
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
+                selectedKeys={citizen.duration ? [citizen.duration] : []}
+                onChange={(e) =>
+                  updateCitizenData(index, "duration", e.target.value)
+                }
               >
                 {authorities.map((authority) => (
-                  <SelectItem key={authority.key} textValue={authority.label}>
+                  <SelectItem key={authority.key} textValue={authority.key}>
                     {authority.label}
                   </SelectItem>
                 ))}
@@ -377,96 +659,63 @@ const handleUpdateBank = async () => {
                 label={t("Workplace")}
                 variant="bordered"
                 placeholder="جهة حكومية"
+                classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                selectedKeys={visitorWorkplace2 ? [visitorWorkplace2] : []}
-                onChange={(e) => setVisitorWorkplace2(e.target.value)}
+                selectedKeys={
+                  citizen.employerName ? [citizen.employerName] : []
+                }
+                onChange={(e) =>
+                  updateCitizenData(index, "employerName", e.target.value)
+                }
               >
-                {Workplaces.map((workplace) => (
-                  <SelectItem key={workplace.key} textValue={workplace.key}>
-                    {workplace.label}
+                {entities.map((entity) => (
+                  <SelectItem key={entity.key} textValue={entity.label}>
+                    {entity.label}
                   </SelectItem>
                 ))}
               </Select>
               <DashboardInput
                 label={t("InterestAmount")}
-                value={visitorInterestAmount2}
-                onChange={setVisitorInterestAmount2}
+                value={citizen.value}
+                onChange={(value) => updateCitizenData(index, "value", value)}
                 placeholder="5%"
               />
+            </div>
+          ))}
 
-              <div className="w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer">
-                <Add />
-                <p className="text-[#2A32F8] text-base">{t("addMoreData")}</p>
-              </div>
-              <DashboardButton titleAr="تعديل" titleEn="Edit" onClick={handleUpdateBank} />
-            </div>
-          </div>
-
-          <div className="flex flex-col flex-1 gap-4">
-            <h3 className=" text-lg font-bold text-[#2A32F8]">
-              {t("citizenData")}
-            </h3>
-            <h2 className="text-[15px] font-bold text-[#1E1B1B]">
-              {t("salaryRang")}
-            </h2>
-            <div className="flex items-center gap-[9px]">
-              <DashboardInput
-                label={t("salaryFrom")}
-                value={citizenSalaryFrom}
-                onChange={setCitizenSalaryFrom}
-                placeholder="5000 درهم"
-              />
-              <DashboardInput
-                label="المرتب الى"
-                value={citizenSalaryTo}
-                onChange={setCitizenSalaryTo}
-                placeholder="5000 درهم"
-              />
-            </div>
-            <Select
-              label={t("duration")}
-              variant="bordered"
-              placeholder="1 سنة"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-              selectedKeys={visitorDuration ? [visitorDuration] : []}
-              onChange={(e) => setVisitorDuration(e.target.value)}
+          {/* Add New Citizen Data Button */}
+          <div className="flex justify-center w-full mt-6">
+            <button
+              type="button"
+              onClick={addCitizenData}
+              className="px-4 py-2 text-sm font-medium text-[#2A32F8] bg-white border border-[#2A32F8] rounded-lg hover:bg-[#2A32F8] hover:text-white transition-colors duration-200"
             >
-              {authorities.map((authority) => (
-                <SelectItem key={authority.key} textValue={authority.key}>
-                  {authority.label}
-                </SelectItem>
-              ))}
-            </Select>
-            <Select
-              label={t("Workplace")}
-              variant="bordered"
-              placeholder="جهة حكومية"
-              classNames={{ label: "mb-2 text-base !text-[#080808]" }}
-              size="lg"
-              selectedKeys={citizenWorkplace ? [citizenWorkplace] : []}
-              onChange={(e) => setCitizenWorkplace(e.target.value)}
-            >
-              {entities.map((entity) => (
-                <SelectItem key={entity.key} textValue={entity.label}>
-                  {entity.label}
-                </SelectItem>
-              ))}
-            </Select>
-            <DashboardInput
-              label={t("InterestAmount")}
-              value={citizenInterestAmount}
-              onChange={setCitizenInterestAmount}
-              placeholder="5%"
-            />
-            <div className="w-full h-[45px] border border-dashed border-[#D1D1D1] rounded-[12px] flex items-center justify-center gap-[10px] cursor-pointer">
-              <Add />
-              <p className="text-[#2A32F8] text-base">{t("addMoreData")}</p>
-            </div>
-            {/* <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleUpdateBank} /> */}
+              {i18n.language === "ar"
+                ? "+ إضافة بيانات مواطن جديد"
+                : "+ Add citizen data"}
+            </button>
           </div>
         </div>
+
+        <div className="flex justify-end mt-6">
+          <DashboardButton
+            titleAr="تعديل"
+            titleEn="Edit"
+            onClick={handleUpdateBank}
+          />
+        </div>
       </form>
+
+      {/* Delete Confirmation Modal */}
+      <DeleteModal
+        isOpen={showDeleteModal}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            handleDeleteCancel();
+          }
+        }}
+        handleDelete={handleDeleteConfirm}
+      />
     </section>
   );
 };

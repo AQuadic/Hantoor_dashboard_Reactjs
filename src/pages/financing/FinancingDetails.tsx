@@ -5,6 +5,8 @@ import SearchBar from "@/components/general/dashboard/SearchBar";
 import React from "react";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import BanksTable from "@/components/financing/BanksTable";
+import { useTranslation } from "react-i18next";
+import { useDatePicker } from "@/hooks/useDatePicker";
 
 const FinancingDetails = () => {
   const location = useLocation();
@@ -12,6 +14,18 @@ const FinancingDetails = () => {
 
   const country = location.state?.country;
   const countryId = location.state?.countryId || params.id;
+
+  const [searchTermAr, setSearchTermAr] = React.useState("");
+  const [searchTermEn, setSearchTermEn] = React.useState("");
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+  const searchTerm = isArabic ? searchTermAr : searchTermEn;
+
+  const {
+    dateRange: financingDateRange,
+    setDateRange: setFinancingDateRange,
+    dateParams,
+  } = useDatePicker();
 
   return (
     <section>
@@ -30,16 +44,19 @@ const FinancingDetails = () => {
         <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
           <div className="flex-1">
             <SearchBar
-              termAr=""
-              termEn=""
-              setTermAr={() => {}}
-              setTermEn={() => {}}
+              termAr={searchTermAr}
+              termEn={searchTermEn}
+              setTermAr={setSearchTermAr}
+              setTermEn={setSearchTermEn}
               placeholderAr="ابحث بالاسم"
               placeholderEn="Search by name"
             />
           </div>
           <div className="flex-1">
-            <DashboardDatePicker />
+            <DashboardDatePicker
+              value={financingDateRange}
+              onChange={setFinancingDateRange}
+            />
           </div>
 
           {countryId && (
@@ -55,7 +72,11 @@ const FinancingDetails = () => {
       </div>
 
       <div className="md:px-8 px-2 mt-4">
-        <BanksTable countryId={countryId} />
+        <BanksTable
+          countryId={countryId}
+          searchTerm={searchTerm}
+          dateParams={dateParams}
+        />
       </div>
     </section>
   );

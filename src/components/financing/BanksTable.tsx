@@ -23,22 +23,38 @@ import TableImagePlaceholder from "../general/TableImagePlaceholder";
 
 interface BanksTableProps {
   countryId?: string | number;
+  searchTerm?: string;
+  dateParams?: { from_date?: string; to_date?: string };
 }
 
-const BanksTable = ({ countryId }: BanksTableProps) => {
+const BanksTable = ({
+  countryId,
+  searchTerm = "",
+  dateParams,
+}: BanksTableProps) => {
   const { t, i18n } = useTranslation("financing");
 
   const [currentPage, setCurrentPage] = useState(1);
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["banks", countryId, currentPage],
+    queryKey: [
+      "banks",
+      countryId,
+      currentPage,
+      searchTerm,
+      dateParams?.from_date,
+      dateParams?.to_date,
+    ],
     queryFn: ({ queryKey }) => {
       const [, id] = queryKey;
       return getBanks({
         country_id: Number(id),
         pagination: true,
         page: currentPage,
-      });
+        search: searchTerm,
+        from_date: dateParams?.from_date,
+        to_date: dateParams?.to_date,
+      } as any);
     },
     enabled: !!countryId,
     placeholderData: (prev) => prev,
@@ -130,12 +146,12 @@ const BanksTable = ({ countryId }: BanksTableProps) => {
               </TableCell>
               <TableCell className="flex gap-[7px] items-center">
                 <Switch defaultSelected={Boolean(bank.is_active)} />
-                <Link 
-                    to={`/bank/edit/${bank.id}`} 
-                    state={{ fromDetailsId: bank.country_id }}
-                  >
-                    <Edit />
-                  </Link>
+                <Link
+                  to={`/bank/edit/${bank.id}`}
+                  state={{ fromDetailsId: bank.country_id }}
+                >
+                  <Edit />
+                </Link>
 
                 <div className="mt-2">
                   <TableDeleteButton

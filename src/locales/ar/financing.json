@@ -36,5 +36,31 @@
   "englishBankName": "الاسم الإنجليزي للبنك مطلوب",
   "phoneRequired": "رقم الهاتف مطلوب",
   "phoneGreaterThan": "يجب ألا يزيد رقم الهاتف عن 20 حرفًا",
-  "countryRequired": "الدولة مطلوبة"
+  "countryRequired": "الدولة مطلوبة",
+
+  "visitorSalaryFromRequired": "بيانات الوافد {{position}}: المرتب من مطلوب",
+  "visitorSalaryToRequired": "بيانات الوافد {{position}}: المرتب إلى مطلوب",
+  "visitorSalaryFromNumeric": "بيانات الوافد {{position}}: يجب أن يكون المرتب من رقمًا صحيحًا موجبًا",
+  "visitorSalaryToNumeric": "بيانات الوافد {{position}}: يجب أن يكون المرتب إلى رقمًا صحيحًا موجبًا",
+  "visitorDurationRequired": "بيانات الوافد {{position}}: المدة مطلوبة",
+  "visitorWorkplaceRequired": "بيانات الوافد {{position}}: جهة العمل مطلوبة",
+  "visitorInterestRequired": "بيانات الوافد {{position}}: قيمة الفائدة مطلوبة",
+
+  "citizenSalaryFromRequired": "بيانات المواطن {{position}}: المرتب من مطلوب",
+  "citizenSalaryToRequired": "بيانات المواطن {{position}}: المرتب إلى مطلوب",
+  "citizenSalaryFromNumeric": "بيانات المواطن {{position}}: يجب أن يكون المرتب من رقمًا صحيحًا موجبًا",
+  "citizenSalaryToNumeric": "بيانات المواطن {{position}}: يجب أن يكون المرتب إلى رقمًا صحيحًا موجبًا",
+  "citizenDurationRequired": "بيانات المواطن {{position}}: المدة مطلوبة",
+  "citizenWorkplaceRequired": "بيانات المواطن {{position}}: جهة العمل مطلوبة",
+  "citizenInterestRequired": "بيانات المواطن {{position}}: قيمة الفائدة مطلوبة",
+
+  "salaryFromLessThanTo": "الإدخال {{position}}: يجب أن يكون المرتب من أقل من المرتب إلى",
+
+  "bankAddedSuccessfully": "تم إضافة البنك بنجاح!",
+  "failedToAddBank": "فشل في إضافة البنك",
+  "addBankError": "حدث خطأ أثناء إضافة البنك",
+
+  "bankUpdatedSuccessfully": "تم تحديث البنك بنجاح!",
+  "failedToUpdateBank": "فشل في تحديث البنك",
+  "updateBankError": "حدث خطأ أثناء تحديث البنك"
 }
