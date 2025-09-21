@@ -18,6 +18,7 @@ import { PriceToTable } from "@/components/models/PriceToTable";
 
 const BrandsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
   const sectionParam = searchParams.get("section") || "Models";
   const pageParam = parseInt(searchParams.get("page") || "1");
@@ -126,10 +127,11 @@ const BrandsPage = () => {
         return (
           <>
             <PriceFromTable
-              page={currentPage}
-              search={search}
-              setPagination={handleSetPagination}
-            />
+                page={currentPage}
+                search={search}
+                setPagination={handleSetPagination}
+                countryId={selectedCountry}
+              />
           </>
         );
       case "Models":
@@ -188,6 +190,8 @@ const BrandsPage = () => {
         setSearch={setSearch}
         dateRange={dateRange}
         setDateRange={setDateRange}
+        selectedCountry={selectedCountry}      
+        setSelectedCountry={setSelectedCountry} 
       />
       <div className="px-2 md:px-8 relative min-h-[300px]">
         <AnimatePresence mode="wait">

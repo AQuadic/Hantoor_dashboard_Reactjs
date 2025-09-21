@@ -23,6 +23,7 @@ export interface GetPriceFromParams {
   is_active?: boolean;
   page?: number;
   search?: string;
+  country_id?: number;
 }
 
 export async function getPriceFrom(

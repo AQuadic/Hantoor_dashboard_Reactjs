@@ -26,6 +26,7 @@ import { useEffect } from "react";
 interface PriceFromTableProps {
   search?: string;
   page: number;
+  countryId?: string | null;
   setPagination: (meta: {
     totalPages: number;
     totalItems: number;
@@ -39,14 +40,18 @@ export function PriceFromTable({
   search = "",
   page,
   setPagination,
+  countryId, 
 }: PriceFromTableProps) {
   const { t } = useTranslation("models");
 
   const { data, isLoading, refetch } = useQuery<PriceFromResponse>({
-    queryKey: ["pricefrom", page, search],
-    queryFn: () => getPriceFrom({ page, search }),
-    placeholderData: (previousData: PriceFromResponse | undefined) =>
-      previousData,
+    queryKey: ["pricefrom", page, search, countryId],
+    queryFn: () =>
+      getPriceFrom({
+        page,
+        search,
+        country_id: countryId ? Number(countryId) : undefined,
+      }),
   });
 
   const priceFromList = data?.data ?? [];

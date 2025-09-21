@@ -7,27 +7,46 @@ import TabsFilter from "../general/dashboard/TabsFilter";
 import { Select, SelectItem, RangeValue } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { CalendarDate } from "@internationalized/date";
+import { useQuery } from "@tanstack/react-query";
+import { Country, getAllCountries } from "@/api/countries/getCountry";
+import { useState } from "react";
 
-interface SubordinatesHeaderProps {
+interface ModelHeaderProps {
   selectedFilter: string;
   setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   dateRange?: RangeValue<CalendarDate> | null;
   setDateRange?: (range: RangeValue<CalendarDate> | null) => void;
+
+  selectedCountry: string | null;
+  setSelectedCountry: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
-const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
+const ModelHeader: React.FC<ModelHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
-  search, 
+  search,
   setSearch,
   dateRange,
   setDateRange,
 }) => {
-  const { t } = useTranslation("users");
+  const { t, i18n } = useTranslation("users");
+  const [, setSelectedCountry] = useState<string | null>(null);
 
-  const filtersData = [
+  const { data } = useQuery<Country[]>({
+    queryKey: ["countries"],
+    queryFn: () => getAllCountries(),
+  });
+
+  const countries: Country[] = Array.isArray(data) ? data : [];
+
+  const selectItems = countries.map((c) => ({
+    key: c.id.toString(),
+    label: i18n.language === "ar" ? c.name.ar : c.name.en,
+  }));
+
+   const filtersData = [
     {
       titleAr: "الموديلات",
       titleEn: "Models",
@@ -100,14 +119,6 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
     },
   ];
 
-  const countries = [
-    { key: "1", label: "مصر" },
-    { key: "2", label: "مصر" },
-    { key: "3", label: "مصر" },
-    { key: "4", label: "مصر" },
-    { key: "5", label: "مصر" },
-    { key: "6", label: "مصر" },
-  ];
   const currentFilter =
     filtersData.find((filter) => filter.titleEn === selectedFilter) ||
     filtersData[0];
@@ -155,7 +166,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
       {(selectedFilter === "Price From" || selectedFilter === "Price To") && (
         <div className="w-[160px] mt-3 md:mx-8 mx-0">
           <Select
-            items={countries}
+            items={selectItems}
             label={t("country")}
             placeholder={t("all")}
             classNames={{
@@ -163,8 +174,12 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
               label: "text-sm text-gray-700",
               listbox: "bg-white shadow-md",
             }}
+            onSelectionChange={(selection) => {
+              const key = [...selection][0];
+              setSelectedCountry(key !== undefined ? key.toString() : null);
+            }}
           >
-            {(country) => <SelectItem>{country.label}</SelectItem>}
+            {(country) => <SelectItem key={country.key}>{country.label}</SelectItem>}
           </Select>
         </div>
       )}
