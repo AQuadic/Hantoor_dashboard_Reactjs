@@ -18,7 +18,10 @@ import { deletePriceFrom } from "@/api/models/priceFrom/deletePriceFrom";
 import toast from "react-hot-toast";
 import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
 import { useEffect } from "react";
-import { getPriceFrom, PriceFromResponse } from "@/api/models/priceFrom/getPriceFrom";
+import {
+  getPriceFrom,
+  PriceFromResponse,
+} from "@/api/models/priceFrom/getPriceFrom";
 
 interface PriceFromTableProps {
   search?: string;
