@@ -20,7 +20,11 @@ import { deleteFinancing } from "@/api/financing/deleteFinancing";
 import toast from "react-hot-toast";
 import { updateRequestFinancing } from "@/api/financing/editFinancing";
 
-const InsuranceTable = () => {
+interface InsuranceTableProps {
+  selectedCountry: string | null;
+}
+
+const InsuranceTable = ({ selectedCountry }: InsuranceTableProps) => {
   const { t, i18n } = useTranslation("setting");
 
 const { data: financingItems = [], isLoading: financingLoading, refetch } = useQuery({
@@ -43,10 +47,10 @@ const { data: financingItems = [], isLoading: financingLoading, refetch } = useQ
   };
 
   const handleDelete = async (id: number) => {
-      await deleteFinancing(id);
-      toast.success(t("deletedSuccessfully"));
-      refetch();
-    };
+    await deleteFinancing(id);
+    toast.success(t("deletedSuccessfully"));
+    refetch();
+  };
 
   const handleToggle = async (item: FinancingItem) => {
     const prevState = item.is_active;
@@ -74,7 +78,12 @@ const { data: financingItems = [], isLoading: financingLoading, refetch } = useQ
     return <Loading />;
   }
 
-  if (!financingItems.length) {
+  const filteredItems =
+    selectedCountry && selectedCountry !== "all"
+      ? financingItems.filter((item) => String(item.country_id) === selectedCountry)
+      : financingItems;
+
+  if (!filteredItems.length) {
     return <NoData />;
   }
 
@@ -89,9 +98,9 @@ const { data: financingItems = [], isLoading: financingLoading, refetch } = useQ
             </TableRow>
         </TableHeader>
         <TableBody>
-            {financingItems.map((item, index) => (
+            {filteredItems.map((item, index) => (
             <TableRow key={item.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
+              <TableCell>{index + 1}</TableCell>
                 <TableCell dir="ltr">{item.phone}</TableCell>
                 <TableCell className="w-full">{getCountryName(item.country_id)}</TableCell>
                 <TableCell className="flex gap-[7px] items-center">
