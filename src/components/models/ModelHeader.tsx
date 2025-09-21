@@ -20,6 +20,7 @@ interface SubordinatesHeaderProps {
 const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
+  search, 
   setSearch,
   dateRange,
   setDateRange,
@@ -131,8 +132,8 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
           <SearchBar
-            termAr={""}
-            termEn={""}
+            termAr={search}
+            termEn={search}
             setTermAr={setSearch}
             setTermEn={setSearch}
             placeholderAr="ابحث بالاسم"

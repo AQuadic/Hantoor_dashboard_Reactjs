@@ -5,35 +5,18 @@ import { useNavigate } from "react-router-dom";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import DashboardInput from "@/components/general/DashboardInput";
-import { Select, SelectItem } from "@heroui/react";
-import { useQuery } from "@tanstack/react-query";
-import {
-  getVehicleTypes,
-  VehicleType,
-  GetVehicleTypesResponse as GetVehicleTypesResponseAPI,
-} from "@/api/models/carTypes/getCarTypes";
 import toast from "react-hot-toast";
 import { addCarClass, AddCarClassPayload } from "@/api/categories/addCategory";
 
 const AddCategories = () => {
-  const { t, i18n } = useTranslation("models");
+  const { t } = useTranslation("models");
   const navigate = useNavigate();
 
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
-  const [selectedCarType, setSelectedCarType] = useState<number | undefined>();
+  const [selectedCarType,] = useState<number | undefined>();
   const [loading, setLoading] = useState(false);
 
-  const { data: carTypes = [], isLoading } = useQuery<
-    GetVehicleTypesResponseAPI,
-    Error,
-    VehicleType[]
-  >({
-    queryKey: ["vehicleTypes"],
-    queryFn: () => getVehicleTypes({ pagination: false }),
-    select: (response) =>
-      Array.isArray(response) ? response : response.data || [],
-  });
 
   const handleAddCategory = async () => {
     if (!arName || !enName || !selectedCarType) {
@@ -98,39 +81,6 @@ const AddCategories = () => {
               onChange={setEnName}
               placeholder={t("writeHere")}
             />
-          </div>
-
-          <div className="mt-4 md:w-1/2 md:rtl:pl-2 md:ltr:pr-2">
-            <Select
-              size="lg"
-              variant="bordered"
-              label={t("type")}
-              onSelectionChange={(key) => {
-                let parsed: number | undefined;
-                if (typeof key === "string" || typeof key === "number")
-                  parsed = Number(key);
-                else if (Array.isArray(key)) parsed = Number(key[0]);
-                else if (key instanceof Set)
-                  parsed = Number(Array.from(key)[0]);
-                else parsed = undefined;
-
-                if (!isNaN(parsed as number)) setSelectedCarType(parsed);
-                else setSelectedCarType(undefined);
-              }}
-              selectedKeys={selectedCarType ? [selectedCarType.toString()] : []}
-              disabled={!carTypes || isLoading}
-            >
-              {carTypes.map((type: VehicleType) => (
-                <SelectItem
-                  key={type.id}
-                  textValue={
-                    i18n.language === "ar" ? type.name.ar : type.name.en
-                  }
-                >
-                  {i18n.language === "ar" ? type.name.ar : type.name.en}
-                </SelectItem>
-              ))}
-            </Select>
           </div>
 
           <DashboardButton

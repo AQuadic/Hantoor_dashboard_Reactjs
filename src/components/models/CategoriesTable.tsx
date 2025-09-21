@@ -135,7 +135,7 @@ export function CategoriesTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("categoryName")}</TableHead>
-          <TableHead className="text-right">{t("type")}</TableHead>
+          {/* <TableHead className="text-right">{t("type")}</TableHead> */}
           <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
@@ -143,12 +143,12 @@ export function CategoriesTable({
         {classes.map((item, index) => (
           <TableRow key={item.id} noBackgroundColumns={1}>
             <TableCell>{from + index}</TableCell>
-            <TableCell>
+            <TableCell className="w-full">
               {i18n.language === "ar" ? item.name.ar : item.name.en}
             </TableCell>
-            <TableCell className="w-full">
+            {/* <TableCell className="w-full">
               {typeMap[item.vehicle_type_id] || item.vehicle_type_id}
-            </TableCell>
+            </TableCell> */}
             <TableCell className="flex gap-[7px] items-center">
               <Switch
                   isSelected={item.is_active}
