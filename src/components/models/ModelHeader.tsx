@@ -5,8 +5,9 @@ import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import TabsFilter from "../general/dashboard/TabsFilter";
 import { RangeValue } from "@heroui/react";
-// import { useTranslation } from "react-i18next";
 import { CalendarDate } from "@internationalized/date";
+import { usePermissions } from "@/hooks/usePermissions";
+import { useMemo } from "react";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
@@ -24,89 +25,97 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   dateRange,
   setDateRange,
 }) => {
-  // const { t } = useTranslation("users");
+  const { hasPermission } = usePermissions();
 
-  const filtersData = [
-    {
-      titleAr: "الموديلات",
-      titleEn: "Models",
-      addTextAr: "اضافة موديل جديد",
-      addTextEn: "Add New Model",
-      link: "/models/add",
-    },
-    {
-      titleAr: "انواع الهيكل",
-      titleEn: "Structure Types",
-      addTextAr: "اضافة نوع هيكل جديد",
-      addTextEn: "Add New Structure Type",
-      link: "/structure-types/add",
-    },
-    {
-      titleAr: "انواع السيارة",
-      titleEn: "Car Types",
-      addTextAr: "اضافة نوع سيارة جديد",
-      addTextEn: "Add New Car Type",
-      link: "/car-types/add",
-    },
-    {
-      titleAr: "الفئات",
-      titleEn: "Categories",
-      addTextAr: "اضافة فئة جديدة",
-      addTextEn: "Add New Category",
-      link: "/categories/add",
-    },
-    {
-      titleAr: "منشأ الماركة",
-      titleEn: "Brand Origin",
-      addTextAr: "اضافة منشأ ماركة جديد",
-      addTextEn: "Add New Brand Origin",
-      link: "/brand-origins/add",
-    },
-    {
-      titleAr: "عدد المقاعد",
-      titleEn: "Number of Seats",
-      addTextAr: "اضافة عدد مقاعد جديد",
-      addTextEn: "Add New Number of Seats",
-      link: "/seat-numbers/add",
-    },
-    {
-      titleAr: "انواع الماكينة",
-      titleEn: "Engine Types",
-      addTextAr: "اضافة نوع ماكينة جديد",
-      addTextEn: "Add New Engine Type",
-      link: "/engine-types/add",
-    },
-    {
-      titleAr: "احجام الماكينة",
-      titleEn: "Engine Sizes",
-      addTextAr: "اضافة حجم ماكينة جديد",
-      addTextEn: "Add New Engine Size",
-      link: "/engine-sizes/add",
-    },
-    {
-      titleAr: "السعر من",
-      titleEn: "Price From",
-      addTextAr: "اضافة سعر من جديد",
-      addTextEn: "Add New Price From",
-      link: "/price-from/add",
-    },
-    {
-      titleAr: "السعر الى",
-      titleEn: "Price To",
-      addTextAr: "اضافة سعر الى جديد",
-      addTextEn: "Add New Price To",
-      link: "/price-to/add",
-    },
-  ];
+  // Filter tabs based on user permissions
+  const filtersData = useMemo(() => {
+    const allFiltersData = [
+      {
+        titleAr: "الموديلات",
+        titleEn: "Models",
+        addTextAr: "اضافة موديل جديد",
+        addTextEn: "Add New Model",
+        link: "/models/add",
+        permission: "view_vehicle_model",
+      },
+      {
+        titleAr: "انواع الهيكل",
+        titleEn: "Structure Types",
+        addTextAr: "اضافة نوع هيكل جديد",
+        addTextEn: "Add New Structure Type",
+        link: "/structure-types/add",
+        permission: "view_vehicle_class",
+      },
+      {
+        titleAr: "انواع السيارة",
+        titleEn: "Car Types",
+        addTextAr: "اضافة نوع سيارة جديد",
+        addTextEn: "Add New Car Type",
+        link: "/car-types/add",
+        permission: "view_vehicle_type",
+      },
+      {
+        titleAr: "الفئات",
+        titleEn: "Categories",
+        addTextAr: "اضافة فئة جديدة",
+        addTextEn: "Add New Category",
+        link: "/categories/add",
+        permission: "view_category",
+      },
+      {
+        titleAr: "منشأ الماركة",
+        titleEn: "Brand Origin",
+        addTextAr: "اضافة منشأ ماركة جديد",
+        addTextEn: "Add New Brand Origin",
+        link: "/brand-origins/add",
+        permission: "view_brand_origin",
+      },
+      {
+        titleAr: "عدد المقاعد",
+        titleEn: "Number of Seats",
+        addTextAr: "اضافة عدد مقاعد جديد",
+        addTextEn: "Add New Number of Seats",
+        link: "/seat-numbers/add",
+        permission: "view_seat_count",
+      },
+      {
+        titleAr: "انواع الماكينة",
+        titleEn: "Engine Types",
+        addTextAr: "اضافة نوع ماكينة جديد",
+        addTextEn: "Add New Engine Type",
+        link: "/engine-types/add",
+        permission: "view_engine_type",
+      },
+      {
+        titleAr: "احجام الماكينة",
+        titleEn: "Engine Sizes",
+        addTextAr: "اضافة حجم ماكينة جديد",
+        addTextEn: "Add New Engine Size",
+        link: "/engine-sizes/add",
+        permission: "view_engine_size",
+      },
+      {
+        titleAr: "السعر من",
+        titleEn: "Price From",
+        addTextAr: "اضافة سعر من جديد",
+        addTextEn: "Add New Price From",
+        link: "/price-from/add",
+        permission: "view_price_from",
+      },
+      {
+        titleAr: "السعر الى",
+        titleEn: "Price To",
+        addTextAr: "اضافة سعر الى جديد",
+        addTextEn: "Add New Price To",
+        link: "/price-to/add",
+        permission: "view_price_to",
+      },
+    ];
 
-  // const countries = [
-  //   { key: "1", label: "مصر" },
-  //   { key: "2", label: "مصر" },
-  //   { key: "3", label: "مصر" },
-  //   { key: "4", label: "مصر" },
-  //   { key: "5", label: "مصر" },
-  //   { key: "6", label: "مصر" },
-  // ];
+    return allFiltersData.filter((tab) => hasPermission(tab.permission));
+  }, [hasPermission]);
+
+  // Find current filter or default to first available if user doesn't have permission
   const currentFilter =
     filtersData.find((filter) => filter.titleEn === selectedFilter) ||
     filtersData[0];
@@ -150,23 +159,6 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
           />
         </Link>
       </div>
-
-      {/* {(selectedFilter === "Price From" || selectedFilter === "Price To") && (
-        <div className="w-[160px] mt-3 md:mx-8 mx-0">
-          <Select
-            items={countries}
-            label={t("country")}
-            placeholder={t("all")}
-            classNames={{
-              trigger: "h-[46px] !h-[46px] min-h-[46px] bg-white border !py-6",
-              label: "text-sm text-gray-700",
-              listbox: "bg-white shadow-md",
-            }}
-          >
-            {(country) => <SelectItem>{country.label}</SelectItem>}
-          </Select>
-        </div>
-      )} */}
     </div>
   );
 };
