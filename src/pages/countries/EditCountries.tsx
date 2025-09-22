@@ -139,7 +139,7 @@ const EditCountries = () => {
             />
           </div>
           <div className="relative w-full border border-gray-300 rounded-lg p-3  text-sm">
-            <p className="text-right text-black text-sm">{t("time")}</p>
+            <p className="rtl:text-right text-black text-sm">{t("time")}</p>
             <div className="flex items-center justify-between gap-1">
               <input
                 type="number"

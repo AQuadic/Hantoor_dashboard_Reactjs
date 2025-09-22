@@ -19,7 +19,7 @@ const AddCountries = () => {
   const [enCurrency, setEnCurrency] = useState("");
   const [serviceFee, setServiceFee] = useState("");
   const [serviceDurationType, setServiceDurationType] = useState<"month" | "day" | "year">("month");
-  const [serviceDuration, setServiceDuration] = useState("3");
+  const [serviceDuration, setServiceDuration] = useState("");
   const [loading, setLoading] = useState(false);
 
 const handleSubmit = async () => {
@@ -143,8 +143,9 @@ const handleSubmit = async () => {
               <input
                 type="number"
                 value={serviceDuration}
+                placeholder="3"
                 onChange={(e) => setServiceDuration(e.target.value)}
-                className="w-10 text-gray-500 text-sm text-center"
+                className="w-10 text-black text-sm text-center"
               />
               <select
                 className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
