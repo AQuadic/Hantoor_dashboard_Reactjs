@@ -11,7 +11,7 @@ import i18n from "../../hooks/i18n";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { getBankById } from "@/api/bank/getBankById";
+import { getBankById, Bank } from "@/api/bank/getBankById";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
 import { updateBankById, UpdateBankPayload } from "@/api/bank/editBank";
@@ -32,8 +32,9 @@ const EditBank = () => {
   const { id } = useParams<{ id: string }>();
   const location = useLocation();
 
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["bank", id],
+  // Typing as any because backend response shape is used directly in multiple places below
+  const { data, isLoading, error } = useQuery<Bank>({
+    queryKey: ["bank", Number(id)],
     queryFn: () => getBankById(Number(id)),
     enabled: !!id,
   });
@@ -49,24 +50,35 @@ const EditBank = () => {
   const [enBankName, setEnBankName] = useState("");
 
   // Dynamic arrays for visitor data
-  const [visitorDataList, setVisitorDataList] = useState([
+  type RowData = {
+    salaryFrom: string;
+    salaryTo: string;
+    employerName: string;
+    value: string;
+    duration: string;
+    type?: "citizen" | "expatriate";
+  };
+
+  const [visitorDataList, setVisitorDataList] = useState<RowData[]>([
     {
       salaryFrom: "",
       salaryTo: "",
       employerName: "",
       value: "",
       duration: "",
+      type: "expatriate",
     },
   ]);
 
   // Dynamic arrays for citizen data
-  const [citizenDataList, setCitizenDataList] = useState([
+  const [citizenDataList, setCitizenDataList] = useState<RowData[]>([
     {
       salaryFrom: "",
       salaryTo: "",
       employerName: "",
       value: "",
       duration: "",
+      type: "citizen",
     },
   ]);
 
@@ -86,15 +98,9 @@ const EditBank = () => {
     { key: "5", label: "5 سنوات" },
   ];
 
-  const Workplaces = [
-    { key: "private_party", label: "جهة خاصة" },
-    { key: "government", label: "جهة حكومية" },
-  ];
+  // typesOptions removed — render labels inline to avoid unused variable
 
-  const entities = [
-    { key: "private_party", label: t("privateParty") },
-    { key: "government", label: t("government") },
-  ];
+  // Workplace/entity lists removed; employer is now a free-text field and type is explicit.
 
   useEffect(() => {
     if (data) {
@@ -115,6 +121,7 @@ const EditBank = () => {
           employerName: exp.employer || "",
           value: exp.value?.toString() || "",
           duration: exp.duration || "",
+          type: exp.type || "expatriate",
         }));
         setVisitorDataList(mappedVisitorData);
       } else {
@@ -125,6 +132,7 @@ const EditBank = () => {
             employerName: "",
             value: "",
             duration: "",
+            type: "expatriate",
           },
         ]);
       }
@@ -137,6 +145,7 @@ const EditBank = () => {
           employerName: citizen.employer || "",
           value: citizen.value?.toString() || "",
           duration: citizen.duration || "",
+          type: citizen.type || "citizen",
         }));
         setCitizenDataList(mappedCitizenData);
       } else {
@@ -147,6 +156,7 @@ const EditBank = () => {
             employerName: "",
             value: "",
             duration: "",
+            type: "citizen",
           },
         ]);
       }
@@ -165,6 +175,7 @@ const EditBank = () => {
         employerName: "",
         value: "",
         duration: "",
+        type: "expatriate",
       },
     ]);
   };
@@ -193,6 +204,7 @@ const EditBank = () => {
         employerName: "",
         value: "",
         duration: "",
+        type: "citizen",
       },
     ]);
   };
@@ -238,6 +250,99 @@ const EditBank = () => {
   };
 
   const queryClient = useQueryClient();
+  // helpers moved out of validateForm to reduce complexity
+  const parseSalary = (s: string) => {
+    const n = parseInt(s.replace(/\D/g, ""));
+    if (isNaN(n) || n <= 0) return null;
+    return n;
+  };
+
+  const validateList = (
+    list: typeof visitorDataList | typeof citizenDataList,
+    kind: "visitor" | "citizen"
+  ) => {
+    const checkSalaryRange = (
+      salaryFromStr: string,
+      salaryToStr: string,
+      position: number
+    ) => {
+      const salaryFrom = parseSalary(salaryFromStr);
+      const salaryTo = parseSalary(salaryToStr);
+
+      if (salaryFrom === null) {
+        toast.error(t(`${kind}SalaryFromNumeric`, { position }));
+        return false;
+      }
+      if (salaryTo === null) {
+        toast.error(t(`${kind}SalaryToNumeric`, { position }));
+        return false;
+      }
+      if (salaryFrom >= salaryTo) {
+        toast.error(t("salaryFromLessThanTo", { position }));
+        return false;
+      }
+      return true;
+    };
+
+    const checkTextFields = (
+      duration: string,
+      employerName: string,
+      value: string,
+      position: number
+    ) => {
+      if (!duration) {
+        toast.error(t(`${kind}DurationRequired`, { position }));
+        return false;
+      }
+      if (!employerName.trim()) {
+        toast.error(t(`${kind}WorkplaceRequired`, { position }));
+        return false;
+      }
+      if (!value.trim()) {
+        toast.error(t(`${kind}InterestRequired`, { position }));
+        return false;
+      }
+      return true;
+    };
+
+    for (let i = 0; i < list.length; i++) {
+      const item = list[i];
+      const position = i + 1;
+
+      if (!item.salaryFrom.trim()) {
+        toast.error(t(`${kind}SalaryFromRequired`, { position }));
+        return false;
+      }
+      if (!item.salaryTo.trim()) {
+        toast.error(t(`${kind}SalaryToRequired`, { position }));
+        return false;
+      }
+
+      if (!checkSalaryRange(item.salaryFrom, item.salaryTo, position))
+        return false;
+      if (
+        !checkTextFields(item.duration, item.employerName, item.value, position)
+      )
+        return false;
+
+      // Validate type presence
+      // item may come from fetched data; ensure it has a valid type
+      if (
+        !item.type ||
+        (item.type !== "citizen" && item.type !== "expatriate")
+      ) {
+        toast.error(
+          t(`${kind}TypeRequired`, { position }) ||
+            (i18n.language === "ar"
+              ? "الرجاء اختيار النوع"
+              : "Please select type")
+        );
+        return false;
+      }
+    }
+
+    return true;
+  };
 
   const validateForm = () => {
     // Basic bank information validation
@@ -258,95 +363,8 @@ const EditBank = () => {
       return false;
     }
 
-    // Validate visitor data
-    for (let i = 0; i < visitorDataList.length; i++) {
-      const visitor = visitorDataList[i];
-      const position = i + 1;
-
-      if (!visitor.salaryFrom.trim()) {
-        toast.error(t("visitorSalaryFromRequired", { position }));
-        return false;
-      }
-      if (!visitor.salaryTo.trim()) {
-        toast.error(t("visitorSalaryToRequired", { position }));
-        return false;
-      }
-
-      // Check if salary fields are numeric
-      const salaryFrom = parseInt(visitor.salaryFrom.replace(/\D/g, ""));
-      const salaryTo = parseInt(visitor.salaryTo.replace(/\D/g, ""));
-
-      if (isNaN(salaryFrom) || salaryFrom <= 0) {
-        toast.error(t("visitorSalaryFromNumeric", { position }));
-        return false;
-      }
-      if (isNaN(salaryTo) || salaryTo <= 0) {
-        toast.error(t("visitorSalaryToNumeric", { position }));
-        return false;
-      }
-      if (salaryFrom >= salaryTo) {
-        toast.error(t("salaryFromLessThanTo", { position }));
-        return false;
-      }
-
-      if (!visitor.duration) {
-        toast.error(t("visitorDurationRequired", { position }));
-        return false;
-      }
-      if (!visitor.employerName) {
-        toast.error(t("visitorWorkplaceRequired", { position }));
-        return false;
-      }
-      if (!visitor.value.trim()) {
-        toast.error(t("visitorInterestRequired", { position }));
-        return false;
-      }
-    }
-
-    // Validate citizen data
-    for (let i = 0; i < citizenDataList.length; i++) {
-      const citizen = citizenDataList[i];
-      const position = i + 1;
-
-      if (!citizen.salaryFrom.trim()) {
-        toast.error(t("citizenSalaryFromRequired", { position }));
-        return false;
-      }
-      if (!citizen.salaryTo.trim()) {
-        toast.error(t("citizenSalaryToRequired", { position }));
-        return false;
-      }
-
-      // Check if salary fields are numeric
-      const salaryFrom = parseInt(citizen.salaryFrom.replace(/\D/g, ""));
-      const salaryTo = parseInt(citizen.salaryTo.replace(/\D/g, ""));
-
-      if (isNaN(salaryFrom) || salaryFrom <= 0) {
-        toast.error(t("citizenSalaryFromNumeric", { position }));
-        return false;
-      }
-      if (isNaN(salaryTo) || salaryTo <= 0) {
-        toast.error(t("citizenSalaryToNumeric", { position }));
-        return false;
-      }
-      if (salaryFrom >= salaryTo) {
-        toast.error(t("salaryFromLessThanTo", { position }));
-        return false;
-      }
-
-      if (!citizen.duration) {
-        toast.error(t("citizenDurationRequired", { position }));
-        return false;
-      }
-      if (!citizen.employerName) {
-        toast.error(t("citizenWorkplaceRequired", { position }));
-        return false;
-      }
-      if (!citizen.value.trim()) {
-        toast.error(t("citizenInterestRequired", { position }));
-        return false;
-      }
-    }
+    if (!validateList(visitorDataList, "visitor")) return false;
+    if (!validateList(citizenDataList, "citizen")) return false;
 
     return true;
   };
@@ -358,7 +376,7 @@ const EditBank = () => {
     // Build finance array from dynamic arrays
     const financeArray = [
       ...visitorDataList.map((visitor) => ({
-        type: "expatriate" as const,
+        type: visitor.type || "expatriate",
         salary_from: Number(visitor.salaryFrom) || 0,
         salary_to: Number(visitor.salaryTo) || 0,
         duration: visitor.duration,
@@ -366,7 +384,7 @@ const EditBank = () => {
         value: visitor.value,
       })),
       ...citizenDataList.map((citizen) => ({
-        type: "citizen" as const,
+        type: citizen.type || "citizen",
         salary_from: Number(citizen.salaryFrom) || 0,
         salary_to: Number(citizen.salaryTo) || 0,
         duration: citizen.duration,
@@ -465,7 +483,7 @@ const EditBank = () => {
           {/* Dynamic Visitor Data Sections */}
           {visitorDataList.map((visitor, index) => (
             <div
-              key={`visitor-${index}`}
+              key={`visitor-${index}-${visitor.salaryFrom}-${visitor.employerName}`}
               className="flex flex-col gap-4 max-w-[47%] flex-1"
             >
               <div className="flex items-center justify-between">
@@ -539,24 +557,37 @@ const EditBank = () => {
                 ))}
               </Select>
               <Select
-                label={t("Workplace")}
+                label={t("type")}
                 variant="bordered"
-                placeholder="جهة حكومية"
+                placeholder={t("expatriate")}
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                selectedKeys={
-                  visitor.employerName ? [visitor.employerName] : []
-                }
+                selectedKeys={visitor.type ? [visitor.type] : []}
                 onChange={(e) =>
-                  updateVisitorData(index, "employerName", e.target.value)
+                  updateVisitorData(index, "type", e.target.value)
                 }
               >
-                {Workplaces.map((workplace) => (
-                  <SelectItem key={workplace.key} textValue={workplace.label}>
-                    {workplace.label}
-                  </SelectItem>
-                ))}
+                {["expatriate", "citizen"].map((key) => {
+                  let label = t(key as "expatriate" | "citizen");
+                  if (i18n.language === "ar") {
+                    label = key === "expatriate" ? "مقيم" : "مواطن";
+                  }
+                  return (
+                    <SelectItem key={key} textValue={label}>
+                      {label}
+                    </SelectItem>
+                  );
+                })}
               </Select>
+
+              <DashboardInput
+                label={t("Workplace")}
+                value={visitor.employerName}
+                onChange={(value) =>
+                  updateVisitorData(index, "employerName", value)
+                }
+                placeholder={t("writeHere")}
+              />
               <DashboardInput
                 label={t("InterestAmount")}
                 value={visitor.value}
@@ -582,7 +613,7 @@ const EditBank = () => {
           {/* Dynamic Citizen Data Sections */}
           {citizenDataList.map((citizen, index) => (
             <div
-              key={`citizen-${index}`}
+              key={`citizen-${index}-${citizen.salaryFrom}-${citizen.employerName}`}
               className="flex flex-col gap-4 max-w-[47%] flex-1"
             >
               <div className="flex items-center justify-between">
@@ -656,24 +687,37 @@ const EditBank = () => {
                 ))}
               </Select>
               <Select
-                label={t("Workplace")}
+                label={t("type")}
                 variant="bordered"
-                placeholder="جهة حكومية"
+                placeholder={t("citizen")}
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                selectedKeys={
-                  citizen.employerName ? [citizen.employerName] : []
-                }
+                selectedKeys={citizen.type ? [citizen.type] : []}
                 onChange={(e) =>
-                  updateCitizenData(index, "employerName", e.target.value)
+                  updateCitizenData(index, "type", e.target.value)
                 }
               >
-                {entities.map((entity) => (
-                  <SelectItem key={entity.key} textValue={entity.label}>
-                    {entity.label}
-                  </SelectItem>
-                ))}
+                {["expatriate", "citizen"].map((key) => {
+                  let label = t(key as "expatriate" | "citizen");
+                  if (i18n.language === "ar") {
+                    label = key === "expatriate" ? "مقيم" : "مواطن";
+                  }
+                  return (
+                    <SelectItem key={key} textValue={label}>
+                      {label}
+                    </SelectItem>
+                  );
+                })}
               </Select>
+
+              <DashboardInput
+                label={t("Workplace")}
+                value={citizen.employerName}
+                onChange={(value) =>
+                  updateCitizenData(index, "employerName", value)
+                }
+                placeholder={t("writeHere")}
+              />
               <DashboardInput
                 label={t("InterestAmount")}
                 value={citizen.value}

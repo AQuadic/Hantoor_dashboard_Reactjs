@@ -9,6 +9,9 @@
   "salaryFrom": "Salary From",
   "salaryTo": "Salary To",
   "duration": "Duration",
+  "type": "Type",
+  "expatriate": "Expatriate",
+  "citizen": "Citizen",
   "month": "Month",
   "day": "Day",
   "year": "Year",
@@ -54,6 +57,9 @@
   "citizenDurationRequired": "Citizen data {{position}}: Duration is required",
   "citizenWorkplaceRequired": "Citizen data {{position}}: Workplace is required",
   "citizenInterestRequired": "Citizen data {{position}}: Interest amount is required",
+
+  "visitorTypeRequired": "Visitor data {{position}}: Type is required",
+  "citizenTypeRequired": "Citizen data {{position}}: Type is required",
 
   "salaryFromLessThanTo": "Entry {{position}}: Salary from must be less than salary to",
 

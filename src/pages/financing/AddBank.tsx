@@ -69,7 +69,8 @@ const AddBank = () => {
     salaryTo: string;
     interestAmount: string;
     duration: string;
-    workplace: string;
+    employer: string; // free-text employer name
+    type: string; // 'citizen' | 'expatriate'
   }
 
   const [visitorDataList, setVisitorDataList] = useState<VisitorData[]>([
@@ -79,7 +80,8 @@ const AddBank = () => {
       salaryTo: "",
       interestAmount: "",
       duration: "",
-      workplace: "",
+      employer: "",
+      type: "expatriate",
     },
   ]);
 
@@ -90,7 +92,8 @@ const AddBank = () => {
     salaryTo: string;
     interestAmount: string;
     duration: string;
-    workplace: string;
+    employer: string;
+    type: string;
   }
 
   const [citizenDataList, setCitizenDataList] = useState<CitizenData[]>([
@@ -100,7 +103,8 @@ const AddBank = () => {
       salaryTo: "",
       interestAmount: "",
       duration: "",
-      workplace: "",
+      employer: "",
+      type: "citizen",
     },
   ]);
 
@@ -112,10 +116,18 @@ const AddBank = () => {
     { key: "5", label: "5 سنوات" },
   ];
 
-  const Workplaces = [
-    { key: "1", label: "جهة حكومية" },
-    { key: "2", label: "جهة خاصة" },
+  const typesOptions = [
+    {
+      key: "expatriate",
+      label: i18n.language === "ar" ? "مقيم" : t("expatriate") || "Expatriate",
+    },
+    {
+      key: "citizen",
+      label: i18n.language === "ar" ? "مواطن" : t("citizen") || "Citizen",
+    },
   ];
+
+  // employer options removed; employer is a free-text input now
 
   // Functions to manage visitor data
   const isDeletingRef = useRef(false);
@@ -127,7 +139,8 @@ const AddBank = () => {
       salaryTo: "",
       interestAmount: "",
       duration: "",
-      workplace: "",
+      employer: "",
+      type: "expatriate",
     };
     setVisitorDataList([...visitorDataList, newVisitorData]);
   };
@@ -174,7 +187,8 @@ const AddBank = () => {
       salaryTo: "",
       interestAmount: "",
       duration: "",
-      workplace: "",
+      employer: "",
+      type: "citizen",
     };
     setCitizenDataList([...citizenDataList, newCitizenData]);
   };
@@ -221,6 +235,113 @@ const AddBank = () => {
   }, [countryId, i18n.language]);
 
   const validateForm = () => {
+    const parseSalary = (s: string) => {
+      const n = parseInt(String(s).replace(/\D/g, ""));
+      if (isNaN(n) || n <= 0) return null;
+      return n;
+    };
+    const checkSalaryRange = (
+      salaryFromStr: string,
+      salaryToStr: string,
+      kind: "visitor" | "citizen",
+      position: number
+    ) => {
+      const salaryFrom = parseSalary(salaryFromStr);
+      const salaryTo = parseSalary(salaryToStr);
+
+      if (salaryFrom === null) {
+        toast.dismiss();
+        toast.error(t(`${kind}SalaryFromNumeric`, { position }));
+        return false;
+      }
+      if (salaryTo === null) {
+        toast.dismiss();
+        toast.error(t(`${kind}SalaryToNumeric`, { position }));
+        return false;
+      }
+      if (salaryFrom >= salaryTo) {
+        toast.dismiss();
+        toast.error(t("salaryFromLessThanTo", { position }));
+        return false;
+      }
+      return true;
+    };
+
+    const checkTextFields = (
+      duration: string,
+      employer: string,
+      interestAmount: string,
+      kind: "visitor" | "citizen",
+      position: number
+    ) => {
+      if (!duration) {
+        toast.dismiss();
+        toast.error(t(`${kind}DurationRequired`, { position }));
+        return false;
+      }
+      if (!employer.trim()) {
+        toast.dismiss();
+        toast.error(t(`${kind}WorkplaceRequired`, { position }));
+        return false;
+      }
+      if (!interestAmount.trim()) {
+        toast.dismiss();
+        toast.error(t(`${kind}InterestRequired`, { position }));
+        return false;
+      }
+      return true;
+    };
+
+    const validateEntries = (
+      list: Array<VisitorData | CitizenData>,
+      kind: "visitor" | "citizen"
+    ) => {
+      for (let i = 0; i < list.length; i++) {
+        const item = list[i];
+        const position = i + 1;
+
+        if (!item.salaryFrom.trim()) {
+          toast.dismiss();
+          toast.error(t(`${kind}SalaryFromRequired`, { position }));
+          return false;
+        }
+        if (!item.salaryTo.trim()) {
+          toast.dismiss();
+          toast.error(t(`${kind}SalaryToRequired`, { position }));
+          return false;
+        }
+
+        if (!checkSalaryRange(item.salaryFrom, item.salaryTo, kind, position))
+          return false;
+
+        if (
+          !checkTextFields(
+            item.duration,
+            item.employer,
+            item.interestAmount,
+            kind,
+            position
+          )
+        )
+          return false;
+
+        // Validate that a 'type' is selected and is one of the allowed values
+        if (
+          !item.type ||
+          (item.type !== "citizen" && item.type !== "expatriate")
+        ) {
+          toast.dismiss();
+          toast.error(
+            t(`${kind}TypeRequired`, { position }) ||
+              (i18n.language === "ar"
+                ? "الرجاء اختيار النوع"
+                : "Please select type")
+          );
+          return false;
+        }
+      }
+      return true;
+    };
     // Basic bank information validation
     if (!arBankName.trim()) {
       toast.dismiss();
@@ -248,111 +369,8 @@ const AddBank = () => {
       return false;
     }
 
-    // Validate visitor data
-    for (let i = 0; i < visitorDataList.length; i++) {
-      const visitor = visitorDataList[i];
-      const position = i + 1;
-
-      if (!visitor.salaryFrom.trim()) {
-        toast.dismiss();
-        toast.error(t("visitorSalaryFromRequired", { position }));
-        return false;
-      }
-      if (!visitor.salaryTo.trim()) {
-        toast.dismiss();
-        toast.error(t("visitorSalaryToRequired", { position }));
-        return false;
-      }
-
-      // Check if salary fields are numeric
-      const salaryFrom = parseInt(visitor.salaryFrom.replace(/\D/g, ""));
-      const salaryTo = parseInt(visitor.salaryTo.replace(/\D/g, ""));
-
-      if (isNaN(salaryFrom) || salaryFrom <= 0) {
-        toast.dismiss();
-        toast.error(t("visitorSalaryFromNumeric", { position }));
-        return false;
-      }
-      if (isNaN(salaryTo) || salaryTo <= 0) {
-        toast.dismiss();
-        toast.error(t("visitorSalaryToNumeric", { position }));
-        return false;
-      }
-      if (salaryFrom >= salaryTo) {
-        toast.dismiss();
-        toast.error(t("salaryFromLessThanTo", { position }));
-        return false;
-      }
-
-      if (!visitor.duration) {
-        toast.dismiss();
-        toast.error(t("visitorDurationRequired", { position }));
-        return false;
-      }
-      if (!visitor.workplace) {
-        toast.dismiss();
-        toast.error(t("visitorWorkplaceRequired", { position }));
-        return false;
-      }
-      if (!visitor.interestAmount.trim()) {
-        toast.dismiss();
-        toast.error(t("visitorInterestRequired", { position }));
-        return false;
-      }
-    }
-
-    // Validate citizen data
-    for (let i = 0; i < citizenDataList.length; i++) {
-      const citizen = citizenDataList[i];
-      const position = i + 1;
-
-      if (!citizen.salaryFrom.trim()) {
-        toast.dismiss();
-        toast.error(t("citizenSalaryFromRequired", { position }));
-        return false;
-      }
-      if (!citizen.salaryTo.trim()) {
-        toast.dismiss();
-        toast.error(t("citizenSalaryToRequired", { position }));
-        return false;
-      }
-
-      // Check if salary fields are numeric
-      const salaryFrom = parseInt(citizen.salaryFrom.replace(/\D/g, ""));
-      const salaryTo = parseInt(citizen.salaryTo.replace(/\D/g, ""));
-
-      if (isNaN(salaryFrom) || salaryFrom <= 0) {
-        toast.dismiss();
-        toast.error(t("citizenSalaryFromNumeric", { position }));
-        return false;
-      }
-      if (isNaN(salaryTo) || salaryTo <= 0) {
-        toast.dismiss();
-        toast.error(t("citizenSalaryToNumeric", { position }));
-        return false;
-      }
-      if (salaryFrom >= salaryTo) {
-        toast.dismiss();
-        toast.error(t("salaryFromLessThanTo", { position }));
-        return false;
-      }
-
-      if (!citizen.duration) {
-        toast.dismiss();
-        toast.error(t("citizenDurationRequired", { position }));
-        return false;
-      }
-      if (!citizen.workplace) {
-        toast.dismiss();
-        toast.error(t("citizenWorkplaceRequired", { position }));
-        return false;
-      }
-      if (!citizen.interestAmount.trim()) {
-        toast.dismiss();
-        toast.error(t("citizenInterestRequired", { position }));
-        return false;
-      }
-    }
+    if (!validateEntries(visitorDataList, "visitor")) return false;
+    if (!validateEntries(citizenDataList, "citizen")) return false;
 
     return true;
   };
@@ -369,47 +387,31 @@ const AddBank = () => {
       return Number.isFinite(n) ? n : undefined;
     };
 
-    const resolveOption = (
-      list: { key: string; label: string }[],
-      selected?: string
-    ) => {
-      if (!selected) return undefined;
-      const found = list.find(
-        (l) => l.key === selected || l.label === selected
-      );
-      if (found) return { key: found.key, label: found.label };
-      // fallback: treat selected as key
-      return { key: selected, label: selected };
-    };
+    // No mapping helper needed: we keep duration and employer as plain strings.
 
     // Add all visitor data entries as expatriate entries
     visitorDataList.forEach((visitorData) => {
       const v_from = parseInteger(visitorData.salaryFrom);
       const v_to = parseInteger(visitorData.salaryTo);
-      const v_duration =
-        resolveOption(authorities, visitorData.duration) ||
-        resolveOption(authorities, authorities[0].key);
-      const v_employer =
-        resolveOption(Workplaces, visitorData.workplace) ||
-        resolveOption(Workplaces, Workplaces[0].key);
+      const v_duration = visitorData.duration ?? "";
+      const v_employer = visitorData.employer ?? "";
+      const v_type = (visitorData.type || "expatriate") as
+        | "citizen"
+        | "expatriate";
 
       if (
         v_from !== undefined ||
         v_to !== undefined ||
         visitorData.interestAmount ||
         visitorData.duration ||
-        visitorData.workplace
+        visitorData.employer
       ) {
         const entry: BankFinance = {
-          type: "expatriate",
+          type: v_type,
           salary_from: v_from,
           salary_to: v_to,
-          duration: v_duration
-            ? { key: v_duration.key, label: v_duration.label }
-            : "",
-          employer: v_employer
-            ? { key: v_employer.key, label: v_employer.label }
-            : "",
+          duration: v_duration,
+          employer: v_employer,
           value: visitorData.interestAmount || undefined,
           is_active: true,
         };
@@ -421,30 +423,25 @@ const AddBank = () => {
     citizenDataList.forEach((citizenData) => {
       const c_from = parseInteger(citizenData.salaryFrom);
       const c_to = parseInteger(citizenData.salaryTo);
-      const c_duration =
-        resolveOption(authorities, citizenData.duration) ||
-        resolveOption(authorities, authorities[0].key);
-      const c_employer =
-        resolveOption(Workplaces, citizenData.workplace) ||
-        resolveOption(Workplaces, Workplaces[0].key);
+      const c_duration = citizenData.duration ?? "";
+      const c_employer = citizenData.employer ?? "";
+      const c_type = (citizenData.type || "citizen") as
+        | "citizen"
+        | "expatriate";
 
       if (
         c_from !== undefined ||
         c_to !== undefined ||
         citizenData.interestAmount ||
         citizenData.duration ||
-        citizenData.workplace
+        citizenData.employer
       ) {
         const entry: BankFinance = {
-          type: "citizen",
+          type: c_type,
           salary_from: c_from,
           salary_to: c_to,
-          duration: c_duration
-            ? { key: c_duration.key, label: c_duration.label }
-            : "",
-          employer: c_employer
-            ? { key: c_employer.key, label: c_employer.label }
-            : "",
+          duration: c_duration,
+          employer: c_employer,
           value: citizenData.interestAmount || undefined,
           is_active: true,
         };
@@ -491,7 +488,8 @@ const AddBank = () => {
       console.debug("AddBank:createBank:response", response);
 
       if (response.success) {
-        toast.success(response.message || t("bankAddedSuccessfully"));
+        // Prefer translated success message; fall back to backend message if present
+        toast.success(t("bankAddedSuccessfully") || response.message);
         navigate(`/financing/details/${selectedCountryId}`, {
           state: {
             country: displayCountryName,
@@ -522,7 +520,8 @@ const AddBank = () => {
         salaryTo: "",
         interestAmount: "",
         duration: "",
-        workplace: "",
+        employer: "",
+        type: "expatriate",
       },
     ]);
     setCitizenDataList([
@@ -532,7 +531,8 @@ const AddBank = () => {
         salaryTo: "",
         interestAmount: "",
         duration: "",
-        workplace: "",
+        employer: "",
+        type: "citizen",
       },
     ]);
     setSelectedCountry(getCountryByIso2("EG"));
@@ -666,22 +666,31 @@ const AddBank = () => {
                 ))}
               </Select>
               <Select
-                label={t("Workplace")}
+                label={i18n.language === "ar" ? "النوع" : t("type")}
                 variant="bordered"
-                placeholder="جهة حكومية"
+                placeholder={t("expatriate")}
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                value={visitorData.workplace}
+                value={visitorData.type}
                 onChange={(e) =>
-                  updateVisitorData(visitorData.id, "workplace", e.target.value)
+                  updateVisitorData(visitorData.id, "type", e.target.value)
                 }
               >
-                {Workplaces.map((w) => (
-                  <SelectItem key={w.key} textValue={w.label}>
-                    {w.label}
+                {typesOptions.map((opt) => (
+                  <SelectItem key={opt.key} textValue={opt.label}>
+                    {opt.label}
                   </SelectItem>
                 ))}
               </Select>
+
+              <DashboardInput
+                label={t("Workplace")}
+                value={visitorData.employer}
+                onChange={(value) =>
+                  updateVisitorData(visitorData.id, "employer", value)
+                }
+                placeholder={t("writeHere")}
+              />
               <DashboardInput
                 label={t("InterestAmount")}
                 value={visitorData.interestAmount}
@@ -783,22 +792,31 @@ const AddBank = () => {
                 ))}
               </Select>
               <Select
-                label={t("Workplace")}
+                label={i18n.language === "ar" ? "النوع" : t("type")}
                 variant="bordered"
-                placeholder="جهة حكومية"
+                placeholder={t("citizen")}
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                value={citizenData.workplace}
+                value={citizenData.type}
                 onChange={(e) =>
-                  updateCitizenData(citizenData.id, "workplace", e.target.value)
+                  updateCitizenData(citizenData.id, "type", e.target.value)
                 }
               >
-                {Workplaces.map((w) => (
-                  <SelectItem key={w.key} textValue={w.label}>
-                    {w.label}
+                {typesOptions.map((opt) => (
+                  <SelectItem key={opt.key} textValue={opt.label}>
+                    {opt.label}
                   </SelectItem>
                 ))}
               </Select>
+
+              <DashboardInput
+                label={t("Workplace")}
+                value={citizenData.employer}
+                onChange={(value) =>
+                  updateCitizenData(citizenData.id, "employer", value)
+                }
+                placeholder={t("writeHere")}
+              />
               <DashboardInput
                 label={t("InterestAmount")}
                 value={citizenData.interestAmount}

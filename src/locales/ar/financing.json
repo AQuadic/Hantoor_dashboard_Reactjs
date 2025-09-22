@@ -9,6 +9,9 @@
   "salaryFrom": "المرتب من",
   "salaryTo": "المرتب الى",
   "duration": "المدة",
+  "type": "النوع",
+  "expatriate": "مقيم",
+  "citizen": "مواطن",
   "month": "شهر",
   "day": "يوم",
   "year": "سنة",
@@ -53,6 +56,9 @@
   "citizenDurationRequired": "بيانات المواطن {{position}}: المدة مطلوبة",
   "citizenWorkplaceRequired": "بيانات المواطن {{position}}: جهة العمل مطلوبة",
   "citizenInterestRequired": "بيانات المواطن {{position}}: قيمة الفائدة مطلوبة",
+
+  "visitorTypeRequired": "بيانات الوافد {{position}}: النوع مطلوب",
+  "citizenTypeRequired": "بيانات المواطن {{position}}: النوع مطلوب",
 
   "salaryFromLessThanTo": "الإدخال {{position}}: يجب أن يكون المرتب من أقل من المرتب إلى",
 
