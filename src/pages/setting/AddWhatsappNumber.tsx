@@ -6,8 +6,14 @@ import { useState, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getCountries, Country } from "@/api/countries/getCountry";
-import { getRequestFinancing, FinancingItem } from "@/api/financing/fetchFinancing";
-import { createRequestFinancing, CreateRequestFinancingParams } from "@/api/financing/addFinancing";
+import {
+  getRequestFinancing,
+  FinancingItem,
+} from "@/api/financing/fetchFinancing";
+import {
+  createRequestFinancing,
+  CreateRequestFinancingParams,
+} from "@/api/financing/addFinancing";
 import { useNavigate } from "react-router";
 import toast from "react-hot-toast";
 
@@ -19,19 +25,17 @@ const AddWhatsappNumber = () => {
   const navigate = useNavigate();
 
   // Fetch all countries using the standard countries endpoint
-  const {
-    data: countriesData,
-    isLoading: isLoadingCountries,
-  } = useQuery({
+  const { data: countriesData, isLoading: isLoadingCountries } = useQuery({
     queryKey: ["countries"],
     queryFn: () => getCountries(1, ""),
   });
 
   // Fetch existing request-financing items (to hide countries that already have entries)
-  const { data: requestFinancingData, isLoading: isLoadingFinancing } = useQuery({
-    queryKey: ["request-financing-list"],
-    queryFn: () => getRequestFinancing(undefined, false),
-  });
+  const { data: requestFinancingData, isLoading: isLoadingFinancing } =
+    useQuery({
+      queryKey: ["request-financing-list"],
+      queryFn: () => getRequestFinancing(undefined, false),
+    });
 
   const countries: Country[] = countriesData?.data ?? [];
   const financingItems: FinancingItem[] = requestFinancingData ?? [];
@@ -42,7 +46,9 @@ const AddWhatsappNumber = () => {
   );
 
   // Filter out countries that already have a financing request
-  const availableCountries = countries.filter((c) => !financedCountryIds.has(c.id));
+  const availableCountries = countries.filter(
+    (c) => !financedCountryIds.has(c.id)
+  );
 
   const handleSubmit = async () => {
     if (!selectedCountry) {
@@ -74,20 +80,23 @@ const AddWhatsappNumber = () => {
       if (typeof err === "object" && err !== null) {
         const e = err as Record<string, unknown>;
         const resp = e["response"] as Record<string, unknown> | undefined;
-        apiMessage = (resp?.["data"] as Record<string, unknown> | undefined)?.["message"] as string | undefined;
+        apiMessage = (resp?.["data"] as Record<string, unknown> | undefined)?.[
+          "message"
+        ] as string | undefined;
         apiMessage = apiMessage ?? (e["message"] as string | undefined);
       } else if (typeof err === "string") {
         apiMessage = err;
       }
 
       let errorMessage = t("somethingWentWrong");
-      if (apiMessage === "Request Financing already exists with this country.") {
+      if (
+        apiMessage === "Request Financing already exists with this country."
+      ) {
         errorMessage = t("requestFinancingExists");
       }
 
       toast.error(errorMessage);
-    }
-    finally {
+    } finally {
       loadingRef.current = false;
     }
   };
@@ -145,11 +154,7 @@ const AddWhatsappNumber = () => {
             />
           </div>
         </div>
-        <DashboardButton
-          titleAr="اضافة"
-          titleEn="Add"
-          onClick={handleSubmit}
-        />
+        <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit} />
       </div>
     </section>
   );
