@@ -41,6 +41,7 @@
   "phoneRequired": "رقم الهاتف مطلوب",
   "phoneGreaterThan": "يجب ألا يزيد رقم الهاتف عن 20 حرفًا",
   "countryRequired": "الدولة مطلوبة",
+  "imageRequired": "الصورة مطلوبة",
 
   "visitorSalaryFromRequired": "بيانات الوافد {{position}}: المرتب من مطلوب",
   "visitorSalaryToRequired": "بيانات الوافد {{position}}: المرتب إلى مطلوب",
