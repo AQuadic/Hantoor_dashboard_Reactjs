@@ -16,6 +16,7 @@ import { Switch } from "@heroui/react";
 import View from "../icons/general/View";
 import { useTranslation } from "react-i18next";
 import Delete from "../icons/general/Delete";
+import NoData from "../general/NoData";
 
 export interface FinancingCountry {
   id: number;
@@ -106,9 +107,7 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
     );
   if (!data || data.length === 0)
     return (
-      <div className="py-8 text-center text-gray-500">
-        {isArabic ? "لا توجد بيانات" : "No data"}
-      </div>
+      <NoData />
     );
 
   return (
