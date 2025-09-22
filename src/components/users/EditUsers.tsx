@@ -33,7 +33,9 @@ const EditUsers = () => {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [selectedCountry, setSelectedCountry] = useState(
+  // selectedPhoneCountry is used only for the MobileInput (phone's country code)
+  // It is intentionally decoupled from the country select (which sets `country_id`).
+  const [selectedPhoneCountry, setSelectedPhoneCountry] = useState(
     getCountryByIso2("EG")
   );
   const [phone, setPhone] = useState("");
@@ -58,25 +60,26 @@ const EditUsers = () => {
         setName(user.name);
         setEmail(user.email || "");
 
-      if (user.phone && user.phone_country) {
-        const countryMeta = getCountryByIso2(user.phone_country);
-        const dialCode = countryMeta.phone[0]; // e.g. "20" for EG
-        const regex = new RegExp(`^\\+?${dialCode}`);
-        setPhone(user.phone.replace(regex, "")); 
-      } else {
-        setPhone(user.phone || "");
-      }
+        if (user.phone && user.phone_country) {
+          const countryMeta = getCountryByIso2(user.phone_country);
+          const dialCode = countryMeta.phone[0]; // e.g. "20" for EG
+          const regex = new RegExp(`^\\+?${dialCode}`);
+          setPhone(user.phone.replace(regex, ""));
+        } else {
+          setPhone(user.phone || "");
+        }
 
-      if (user.country_id) {
-        setSelectedCountryId(user.country_id.toString());
-      }
+        if (user.country_id) {
+          setSelectedCountryId(user.country_id.toString());
+        }
 
-      if (user.phone_country) {
-        setSelectedCountry(getCountryByIso2(user.phone_country));
-      }
+        // Initialize the phone-country used by the MobileInput independently
+        if (user.phone_country) {
+          setSelectedPhoneCountry(getCountryByIso2(user.phone_country));
+        }
 
-      if (user.image?.url) {
-        setExistingImageUrl(user.image.url);
+        if (user.image?.url) {
+          setExistingImageUrl(user.image.url);
         }
       })
       .finally(() => setLoading(false));
@@ -127,7 +130,8 @@ const EditUsers = () => {
       name,
       email,
       phone,
-      phone_country: selectedCountry.iso2,
+      // submit the phone country coming from the MobileInput state
+      phone_country: selectedPhoneCountry.iso2,
       country_id: selectedCountryId || undefined,
     };
 
@@ -214,8 +218,9 @@ const EditUsers = () => {
           <div className="relative w-full mt-[15px]">
             <MobileInput
               label={t("phone")}
-              selectedCountry={selectedCountry}
-              setSelectedCountry={setSelectedCountry}
+              // mobile input's country (phone country) is separate from the form country select
+              selectedCountry={selectedPhoneCountry}
+              setSelectedCountry={setSelectedPhoneCountry}
               phone={phone}
               setPhone={setPhone}
             />
@@ -230,18 +235,11 @@ const EditUsers = () => {
           <div className="relative md:w-1/2 w-full mt-[18px] rtl:pl-2 ltr:pr-2">
             <Select
               selectedKeys={selectedCountryId ? [selectedCountryId] : []}
+              // Changing the country select must NOT change the phone-country used by the MobileInput.
+              // Only update `selectedCountryId` which maps to `country_id` submitted to the API.
               onSelectionChange={(keys) => {
                 const value = Array.from(keys)[0] as string;
                 setSelectedCountryId(value);
-                const country = countriesData?.data.find((c) => c.id.toString() === value);
-                if (country) {
-                  const meta = countries[country.code as keyof typeof countries];
-                  setSelectedCountry({
-                    iso2: country.code,
-                    name: country.name.en,
-                    phone: [meta?.phone ?? ""]
-                  });
-                }
               }}
               items={
                 countriesData?.data.map((c) => ({
@@ -259,7 +257,6 @@ const EditUsers = () => {
             >
               {(country) => <SelectItem>{country.label}</SelectItem>}
             </Select>
-
           </div>
         </div>
 

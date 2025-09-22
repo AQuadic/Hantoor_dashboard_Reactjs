@@ -35,7 +35,9 @@ export async function getRequestFinancingCountries(
 
   // helper to safely read numeric fields that may be strings
   const toNumber = (v: unknown, fallback = 0) =>
-    v === undefined || v === null ? fallback : Number(v as unknown as string | number);
+    v === undefined || v === null
+      ? fallback
+      : Number(v as unknown as string | number);
 
   const data = (raw.data as unknown as unknown[]) || [];
   const links = (raw.links as unknown as {
