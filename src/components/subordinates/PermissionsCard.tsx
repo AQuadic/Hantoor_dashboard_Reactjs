@@ -17,7 +17,8 @@ const PermissionsCard: React.FC<PermissionsCardProps> = ({
   setSelectedPermissions,
 }) => {
   const {
-    i18n: { language },t
+    i18n: { language },
+    t,
   } = useTranslation("users");
 
   const handleSelectOne = (index: number) => {
@@ -29,7 +30,7 @@ const PermissionsCard: React.FC<PermissionsCardProps> = ({
 
   const handleSelectAll = () => {
     const allSelected = selectedPermissions.every(
-      (permission) => permission.isSelected,
+      (permission) => permission.isSelected
     );
     const updatedPermissions = selectedPermissions.map((permission) => ({
       ...permission,
@@ -46,7 +47,16 @@ const PermissionsCard: React.FC<PermissionsCardProps> = ({
         <h3 className="mb-4 text-lg font-bold text-primary">
           {language === "ar" ? titleAr : titleEn}
         </h3>
-        <Checkbox onChange={handleSelectAll}>{t('selectAll')}</Checkbox>
+        {/* compute whether all items are selected and control the checkbox state */}
+        <Checkbox
+          isSelected={
+            selectedPermissions.length > 0 &&
+            selectedPermissions.every((p) => p.isSelected)
+          }
+          onChange={handleSelectAll}
+        >
+          {t("selectAll")}
+        </Checkbox>
       </div>
       <div className={"flex flex-wrap gap-2"}>
         {selectedPermissions.map((permission, index) => (
