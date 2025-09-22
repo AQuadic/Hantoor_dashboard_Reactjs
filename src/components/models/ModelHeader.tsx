@@ -120,6 +120,20 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
     filtersData.find((filter) => filter.titleEn === selectedFilter) ||
     filtersData[0];
 
+  const getSearchPlaceholder = (filter: string) => {
+    switch (filter) {
+      case "Number of Seats":
+        return { ar: "ابحث بالعدد", en: "Search by number" };
+      case "Price From":
+      case "Price To":
+        return { ar: "ابحث بالسعر", en: "Search by price" };
+      default:
+        return { ar: "ابحث بالاسم", en: "Search by name" };
+    }
+  };
+  const placeholder = getSearchPlaceholder(selectedFilter);
+
+
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -139,14 +153,15 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
 
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
-          <SearchBar
-            termAr={""}
-            termEn={""}
-            setTermAr={setSearch}
-            setTermEn={setSearch}
-            placeholderAr="ابحث بالاسم"
-            placeholderEn="Search by name"
-          />
+        <SearchBar
+          termAr={""}
+          termEn={""}
+          setTermAr={setSearch}
+          setTermEn={setSearch}
+          placeholderAr={placeholder.ar}
+          placeholderEn={placeholder.en}
+        />
+
         </div>
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
