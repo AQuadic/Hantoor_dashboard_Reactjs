@@ -54,13 +54,29 @@ const EditUsers = () => {
   useEffect(() => {
     if (!userId) return;
     getAdminUser(userId)
-      .then((user: AdminUser & { media?: Array<{ url?: string }> }) => {
+      .then((user: AdminUser) => {
         setName(user.name);
         setEmail(user.email || "");
+
+      if (user.phone && user.phone_country) {
+        const countryMeta = getCountryByIso2(user.phone_country);
+        const dialCode = countryMeta.phone[0]; // e.g. "20" for EG
+        const regex = new RegExp(`^\\+?${dialCode}`);
+        setPhone(user.phone.replace(regex, "")); 
+      } else {
         setPhone(user.phone || "");
-        if (user.country_id) setSelectedCountryId(user.country_id.toString());
-        if (user.media && Array.isArray(user.media) && user.media.length > 0) {
-          setExistingImageUrl(user.media[0].url);
+      }
+
+      if (user.country_id) {
+        setSelectedCountryId(user.country_id.toString());
+      }
+
+      if (user.phone_country) {
+        setSelectedCountry(getCountryByIso2(user.phone_country));
+      }
+
+      if (user.image?.url) {
+        setExistingImageUrl(user.image.url);
         }
       })
       .finally(() => setLoading(false));
@@ -213,6 +229,20 @@ const EditUsers = () => {
           {/* Country */}
           <div className="relative md:w-1/2 w-full mt-[18px] rtl:pl-2 ltr:pr-2">
             <Select
+              selectedKeys={selectedCountryId ? [selectedCountryId] : []}
+              onSelectionChange={(keys) => {
+                const value = Array.from(keys)[0] as string;
+                setSelectedCountryId(value);
+                const country = countriesData?.data.find((c) => c.id.toString() === value);
+                if (country) {
+                  const meta = countries[country.code as keyof typeof countries];
+                  setSelectedCountry({
+                    iso2: country.code,
+                    name: country.name.en,
+                    phone: [meta?.phone ?? ""]
+                  });
+                }
+              }}
               items={
                 countriesData?.data.map((c) => ({
                   key: c.id.toString(),
@@ -226,22 +256,10 @@ const EditUsers = () => {
                 label: "!text-[15px] !text-[#000000]",
                 listbox: "bg-white shadow-md",
               }}
-              onVolumeChange={(event) => {
-                const value = (event.target as HTMLSelectElement).value;
-                const country = countriesData?.data.find(
-                  (c) => c.id.toString() === value
-                );
-                if (country) {
-                  setSelectedCountry({
-                    iso2: country.code,
-                    name: country.name.en,
-                    phone: [country.code],
-                  });
-                }
-              }}
             >
               {(country) => <SelectItem>{country.label}</SelectItem>}
             </Select>
+
           </div>
         </div>
 
