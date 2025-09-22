@@ -5,6 +5,7 @@ export interface Country {
   name: { ar: string; en: string };
   code: string;
   currency: string;
+  currency_text: { ar: string; en: string };
   is_active: boolean;
 }
 
