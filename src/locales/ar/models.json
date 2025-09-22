@@ -89,5 +89,6 @@
     "priceUpdated": "تم تعديل السعر بنجاح",
     "brand": "الماركة",
     "categoryDeleted": "تم حذف الفئة بنجاح",
-    "isRequired": "مطلوبة"
+    "isRequired": "مطلوبة",
+    "numbersMustMatch": "يجب أن تتطابق أعداد المقاعد باللغتين"
 }

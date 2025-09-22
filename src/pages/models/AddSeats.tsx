@@ -69,6 +69,12 @@ const AddSeats = () => {
             titleEn={loading ? "Adding..." : "Add"}
             isLoading={loading}
             onClick={async () => {
+              if (arSeatsNumbers !== enSeatsNumbers) {
+                toast.dismiss()
+                toast.error(t("numbersMustMatch"));
+                return;
+              }
+
               setLoading(true);
               try {
                 await postNumberOfSeats({
@@ -84,6 +90,7 @@ const AddSeats = () => {
                   error?.response?.data?.message ||
                   error?.message ||
                   t("somethingWentWrong");
+                  toast.dismiss()
                 toast.error(errorMsg);
               } finally {
                 setLoading(false);

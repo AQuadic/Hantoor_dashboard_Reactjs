@@ -89,5 +89,6 @@
     "priceUpdated": "Price updated successfully",
     "brand": "Brand",
     "categoryDeleted": "Category deleted successfully",
-    "isRequired": "is required"
+    "isRequired": "is required",
+    "numbersMustMatch": "Number of seats must match in both languages"
 }
