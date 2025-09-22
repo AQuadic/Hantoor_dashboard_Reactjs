@@ -3,7 +3,7 @@ import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import { useQueryClient } from "@tanstack/react-query";
 import { deleteFinancing } from "@/api/financing/deleteFinancing";
 import toast from "react-hot-toast";
-import { toggleFinancingStatus } from "@/api/financing/toggleFinancingStatus";
+import { setFinancingStatus } from "@/api/financing/setFinancingStatus";
 import {
   Table,
   TableBody,
@@ -54,24 +54,23 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
     checked: boolean
   ) => {
     try {
-      await toggleFinancingStatus(country.id, checked);
+      await setFinancingStatus({
+        country_id: country.id,
+        is_active: checked ? 1 : 0,
+      });
       toast.dismiss();
       toast.success(
-        (t("statusUpdated") as string) ||
-          (isArabic ? "تم التحديث" : "Status updated")
+        t("statusUpdated") || (isArabic ? "تم التحديث" : "Status updated")
       );
       // Invalidate financing queries to refresh the table
       queryClient.invalidateQueries({ queryKey: ["financing"] });
     } catch (err) {
-      const errorLike = err as
-        | {
-            response?: { data?: { message?: string } };
-            message?: string;
-          }
+      const axiosError = err as
+        | { response?: { data?: { message?: string } }; message?: string }
         | undefined;
       const message =
-        errorLike?.response?.data?.message ||
-        errorLike?.message ||
+        axiosError?.response?.data?.message ||
+        axiosError?.message ||
         (isArabic ? "حدث خطأ" : "Error");
       toast.error(message);
     }
@@ -83,12 +82,10 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
       // Invalidate financing queries to refetch updated list
       queryClient.invalidateQueries({ queryKey: ["financing"] });
     } catch (err) {
-      // eslint-disable-next-line no-console
       console.error("Failed to delete financing:", err);
       // Show localized toast error
       toast.error(
-        (t("deleteFailed") as string) ||
-          (isArabic ? "فشل الحذف" : "Delete failed")
+        t("deleteFailed") || (isArabic ? "فشل الحذف" : "Delete failed")
       );
     }
   };
@@ -134,35 +131,34 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
                   await handleToggleStatus(country, e.target.checked);
                 }}
               />
-              <div
+              <button
+                type="button"
                 className="cursor-pointer"
                 onClick={() => handleViewCountry(country)}
+                aria-label={
+                  isArabic
+                    ? `عرض ${country.name.ar}`
+                    : `View ${country.name.en}`
+                }
               >
                 <View />
-              </div>
-              <div
-                className={
-                  country.banks_count === 0
-                    ? "opacity-50 cursor-not-allowed"
-                    : ""
-                }
-                onClick={(e) => {
-                  if (country.banks_count === 0) {
-                    e.preventDefault();
-                    e.stopPropagation();
+              </button>
+              {country.banks_count > 0 ? (
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(country.id)}
+                />
+              ) : (
+                <button
+                  type="button"
+                  disabled
+                  className="cursor-not-allowed opacity-50"
+                  aria-label={
+                    isArabic ? `حذف غير متاح` : "Delete not available"
                   }
-                }}
-              >
-                {country.banks_count > 0 ? (
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(country.id)}
-                  />
-                ) : (
-                  <button disabled className="cursor-not-allowed">
-                    <Delete />
-                  </button>
-                )}
-              </div>
+                >
+                  <Delete />
+                </button>
+              )}
             </TableCell>
           </TableRow>
         ))}
