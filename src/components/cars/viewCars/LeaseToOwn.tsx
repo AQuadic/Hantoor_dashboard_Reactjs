@@ -99,6 +99,13 @@ const handleDelete = async () => {
     },
   ];
 
+  if (
+  !isRentToOwn || 
+  (!vehicle.rent_to_own_duration && !vehicle.rent_to_own_price && !vehicle.rent_to_own_whatsapp)
+  ) {
+    return <NoData />;
+  }
+
 
   return (
     <section className="md:mx-8 mx-0">
