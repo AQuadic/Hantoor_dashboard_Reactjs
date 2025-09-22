@@ -39,19 +39,63 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
   const vehicleTypes = Array.isArray(vehicleTypesData) ? vehicleTypesData : [];
   const models = Array.isArray(modelsData?.data) ? modelsData.data : [];
 
+  const allBrandOption: Brand = { 
+    id: "all" as any, 
+    name: { ar: "الجميع", en: "All" },
+    created_at: "",
+    updated_at: "",
+    is_active: true
+  };
+  
+  const allVehicleTypeOption: VehicleType = { 
+    id: "all" as any, 
+    name: { ar: "الجميع", en: "All" },
+    created_at: "",
+    updated_at: "",
+    is_active: true,
+    body_type_id: null as any,
+    brand_id: null as any
+  };
+  
+  const allModelOption: Model = { 
+    id: "all" as any, 
+    name: { ar: "الجميع", en: "All" },
+    is_active: true
+  };
+
+  const brandsWithAll = [allBrandOption, ...brands];
+  const vehicleTypesWithAll = [allVehicleTypeOption, ...vehicleTypes];
+  const modelsWithAll = [allModelOption, ...models];
+
   const handleBrandChange = (selection: Selection) => {
-    const selectedBrands = Array.from(selection).map((key) => Number(key));
-    onFilterChange?.({ brand_id: selectedBrands });
+    const selectionArray = Array.from(selection);
+    if (selectionArray.includes("all")) {
+      onFilterChange?.({ brand_id: [] });
+    } else {
+      const selectedBrands = selectionArray.map((key) => Number(key));
+      onFilterChange?.({ brand_id: selectedBrands });
+    }
   };
 
   const handleTypeChange = (selection: Selection) => {
-    const selectedTypes = Array.from(selection).map((key) => Number(key));
-    onFilterChange?.({ vehicle_type_id: selectedTypes });
+    const selectionArray = Array.from(selection);
+    // If "all" is selected, clear the filter
+    if (selectionArray.includes("all")) {
+      onFilterChange?.({ vehicle_type_id: [] });
+    } else {
+      const selectedTypes = selectionArray.map((key) => Number(key));
+      onFilterChange?.({ vehicle_type_id: selectedTypes });
+    }
   };
 
   const handleModelChange = (selection: Selection) => {
-    const selectedModels = Array.from(selection).map((key) => Number(key));
-    onFilterChange?.({ vehicle_model_id: selectedModels });
+    const selectionArray = Array.from(selection);
+    if (selectionArray.includes("all")) {
+      onFilterChange?.({ vehicle_model_id: [] });
+    } else {
+      const selectedModels = selectionArray.map((key) => Number(key));
+      onFilterChange?.({ vehicle_model_id: selectedModels });
+    }
   };
 
   const handleDiscountChange = (checked: boolean) => {
@@ -66,11 +110,11 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
     <div className="mt-[11px] flex flex-wrap items-center gap-[5px] px-8">
       <div className="w-[160px]">
         <Select
-          items={brands}
+          items={brandsWithAll}
           label={t("brand")}
           placeholder={t("all")}
-          selectionMode="multiple"
-          selectedKeys={new Set(filters?.brand_id?.map(String) || [])}
+          selectionMode="single"
+          selectedKeys={filters?.brand_id && filters.brand_id.length > 0 ? new Set(filters.brand_id.map(String)) : new Set(["all"])}
           onSelectionChange={handleBrandChange}
           classNames={{
             trigger: "h-[46px] !h-[46px] min-h-[46px] bg-white border py-0",
@@ -88,11 +132,11 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
 
       <div className="w-[160px]">
         <Select
-          items={vehicleTypes}
+          items={vehicleTypesWithAll}
           label={t("type")}
           placeholder={t("all")}
-          selectionMode="multiple"
-          selectedKeys={new Set(filters?.vehicle_type_id?.map(String) || [])}
+          selectionMode="single"
+          selectedKeys={filters?.vehicle_type_id && filters.vehicle_type_id.length > 0 ? new Set(filters.vehicle_type_id.map(String)) : new Set(["all"])}
           onSelectionChange={handleTypeChange}
           classNames={{
             trigger: "h-[46px] !h-[46px] min-h-[46px] bg-white border py-0",
@@ -111,11 +155,11 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
 
       <div className="w-[160px]">
         <Select
-          items={models}
+          items={modelsWithAll}
           label={t("model")}
           placeholder={t("all")}
-          selectionMode="multiple"
-          selectedKeys={new Set(filters?.vehicle_model_id?.map(String) || [])}
+          selectionMode="single"
+          selectedKeys={filters?.vehicle_model_id && filters.vehicle_model_id.length > 0 ? new Set(filters.vehicle_model_id.map(String)) : new Set(["all"])}
           onSelectionChange={handleModelChange}
           classNames={{
             trigger: "h-[46px] !h-[46px] min-h-[46px] bg-white border py-0",

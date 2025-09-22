@@ -26,7 +26,7 @@ export interface BrandImage {
 export interface Brand {
   id: number;
   name: { ar: string; en: string };
-  is_active: number;
+  is_active: boolean;
   image?: BrandImage;
   created_at?: string;
   updated_at?: string;
