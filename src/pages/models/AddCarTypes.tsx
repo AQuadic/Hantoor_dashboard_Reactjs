@@ -136,10 +136,10 @@ const AddCarTypes = () => {
             titleEn={loading ? "Adding..." : "Add"}
             isLoading={loading}
             onClick={async () => {
-              if (!selectedStructure) {
-                toast.error(t("structure") + " " + t("isRequired"));
-                return;
-              }
+              // if (!selectedStructure) {
+              //   toast.error(t("structure") + " " + t("isRequired"));
+              //   return;
+              // }
               if (!selectedBrand) {
                 toast.error(t("brand") + " " + t("isRequired"));
                 return;
