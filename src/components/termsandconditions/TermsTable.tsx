@@ -76,7 +76,7 @@ const TermsTable = ({ data, isLoading, refetch }: TermsTableProps) => {
             <TableHead className="text-right">{t('textTitle')}</TableHead>
             <TableHead className="text-right">{t('country')}</TableHead>
             <TableHead className="text-right">{t('description')}</TableHead>
-            <TableHead className="text-right">{t('status')}</TableHead>
+            <TableHead className="text-right"></TableHead>
             </TableRow>
         </TableHeader>
         <TableBody>
