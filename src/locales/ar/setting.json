@@ -85,5 +85,6 @@
   "profileUpdated": "تم تحديث الصفحة بنجاح",
   "statusUpdated": "تم تحديث الحالة بنجاح",
   "requestFinancingExists": "طلب التمويل موجود بالفعل لهذا البلد.",
-  "all": "الكل"
+  "all": "الكل",
+  "addImage": "يرجى إضافة صورة"
 }

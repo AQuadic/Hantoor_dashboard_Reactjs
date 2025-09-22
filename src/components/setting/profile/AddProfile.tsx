@@ -46,12 +46,14 @@ const AddProfile = () => {
 
   const handleSubmit = async () => {
     if (!countryId) {
-      toast.error("Please select a country");
+      toast.dismiss()
+      toast.error(t("selectCountry"));
       return;
     }
 
     if (!profileImage) {
-      toast.error("Please add an image");
+      toast.dismiss()
+      toast.error(t("addImage"));
       return;
     }
 

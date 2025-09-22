@@ -85,5 +85,6 @@
   "profileUpdated": "Profile updated successfully",
   "statusUpdated": "status updated successfully",
   "requestFinancingExists": "Request Financing already exists with this country.",
-  "all": "All"
+  "all": "All",
+  "addImage": "Please add an image"
 }
