@@ -59,6 +59,15 @@ const SupportMessagesTable = ({
     }
   };
 
+  const getDebouncedUpdater = (id: number) => {
+    if (!debouncedUpdaters.current[id]) {
+      debouncedUpdaters.current[id] = debounce((value: string) => {
+        handleUpdate(id, { notes: value });
+      }, 500);
+    }
+    return debouncedUpdaters.current[id];
+  };
+
   if (isLoading) return <Loading />;
   if (!conversations.length) return <NoData />;
 
@@ -149,12 +158,7 @@ const SupportMessagesTable = ({
                           ...prev,
                           [message.id]: newValue,
                         }));
-                      }}
-                      onBlur={() => {
-                        const value = notesMap[message.id] ?? message.notes;
-                        if (value !== message.notes) {
-                          handleUpdate(message.id, { notes: value });
-                        }
+                        getDebouncedUpdater(message.id)(newValue);
                       }}
                       className="w-[150px] h-[37px] bg-[#FFFFFF] border border-[#D8D8D8] rounded-[10px] focus:outline-none px-3 placeholder:text-[13px]"
                       placeholder={t("yourNotes")}
