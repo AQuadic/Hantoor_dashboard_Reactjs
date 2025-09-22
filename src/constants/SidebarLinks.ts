@@ -131,15 +131,15 @@ export const SidebarLinks: SidebarLink[] = [
     requiredPermissions: [
       // Models section
       "view_vehicle_model",
-      "create_vehicle_model", 
+      "create_vehicle_model",
       "edit_vehicle_model",
       "delete_vehicle_model",
       // Structure Types (Body Types)
       "view_vehicle_class",
       "create_vehicle_class",
-      "edit_vehicle_class", 
+      "edit_vehicle_class",
       "delete_vehicle_class",
-      // Vehicle Types  
+      // Vehicle Types
       "view_vehicle_type",
       "create_vehicle_type",
       "edit_vehicle_type",
@@ -147,7 +147,7 @@ export const SidebarLinks: SidebarLink[] = [
       // Categories
       "view_category",
       "create_category",
-      "edit_category", 
+      "edit_category",
       "delete_category",
       // Brand Origins
       "view_brand_origin",
@@ -155,7 +155,7 @@ export const SidebarLinks: SidebarLink[] = [
       "edit_brand_origin",
       "delete_brand_origin",
       // Number of Seats
-      "view_seat_count", 
+      "view_seat_count",
       "create_seat_count",
       "edit_seat_count",
       "delete_seat_count",
@@ -166,7 +166,7 @@ export const SidebarLinks: SidebarLink[] = [
       "delete_engine_type",
       // Engine Sizes
       "view_engine_size",
-      "create_engine_size", 
+      "create_engine_size",
       "edit_engine_size",
       "delete_engine_size",
       // Price From
@@ -188,7 +188,12 @@ export const SidebarLinks: SidebarLink[] = [
     linkAr: "السيارات",
     linkEn: "Cars",
     path: "/cars",
-    requiredPermissions: ["view_vehicle", "create_vehicle", "edit_vehicle", "delete_vehicle"],
+    requiredPermissions: [
+      "view_vehicle",
+      "create_vehicle",
+      "edit_vehicle",
+      "delete_vehicle",
+    ],
     requireAny: true,
   },
   {

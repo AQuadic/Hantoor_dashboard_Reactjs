@@ -109,8 +109,6 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
   // Flag to prevent multiple simultaneous fetches
   const fetchingRef = useRef(false);
 
-
-
   // Internal fetch function
   const performFetch = useCallback(async () => {
     if (!isAuthenticated || !token) {
@@ -129,15 +127,24 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
     try {
       const response = await getCurrentPermissions();
 
-      if (response.current_permissions && Array.isArray(response.current_permissions)) {
+      if (
+        response.current_permissions &&
+        Array.isArray(response.current_permissions)
+      ) {
         // Convert string array to Permission objects - keep original API format
-        const permissions: Permission[] = response.current_permissions.map((permissionKey) => {
-          return {
-            key: permissionKey, // Keep original API format (e.g., view_user, create_admin)
-            name: permissionKey.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
-            titleEn: permissionKey.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
-          };
-        });
+        const permissions: Permission[] = response.current_permissions.map(
+          (permissionKey) => {
+            return {
+              key: permissionKey, // Keep original API format (e.g., view_user, create_admin)
+              name: permissionKey
+                .replace(/_/g, " ")
+                .replace(/\b\w/g, (l) => l.toUpperCase()),
+              titleEn: permissionKey
+                .replace(/_/g, " ")
+                .replace(/\b\w/g, (l) => l.toUpperCase()),
+            };
+          }
+        );
 
         dispatch({
           type: "FETCH_PERMISSIONS_SUCCESS",
@@ -159,13 +166,15 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
 
         // Make permissions available globally for debugging
         if (typeof window !== "undefined") {
-          (window as { debugPermissions?: Permission[] }).debugPermissions = permissions;
+          (window as { debugPermissions?: Permission[] }).debugPermissions =
+            permissions;
         }
       } else {
         throw new Error("Invalid permissions response format");
       }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error occurred";
       dispatch({
         type: "FETCH_PERMISSIONS_ERROR",
         payload: errorMessage,
@@ -241,7 +250,15 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
       console.log("🔐 Clearing permissions for unauthenticated user...");
       dispatch({ type: "CLEAR_PERMISSIONS" });
     }
-  }, [isAuthenticated, token, state.isLoaded, state.isLoading, state.permissions.length, autoFetch, performFetch]);
+  }, [
+    isAuthenticated,
+    token,
+    state.isLoaded,
+    state.isLoading,
+    state.permissions.length,
+    autoFetch,
+    performFetch,
+  ]);
 
   // Auto-refresh functionality
   useEffect(() => {
