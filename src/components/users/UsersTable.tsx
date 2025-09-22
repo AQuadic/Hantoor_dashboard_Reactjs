@@ -33,8 +33,8 @@ interface UserTableProps {
   readonly page: number;
   readonly perPage: number;
   readonly dateParams?: DateFilterParams;
-  readonly countryId?: number; 
-  readonly signupWith?: string; 
+  readonly countryId?: number;
+  readonly signupWith?: string;
   readonly onDataLoaded: (meta: AdminUsersResponse["meta"]) => void;
 }
 
@@ -50,7 +50,15 @@ export function UserTable({
   const { t, i18n } = useTranslation("users");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["adminUsers", searchTerm, page, perPage, dateParams, countryId, signupWith],
+    queryKey: [
+      "adminUsers",
+      searchTerm,
+      page,
+      perPage,
+      dateParams,
+      countryId,
+      signupWith,
+    ],
     queryFn: () =>
       getAdminUsers({
         search: searchTerm || undefined,
@@ -111,14 +119,20 @@ export function UserTable({
 
   const toCalendarDate = (dateString?: string): CalendarDate | undefined => {
     if (!dateString) return undefined;
-    const d = new Date(dateString);
-    if (isNaN(d.getTime())) return undefined;
-    // CalendarDate expects yyyy-mm-dd
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
+    // Parse the ISO date portion (yyyy-mm-dd) directly to avoid
+    // timezone conversions when creating a JS Date which can shift
+    // the local day/month and cause an off-by-one month issue.
+    const isoRegex = /^(\d{4})-(\d{2})-(\d{2})/;
+    const isoMatch = isoRegex.exec(dateString);
+    if (!isoMatch) return undefined;
+    const [, ys, ms, ds] = isoMatch;
+    const y = Number(ys);
+    const m = Number(ms);
+    const day = Number(ds);
+    if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(day))
+      return undefined;
     try {
-      return new CalendarDate(y, Number(m), Number(day));
+      return new CalendarDate(y, m, day);
     } catch {
       return undefined;
     }
@@ -191,14 +205,18 @@ export function UserTable({
             <TableCell>{user.created_by}</TableCell>
             <TableCell>
               {user.country
-                ? user.country.name[i18n.language === "ar" ? "ar" : "en"]
+                ? (() => {
+                    const langKey = i18n.language === "ar" ? "ar" : "en";
+                    return user.country.name[langKey];
+                  })()
                 : "-"}
             </TableCell>
             <TableCell>{user.search_histories_count}</TableCell>
             <TableCell>{"-"}</TableCell>
             <TableCell>{user.favorite_cars_count}</TableCell>
             <TableCell>
-              {user.country?.currency_text?.[i18n.language as "ar" | "en"] ?? "-"}
+              {user.country?.currency_text?.[i18n.language as "ar" | "en"] ??
+                "-"}
             </TableCell>
             <TableCell>
               {formatLastOnline(user.last_online, i18n.language)}

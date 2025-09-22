@@ -2,6 +2,40 @@
 applyTo: "**"
 ---
 
+# User Memory
+
+## User Preferences
+
+- Programming languages: javascript/ typescript/ next js
+- Code style preferences: prettier
+- Development environment: vs code
+- Communication style: concise
+
+## Project Context
+
+- Current project type: web app (React + Vite)
+- Tech stack: React, TypeScript, Vite, TanStack Query
+
+## Coding Patterns
+
+- Preferred patterns and practices
+
+## Context7 Research History
+
+- (empty)
+
+## Conversation History
+
+- Fixed a bug where the "blocked until" date shifted by one month due to timezone-based parsing; changed `toCalendarDate` to parse the yyyy-mm-dd portion directly.
+
+## Notes
+
+- File changed: `src/components/users/UsersTable.tsx` — replaced Date parsing with direct ISO date extraction to avoid timezone shifts.
+
+---
+
+## applyTo: "\*\*"
+
 # 2025-09-11: ROUTE PARAMETER INCONSISTENCY ANALYSIS ✅
 
 **ISSUE IDENTIFIED**: Route parameter naming inconsistency across components
