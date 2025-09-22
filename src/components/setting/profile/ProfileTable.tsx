@@ -110,7 +110,13 @@ const ProfileTable = ({ countryId }: Props) => {
             <TableCell>
               {i18n.language === "ar" ? profile.title.ar : profile.title.en}
             </TableCell>
-            <TableCell>{profile.country_id}</TableCell>
+            <TableCell>
+              {profile.country
+                ? i18n.language === "ar"
+                  ? profile.country.name.ar
+                  : profile.country.name.en
+                : "--"}
+            </TableCell>
             <TableCell className="w-full">
               {i18n.language === "ar"
                 ? parseDescription(profile.description.ar)
