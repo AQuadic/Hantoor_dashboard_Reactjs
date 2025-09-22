@@ -152,7 +152,7 @@ const SupportMessagesTable = ({
                       }}
                       onBlur={() => {
                         const value = notesMap[message.id] ?? message.notes;
-                        if (value && value.trim() !== "") {
+                        if (value !== message.notes) {
                           handleUpdate(message.id, { notes: value });
                         }
                       }}
