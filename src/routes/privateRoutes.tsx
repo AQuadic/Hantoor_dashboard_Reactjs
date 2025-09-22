@@ -297,10 +297,19 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/contact-us",
     element: <ContactUsPage />,
+    requiredPermissions: [
+      "view_contact_us",
+      "create_contact_us",
+      "edit_contact_us",
+      "delete_contact_us",
+    ],
+    requireAny: true,
   },
   {
     path: "/contact-us/view",
     element: <ContactUsView />,
+    requiredPermissions: ["view_contact_us"],
+    requireAny: false,
   },
 
   // Agents route
@@ -523,22 +532,39 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/settings",
     element: <SettingPage />,
+    requiredPermissions: [
+      "view_general_setting",
+      "view_insurance_price_button",
+      "view_info_page",
+      "view_ad_image",
+      "view_terms",
+      "view_app_feature",
+    ],
+    requireAny: true,
   },
   {
     path: "/setting/add-whatsapp",
     element: <AddWhatsappNumber />,
+    requiredPermissions: ["edit_social_link"],
+    requireAny: false,
   },
   {
     path: "/setting/edit-whatsapp/:id",
     element: <EditWhatsappNumber />,
+    requiredPermissions: ["edit_social_link"],
+    requireAny: false,
   },
   {
     path: "/setting/add-profile",
     element: <AddProfile />,
+    requiredPermissions: ["create_info_page"],
+    requireAny: false,
   },
   {
     path: "/profile/edit/:id",
     element: <EditProfile />,
+    requiredPermissions: ["edit_info_page"],
+    requireAny: false,
   },
   {
     path: "/setting/add-terms",
