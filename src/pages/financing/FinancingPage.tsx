@@ -49,7 +49,7 @@ const FinancingPage = () => {
           isLoading={isLoading}
           error={error}
         />
-        {financingData && (
+        {financingData && financingData.data?.length > 0 && (
           <TablePagination
             currentPage={financingData.meta.current_page}
             setCurrentPage={handlePageChange}
