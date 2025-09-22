@@ -88,5 +88,6 @@
     "priceDeactivated": "Price deactivated successfully",
     "priceUpdated": "Price updated successfully",
     "brand": "Brand",
-    "categoryDeleted": "Category deleted successfully"
+    "categoryDeleted": "Category deleted successfully",
+    "isRequired": "is required"
 }
