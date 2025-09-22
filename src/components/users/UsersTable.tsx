@@ -196,7 +196,7 @@ export function UserTable({
             </TableCell>
             <TableCell>{user.search_histories_count}</TableCell>
             <TableCell>{"-"}</TableCell>
-            <TableCell>{"-"}</TableCell>
+            <TableCell>{user.favorite_cars_count}</TableCell>
             <TableCell>
               {user.country?.currency_text?.[i18n.language as "ar" | "en"] ?? "-"}
             </TableCell>
