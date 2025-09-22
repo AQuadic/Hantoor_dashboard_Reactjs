@@ -18,7 +18,7 @@ const DashboardUsers = () => {
   const [meta, setMeta] = useState<AdminUsersResponse["meta"] | null>(null);
   const { dateRange, setDateRange, dateParams } = useDatePicker();
   const [countryId, setCountryId] = useState<number | undefined>(undefined);
-
+  const [signupWith, setSignupWith] = useState<string | undefined>(undefined);
 
   const activeSearchTerm = searchTermEn || searchTermAr;
 
@@ -64,6 +64,8 @@ const DashboardUsers = () => {
         <UserSelects
           countryId={countryId}
           setCountryId={setCountryId}
+          signupWith={signupWith}
+          setSignupWith={setSignupWith}
         />
       </div>
       <div className="px-2 md:px-8">
@@ -73,6 +75,7 @@ const DashboardUsers = () => {
           perPage={perPage}
           dateParams={dateParams}
           countryId={countryId} 
+          signupWith={signupWith} 
           onDataLoaded={setMeta}
         />
         {meta && (meta.total ?? 0) > 0 && (
