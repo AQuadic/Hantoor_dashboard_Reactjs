@@ -42,6 +42,7 @@
   "phoneRequired": "Phone number is required",
   "phoneGreaterThan": "Phone must not be greater than 20 characters",
   "countryRequired": "Country is required",
+  "imageRequired": "Image is required",
 
   "visitorSalaryFromRequired": "Visitor data {{position}}: Salary from is required",
   "visitorSalaryToRequired": "Visitor data {{position}}: Salary to is required",

@@ -44,6 +44,7 @@ const EditBank = () => {
   );
   const [phone, setPhone] = useState("");
   const [profileImage, setProfileImage] = useState<File | null>(null);
+  const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
 
   // Bank name states
   const [arBankName, setArBankName] = useState("");
@@ -108,6 +109,7 @@ const EditBank = () => {
       setEnBankName(data.name.en || "");
       setPhone(data.phone || "");
       setSelectedCountry(getCountryByIso2(data.phone_country || "EG"));
+      setExistingImageUrl(data.image?.url || null);
 
       const expatriates =
         data.finance?.filter((f) => f.type === "expatriate") || [];
@@ -250,6 +252,7 @@ const EditBank = () => {
   };
 
   const queryClient = useQueryClient();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   // helpers moved out of validateForm to reduce complexity
   const parseSalary = (s: string) => {
     const n = parseInt(s.replace(/\D/g, ""));
@@ -367,6 +370,12 @@ const EditBank = () => {
       return false;
     }
 
+    // Require an image: either a newly selected file or the existing image URL
+    if (!profileImage && !existingImageUrl) {
+      toast.error(t("imageRequired") || "Image is required");
+      return false;
+    }
+
     if (!validateList(visitorDataList, "visitor")) return false;
     if (!validateList(citizenDataList, "citizen")) return false;
 
@@ -374,9 +383,11 @@ const EditBank = () => {
   };
 
   const handleUpdateBank = async () => {
+    if (isSubmitting) return;
     if (!validateForm()) {
       return;
     }
+    setIsSubmitting(true);
     // Build finance array from dynamic arrays
     const financeArray = [
       ...visitorDataList.map((visitor) => ({
@@ -423,6 +434,8 @@ const EditBank = () => {
     } catch (error: unknown) {
       console.error("Update bank error:", error);
       toast.error(t("updateBankError"));
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -451,7 +464,12 @@ const EditBank = () => {
           <ImageInput
             image={profileImage}
             setImage={setProfileImage}
-            existingImageUrl={data?.image?.url}
+            existingImageUrl={existingImageUrl || undefined}
+            onRemoveImage={() => {
+              // Clear both the selected file and the existing image url without reloading
+              setProfileImage(null);
+              setExistingImageUrl(null);
+            }}
           />
           <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
             {/* Arabic bank */}
@@ -747,8 +765,9 @@ const EditBank = () => {
 
         <div className="flex justify-end mt-6">
           <DashboardButton
-            titleAr="تعديل"
-            titleEn="Edit"
+            titleAr={isSubmitting ? "جاري التعديل..." : "تعديل"}
+            titleEn={isSubmitting ? "Editing..." : "Edit"}
+            isLoading={isSubmitting}
             onClick={handleUpdateBank}
           />
         </div>

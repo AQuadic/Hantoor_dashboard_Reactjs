@@ -68,21 +68,21 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   // Handle file selection
   const handleFileSelect = (file: File) => {
-    if (file && file.type.startsWith("image/")) {
+    if (file?.type?.startsWith("image/")) {
       setImage(file);
     }
   };
 
   // Handle drag events
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+  const handleDragOver = (e: DragEvent<HTMLElement>) => {
     e.preventDefault();
   };
 
-  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
+  const handleDragLeave = (e: DragEvent<HTMLElement>) => {
     e.preventDefault();
   };
 
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: DragEvent<HTMLElement>) => {
     e.preventDefault();
     const files = e.dataTransfer.files;
     if (files.length > 0) {
@@ -125,67 +125,68 @@ const ImageInput: React.FC<ImageInputProps> = ({
   };
 
   return (
-    <>
-      <div
-        className={`bg-white ${isRounded ? "rounded-full" : "rounded-lg"} 
+    <button
+      type="button"
+      aria-label="Upload image"
+      className={`bg-white ${isRounded ? "rounded-full" : "rounded-lg"} 
                     flex flex-col items-center justify-center 
                     border-dashed border-2 cursor-pointer relative overflow-hidden
                     ${isIconMode ? "gap-0" : "gap-5"}`}
-        style={{ width: width ?? 180, height: height ?? 180 }}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={handleClick}
-      >
-        {/* Hidden file input */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="image/*"
-          onChange={handleFileInputChange}
-          className="hidden"
-        />
+      style={{ width: width ?? 180, height: height ?? 180 }}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      onClick={handleClick}
+    >
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleFileInputChange}
+        className="hidden"
+      />
 
-        {/* Remove button - show when image or existingImageUrl is present */}
-        {(image || (existingImageUrl && imagePreview)) && canRemove && (
-          <button
-            onClick={handleRemoveImage}
-            className={`absolute ${
-              isIconMode ? "top-1 right-1" : "top-2 right-2"
-            } 
+      {/* Remove button - show when image or existingImageUrl is present */}
+      {(image || (existingImageUrl && imagePreview)) && canRemove && (
+        <button
+          type="button"
+          onClick={handleRemoveImage}
+          className={`absolute ${
+            isIconMode ? "top-1 right-1" : "top-2 right-2"
+          } 
                        bg-black text-white rounded-full p-1 transition-colors duration-200 z-10 hover:bg-gray-800`}
-            aria-label="Remove image"
-          >
-            <X size={isIconMode ? 12 : 16} />
-          </button>
-        )}
+          aria-label="Remove image"
+        >
+          <X size={isIconMode ? 12 : 16} />
+        </button>
+      )}
 
-        {/* Content */}
-        {imagePreview ? (
+      {/* Content */}
+      {imagePreview ? (
+        <img
+          src={imagePreview}
+          alt="Uploaded preview"
+          className={`w-full h-full object-cover ${
+            isRounded ? "rounded-full" : "rounded-lg"
+          }`}
+        />
+      ) : (
+        <>
           <img
-            src={imagePreview}
-            alt="Uploaded preview"
-            className={`w-full h-full object-cover ${
-              isRounded ? "rounded-full" : "rounded-lg"
-            }`}
+            src="/images/addImage.png"
+            alt="add"
+            className={isIconMode ? "w-[24px] h-[24px]" : "w-[50px] h-[50px]"}
           />
-        ) : (
-          <>
-            <img
-              src="/images/addImage.png"
-              alt="Add Image"
-              className={isIconMode ? "w-[24px] h-[24px]" : "w-[50px] h-[50px]"}
-            />
-            {/* Only show text when not in icon mode */}
-            {!isIconMode && (
-              <p className="text-lg text-primary underline">
-                {placeholderText || t("addPhoto")}
-              </p>
-            )}
-          </>
-        )}
-      </div>
-    </>
+          {/* Only show text when not in icon mode */}
+          {!isIconMode && (
+            <p className="text-lg text-primary underline">
+              {placeholderText || t("addPhoto")}
+            </p>
+          )}
+        </>
+      )}
+    </button>
   );
 };
 
