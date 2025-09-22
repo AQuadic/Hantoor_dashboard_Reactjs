@@ -90,5 +90,6 @@
   "accessoriesDeleted": "تم حذف الإكسسوار بنجاح",
   "offerDeleted": "تم حذف الأوفر بنجاح",
   "rentToOwnDeleted": "تم حذف بيانات التقسيط بنجاح",
-  "noImage": "لا توجد صورة"
+  "noImage": "لا توجد صورة",
+  "pleaseSelectCountry": "يرجى اختيار الدولة"
 }

@@ -274,6 +274,11 @@ const AddCarsForm = () => {
       return;
     }
 
+    if (!formData.country_id) {
+      toast.error(t("pleaseSelectCountry"));
+      return;
+    }
+
     if (isEdit && vehicleId) {
       const payload = getUpdatePayload();
       updateVehicleMutation.mutate({ id: Number(vehicleId), data: payload });
