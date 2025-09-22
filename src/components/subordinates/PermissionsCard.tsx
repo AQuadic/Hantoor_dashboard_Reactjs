@@ -59,17 +59,23 @@ const PermissionsCard: React.FC<PermissionsCardProps> = ({
         </Checkbox>
       </div>
       <div className={"flex flex-wrap gap-2"}>
-        {selectedPermissions.map((permission, index) => (
-          <Checkbox
-            key={index}
-            isSelected={permission.isSelected}
-            onChange={() => handleSelectOne(index)}
-          >
-            {language === "ar"
+        {selectedPermissions.map((permission, index) => {
+          const title =
+            language === "ar"
               ? permission.permission.titleAr
-              : permission.permission.titleEn}
-          </Checkbox>
-        ))}
+              : permission.permission.titleEn;
+          // use permission title as key to avoid using array index
+          return (
+            <div key={title || index} className="w-72 flex-shrink-0">
+              <Checkbox
+                isSelected={permission.isSelected}
+                onChange={() => handleSelectOne(index)}
+              >
+                {title}
+              </Checkbox>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

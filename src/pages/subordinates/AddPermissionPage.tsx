@@ -136,6 +136,17 @@ const AddPermissionPage = () => {
   const handleSubmit = async () => {
     setIsSubmitting(true);
 
+    // Client-side validation: ensure role name is present and non-empty
+    const nameTrimmed = roleName.trim();
+    if (!nameTrimmed) {
+      const validationMsg = t("nameMustBeText", {
+        defaultValue: "يجب أن يكون حقل الاسم نصًا.",
+      });
+      toast.error(validationMsg);
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       console.log("Submitting role data:", {
         name: roleName,
@@ -214,7 +225,7 @@ const AddPermissionPage = () => {
         <DashboardInput
           label={t("roleName")}
           value={roleName}
-          onChange={setRoleName}
+          onChange={(val: string) => setRoleName(val)}
           placeholder={t("roleNamePlaceholder")}
         />
       </div>
