@@ -16,6 +16,7 @@ import { getBanks, Bank } from "@/api/bank/getBanks";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import { deleteBank } from "@/api/bank/deleteBank";
+import { updateBankStatus } from "@/api/bank/updateBankStatus";
 import toast from "react-hot-toast";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import { useState } from "react";
@@ -54,7 +55,7 @@ const BanksTable = ({
         search: searchTerm,
         from_date: dateParams?.from_date,
         to_date: dateParams?.to_date,
-      } as any);
+      });
     },
     enabled: !!countryId,
     placeholderData: (prev) => prev,
@@ -64,6 +65,20 @@ const BanksTable = ({
     await deleteBank(id);
     toast.success(t("bankDeleted"));
     refetch();
+  };
+
+  const handleToggleStatus = async (bankId: number, currentStatus: boolean) => {
+    try {
+      await updateBankStatus(bankId, {
+        is_active: !currentStatus,
+      });
+
+      toast.success(t("statusUpdated") || "Status updated successfully");
+      refetch();
+    } catch (error) {
+      toast.error(t("errorUpdatingStatus") || "Error updating status");
+      console.error("Error updating bank status:", error);
+    }
   };
 
   if (isLoading) return <Loading />;
@@ -145,7 +160,12 @@ const BanksTable = ({
                   "-"}
               </TableCell>
               <TableCell className="flex gap-[7px] items-center">
-                <Switch defaultSelected={Boolean(bank.is_active)} />
+                <Switch
+                  defaultSelected={Boolean(bank.is_active)}
+                  onValueChange={() =>
+                    handleToggleStatus(bank.id, Boolean(bank.is_active))
+                  }
+                />
                 <Link
                   to={`/bank/edit/${bank.id}`}
                   state={{ fromDetailsId: bank.country_id }}

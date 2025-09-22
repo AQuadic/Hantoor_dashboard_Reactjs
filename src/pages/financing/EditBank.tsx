@@ -362,6 +362,10 @@ const EditBank = () => {
       toast.error(t("phoneGreaterThan"));
       return false;
     }
+    if (!data?.country_id) {
+      toast.error(t("countryRequired") || "Country is required");
+      return false;
+    }
 
     if (!validateList(visitorDataList, "visitor")) return false;
     if (!validateList(citizenDataList, "citizen")) return false;

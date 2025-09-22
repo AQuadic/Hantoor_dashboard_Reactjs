@@ -33,6 +33,7 @@
   "bankDeleted": "Bank deleted successfully",
   "deleteFailed": "Delete failed",
   "statusUpdated": "Status updated successfully",
+  "errorUpdatingStatus": "Error updating status",
   "privateParty": "Private Party",
   "government": "Government",
 
