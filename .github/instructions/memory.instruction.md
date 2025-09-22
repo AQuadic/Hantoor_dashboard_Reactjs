@@ -196,6 +196,13 @@ if (data.ads_images?.length) {
 }
 ```
 
+# 2025-09-22: Use `/admin/request-financing` to populate Add WhatsApp countries
+
+- Created `src/api/financing/getRequestFinancingCountries.ts` which calls `/admin/request-financing` and normalizes the pagination response into the `CountriesResponse` shape expected by the UI.
+- Updated `src/pages/setting/AddWhatsappNumber.tsx` to use the new `getRequestFinancingCountries` function so the Add WhatsApp page retrieves countries from the `request-financing` endpoint.
+
+This change keeps the countries list consistent with the financing-related backend resource.
+
 2025-09-11: Translation fix - rentToOwnPrice
 
 - Added `rentToOwnPrice` translation key to `src/locales/en/cars.json` as "Rent-to-Own Price" and to `src/locales/ar/cars.json` as "سعر الإيجار منتهي بالتملك".
