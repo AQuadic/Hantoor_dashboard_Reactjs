@@ -98,7 +98,7 @@ const CountriesTable = ({
                   ? country.currency_text?.ar || "-"
                   : country.currency_text?.en || "-"}
               </TableCell>
-              <TableCell style={{ textAlign: "center" }}>0</TableCell>
+              <TableCell style={{ textAlign: "center" }}>{country.users_count}</TableCell>
               <TableCell className="w-full">
                 {new Date(country.created_at).toLocaleString(
                   i18n.language === "ar" ? "ar-EG" : "en-GB",
