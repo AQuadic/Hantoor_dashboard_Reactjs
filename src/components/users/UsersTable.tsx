@@ -34,6 +34,7 @@ interface UserTableProps {
   readonly perPage: number;
   readonly dateParams?: DateFilterParams;
   readonly countryId?: number; 
+  readonly signupWith?: string; 
   readonly onDataLoaded: (meta: AdminUsersResponse["meta"]) => void;
 }
 
@@ -43,12 +44,13 @@ export function UserTable({
   perPage,
   dateParams = {},
   countryId,
+  signupWith,
   onDataLoaded,
 }: UserTableProps) {
   const { t, i18n } = useTranslation("users");
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ["adminUsers", searchTerm, page, perPage, dateParams, countryId],
+    queryKey: ["adminUsers", searchTerm, page, perPage, dateParams, countryId, signupWith],
     queryFn: () =>
       getAdminUsers({
         search: searchTerm || undefined,
@@ -56,6 +58,7 @@ export function UserTable({
         per_page: perPage,
         pagination: "normal",
         country_id: countryId,
+        signup_with: signupWith,
         ...dateParams,
       }),
   });

@@ -32,5 +32,8 @@
   "newPassword": "New password",
   "invalidDate": "Invalid Date",
   "profileImage": "Profile Image",
-  "statusUpdated": "Status updated successfully"
+  "statusUpdated": "Status updated successfully",
+  "apple": "Apple",
+  "google": "Google",
+  "admin": "Admin"
 }
