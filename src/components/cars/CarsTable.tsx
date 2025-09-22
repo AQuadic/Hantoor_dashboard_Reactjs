@@ -368,7 +368,9 @@ const formatDate = (dateString: string) => {
                 <TableCell>
                   {vehicle.agent?.name[i18n.language as "ar" | "en"]}
                 </TableCell>
-                <TableCell>-</TableCell>
+                <TableCell>
+                  {vehicle.vehicle_type?.name?.[i18n.language === "ar" ? "ar" : "en"] ?? "-"}
+                </TableCell>
                 <TableCell>
                   {vehicle.vehicle_model?.name[i18n.language as "ar" | "en"]}
                 </TableCell>
@@ -390,7 +392,7 @@ const formatDate = (dateString: string) => {
                   {translateYesNo(vehicle.is_Insurance_warranty)}
                 </TableCell>
                 <TableCell>{translateYesNo(vehicle.is_rent_to_own)}</TableCell>
-                <TableCell>{vehicle.views || 0}</TableCell>
+                <TableCell>{vehicle.favorites_count || 0}</TableCell>
                 <TableCell>
                   {vehicle.created_at ? formatDate(vehicle.created_at) : "-"}
                 </TableCell>

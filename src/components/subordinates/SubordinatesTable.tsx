@@ -127,7 +127,7 @@ export function SubordinatesTable({
               )}
             </TableCell>
             <TableCell>{admin.name}</TableCell>
-            <TableCell>{admin.phone || "-"}</TableCell>
+            <TableCell dir="ltr">{admin.phone || "-"}</TableCell>
             <TableCell>{admin.email}</TableCell>
             <TableCell>
               {formatDateTime(admin.created_at, i18n.language)}

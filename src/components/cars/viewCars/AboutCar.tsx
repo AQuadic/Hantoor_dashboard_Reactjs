@@ -73,7 +73,7 @@ const AboutCar = ({ vehicle }: AboutCarProps) => {
                 تاريخ ووقت الإضافة
               </TableHead>
               <TableHead className="text-right min-w-[15%]">
-                تاريخ ووقت الإضافة
+                
               </TableHead>
             </TableRow>
           </TableHeader>
