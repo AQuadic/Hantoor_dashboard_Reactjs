@@ -41,6 +41,10 @@ const initialState: PermissionContextState = {
   lastFetched: null,
 };
 
+// Since sidebar and API use the same format (underscore notation),
+// we should not transform permissions - keep them as-is
+// The routes should be updated to match the API format
+
 // Reducer function
 const permissionReducer = (
   state: PermissionContextState,
@@ -102,22 +106,18 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
   // Get auth state from store
   const { isAuthenticated, token } = useAuthStore();
 
-  // Use refs to store current auth values to avoid dependency issues
-  const authRef = useRef({ isAuthenticated, token });
-  authRef.current = { isAuthenticated, token };
-
   // Flag to prevent multiple simultaneous fetches
   const fetchingRef = useRef(false);
 
-  // Internal fetch function to avoid dependency issues
-  const fetchPermissionsInternal = useCallback(async () => {
-    // Check auth state from ref to avoid circular dependencies
-    if (!authRef.current.isAuthenticated || !authRef.current.token) {
+
+
+  // Internal fetch function
+  const performFetch = useCallback(async () => {
+    if (!isAuthenticated || !token) {
       console.log("🔐 Skipping permission fetch - user not authenticated");
       return;
     }
 
-    // Prevent multiple simultaneous fetches
     if (fetchingRef.current) {
       console.log("🔐 Skipping permission fetch - already in progress");
       return;
@@ -129,22 +129,15 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
     try {
       const response = await getCurrentPermissions();
 
-      if (
-        response.current_permissions &&
-        Array.isArray(response.current_permissions)
-      ) {
-        // Convert string array to Permission objects
-        const permissions: Permission[] = response.current_permissions.map(
-          (permissionKey) => ({
-            key: permissionKey,
-            name: permissionKey
-              .replace(/_/g, " ")
-              .replace(/\b\w/g, (l) => l.toUpperCase()),
-            titleEn: permissionKey
-              .replace(/_/g, " ")
-              .replace(/\b\w/g, (l) => l.toUpperCase()),
-          })
-        );
+      if (response.current_permissions && Array.isArray(response.current_permissions)) {
+        // Convert string array to Permission objects - keep original API format
+        const permissions: Permission[] = response.current_permissions.map((permissionKey) => {
+          return {
+            key: permissionKey, // Keep original API format (e.g., view_user, create_admin)
+            name: permissionKey.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+            titleEn: permissionKey.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+          };
+        });
 
         dispatch({
           type: "FETCH_PERMISSIONS_SUCCESS",
@@ -158,26 +151,21 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
         console.log("🔐 Permissions loaded:", {
           count: permissions.length,
           keys: permissions.map((p) => p.key),
-          sample: permissions.slice(0, 5),
-          userPermissions: permissions
-            .filter((p) => p.key.includes("user"))
-            .map((p) => p.key),
+          apiPermissions: response.current_permissions,
+          userPermissions: permissions.filter((p) => p.key.includes("user")),
+          adminPermissions: permissions.filter((p) => p.key.includes("admin")),
+          agentPermissions: permissions.filter((p) => p.key.includes("agent")),
         });
 
         // Make permissions available globally for debugging
         if (typeof window !== "undefined") {
-          (window as { debugPermissions?: Permission[] }).debugPermissions =
-            permissions;
-          console.log(
-            "🔐 Debug: Use window.debugPermissions to inspect permissions in console"
-          );
+          (window as { debugPermissions?: Permission[] }).debugPermissions = permissions;
         }
       } else {
         throw new Error("Invalid permissions response format");
       }
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error occurred";
+      const errorMessage = error instanceof Error ? error.message : "Unknown error occurred";
       dispatch({
         type: "FETCH_PERMISSIONS_ERROR",
         payload: errorMessage,
@@ -186,17 +174,17 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
     } finally {
       fetchingRef.current = false;
     }
-  }, []);
+  }, [isAuthenticated, token]);
 
   // Public fetch permissions function
   const fetchPermissions = useCallback(async () => {
-    await fetchPermissionsInternal();
-  }, [fetchPermissionsInternal]);
+    await performFetch();
+  }, [performFetch]);
 
   // Refresh permissions (alias for fetchPermissions)
   const refreshPermissions = useCallback(async () => {
-    await fetchPermissions();
-  }, [fetchPermissions]);
+    await performFetch();
+  }, [performFetch]);
 
   // Clear permissions
   const clearPermissions = useCallback(() => {
@@ -244,41 +232,29 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
 
     if (isAuthenticated && token) {
       // User is authenticated
-      if (!state.isLoaded && !state.isLoading) {
+      if (!state.isLoaded && !state.isLoading && autoFetch) {
         console.log("🔐 Fetching permissions for authenticated user...");
-        fetchPermissionsInternal();
+        performFetch();
       }
     } else if (state.isLoaded || state.permissions.length > 0) {
       // User is not authenticated - clear permissions
       console.log("🔐 Clearing permissions for unauthenticated user...");
       dispatch({ type: "CLEAR_PERMISSIONS" });
     }
-  }, [
-    isAuthenticated,
-    token,
-    state.isLoaded,
-    state.isLoading,
-    state.permissions.length,
-    autoFetch,
-    fetchPermissionsInternal,
-  ]);
+  }, [isAuthenticated, token, state.isLoaded, state.isLoading, state.permissions.length, autoFetch, performFetch]);
 
   // Auto-refresh functionality
   useEffect(() => {
     if (refreshInterval && refreshInterval > 0) {
       const interval = setInterval(() => {
-        if (
-          !state.isLoading &&
-          authRef.current.isAuthenticated &&
-          authRef.current.token
-        ) {
-          fetchPermissionsInternal();
+        if (!state.isLoading && isAuthenticated && token) {
+          performFetch();
         }
       }, refreshInterval);
 
       return () => clearInterval(interval);
     }
-  }, [refreshInterval, state.isLoading, fetchPermissionsInternal]);
+  }, [refreshInterval, state.isLoading, isAuthenticated, token, performFetch]);
 
   // Context value - memoized to prevent unnecessary re-renders
   const contextValue: PermissionContextType = useMemo(
