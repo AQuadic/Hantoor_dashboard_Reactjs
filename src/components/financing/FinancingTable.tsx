@@ -105,10 +105,7 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
         {isArabic ? "حدث خطأ" : "Error"}
       </div>
     );
-  if (!data || data.length === 0)
-    return (
-      <NoData />
-    );
+  if (!data || data.length === 0) return <NoData />;
 
   return (
     <Table>
@@ -122,12 +119,7 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
       </TableHeader>
       <TableBody>
         {data.map((country, index) => (
-          <TableRow
-            key={country.id}
-            noBackgroundColumns={1}
-            className="cursor-pointer"
-            onClick={() => handleViewCountry(country)}
-          >
+          <TableRow key={country.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               {isArabic ? country.name.ar : country.name.en}
