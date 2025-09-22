@@ -1,31 +1,32 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { Input } from "@heroui/react";
+import { Input, Select, SelectItem } from "@heroui/react";
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
-// import { useQuery } from "@tanstack/react-query";
-// import { getCountries, Country } from "@/api/countries/getCountry";
+import { useQuery } from "@tanstack/react-query";
+import { getCountries, Country } from "@/api/countries/getCountry";
 import toast from "react-hot-toast";
 import { createPriceFrom } from "@/api/models/pricefrom/addPriceFrom";
 
 const AddPriceFrom = () => {
-  const { t } = useTranslation("models");
+  const { t, i18n } = useTranslation("models");
   const [arPrice, setArPrice] = useState("");
   const [enPrice, setEnPrice] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
   const navigate = useNavigate();
   const params = useParams();
   const brandId = params.id;
   const isEdit = Boolean(brandId);
 
-  // const {
-  //   data: countriesData,
-  //   isLoading,
-  //   isError,
-  // } = useQuery({
-  //   queryKey: ["countries"],
-  //   queryFn: () => getCountries(),
-  // });
+  const {
+    data: countriesData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(),
+  });
 
   const handleSubmit = async () => {
     if (!arPrice) {
@@ -36,7 +37,7 @@ const AddPriceFrom = () => {
     try {
       await createPriceFrom({
         name: arPrice,
-        // country_id: Number(selectedCountry),
+        country_id: Number(selectedCountry),
       });
       toast.success(t("priceAddedSuccessfully"));
       navigate("/models?section=Price From");
@@ -84,7 +85,7 @@ const AddPriceFrom = () => {
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
-              {/* <Select
+              <Select
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
@@ -105,7 +106,7 @@ const AddPriceFrom = () => {
                     {i18n.language === "ar" ? country.name.ar : country.name.en}
                   </SelectItem>
                 ))}
-              </Select> */}
+              </Select>
             </div>
             <Input
               label={t("enPrice")}

@@ -1,31 +1,32 @@
-// import { Country, getCountries } from "@/api/countries/getCountry";
+import { Country, getCountries } from "@/api/countries/getCountry";
 import { createPriceTo } from "@/api/models/priceto/addPriceTo";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import { Input } from "@heroui/react";
-// import { useQuery } from "@tanstack/react-query";
+import { Input, Select, SelectItem } from "@heroui/react";
+import { useQuery } from "@tanstack/react-query";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useParams } from "react-router";
 
 const AddPriceTo = () => {
-  const { t } = useTranslation("models");
+  const { t, i18n } = useTranslation("models");
   const [arPrice, setArPrice] = useState("");
   const [enPrice, setEnPrice] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
   const navigate = useNavigate();
   const params = useParams();
   const brandId = params.id;
   const isEdit = Boolean(brandId);
 
-  // const {
-  //   data: countriesData,
-  //   isLoading,
-  //   isError,
-  // } = useQuery({
-  //   queryKey: ["countries"],
-  //   queryFn: () => getCountries(),
-  // });
+  const {
+    data: countriesData,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["countries"],
+    queryFn: () => getCountries(),
+  });
 
   const handleSubmit = async () => {
     if (!arPrice) {
@@ -83,7 +84,7 @@ const AddPriceTo = () => {
                 classNames={{ label: "mb-2 text-base" }}
                 size="lg"
               />
-              {/* <Select
+              <Select
                 className="mt-4"
                 size={"lg"}
                 variant="bordered"
@@ -104,7 +105,7 @@ const AddPriceTo = () => {
                     {i18n.language === "ar" ? country.name.ar : country.name.en}
                   </SelectItem>
                 ))}
-              </Select> */}
+              </Select>
             </div>
             <Input
               label={t("enPrice")}
