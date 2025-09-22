@@ -49,12 +49,6 @@ const EditCountries = () => {
   }, [id, t]);
 
   const handleSubmit = async () => {
-    const serviceFeeNum = parseFloat(serviceFee);
-    if (isNaN(serviceFeeNum) || serviceFeeNum < 0) {
-      toast.error(t("invalidServiceFee"));
-      return;
-    }
-
     try {
       setLoading(true);
       await updateCountry(Number(id), {
