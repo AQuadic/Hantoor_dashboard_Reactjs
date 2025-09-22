@@ -20,7 +20,7 @@ const AddPermissionPage = () => {
   const navigate = useNavigate();
 
   const isEdit = Boolean(roleId);
-  const { t } = useTranslation();
+  const { t } = useTranslation("subordinates");
   const queryClient = useQueryClient();
 
   // State for role name and selected permissions
@@ -54,19 +54,11 @@ const AddPermissionPage = () => {
   const createMutation = useMutation({
     mutationFn: createRole,
     onSuccess: () => {
-      toast.success(
-        t("roleCreatedSuccessfully") || "Role created successfully"
-      );
+      toast.success(t("roleCreatedSuccessfully"));
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       // Navigate back to subordinates page with permissions tab
       navigate("/subordinates");
     },
-    // onError: (error: unknown) => {
-    //   console.error("Error creating role:", error);
-    //   const errorMessage =
-    //     error instanceof Error ? error.message : "Failed to create role";
-    //   toast.error(t("failedToCreateRole") || errorMessage);
-    // },
   });
 
   // Update role mutation
@@ -79,9 +71,7 @@ const AddPermissionPage = () => {
       data: { name: string; permissions: string[] };
     }) => updateRole(id, data),
     onSuccess: () => {
-      toast.success(
-        t("roleUpdatedSuccessfully") || "Role updated successfully"
-      );
+      toast.success(t("roleUpdatedSuccessfully"));
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       queryClient.invalidateQueries({ queryKey: ["role", roleId] });
       // Navigate back to subordinates page with permissions tab
@@ -90,8 +80,8 @@ const AddPermissionPage = () => {
     onError: (error: unknown) => {
       console.error("Error updating role:", error);
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to update role";
-      toast.error(t("failedToUpdateRole") || errorMessage);
+        error instanceof Error ? error.message : t("failedToUpdateRole");
+      toast.error(errorMessage);
     },
   });
 
@@ -103,13 +93,6 @@ const AddPermissionPage = () => {
       setSelectedPermissions(roleData.permissions || []);
     }
   }, [isEdit, roleData]);
-
-  // Helper function to format section names (similar to RoleModal)
-  const formatSectionName = (sectionKey: string): string => {
-    return sectionKey
-      .replace(/_/g, " ")
-      .replace(/\b\w/g, (l) => l.toUpperCase());
-  };
 
   // Handle permission changes
   const handlePermissionChange = (
@@ -151,19 +134,6 @@ const AddPermissionPage = () => {
 
   // Handle form submission
   const handleSubmit = async () => {
-    // if (!roleName.trim()) {
-    //   toast.error(t("pleaseEnterRoleName") || "Please enter a role name");
-    //   return;
-    // }
-
-    // if (selectedPermissions.length === 0) {
-    //   toast.error(
-    //     t("selectAtLeastOnePermission") ||
-    //       "Please select at least one permission"
-    //   );
-    //   return;
-    // }
-
     setIsSubmitting(true);
 
     try {
@@ -188,13 +158,29 @@ const AddPermissionPage = () => {
           permissions: selectedPermissions,
         });
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Form submission error:", error);
-      const backendMsg =
-        error?.response?.data?.message ||
-        error?.response?.data?.error || 
-        error?.message || 
-        "An unexpected error occurred";
+      let backendMsg = "An unexpected error occurred";
+
+      if (error instanceof Error) {
+        backendMsg = error.message;
+        // Try to extract backend error message if available
+        if (
+          "response" in error &&
+          typeof error.response === "object" &&
+          error.response
+        ) {
+          const response = error.response as Record<string, unknown>;
+          if (typeof response.data === "object" && response.data) {
+            const data = response.data as Record<string, unknown>;
+            if (typeof data.message === "string") {
+              backendMsg = data.message;
+            } else if (typeof data.error === "string") {
+              backendMsg = data.error;
+            }
+          }
+        }
+      }
 
       toast.error(backendMsg);
     } finally {
@@ -209,27 +195,27 @@ const AddPermissionPage = () => {
   return (
     <section>
       <DashboardHeader
-        titleAr={isEdit ? " تعديل الصلاحية" : "اضافة صلاحية جديدة"}
-        titleEn={isEdit ? "Edit Permission" : "Add Permission"}
+        titleAr={isEdit ? t("editPermission") : t("addPermission")}
+        titleEn={isEdit ? t("editPermission") : t("addPermission")}
         items={[
           {
-            titleAr: "الصفحة الرئيسية",
-            titleEn: "Home",
+            titleAr: t("home"),
+            titleEn: t("home"),
             link: "/",
           },
           {
-            titleAr: isEdit ? "تعديل الصلاحية" : "اضافة صلاحية جديدة",
-            titleEn: isEdit ? "Edit Permission" : "Add Permission",
+            titleAr: isEdit ? t("editPermission") : t("addPermission"),
+            titleEn: isEdit ? t("editPermission") : t("addPermission"),
             link: isEdit ? `/permissions/${roleId}` : "/permissions/add",
           },
         ]}
       />
       <div className="flex flex-col gap-8 p-8 pt-0 bg-white rounded-b-2xl">
         <DashboardInput
-          label="اسم الصلاحية"
+          label={t("roleName")}
           value={roleName}
           onChange={setRoleName}
-          placeholder="مدير"
+          placeholder={t("roleNamePlaceholder")}
         />
       </div>
       <div className="px-8 py-4 space-y-8">
@@ -240,16 +226,20 @@ const AddPermissionPage = () => {
               ([sectionKey, permissions]) => (
                 <div key={sectionKey} className="space-y-4">
                   <PermissionsCard
-                    titleAr={formatSectionName(sectionKey)}
-                    titleEn={formatSectionName(sectionKey)}
+                    titleAr={t(`permissionSections.${sectionKey}`, {
+                      defaultValue: sectionKey,
+                    })}
+                    titleEn={t(`permissionSections.${sectionKey}`, {
+                      defaultValue: sectionKey,
+                    })}
                     selectedPermissions={permissions.map((permission) => ({
                       permission: {
-                        titleAr: permission
-                          .replace(/_/g, " ")
-                          .replace(/\b\w/g, (l) => l.toUpperCase()),
-                        titleEn: permission
-                          .replace(/_/g, " ")
-                          .replace(/\b\w/g, (l) => l.toUpperCase()),
+                        titleAr: t(`permissionNames.${permission}`, {
+                          defaultValue: permission,
+                        }),
+                        titleEn: t(`permissionNames.${permission}`, {
+                          defaultValue: permission,
+                        }),
                       },
                       isSelected: selectedPermissions.includes(permission),
                     }))}
@@ -268,14 +258,14 @@ const AddPermissionPage = () => {
           let buttonTitleEn: string;
 
           if (isSubmitting) {
-            buttonTitleAr = "جاري الحفظ...";
-            buttonTitleEn = "Saving...";
+            buttonTitleAr = t("saving");
+            buttonTitleEn = t("saving");
           } else if (isEdit) {
-            buttonTitleAr = "تعديل";
-            buttonTitleEn = "Update";
+            buttonTitleAr = t("update");
+            buttonTitleEn = t("update");
           } else {
-            buttonTitleAr = "اضافة";
-            buttonTitleEn = "Add";
+            buttonTitleAr = t("add");
+            buttonTitleEn = t("add");
           }
 
           return (
