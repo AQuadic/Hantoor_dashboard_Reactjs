@@ -194,7 +194,9 @@ export function UserTable({
             <TableCell>{user.search_histories_count}</TableCell>
             <TableCell>{"-"}</TableCell>
             <TableCell>{"-"}</TableCell>
-            <TableCell>{"-"}</TableCell>
+            <TableCell>
+              {user.country?.currency_text?.[i18n.language as "ar" | "en"] ?? "-"}
+            </TableCell>
             <TableCell>
               {formatLastOnline(user.last_online, i18n.language)}
             </TableCell>

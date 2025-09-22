@@ -61,12 +61,12 @@ const AddPermissionPage = () => {
       // Navigate back to subordinates page with permissions tab
       navigate("/subordinates");
     },
-    onError: (error: unknown) => {
-      console.error("Error creating role:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to create role";
-      toast.error(t("failedToCreateRole") || errorMessage);
-    },
+    // onError: (error: unknown) => {
+    //   console.error("Error creating role:", error);
+    //   const errorMessage =
+    //     error instanceof Error ? error.message : "Failed to create role";
+    //   toast.error(t("failedToCreateRole") || errorMessage);
+    // },
   });
 
   // Update role mutation
@@ -151,18 +151,18 @@ const AddPermissionPage = () => {
 
   // Handle form submission
   const handleSubmit = async () => {
-    if (!roleName.trim()) {
-      toast.error(t("pleaseEnterRoleName") || "Please enter a role name");
-      return;
-    }
+    // if (!roleName.trim()) {
+    //   toast.error(t("pleaseEnterRoleName") || "Please enter a role name");
+    //   return;
+    // }
 
-    if (selectedPermissions.length === 0) {
-      toast.error(
-        t("selectAtLeastOnePermission") ||
-          "Please select at least one permission"
-      );
-      return;
-    }
+    // if (selectedPermissions.length === 0) {
+    //   toast.error(
+    //     t("selectAtLeastOnePermission") ||
+    //       "Please select at least one permission"
+    //   );
+    //   return;
+    // }
 
     setIsSubmitting(true);
 
@@ -188,8 +188,16 @@ const AddPermissionPage = () => {
           permissions: selectedPermissions,
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Form submission error:", error);
+      const backendMsg =
+        error?.response?.data?.message ||
+        error?.response?.data?.error || 
+        error?.message || 
+        "An unexpected error occurred";
+
+      toast.error(backendMsg);
+    } finally {
       setIsSubmitting(false);
     }
   };
