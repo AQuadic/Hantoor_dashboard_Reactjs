@@ -185,7 +185,7 @@ export function UserTable({
             <TableCell dir="ltr">{user.phone || "-"}</TableCell>
             <TableCell>{user.email || "-"}</TableCell>
             <TableCell>{formatDate(user.created_at, i18n.language)}</TableCell>
-            <TableCell>{user.signup_with}</TableCell>
+            <TableCell>{user.created_by}</TableCell>
             <TableCell>{user.country ? user.country.name.en : "-"}</TableCell>
             <TableCell>{user.search_histories_count}</TableCell>
             <TableCell>{"-"}</TableCell>

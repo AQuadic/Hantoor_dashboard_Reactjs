@@ -25,6 +25,7 @@ export interface AdminUser {
   country_id?: number;
   city_id?: number;
   created_at: string;
+  created_by: string;
   updated_at: string;
   last_online: string;
   country?: Country | null;
