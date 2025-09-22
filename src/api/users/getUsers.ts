@@ -31,6 +31,7 @@ export interface AdminUser {
   last_online: string;
   country?: Country | null;
   search_histories_count?: string;
+  favorite_cars_count?: string;
   is_active: boolean;
   image?: AdminUserImage | null;
   blocked_until?: string | null;
