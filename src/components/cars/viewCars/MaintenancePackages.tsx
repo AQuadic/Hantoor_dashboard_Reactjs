@@ -75,9 +75,9 @@ const MaintenancePackages = ({ packages, refetch }: MaintenancePackagesProps) =>
           <TableHeader>
             <TableRow>
               <TableHead className="text-right">#</TableHead>
-              <TableHead className="text-right">المدة/المسافة</TableHead>
-              <TableHead className="text-right">السعر</TableHead>
-              <TableHead className="text-right">الحالة</TableHead>
+              <TableHead className="text-right">{t('durationDistance')}</TableHead>
+              <TableHead className="text-right">{t('price')}</TableHead>
+              <TableHead className="text-right">{t('status')}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>

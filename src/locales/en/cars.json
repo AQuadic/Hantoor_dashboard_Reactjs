@@ -91,5 +91,13 @@
   "offerDeleted": "Offer deleted successfully",
   "rentToOwnDeleted": "Rent-to-own data has been deleted successfully",
   "noImage": "No Image",
-  "pleaseSelectCountry": "Please select a country"
+  "pleaseSelectCountry": "Please select a country",
+  "priceIncludesTax": "Price (Tax Included)",
+  "priceIncludesWarranty": "Price (Warranty Included)",
+  "priceIncludesInsurance": "Price (Insurance Included)",
+  "addedAt": "Date & Time Added",
+  "name": "Name",
+  "details": "Details",
+  "durationDistance": "Duration/Distance",
+  "duration": "Duration"
 }

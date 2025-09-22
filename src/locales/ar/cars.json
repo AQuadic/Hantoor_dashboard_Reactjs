@@ -91,5 +91,13 @@
   "offerDeleted": "تم حذف الأوفر بنجاح",
   "rentToOwnDeleted": "تم حذف بيانات التقسيط بنجاح",
   "noImage": "لا توجد صورة",
-  "pleaseSelectCountry": "يرجى اختيار الدولة"
+  "pleaseSelectCountry": "يرجى اختيار الدولة",
+  "priceIncludesTax": "السعر شامل الضريبة",
+  "priceIncludesWarranty": "السعر شامل الضمان",
+  "priceIncludesInsurance": "السعر شامل التأمين",
+  "addedAt": "تاريخ ووقت الإضافة",
+  "name": "الاسم",
+  "details": "التفاصيل",
+  "durationDistance": "المدة/المسافة",
+  "duration": "المدة"
 }

@@ -16,9 +16,10 @@ import { deleteOffers } from "@/api/vehicles/offers/deleteOffer";
 import { updateOffer, UpdateOfferRequest } from "@/api/vehicles/offers/updateOffers";
 import { useState } from "react";
 import NoData from "@/components/general/NoData";
+import TableImagePlaceholder from "@/components/general/TableImagePlaceholder";
 
 const Offers = ({ offers }: { offers: Offer[] }) => {
-  const { t } = useTranslation("cars");
+  const { t, i18n } = useTranslation("cars");
   const queryClient = useQueryClient();
   const [localOffers, setLocalOffers] = useState<Offer[]>(offers);
 
@@ -70,10 +71,10 @@ const Offers = ({ offers }: { offers: Offer[] }) => {
           <TableHeader>
             <TableRow>
               <TableHead className="text-right ">#</TableHead>
-              <TableHead className="text-right ">الصورة</TableHead>
-              <TableHead className="text-right w-[10%]">الاسم</TableHead>
-              <TableHead className="text-right w-full">تفاصيل</TableHead>
-              <TableHead className="text-right">الحالة</TableHead>
+              <TableHead className="text-right ">{t('image')}</TableHead>
+              <TableHead className="text-right w-[10%]">{t('name')}</TableHead>
+              <TableHead className="text-right w-full">{t('details')}</TableHead>
+              <TableHead className="text-right">{t('status')}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -89,11 +90,15 @@ const Offers = ({ offers }: { offers: Offer[] }) => {
                       className="w-16 h-16 object-cover rounded"
                     />
                   ) : (
-                    <span>-</span>
+                    <TableImagePlaceholder />
                   )}
                 </TableCell>
-                <TableCell>{offer.name.ar || offer.name.en || "-"}</TableCell>
-                <TableCell>{offer.description.ar || offer.description.en || "-"}</TableCell>
+                <TableCell>
+                  {t(offer.name[i18n.language as "ar" | "en"] || offer.name.en || offer.name.ar || "-")}
+                </TableCell>
+                <TableCell>
+                  {t(offer.description[i18n.language as "ar" | "en"] || offer.description.en || offer.description.ar || "-")}
+                </TableCell>
 
                 <TableCell className="flex items-center gap-2">
                   <Switch

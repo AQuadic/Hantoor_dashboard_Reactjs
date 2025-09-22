@@ -15,6 +15,7 @@ import toast from "react-hot-toast";
 import { useTranslation } from "react-i18next";
 import { useState, useEffect } from "react";
 import NoData from "@/components/general/NoData";
+import TableImagePlaceholder from "@/components/general/TableImagePlaceholder";
 
 interface AccessoriesProps {
   accessories: Accessory[];
@@ -22,7 +23,7 @@ interface AccessoriesProps {
 }
 
 const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
-  const { t } = useTranslation("cars");
+  const { t, i18n } = useTranslation("cars");
 
   const [localAccessories, setLocalAccessories] = useState<Accessory[]>(accessories);
 
@@ -74,10 +75,10 @@ const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
           <TableHeader>
             <TableRow>
               <TableHead className="text-right">#</TableHead>
-              <TableHead className="text-right">الصورة</TableHead>
-              <TableHead className="text-right">الاسم</TableHead>
-              <TableHead className="text-right">السعر</TableHead>
-              <TableHead className="text-right">الحالة</TableHead>
+              <TableHead className="text-right">{t('image')}</TableHead>
+              <TableHead className="text-right">{t('name')}</TableHead>
+              <TableHead className="text-right">{t('price')}</TableHead>
+              <TableHead className="text-right">{t('status')}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -93,13 +94,13 @@ const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
                       className="w-16 h-16 object-cover rounded"
                     />
                   ) : (
-                    <span>-</span>
+                    <TableImagePlaceholder />
                   )}
                 </TableCell>
                 <TableCell>
-                  {accessory.name.ar || accessory.name.en || "-"}
+                  {t(accessory.name[i18n.language as "ar" | "en"] || accessory.name.en || accessory.name.ar || "-")}
                 </TableCell>
-                <TableCell className="w-full">{accessory.price} درهم</TableCell>
+                <TableCell className="w-full">{accessory.price}</TableCell>
                 <TableCell className="flex items-center gap-[7px]">
                   <Switch
                     isSelected={accessory.is_active}

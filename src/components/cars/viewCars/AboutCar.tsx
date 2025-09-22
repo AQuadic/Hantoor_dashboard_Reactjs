@@ -12,7 +12,7 @@ interface AboutCarProps {
 }
 
 const AboutCar = ({ vehicle }: AboutCarProps) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation('cars');
   const lang = i18n.language;
   const navigate = useNavigate ()
   const insuranceData = [
@@ -55,22 +55,22 @@ const AboutCar = ({ vehicle }: AboutCarProps) => {
           <TableHeader>
             <TableRow>
               <TableHead className="text-right min-w-[15%]">
-                السعر شامل الضريبة
+                {t('priceIncludesTax')}
               </TableHead>
               <TableHead className="text-right min-w-[15%]">
-                السعر شامل الضمان
+                {t('priceIncludesWarranty')}
               </TableHead>
               <TableHead className="text-right min-w-[15%]">
-                السعر شامل التأمين
+                {t('priceIncludesInsurance')}
               </TableHead>
               <TableHead className="text-right min-w-[15%]">
-                اسم الوكيل
+                {t('agentName')}
               </TableHead>
               <TableHead className="text-right min-w-[15%]">
-                إيجار منتهي بالتمليك
+                {t('leaseToOwn')}
               </TableHead>
               <TableHead className="text-right w-full">
-                تاريخ ووقت الإضافة
+                {t('addedAt')}
               </TableHead>
               <TableHead className="text-right min-w-[15%]">
                 

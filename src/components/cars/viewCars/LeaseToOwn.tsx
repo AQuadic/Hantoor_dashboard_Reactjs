@@ -14,7 +14,7 @@ interface LeaseToOwnProps {
 }
 
 const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
-  const { t } = useTranslation("cars");
+  const { t, i18n } = useTranslation("cars");
   const queryClient = useQueryClient();
 
   const [isRentToOwn, setIsRentToOwn] = useState(vehicle?.is_rent_to_own || false);
@@ -94,7 +94,7 @@ const handleDelete = async () => {
 
   const rentToOwnData = [
     {
-      duration: isRentToOwn ? `${vehicle.rent_to_own_duration} سنة` : "-",
+      duration: isRentToOwn ? `${vehicle.rent_to_own_duration} ` : "-",
       price: isRentToOwn ? vehicle.rent_to_own_price || "-" : "-",
     },
   ];
@@ -113,9 +113,9 @@ const handleDelete = async () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="text-right">السعر</TableHead>
-              <TableHead className="text-right">المدة</TableHead>
-              <TableHead className="text-right">الحالة</TableHead>
+              <TableHead className="text-right">{t('price')}</TableHead>
+              <TableHead className="text-right">{t('duration')}</TableHead>
+              <TableHead className="text-right">{t('status')}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>

@@ -1,11 +1,16 @@
 import { VehicleVideo } from "@/api/vehicles/getVehicleById";
 import React from "react";
+import NoData from "@/components/general/NoData";
 
 interface VideosProps {
   video?: VehicleVideo | null;
 }
 
 const Videos: React.FC<VideosProps> = ({ video }) => {
+  if (!video || !video.url) {
+    return <NoData />;
+  }
+
     return (
         <section className="mt-4 flex flex-wrap gap-4 md:mx-8 mx-0">
             {video?.url ? (
