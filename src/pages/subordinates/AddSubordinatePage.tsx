@@ -112,7 +112,7 @@ const AddSubordinatePage = () => {
         // Prefill phone number and country for edit mode.
         const phoneVal =
           data.phone ||
-          data.phone_national ||
+          data.phone_national?.replace(/\s/g, "") ||
           data.phone_e164 ||
           data.phone_normalized ||
           data.mobile ||
@@ -129,6 +129,9 @@ const AddSubordinatePage = () => {
         // Set role if available - roles is an array of objects with name property
         if (data.roles && data.roles.length > 0) {
           setSelectedRole(data.roles[0].name);
+        }
+        if (data.phone_country) {
+          setSelectedCountry(getCountryByIso2(data.phone_country));
         }
       } catch (err: unknown) {
         const message = extractErrorMessage(err) || "Failed to load admin data";
