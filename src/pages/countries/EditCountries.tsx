@@ -145,7 +145,7 @@ const EditCountries = () => {
                 type="number"
                 value={serviceDuration}
                 onChange={(e) => setServiceDuration(e.target.value)}
-                className="w-10 text-gray-500 text-sm text-center"
+                className="w-10 text-black text-sm text-center"
               />
               <select
                 className="text-blue-600 bg-transparent focus:outline-none text-sm cursor-pointer"
