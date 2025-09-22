@@ -30,6 +30,9 @@
   "addedSuccessfully": "Added successfully",
   "editedSuccessfully": "Edited successfully",
 
+  "requiredArQuestion": "Question (in Arabic) is required",
+  "requiredEnQuestion": "Question (in English) is required",
+
   "conversationDeleted": "Conversation deleted successfully",
   "conversationUpdated": "Conversation updated successfully",
 

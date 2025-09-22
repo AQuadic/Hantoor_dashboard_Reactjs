@@ -1,6 +1,6 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import DashboardTextEditor from "@/components/general/DashboardTextEditor";
+// DashboardTextEditor removed from this screen per requirements (answers are now sent as fake payloads)
 import DashboardInput from "@/components/general/DashboardInput";
 import {
   Select,
@@ -11,7 +11,11 @@ import {
 } from "@/components/ui/select";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { CountriesResponse, Country, getCountries } from "@/api/countries/getCountry";
+import {
+  CountriesResponse,
+  Country,
+  getCountries,
+} from "@/api/countries/getCountry";
 import { useQuery } from "@tanstack/react-query";
 import { FAQ, getFAQById } from "@/api/faq/getFaqById";
 import { updateFaq, FaqPayload } from "@/api/faq/editFaq";
@@ -24,17 +28,18 @@ const EditQuestion = () => {
   const { id: faqId } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [arBody, setArBody] = useState("");
-  const [enBody, setEnBody] = useState("");
+  // answers removed from UI; we still keep local values for parsing but they won't be editable
+  // answers removed from UI and not stored/edited anymore
   const [arQuestion, setArQuestion] = useState("");
   const [enQuestion, setEnQuestion] = useState("");
   const [countryId, setCountryId] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
-  const { data: countriesData, isLoading: countriesLoading } = useQuery<CountriesResponse>({
-    queryKey: ["countries"],
-    queryFn: () => getCountries(1),
-  });
+  const { data: countriesData, isLoading: countriesLoading } =
+    useQuery<CountriesResponse>({
+      queryKey: ["countries"],
+      queryFn: () => getCountries(1),
+    });
 
   useEffect(() => {
     if (!faqId) return;
@@ -48,18 +53,7 @@ const EditQuestion = () => {
         setArQuestion(data.question?.ar || "");
         setEnQuestion(data.question?.en || "");
 
-        const parseAnswer = (val?: string) => {
-          if (!val) return "";
-          try {
-            const parsed = JSON.parse(val);
-            return parsed?.[0]?.children?.[0]?.text || "";
-          } catch {
-            return val;
-          }
-        };
-
-        setArBody(parseAnswer(data.answer?.ar));
-        setEnBody(parseAnswer(data.answer?.en));
+        // answers are not editable in the UI; we ignore stored answers when editing
       } catch (error) {
         console.error("Failed to fetch FAQ:", error);
         toast.error("Failed to fetch FAQ data");
@@ -74,17 +68,36 @@ const EditQuestion = () => {
   const handleSave = async () => {
     if (!faqId) return;
 
+    if (!countryId) {
+      toast.error(t("setting:pleaseSelectCountry"));
+      return;
+    }
+
+    // validate required question fields
+    if (!arQuestion || arQuestion.trim() === "") {
+      toast.error(t("requiredArQuestion"));
+      return;
+    }
+    if (!enQuestion || enQuestion.trim() === "") {
+      toast.error(t("requiredEnQuestion"));
+      return;
+    }
+
     const payload: FaqPayload = {
       country_id: countryId,
       type: "Technical Support Questions",
       question: { ar: arQuestion, en: enQuestion },
-      answer: { ar: arBody, en: enBody },
+      // send a fake answer object with `value` property as required by API
+      answer: {
+        ar: JSON.stringify({ value: "" }),
+        en: JSON.stringify({ value: "" }),
+      },
     };
 
     try {
       setLoading(true);
       await updateFaq(faqId, payload);
-      toast.success(t('editedSuccessfully'));
+      toast.success(t("editedSuccessfully"));
       navigate("/technical-support");
     } catch {
       toast.error("Failed to update FAQ");
@@ -93,7 +106,7 @@ const EditQuestion = () => {
     }
   };
 
-  if (loading || countriesLoading) return <Loading />
+  if (loading || countriesLoading) return <Loading />;
 
   return (
     <section>
@@ -118,7 +131,10 @@ const EditQuestion = () => {
               value={countryId}
               disabled={countriesLoading || !countriesData?.data?.length}
             >
-              <SelectTrigger className="w-full !h-16 rounded-[12px] mt-4" dir="rtl">
+              <SelectTrigger
+                className="w-full !h-16 rounded-[12px] mt-4"
+                dir="rtl"
+              >
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
               <SelectContent dir="rtl">
@@ -152,24 +168,7 @@ const EditQuestion = () => {
           </div>
         </div>
 
-        <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
-          {/* Arabic Question */}
-          <div className="relative w-full">
-            <DashboardTextEditor
-              title={t("arAnswer")}
-              body={arBody}
-              setBody={setArBody}
-            />
-          </div>
-          {/* English Question */}
-          <div className="relative w-full">
-            <DashboardTextEditor
-              title={t("enAnswer")}
-              body={enBody}
-              setBody={setEnBody}
-            />
-          </div>
-        </div>
+        {/* Answers removed from UI - payload will include a fake answer with `value` */}
 
         <div className="mt-4">
           <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />

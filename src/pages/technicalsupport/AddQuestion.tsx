@@ -1,6 +1,6 @@
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
-import DashboardTextEditor from "@/components/general/DashboardTextEditor";
+// DashboardTextEditor removed from this screen per requirements (answers are now sent as fake payloads)
 import DashboardInput from "@/components/general/DashboardInput";
 import {
   Select,
@@ -14,15 +14,18 @@ import { useTranslation } from "react-i18next";
 import { createFAQ, CreateFAQPayload } from "@/api/faq/addFaq";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import { CountriesResponse, Country, getCountries } from "@/api/countries/getCountry";
+import {
+  CountriesResponse,
+  Country,
+  getCountries,
+} from "@/api/countries/getCountry";
 import { useNavigate } from "react-router";
 
 const AddQuestions = () => {
   const { t } = useTranslation("questions");
 
   const [countryId, setCountryId] = React.useState<string>();
-  const [arBody, setArBody] = React.useState("");
-  const [enBody, setEnBody] = React.useState("");
+  // answers removed from UI; we'll send a fake value in the payload
   const [arQuestion, setArQuestion] = React.useState("");
   const [enQuestion, setEnQuestion] = React.useState("");
   const navigate = useNavigate();
@@ -30,16 +33,27 @@ const AddQuestions = () => {
   const [type] = useState<"Frequent Questions" | "Technical Support Questions">(
     "Technical Support Questions"
   );
-    const [, setErrors] = useState<Record<string, string[]>>({});
-  
-  const { data: countriesData, isLoading: countriesLoading } = useQuery<CountriesResponse>({
+  const [, setErrors] = useState<Record<string, string[]>>({});
+
+  const { data: countriesData, isLoading: countriesLoading } =
+    useQuery<CountriesResponse>({
       queryKey: ["countries"],
       queryFn: () => getCountries(1),
     });
 
-      const handleSubmit = async () => {
+  const handleSubmit = async () => {
     if (!countryId) {
-      toast.error(t("Please select a country"));
+      toast.error(t("setting:pleaseSelectCountry"));
+      return;
+    }
+
+    // validate required question fields
+    if (!arQuestion || arQuestion.trim() === "") {
+      toast.error(t("requiredArQuestion"));
+      return;
+    }
+    if (!enQuestion || enQuestion.trim() === "") {
+      toast.error(t("requiredEnQuestion"));
       return;
     }
 
@@ -47,7 +61,11 @@ const AddQuestions = () => {
       type,
       country_id: countryId,
       question: { ar: arQuestion, en: enQuestion },
-      answer: { ar: arBody, en: enBody },
+      // send a fake answer object with `value` property as required
+      answer: {
+        ar: JSON.stringify({ value: "" }),
+        en: JSON.stringify({ value: "" }),
+      },
     };
 
     setLoading(true);
@@ -59,8 +77,6 @@ const AddQuestions = () => {
         toast.success(t("addedSuccessfully"));
         setArQuestion("");
         setEnQuestion("");
-        setArBody("");
-        setEnBody("");
         setCountryId(undefined);
         setErrors({});
         navigate("/technical-support");
@@ -80,8 +96,6 @@ const AddQuestions = () => {
       }
     }
   };
-
-
 
   return (
     <section>
@@ -105,7 +119,10 @@ const AddQuestions = () => {
               onValueChange={(value) => setCountryId(value)}
               disabled={countriesLoading || !countriesData?.data?.length}
             >
-              <SelectTrigger className="w-full !h-16 rounded-[12px] mt-4" dir="rtl">
+              <SelectTrigger
+                className="w-full !h-16 rounded-[12px] mt-4"
+                dir="rtl"
+              >
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
               <SelectContent dir="rtl">
@@ -139,27 +156,14 @@ const AddQuestions = () => {
           </div>
         </div>
 
-        <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
-          {/* Arabic Answer */}
-          <div className="relative w-full">
-            <DashboardTextEditor
-              title={t("arAnswer")}
-              body={arBody}
-              setBody={setArBody}
-            />
-          </div>
-          {/* English Answer */}
-          <div className="relative w-full">
-            <DashboardTextEditor
-              title={t("enAnswer")}
-              body={enBody}
-              setBody={setEnBody}
-            />
-          </div>
-        </div>
+        {/* Answers removed from UI - payload will include a fake answer with `value` */}
 
         <div className="mt-4">
-          <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit} />
+          <DashboardButton
+            titleAr="اضافة"
+            titleEn="Add"
+            onClick={handleSubmit}
+          />
         </div>
       </div>
     </section>

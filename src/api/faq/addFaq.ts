@@ -30,7 +30,34 @@ export const createFAQ = async (
   payload: CreateFAQPayload
 ): Promise<CreateFAQResponse> => {
   try {
-    const response = await axios.post<CreateFAQResponse>("/admin/faqs", payload);
+    // ensure answer fields follow expected structure: JSON string with { value }
+    const safePayload = { ...payload } as any;
+    if (safePayload.answer) {
+      if (typeof safePayload.answer.ar === "string") {
+        try {
+          JSON.parse(safePayload.answer.ar);
+          // already JSON - leave as is
+        } catch {
+          safePayload.answer.ar = JSON.stringify({
+            value: safePayload.answer.ar,
+          });
+        }
+      }
+      if (typeof safePayload.answer.en === "string") {
+        try {
+          JSON.parse(safePayload.answer.en);
+        } catch {
+          safePayload.answer.en = JSON.stringify({
+            value: safePayload.answer.en,
+          });
+        }
+      }
+    }
+
+    const response = await axios.post<CreateFAQResponse>(
+      "/admin/faqs",
+      safePayload
+    );
     return response.data;
   } catch (error: any) {
     if (error.response) return error.response.data;

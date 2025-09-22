@@ -31,6 +31,9 @@
   "addedSuccessfully": "تمت الاضافة بنجاح",
   "editedSuccessfully": "تم التعديل بنجاح",
 
+  "requiredArQuestion": "السؤال ( باللغة العربية ) مطلوب",
+  "requiredEnQuestion": "السؤال ( باللغة الانجليزية ) مطلوب",
+
   "conversationDeleted": "تم حذف المحادثة بنجاح",
   "conversationUpdated": "تم تحديث المحادثة بنجاح",
 
