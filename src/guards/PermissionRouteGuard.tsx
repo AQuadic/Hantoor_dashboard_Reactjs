@@ -33,24 +33,8 @@ const PermissionRouteGuard: React.FC<PermissionRouteGuardProps> = ({
     return () => clearTimeout(timer);
   }, []);
 
-  // Debug logging for troubleshooting
-  console.log("🛡️ PermissionRouteGuard state:", {
-    path: location.pathname,
-    requiredPermissions,
-    authLoading,
-    isAuthenticated,
-    isLoading,
-    isLoaded,
-    permissionCount: permissions.length,
-    error: !!error,
-  });
-
   // Wait for initial setup and auth to finish loading
   if (isInitializing || authLoading) {
-    console.log("🛡️ Waiting for initialization or auth to load...", {
-      isInitializing,
-      authLoading,
-    });
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
