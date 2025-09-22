@@ -9,6 +9,8 @@ import {
   UpdateSettingsPayload,
 } from "@/api/setting/updateSetting";
 import { GeneralSettingsResponse, getSettings } from "@/api/setting/getSetting";
+import { uploadLangCountryImage } from "@/api/setting/uploadLangCountryImage";
+import { chooseLangCountryImage } from "@/api/setting/chooseLangCountryImage";
 
 const GeneralSettings = () => {
   const { t } = useTranslation("setting");
@@ -63,10 +65,29 @@ const GeneralSettings = () => {
           iphone_date: data.appLinks?.ios?.release_date ?? "",
         });
 
-        if (data.profile_image) {
-          // keep the URL to show existing image; do not convert to File
-          setExistingProfileImageUrl(data.profile_image);
-          setProfileImage(null);
+        // Try to fetch chosen image from dedicated endpoint and prefer it if present
+        try {
+          const chosen = await chooseLangCountryImage();
+          // backend may return just { image_url: '...' } or { data: { image_url: '...' } }
+          const chosenUrl =
+            chosen?.image_url ??
+            chosen?.data?.image ??
+            chosen?.data?.profile_image ??
+            chosen?.data?.image_url;
+          if (chosenUrl) {
+            setExistingProfileImageUrl(chosenUrl);
+            setProfileImage(null);
+          } else if (data.profile_image) {
+            setExistingProfileImageUrl(data.profile_image);
+            setProfileImage(null);
+          }
+        } catch (e) {
+          console.warn("chooseLangCountryImage failed:", e);
+          // fallback to settings.profile_image if choose endpoint fails
+          if (data.profile_image) {
+            setExistingProfileImageUrl(data.profile_image);
+            setProfileImage(null);
+          }
         }
       } catch (error: unknown) {
         const message = error instanceof Error ? error.message : String(error);
@@ -85,7 +106,10 @@ const GeneralSettings = () => {
     sectionKey: keyof typeof loadingStates
   ) => {
     const emptyFields = keys.filter((key) => {
-      if (key === "profile_image") return !profileImage;
+      if (key === "profile_image") {
+        // allow saving if there's an existing image URL or a newly picked file
+        return !profileImage && !existingProfileImageUrl;
+      }
       return !fields[key as keyof typeof fields]?.trim();
     });
 
@@ -171,14 +195,57 @@ const GeneralSettings = () => {
     }
 
     if (keys.includes("profile_image")) {
-      if (profileImage) {
-        toast.error(t("imageUploadNotSupported"));
-        return;
-      }
+      // For profile image: either upload a new file or send remove flag
+      // If no file and no existing URL, it's invalid (handled above).
     }
 
     try {
       setLoadingStates((prev) => ({ ...prev, [sectionKey]: true }));
+      // If updating profile image, build payload accordingly
+      if (keys.includes("profile_image")) {
+        // If there's a new file, upload it to the dedicated endpoint then refresh
+        if (profileImage) {
+          const uploadResp = await uploadLangCountryImage(profileImage);
+          toast.success(uploadResp.message || t("savedSuccessfully"));
+          // After uploading, try the choose endpoint first (it may return image_url directly)
+          const chosenAfter = await chooseLangCountryImage();
+          const newUrl =
+            chosenAfter?.image_url ??
+            chosenAfter?.data?.image ??
+            chosenAfter?.data?.profile_image ??
+            chosenAfter?.data?.image_url;
+          if (newUrl) {
+            setExistingProfileImageUrl(newUrl);
+            setProfileImage(null);
+          } else {
+            // fallback to getSettings
+            const data: GeneralSettingsResponse = await getSettings();
+            setExistingProfileImageUrl(data.profile_image ?? null);
+            setProfileImage(null);
+          }
+          return;
+        }
+
+        // No file -> user removed existing image, call updateSettings with remove flag
+        const response = await updateSettings({ remove_image: true });
+        toast.success(response.message || t("savedSuccessfully"));
+        // After removal, try choose endpoint to see if it returns a replacement image_url
+        const chosenAfterRemove = await chooseLangCountryImage();
+        const afterRemoveUrl =
+          chosenAfterRemove?.image_url ??
+          chosenAfterRemove?.data?.image ??
+          chosenAfterRemove?.data?.profile_image ??
+          chosenAfterRemove?.data?.image_url;
+        if (afterRemoveUrl) {
+          setExistingProfileImageUrl(afterRemoveUrl);
+        } else {
+          const data: GeneralSettingsResponse = await getSettings();
+          setExistingProfileImageUrl(data.profile_image ?? null);
+        }
+        setProfileImage(null);
+        return;
+      }
+
       const response = await updateSettings(payload);
       toast.success(response.message || t("savedSuccessfully"));
     } catch (error: unknown) {
