@@ -392,7 +392,7 @@ const formatDate = (dateString: string) => {
                   {translateYesNo(vehicle.is_Insurance_warranty)}
                 </TableCell>
                 <TableCell>{translateYesNo(vehicle.is_rent_to_own)}</TableCell>
-                <TableCell>{vehicle.views || 0}</TableCell>
+                <TableCell>{vehicle.favorites_count || 0}</TableCell>
                 <TableCell>
                   {vehicle.created_at ? formatDate(vehicle.created_at) : "-"}
                 </TableCell>
