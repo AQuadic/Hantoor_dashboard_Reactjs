@@ -1,10 +1,18 @@
 import { axios } from "@/lib/axios";
 
+export interface UserImage {
+  file_name: string;
+  url: string;
+  mime_type: string;
+  responsive_urls: string[];
+  uuid: string;
+}
+
 export interface User {
   id: number;
   name: string;
   email: string;
-  image: string | null;
+  image: UserImage | null;
   created_at?: string | null;
 }
 

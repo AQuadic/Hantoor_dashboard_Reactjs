@@ -19,6 +19,7 @@ import {
   ConversationApiResponse,
   fetchConversation,
 } from "@/api/chats/fetchConversationById";
+import TableImagePlaceholder from "@/components/general/TableImagePlaceholder";
 
 interface ConversationPageProps {
   conversationId?: number | null;
@@ -261,11 +262,15 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
             <div key={message.id} className="flex flex-col items-start gap-2">
               <div className="flex items-start gap-2">
                 {/* Avatar */}
-                <img
-                  src={message.user?.image || Avatar}
-                  alt={message.user?.name || "User"}
-                  className="w-8 h-8 rounded-full"
-                />
+              {message.user?.image?.url ? (
+                  <img
+                    src={message.user.image.url}
+                    alt={message.user?.name || "User"}
+                    className="w-8 h-8 rounded-full"
+                  />
+                ) : (
+                  <TableImagePlaceholder />
+                )}
 
                 {/* Name + Time + Bubble */}
                 <div>
