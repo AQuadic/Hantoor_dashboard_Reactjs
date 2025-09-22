@@ -19,7 +19,7 @@ const AddCategories = () => {
 
 
   const handleAddCategory = async () => {
-    if (!arName || !enName || !selectedCarType) {
+    if (!arName || !enName) {
       toast.error(t("fillAllFields"));
       return;
     }
