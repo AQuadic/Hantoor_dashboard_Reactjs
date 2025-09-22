@@ -87,22 +87,7 @@ const BrandsPage = () => {
   const [selectedTab, setSelectedTab] = useState(sectionParam);
   const [currentPage, setCurrentPage] = useState(pageParam);
 
-  // Wrapper functions that update both state and URL
-  const handleTabChange = useCallback(
-    (value: React.SetStateAction<string>) => {
-      const newTab = typeof value === "function" ? value(selectedTab) : value;
-      setSelectedTab(newTab);
-      setCurrentPage(1); // Reset page when changing tabs
-      setSearch("");
 
-      // Update URL when user changes tab
-      const newParams = new URLSearchParams(searchParams);
-      newParams.set("section", newTab);
-      newParams.set("page", "1");
-      setSearchParams(newParams, { replace: true });
-    },
-    [selectedTab, searchParams, setSearchParams]
-  );
 
   const handlePageChange = useCallback(
     (value: React.SetStateAction<number>) => {
@@ -127,6 +112,28 @@ const BrandsPage = () => {
     from: 0,
     to: 0,
   });
+
+  const handleTabChange = useCallback(
+  (value: React.SetStateAction<string>) => {
+    const newTab = typeof value === "function" ? value(selectedTab) : value;
+    setSelectedTab(newTab);
+    setCurrentPage(1);
+    setSearch("");
+    setDateRange(null);
+
+    const newParams = new URLSearchParams(searchParams);
+    newParams.set("section", newTab);
+    newParams.set("page", "1");
+    newParams.delete("dateFrom");
+    newParams.delete("dateTo");
+
+    setSearchParams(newParams, { replace: true });
+    },
+    [selectedTab, searchParams, setSearchParams, setDateRange]
+  );
+  useEffect(() => {
+    setDateRange(null);
+  }, [sectionParam]);
 
   const handleSetPagination = useCallback((meta: typeof paginationMeta) => {
     setPaginationMeta(meta);
