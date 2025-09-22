@@ -431,9 +431,17 @@ const EditBank = () => {
       } else {
         toast.error(res.message || t("failedToUpdateBank"));
       }
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("Update bank error:", error);
-      toast.error(t("updateBankError"));
+      if (error.response?.data?.errors) {
+        toast.error(
+          Object.values(error.response.data.errors)
+            .flat()
+            .join(", ")
+        );
+      } else {
+        toast.error(t("updateBankError"));
+      }
     } finally {
       setIsSubmitting(false);
     }
