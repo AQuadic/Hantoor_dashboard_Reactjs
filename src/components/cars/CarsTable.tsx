@@ -368,7 +368,9 @@ const formatDate = (dateString: string) => {
                 <TableCell>
                   {vehicle.agent?.name[i18n.language as "ar" | "en"]}
                 </TableCell>
-                <TableCell>-</TableCell>
+                <TableCell>
+                  {vehicle.vehicle_type?.name?.[i18n.language === "ar" ? "ar" : "en"] ?? "-"}
+                </TableCell>
                 <TableCell>
                   {vehicle.vehicle_model?.name[i18n.language as "ar" | "en"]}
                 </TableCell>
