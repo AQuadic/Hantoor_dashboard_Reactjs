@@ -91,5 +91,6 @@
     "categoryDeleted": "تم حذف الفئة بنجاح",
     "isRequired": "مطلوبة",
     "numbersMustMatch": "يجب أن تتطابق أعداد المقاعد باللغتين",
-    "priceMustMatch": "يجب أن يتطابق السعر باللغتين"
+    "priceMustMatch": "يجب أن يتطابق السعر باللغتين",
+    "categoryUpdated": "تم تعديل الفئة بنجاح"
 }

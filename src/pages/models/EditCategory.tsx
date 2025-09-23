@@ -18,7 +18,7 @@ const EditCategory = () => {
 
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
-  const [selectedCarType, setSelectedCarType] = useState<number | undefined>(
+  const [, setSelectedCarType] = useState<number | undefined>(
     undefined
   );
   const [, setLoading] = useState(false);
@@ -44,11 +44,9 @@ const EditCategory = () => {
 
   const handleSave = async () => {
     if (!id) return toast.error("ID not found");
-    if (!selectedCarType) return toast.error(t("Please select a vehicle type"));
 
     const payload: UpdateVehicleClassPayload = {
       name: { ar: arName, en: enName },
-      vehicle_type_id: selectedCarType.toString(),
     };
 
     try {
