@@ -128,6 +128,7 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
                 onChange={async (e) => {
                   // Prevent row click navigation when toggling
                   e.stopPropagation();
+                  if (country.banks_count === 0) return;
                   await handleToggleStatus(country, e.target.checked);
                 }}
               />
