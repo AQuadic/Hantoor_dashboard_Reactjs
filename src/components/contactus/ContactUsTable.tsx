@@ -25,6 +25,7 @@ import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import { updateSuggestion } from "@/api/suggestions/getSuggestionsById";
 import { DateFilterParams } from "@/hooks/useDatePicker";
+import { Country, getAllCountries } from "@/api/countries/getCountry";
 
 type ContactUsTableProps = {
   page: number;
@@ -45,7 +46,7 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
   setPerPage,
   setTotalItems,
 }) => {
-  const { t } = useTranslation("contactUs");
+  const { t, i18n } = useTranslation("contactUs");
   const [openMessageId, setOpenMessageId] = useState<number | null>(null);
 
   const { data, isLoading, refetch } = useQuery<SuggestionsResponse, Error>({
@@ -53,6 +54,14 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
     queryFn: () =>
       getSuggestions({ page, per_page: perPage, search, ...dateParams }),
   });
+
+  const { data: countriesData } = useQuery<Country[]>({
+    queryKey: ["countries"],
+    queryFn: () => getAllCountries(),
+  });
+  const countries: Country[] = Array.isArray(countriesData) ? countriesData : [];
+  const countryMap = new Map(countries.map((c) => [c.id, c]));
+
 
   // track ids that are currently being toggled to prevent duplicate presses
   const [togglingIds, setTogglingIds] = useState<number[]>([]);
@@ -113,7 +122,11 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
                 <TableCell>{message.name}</TableCell>
                 <TableCell dir="ltr">{message.phone}</TableCell>
                 <TableCell>{message.email}</TableCell>
-                <TableCell>{message.city}</TableCell>
+                <TableCell>
+                  {message.country?.name?.[i18n.language as "ar" | "en"] ||
+                    countryMap.get(message.country_id || -1)?.name?.[i18n.language as "ar" | "en"] ||
+                    "-"}
+                </TableCell>
                 <TableCell className="flex items-center gap-2">
                   <div
                     className="flex gap-[7px] items-center"

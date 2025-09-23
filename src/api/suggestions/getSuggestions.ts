@@ -13,6 +13,15 @@ export interface Suggestion {
   status: string;
   type: string;
   is_starred: boolean;
+  country_id?: number | null;
+  country?: {
+    id: number;
+    name: {
+      ar: string;
+      en: string;
+    };
+    code: string;
+  };
 }
 
 export interface SuggestionsResponse {
