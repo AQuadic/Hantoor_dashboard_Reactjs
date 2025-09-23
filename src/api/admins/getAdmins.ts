@@ -37,11 +37,27 @@ export interface GetAdminsParams {
   to_date?: string;
 }
 
+export interface PaginationMeta {
+  current_page: number;
+  from: number;
+  last_page: number;
+  path: string;
+  per_page: number;
+  to: number;
+  total: number;
+}
+
+export interface PaginationLinks {
+  first: string | null;
+  last: string | null;
+  prev: string | null;
+  next: string | null;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
-  current_page?: number;
-  per_page?: number;
-  total?: number;
+  meta: PaginationMeta;
+  links: PaginationLinks;
 }
 
 export async function getAdmins(

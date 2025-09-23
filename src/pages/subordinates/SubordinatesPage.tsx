@@ -66,18 +66,10 @@ const SubordinatesPage = () => {
     enabled: selectedFilter === "Permissions",
   });
 
-  const subordinatesTotalItems = subordinatesData?.total || 0;
-  const subordinatesTotalPages = Math.ceil(
-    subordinatesTotalItems / subordinatesItemsPerPage
-  );
-  const subordinatesFrom =
-    subordinatesTotalItems > 0
-      ? (subordinatesCurrentPage - 1) * subordinatesItemsPerPage + 1
-      : 0;
-  const subordinatesTo = Math.min(
-    subordinatesCurrentPage * subordinatesItemsPerPage,
-    subordinatesTotalItems
-  );
+  const subordinatesTotalItems = subordinatesData?.meta?.total || 0;
+  const subordinatesTotalPages = subordinatesData?.meta?.last_page || 1;
+  const subordinatesFrom = subordinatesData?.meta?.from || 0;
+  const subordinatesTo = subordinatesData?.meta?.to || 0;
 
   const permissionsTotalItems = permissionsData?.total || 0;
   const permissionsTotalPages = Math.ceil(
@@ -91,6 +83,7 @@ const SubordinatesPage = () => {
     permissionsCurrentPage * permissionsItemsPerPage,
     permissionsTotalItems
   );
+
 
   return (
     <section>
