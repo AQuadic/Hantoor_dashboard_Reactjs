@@ -51,6 +51,11 @@ const EditPriceTo = () => {
       toast.error(t("pleaseEnterPrice"));
       return;
     }
+      if (priceAr !== priceEn) {
+    toast.dismiss()
+    toast.error(t("priceMustMatch"));
+    return;
+  }
     if (!selectedCountry) {
       toast.error(t("pleaseSelectCountry"));
       return;

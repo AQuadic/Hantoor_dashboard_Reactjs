@@ -53,6 +53,12 @@ const EditPriceFrom = () => {
       return;
     }
 
+    if (priceAr !== priceEn) {
+      toast.dismiss()
+      toast.error(t("priceMustMatch"));
+      return;
+    }
+
     try {
       await updatePriceFrom(priceId, { name: priceAr });
       toast.success(t("priceUpdated"));

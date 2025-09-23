@@ -90,5 +90,6 @@
     "brand": "Brand",
     "categoryDeleted": "Category deleted successfully",
     "isRequired": "is required",
-    "numbersMustMatch": "Number of seats must match in both languages"
+    "numbersMustMatch": "Number of seats must match in both languages",
+    "priceMustMatch": "Price must match in both languages"
 }

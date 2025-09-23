@@ -29,8 +29,10 @@ const AddPriceTo = () => {
   });
 
   const handleSubmit = async () => {
-    if (!arPrice) {
-      alert(t("pleaseFillAllFields"));
+
+    if (arPrice !== enPrice) {
+      toast.dismiss()
+      toast.error(t("priceMustMatch"));
       return;
     }
 
