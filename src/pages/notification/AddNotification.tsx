@@ -85,7 +85,7 @@ const AddNotification = () => {
       type RpcError = { response?: { data?: { message?: string } } };
       const errorObj = err as RpcError;
       if (errorObj.response?.data?.message) {
-        toast.error(`Error: ${errorObj.response.data.message}`);
+        toast.error(` ${errorObj.response.data.message}`);
       } else {
         toast.error("Failed to send notification");
       }
