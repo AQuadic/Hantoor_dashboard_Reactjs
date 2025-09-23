@@ -4,10 +4,13 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import TabsFilter from "../general/dashboard/TabsFilter";
-import { RangeValue } from "@heroui/react";
+import { Select, SelectItem, RangeValue } from "@heroui/react";
 import { CalendarDate } from "@internationalized/date";
 import { usePermissions } from "@/hooks/usePermissions";
 import { useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Country, getAllCountries } from "@/api/countries/getCountry";
+import { useTranslation } from "react-i18next";
 
 interface SubordinatesHeaderProps {
   selectedFilter: string;
@@ -16,16 +19,33 @@ interface SubordinatesHeaderProps {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   dateRange?: RangeValue<CalendarDate> | null;
   setDateRange?: (range: RangeValue<CalendarDate> | null) => void;
+  selectedCountry: string | null;
+  setSelectedCountry: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   selectedFilter,
   setSelectedFilter,
+  search,
   setSearch,
   dateRange,
   setDateRange,
+  setSelectedCountry,
 }) => {
+  const { t, i18n } = useTranslation("users");
   const { hasPermission } = usePermissions();
+
+  const { data } = useQuery<Country[]>({
+    queryKey: ["countries"],
+    queryFn: () => getAllCountries(),
+  });
+
+  const countries: Country[] = Array.isArray(data) ? data : [];
+
+  const selectItems = countries.map((c) => ({
+    key: c.id.toString(),
+    label: i18n.language === "ar" ? c.name.ar : c.name.en,
+  }));
 
   // Filter tabs based on user permissions
   const filtersData = useMemo(() => {
@@ -154,8 +174,8 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
         <SearchBar
-          termAr={""}
-          termEn={""}
+          termAr={search}
+          termEn={search}
           setTermAr={setSearch}
           setTermEn={setSearch}
           placeholderAr={placeholder.ar}
@@ -174,6 +194,22 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
           />
         </Link>
       </div>
+
+      {(selectedFilter === "Price From" || selectedFilter === "Price To") && (
+        <div className="w-[160px] mt-3 md:mx-8 mx-0">
+          <Select
+              items={selectItems}
+              label={t("country")}
+              placeholder={t("all")}
+              onSelectionChange={(selection) => {
+                const key = [...selection][0];
+                setSelectedCountry(key !== undefined ? key.toString() : null);
+              }}
+            >
+              {(country) => <SelectItem key={country.key}>{country.label}</SelectItem>}
+            </Select>
+                    </div>
+          )}
     </div>
   );
 };

@@ -21,7 +21,7 @@ const BrandsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { hasPermission } = usePermissions();
-  const [selectedCountry] = useState<string | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
   const sectionParam = searchParams.get("section") || "Models";
   const pageParam = parseInt(searchParams.get("page") || "1");
@@ -261,6 +261,7 @@ const BrandsPage = () => {
             search={search}
             page={currentPage}
             setPagination={handleSetPagination}
+            countryId={selectedCountry} 
             dateParams={dateParams}
           />
         );
@@ -287,6 +288,8 @@ const BrandsPage = () => {
         setSearch={setSearch}
         dateRange={dateRange}
         setDateRange={setDateRange}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
       />
       <div className="px-2 md:px-8 relative min-h-[300px]">
         <AnimatePresence mode="wait">

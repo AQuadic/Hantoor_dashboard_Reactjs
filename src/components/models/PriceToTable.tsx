@@ -31,6 +31,7 @@ interface PriceToTableProps {
     from: number;
     to: number;
   }) => void;
+  countryId?: string | null;
 }
 
 export function PriceToTable({
@@ -38,12 +39,13 @@ export function PriceToTable({
   page,
   setPagination,
   dateParams,
+  countryId,
 }: PriceToTableProps) {
   const { t } = useTranslation("models");
 
   const { data, isLoading, refetch } = useQuery<PriceToResponse>({
-    queryKey: ["priceto", page, search, dateParams],
-    queryFn: () => getPriceTo({ page, search, ...dateParams }),
+    queryKey: ["priceto", page, search, dateParams, countryId],
+    queryFn: () => getPriceTo({ page, search, country_id: countryId, ...dateParams }),
     placeholderData: (previousData: PriceToResponse | undefined) =>
       previousData,
   });

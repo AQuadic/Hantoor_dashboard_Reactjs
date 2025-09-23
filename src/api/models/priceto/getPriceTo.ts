@@ -25,6 +25,7 @@ export interface GetPriceToParams {
   search?: string;
   from_date?: string;
   to_date?: string;
+  country_id?: string | null;
 }
 
 export async function getPriceTo(
@@ -36,6 +37,7 @@ export async function getPriceTo(
       search: params?.search || undefined,
       from_date: params?.from_date,
       to_date: params?.to_date,
+      country_id: params?.country_id || undefined,
     },
   });
 
