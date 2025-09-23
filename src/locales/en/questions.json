@@ -37,5 +37,6 @@
   "conversationUpdated": "Conversation updated successfully",
 
   "statusUpdated": "Status updated successfully",
-  "statusChanged": "Status changed successfully"
+  "statusChanged": "Status changed successfully",
+  "selectCountry": "Please select a country"
 }

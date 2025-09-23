@@ -38,5 +38,6 @@
   "conversationUpdated": "تم تحديث المحادثة بنجاح",
 
   "statusUpdated": "تم تحديث الحالة بنجاح",
-  "statusChanged": "تم تغيير الحالة بنجاح"
+  "statusChanged": "تم تغيير الحالة بنجاح",
+  "selectCountry": "الرجاء اختيار البلد"
 }

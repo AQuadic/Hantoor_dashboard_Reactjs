@@ -41,7 +41,8 @@ const AddFaq = () => {
 
   const handleSubmit = async () => {
     if (!countryId) {
-      toast.error(t("Please select a country"));
+      toast.dismiss()
+      toast.error(t("selectCountry"));
       return;
     }
 
