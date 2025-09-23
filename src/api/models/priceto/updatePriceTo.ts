@@ -6,6 +6,7 @@ export interface UpdatePriceToResponse {
   data?: {
     id: number;
     name: string;
+    country_id?: number;
     is_active: number;
     created_at: string | null;
     updated_at: string | null;
@@ -14,6 +15,7 @@ export interface UpdatePriceToResponse {
 
 export interface UpdatePriceToPayload {
   name?: string;
+  country_id?: number;
   is_active?: number;
 }
 

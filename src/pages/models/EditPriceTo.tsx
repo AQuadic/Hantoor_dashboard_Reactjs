@@ -40,6 +40,9 @@ const EditPriceTo = () => {
     if (priceData) {
       setPriceAr(priceData.name);
       setPriceEn(priceData.name);
+      if (priceData.country_id) {
+        setSelectedCountry(String(priceData.country_id));  // ✅ pre-fill
+      }
     }
   }, [priceData]);
 
@@ -48,9 +51,16 @@ const EditPriceTo = () => {
       toast.error(t("pleaseEnterPrice"));
       return;
     }
+    if (!selectedCountry) {
+      toast.error(t("pleaseSelectCountry"));
+      return;
+    }
 
     try {
-      await updatePriceTo(priceId, { name: priceAr || priceEn });
+      await updatePriceTo(priceId, {
+        name: priceAr || priceEn,
+        country_id: Number(selectedCountry), 
+      });
       toast.success(t("priceUpdated"));
       navigate("/models?section=Price To");
     } catch (error: any) {
