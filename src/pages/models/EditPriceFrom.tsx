@@ -40,6 +40,10 @@ const EditPriceFrom = () => {
     if (priceData) {
       setPriceAr(priceData.name);
       setPriceEn(priceData.name);
+
+      if (priceData.country) {
+        setSelectedCountry(String(priceData.country.id));
+      }
     }
   }, [priceData]);
 
@@ -87,7 +91,7 @@ const EditPriceFrom = () => {
       />
       <div className="flex flex-col gap-8 p-8">
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
-          <div className="flex gap-4">
+          <div className="flex md:flex-row flex-col gap-4">
             <div className="flex-1">
               <Input
                 label={t("arPrice")}
@@ -111,10 +115,8 @@ const EditPriceFrom = () => {
               >
                 {(countriesData?.data || []).map((country: Country) => (
                   <SelectItem
-                    key={country.id}
-                    textValue={
-                      i18n.language === "ar" ? country.name.ar : country.name.en
-                    }
+                    key={String(country.id)}
+                    textValue={i18n.language === "ar" ? country.name.ar : country.name.en}
                   >
                     {i18n.language === "ar" ? country.name.ar : country.name.en}
                   </SelectItem>

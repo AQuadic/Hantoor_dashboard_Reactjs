@@ -1,16 +1,30 @@
 import { axios } from "@/lib/axios";
 
+export interface CountryName {
+  ar: string;
+  en: string;
+}
+
+export interface Country {
+  id: number;
+  name: CountryName;
+}
+
+export interface PriceFrom {
+  id: number;
+  name: string;
+  is_active: number;
+  created_at: string | null;
+  updated_at: string | null;
+  country?: Country; 
+}
+
 export interface UpdatePriceFromResponse {
   success: boolean;
   message: string;
-  data?: {
-    id: number;
-    name: string;
-    is_active: number;
-    created_at: string | null;
-    updated_at: string | null;
-  };
+  data?: PriceFrom;
 }
+
 
 export interface UpdatePriceFromPayload {
   name?: string;
