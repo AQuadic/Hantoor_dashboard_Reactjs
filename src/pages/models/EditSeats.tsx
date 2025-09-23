@@ -38,6 +38,11 @@ const EditSeats = () => {
       toast.error(t("invalidSeatId") || "Invalid seat ID");
       return;
     }
+    if (arSeatsNumbers !== enSeatsNumbers) {
+      toast.dismiss()
+      toast.error(t("numbersMustMatch"));
+      return;
+    }
     setLoading(true);
     try {
       await updateNumberOfSeats(Number(id), {
