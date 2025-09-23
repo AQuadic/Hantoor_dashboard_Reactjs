@@ -35,5 +35,8 @@
   "statusUpdated": "تم تحديث الحالة بنجاح",
   "apple": "آبل",
   "google": "جوجل",
-  "admin": "المسؤول"
+  "admin": "المسؤول",
+  "nameRequired": "الاسم مطلوب",
+  "emailRequired": "البريد الإلكتروني مطلوب",
+  "phoneRequired": "رقم الجوال مطلوب"
 }

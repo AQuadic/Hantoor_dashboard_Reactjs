@@ -125,6 +125,9 @@ const EditUsers = () => {
 
   const handleSubmit = async () => {
     if (!userId) return toast.error("User ID is missing!");
+    if (!name.trim()) return toast.error(t("nameRequired"));
+    if (!email.trim()) return toast.error(t("emailRequired"));
+    if (!phone.trim()) return toast.error(t("phoneRequired"));
 
     const payload: UpdateAdminUserPayload = {
       name,

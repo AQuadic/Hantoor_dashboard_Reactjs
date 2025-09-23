@@ -35,5 +35,8 @@
   "statusUpdated": "Status updated successfully",
   "apple": "Apple",
   "google": "Google",
-  "admin": "Admin"
+  "admin": "Admin",
+  "nameRequired": "Name is required",
+  "emailRequired": "Email is required",
+  "phoneRequired": "Phone number is required"
 }
