@@ -32,6 +32,7 @@ export interface AdminUser {
   country?: Country | null;
   search_histories_count?: string;
   favorite_cars_count?: string;
+  request_insurance_price_count?: string;
   is_active: boolean;
   image?: AdminUserImage | null;
   blocked_until?: string | null;
