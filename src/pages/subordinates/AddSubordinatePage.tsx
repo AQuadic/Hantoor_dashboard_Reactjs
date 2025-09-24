@@ -119,8 +119,18 @@ const AddSubordinatePage = () => {
           "";
         setPhone(phoneVal);
         if (data.phone_country) {
-          setSelectedCountry(getCountryByIso2(data.phone_country));
+        const country = getCountryByIso2(data.phone_country);
+        setSelectedCountry(country);
+
+        let rawPhone = data.phone_e164 || data.phone || "";
+
+        if (rawPhone.startsWith("+" + country.phone[0])) {
+          rawPhone = rawPhone.slice(country.phone[0].length + 1);
         }
+
+        setPhone(rawPhone.trim());
+      }
+
 
         if (data.image?.url) {
           setExistingImageUrl(data.image.url);
@@ -152,6 +162,7 @@ const AddSubordinatePage = () => {
       !name.trim() ||
       !phone.trim() ||
       !email.trim() ||
+      !selectedRole.trim() ||
       (!isEdit && (!password || !confirmPassword))
     ) {
       toast.error(t("fillAllFieldes"));
