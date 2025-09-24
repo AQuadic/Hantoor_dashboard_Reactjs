@@ -28,5 +28,8 @@
     "noClients": "No clients",
     "selectCountry": "Please select a country",
     "search": "Search ...",
-    "noImage": "No Image"
+    "noImage": "No Image",
+
+    "selectReceiverType": "Please select a receiver type",
+    "selectUsers": "Please select users"
 }

@@ -37,7 +37,7 @@ const AddNotification = () => {
   const [enDescription, setEnDescription] = useState("");
 
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [recieverType, setRecieverType] = useState<"all" | "selected">("all");
+  const [recieverType, setRecieverType] = useState<"all" | "selected" | null>(null);
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -66,6 +66,17 @@ const AddNotification = () => {
       toast.error(t("selectCountry"));
       return;
     }
+
+    if (!recieverType) {
+      toast.error(t("selectReceiverType"));
+      return;
+    }
+
+    if (recieverType === "selected" && selectedUsers.length === 0) {
+      toast.error(t("selectUsers"));
+      return;
+    }
+
 
     const payload: BroadcastNotificationPayload = {
       title: { en: enText, ar: arText },
@@ -204,9 +215,13 @@ const AddNotification = () => {
               placeholder={t("choose")}
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
-              value={recieverType === "all" ? "1" : "2"}
+              value={
+                recieverType === "all" ? "1" : recieverType === "selected" ? "2" : ""
+              }
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setRecieverType(e.target.value === "1" ? "all" : "selected");
+                if (e.target.value === "1") setRecieverType("all");
+                else if (e.target.value === "2") setRecieverType("selected");
+                else setRecieverType(null);
               }}
             >
               {reciever.map((authority) => (

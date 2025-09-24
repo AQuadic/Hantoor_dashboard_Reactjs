@@ -28,5 +28,8 @@
     "noClients": "لا يوجد عملاء",
     "selectCountry": "يرجي اختيار البلد",
     "search": "ابحث...",
-    "noImage": "لا توجد صورة"
+    "noImage": "لا توجد صورة",
+
+    "selectReceiverType": "يرجى اختيار نوع المستلم",
+    "selectUsers": "يرجى اختيار المستخدمين"
 }
