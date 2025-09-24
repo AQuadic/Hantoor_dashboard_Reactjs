@@ -247,7 +247,7 @@ const AddSubordinatePage = () => {
       />
       <div className="flex flex-col gap-8 p-8">
         <div className="p-8 bg-white rounded-2xl">
-          <h3 className="mb-4 text-lg font-bold">{t("personalImage")}</h3>
+          <h3 className="text-[#2A32F8] mb-4 text-lg font-bold">{t("personalImage")}</h3>
           <ImageInput
             image={profileImage}
             setImage={setProfileImage}
@@ -257,8 +257,6 @@ const AddSubordinatePage = () => {
         </div>
 
         <div className="flex flex-col gap-4 p-8 bg-white rounded-2xl">
-          <h3 className="mb-2 text-lg font-bold">{t("mainData")}</h3>
-
           <div className="flex md:flex-row flex-col gap-4">
             <div className="w-full">
               <DashboardInput
@@ -315,13 +313,15 @@ const AddSubordinatePage = () => {
           {!isEdit && (
             <div className="flex md:flex-row flex-col gap-4">
               <DashboardInput
-                label={`${t("password")} *`}
+                label="Password *"
+                type="password"
                 value={password}
                 onChange={setPassword}
                 placeholder="••••••••••••••••"
               />
               <DashboardInput
                 label={`${t("confirmPassword")} *`}
+                type="password"
                 value={confirmPassword}
                 onChange={setConfirmPassword}
                 placeholder="••••••••••••••••"
