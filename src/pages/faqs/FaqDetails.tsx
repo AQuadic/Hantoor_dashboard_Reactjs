@@ -25,9 +25,16 @@ const FaqDetails: React.FC<FaqDetailsProps> = ({ faqId }) => {
   const parseAnswer = (raw: string) => {
     try {
       const parsed = JSON.parse(raw);
-      return parsed
-        .map((p: any) => p.children?.map((c: any) => c.text).join("") || "")
-        .join("\n");
+      if (parsed && typeof parsed === 'object' && 'value' in parsed) {
+        return parsed.value;
+      }
+      if (Array.isArray(parsed)) {
+        return parsed
+          .map((p: any) => p.children?.map((c: any) => c.text).join("") || "")
+          .join("\n");
+      }
+
+      return raw;
     } catch {
       return raw;
     }
