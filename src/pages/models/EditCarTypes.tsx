@@ -139,8 +139,11 @@ const EditCarTypes: React.FC = () => {
                 size={"lg"}
                 variant="bordered"
                 label={t("brand")}
-                onSelectionChange={(key) => setSelectedBrand(key as string)}
-                selectedKeys={selectedBrand ? [selectedBrand] : []}
+                selectedKeys={selectedBrand ? new Set([selectedBrand]) : new Set()}
+                onSelectionChange={(keys) => {
+                  const key = Array.from(keys)[0] as string;
+                  setSelectedBrand(key);
+                }}
                 isLoading={isLoadingBrands}
               >
                 {(brandsResponse?.data ?? []).map((brand) => (
