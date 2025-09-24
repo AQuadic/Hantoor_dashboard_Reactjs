@@ -22,6 +22,7 @@ const EditCountries = () => {
   const [code, setCode] = useState("");
   const [arCurrency, setArCurrency] = useState("");
   const [enCurrency, setEnCurrency] = useState("");
+    const [currencyCode, setCurrencyCode] = useState("");
   const [serviceFee, setServiceFee] = useState("");
   const [serviceDuration, setServiceDuration] = useState("3");
   const [serviceDurationType, setServiceDurationType] = useState<
@@ -38,6 +39,7 @@ const EditCountries = () => {
         setCode(res.code || "");
         setArCurrency(res.currency_text?.ar || "");
         setEnCurrency(res.currency_text?.en || "");
+        setCurrencyCode(res.currency || "");
         setServiceFee(res.service_fee?.toString() || "");
         setServiceDuration(res.service_duration || "3");
         setServiceDurationType((res.service_duration_type as any) || "month");
@@ -51,15 +53,29 @@ const EditCountries = () => {
   const handleSubmit = async () => {
     try {
       setLoading(true);
-      await updateCountry(Number(id), {
+
+      const originalCurrency = country?.currency || "";
+      const cleanCurrency = currencyCode.trim().toUpperCase().slice(0, 3);
+
+      const payload: any = {
         name: { ar: arCountry, en: enCountry },
-        // Ensure API receives currency text in both languages
         currency_text: { ar: arCurrency.trim(), en: enCurrency.trim() },
         service_fee: serviceFee,
         service_duration: serviceDuration,
         service_duration_type: serviceDurationType,
         is_active: true,
-      });
+      };
+
+      if (code.trim().toUpperCase() !== (country?.code || "").toUpperCase()) {
+        payload.code = code.trim().toUpperCase();
+      }
+
+      if (cleanCurrency !== originalCurrency.toUpperCase()) {
+        payload.currency = cleanCurrency;
+      }
+
+      await updateCountry(Number(id), payload);
+
       toast.success(t("countryUpdatedSuccessfully"));
       navigate("/countries");
     } catch (error: any) {
@@ -164,6 +180,7 @@ const EditCountries = () => {
           </div>
         </div>
 
+        <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
         <div className="relative w-full mt-4">
           <DashboardInput
             label={t("countryCode")}
@@ -172,6 +189,16 @@ const EditCountries = () => {
             placeholder="EG"
             disabled
           />
+        </div>
+        <div className="relative w-full">
+          <DashboardInput
+            label={t("currencyCode")}
+            value={currencyCode}
+            onChange={setCurrencyCode}
+            placeholder={t("AED")}
+            disabled
+          />
+        </div>
         </div>
 
         <div className="mt-4">
