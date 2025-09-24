@@ -38,7 +38,7 @@ const Specifications = ({ vehicle }: SpecificationsProps) => {
               <TableHead className="text-right">{lang === "ar" ? "عدد المقاعد" : "Seats"}</TableHead>
               <TableHead className="text-right">{lang === "ar" ? "نوع الماكينة" : "Engine Type"}</TableHead>
               <TableHead className="text-right">{lang === "ar" ? "حجم الماكينة" : "Engine Size"}</TableHead>
-              <TableHead className="text-right">{lang === "ar" ? "نوع قوة الماكينة" : "Power"}</TableHead>
+              {/* <TableHead className="text-right">{lang === "ar" ? "نوع قوة الماكينة" : "Power"}</TableHead> */}
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -53,7 +53,7 @@ const Specifications = ({ vehicle }: SpecificationsProps) => {
                 <TableCell>{specification.seates}</TableCell>
                 <TableCell>{specification.engineType}</TableCell>
                 <TableCell>{specification.engineSize}</TableCell>
-                <TableCell>{specification.power}</TableCell>
+                {/* <TableCell>{specification.power}</TableCell> */}
                 <TableCell></TableCell>
               </TableRow>
             ))}
