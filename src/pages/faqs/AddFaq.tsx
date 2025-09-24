@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { useNavigate } from "react-router-dom"; // <-- correct import
+import { useNavigate } from "react-router-dom";
 
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
@@ -43,6 +43,11 @@ const AddFaq = () => {
     if (!countryId) {
       toast.dismiss()
       toast.error(t("selectCountry"));
+      return;
+    }
+    if (!arQuestion.trim() || !enQuestion.trim() || !arBody.trim() || !enBody.trim()) {
+      toast.dismiss();
+      toast.error(t("pleaseFillAllFields"));
       return;
     }
 

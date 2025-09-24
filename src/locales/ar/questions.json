@@ -39,5 +39,6 @@
 
   "statusUpdated": "تم تحديث الحالة بنجاح",
   "statusChanged": "تم تغيير الحالة بنجاح",
-  "selectCountry": "الرجاء اختيار البلد"
+  "selectCountry": "الرجاء اختيار البلد",
+  "pleaseFillAllFields": "الرجاء ملء جميع الحقول"
 }

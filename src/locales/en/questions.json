@@ -38,5 +38,6 @@
 
   "statusUpdated": "Status updated successfully",
   "statusChanged": "Status changed successfully",
-  "selectCountry": "Please select a country"
+  "selectCountry": "Please select a country",
+  "pleaseFillAllFields": "Please fill all fileds"
 }
