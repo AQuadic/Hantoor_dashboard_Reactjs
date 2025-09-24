@@ -49,7 +49,7 @@ const EditFaq = () => {
           if (!val) return "";
           try {
             const parsed = JSON.parse(val);
-            return parsed?.[0]?.children?.[0]?.text || "";
+            return parsed?.value || "";
           } catch {
             return val;
           }
