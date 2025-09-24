@@ -4,7 +4,7 @@ import Avatar from "/images/avatar.svg";
 import Link from "@/components/icons/chats/Link";
 import AvatarIcon from "@/components/icons/chats/Avatar";
 import SendIcon from "@/components/icons/chats/SendIcon";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { getConversationMessages } from "@/api/support/getConversationById";
 import { sendMessage } from "@/api/support/sendMessage";
 import Loading from "@/components/general/Loading";
@@ -22,13 +22,31 @@ const SupportMsgsConversation = ({
   const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const emojiRef = useRef<HTMLDivElement | null>(null);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
-  const { data: messagesResponse, isLoading, error } = useQuery({
+  const {
+    data: messagesResponse,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
     queryKey: ["conversation-messages", conversationId],
-    queryFn: () =>
+    queryFn: ({ pageParam = 1 }) =>
       getConversationMessages({
         conversation_id: conversationId,
+        page: pageParam,
       }),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.next_page_url) {
+        const url = new URL(lastPage.next_page_url);
+        const page = url.searchParams.get("page");
+        return page ? Number(page) : undefined;
+      }
+      return undefined;
+    },
     enabled: !!conversationId,
   });
 
@@ -38,7 +56,8 @@ const SupportMsgsConversation = ({
 
   const messages = useMemo(() => {
     if (!messagesResponse) return [];
-    return messagesResponse.data
+    return messagesResponse.pages
+      .flatMap((page) => page.data)
       .slice()
       .reverse()
       .map((msg) => {
@@ -81,6 +100,23 @@ const SupportMsgsConversation = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 1.0 }
+    );
+
+    observer.observe(loadMoreRef.current);
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isLoading) return <Loading />;
   if (error || !messagesResponse) {
