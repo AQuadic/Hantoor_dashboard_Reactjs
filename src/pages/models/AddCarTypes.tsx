@@ -136,10 +136,6 @@ const AddCarTypes = () => {
             titleEn={loading ? "Adding..." : "Add"}
             isLoading={loading}
             onClick={async () => {
-              // if (!selectedStructure) {
-              //   toast.error(t("structure") + " " + t("isRequired"));
-              //   return;
-              // }
               if (!selectedBrand) {
                 toast.error(t("brand") + " " + t("isRequired"));
                 return;
@@ -158,11 +154,13 @@ const AddCarTypes = () => {
                 });
                 toast.success(t("carTypeAdded"));
                 navigate("/models?section=Car Types");
-              } catch (error: unknown) {
+              } catch (error: any) {
                 const errorMsg =
-                  error instanceof Error
-                    ? error.message
-                    : t("somethingWentWrong");
+                  error?.response?.data?.message ||
+                  (error?.response?.data?.errors
+                    ? Object.values(error.response.data.errors).flat().join("\n")
+                    : error?.message) || 
+                      t("somethingWentWrong");
                 toast.error(errorMsg);
               } finally {
                 setLoading(false);
