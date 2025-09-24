@@ -47,9 +47,9 @@ const Specifications = ({ vehicle }: SpecificationsProps) => {
               <TableRow key={idx} noBackgroundColumns={1}>
                 <TableCell>{specification.brand}</TableCell>
                 <TableCell>{specification.category}</TableCell>
-                <TableCell>{specification.type}</TableCell>
-                <TableCell>{specification.structure}</TableCell>
                 <TableCell>{specification.model}</TableCell>
+                <TableCell>{specification.structure}</TableCell>
+                <TableCell>{specification.type}</TableCell>
                 <TableCell>{specification.seates}</TableCell>
                 <TableCell>{specification.engineType}</TableCell>
                 <TableCell>{specification.engineSize}</TableCell>
