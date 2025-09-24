@@ -142,8 +142,8 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
           ar: center.description.ar,
           en: center.description.en,
         },
-        phone: center.phone,
-        whatsapp: center.whatsapp,
+        phone: center.phone || "N/A",
+        whatsapp: center.whatsapp || "N/A",
         type: center.type,
         is_active: center.is_active ? "1" : "0",
         link_google_map: center.link_google_map || ""
