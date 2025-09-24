@@ -44,6 +44,7 @@
   "failedToUpdateRole": "فشل في تحديث الصلاحية",
   "pleaseEnterRoleName": "يرجى إدخال اسم الصلاحية",
   "selectAtLeastOnePermission": "يرجى اختيار صلاحية واحدة على الأقل",
+  "mohamed": "محمد احمد",
 
   "permissionSections": {
     "dashboard": "لوحة التحكم",

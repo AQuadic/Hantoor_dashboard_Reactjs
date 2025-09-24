@@ -263,7 +263,7 @@ const AddSubordinatePage = () => {
                 label={`${t("name")} *`}
                 value={name}
                 onChange={setName}
-                placeholder="محمد احمد"
+                placeholder={t('mohamed')}
               />
             </div>
             <div className="w-full">
