@@ -16,7 +16,7 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import { getPriceTo, PriceToResponse } from "@/api/models/priceto/getPriceTo";
+import { getPriceTo, PriceTo, PriceToResponse } from "@/api/models/priceto/getPriceTo";
 import { deletePriceTo } from "@/api/models/priceto/deletePriceTo";
 import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
 
@@ -41,7 +41,7 @@ export function PriceToTable({
   dateParams,
   countryId,
 }: PriceToTableProps) {
-  const { t } = useTranslation("models");
+  const { t, i18n } = useTranslation("models");
 
   const { data, isLoading, refetch } = useQuery<PriceToResponse>({
     queryKey: ["priceto", page, search, dateParams, countryId],
@@ -92,36 +92,37 @@ export function PriceToTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("priceTo")}</TableHead>
+          <TableHead className="text-right">{t("country")}</TableHead>
           <TableHead className="text-right">{t("status")}</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {priceToList.map(
-          (
-            price: { id: number; name: string; is_active: number },
-            index: number
-          ) => (
-            <TableRow key={price.id} noBackgroundColumns={1}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell className="w-full">{price.name}</TableCell>
-              <TableCell className="flex gap-[7px] items-center">
-                <Switch
-                  isSelected={price.is_active === 1}
-                  onChange={() => handleToggleStatus(price.id, price.is_active)}
-                />
-                <Link to={`/price-to/edit/${price.id}`}>
-                  <Edit />
-                </Link>
 
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(price.id)}
-                  />
-                </div>
-              </TableCell>
-            </TableRow>
-          )
-        )}
+        {priceToList.map((price: PriceTo, index: number) => (
+          <TableRow key={price.id} noBackgroundColumns={1}>
+            <TableCell>{index + 1}</TableCell>
+            <TableCell>{price.name}</TableCell>
+            <TableCell className="w-full">
+              {price.country
+                ? price.country.name[i18n.language as "ar" | "en"] || "-"
+                : "-"}
+            </TableCell>
+            <TableCell className="flex gap-[7px] items-center">
+              <Switch
+                isSelected={price.is_active === 1}
+                onChange={() => handleToggleStatus(price.id, price.is_active)}
+              />
+              <Link to={`/price-to/edit/${price.id}`}>
+                <Edit />
+              </Link>
+              <div className="mt-2">
+                <TableDeleteButton handleDelete={() => handleDelete(price.id)} />
+              </div>
+            </TableCell>
+          </TableRow>
+        ))
+      }
+
       </TableBody>
     </Table>
   );
