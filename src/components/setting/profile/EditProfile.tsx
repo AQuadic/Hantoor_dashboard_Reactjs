@@ -92,10 +92,20 @@ const EditProfile: React.FC = () => {
         toast.error(t("pleaseAddImage") || "Please add an image");
         return;
       }
+      if (!countryId) {
+        toast.error(t("pleaseChooseCountry") || "Please select a country");
+        return;
+      }
+      if (!arTitle.trim() || !enTitle.trim()) {
+        toast.error(t("pleaseFillTitles") || "Please fill in both titles");
+        return;
+      }
+      if (!arBody.trim() || !enBody.trim()) {
+        toast.error(t("pleaseFillDescriptions") || "Please fill in both descriptions");
+        return;
+      }
 
       await updateOnboarding(id!, {
-        // Only send a File when user selected a new one; if using existingImageUrl,
-        // omit image so backend keeps the current image.
         image: profileImage || undefined,
         country_id: countryId,
         title: { ar: arTitle, en: enTitle },

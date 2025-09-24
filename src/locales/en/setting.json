@@ -86,5 +86,7 @@
   "statusUpdated": "status updated successfully",
   "requestFinancingExists": "Request Financing already exists with this country.",
   "all": "All",
-  "addImage": "Please add an image"
+  "addImage": "Please add an image",
+  "pleaseFillTitles": "Please fill titles",
+  "pleaseFillDescriptions":"Please fill descriptions"
 }
