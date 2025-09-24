@@ -1,6 +1,6 @@
 {
-    "arModelName": "Model name (in Arabic)",
-    "enModelName": "Model name (in English)",
+    "arModelName": "Model (in Arabic)",
+    "enModelName": "Model (in English)",
     "writeHere": "Write here",
     "agent": "Agent",
     "arStructureName": "Structure type name (in Arabic)",
