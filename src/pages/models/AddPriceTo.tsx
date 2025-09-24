@@ -39,6 +39,7 @@ const AddPriceTo = () => {
     try {
       await createPriceTo({
         name: arPrice,
+        country_id: Number(selectedCountry),
       });
       toast.success(t("priceAddedSuccessfully"));
       navigate("/models?section=Price To");
