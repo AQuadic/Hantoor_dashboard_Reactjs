@@ -92,5 +92,7 @@
     "isRequired": "is required",
     "numbersMustMatch": "Number of seats must match in both languages",
     "priceMustMatch": "Price must match in both languages",
-    "categoryUpdated": "Category updated successfully"
+    "categoryUpdated": "Category updated successfully",
+
+    "carTypeUpdated": "Car type updated successfully"
 }

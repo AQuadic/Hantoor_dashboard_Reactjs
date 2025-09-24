@@ -63,7 +63,7 @@ const EditCarTypes: React.FC = () => {
     try {
       setIsSubmitting(true);
       await updateCarType(typeId, payload);
-      toast.success(t("bodyTypeUpdated"));
+      toast.success(t("carTypeUpdated"));
       navigate("/models?section=Car Types");
     } catch (err: unknown) {
       if (err instanceof Error && "response" in err) {

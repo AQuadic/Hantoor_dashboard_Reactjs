@@ -92,5 +92,7 @@
     "isRequired": "مطلوبة",
     "numbersMustMatch": "يجب أن تتطابق أعداد المقاعد باللغتين",
     "priceMustMatch": "يجب أن يتطابق السعر باللغتين",
-    "categoryUpdated": "تم تعديل الفئة بنجاح"
+    "categoryUpdated": "تم تعديل الفئة بنجاح",
+
+    "carTypeUpdated": "تم تعديل نوع السيارة بنجاح"
 }
