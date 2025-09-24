@@ -29,6 +29,7 @@ export interface UpdatePriceFromResponse {
 export interface UpdatePriceFromPayload {
   name?: string;
   is_active?: number;
+  country_id?: number | null;
 }
 
 export async function updatePriceFrom(

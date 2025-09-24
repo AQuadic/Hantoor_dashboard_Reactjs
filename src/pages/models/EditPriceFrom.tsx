@@ -54,13 +54,16 @@ const EditPriceFrom = () => {
     }
 
     if (priceAr !== priceEn) {
-      toast.dismiss()
+      toast.dismiss();
       toast.error(t("priceMustMatch"));
       return;
     }
 
     try {
-      await updatePriceFrom(priceId, { name: priceAr });
+      await updatePriceFrom(priceId, {
+        name: priceAr,
+        country_id: selectedCountry ? Number(selectedCountry) : null,
+      });
       toast.success(t("priceUpdated"));
       navigate("/models?section=Price From");
     } catch (error: any) {
