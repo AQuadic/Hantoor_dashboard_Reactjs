@@ -19,7 +19,11 @@ import { useEffect } from "react";
 
 import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
 import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
-import { getPriceFrom, PriceFrom, PriceFromResponse } from "@/api/models/pricefrom/getPricefrom";
+import {
+  getPriceFrom,
+  PriceFrom,
+  PriceFromResponse,
+} from "@/api/models/priceFrom/getPricefrom";
 
 interface PriceFromTableProps {
   search?: string;
@@ -109,10 +113,10 @@ export function PriceFromTable({
               {price.name}
               <span className="px-2">
                 {price.country?.currency_text
-              ? price.country.currency_text[i18n.language as "ar" | "en"]
-              : ""}
+                  ? price.country.currency_text[i18n.language as "ar" | "en"]
+                  : ""}
               </span>
-              </TableCell>
+            </TableCell>
             <TableCell className="w-full">
               {price.country
                 ? price.country.name[i18n.language as "ar" | "en"] || "-"
@@ -127,7 +131,9 @@ export function PriceFromTable({
                 <Edit />
               </Link>
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(price.id)} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(price.id)}
+                />
               </div>
             </TableCell>
           </TableRow>
