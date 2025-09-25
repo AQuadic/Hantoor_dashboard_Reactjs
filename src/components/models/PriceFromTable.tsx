@@ -16,13 +16,10 @@ import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import {
-  getPriceFrom,
-  PriceFrom,
-  PriceFromResponse,
-} from "@/api/models/priceFrom/getPricefrom";
+
 import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
 import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
+import { getPriceFrom, PriceFrom, PriceFromResponse } from "@/api/models/pricefrom/getPricefrom";
 
 interface PriceFromTableProps {
   search?: string;
