@@ -83,7 +83,8 @@
     "social_link": "إدارة روابط التواصل الاجتماعي",
     "app_feature": "إدارة مميزات التطبيق",
     "onboarding": "إدارة التعريف بالتطبيق",
-    "request_financing": "إدارة طلبات التمويل"
+    "request_financing": "إدارة طلبات التمويل",
+    "role": "الدور"
   },
 
   "permissionNames": {

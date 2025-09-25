@@ -83,7 +83,8 @@
     "social_link": "Social Link Management",
     "app_feature": "App Feature Management",
     "onboarding": "Onboarding Management",
-    "request_financing": "Request Financing Management"
+    "request_financing": "Request Financing Management",
+    "role": "Role"
   },
 
   "permissionNames": {
