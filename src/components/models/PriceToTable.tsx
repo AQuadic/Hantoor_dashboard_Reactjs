@@ -101,7 +101,14 @@ export function PriceToTable({
         {priceToList.map((price: PriceTo, index: number) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
-            <TableCell>{price.name}</TableCell>
+            <TableCell>
+              {price.name}
+              <span className="px-2">
+                {price.country?.currency_text
+              ? price.country.currency_text[i18n.language as "ar" | "en"]
+              : ""}
+              </span>
+              </TableCell>
             <TableCell className="w-full">
               {price.country
                 ? price.country.name[i18n.language as "ar" | "en"] || "-"

@@ -4,7 +4,7 @@ export interface Country {
   id: number;
   name: { ar: string; en: string };
   code: string;
-  currency?: string | null;
+  currency_text?: { ar: string; en: string };
 }
 
 export interface PriceTo {
