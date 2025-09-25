@@ -37,20 +37,17 @@ const deserialize = (body: string): CustomElement[] => {
   ];
 };
 
-// Helper: Serialize Slate value to string
-// const serialize = (value: Descendant[]): string => {
-//   return JSON.stringify(value);
-// };
 // Props for ToolbarDropdown
 type DropdownProps = {
   value: string;
   options: { value: string; label: string }[];
   onChange: (value: string) => void;
+  placeholder?: string;
 };
+
 import React, { useCallback, useMemo } from "react";
 import {
   createEditor,
-  // Descendant,
   Editor,
   Element as SlateElement,
   Transforms,
@@ -60,8 +57,6 @@ import { Slate, Editable, withReact, ReactEditor } from "slate-react";
 import { withHistory, HistoryEditor } from "slate-history";
 import { css } from "@emotion/css";
 import {
-  Undo2,
-  Redo2,
   Bold,
   Italic,
   Underline,
@@ -70,11 +65,12 @@ import {
   List,
   Link2,
   Image as LucideImage,
-  Code2,
-  Quote,
   AlignLeft,
   AlignCenter,
   AlignRight,
+  Type,
+  Palette,
+  ChevronDown,
 } from "lucide-react";
 
 const ToolbarDropdown: React.FC<DropdownProps> = ({
@@ -82,36 +78,52 @@ const ToolbarDropdown: React.FC<DropdownProps> = ({
   options,
   onChange,
 }) => (
-  <select
-    value={value}
-    onChange={(e) => onChange(e.target.value)}
-    className={css`
-      border: 1px solid #d1d5db;
-      border-radius: 2px;
-      padding: 0 2px;
-      font-size: 11px;
-      background: white;
-      color: #374151;
-      margin: 0 2px;
-      height: 22px;
-      min-width: 44px;
-      max-width: 44px;
-      cursor: pointer;
-      vertical-align: middle;
-      appearance: none;
-      text-align: center;
-      &:focus {
-        outline: none;
-        border-color: #3b82f6;
-      }
-    `}
-  >
-    {options.map((option) => (
-      <option key={option.value} value={option.value}>
-        {option.label}
-      </option>
-    ))}
-  </select>
+  <div className={css`
+    position: relative;
+    display: inline-block;
+  `}>
+    <select
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      className={css`
+        appearance: none;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 4px;
+        padding: 4px 24px 4px 8px;
+        font-size: 13px;
+        color: #374151;
+        min-width: 100px;
+        height: 28px;
+        cursor: pointer;
+        &:focus {
+          outline: none;
+          border-color: #3b82f6;
+          box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+        }
+        &:hover {
+          border-color: #d1d5db;
+        }
+      `}
+    >
+      {options.map((option) => (
+        <option key={option.value} value={option.value}>
+          {option.label}
+        </option>
+      ))}
+    </select>
+    <ChevronDown 
+      size={14} 
+      className={css`
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #6b7280;
+      `}
+    />
+  </div>
 );
 
 const ToolbarButton: React.FC<{
@@ -120,29 +132,29 @@ const ToolbarButton: React.FC<{
   disabled?: boolean;
   onClick?: (e: React.MouseEvent) => void;
   format?: string;
-}> = ({ icon, active, disabled, onClick, format }) => (
+  title?: string;
+}> = ({ icon, active, disabled, onClick, format, title }) => (
   <button
     type="button"
+    title={title}
     className={css`
-      height: 32px;
+      height: 28px;
+      width: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      transition: color 0.15s;
-      background: none;
-      border: none;
-      margin: 0 2px;
-      padding: 0 6px;
-      border-radius: 12px;
-      &:hover {
-        background: #f3f4f6;
+      font-size: 16px;
+      background: ${active ? '#e3f2fd' : 'transparent'};
+      border: 1px solid ${active ? '#2196f3' : 'transparent'};
+      border-radius: 4px;
+      color: ${active ? '#1976d2' : disabled ? '#9ca3af' : '#374151'};
+      cursor: ${disabled ? 'not-allowed' : 'pointer'};
+      transition: all 0.15s;
+      &:hover:not(:disabled) {
+        background: ${active ? '#e3f2fd' : '#f3f4f6'};
+        border-color: ${active ? '#2196f3' : '#e5e7eb'};
       }
     `}
-    style={{
-      color: active ? "#2563eb" : disabled ? "#9ca3af" : "#374151",
-      cursor: disabled ? "not-allowed" : "pointer",
-    }}
     onMouseDown={onClick}
     aria-label={format}
     disabled={disabled}
@@ -151,39 +163,75 @@ const ToolbarButton: React.FC<{
   </button>
 );
 
-const ColorPicker: React.FC<{
+const ColorButton: React.FC<{
   value: string;
   onChange: (color: string) => void;
   label: string;
-}> = ({ value, onChange, label }) => (
-  <div
-    className={css`
-      position: relative;
-      display: inline-block;
-    `}
-  >
-    <input
-      type="color"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
+  icon: React.ReactNode;
+}> = ({ value, onChange, label, icon }) => (
+  <div className={css`
+    position: relative;
+    display: inline-block;
+  `}>
+    <button
+      type="button"
+      title={label}
       className={css`
-        width: 24px;
-        height: 24px;
-        border: 1px solid #d1d5db;
-        border-radius: 3px;
+        height: 28px;
+        width: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: 1px solid transparent;
+        border-radius: 4px;
         cursor: pointer;
-        margin: 0 1px;
-        &::-webkit-color-swatch-wrapper {
-          padding: 0;
-        }
-        &::-webkit-color-swatch {
-          border: none;
-          border-radius: 2px;
+        transition: all 0.15s;
+        position: relative;
+        &:hover {
+          background: #f3f4f6;
+          border-color: #e5e7eb;
         }
       `}
-      title={label}
-    />
+    >
+      {icon}
+      <input
+        type="color"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={css`
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          cursor: pointer;
+        `}
+      />
+      <div
+        className={css`
+          position: absolute;
+          bottom: 2px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 14px;
+          height: 3px;
+          background-color: ${value};
+          border-radius: 1px;
+        `}
+      />
+    </button>
   </div>
+);
+
+const ToolbarDivider = () => (
+  <div className={css`
+    width: 1px;
+    height: 20px;
+    background: #e5e7eb;
+    margin: 0 4px;
+  `} />
 );
 
 // Custom Slate types
@@ -198,6 +246,7 @@ export type CustomText = {
   fontSize?: string;
   backgroundColor?: string;
 };
+
 export type CustomElement =
   | { type: "paragraph"; align?: string; children: CustomText[] }
   | { type: "heading"; level: number; align?: string; children: CustomText[] }
@@ -208,6 +257,7 @@ export type CustomElement =
   | { type: "list-item"; children: CustomText[] }
   | { type: "code"; children: CustomText[] }
   | { type: "quote"; align?: string; children: CustomText[] };
+
 declare module "slate" {
   interface CustomTypes {
     Editor: BaseEditor & ReactEditor & HistoryEditor;
@@ -217,8 +267,17 @@ declare module "slate" {
 }
 
 const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
+  const textFormatOptions = [
+    { value: "paragraph", label: "Normal text" },
+    { value: "heading-1", label: "Heading 1" },
+    { value: "heading-2", label: "Heading 2" },
+    { value: "heading-3", label: "Heading 3" },
+  ];
+
   const fontSizeOptions = [
+    { value: "11px", label: "11" },
     { value: "12px", label: "12" },
+    { value: "13px", label: "13" },
     { value: "14px", label: "14" },
     { value: "16px", label: "16" },
     { value: "18px", label: "18" },
@@ -227,11 +286,33 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
     { value: "28px", label: "28" },
     { value: "32px", label: "32" },
   ];
+
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const getCurrentTextFormat = () => {
+    const { selection } = editor;
+    if (!selection) return "paragraph";
+
+    const [match] = Array.from(
+      Editor.nodes(editor, {
+        at: Editor.unhangRange(editor, selection),
+        match: (n) => !Editor.isEditor(n) && SlateElement.isElement(n),
+      })
+    );
+
+    if (match) {
+      const element = match[0] as CustomElement;
+      if (element.type === "heading") {
+        return `heading-${element.level}`;
+      }
+      return element.type;
+    }
+    return "paragraph";
+  };
 
   const getCurrentFontSize = () => {
     const marks = Editor.marks(editor) as Record<string, unknown> | null;
-    return (marks?.fontSize as string) || "16px";
+    return (marks?.fontSize as string) || "14px";
   };
 
   const getCurrentTextColor = () => {
@@ -283,6 +364,7 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
       "code",
       "quote",
     ] as const;
+    
     const newType = isActive
       ? "paragraph"
       : isList
@@ -290,6 +372,7 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
       : validTypes.includes(format as CustomElement["type"])
       ? (format as CustomElement["type"])
       : "paragraph";
+    
     const newProperties: Partial<CustomElement> = {
       type: newType,
     };
@@ -299,6 +382,23 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
     if (!isActive && isList) {
       const block = { type: format, children: [] } as CustomElement;
       Transforms.wrapNodes(editor, block);
+    }
+  };
+
+  const setTextFormat = (format: string) => {
+    if (format.startsWith("heading-")) {
+      const level = parseInt(format.split("-")[1]);
+      Transforms.setNodes(
+        editor,
+        { type: "heading", level } as Partial<CustomElement>,
+        { match: (n) => Editor.isBlock(editor, n) }
+      );
+    } else {
+      Transforms.setNodes(
+        editor,
+        { type: format } as Partial<CustomElement>,
+        { match: (n) => Editor.isBlock(editor, n) }
+      );
     }
   };
 
@@ -320,32 +420,36 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
         display: flex;
         align-items: center;
         border-bottom: 1px solid #e5e7eb;
-        background: none;
-        padding: 0 0 4px 0;
-        gap: 2px;
+        background: #fafafa;
+        padding: 8px 12px;
+        gap: 4px;
         flex-wrap: wrap;
-        min-height: 36px;
+        min-height: 44px;
       `}
     >
+      {/* Text Format Dropdown */}
+      <ToolbarDropdown
+        value={getCurrentTextFormat()}
+        options={textFormatOptions}
+        onChange={setTextFormat}
+      />
+      
+      <ToolbarDivider />
+      
       {/* Font Size */}
       <ToolbarDropdown
         value={getCurrentFontSize()}
         options={fontSizeOptions}
         onChange={setFontSize}
       />
-      <ColorPicker
-        value={getCurrentTextColor()}
-        onChange={setTextColor}
-        label="Text Color"
-      />
-      <ColorPicker
-        value={getCurrentBackgroundColor()}
-        onChange={setBackgroundColor}
-        label="Highlight Color"
-      />
+      
+      <ToolbarDivider />
+
+      {/* Text Formatting */}
       <ToolbarButton
         format="bold"
-        icon={<Bold size={18} />}
+        title="Bold"
+        icon={<Bold size={16} />}
         active={isMarkActive(editor, "bold")}
         onClick={(e) => {
           e.preventDefault();
@@ -354,7 +458,8 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
       />
       <ToolbarButton
         format="italic"
-        icon={<Italic size={18} />}
+        title="Italic"
+        icon={<Italic size={16} />}
         active={isMarkActive(editor, "italic")}
         onClick={(e) => {
           e.preventDefault();
@@ -363,7 +468,8 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
       />
       <ToolbarButton
         format="underline"
-        icon={<Underline size={18} />}
+        title="Underline"
+        icon={<Underline size={16} />}
         active={isMarkActive(editor, "underline")}
         onClick={(e) => {
           e.preventDefault();
@@ -372,16 +478,38 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
       />
       <ToolbarButton
         format="strikethrough"
-        icon={<Strikethrough size={18} />}
+        title="Strikethrough"
+        icon={<Strikethrough size={16} />}
         active={isMarkActive(editor, "strikethrough")}
         onClick={(e) => {
           e.preventDefault();
           toggleMark(editor, "strikethrough");
         }}
       />
+
+      <ToolbarDivider />
+
+      {/* Colors */}
+      <ColorButton
+        value={getCurrentTextColor()}
+        onChange={setTextColor}
+        label="Text Color"
+        icon={<Type size={16} />}
+      />
+      <ColorButton
+        value={getCurrentBackgroundColor()}
+        onChange={setBackgroundColor}
+        label="Highlight Color"
+        icon={<Palette size={16} />}
+      />
+
+      <ToolbarDivider />
+
+      {/* Alignment */}
       <ToolbarButton
         format="align-left"
-        icon={<AlignLeft size={18} />}
+        title="Align Left"
+        icon={<AlignLeft size={16} />}
         active={isBlockActive("align-left")}
         onClick={(e) => {
           e.preventDefault();
@@ -390,7 +518,8 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
       />
       <ToolbarButton
         format="align-center"
-        icon={<AlignCenter size={18} />}
+        title="Align Center"
+        icon={<AlignCenter size={16} />}
         active={isBlockActive("align-center")}
         onClick={(e) => {
           e.preventDefault();
@@ -399,25 +528,22 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
       />
       <ToolbarButton
         format="align-right"
-        icon={<AlignRight size={18} />}
+        title="Align Right"
+        icon={<AlignRight size={16} />}
         active={isBlockActive("align-right")}
         onClick={(e) => {
           e.preventDefault();
           toggleBlock("align-right");
         }}
       />
-      <ToolbarButton
-        format="numbered-list"
-        icon={<ListOrdered size={18} />}
-        active={isBlockActive("numbered-list")}
-        onClick={(e) => {
-          e.preventDefault();
-          toggleBlock("numbered-list");
-        }}
-      />
+
+      <ToolbarDivider />
+
+      {/* Lists */}
       <ToolbarButton
         format="bulleted-list"
-        icon={<List size={18} />}
+        title="Bulleted List"
+        icon={<List size={16} />}
         active={isBlockActive("bulleted-list")}
         onClick={(e) => {
           e.preventDefault();
@@ -425,8 +551,23 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
         }}
       />
       <ToolbarButton
+        format="numbered-list"
+        title="Numbered List"
+        icon={<ListOrdered size={16} />}
+        active={isBlockActive("numbered-list")}
+        onClick={(e) => {
+          e.preventDefault();
+          toggleBlock("numbered-list");
+        }}
+      />
+
+      <ToolbarDivider />
+
+      {/* Insert Elements */}
+      <ToolbarButton
         format="link"
-        icon={<Link2 size={18} />}
+        title="Insert Link"
+        icon={<Link2 size={16} />}
         onClick={(e) => {
           e.preventDefault();
           const url = window.prompt("Enter URL:");
@@ -437,12 +578,14 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
       />
       <ToolbarButton
         format="image"
-        icon={<LucideImage size={18} />}
+        title="Insert Image"
+        icon={<LucideImage size={16} />}
         onClick={(e) => {
           e.preventDefault();
           if (fileInputRef.current) fileInputRef.current.click();
         }}
       />
+      
       <input
         ref={fileInputRef}
         type="file"
@@ -466,40 +609,6 @@ const Toolbar: React.FC<{ editor: Editor & HistoryEditor }> = ({ editor }) => {
           e.target.value = "";
         }}
       />
-      <ToolbarButton
-        format="code"
-        icon={<Code2 size={18} />}
-        active={isBlockActive("code")}
-        onClick={(e) => {
-          e.preventDefault();
-          toggleBlock("code");
-        }}
-      />
-      <ToolbarButton
-        format="quote"
-        icon={<Quote size={18} />}
-        active={isBlockActive("quote")}
-        onClick={(e) => {
-          e.preventDefault();
-          toggleBlock("quote");
-        }}
-      />
-      <ToolbarButton
-        format="undo"
-        icon={<Undo2 size={18} />}
-        onClick={(e) => {
-          e.preventDefault();
-          HistoryEditor.undo(editor);
-        }}
-      />
-      <ToolbarButton
-        format="redo"
-        icon={<Redo2 size={18} />}
-        onClick={(e) => {
-          e.preventDefault();
-          HistoryEditor.redo(editor);
-        }}
-      />
     </div>
   );
 };
@@ -509,6 +618,7 @@ const isMarkActive = (editor: Editor, format: string) => {
   const marks = Editor.marks(editor) as Record<string, unknown> | null;
   return marks ? marks[format] === true : false;
 };
+
 const toggleMark = (editor: Editor, format: string) => {
   const isActive = isMarkActive(editor, format);
   if (isActive) {
@@ -525,68 +635,54 @@ const DashboardTextEditor = ({
 }: DashboardTextEditorProps) => {
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const initialValue = useMemo(() => deserialize(body), [body]);
+  
   const renderElement = useCallback(
     (props: import("slate-react").RenderElementProps) => (
       <Element {...props} editor={editor} />
     ),
     [editor]
   );
+  
   const renderLeaf = useCallback(
     (props: React.ComponentProps<typeof Leaf>) => <Leaf {...props} />,
     []
   );
 
-  // Handle controlled value
-  // const handleChange = (val: Descendant[]) => {
-  //   setBody(serialize(val));
-  // };
-
-  // Get initial font size/color from marks for placeholder/first input
+  // Get initial font size/color from marks
   const marks = Editor.marks(editor) as Record<string, unknown> | null;
-  const fontSize = (marks?.fontSize as string) || "16px";
+  const fontSize = (marks?.fontSize as string) || "14px";
   const color = (marks?.color as string) || "#1f2937";
+
   return (
     <div>
-      <h2 className="text-[#000000] text-[15px] font-normal">{title}</h2>
+      <h2 className="text-[#000000] text-[15px] font-normal mb-3">{title}</h2>
       <div
         className={css`
           direction: rtl;
           font-family: var(--font-primary);
           background: #fff;
           border: 1px solid #d1d5db;
-          border-radius: 6px;
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-          padding: 0;
-          width: 100%;
-          max-width: 100%;
+          border-radius: 8px;
+          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
           overflow: hidden;
+          width: 100%;
         `}
       >
-        <div
-          className={css`
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #222;
-            padding: 16px 16px 0 16px;
-            text-align: right;
-          `}
-        ></div>
         <Toolbar editor={editor} />
         <Slate
-        key={body}
-        editor={editor}
-        initialValue={initialValue}
-        onChange={(value) => {
-          const plainText = value.map((n: any) => n.children.map((c: any) => c.text).join("")).join("\n");
-          setBody(plainText);
-        }}
-      >
+          editor={editor}
+          initialValue={initialValue}
+          onChange={(value) => {
+            setBody(JSON.stringify(value));
+          }}
+
+        >
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}
-            placeholder="اكتب هنا"
+            placeholder="اكتب هنا..."
             className={css`
-              min-height: 208px;
+              min-height: 200px;
               padding: 16px;
               font-size: ${fontSize};
               color: ${color};
@@ -601,24 +697,30 @@ const DashboardTextEditor = ({
               max-height: 400px;
               border: none;
               box-shadow: none;
+              
               &::placeholder {
                 color: #9ca3af !important;
                 opacity: 1;
                 -webkit-text-fill-color: #9ca3af !important;
               }
+              
               &::-webkit-input-placeholder {
                 color: #9ca3af !important;
               }
+              
               &::-webkit-scrollbar {
                 width: 6px;
               }
+              
               &::-webkit-scrollbar-track {
                 background: #f1f5f9;
               }
+              
               &::-webkit-scrollbar-thumb {
                 background: #cbd5e1;
                 border-radius: 3px;
               }
+              
               &::-webkit-scrollbar-thumb:hover {
                 background: #94a3b8;
               }
@@ -632,7 +734,7 @@ const DashboardTextEditor = ({
   );
 };
 
-// Custom element renderers (expand for lists, images, code, etc.)
+// Custom element renderers
 import { RenderElementProps, RenderLeafProps } from "slate-react";
 
 const Element = ({
@@ -650,6 +752,22 @@ const Element = ({
   }
 
   switch (el.type) {
+    case "heading":
+      const Tag = `h${el.level}` as keyof JSX.IntrinsicElements;
+      return (
+        <Tag
+          {...attributes}
+          style={style}
+          className={css`
+            margin: 16px 0 8px 0;
+            font-weight: 600;
+            color: #1f2937;
+            line-height: 1.3;
+          `}
+        >
+          {children}
+        </Tag>
+      );
     case "code":
       return (
         <pre
@@ -657,13 +775,14 @@ const Element = ({
           className={css`
             background: #f1f5f9;
             border: 1px solid #e2e8f0;
-            border-radius: 4px;
+            border-radius: 6px;
             padding: 12px;
-            font-family: "Courier New", monospace;
+            font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
             font-size: 14px;
             overflow-x: auto;
             direction: ltr;
             text-align: left;
+            margin: 8px 0;
           `}
         >
           <code>{children}</code>
@@ -676,11 +795,12 @@ const Element = ({
           style={style}
           className={css`
             border-right: 4px solid #3b82f6;
-            margin: 8px 0;
-            padding: 8px 16px;
+            margin: 12px 0;
+            padding: 12px 20px;
             background: #f8fafc;
             font-style: italic;
             color: #64748b;
+            border-radius: 0 6px 6px 0;
           `}
         >
           {children}
@@ -692,8 +812,9 @@ const Element = ({
           {...attributes}
           style={style}
           className={css`
-            padding-right: 20px;
+            padding-right: 24px;
             margin: 8px 0;
+            list-style-type: disc;
           `}
         >
           {children}
@@ -705,8 +826,9 @@ const Element = ({
           {...attributes}
           style={style}
           className={css`
-            padding-right: 20px;
+            padding-right: 24px;
             margin: 8px 0;
+            list-style-type: decimal;
           `}
         >
           {children}
@@ -718,6 +840,7 @@ const Element = ({
           {...attributes}
           className={css`
             margin: 4px 0;
+            line-height: 1.6;
           `}
         >
           {children}
@@ -729,7 +852,8 @@ const Element = ({
           {...attributes}
           className={css`
             position: relative;
-            display: inline-block;
+            display: block;
+            margin: 12px 0;
           `}
         >
           <div contentEditable={false} style={{ position: "relative" }}>
@@ -739,9 +863,10 @@ const Element = ({
               className={css`
                 max-width: 100%;
                 height: auto;
-                border-radius: 4px;
+                border-radius: 6px;
                 display: block;
-                margin: 8px auto;
+                margin: 0 auto;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
               `}
             />
             <button
@@ -755,24 +880,26 @@ const Element = ({
               }}
               className={css`
                 position: absolute;
-                top: 4px;
-                left: 4px;
-                background: rgba(255, 255, 255, 0.85);
+                top: 8px;
+                left: 8px;
+                background: rgba(239, 68, 68, 0.9);
                 border: none;
                 border-radius: 50%;
-                width: 24px;
-                height: 24px;
+                width: 28px;
+                height: 28px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 cursor: pointer;
-                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
                 z-index: 2;
                 font-size: 16px;
-                color: #ef4444;
-                transition: background 0.15s;
+                color: white;
+                font-weight: 600;
+                transition: all 0.15s;
                 &:hover {
-                  background: #fee2e2;
+                  background: #ef4444;
+                  transform: scale(1.05);
                 }
               `}
               aria-label="Remove image"
@@ -783,7 +910,6 @@ const Element = ({
           {children}
         </div>
       );
-    // align-left, align-center, align-right cases removed (not valid element types)
     default:
       return (
         <p
@@ -817,6 +943,8 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
 
   if (l.backgroundColor) {
     style.backgroundColor = l.backgroundColor;
+    style.padding = "2px 4px";
+    style.borderRadius = "3px";
   }
 
   if (l.bold) {
@@ -835,20 +963,24 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
     el = <s>{el}</s>;
   }
 
-  // Handle links
-  // Remove link property usage from CustomText
+  if (l.code) {
+    el = (
+      <code
+        className={css`
+          background: #f1f5f9;
+          padding: 2px 6px;
+          border-radius: 4px;
+          font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+          font-size: 0.9em;
+          color: #e11d48;
+        `}
+      >
+        {el}
+      </code>
+    );
+  }
 
-  return (
-    <span
-      {...attributes}
-      style={style}
-      className={css`
-        ${l.backgroundColor ? "padding: 2px 4px; border-radius: 2px;" : ""}
-      `}
-    >
-      {el}
-    </span>
-  );
+  return <span {...attributes} style={style}>{el}</span>;
 };
 
 export default DashboardTextEditor;
