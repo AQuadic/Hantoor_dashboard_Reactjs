@@ -7,8 +7,8 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
-import { getPriceToById } from "@/api/models/priceto/getPricToById";
+import { updatePriceTo } from "@/api/models/priceTo/updatePriceTo";
+import { getPriceToById } from "@/api/models/priceTo/getPricToById";
 
 const EditPriceTo = () => {
   const { t, i18n } = useTranslation("models");

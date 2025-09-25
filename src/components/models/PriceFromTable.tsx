@@ -14,15 +14,15 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
-import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
 import toast from "react-hot-toast";
-import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
 import { useEffect } from "react";
 import {
   getPriceFrom,
   PriceFrom,
   PriceFromResponse,
-} from "@/api/models/pricefrom/getPriceFrom";
+} from "@/api/models/priceFrom/getPricefrom";
+import { deletePriceFrom } from "@/api/models/priceFrom/deletePriceFrom";
+import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
 
 interface PriceFromTableProps {
   search?: string;

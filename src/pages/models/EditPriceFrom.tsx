@@ -6,9 +6,9 @@ import { useQuery } from "@tanstack/react-query";
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
-import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
+import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
 import toast from "react-hot-toast";
-import { getPriceFromById } from "@/api/models/pricefrom/getPriceFromById";
+import { getPriceFromById } from "@/api/models/priceFrom/getPriceFromById";
 
 const EditPriceFrom = () => {
   const { t, i18n } = useTranslation("models");
