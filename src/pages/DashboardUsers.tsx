@@ -9,6 +9,7 @@ import { AdminUsersResponse } from "@/api/users/getUsers";
 import { useDatePicker } from "@/hooks/useDatePicker";
 import { Link } from "react-router";
 import { useState } from "react";
+import { useHasPermission, usePermissions } from "@/permissions";
 
 const DashboardUsers = () => {
   const [searchTermAr, setSearchTermAr] = useState("");
@@ -21,6 +22,11 @@ const DashboardUsers = () => {
   const [signupWith, setSignupWith] = useState<string | undefined>(undefined);
 
   const activeSearchTerm = searchTermEn || searchTermAr;
+
+  const canAdd = useHasPermission("add_user");
+  const permissions = usePermissions();
+  console.log("canAdd", canAdd);
+  console.log("canAdd", permissions.permissions);
 
   return (
     <section>
@@ -52,13 +58,15 @@ const DashboardUsers = () => {
           <div className="flex-1">
             <DashboardDatePicker value={dateRange} onChange={setDateRange} />
           </div>
-          <Link to="/users/add">
-            <DashboardButton
-              titleAr={"إضافة مستخدم جديد"}
-              titleEn={"Add new user"}
-              variant="add"
-            />
-          </Link>
+          {canAdd && (
+            <Link to="/users/add">
+              <DashboardButton
+                titleAr={"إضافة مستخدم جديد"}
+                titleEn={"Add new user"}
+                variant="add"
+              />
+            </Link>
+          )}
         </div>
 
         <UserSelects
@@ -74,8 +82,8 @@ const DashboardUsers = () => {
           page={currentPage}
           perPage={perPage}
           dateParams={dateParams}
-          countryId={countryId} 
-          signupWith={signupWith} 
+          countryId={countryId}
+          signupWith={signupWith}
           onDataLoaded={setMeta}
         />
         {meta && (meta.total ?? 0) > 0 && (
