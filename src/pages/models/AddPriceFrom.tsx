@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import toast from "react-hot-toast";
-import { createPriceFrom } from "@/api/models/priceFrom/addPriceFrom";
+import { createPriceFrom } from "@/api/models/pricefrom/addPriceFrom";
 
 const AddPriceFrom = () => {
   const { t, i18n } = useTranslation("models");

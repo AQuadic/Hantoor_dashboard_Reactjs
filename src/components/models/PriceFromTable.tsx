@@ -20,9 +20,9 @@ import {
   getPriceFrom,
   PriceFrom,
   PriceFromResponse,
-} from "@/api/models/priceFrom/getPricefrom";
-import { deletePriceFrom } from "@/api/models/priceFrom/deletePriceFrom";
-import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
+} from "@/api/models/pricefrom/getPricefrom";
+import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
+import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
 
 interface PriceFromTableProps {
   search?: string;
