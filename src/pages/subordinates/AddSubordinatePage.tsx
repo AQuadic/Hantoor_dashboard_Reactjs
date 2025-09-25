@@ -219,7 +219,7 @@ const AddSubordinatePage = () => {
     <div>
       <DashboardHeader
         titleAr={isEdit ? "تعديل مسؤول فرعي" : "إضافة مسؤول فرعي جديد"}
-        titleEn={isEdit ? "Edit Branch Manager" : "Add New Branch Manager"}
+        titleEn={isEdit ? "Edit Subordinate" : "Add New Subordinate"}
         items={[
           {
             titleAr: "الصفحة الرئيسية",
@@ -233,12 +233,12 @@ const AddSubordinatePage = () => {
           },
           {
             titleAr: "المسؤولين الفرعيين",
-            titleEn: "Branch Managers",
-            link: "/branch-managers",
+            titleEn: "subordinates",
+            link: "/subordinates",
           },
           {
             titleAr: isEdit ? "تعديل مسؤول فرعي" : "إضافة مسؤول فرعي جديد",
-            titleEn: isEdit ? "Edit Branch Manager" : "Add New Branch Manager",
+            titleEn: isEdit ? "Edit Subordinate" : "Add New Subordinate",
             link: isEdit
               ? `/branch-managers/${managerId}`
               : "/branch-managers/add",
