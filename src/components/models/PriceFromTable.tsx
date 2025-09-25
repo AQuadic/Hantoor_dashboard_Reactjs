@@ -20,7 +20,7 @@ import {
   getPriceFrom,
   PriceFrom,
   PriceFromResponse,
-} from "@/api/models/pricefrom/getPricefrom";
+} from "@/api/models/priceFrom/getPricefrom";
 import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
 import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
 
