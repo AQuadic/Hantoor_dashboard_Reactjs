@@ -21,9 +21,8 @@ import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
 import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
 import {
   getPriceFrom,
-  PriceFrom,
   PriceFromResponse,
-} from "@/api/models/priceFrom/getPricefrom";
+} from "@/api/models/pricefrom/getPriceFrom";
 
 interface PriceFromTableProps {
   search?: string;
@@ -106,7 +105,7 @@ export function PriceFromTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {priceFromList.map((price: PriceFrom, index: number) => (
+        {priceFromList.map((price, index: number) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
             <TableCell>{data ? data.from + index : index + 1}</TableCell>
             <TableCell>
