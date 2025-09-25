@@ -269,6 +269,12 @@
     "view_request_financing": "View Request Financing",
     "create_request_financing": "Create Request Financing",
     "edit_request_financing": "Edit Request Financing",
-    "delete_request_financing": "Delete Request Financing"
+    "delete_request_financing": "Delete Request Financing",
+
+    "role": "Role",
+    "create_role": "Add role",
+    "view_role": "View role",
+    "edit_role": "Edit role",
+    "delete_role": "Delete role"
   }
 }

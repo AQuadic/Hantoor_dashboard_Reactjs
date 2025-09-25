@@ -269,6 +269,12 @@
     "view_request_financing": "عرض طلب التمويل",
     "create_request_financing": "إنشاء طلب تمويل",
     "edit_request_financing": "تعديل طلب التمويل",
-    "delete_request_financing": "حذف طلب التمويل"
+    "delete_request_financing": "حذف طلب التمويل",
+
+    "role": "الدور",
+    "create_role": "اضافة دور",
+    "view_role": "عرض الدور",
+    "edit_role": "تعديل الدور",
+    "delete_role": "حذف الدور"
   }
 }
