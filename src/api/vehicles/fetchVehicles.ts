@@ -38,6 +38,8 @@ export interface VehicleFeature {
   image?: File | string | null;
   created_at?: string;
   updated_at?: string;
+  discount_from_date?: string;
+  discount_to_date?: string; 
 }
 
 export interface VehicleOffer {
@@ -133,6 +135,8 @@ export interface Vehicle {
   is_discount: boolean | null;
   discount_value: string | number | null;
   discount_date: string | null;
+  discount_from_date?: string | null;
+  discount_to_date?: string | null;
   is_include_tax: boolean;
   is_Insurance_warranty: boolean;
   is_include_warranty: boolean;
@@ -272,6 +276,8 @@ export interface CreateVehiclePayload {
   is_discount?: boolean;
   discount_value?: string;
   discount_date?: string;
+  discount_from_date?: string;
+  discount_to_date?: string; 
   is_include_tax?: boolean;
   is_Insurance_warranty?: boolean;
   is_include_warranty?: boolean;
@@ -437,6 +443,8 @@ export async function createVehicle(
     "engine_volume_id",
     "price",
     "discount_value",
+    "discount_from_date",
+    "discount_to_date",  
     "discount_date",
     "rent_to_own_duration",
     "rent_to_own_whatsapp",
@@ -622,6 +630,8 @@ try {
     "price",
     "discount_value",
     "discount_date",
+    "discount_from_date",
+    "discount_to_date", 
     "rent_to_own_duration",
     "rent_to_own_whatsapp",
     "rent_to_own_price",

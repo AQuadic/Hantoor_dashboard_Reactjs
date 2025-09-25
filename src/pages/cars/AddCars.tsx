@@ -47,7 +47,13 @@ const AddCarsForm = () => {
   React.useEffect(() => {
     if (vehicle && isEdit) {
       console.log("Loading vehicle data:", vehicle); // Debug log
-
+      const normalizeDate = (date: unknown): string => {
+      if (!date) return "";
+      const str = String(date);
+      if (str.includes("T")) return str;
+      return str.split(" ")[0];
+    };
+    
       // Helper function to convert VehicleImageObject to VehicleImage array
       const convertToVehicleImages = (images: unknown[]): VehicleImage[] => {
         if (!Array.isArray(images)) return [];
@@ -114,9 +120,9 @@ const AddCarsForm = () => {
         discount_value: vehicle.discount_value
           ? safeToString(vehicle.discount_value)
           : "",
-        discount_date: vehicle.discount_date
-          ? safeToString(vehicle.discount_date)
-          : "",
+        discount_date: normalizeDate(vehicle.discount_date),
+        discount_from_date: normalizeDate(vehicle.discount_from_date),
+        discount_to_date: normalizeDate(vehicle.discount_to_date),
         is_include_tax: Boolean(vehicle.is_include_tax),
         is_Insurance_warranty: Boolean(vehicle.is_Insurance_warranty),
         is_include_warranty: Boolean(vehicle.is_include_warranty),
@@ -303,7 +309,7 @@ const AddCarsForm = () => {
         <CarAccessories />
         <CarOffers />
         <RentToOwn />
-        <CarAdvertisingImages />
+        {/* <CarAdvertisingImages /> */}
         <div className="mt-6">
           <DashboardButton
             titleAr={isEdit ? "تحديث" : "اضافة"}

@@ -25,6 +25,8 @@ interface VehicleFormState extends Omit<CreateVehiclePayload, "name"> {
   carImages: VehicleImage[];
   additionalImages: VehicleImage[];
   adsImages: VehicleImage[];
+  discount_from_date?: string;
+  discount_to_date?: string;
 }
 
 interface VehicleFormContextType {
@@ -74,6 +76,8 @@ const initialFormState: VehicleFormState = {
   is_discount: false,
   discount_value: "",
   discount_date: "",
+  discount_from_date: "",
+  discount_to_date: "", 
   is_include_tax: false,
   is_Insurance_warranty: false,
   is_include_warranty: false,
@@ -364,7 +368,12 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       price: formData.price,
       is_discount: formData.is_discount,
       discount_value: formData.discount_value,
-      discount_date: formData.discount_date,
+      ...(formData.is_discount
+        ? {
+            discount_from_date: formData.discount_from_date,
+            discount_to_date: formData.discount_to_date,
+          }
+        : {}),
       is_include_tax: formData.is_include_tax,
       is_Insurance_warranty: formData.is_Insurance_warranty,
       is_include_warranty: formData.is_include_warranty,
@@ -377,7 +386,7 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       video:
         formData.videoFile instanceof File ? formData.videoFile : undefined,
       images: formData.carImages,
-      additional_images: formData.additionalImages, // From PhotosAndVideos MultiImageInput
+      additional_images: formData.additionalImages,
       ads_images: formData.adsImages,
       offers: formData.offers,
       packages: formData.packages,

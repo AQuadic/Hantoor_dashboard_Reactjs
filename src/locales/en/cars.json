@@ -99,5 +99,8 @@
   "name": "Name",
   "details": "Details",
   "durationDistance": "Duration/Distance",
-  "duration": "Duration"
+  "duration": "Duration",
+
+  "discountFromDate": "Discount Start Date",
+  "discountToDate": "Discount End Date"
 }

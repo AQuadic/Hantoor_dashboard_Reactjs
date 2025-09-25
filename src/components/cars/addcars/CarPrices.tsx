@@ -4,6 +4,7 @@ import DatePickerIcon from "@/components/icons/general/DatePickerIcon";
 import { getLocalTimeZone, today } from "@internationalized/date";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
+import { parseDate } from "@internationalized/date";
 
 const CarPrices = () => {
   const { t } = useTranslation("cars");
@@ -38,6 +39,8 @@ const CarPrices = () => {
           </span>
         </div>
       </div>
+
+      {/* تفعيل الخصم */}
       <Checkbox
         isSelected={formData?.is_discount || false}
         onValueChange={(value) => updateField?.("is_discount", value)}
@@ -45,8 +48,11 @@ const CarPrices = () => {
       >
         {t("priceDiscount")}
       </Checkbox>
+
+      {/* بيانات الخصم */}
       {formData?.is_discount && (
         <div className="flex items-center gap-4">
+          {/* نسبة الخصم */}
           <Input
             max={100}
             value={formData?.discount_value || ""}
@@ -61,15 +67,39 @@ const CarPrices = () => {
           />
           <DatePicker
             size="lg"
-            variant={"bordered"}
+            variant="bordered"
             className="w-1/4"
-            label={t("date")}
-            maxValue={today(getLocalTimeZone())}
+            label={t("discountFromDate")}
             selectorIcon={<DatePickerIcon />}
+            minValue={today(getLocalTimeZone())}
+            value={
+              formData?.discount_from_date
+                ? parseDate(formData.discount_from_date)
+                : null
+            }
             onChange={(date) =>
-              updateField?.("discount_date", date?.toString())
+              updateField?.("discount_from_date", date?.toString().split("T")[0] || "")
             }
           />
+
+          <DatePicker
+            size="lg"
+            variant="bordered"
+            className="w-1/4"
+            label={t("discountToDate")}
+            selectorIcon={<DatePickerIcon />}
+            minValue={today(getLocalTimeZone())}
+            value={
+              formData?.discount_to_date
+                ? parseDate(formData.discount_to_date.split(" ")[0])
+                : null
+            }
+            onChange={(date) =>
+              updateField?.("discount_to_date", date?.toString().split("T")[0] || "")
+            }
+          />
+
+          {/* السعر بعد الخصم */}
           <div className="bg-[#2E7CBE1A] w-1/4 px-5 py-4 flex items-center justify-between rounded-2xl">
             <span>{t("priceAfterDiscount")}</span>
             <span className="text-xl font-bold text-primary">
@@ -78,6 +108,8 @@ const CarPrices = () => {
           </div>
         </div>
       )}
+
+      {/* خيارات إضافية */}
       <div className="mt-4  w-[calc(50%+16px)] h-[46px] border border-[#DBDEE1] rounded-[34px] flex items-center px-4 gap-16">
         <Checkbox
           isSelected={formData?.is_include_tax || false}
@@ -87,16 +119,16 @@ const CarPrices = () => {
           <p className="text-[#1E1B1B] md:text-base text-sm font-normal">
             {t("taxIncluded")}
           </p>
-        </Checkbox>{" "}
+        </Checkbox>
         <Checkbox
           isSelected={formData?.is_include_warranty || false}
           onValueChange={(value) => updateField?.("is_include_warranty", value)}
           size="md"
         >
           <p className="text-[#1E1B1B] md:text-base text-sm font-normal">
-            {t("warrantyIncluded")}{" "}
+            {t("warrantyIncluded")}
           </p>
-        </Checkbox>{" "}
+        </Checkbox>
         <Checkbox
           isSelected={formData?.is_Insurance_warranty || false}
           onValueChange={(value) =>
@@ -105,7 +137,7 @@ const CarPrices = () => {
           size="md"
         >
           <p className="text-[#1E1B1B] md:text-base text-sm font-normal">
-            {t("insuranceIncluded")}{" "}
+            {t("insuranceIncluded")}
           </p>
         </Checkbox>
       </div>

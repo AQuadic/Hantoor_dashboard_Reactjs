@@ -99,5 +99,8 @@
   "name": "الاسم",
   "details": "التفاصيل",
   "durationDistance": "المدة/المسافة",
-  "duration": "المدة"
+  "duration": "المدة",
+
+  "discountFromDate": "تاريخ بداية الخصم",
+  "discountToDate": "تاريخ نهاية الخصم"
 }
