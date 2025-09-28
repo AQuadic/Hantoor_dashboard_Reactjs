@@ -42,10 +42,9 @@ const CarDetails = () => {
       pagination: true,
     });
 
-  const vehicleBodies = {
-    data: vehicleBodiesData?.data || [],
-    isLoading: vehicleBodiesLoading,
-  };
+  const vehicleBodies = Array.isArray(vehicleBodiesData)
+    ? vehicleBodiesData
+    : vehicleBodiesData?.data || [];
 
   // Fetch countries on component mount
   useEffect(() => {
@@ -189,16 +188,16 @@ const CarDetails = () => {
           size="lg"
           selectedKeys={
             formData?.vehicle_body_type_id
-              ? [formData.vehicle_body_type_id]
+              ? [formData.vehicle_body_type_id.toString()]
               : []
           }
           onSelectionChange={(keys) => {
             const value = Array.from(keys)[0] as string;
             updateField?.("vehicle_body_type_id", value);
           }}
-          isLoading={vehicleBodies.isLoading}
+          isLoading={vehicleBodiesLoading}
         >
-          {vehicleBodies.data.map((body) => (
+          {vehicleBodies.map((body) => (
             <SelectItem key={body.id.toString()}>
               {body.name[i18n.language as "ar" | "en"]}
             </SelectItem>
