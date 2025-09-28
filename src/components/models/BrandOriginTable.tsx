@@ -88,11 +88,6 @@ export function BrandOriginTable({
 
   if (!data || data.length === 0) return <NoData />;
 
-  const filtered = data?.filter((brand) => {
-    const name = currentLang === "ar" ? brand.name.ar : brand.name.en;
-    return name.toLowerCase().includes(search.toLowerCase());
-  });
-
   return (
     <Table>
       <TableHeader>
@@ -103,7 +98,7 @@ export function BrandOriginTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {filtered?.map((brand, index) => (
+        {data.map((brand, index) => (
           <TableRow key={brand.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">
