@@ -7,7 +7,7 @@ import TabsFilter from "../general/dashboard/TabsFilter";
 import { Select, SelectItem, RangeValue } from "@heroui/react";
 import { CalendarDate } from "@internationalized/date";
 import { usePermissions } from "@/hooks/usePermissions";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Country, getAllCountries } from "@/api/countries/getCountry";
 import { useTranslation } from "react-i18next";
@@ -30,6 +30,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   setSearch,
   dateRange,
   setDateRange,
+  selectedCountry,
   setSelectedCountry,
 }) => {
   const { t, i18n } = useTranslation("users");
@@ -42,10 +43,13 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
 
   const countries: Country[] = Array.isArray(data) ? data : [];
 
-  const selectItems = countries.map((c) => ({
-    key: c.id.toString(),
-    label: i18n.language === "ar" ? c.name.ar : c.name.en,
-  }));
+  const selectItems = [
+    { key: "all", label: t("all") },
+    ...countries.map((c) => ({
+      key: c.id.toString(),
+      label: i18n.language === "ar" ? c.name.ar : c.name.en,
+    })),
+  ];
 
   // Filter tabs based on user permissions
   const filtersData = useMemo(() => {
@@ -153,6 +157,14 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   };
   const placeholder = getSearchPlaceholder(selectedFilter);
 
+  useEffect(() => {
+    if (selectedFilter !== "Price From" && selectedFilter !== "Price To") {
+      setSelectedCountry(null);
+    } else {
+      setSelectedCountry(null);
+    }
+  }, [selectedFilter, setSelectedCountry]);
+
 
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
@@ -201,14 +213,15 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
               items={selectItems}
               label={t("country")}
               placeholder={t("all")}
+              selectedKeys={selectedCountry ? [selectedCountry] : ["all"]}
               onSelectionChange={(selection) => {
-                const key = [...selection][0];
-                setSelectedCountry(key !== undefined ? key.toString() : null);
-              }}
-            >
+                  const key = [...selection][0];
+                  setSelectedCountry(key === "all" ? null : String(key));
+                }}
+              >
               {(country) => <SelectItem key={country.key}>{country.label}</SelectItem>}
             </Select>
-                    </div>
+            </div>
           )}
     </div>
   );
