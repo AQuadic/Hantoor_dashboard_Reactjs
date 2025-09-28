@@ -7,18 +7,18 @@ export interface FinancingCountry {
     en: string;
   };
   code: string;
-  currency: string;
+  currency: string | null;
   currency_text: {
     ar: string;
     en: string;
   } | null;
-  language_code: string;
+  language_code: string | null;
   service_fee: number | null;
   service_duration_type: string | null;
   service_duration: string | null;
   is_active: boolean;
   banks_count: number;
-  users_count: number;
+  users_count?: number;
   created_at: string;
   updated_at?: string;
 }
@@ -34,10 +34,10 @@ export interface FinancingResponse {
   meta: {
     current_page: number;
     current_page_url: string;
-    from: number;
+    from: number | null;
     path: string;
     per_page: number;
-    to: number;
+    to: number | null;
     last_page?: number;
     total?: number;
   };
@@ -49,11 +49,11 @@ export async function getFinancingCountries(
   from_date?: string,
   to_date?: string
 ): Promise<FinancingResponse> {
-  const pageNum = Number(page);
+  const perPage = 15;
 
   const params: Record<string, string | number | boolean> = {
-    page: pageNum,
-    per_page: 15,
+    page,
+    per_page: perPage,
     pagination: true,
   };
 
@@ -69,35 +69,46 @@ export async function getFinancingCountries(
     params.to_date = to_date;
   }
 
-  // Use the financing endpoint which returns countries with banks information
-  const response = await axios.get("/admin/financing", {
-    params,
-  });
-
-  // Normalize response shape: some endpoints return pagination metadata at the root
-  // while the UI expects { data, links, meta } where meta contains pagination info.
+  const response = await axios.get("/admin/financing", { params });
   const raw: any = response.data;
 
-  // If backend already returns the expected shape, return it directly
-  if (raw && raw.meta) {
+  if (Array.isArray(raw)) {
+    const total = raw.length;
+    const from = total > 0 ? (page - 1) * perPage + 1 : 0;
+    const to = from + total - 1;
+
+    return {
+      data: raw,
+      links: { first: null, last: null, prev: null, next: null },
+      meta: {
+        current_page: page,
+        current_page_url: "",
+        from,
+        path: "/admin/financing",
+        per_page: perPage,
+        to,
+        last_page: Math.ceil(total / perPage),
+        total,
+      },
+    };
+  }
+
+  if (raw?.meta && raw?.data) {
     return raw as FinancingResponse;
   }
 
-  // Map root-level pagination fields into meta to match existing UI expectations
-  const mapped: FinancingResponse = {
+  return {
     data: raw?.data || [],
     links: raw?.links || { first: null, last: null, prev: null, next: null },
     meta: {
-      current_page: raw?.current_page ?? 1,
-      current_page_url: raw?.first_page_url ?? raw?.current_page_url ?? "",
-      from: raw?.from ?? null,
-      path: raw?.path ?? "",
-      per_page: raw?.per_page ?? raw?.perPage ?? 15,
-      to: raw?.to ?? null,
-      last_page: raw?.last_page ?? raw?.lastPage ?? undefined,
-      total: raw?.total ?? undefined,
+      current_page: raw?.current_page ?? page,
+      current_page_url: raw?.first_page_url ?? "",
+      from: raw?.from ?? 0,
+      path: raw?.path ?? "/admin/financing",
+      per_page: raw?.per_page ?? perPage,
+      to: raw?.to ?? 0,
+      last_page: raw?.last_page ?? 1,
+      total: raw?.total ?? raw?.data?.length ?? 0,
     },
   };
-
-  return mapped;
 }

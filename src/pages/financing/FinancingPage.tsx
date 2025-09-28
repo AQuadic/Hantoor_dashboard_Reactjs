@@ -50,14 +50,14 @@ const FinancingPage = () => {
           error={error}
         />
         {financingData && financingData.data?.length > 0 && (
-          <TablePagination
+        <TablePagination
             currentPage={financingData.meta.current_page}
             setCurrentPage={handlePageChange}
             totalPages={financingData.meta.last_page || 1}
             totalItems={financingData.meta.total || 0}
             itemsPerPage={financingData.meta.per_page}
-            from={financingData.meta.from}
-            to={financingData.meta.to}
+            from={financingData.meta.from ?? 0} 
+            to={financingData.meta.to ?? 0} 
           />
         )}
       </div>
