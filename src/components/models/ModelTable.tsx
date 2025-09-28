@@ -27,7 +27,7 @@ import NoData from "../general/NoData";
 interface ModelTableProps {
   readonly page: number;
   readonly search: string;
-  readonly dateParams?: { from_date?: string; to_date?: string }; // <-- add date filter
+  readonly dateParams?: { from_date?: string; to_date?: string };
   readonly setPagination: (meta: {
     totalPages: number;
     totalItems: number;
@@ -94,11 +94,6 @@ export function ModelTable({ page, search, dateParams, setPagination }: ModelTab
   if (isLoading) return <Loading />;
   if (models.length === 0) return <NoData />;
 
-  const filtered = models.filter((model) => {
-    const name = i18n.language === "ar" ? model.name.ar : model.name.en || model.name.ar;
-    return name.toLowerCase().includes(search.toLowerCase());
-  });
-
   return (
     <Table>
       <TableHeader>
@@ -109,7 +104,7 @@ export function ModelTable({ page, search, dateParams, setPagination }: ModelTab
         </TableRow>
       </TableHeader>
       <TableBody>
-        {filtered.map((model, index) => (
+        {models.map((model, index) => (
           <TableRow key={model.id} noBackgroundColumns={1}>
             <TableCell>{paginationData.from + index}</TableCell>
             <TableCell className="w-full">
