@@ -58,7 +58,7 @@ const DashboardUsers = () => {
           <div className="flex-1">
             <DashboardDatePicker value={dateRange} onChange={setDateRange} />
           </div>
-          {canAdd && (
+          {/* {canAdd && ( */}
             <Link to="/users/add">
               <DashboardButton
                 titleAr={"إضافة مستخدم جديد"}
@@ -66,7 +66,7 @@ const DashboardUsers = () => {
                 variant="add"
               />
             </Link>
-          )}
+          {/* )} */}
         </div>
 
         <UserSelects
