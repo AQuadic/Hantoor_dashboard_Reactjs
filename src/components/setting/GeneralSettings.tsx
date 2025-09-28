@@ -256,6 +256,22 @@ const GeneralSettings = () => {
     }
   };
 
+  const handleRemoveImage = async () => {
+  setExistingProfileImageUrl(null);
+  setProfileImage(null);
+
+  try {
+    setLoadingStates((prev) => ({ ...prev, profile_image: true }));
+    const response = await updateSettings({ remove_image: true });
+    toast.success(response.message || t("savedSuccessfully"));
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    toast.error(message || t("somethingWentWrong"));
+  } finally {
+    setLoadingStates((prev) => ({ ...prev, profile_image: false }));
+  }
+};
+
   return (
     <section>
       {/* 1 */}
@@ -302,6 +318,7 @@ const GeneralSettings = () => {
           image={profileImage ?? existingProfileImageUrl}
           existingImageUrl={existingProfileImageUrl ?? undefined}
           setImage={setProfileImage}
+          onRemoveImage={handleRemoveImage} 
         />
         <div className="mt-4">
           <DashboardButton
