@@ -87,10 +87,6 @@ export function EngineTypesTable({
 
   if (!engineTypes || !engineTypes.length) return <NoData />;
 
-  const filtered = engineTypes?.filter((engine) => {
-    // Only ar name is used in table, so filter by that
-    return engine.name.ar.toLowerCase().includes(search.toLowerCase());
-  });
 
   return (
     <Table>
@@ -102,7 +98,7 @@ export function EngineTypesTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {filtered?.map((engine, index) => (
+        {engineTypes?.map((engine, index) => (
           <TableRow key={engine.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">{engine.name.ar}</TableCell>

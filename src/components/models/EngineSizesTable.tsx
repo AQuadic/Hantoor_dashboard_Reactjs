@@ -85,13 +85,6 @@ export function EngineSizesTable({
 
   if (!engineSize || engineSize.length === 0) return <NoData />;
 
-  const filtered = engineSize?.filter((engine) => {
-    const name =
-      i18n.language === "ar"
-        ? engine.name.ar.slice(0, 7)
-        : engine.name.en.slice(0, 7);
-    return name.toLowerCase().includes(search.toLowerCase());
-  });
 
   return (
     <Table>
@@ -103,7 +96,7 @@ export function EngineSizesTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {filtered?.map((engine, index) => (
+        {engineSize?.map((engine, index) => (
           <TableRow key={engine.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
             <TableCell className="w-full">
