@@ -187,7 +187,6 @@ const EditCountries = () => {
             value={code}
             onChange={setCode}
             placeholder="EG"
-            disabled
           />
         </div>
         <div className="relative w-full">
@@ -196,7 +195,6 @@ const EditCountries = () => {
             value={currencyCode}
             onChange={setCurrencyCode}
             placeholder={t("AED")}
-            disabled
           />
         </div>
         </div>
