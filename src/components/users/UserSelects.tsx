@@ -36,6 +36,7 @@ const UserSelects = ({
     { key: "phone", label: t("phone") },
     { key: "email", label: t("email") },
     { key: "admin", label: t("admin") },
+    { key: "facebook", label: t("facebook") },
     ];
 
     return (
