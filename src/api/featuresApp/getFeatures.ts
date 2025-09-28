@@ -32,14 +32,15 @@ export interface FeaturesResponse {
   total: number;
 }
 
-export const getFeatures = async (page: number, perPage: number) => {
-  const { data } = await axios.get<FeaturesResponse>(
-    `/admin/vehicle/feature-app?pagination=true&page=${page}&per_page=${perPage}`,{
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    } 
-  }
+export const getFeatures = async (page: number, perPage: number): Promise<Feature[]> => {
+  const { data } = await axios.get<Feature[]>(
+    `/admin/vehicle/feature-app?page=${page}&per_page=${perPage}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    }
   );
   return data;
 };
