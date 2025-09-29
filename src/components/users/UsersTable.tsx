@@ -158,6 +158,17 @@ export function UserTable({
   if (isLoading) return <Loading />;
   if (users.length === 0) return <NoData />;
 
+  const signupMethodLabels: Record<string, string> = {
+  all: t("all"),
+  apple: t("apple"),
+  google: t("google"),
+  phone: t("phone"),
+  email: t("email"),
+  admin: t("admin"),
+  facebook: t("facebook"),
+};
+
+
   return (
     <Table>
       <TableHeader>
@@ -202,7 +213,10 @@ export function UserTable({
             <TableCell dir="ltr">{user.phone || "-"}</TableCell>
             <TableCell>{user.email || "-"}</TableCell>
             <TableCell>{formatDate(user.created_at, i18n.language)}</TableCell>
-            <TableCell>{user.created_by}</TableCell>
+            <TableCell>
+              {user.created_by ? signupMethodLabels[user.created_by] ?? user.created_by : "-"}
+            </TableCell>
+
             <TableCell>
               {user.country
                 ? (() => {
