@@ -50,15 +50,15 @@ export interface Conversation {
 
 export interface SupportConversationsResponse {
   data: Conversation[];
-  current_page: number;
-  from: number | null;
-  to: number | null;
-  per_page: string;
-  first_page_url: string;
-  next_page_url: string | null;
-  prev_page_url: string | null;
-  path: string;
-  current_page_url: string;
+  links: any[];
+  meta: {
+    current_page: number;
+    from: number | null;
+    last_page: number;
+    per_page: number;
+    to: number | null;
+    total: number;
+  };
 }
 
 export interface GetSupportConversationsParams {

@@ -92,16 +92,14 @@ const SupportMessagesTable = ({
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{message.id}</TableCell>
                 <TableCell>
-                  {message.faq.country
-                    ? i18n.language === "ar"
-                      ? message.faq.country.name.ar
-                      : message.faq.country.name.en
-                    : "-"}
+                  {i18n.language === "ar"
+                    ? message.faq?.question?.ar ?? "-"
+                    : message.faq?.question?.en ?? "-"}
                 </TableCell>
                 <TableCell>
                   {i18n.language === "ar"
-                    ? message.faq.question.ar
-                    : message.faq.question.en}
+                    ? message.faq?.question?.ar ?? "-"
+                    : message.faq?.question?.en ?? "-"}
                 </TableCell>
                 <TableCell>{message.user.name}</TableCell>
                 <TableCell className="w-full">

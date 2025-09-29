@@ -12,7 +12,7 @@ import { useDatePicker } from "@/hooks/useDatePicker";
 const SupportMessagesPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
-  const [searchTerm, setSearchTerm] = useState(""); // <-- new search term
+  const [searchTerm, setSearchTerm] = useState("");
   const { dateRange, setDateRange, dateParams } = useDatePicker();
   const itemsPerPage = 5;
   const { data, isLoading, refetch } = useQuery<
@@ -34,22 +34,13 @@ const SupportMessagesPage = () => {
         search: searchTerm,
         country_id: selectedCountry ? Number(selectedCountry) : undefined, 
         ...dateParams,
-      })
+      }),
   });
-  const filteredConversations =
-    data?.data.filter((c) => {
-      const search = searchTerm.toLowerCase();
-      return (
-        c.id.toString().includes(search) ||
-        c.user.name.toLowerCase().includes(search) ||
-        c.user.phone.toLowerCase().includes(search) ||
-        c.faq.question.ar.toLowerCase().includes(search) ||
-        c.faq.question.en.toLowerCase().includes(search)
-      );
-    }) || [];
 
-  const totalItems = filteredConversations.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const totalItems = data?.meta?.total ?? 0;
+  const totalPages = data?.meta?.last_page ?? 1;
+  const from = data?.meta?.from ?? 0;
+  const to = data?.meta?.to ?? 0;
 
   return (
     <div>
@@ -63,7 +54,7 @@ const SupportMessagesPage = () => {
       />
       <div className="px-2 md:px-8">
         <SupportMessagesTable
-          conversations={filteredConversations}
+          conversations={data?.data ?? []}
           isLoading={isLoading}
           refetch={refetch}
         />
@@ -75,8 +66,8 @@ const SupportMessagesPage = () => {
             totalPages={totalPages}
             totalItems={totalItems}
             itemsPerPage={itemsPerPage}
-            from={(currentPage - 1) * itemsPerPage + 1}
-            to={Math.min(currentPage * itemsPerPage, totalItems)}
+            from={from}
+            to={to}
           />
         )}
       </div>
