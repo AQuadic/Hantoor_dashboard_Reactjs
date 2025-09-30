@@ -12,6 +12,7 @@ import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { useQuery } from "@tanstack/react-query";
 import { Brand } from "@/types/dropdown";
 import { fetchBrands } from "@/api/brand/fetchBrands";
+import { fetchAgents, Agent } from "@/api/agents/fetchAgents";
 
 const CarDetails = () => {
   const { t, i18n } = useTranslation("cars");
@@ -60,6 +61,17 @@ const CarDetails = () => {
     queryKey: ["allCountries"],
     queryFn: async () => {
       return await getAllCountries();
+    },
+  });
+
+  const { data: allAgents = [], isLoading: allAgentsLoading } = useQuery<
+    Agent[],
+    Error
+  >({
+    queryKey: ["allAgents"],
+    queryFn: async () => {
+      const res = await fetchAgents(1, "", undefined, false); // isPaginated = false
+      return res as Agent[];
     },
   });
 
@@ -171,7 +183,7 @@ const CarDetails = () => {
           }}
           isLoading={agents.isLoading}
         >
-          {agents.data.map((agent) => (
+          {allAgents.map((agent) => (
             <SelectItem key={agent.id.toString()}>
               {agent.name[i18n.language as "ar" | "en"]}
             </SelectItem>
