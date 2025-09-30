@@ -7,8 +7,12 @@ import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
 import { VehicleFeature } from "@/api/vehicles/fetchVehicles";
 import { useAllDropdownData, useVehicleTypes } from "@/hooks/useDropdownData";
-import { getCountries, Country } from "@/api/countries/getCountry";
+import { getCountries, Country, getAllCountries } from "@/api/countries/getCountry";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
+import { useQuery } from "@tanstack/react-query";
+import { Brand } from "@/types/dropdown";
+import { fetchBrands } from "@/api/brand/fetchBrands";
+import { fetchAgents, Agent } from "@/api/agents/fetchAgents";
 
 const CarDetails = () => {
   const { t, i18n } = useTranslation("cars");
@@ -41,6 +45,35 @@ const CarDetails = () => {
     useVehicleBodies({
       pagination: true,
     });
+
+  const { data: allBrands = [] } = useQuery<Brand[], Error>({
+    queryKey: ['allBrands'],
+    queryFn: async () => {
+      const res = await fetchBrands(1, "", undefined, undefined, false); // isPaginated = false
+      return res as Brand[];
+    }
+    });
+
+  const { data: allCountries = [] } = useQuery<
+    Country[],
+    Error
+  >({
+    queryKey: ["allCountries"],
+    queryFn: async () => {
+      return await getAllCountries();
+    },
+  });
+
+  const { data: allAgents = [], isLoading: allAgentsLoading } = useQuery<
+    Agent[],
+    Error
+  >({
+    queryKey: ["allAgents"],
+    queryFn: async () => {
+      const res = await fetchAgents(1, "", undefined, false); // isPaginated = false
+      return res as Agent[];
+    },
+  });
 
   const vehicleBodies = Array.isArray(vehicleBodiesData)
     ? vehicleBodiesData
@@ -111,13 +144,12 @@ const CarDetails = () => {
           }}
           isLoading={countriesLoading}
         >
-          {countries.map((country) => (
+          {allCountries.map((country) => (
             <SelectItem key={country.id.toString()}>
               {country.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
-
         <Select
           label={t("brand")}
           variant="bordered"
@@ -131,9 +163,9 @@ const CarDetails = () => {
           }}
           isLoading={brands.isLoading}
         >
-          {brands.data.map((brand) => (
+          {allBrands.map((brand) => (
             <SelectItem key={brand.id.toString()}>
-              {brand?.name[i18n.language as "ar" | "en"]}
+              {brand.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
@@ -151,7 +183,7 @@ const CarDetails = () => {
           }}
           isLoading={agents.isLoading}
         >
-          {agents.data.map((agent) => (
+          {allAgents.map((agent) => (
             <SelectItem key={agent.id.toString()}>
               {agent.name[i18n.language as "ar" | "en"]}
             </SelectItem>

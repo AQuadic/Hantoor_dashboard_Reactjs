@@ -53,12 +53,35 @@ export async function fetchBrands(
   page: number = 1,
   searchTerm: string = "",
   from_date?: string,
-  to_date?: string
-): Promise<BrandsApiResponse> {
+  to_date?: string,
+  isPaginated: boolean = true
+): Promise<BrandsApiResponse | Brand[]> {
+  if (isPaginated) {
   const params: Record<string, string | number> = { page };
   if (searchTerm) params.search = searchTerm;
   if (from_date) params.from_date = from_date;
   if (to_date) params.to_date = to_date;
-  const response = await axios.get(`/admin/brands`, { params });
-  return response.data as BrandsApiResponse;
+
+  const response = await axios.get<BrandsApiResponse>(`/admin/brands`, { params });
+  return response.data;
+} else {
+  let allBrands: Brand[] = [];
+  let currentPage = 1;
+  let totalPages = 1;
+
+  do {
+    const params: Record<string, string | number> = { page: currentPage };
+    if (searchTerm) params.search = searchTerm;
+    if (from_date) params.from_date = from_date;
+    if (to_date) params.to_date = to_date;
+
+    const response = await axios.get<BrandsApiResponse>(`/admin/brands`, { params });
+    const data = response.data;
+    allBrands = [...allBrands, ...data.data];
+    totalPages = data.last_page;
+    currentPage++;
+  } while (currentPage <= totalPages);
+
+  return allBrands;
+}
 }
