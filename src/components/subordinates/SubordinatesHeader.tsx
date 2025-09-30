@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
+import { useHasPermission } from "@/hooks/usePermissions";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
@@ -27,6 +28,9 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
   dateRange,
   setDateRange,
 }) => {
+  const canCreateAdmin = useHasPermission("create_admin");
+  const canCreatePermission = useHasPermission("create_permission");
+
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -67,23 +71,25 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
-        {selectedFilter === "Subordinates" ? (
-          <Link to="/subordinates/add">
-            <DashboardButton
-              titleEn={"Add a new Subordinate"}
-              titleAr={"اضافة مسؤول فرعي جديد"}
-              variant="add"
-            />
-          </Link>
-        ) : (
-          <Link to="/subordinates/permissions/add">
-            <DashboardButton
-              titleEn={"Add new permission"}
-              titleAr={"اضافة صلاحية جديدة "}
-              variant="add"
-            />
-          </Link>
-        )}
+        {selectedFilter === "Subordinates"
+          ? canCreateAdmin && (
+              <Link to="/subordinates/add">
+                <DashboardButton
+                  titleEn={"Add a new Subordinate"}
+                  titleAr={"اضافة مسؤول فرعي جديد"}
+                  variant="add"
+                />
+              </Link>
+            )
+          : canCreatePermission && (
+              <Link to="/subordinates/permissions/add">
+                <DashboardButton
+                  titleEn={"Add new permission"}
+                  titleAr={"اضافة صلاحية جديدة "}
+                  variant="add"
+                />
+              </Link>
+            )}
       </div>
     </div>
   );

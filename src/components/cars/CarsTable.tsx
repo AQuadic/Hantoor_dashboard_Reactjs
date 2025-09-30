@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { toast } from "react-hot-toast";
 import TableDeleteButton from "../general/dashboard/table/TableDeleteButton";
 import {
@@ -47,13 +48,16 @@ const CarsTable = ({
   onDataChange,
 }: CarsTableProps) => {
   const { t, i18n } = useTranslation("cars");
+  const canEdit = useHasPermission("edit_vehicle");
   const queryClient = useQueryClient();
   const [openChatId, setOpenChatId] = useState<number | null>(null);
   // Local status map to allow immediate UI toggle feedback
   const [localStatusMap, setLocalStatusMap] = useState<Record<number, boolean>>(
     {}
   );
-const [openConversationId, setOpenConversationId] = useState<number | null>(null);
+  const [openConversationId, setOpenConversationId] = useState<number | null>(
+    null
+  );
 
   // Fetch vehicles with filters
   const {
@@ -88,12 +92,12 @@ const [openConversationId, setOpenConversationId] = useState<number | null>(null
       toast.error(t("errorFetchingVehicles") || "Error fetching vehicles");
     }
   }, [error, t]);
-  
+
   useEffect(() => {
     if (openChatId !== null && vehiclesData?.data) {
-      const vehicle = vehiclesData.data.find(
-        (v) => v.id === openChatId
-      ) as Vehicle & { conversation?: { id: number } } | undefined;
+      const vehicle = vehiclesData.data.find((v) => v.id === openChatId) as
+        | (Vehicle & { conversation?: { id: number } })
+        | undefined;
 
       if (vehicle?.conversation) {
         setOpenConversationId(vehicle.conversation.id);
@@ -102,7 +106,6 @@ const [openConversationId, setOpenConversationId] = useState<number | null>(null
       }
     }
   }, [openChatId, vehiclesData]);
-
 
   // Call onDataChange when data changes
   useEffect(() => {
@@ -208,21 +211,20 @@ const [openConversationId, setOpenConversationId] = useState<number | null>(null
     );
   };
 
-const formatDate = (dateString: string) => {
-  if (!dateString) return "-";
-  const date = new Date(dateString);
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
 
-  return date.toLocaleString(i18n.language === "ar" ? "ar-EG" : "en-US", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  });
-};
-
+    return date.toLocaleString(i18n.language === "ar" ? "ar-EG" : "en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+  };
 
   const formatPrice = (price: string) => {
     try {
@@ -348,18 +350,18 @@ const formatDate = (dateString: string) => {
               <TableRow key={vehicle.id} noBackgroundColumns={1}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>
-                {getVehicleImage(vehicle) ? (
-                  <img
-                    src={getVehicleImage(vehicle)}
-                    alt={getVehicleDisplayName(vehicle.name)}
-                    className="w-[93px] h-[60px] object-cover rounded"
-                    onError={(e) => {
-                      (e.currentTarget as HTMLImageElement).src = carImage;
-                    }}
-                  />
-                ) : (
-                  <TableImagePlaceholder className="w-[93px] h-[60px]" />
-                )}
+                  {getVehicleImage(vehicle) ? (
+                    <img
+                      src={getVehicleImage(vehicle)}
+                      alt={getVehicleDisplayName(vehicle.name)}
+                      className="w-[93px] h-[60px] object-cover rounded"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = carImage;
+                      }}
+                    />
+                  ) : (
+                    <TableImagePlaceholder className="w-[93px] h-[60px]" />
+                  )}
                 </TableCell>
                 <TableCell>{getVehicleDisplayName(vehicle.name)}</TableCell>
                 <TableCell>
@@ -369,7 +371,9 @@ const formatDate = (dateString: string) => {
                   {vehicle.agent?.name[i18n.language as "ar" | "en"]}
                 </TableCell>
                 <TableCell>
-                  {vehicle.vehicle_type?.name?.[i18n.language === "ar" ? "ar" : "en"] ?? "-"}
+                  {vehicle.vehicle_type?.name?.[
+                    i18n.language === "ar" ? "ar" : "en"
+                  ] ?? "-"}
                 </TableCell>
                 <TableCell>
                   {vehicle.vehicle_model?.name[i18n.language as "ar" | "en"]}
@@ -414,9 +418,11 @@ const formatDate = (dateString: string) => {
                   <Link to={`/cars/${vehicle.id}`} className="">
                     <ViewIcon />
                   </Link>
-                  <Link to={`/cars/edit/${vehicle.id}`} className="mt-2">
-                    <TableEditButton />
-                  </Link>
+                  {canEdit && (
+                    <Link to={`/cars/edit/${vehicle.id}`} className="mt-2">
+                      <TableEditButton />
+                    </Link>
+                  )}
                   <div className="mt-2">
                     <TableDeleteButton
                       handleDelete={() => handleDelete(vehicle.id)}
@@ -450,7 +456,7 @@ const formatDate = (dateString: string) => {
               transition={{ duration: 0.3 }}
               className="fixed top-0 right-0 h-full md:w-[493px] w-[300px] bg-white shadow-lg z-50 overflow-y-auto"
             >
-            <ConversationPage conversationId={openConversationId!} />
+              <ConversationPage conversationId={openConversationId!} />
             </motion.div>
           </>
         )}

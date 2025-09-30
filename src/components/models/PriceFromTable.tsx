@@ -11,6 +11,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
@@ -46,6 +47,7 @@ export function PriceFromTable({
   dateParams,
 }: PriceFromTableProps) {
   const { t, i18n } = useTranslation("models");
+  const canEdit = useHasPermission("edit_price_from");
 
   const { data, isLoading, refetch } = useQuery<PriceFromResponse>({
     queryKey: ["pricefrom", page, search, countryId, dateParams],
@@ -126,9 +128,11 @@ export function PriceFromTable({
                 isSelected={price.is_active === 1}
                 onChange={() => handleToggleStatus(price.id, price.is_active)}
               />
-              <Link to={`/price-from/edit/${price.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/price-from/edit/${price.id}`}>
+                  <Edit />
+                </Link>
+              )}
               <div className="mt-2">
                 <TableDeleteButton
                   handleDelete={() => handleDelete(price.id)}

@@ -1,5 +1,6 @@
 import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
+import { useHasPermission } from "@/hooks/usePermissions";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
@@ -19,6 +20,8 @@ const TechnicalsupportHeader: React.FC<TechnicalsupportHeaderProps> = ({
   dateRange,
   setDateRange,
 }) => {
+  const canCreate = useHasPermission("create_support_question");
+
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -47,13 +50,15 @@ const TechnicalsupportHeader: React.FC<TechnicalsupportHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
-        <Link to="/technical-support/add">
-          <DashboardButton
-            titleAr={"اضافة سؤال جديد"}
-            titleEn="Add a new question"
-            variant="add"
-          />
-        </Link>
+        {canCreate && (
+          <Link to="/technical-support/add">
+            <DashboardButton
+              titleAr={"اضافة سؤال جديد"}
+              titleEn="Add a new question"
+              variant="add"
+            />
+          </Link>
+        )}
       </div>
     </div>
   );

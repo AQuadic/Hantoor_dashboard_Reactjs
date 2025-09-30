@@ -11,6 +11,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { useQuery } from "@tanstack/react-query";
 import {
   getModels,
@@ -37,8 +38,14 @@ interface ModelTableProps {
   }) => void;
 }
 
-export function ModelTable({ page, search, dateParams, setPagination }: ModelTableProps) {
+export function ModelTable({
+  page,
+  search,
+  dateParams,
+  setPagination,
+}: ModelTableProps) {
   const { t, i18n } = useTranslation("models");
+  const canEdit = useHasPermission("edit_vehicle_model");
 
   const {
     data: modelsResponse,
@@ -117,9 +124,11 @@ export function ModelTable({ page, search, dateParams, setPagination }: ModelTab
                 isSelected={model.is_active}
                 onChange={() => handleToggleStatus(model)}
               />
-              <Link to={`/models/edit/${model.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/models/edit/${model.id}`}>
+                  <Edit />
+                </Link>
+              )}
               <div className="mt-2">
                 <TableDeleteButton
                   handleDelete={() => handleDelete(model.id)}

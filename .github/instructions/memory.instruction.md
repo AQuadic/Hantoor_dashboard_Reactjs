@@ -1063,3 +1063,43 @@ const handleSave = async (
 - Added `src/components/general/TableImagePlaceholder.tsx` — reusable placeholder component for table image cells when there's no image.
 - Updated `src/components/notifications/NotificationTable.tsx` to use the new placeholder instead of an empty div when a notification has no image.
 - Preserved existing error handling and toasts; ensured remove image action works immediately and on save.
+
+# 2025-09-30: PERMISSION-GATING PROGRESS
+
+- Task: Hide Add (header) and Edit (table row) controls when the current admin user lacks the appropriate permission.
+- Scope: Components under src/components/\* that render tables and headers across admin pages (models, users, cars, agents, financing, countries, faqs, features, settings/profile, technical support, brands).
+- Actions taken:
+
+  - Added useHasPermission imports and top-level const canEdit / canCreate variables to multiple components.
+  - Wrapped Edit links and Add buttons with conditional rendering (e.g., {canEdit && <Link .../>}).
+  - Fixed several Rule-of-Hooks issues by moving hooks to top-level.
+  - Replaced several unsafe catch(err: any) occurrences with unknown and small helpers to extract messages safely.
+  - Marked many component prop types as readonly to satisfy lint rules.
+
+- Files updated (representative list):
+
+  - src/components/faqs/FAQsTable.tsx — gated Edit link (edit_faq) and improved error handling
+  - src/components/subordinates/SubordinatesTable.tsx — gated Edit / Change Password (edit_admin, edit_admin_password)
+  - src/components/users/UsersTable.tsx — gated Edit / Change Password (edit_user, edit_user_password)
+  - src/components/models/\* — gated many model-related edit links (ModelTable, StructureTable, PriceFromTable, PriceToTable, EngineTypesTable, EngineSizesTable, NumberOfSeatsTable, CategoriesTable, BrandOriginTable, CatTypesTable)
+  - src/components/features/FeaturesTable.tsx — verified edit gating (edit_app_feature)
+  - src/components/countries/CountriesTable.tsx — gated edit link (edit_country)
+  - src/components/brands/BrandsHeader.tsx — Add button already gated (create_brand)
+  - src/components/financing/BanksTable.tsx — gated bank edit link (edit_bank)
+  - src/components/cars/CarsTable.tsx — gated car edit (edit_vehicle)
+  - src/components/agents/AgentPageTable.tsx — gated agent edit (edit_agent)
+  - src/components/cars/viewCars/AboutCar.tsx — gated car edit (edit_vehicle)
+  - src/components/setting/profile/ProfileTable.tsx — gated profile edit (edit_profile)
+
+- Outstanding work / known issues found by lint/TS checks:
+
+  - Import-casing conflicts (pricefrom/priceFrom and priceto/priceTo) that must be normalized across imports/files on disk.
+  - Several unrelated lint advisories (nested ternaries, unnecessary assertions, absolute import paths) that can be cleaned in a follow-up pass.
+
+- Next steps (planned):
+  1. Finish gating any remaining model subtables not yet updated.
+  2. Gate Add buttons in headers across pages that have Add actions (AgentsHeader, CarsHeader, ModelsHeader where applicable).
+  3. Normalize import casing for priceFrom/priceTo files to eliminate TS errors on Windows.
+  4. Run full lint/TS build, fix remaining warnings/errors, and run quick smoke tests in the app.
+
+I will continue applying the remaining patches and then run a full lint/build pass; progress will be appended to this memory entry.

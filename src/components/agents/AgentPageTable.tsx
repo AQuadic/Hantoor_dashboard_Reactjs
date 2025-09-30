@@ -14,6 +14,7 @@ import Copy from "../icons/agents/Copy";
 import View from "../icons/general/View";
 import { Agent } from "@/api/agents/fetchAgents";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import NoData from "../general/NoData";
 import Loading from "../general/Loading";
 import toast from "react-hot-toast";
@@ -32,6 +33,7 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
   isLoading,
 }) => {
   const { t, i18n } = useTranslation("agents");
+  const canEdit = useHasPermission("edit_agent");
   if (isLoading) return <Loading />;
   if (!agents || agents.length === 0) return <NoData />;
 
@@ -84,8 +86,8 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
                 isSelected={!!agent.is_active}
                 onValueChange={(isSelected) => {
                   onToggleActive?.(agent.id, isSelected);
-                  toast.dismiss()
-                  toast.success(t('statusUpdated'))
+                  toast.dismiss();
+                  toast.success(t("statusUpdated"));
                 }}
               />
               <button
@@ -97,9 +99,11 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
               <Link to={`/agent/details/${agent.id}`}>
                 <View />
               </Link>
-              <Link to={`/agent/edit/${agent.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/agent/edit/${agent.id}`}>
+                  <Edit />
+                </Link>
+              )}
               <div className="mt-2">
                 <TableDeleteButton handleDelete={() => onDelete(agent.id)} />
               </div>

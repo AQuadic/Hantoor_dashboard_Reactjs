@@ -14,6 +14,7 @@ import { Switch } from "@heroui/react";
 import { DatePicker } from "@heroui/date-picker";
 import { CalendarDate } from "@internationalized/date";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { useQuery } from "@tanstack/react-query";
 import {
   AdminUser,
@@ -48,6 +49,8 @@ export function UserTable({
   onDataLoaded,
 }: UserTableProps) {
   const { t, i18n } = useTranslation("users");
+  const canEdit = useHasPermission("edit_user");
+  const canChangePassword = useHasPermission("edit_user_password");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: [
@@ -159,15 +162,14 @@ export function UserTable({
   if (users.length === 0) return <NoData />;
 
   const signupMethodLabels: Record<string, string> = {
-  all: t("all"),
-  apple: t("apple"),
-  google: t("google"),
-  phone: t("phone"),
-  email: t("email"),
-  admin: t("admin"),
-  facebook: t("facebook"),
-};
-
+    all: t("all"),
+    apple: t("apple"),
+    google: t("google"),
+    phone: t("phone"),
+    email: t("email"),
+    admin: t("admin"),
+    facebook: t("facebook"),
+  };
 
   return (
     <Table>
@@ -214,7 +216,9 @@ export function UserTable({
             <TableCell>{user.email || "-"}</TableCell>
             <TableCell>{formatDate(user.created_at, i18n.language)}</TableCell>
             <TableCell>
-              {user.created_by ? signupMethodLabels[user.created_by] ?? user.created_by : "-"}
+              {user.created_by
+                ? signupMethodLabels[user.created_by] ?? user.created_by
+                : "-"}
             </TableCell>
 
             <TableCell>
@@ -291,12 +295,16 @@ export function UserTable({
                   }
                 }}
               />
-              <Link to={`/users/edit/${user.id}`}>
-                <Edit />
-              </Link>
-              <Link to={`/users/change-password/${user.id}`}>
-                <Password />
-              </Link>
+              {canEdit && (
+                <Link to={`/users/edit/${user.id}`}>
+                  <Edit />
+                </Link>
+              )}
+              {canChangePassword && (
+                <Link to={`/users/change-password/${user.id}`}>
+                  <Password />
+                </Link>
+              )}
               <TableDeleteButton handleDelete={() => handleDelete(user.id)} />
             </TableCell>
           </TableRow>

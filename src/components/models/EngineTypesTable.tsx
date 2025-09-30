@@ -17,21 +17,25 @@ import {
 } from "@/api/models/engineTypes/getEngineType";
 import { deleteEngineType } from "@/api/models/engineTypes/deleteEngineType";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import { updateEngineType } from "@/api/models/engineTypes/editEngineType";
 import NoData from "../general/NoData";
 
 interface EngineTypesTableProps {
-  search?: string;
-  page?: number;
-  dateParams?: { from_date?: string; to_date?: string }; // <-- add date filter
-  setPagination?: (meta: {
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-    from: number;
-    to: number;
+  readonly search?: string;
+  readonly page?: number;
+  readonly dateParams?: {
+    readonly from_date?: string;
+    readonly to_date?: string;
+  }; // <-- add date filter
+  readonly setPagination?: (meta: {
+    readonly totalPages: number;
+    readonly totalItems: number;
+    readonly itemsPerPage: number;
+    readonly from: number;
+    readonly to: number;
   }) => void;
 }
 
@@ -42,7 +46,12 @@ export function EngineTypesTable({
   dateParams,
 }: EngineTypesTableProps) {
   const { t } = useTranslation("models");
-  const { data: engineTypes, isLoading, refetch } = useQuery<EngineType[]>({
+  const canEdit = useHasPermission("edit_engine_type");
+  const {
+    data: engineTypes,
+    isLoading,
+    refetch,
+  } = useQuery<EngineType[]>({
     queryKey: ["engineTypes", page, search, dateParams],
     queryFn: async () => {
       const r = await getEngineTypePaginated({ page, search, ...dateParams });
@@ -85,8 +94,7 @@ export function EngineTypesTable({
     return <Loading />;
   }
 
-  if (!engineTypes || !engineTypes.length) return <NoData />;
-
+  if (!engineTypes?.length) return <NoData />;
 
   return (
     <Table>
@@ -107,9 +115,11 @@ export function EngineTypesTable({
                 isSelected={engine.is_active}
                 onChange={() => handleToggleStatus(engine.id, engine.is_active)}
               />
-              <Link to={`/engin-type/edit/${engine.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/engin-type/edit/${engine.id}`}>
+                  <Edit />
+                </Link>
+              )}
 
               <div className="mt-2">
                 <TableDeleteButton

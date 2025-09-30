@@ -11,6 +11,7 @@ import {
 import TableDeleteButton from "../../general/dashboard/table/TableDeleteButton";
 import Edit from "../../icons/general/Edit";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { getOnboardings, OnboardingItem } from "@/api/onboarding/getProfile";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
@@ -49,6 +50,7 @@ interface Props {
 
 const ProfileTable = ({ countryId }: Props) => {
   const { t, i18n } = useTranslation("setting");
+  const canEdit = useHasPermission("edit_profile");
 
   const {
     data: profiles,
@@ -123,9 +125,11 @@ const ProfileTable = ({ countryId }: Props) => {
                 : parseDescription(profile.description.en)}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Link to={`/profile/edit/${profile.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/profile/edit/${profile.id}`}>
+                  <Edit />
+                </Link>
+              )}
 
               <div className="mt-2">
                 <TableDeleteButton

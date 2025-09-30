@@ -11,6 +11,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import Loading from "../general/Loading";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -27,15 +28,18 @@ import { updateCarType } from "@/api/models/carTypes/editCarType";
 import NoData from "../general/NoData";
 
 interface CarTypesTableProps {
-  search?: string;
-  page: number;
-  dateParams?: { from_date?: string; to_date?: string };
-  setPagination: (meta: {
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-    from: number;
-    to: number;
+  readonly search?: string;
+  readonly page: number;
+  readonly dateParams?: {
+    readonly from_date?: string;
+    readonly to_date?: string;
+  };
+  readonly setPagination: (meta: {
+    readonly totalPages: number;
+    readonly totalItems: number;
+    readonly itemsPerPage: number;
+    readonly from: number;
+    readonly to: number;
   }) => void;
 }
 
@@ -45,20 +49,24 @@ export function CarTypesTable({
   setPagination,
   dateParams,
 }: Readonly<CarTypesTableProps>) {
+  const canEdit = useHasPermission("edit_vehicle_type");
   const { t, i18n } = useTranslation("models");
   const queryClient = useQueryClient();
 
-  const { data: carTypesResponse, isLoading: isLoadingTypes, error: errorTypes } =
-    useQuery<GetVehicleTypesPaginated | VehicleType[], Error>({
-      queryKey: ["vehicleTypes", search, page, dateParams],
-      queryFn: () =>
-        getVehicleTypes({
-          pagination: true,
-          search,
-          page,
-          ...dateParams, 
-        }),
-    });
+  const {
+    data: carTypesResponse,
+    isLoading: isLoadingTypes,
+    error: errorTypes,
+  } = useQuery<GetVehicleTypesPaginated | VehicleType[], Error>({
+    queryKey: ["vehicleTypes", search, page, dateParams],
+    queryFn: () =>
+      getVehicleTypes({
+        pagination: true,
+        search,
+        page,
+        ...dateParams,
+      }),
+  });
 
   const {
     data: brandsResponse,
@@ -178,9 +186,11 @@ export function CarTypesTable({
                 isSelected={car.is_active}
                 onChange={() => handleToggleStatus(car)}
               />
-              <Link to={`/car-types/${car.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/car-types/${car.id}`}>
+                  <Edit />
+                </Link>
+              )}
               <div className="mt-2">
                 <TableDeleteButton handleDelete={() => handleDelete(car.id)} />
               </div>

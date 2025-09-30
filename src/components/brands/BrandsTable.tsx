@@ -12,6 +12,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { deleteBrands } from "@/api/brand/deleteBrands";
 import { updateBrand } from "@/api/brand/updateBrand";
 import toast from "react-hot-toast";
@@ -59,7 +60,12 @@ interface BrandsTableProps {
   isLoading?: boolean;
 }
 
-export function BrandsTable({ brands, refetch, isLoading }: BrandsTableProps) {
+export function BrandsTable({
+  brands,
+  refetch,
+  isLoading,
+}: Readonly<BrandsTableProps>) {
+  const canEdit = useHasPermission("edit_brand");
   const { t, i18n } = useTranslation("brands");
   const [updatingId, setUpdatingId] = React.useState<number | null>(null);
   const [localBrands, setLocalBrands] = React.useState<Brand[] | undefined>(
@@ -148,22 +154,26 @@ export function BrandsTable({ brands, refetch, isLoading }: BrandsTableProps) {
                     );
                   })()
                 ) : (
-                    <TableImagePlaceholder className="w-10 h-10" />
+                  <TableImagePlaceholder className="w-10 h-10" />
                 )}
               </TableCell>
               <TableCell>
                 {i18n.language === "ar" ? brand.name.ar : brand.name.en}
               </TableCell>
-              <TableCell className="w-full">{brand.vehicles_count ?? "-"}</TableCell>
+              <TableCell className="w-full">
+                {brand.vehicles_count ?? "-"}
+              </TableCell>
               <TableCell className="flex gap-[7px] items-center">
                 <Switch
                   isSelected={Boolean(brand.is_active)}
                   isDisabled={updatingId === brand.id}
                   onChange={() => handleToggleActive(brand)}
                 />
-                <Link to={`/brands/${brand.id}`}>
-                  <Edit />
-                </Link>
+                {canEdit && (
+                  <Link to={`/brands/${brand.id}`}>
+                    <Edit />
+                  </Link>
+                )}
                 <div className="mt-2">
                   <TableDeleteButton
                     handleDelete={() => handleDelete(brand.id)}

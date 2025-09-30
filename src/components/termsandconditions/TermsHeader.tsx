@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/select";
 import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { useTranslation } from "react-i18next";
 import { Country } from "@/api/countries/getCountry";
 
@@ -23,6 +24,8 @@ const TermsHeader = ({
 }: TermsHeaderProps) => {
   const { i18n } = useTranslation("setting");
   const isRTL = i18n.language === "ar";
+
+  const canCreate = useHasPermission("create_info_page");
 
   return (
     <div className="flex items-center justify-between">
@@ -57,13 +60,15 @@ const TermsHeader = ({
           </SelectContent>
         </Select>
       </div>
-      <Link to="/setting/add-terms">
-        <DashboardButton
-          titleAr={"اضافة شروط واحكام جديدة"}
-          titleEn="Add new terms and conditions"
-          variant="add"
-        />
-      </Link>
+      {canCreate && (
+        <Link to="/setting/add-terms">
+          <DashboardButton
+            titleAr={"اضافة شروط واحكام جديدة"}
+            titleEn="Add new terms and conditions"
+            variant="add"
+          />
+        </Link>
+      )}
     </div>
   );
 };

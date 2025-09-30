@@ -17,24 +17,27 @@ import {
 } from "@/api/models/engineSize/getEnginSize";
 import { deleteEngineSize } from "@/api/models/engineSize/deleteEngineSize";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import { updateEngineSize } from "@/api/models/engineSize/editEngineSize";
 import NoData from "../general/NoData";
 
 interface EngineSizesTableProps {
-  search?: string;
-  page?: number;
-  dateParams?: { from_date?: string; to_date?: string };
-  setPagination?: (meta: {
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-    from: number;
-    to: number;
+  readonly search?: string;
+  readonly page?: number;
+  readonly dateParams?: {
+    readonly from_date?: string;
+    readonly to_date?: string;
+  };
+  readonly setPagination?: (meta: {
+    readonly totalPages: number;
+    readonly totalItems: number;
+    readonly itemsPerPage: number;
+    readonly from: number;
+    readonly to: number;
   }) => void;
 }
-
 
 export function EngineSizesTable({
   search = "",
@@ -43,7 +46,12 @@ export function EngineSizesTable({
   setPagination,
 }: EngineSizesTableProps) {
   const { t, i18n } = useTranslation("models");
-  const { data: engineSize, isLoading, refetch } = useQuery<EngineSize[]>({
+  const canEdit = useHasPermission("edit_engine_size");
+  const {
+    data: engineSize,
+    isLoading,
+    refetch,
+  } = useQuery<EngineSize[]>({
     queryKey: ["engineSize", page, search, dateParams],
     queryFn: async () => {
       const r = await getEngineSizePaginated({ page, search, ...dateParams });
@@ -72,7 +80,9 @@ export function EngineSizesTable({
   const handleToggleStatus = async (id: number, current: boolean) => {
     try {
       await updateEngineSize(id, { is_active: !current });
-      toast.success(!current ? t("engineSizeActivated") : t("engineSizeDeactivated"));
+      toast.success(
+        !current ? t("engineSizeActivated") : t("engineSizeDeactivated")
+      );
       refetch();
     } catch {
       toast.error(t("error"));
@@ -83,8 +93,7 @@ export function EngineSizesTable({
     return <Loading />;
   }
 
-  if (!engineSize || engineSize.length === 0) return <NoData />;
-
+  if (!engineSize?.length) return <NoData />;
 
   return (
     <Table>
@@ -109,9 +118,11 @@ export function EngineSizesTable({
                 isSelected={engine.is_active}
                 onChange={() => handleToggleStatus(engine.id, engine.is_active)}
               />
-              <Link to={`/engine-size/edit/${engine.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/engine-size/edit/${engine.id}`}>
+                  <Edit />
+                </Link>
+              )}
 
               <div className="mt-2">
                 <TableDeleteButton

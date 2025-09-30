@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "../ui/table";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { Switch } from "@heroui/react";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { deleteBodyType } from "@/api/models/structureType/deleteStructure";
@@ -41,12 +42,13 @@ export function StructureTable({
   dateParams,
 }: StructureTableProps) {
   const { t, i18n } = useTranslation("models");
+  const canEdit = useHasPermission("edit_vehicle_body");
   const language = i18n.language as "ar" | "en";
 
   const {
     data: bodiesResponse,
     isLoading,
-    refetch
+    refetch,
   } = useVehicleBodies({
     pagination: true,
     search,
@@ -124,9 +126,11 @@ export function StructureTable({
                   isSelected={!!item.is_active}
                   onChange={() => handleToggleStatus(item)}
                 />
-                <Link to={`/structure-types/edit/${item.id}`}>
-                  <Edit />
-                </Link>
+                {canEdit && (
+                  <Link to={`/structure-types/edit/${item.id}`}>
+                    <Edit />
+                  </Link>
+                )}
                 <div className="mt-2">
                   <TableDeleteButton
                     handleDelete={() => handleDelete(item.id)}

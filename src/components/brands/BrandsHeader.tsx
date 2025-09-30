@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
+import { useHasPermission } from "@/hooks/usePermissions";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
@@ -24,6 +25,8 @@ const BrandsHeader: React.FC<BrandsHeaderProps> = ({
   dateRange,
   setDateRange,
 }) => {
+  const canCreate = useHasPermission("create_brand");
+
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -49,13 +52,15 @@ const BrandsHeader: React.FC<BrandsHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
-        <Link to="/brands/add">
-          <DashboardButton
-            titleAr={"اضافة ماركة جديدة"}
-            titleEn={"Add new brand"}
-            variant="add"
-          />
-        </Link>
+        {canCreate && (
+          <Link to="/brands/add">
+            <DashboardButton
+              titleAr={"اضافة ماركة جديدة"}
+              titleEn={"Add new brand"}
+              variant="add"
+            />
+          </Link>
+        )}
       </div>
     </div>
   );

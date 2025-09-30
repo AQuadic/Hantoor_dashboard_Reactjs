@@ -12,6 +12,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { RefetchOptions, QueryObserverResult } from "@tanstack/react-query";
 import { Country, CountriesResponse } from "@/api/countries/getCountry";
 import Loading from "../general/Loading";
@@ -34,6 +35,7 @@ const CountriesTable = ({
   isLoading = false,
 }: CountriesTableProps) => {
   const { t, i18n } = useTranslation("country");
+  const canEdit = useHasPermission("edit_country");
 
   const [localCountries, setLocalCountries] = useState(countries);
 
@@ -98,7 +100,9 @@ const CountriesTable = ({
                   ? country.currency_text?.ar || "-"
                   : country.currency_text?.en || "-"}
               </TableCell>
-              <TableCell style={{ textAlign: "center" }}>{country.users_count}</TableCell>
+              <TableCell style={{ textAlign: "center" }}>
+                {country.users_count}
+              </TableCell>
               <TableCell className="w-full">
                 {new Date(country.created_at).toLocaleString(
                   i18n.language === "ar" ? "ar-EG" : "en-GB",
@@ -118,9 +122,11 @@ const CountriesTable = ({
                   isSelected={country.is_active}
                   onChange={() => handleToggleStatus(country)}
                 />
-                <Link to={`/countries/edit/${country.id}`}>
-                  <Edit />
-                </Link>
+                {canEdit && (
+                  <Link to={`/countries/edit/${country.id}`}>
+                    <Edit />
+                  </Link>
+                )}
 
                 <div className="mt-2">
                   <TableDeleteButton

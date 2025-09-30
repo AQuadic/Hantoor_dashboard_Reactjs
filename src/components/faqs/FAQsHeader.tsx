@@ -3,6 +3,7 @@ import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardButton from "../general/dashboard/DashboardButton";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { Link } from "react-router";
 import { RangeValue } from "@heroui/react";
 import { CalendarDate } from "@internationalized/date";
@@ -20,6 +21,8 @@ const FAQsHeader: React.FC<FAQsHeaderProps> = ({
   dateRange,
   setDateRange,
 }) => {
+  const canCreate = useHasPermission("create_faq");
+
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -45,13 +48,15 @@ const FAQsHeader: React.FC<FAQsHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
-        <Link to="/faq/add">
-          <DashboardButton
-            titleAr={"اضافة سؤال جديد"}
-            titleEn={"Add a new question"}
-            variant="add"
-          />
-        </Link>
+        {canCreate && (
+          <Link to="/faq/add">
+            <DashboardButton
+              titleAr={"اضافة سؤال جديد"}
+              titleEn={"Add a new question"}
+              variant="add"
+            />
+          </Link>
+        )}
       </div>
     </div>
   );

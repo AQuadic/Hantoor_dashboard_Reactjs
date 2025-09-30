@@ -11,6 +11,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { deleteFAQ } from "@/api/faq/deleteFaq";
 import { updateFaq } from "@/api/faq/editFaq";
 import toast from "react-hot-toast";
@@ -28,6 +29,8 @@ interface TechnicalSupportTableProps {
 const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
   const { data, isLoading, refetch } = props;
   const { t, i18n } = useTranslation("questions");
+
+  const canEdit = useHasPermission("edit_support_question");
 
   if (isLoading) return <Loading />;
   if (!data.length) return <NoData />;
@@ -105,9 +108,11 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
                   handleToggleStatus(question.id, question.is_active)
                 }
               />
-              <Link to={`/technical-support/edit/${question.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/technical-support/edit/${question.id}`}>
+                  <Edit />
+                </Link>
+              )}
 
               <div className="mt-2">
                 <TableDeleteButton

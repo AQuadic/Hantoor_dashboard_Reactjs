@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
+import { useHasPermission } from "@/hooks/usePermissions";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
@@ -24,6 +25,7 @@ const CountriesHeader: React.FC<CountriesHeaderProps> = ({
   dateRange,
   setDateRange,
 }) => {
+  const canCreate = useHasPermission("create_country");
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -49,13 +51,15 @@ const CountriesHeader: React.FC<CountriesHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
-        <Link to="/countries/add">
-          <DashboardButton
-            titleAr={"اضافة بلد جديدة"}
-            titleEn={"Add new country"}
-            variant="add"
-          />
-        </Link>
+        {canCreate && (
+          <Link to="/countries/add">
+            <DashboardButton
+              titleAr={"اضافة بلد جديدة"}
+              titleEn={"Add new country"}
+              variant="add"
+            />
+          </Link>
+        )}
       </div>
     </div>
   );

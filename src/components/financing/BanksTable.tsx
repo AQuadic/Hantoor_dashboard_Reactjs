@@ -12,6 +12,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { getBanks, Bank } from "@/api/bank/getBanks";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
@@ -34,6 +35,8 @@ const BanksTable = ({
   dateParams,
 }: BanksTableProps) => {
   const { t, i18n } = useTranslation("financing");
+
+  const canEdit = useHasPermission("edit_bank");
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -166,12 +169,14 @@ const BanksTable = ({
                     handleToggleStatus(bank.id, Boolean(bank.is_active))
                   }
                 />
-                <Link
-                  to={`/bank/edit/${bank.id}`}
-                  state={{ fromDetailsId: bank.country_id }}
-                >
-                  <Edit />
-                </Link>
+                {canEdit && (
+                  <Link
+                    to={`/bank/edit/${bank.id}`}
+                    state={{ fromDetailsId: bank.country_id }}
+                  >
+                    <Edit />
+                  </Link>
+                )}
 
                 <div className="mt-2">
                   <TableDeleteButton

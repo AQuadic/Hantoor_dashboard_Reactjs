@@ -11,6 +11,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { useQuery } from "@tanstack/react-query";
 import {
   getVehicleClasses,
@@ -30,15 +31,18 @@ import NoData from "../general/NoData";
 import Loading from "../general/Loading";
 
 interface CategoriesTableProps {
-  search?: string;
-  page: number;
-  dateParams?: { from_date?: string; to_date?: string };
-  setPagination: (meta: {
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-    from: number;
-    to: number;
+  readonly search?: string;
+  readonly page: number;
+  readonly dateParams?: {
+    readonly from_date?: string;
+    readonly to_date?: string;
+  };
+  readonly setPagination: (meta: {
+    readonly totalPages: number;
+    readonly totalItems: number;
+    readonly itemsPerPage: number;
+    readonly from: number;
+    readonly to: number;
   }) => void;
 }
 
@@ -49,10 +53,13 @@ export function CategoriesTable({
   setPagination,
 }: CategoriesTableProps) {
   const { t, i18n } = useTranslation("models");
+  const canEdit = useHasPermission("edit_category");
 
-  const { data: classesResponse, refetch, isLoading } = useQuery<
-    GetVehicleClassesPaginated | VehicleClass[]
-  >({
+  const {
+    data: classesResponse,
+    refetch,
+    isLoading,
+  } = useQuery<GetVehicleClassesPaginated | VehicleClass[]>({
     queryKey: ["vehicleClasses", search, page, dateParams],
     queryFn: () =>
       getVehicleClasses({
@@ -111,8 +118,12 @@ export function CategoriesTable({
       await updateVehicleClass(id, { is_active: !current });
       toast.success(!current ? t("countryActivated") : t("countryDeactivated"));
       refetch();
-    } catch (error: any) {
-      toast.error(error.message || t("error"));
+    } catch (error: unknown) {
+      const getMessage = (e: unknown): string | undefined => {
+        if (!e || typeof e !== "object") return undefined;
+        return (e as { message?: string })?.message;
+      };
+      toast.error(getMessage(error) || t("error"));
     }
   };
 
@@ -154,12 +165,14 @@ export function CategoriesTable({
             </TableCell> */}
             <TableCell className="flex gap-[7px] items-center">
               <Switch
-                  isSelected={item.is_active}
-                  onChange={() => handleToggleStatus(item.id, item.is_active)}
-                />
-              <Link to={`/categories/${item.id}`}>
-                <Edit />
-              </Link>
+                isSelected={item.is_active}
+                onChange={() => handleToggleStatus(item.id, item.is_active)}
+              />
+              {canEdit && (
+                <Link to={`/categories/${item.id}`}>
+                  <Edit />
+                </Link>
+              )}
               <div className="mt-2">
                 <TableDeleteButton handleDelete={() => handleDelete(item.id)} />
               </div>

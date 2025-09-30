@@ -11,6 +11,7 @@ import {
 import Edit from "../icons/general/Edit";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { Feature } from "@/api/featuresApp/getFeatures";
 import { editFeature } from "@/api/featuresApp/editFeatures";
 import toast from "react-hot-toast";
@@ -24,9 +25,10 @@ interface Props {
 
 const FeaturesTable: React.FC<Props> = ({ features, refetch }) => {
   const { t, i18n } = useTranslation("setting");
+  const canEdit = useHasPermission("edit_app_feature");
   const [updatingId, setUpdatingId] = useState<number | null>(null);
 
-    const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number) => {
     await deleteFeature(id);
     toast.success(t("faetureDeletedSuccessfully"));
     refetch();
@@ -45,7 +47,7 @@ const FeaturesTable: React.FC<Props> = ({ features, refetch }) => {
       toast.success(t("statusUpdated") || "Status updated");
       refetch();
     } catch (err) {
-      feature.is_active = prevState; 
+      feature.is_active = prevState;
       toast.error(t("somethingWentWrong"));
     } finally {
       setUpdatingId(null);
@@ -96,18 +98,22 @@ const FeaturesTable: React.FC<Props> = ({ features, refetch }) => {
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch
-                isSelected={feature.is_active === 1 || feature.is_active === true}
+                isSelected={
+                  feature.is_active === 1 || feature.is_active === true
+                }
                 isDisabled={updatingId === feature.id}
                 onChange={() => handleToggle(feature)}
               />
-              <Link to={`/features/edit/${feature.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/features/edit/${feature.id}`}>
+                  <Edit />
+                </Link>
+              )}
               <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(feature.id)}
-                  />
-                </div>
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(feature.id)}
+                />
+              </div>
             </TableCell>
           </TableRow>
         ))}

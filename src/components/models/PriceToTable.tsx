@@ -11,12 +11,17 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import { getPriceTo, PriceTo, PriceToResponse } from "@/api/models/priceto/getPriceTo";
+import {
+  getPriceTo,
+  PriceTo,
+  PriceToResponse,
+} from "@/api/models/priceto/getPriceTo";
 import { deletePriceTo } from "@/api/models/priceto/deletePriceTo";
 import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
 
@@ -42,10 +47,12 @@ export function PriceToTable({
   countryId,
 }: PriceToTableProps) {
   const { t, i18n } = useTranslation("models");
+  const canEdit = useHasPermission("edit_price_to");
 
   const { data, isLoading, refetch } = useQuery<PriceToResponse>({
     queryKey: ["priceto", page, search, dateParams, countryId],
-    queryFn: () => getPriceTo({ page, search, country_id: countryId, ...dateParams }),
+    queryFn: () =>
+      getPriceTo({ page, search, country_id: countryId, ...dateParams }),
     placeholderData: (previousData: PriceToResponse | undefined) =>
       previousData,
   });
@@ -97,7 +104,6 @@ export function PriceToTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-
         {priceToList.map((price: PriceTo, index: number) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
             <TableCell>{index + 1}</TableCell>
@@ -105,10 +111,10 @@ export function PriceToTable({
               {price.name}
               <span className="px-2">
                 {price.country?.currency_text
-              ? price.country.currency_text[i18n.language as "ar" | "en"]
-              : ""}
+                  ? price.country.currency_text[i18n.language as "ar" | "en"]
+                  : ""}
               </span>
-              </TableCell>
+            </TableCell>
             <TableCell className="w-full">
               {price.country
                 ? price.country.name[i18n.language as "ar" | "en"] || "-"
@@ -119,17 +125,19 @@ export function PriceToTable({
                 isSelected={price.is_active === 1}
                 onChange={() => handleToggleStatus(price.id, price.is_active)}
               />
-              <Link to={`/price-to/edit/${price.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/price-to/edit/${price.id}`}>
+                  <Edit />
+                </Link>
+              )}
               <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(price.id)} />
+                <TableDeleteButton
+                  handleDelete={() => handleDelete(price.id)}
+                />
               </div>
             </TableCell>
           </TableRow>
-        ))
-      }
-
+        ))}
       </TableBody>
     </Table>
   );

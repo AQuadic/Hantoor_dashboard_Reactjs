@@ -16,6 +16,7 @@ import { getAdmins } from "@/api/admins/getAdmins";
 import type { DateFilterParams } from "@/utils/dateUtils";
 import { deleteAdmin } from "@/api/admins/deleteAdmin";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
@@ -36,6 +37,8 @@ export function SubordinatesTable({
   dateParams,
 }: SubordinatesTableProps) {
   const { t, i18n } = useTranslation("subordinates");
+  const canEdit = useHasPermission("edit_admin");
+  const canChangePassword = useHasPermission("edit_admin_password");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["admins", currentPage, itemsPerPage, searchTerm, dateParams],
@@ -139,16 +142,16 @@ export function SubordinatesTable({
             </TableCell>
             <TableCell>
               {admin?.last_online
-                ? new Date(admin.last_online).toLocaleString(
-                    i18n.language === "ar" ? "ar-EG" : "en-US",
-                    {
+                ? (() => {
+                    const locale = i18n.language === "ar" ? "ar-EG" : "en-US";
+                    return new Date(admin.last_online).toLocaleString(locale, {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
                       hour: "2-digit",
                       minute: "2-digit",
-                    }
-                  )
+                    });
+                  })()
                 : "..."}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
@@ -156,12 +159,16 @@ export function SubordinatesTable({
                 isSelected={!!admin.is_active}
                 onChange={() => handleToggleStatus(admin.id, !!admin.is_active)}
               />
-              <Link to={`/subordinates/${admin.id}`}>
-                <Edit />
-              </Link>
-              <Link to={`/subordinates/change_password/${admin.id}`}>
-                <Password />
-              </Link>
+              {canEdit && (
+                <Link to={`/subordinates/${admin.id}`}>
+                  <Edit />
+                </Link>
+              )}
+              {canChangePassword && (
+                <Link to={`/subordinates/change_password/${admin.id}`}>
+                  <Password />
+                </Link>
+              )}
               <div className="mt-2">
                 <TableDeleteButton
                   handleDelete={() => handleDelete(admin.id)}

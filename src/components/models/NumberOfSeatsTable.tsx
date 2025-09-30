@@ -14,21 +14,25 @@ import { getSeatsPaginated, numOfSeats } from "@/api/models/seats/getSeats";
 import { useQuery } from "@tanstack/react-query";
 import { deleteSeats } from "@/api/models/seats/deleteSeats";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import { updateNumberOfSeats } from "@/api/models/seats/editNumOfSeats";
 import NoData from "../general/NoData";
 
 interface NumberOfSeatsTableProps {
-  search?: string;
-  page?: number;
-  dateParams?: { from_date?: string; to_date?: string };
-  setPagination?: (meta: {
-    totalPages: number;
-    totalItems: number;
-    itemsPerPage: number;
-    from: number;
-    to: number;
+  readonly search?: string;
+  readonly page?: number;
+  readonly dateParams?: {
+    readonly from_date?: string;
+    readonly to_date?: string;
+  };
+  readonly setPagination?: (meta: {
+    readonly totalPages: number;
+    readonly totalItems: number;
+    readonly itemsPerPage: number;
+    readonly from: number;
+    readonly to: number;
   }) => void;
 }
 
@@ -39,8 +43,13 @@ export function NumberOfSeatsTable({
   setPagination,
 }: NumberOfSeatsTableProps) {
   const { t, i18n } = useTranslation("models");
+  const canEdit = useHasPermission("edit_seat_count");
 
-  const { data: seats, isLoading, refetch } = useQuery<numOfSeats[]>({
+  const {
+    data: seats,
+    isLoading,
+    refetch,
+  } = useQuery<numOfSeats[]>({
     queryKey: ["seats", page, search, dateParams],
     queryFn: async () => {
       const r = await getSeatsPaginated({ page, search, ...dateParams });
@@ -94,7 +103,7 @@ export function NumberOfSeatsTable({
     return <Loading />;
   }
 
-  if (!seats || seats.length === 0) return <NoData />;
+  if (!seats?.length) return <NoData />;
 
   return (
     <Table>
@@ -120,9 +129,11 @@ export function NumberOfSeatsTable({
                 isSelected={!!seat.is_active}
                 onChange={() => handleToggleStatus(seat.id, !!seat.is_active)}
               />
-              <Link to={`/seats/edit/${seat.id}`}>
-                <Edit />
-              </Link>
+              {canEdit && (
+                <Link to={`/seats/edit/${seat.id}`}>
+                  <Edit />
+                </Link>
+              )}
 
               <div className="mt-2">
                 <TableDeleteButton handleDelete={() => handleDelete(seat.id)} />
