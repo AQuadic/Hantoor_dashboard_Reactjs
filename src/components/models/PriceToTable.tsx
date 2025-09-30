@@ -21,9 +21,9 @@ import {
   getPriceTo,
   PriceTo,
   PriceToResponse,
-} from "@/api/models/priceTo/getPriceTo";
-import { deletePriceTo } from "@/api/models/priceTo/deletePriceTo";
-import { updatePriceTo } from "@/api/models/priceTo/updatePriceTo";
+} from "@/api/models/priceto/getPriceTo";
+import { deletePriceTo } from "@/api/models/priceto/deletePriceTo";
+import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
 
 interface PriceToTableProps {
   search?: string;

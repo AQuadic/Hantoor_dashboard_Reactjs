@@ -18,12 +18,13 @@ import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 
-import { deletePriceFrom } from "@/api/models/priceFrom/deletePriceFrom";
-import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
+import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
+import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
 import {
   getPriceFrom,
   PriceFromResponse,
-} from "@/api/models/priceFrom/getPriceFrom";
+  PriceFrom,
+} from "@/api/models/pricefrom/getPriceFrom";
 
 interface PriceFromTableProps {
   search?: string;
@@ -107,7 +108,7 @@ export function PriceFromTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {priceFromList.map((price, index: number) => (
+        {priceFromList.map((price: PriceFrom, index: number) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
             <TableCell>{data ? data.from + index : index + 1}</TableCell>
             <TableCell>
