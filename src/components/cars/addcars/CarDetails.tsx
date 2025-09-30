@@ -9,6 +9,9 @@ import { VehicleFeature } from "@/api/vehicles/fetchVehicles";
 import { useAllDropdownData, useVehicleTypes } from "@/hooks/useDropdownData";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
+import { useQuery } from "@tanstack/react-query";
+import { Brand } from "@/types/dropdown";
+import { fetchBrands } from "@/api/brand/fetchBrands";
 
 const CarDetails = () => {
   const { t, i18n } = useTranslation("cars");
@@ -40,6 +43,14 @@ const CarDetails = () => {
   const { data: vehicleBodiesData, isLoading: vehicleBodiesLoading } =
     useVehicleBodies({
       pagination: true,
+    });
+
+  const { data: allBrands = [] } = useQuery<Brand[], Error>({
+    queryKey: ['allBrands'],
+    queryFn: async () => {
+      const res = await fetchBrands(1, "", undefined, undefined, false); // isPaginated = false
+      return res as Brand[];
+    }
     });
 
   const vehicleBodies = Array.isArray(vehicleBodiesData)
@@ -117,7 +128,6 @@ const CarDetails = () => {
             </SelectItem>
           ))}
         </Select>
-
         <Select
           label={t("brand")}
           variant="bordered"
@@ -131,9 +141,9 @@ const CarDetails = () => {
           }}
           isLoading={brands.isLoading}
         >
-          {brands.data.map((brand) => (
+          {allBrands.map((brand) => (
             <SelectItem key={brand.id.toString()}>
-              {brand?.name[i18n.language as "ar" | "en"]}
+              {brand.name[i18n.language as "ar" | "en"]}
             </SelectItem>
           ))}
         </Select>
