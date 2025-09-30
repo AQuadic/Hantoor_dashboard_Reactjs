@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
 import { VehicleFeature } from "@/api/vehicles/fetchVehicles";
 import { useAllDropdownData, useVehicleTypes } from "@/hooks/useDropdownData";
-import { getCountries, Country } from "@/api/countries/getCountry";
+import { getCountries, Country, getAllCountries } from "@/api/countries/getCountry";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { useQuery } from "@tanstack/react-query";
 import { Brand } from "@/types/dropdown";
@@ -52,6 +52,16 @@ const CarDetails = () => {
       return res as Brand[];
     }
     });
+
+  const { data: allCountries = [] } = useQuery<
+    Country[],
+    Error
+  >({
+    queryKey: ["allCountries"],
+    queryFn: async () => {
+      return await getAllCountries();
+    },
+  });
 
   const vehicleBodies = Array.isArray(vehicleBodiesData)
     ? vehicleBodiesData
@@ -122,7 +132,7 @@ const CarDetails = () => {
           }}
           isLoading={countriesLoading}
         >
-          {countries.map((country) => (
+          {allCountries.map((country) => (
             <SelectItem key={country.id.toString()}>
               {country.name[i18n.language as "ar" | "en"]}
             </SelectItem>
