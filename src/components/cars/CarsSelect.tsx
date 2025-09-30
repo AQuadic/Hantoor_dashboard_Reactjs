@@ -17,6 +17,10 @@ interface CarsSelectProps {
 const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
   const { t, i18n } = useTranslation("cars");
 
+  // Use a numeric sentinel for the "all" option to avoid `any` casts.
+  // Most IDs in the API are numeric, so -1 is an unlikely real id.
+  const ALL_ID = -1;
+
   // Fetch brands data
   const { data: brandsData } = useQuery({
     queryKey: ["brands"],
@@ -40,7 +44,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
   const models = Array.isArray(modelsData?.data) ? modelsData.data : [];
 
   const allBrandOption: Brand = {
-    id: "all" as any,
+    id: ALL_ID,
     name: { ar: "الجميع", en: "All" },
     created_at: "",
     updated_at: "",
@@ -48,17 +52,17 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
   };
 
   const allVehicleTypeOption: VehicleType = {
-    id: "all" as any,
+    id: ALL_ID,
     name: { ar: "الجميع", en: "All" },
     created_at: "",
     updated_at: "",
     is_active: true,
-    body_type_id: null as any,
-    brand_id: null as any,
+    body_type_id: ALL_ID,
+    brand_id: ALL_ID,
   };
 
   const allModelOption: Model = {
-    id: "all" as any,
+    id: ALL_ID,
     name: { ar: "الجميع", en: "All" },
     is_active: true,
   };
@@ -69,7 +73,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
 
   const handleBrandChange = (selection: Selection) => {
     const selectionArray = Array.from(selection);
-    if (selectionArray.includes("all")) {
+    if (selectionArray.includes(String(ALL_ID))) {
       onFilterChange?.({ brand_id: [] });
     } else {
       const selectedBrands = selectionArray.map((key) => Number(key));
@@ -80,7 +84,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
   const handleTypeChange = (selection: Selection) => {
     const selectionArray = Array.from(selection);
     // If "all" is selected, clear the filter
-    if (selectionArray.includes("all")) {
+    if (selectionArray.includes(String(ALL_ID))) {
       onFilterChange?.({ vehicle_type_id: [] });
     } else {
       const selectedTypes = selectionArray.map((key) => Number(key));
@@ -90,7 +94,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
 
   const handleModelChange = (selection: Selection) => {
     const selectionArray = Array.from(selection);
-    if (selectionArray.includes("all")) {
+    if (selectionArray.includes(String(ALL_ID))) {
       onFilterChange?.({ vehicle_model_id: [] });
     } else {
       const selectedModels = selectionArray.map((key) => Number(key));
@@ -117,7 +121,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
           selectedKeys={
             filters?.brand_id && filters.brand_id.length > 0
               ? new Set(filters.brand_id.map(String))
-              : new Set(["all"])
+              : new Set([String(ALL_ID)])
           }
           onSelectionChange={handleBrandChange}
           classNames={{
@@ -127,7 +131,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
           }}
         >
           {(brand: Brand) => (
-            <SelectItem key={brand.id}>
+            <SelectItem key={String(brand.id)}>
               {brand.name[i18n.language as "ar" | "en"] || brand.name.en}
             </SelectItem>
           )}
@@ -143,7 +147,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
           selectedKeys={
             filters?.vehicle_type_id && filters.vehicle_type_id.length > 0
               ? new Set(filters.vehicle_type_id.map(String))
-              : new Set(["all"])
+              : new Set([String(ALL_ID)])
           }
           onSelectionChange={handleTypeChange}
           classNames={{
@@ -153,7 +157,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
           }}
         >
           {(vehicleType: VehicleType) => (
-            <SelectItem key={vehicleType.id}>
+            <SelectItem key={String(vehicleType.id)}>
               {vehicleType.name[i18n.language as "ar" | "en"] ||
                 vehicleType.name.en}
             </SelectItem>
@@ -170,7 +174,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
           selectedKeys={
             filters?.vehicle_model_id && filters.vehicle_model_id.length > 0
               ? new Set(filters.vehicle_model_id.map(String))
-              : new Set(["all"])
+              : new Set([String(ALL_ID)])
           }
           onSelectionChange={handleModelChange}
           classNames={{
@@ -180,7 +184,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
           }}
         >
           {(model: Model) => (
-            <SelectItem key={model.id}>
+            <SelectItem key={String(model.id)}>
               {model.name[i18n.language as "ar" | "en"] || model.name.en}
             </SelectItem>
           )}

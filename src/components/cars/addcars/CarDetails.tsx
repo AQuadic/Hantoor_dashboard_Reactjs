@@ -24,7 +24,7 @@ const CarDetails = () => {
     useVehicleForm();
 
   // State for countries data
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [, setCountries] = useState<Country[]>([]);
   const [countriesLoading, setCountriesLoading] = useState(true);
 
   // Fetch all dropdown data (excluding countries and vehicle bodies)
@@ -65,10 +65,7 @@ const CarDetails = () => {
     },
   });
 
-  const { data: allAgents = [], isLoading: allAgentsLoading } = useQuery<
-    Agent[],
-    Error
-  >({
+  const { data: allAgents = [] } = useQuery<Agent[], Error>({
     queryKey: ["allAgents"],
     queryFn: async () => {
       const res = await fetchAgents(1, "", undefined, false); // isPaginated = false
