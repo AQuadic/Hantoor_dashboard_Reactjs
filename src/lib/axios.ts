@@ -44,6 +44,9 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
+    if (error.response && error.response.status === 403) {
+      window.location.href = "/403";
+    }
     if (
       error.response &&
       error.response.status === 401 &&
