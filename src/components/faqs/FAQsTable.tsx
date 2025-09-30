@@ -29,6 +29,8 @@ interface FAQsTableProps {
   data?: FAQ[];
   isLoading?: boolean;
   refetch: () => void;
+  from?: number;
+  to?: number;
 }
 
 const FAQsTable = ({ data, isLoading = false, refetch }: FAQsTableProps) => {

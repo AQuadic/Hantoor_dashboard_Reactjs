@@ -7,8 +7,8 @@ import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router";
 import toast from "react-hot-toast";
-import { updatePriceTo } from "@/api/models/priceto/updatePriceTo";
-import { getPriceToById } from "@/api/models/priceto/getPricToById";
+import { updatePriceTo } from "@/api/models/priceTo/updatePriceTo";
+import { getPriceToById } from "@/api/models/priceTo/getPricToById";
 
 const EditPriceTo = () => {
   const { t, i18n } = useTranslation("models");
@@ -41,7 +41,7 @@ const EditPriceTo = () => {
       setPriceAr(priceData.name);
       setPriceEn(priceData.name);
       if (priceData.country_id) {
-        setSelectedCountry(String(priceData.country_id));  // ✅ pre-fill
+        setSelectedCountry(String(priceData.country_id)); // ✅ pre-fill
       }
     }
   }, [priceData]);
@@ -51,11 +51,11 @@ const EditPriceTo = () => {
       toast.error(t("pleaseEnterPrice"));
       return;
     }
-      if (priceAr !== priceEn) {
-    toast.dismiss()
-    toast.error(t("priceMustMatch"));
-    return;
-  }
+    if (priceAr !== priceEn) {
+      toast.dismiss();
+      toast.error(t("priceMustMatch"));
+      return;
+    }
     if (!selectedCountry) {
       toast.error(t("pleaseSelectCountry"));
       return;
@@ -64,7 +64,7 @@ const EditPriceTo = () => {
     try {
       await updatePriceTo(priceId, {
         name: priceAr || priceEn,
-        country_id: Number(selectedCountry), 
+        country_id: Number(selectedCountry),
       });
       toast.success(t("priceUpdated"));
       navigate("/models?section=Price To");

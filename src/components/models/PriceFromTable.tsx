@@ -18,12 +18,12 @@ import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
 
-import { deletePriceFrom } from "@/api/models/pricefrom/deletePriceFrom";
-import { updatePriceFrom } from "@/api/models/pricefrom/updatePriceFrom";
+import { deletePriceFrom } from "@/api/models/priceFrom/deletePriceFrom";
+import { updatePriceFrom } from "@/api/models/priceFrom/updatePriceFrom";
 import {
   getPriceFrom,
   PriceFromResponse,
-} from "@/api/models/pricefrom/getPriceFrom";
+} from "@/api/models/priceFrom/getPriceFrom";
 
 interface PriceFromTableProps {
   search?: string;

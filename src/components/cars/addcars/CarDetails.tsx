@@ -7,7 +7,11 @@ import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
 import { VehicleFeature } from "@/api/vehicles/fetchVehicles";
 import { useAllDropdownData, useVehicleTypes } from "@/hooks/useDropdownData";
-import { getCountries, Country, getAllCountries } from "@/api/countries/getCountry";
+import {
+  getCountries,
+  Country,
+  getAllCountries,
+} from "@/api/countries/getCountry";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { useQuery } from "@tanstack/react-query";
 import { Brand } from "@/types/dropdown";
@@ -47,17 +51,14 @@ const CarDetails = () => {
     });
 
   const { data: allBrands = [] } = useQuery<Brand[], Error>({
-    queryKey: ['allBrands'],
+    queryKey: ["allBrands"],
     queryFn: async () => {
       const res = await fetchBrands(1, "", undefined, undefined, false); // isPaginated = false
-      return res as Brand[];
-    }
-    });
+      return res.data as Brand[];
+    },
+  });
 
-  const { data: allCountries = [] } = useQuery<
-    Country[],
-    Error
-  >({
+  const { data: allCountries = [] } = useQuery<Country[], Error>({
     queryKey: ["allCountries"],
     queryFn: async () => {
       return await getAllCountries();
@@ -71,7 +72,7 @@ const CarDetails = () => {
     queryKey: ["allAgents"],
     queryFn: async () => {
       const res = await fetchAgents(1, "", undefined, false); // isPaginated = false
-      return res as Agent[];
+      return res.data as Agent[];
     },
   });
 

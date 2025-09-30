@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchBrands } from "@/api/brand/fetchBrands";
-import { fetchAgents } from "@/api/agents/fetchAgents";
+import { fetchBrands, BrandsApiResponse } from "@/api/brand/fetchBrands";
+import { fetchAgents, AgentsApiResponse } from "@/api/agents/fetchAgents";
 import { getModels } from "@/api/models/models/getModels";
 import { getVehicleBodies } from "@/api/models/structureType/getStructure";
 import {
@@ -54,10 +54,15 @@ export const useCountries = (): UseDropdownData<Country> => {
 
 // Brands hook
 export const useBrands = (): UseDropdownData<Brand> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery<
+    BrandsApiResponse,
+    Error,
+    Brand[]
+  >({
     queryKey: ["brands"],
     queryFn: () => fetchBrands(1, ""),
-    select: (response) => response.data || [],
+    select: (response) =>
+      response && Array.isArray(response.data) ? response.data : [],
   });
 
   return {
@@ -70,10 +75,15 @@ export const useBrands = (): UseDropdownData<Brand> => {
 
 // Agents hook
 export const useAgents = (): UseDropdownData<Agent> => {
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery<
+    AgentsApiResponse,
+    Error,
+    Agent[]
+  >({
     queryKey: ["agents"],
     queryFn: () => fetchAgents(1, ""),
-    select: (response) => response.data || [],
+    select: (response) =>
+      response && Array.isArray(response.data) ? response.data : [],
   });
 
   return {

@@ -1,5 +1,5 @@
 import { Country, getCountries } from "@/api/countries/getCountry";
-import { createPriceTo } from "@/api/models/priceto/addPriceTo";
+import { createPriceTo } from "@/api/models/priceTo/addPriceTo";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import { Input, Select, SelectItem } from "@heroui/react";
@@ -29,9 +29,8 @@ const AddPriceTo = () => {
   });
 
   const handleSubmit = async () => {
-
     if (arPrice !== enPrice) {
-      toast.dismiss()
+      toast.dismiss();
       toast.error(t("priceMustMatch"));
       return;
     }

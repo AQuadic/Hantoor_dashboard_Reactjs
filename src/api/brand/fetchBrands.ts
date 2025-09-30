@@ -55,16 +55,20 @@ export async function fetchBrands(
   from_date?: string,
   to_date?: string,
   isPaginated: boolean = true
-): Promise<BrandsApiResponse | Brand[]> {
+): Promise<BrandsApiResponse> {
   if (isPaginated) {
-  const params: Record<string, string | number> = { page };
-  if (searchTerm) params.search = searchTerm;
-  if (from_date) params.from_date = from_date;
-  if (to_date) params.to_date = to_date;
+    const params: Record<string, string | number> = { page };
+    if (searchTerm) params.search = searchTerm;
+    if (from_date) params.from_date = from_date;
+    if (to_date) params.to_date = to_date;
 
-  const response = await axios.get<BrandsApiResponse>(`/admin/brands`, { params });
-  return response.data;
-} else {
+    const response = await axios.get<BrandsApiResponse>(`/admin/brands`, {
+      params,
+    });
+    return response.data;
+  }
+
+  // Non-paginated: gather all pages and return a BrandsApiResponse-shaped object
   let allBrands: Brand[] = [];
   let currentPage = 1;
   let totalPages = 1;
@@ -75,13 +79,27 @@ export async function fetchBrands(
     if (from_date) params.from_date = from_date;
     if (to_date) params.to_date = to_date;
 
-    const response = await axios.get<BrandsApiResponse>(`/admin/brands`, { params });
+    const response = await axios.get<BrandsApiResponse>(`/admin/brands`, {
+      params,
+    });
     const data = response.data;
     allBrands = [...allBrands, ...data.data];
-    totalPages = data.last_page;
+    totalPages = data.last_page || 1;
     currentPage++;
   } while (currentPage <= totalPages);
 
-  return allBrands;
-}
+  return {
+    current_page: 1,
+    data: allBrands,
+    first_page_url: "",
+    from: allBrands.length > 0 ? 1 : 0,
+    last_page: 1,
+    last_page_url: "",
+    next_page_url: null,
+    path: "",
+    per_page: allBrands.length,
+    prev_page_url: null,
+    to: allBrands.length,
+    total: allBrands.length,
+  } as BrandsApiResponse;
 }

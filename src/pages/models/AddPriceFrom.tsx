@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import toast from "react-hot-toast";
-import { createPriceFrom } from "@/api/models/pricefrom/addPriceFrom";
+import { createPriceFrom } from "@/api/models/priceFrom/addPriceFrom";
 
 const AddPriceFrom = () => {
   const { t, i18n } = useTranslation("models");
@@ -30,10 +30,10 @@ const AddPriceFrom = () => {
 
   const handleSubmit = async () => {
     if (arPrice !== enPrice) {
-      toast.dismiss()
+      toast.dismiss();
       toast.error(t("priceMustMatch"));
       return;
-      }
+    }
 
     try {
       await createPriceFrom({
