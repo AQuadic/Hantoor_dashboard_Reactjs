@@ -1,4 +1,4 @@
-import { Checkbox, Input } from "@heroui/react";
+import { Checkbox, Input, Switch } from "@heroui/react";
 import React from "react";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import TableDeleteButton from "@/components/general/dashboard/table/TableDeleteButton";
@@ -21,9 +21,12 @@ const CarAccessories = () => {
 
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] ">
-      <h1 className="text-lg text-[#2A32F8] font-bold mb-2">
-        {t("accessories")}
-      </h1>
+      <div className="flex items-center  justify-between ">
+        <h1 className="text-lg text-[#2A32F8] font-bold mb-2">
+          {t("accessories")}
+        </h1>
+        <Switch />
+      </div>
       {accessories.map((accessory, index) => (
         <div key={index} className="mt-4 flex items-center gap-4 pt-4">
           <span className="min-w-[65px]">
