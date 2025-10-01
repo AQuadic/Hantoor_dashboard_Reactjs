@@ -24,7 +24,7 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
   // Fetch brands data
   const { data: brandsData } = useQuery({
     queryKey: ["brands"],
-    queryFn: () => fetchBrands(),
+    queryFn: () => fetchBrands(1, "", undefined, undefined, false),
   });
 
   // Fetch vehicle types data
