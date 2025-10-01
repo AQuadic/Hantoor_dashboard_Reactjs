@@ -22,7 +22,7 @@ const SettingPage = () => {
   const sectionPermissions = useMemo(
     () => ({
       "General Settings": "view_general_setting",
-      "Insurance Price Request Button": "view_insurance_price_button",
+      "Insurance Price Request Button": "view_request_financing",
       "Informational Pages": "view_info_page",
       "Advertising Images": "view_ad_image",
       "Terms and Conditions": "view_terms",

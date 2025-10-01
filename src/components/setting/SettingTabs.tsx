@@ -24,7 +24,7 @@ const SettingTabs: React.FC<SubordinatesHeaderProps> = ({
       {
         titleAr: "زر طلب تفاصيل سعر التأمين",
         titleEn: "Insurance Price Request Button",
-        permission: "view_insurance_price_button",
+        permission: "view_request_financing",
       },
       {
         titleAr: "الصفحات التعريفية",

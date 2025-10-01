@@ -301,7 +301,7 @@ export const SidebarLinks: SidebarLink[] = [
     path: "/settings",
     requiredPermissions: [
       "view_general_setting",
-      "view_insurance_price_button",
+      "view_request_financing",
       "view_info_page",
       "view_ad_image",
       "view_terms",

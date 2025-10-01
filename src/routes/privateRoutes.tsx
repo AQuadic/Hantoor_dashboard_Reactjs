@@ -534,7 +534,7 @@ export const privateRoutes: RouteTypes[] = [
     element: <SettingPage />,
     requiredPermissions: [
       "view_general_setting",
-      "view_insurance_price_button",
+      "view_request_financing",
       "view_info_page",
       "view_ad_image",
       "view_terms",
