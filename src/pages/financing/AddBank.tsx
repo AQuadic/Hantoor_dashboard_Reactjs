@@ -116,18 +116,7 @@ const AddBank = () => {
     { key: "5", label: "5 سنوات" },
   ];
 
-  const typesOptions = [
-    {
-      key: "expatriate",
-      label: i18n.language === "ar" ? "مقيم" : t("expatriate") || "Expatriate",
-    },
-    {
-      key: "citizen",
-      label: i18n.language === "ar" ? "مواطن" : t("citizen") || "Citizen",
-    },
-  ];
-
-  // employer options removed; employer is a free-text input now
+  // employer will be a select with translated labels (private_party | government)
 
   // Functions to manage visitor data
   const isDeletingRef = useRef(false);
@@ -325,20 +314,7 @@ const AddBank = () => {
         )
           return false;
 
-        // Validate that a 'type' is selected and is one of the allowed values
-        if (
-          !item.type ||
-          (item.type !== "citizen" && item.type !== "expatriate")
-        ) {
-          toast.dismiss();
-          toast.error(
-            t(`${kind}TypeRequired`, { position }) ||
-              (i18n.language === "ar"
-                ? "الرجاء اختيار النوع"
-                : "Please select type")
-          );
-          return false;
-        }
+        // type is implicit: visitor list => expatriate, citizen list => citizen
       }
       return true;
     };
@@ -389,15 +365,13 @@ const AddBank = () => {
 
     // No mapping helper needed: we keep duration and employer as plain strings.
 
-    // Add all visitor data entries as expatriate entries
+    // Add all visitor data entries as expatriate entries (type derived)
     visitorDataList.forEach((visitorData) => {
       const v_from = parseInteger(visitorData.salaryFrom);
       const v_to = parseInteger(visitorData.salaryTo);
       const v_duration = visitorData.duration ?? "";
       const v_employer = visitorData.employer ?? "";
-      const v_type = (visitorData.type || "expatriate") as
-        | "citizen"
-        | "expatriate";
+      const v_type: "citizen" | "expatriate" = "expatriate";
 
       if (
         v_from !== undefined ||
@@ -419,15 +393,13 @@ const AddBank = () => {
       }
     });
 
-    // Add all citizen data entries
+    // Add all citizen data entries (type derived)
     citizenDataList.forEach((citizenData) => {
       const c_from = parseInteger(citizenData.salaryFrom);
       const c_to = parseInteger(citizenData.salaryTo);
       const c_duration = citizenData.duration ?? "";
       const c_employer = citizenData.employer ?? "";
-      const c_type = (citizenData.type || "citizen") as
-        | "citizen"
-        | "expatriate";
+      const c_type: "citizen" | "expatriate" = "citizen";
 
       if (
         c_from !== undefined ||
@@ -665,32 +637,24 @@ const AddBank = () => {
                   </SelectItem>
                 ))}
               </Select>
+              {/* Employer select (translated) */}
               <Select
-                label={i18n.language === "ar" ? "النوع" : t("type")}
+                label={t("Workplace")}
                 variant="bordered"
-                placeholder={t("expatriate")}
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                value={visitorData.type}
+                value={visitorData.employer}
                 onChange={(e) =>
-                  updateVisitorData(visitorData.id, "type", e.target.value)
+                  updateVisitorData(visitorData.id, "employer", e.target.value)
                 }
               >
-                {typesOptions.map((opt) => (
-                  <SelectItem key={opt.key} textValue={opt.label}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
+                <SelectItem key="private_party" textValue="private_party">
+                  {i18n.language === "ar" ? "قطاع خاص" : "Private party"}
+                </SelectItem>
+                <SelectItem key="government" textValue="government">
+                  {i18n.language === "ar" ? "حكومي" : "Government"}
+                </SelectItem>
               </Select>
-
-              <DashboardInput
-                label={t("Workplace")}
-                value={visitorData.employer}
-                onChange={(value) =>
-                  updateVisitorData(visitorData.id, "employer", value)
-                }
-                placeholder={t("writeHere")}
-              />
               <DashboardInput
                 label={t("InterestAmount")}
                 value={visitorData.interestAmount}
@@ -791,32 +755,24 @@ const AddBank = () => {
                   </SelectItem>
                 ))}
               </Select>
+              {/* Employer select (translated) */}
               <Select
-                label={i18n.language === "ar" ? "النوع" : t("type")}
+                label={t("Workplace")}
                 variant="bordered"
-                placeholder={t("citizen")}
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                value={citizenData.type}
+                value={citizenData.employer}
                 onChange={(e) =>
-                  updateCitizenData(citizenData.id, "type", e.target.value)
+                  updateCitizenData(citizenData.id, "employer", e.target.value)
                 }
               >
-                {typesOptions.map((opt) => (
-                  <SelectItem key={opt.key} textValue={opt.label}>
-                    {opt.label}
-                  </SelectItem>
-                ))}
+                <SelectItem key="private_party" textValue="private_party">
+                  {i18n.language === "ar" ? "قطاع خاص" : "Private party"}
+                </SelectItem>
+                <SelectItem key="government" textValue="government">
+                  {i18n.language === "ar" ? "حكومي" : "Government"}
+                </SelectItem>
               </Select>
-
-              <DashboardInput
-                label={t("Workplace")}
-                value={citizenData.employer}
-                onChange={(value) =>
-                  updateCitizenData(citizenData.id, "employer", value)
-                }
-                placeholder={t("writeHere")}
-              />
               <DashboardInput
                 label={t("InterestAmount")}
                 value={citizenData.interestAmount}
