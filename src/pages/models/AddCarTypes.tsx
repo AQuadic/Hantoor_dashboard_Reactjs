@@ -34,7 +34,7 @@ const AddCarTypes = () => {
 
   const { data: brandsResponse, isLoading: isLoadingBrands } = useQuery({
     queryKey: ["brands-list"],
-    queryFn: () => fetchBrands(1, "", "", ""),
+    queryFn: () => fetchBrands(1, "", "", "", false),
   });
 
   return (
