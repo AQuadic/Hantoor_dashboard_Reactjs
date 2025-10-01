@@ -1,14 +1,21 @@
 import React from "react";
 import { Checkbox, DatePicker, Input } from "@heroui/react";
 import DatePickerIcon from "@/components/icons/general/DatePickerIcon";
-import { getLocalTimeZone, today } from "@internationalized/date";
+import { getLocalTimeZone, today, parseDate } from "@internationalized/date";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
-import { parseDate } from "@internationalized/date";
+import { useQuery } from "@tanstack/react-query";
+import { getAllCountries, Country } from "@/api/countries/getCountry";
 
 const CarPrices = () => {
-  const { t } = useTranslation("cars");
+  const { t, i18n } = useTranslation("cars");
   const { formData, updateField } = useVehicleForm();
+
+  const { data: allCountries = [] } = useQuery<Country[], Error>({
+    queryKey: ["allCountries"],
+    queryFn: () => getAllCountries(),
+  });
+
 
   // Calculate discounted price
   const discountedPrice =
@@ -16,6 +23,13 @@ const CarPrices = () => {
       ? parseFloat(formData.price) -
         (parseFloat(formData.price) * parseFloat(formData.discount_value)) / 100
       : parseFloat(formData?.price || "0");
+
+    const selectedCountry = allCountries.find(
+      (c) => c.id.toString() === formData?.country_id?.toString()
+    );
+
+    const currencyText =
+      selectedCountry?.currency_text?.[i18n.language as "ar" | "en"] || "";
 
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
@@ -33,7 +47,7 @@ const CarPrices = () => {
           className="w-1/4"
         />
         <div className="bg-[#2E7CBE1A] w-1/4 px-5 py-4 flex items-center justify-between rounded-2xl">
-          <span>{t("priceWithUAE")}</span>
+          <span>{currencyText}</span>
           <span className="text-xl font-bold text-primary">
             {formData?.price || 0}
           </span>
