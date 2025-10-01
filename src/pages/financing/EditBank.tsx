@@ -330,18 +330,7 @@ const EditBank = () => {
 
       // Validate type presence
       // item may come from fetched data; ensure it has a valid type
-      if (
-        !item.type ||
-        (item.type !== "citizen" && item.type !== "expatriate")
-      ) {
-        toast.error(
-          t(`${kind}TypeRequired`, { position }) ||
-            (i18n.language === "ar"
-              ? "الرجاء اختيار النوع"
-              : "Please select type")
-        );
-        return false;
-      }
+      // type is derived from which list (visitor => expatriate, citizen => citizen)
     }
 
     return true;
@@ -388,10 +377,10 @@ const EditBank = () => {
       return;
     }
     setIsSubmitting(true);
-    // Build finance array from dynamic arrays
+    // Build finance array from dynamic arrays (type derived from which list)
     const financeArray = [
       ...visitorDataList.map((visitor) => ({
-        type: visitor.type || "expatriate",
+        type: "expatriate" as const,
         salary_from: Number(visitor.salaryFrom) || 0,
         salary_to: Number(visitor.salaryTo) || 0,
         duration: visitor.duration,
@@ -399,7 +388,7 @@ const EditBank = () => {
         value: visitor.value,
       })),
       ...citizenDataList.map((citizen) => ({
-        type: citizen.type || "citizen",
+        type: "citizen" as const,
         salary_from: Number(citizen.salaryFrom) || 0,
         salary_to: Number(citizen.salaryTo) || 0,
         duration: citizen.duration,
@@ -431,13 +420,16 @@ const EditBank = () => {
       } else {
         toast.error(res.message || t("failedToUpdateBank"));
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Update bank error:", error);
-      if (error.response?.data?.errors) {
+      // try to read axios-like error shape safely
+      type AxiosLike = {
+        response?: { data?: { errors?: Record<string, string[] | string> } };
+      };
+      const axiosErr = error as AxiosLike;
+      if (axiosErr?.response?.data?.errors) {
         toast.error(
-          Object.values(error.response.data.errors)
-            .flat()
-            .join(", ")
+          Object.values(axiosErr.response.data.errors).flat().join(", ")
         );
       } else {
         toast.error(t("updateBankError"));
@@ -586,38 +578,26 @@ const EditBank = () => {
                   </SelectItem>
                 ))}
               </Select>
+              {/* Employer select (translated) */}
               <Select
-                label={t("type")}
+                label={t("Workplace")}
                 variant="bordered"
-                placeholder={t("expatriate")}
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                selectedKeys={visitor.type ? [visitor.type] : []}
+                selectedKeys={
+                  visitor.employerName ? [visitor.employerName] : []
+                }
                 onChange={(e) =>
-                  updateVisitorData(index, "type", e.target.value)
+                  updateVisitorData(index, "employerName", e.target.value)
                 }
               >
-                {["expatriate", "citizen"].map((key) => {
-                  let label = t(key as "expatriate" | "citizen");
-                  if (i18n.language === "ar") {
-                    label = key === "expatriate" ? "مقيم" : "مواطن";
-                  }
-                  return (
-                    <SelectItem key={key} textValue={label}>
-                      {label}
-                    </SelectItem>
-                  );
-                })}
+                <SelectItem key="private_party" textValue="private_party">
+                  {i18n.language === "ar" ? "قطاع خاص" : "Private party"}
+                </SelectItem>
+                <SelectItem key="government" textValue="government">
+                  {i18n.language === "ar" ? "حكومي" : "Government"}
+                </SelectItem>
               </Select>
-
-              <DashboardInput
-                label={t("Workplace")}
-                value={visitor.employerName}
-                onChange={(value) =>
-                  updateVisitorData(index, "employerName", value)
-                }
-                placeholder={t("writeHere")}
-              />
               <DashboardInput
                 label={t("InterestAmount")}
                 value={visitor.value}
@@ -716,38 +696,26 @@ const EditBank = () => {
                   </SelectItem>
                 ))}
               </Select>
+              {/* Employer select (translated) */}
               <Select
-                label={t("type")}
+                label={t("Workplace")}
                 variant="bordered"
-                placeholder={t("citizen")}
                 classNames={{ label: "mb-2 text-base !text-[#080808]" }}
                 size="lg"
-                selectedKeys={citizen.type ? [citizen.type] : []}
+                selectedKeys={
+                  citizen.employerName ? [citizen.employerName] : []
+                }
                 onChange={(e) =>
-                  updateCitizenData(index, "type", e.target.value)
+                  updateCitizenData(index, "employerName", e.target.value)
                 }
               >
-                {["expatriate", "citizen"].map((key) => {
-                  let label = t(key as "expatriate" | "citizen");
-                  if (i18n.language === "ar") {
-                    label = key === "expatriate" ? "مقيم" : "مواطن";
-                  }
-                  return (
-                    <SelectItem key={key} textValue={label}>
-                      {label}
-                    </SelectItem>
-                  );
-                })}
+                <SelectItem key="private_party" textValue="private_party">
+                  {i18n.language === "ar" ? "قطاع خاص" : "Private party"}
+                </SelectItem>
+                <SelectItem key="government" textValue="government">
+                  {i18n.language === "ar" ? "حكومي" : "Government"}
+                </SelectItem>
               </Select>
-
-              <DashboardInput
-                label={t("Workplace")}
-                value={citizen.employerName}
-                onChange={(value) =>
-                  updateCitizenData(index, "employerName", value)
-                }
-                placeholder={t("writeHere")}
-              />
               <DashboardInput
                 label={t("InterestAmount")}
                 value={citizen.value}
