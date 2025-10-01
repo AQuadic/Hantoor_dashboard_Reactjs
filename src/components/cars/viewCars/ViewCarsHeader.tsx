@@ -114,20 +114,24 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
                 : "0 درهم"}
             </p>
 
-            <p className="text-[17px] font-bold text-[#606060] line-through">
-              {vehicle?.price ? `${vehicle.price} درهم` : "0 درهم"}
-            </p>
-
-            <div className="flex items-center w-[70px] h-[30px] bg-[#FF1B5412] rounded-[67px]">
-              <img
-                src="/images/percentage.gif"
-                alt="%"
-                className="w-[26px] h-[26px]"
-              />
-              <p className="text-[#FF1C55] text-[15px] font-normal px-2">
-                {vehicle?.discount_value}%
+            {vehicle?.discount_value ? (
+              <p className="text-[17px] font-bold text-[#606060] line-through">
+                {vehicle.price} درهم
               </p>
-            </div>
+            ) : null}
+
+            {vehicle?.discount_value ? (
+              <div className="flex items-center w-[70px] h-[30px] bg-[#FF1B5412] rounded-[67px]">
+                <img
+                  src="/images/percentage.gif"
+                  alt="%"
+                  className="w-[26px] h-[26px]"
+                />
+                <p className="text-[#FF1C55] text-[15px] font-normal px-2">
+                  {vehicle.discount_value}%
+                </p>
+              </div>
+            ) : null}
 
             {/* {(vehicle?.vehicle_model?.name || vehicle?.vehicle_type?.name || vehicle?.vehicle_class?.name) && (
               <div className="flex gap-4 mt-2 text-sm text-[#606060]">
