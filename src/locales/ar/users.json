@@ -39,5 +39,7 @@
   "facebook": "فيسبوك",
   "nameRequired": "الاسم مطلوب",
   "emailRequired": "البريد الإلكتروني مطلوب",
-  "phoneRequired": "رقم الجوال مطلوب"
+  "phoneRequired": "رقم الجوال مطلوب",
+  "imageRemoved": "تم حذف الصورة بنجاح",
+  "imageRequired": "الصورة مطلوبة"
 }

@@ -43,6 +43,7 @@ const EditUsers = () => {
   const [existingImageUrl, setExistingImageUrl] = useState<string | undefined>(
     undefined
   );
+  const [removeExistingImage, setRemoveExistingImage] = useState(false);
   const [selectedCountryId, setSelectedCountryId] = useState<string>("");
 
   const { data: countriesData } = useQuery<CountriesResponse>({
@@ -80,6 +81,7 @@ const EditUsers = () => {
 
         if (user.image?.url) {
           setExistingImageUrl(user.image.url);
+          setRemoveExistingImage(false);
         }
       })
       .finally(() => setLoading(false));
@@ -123,7 +125,24 @@ const EditUsers = () => {
     toast.error(getDisplayMessage(String(rawMessage)));
   };
 
+  const handleRemoveImage = () => {
+    setProfileImage(null);
+    setExistingImageUrl(undefined);
+    setRemoveExistingImage(true);
+    toast.success(t('imageRemoved'))
+  };
+
+  useEffect(() => {
+    if (profileImage) {
+      setRemoveExistingImage(false);
+    }
+  }, [profileImage]);
+
   const handleSubmit = async () => {
+
+  if (!profileImage && !existingImageUrl) {
+    return toast.error(t("imageRequired"));
+  }
     if (!userId) return toast.error("User ID is missing!");
     if (!name.trim()) return toast.error(t("nameRequired"));
     if (!email.trim()) return toast.error(t("emailRequired"));
@@ -136,6 +155,8 @@ const EditUsers = () => {
       // submit the phone country coming from the MobileInput state
       phone_country: selectedPhoneCountry.iso2,
       country_id: selectedCountryId || undefined,
+      image: profileImage || undefined,
+      remove_image: removeExistingImage,
     };
 
     try {
@@ -183,6 +204,7 @@ const EditUsers = () => {
               image={profileImage ?? existingImageUrl}
               setImage={setProfileImage}
               existingImageUrl={existingImageUrl}
+              onRemoveImage={handleRemoveImage}
             />
           </div>
         </div>

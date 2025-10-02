@@ -11,6 +11,7 @@ export interface UpdateAdminUserPayload {
   city_id?: string;
   is_active?: boolean;
   blocked_until?: string | null;
+  remove_image?: boolean;
 }
 
 export interface AdminUser {
@@ -50,6 +51,9 @@ export const updateAdminUser = async (
       } else {
         formData.append("blocked_until", payload.blocked_until);
       }
+    }
+    if (payload.remove_image && !payload.image) {
+      formData.append("remove_image", "1");
     }
     const response = await axios.post<AdminUser>(
       `/user/admin/${userId}`,
