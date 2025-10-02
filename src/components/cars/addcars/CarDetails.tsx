@@ -20,8 +20,14 @@ import { fetchAgents, Agent } from "@/api/agents/fetchAgents";
 
 const CarDetails = () => {
   const { t, i18n } = useTranslation("cars");
-  const { formData, updateField, features, addFeature, removeFeature } =
-    useVehicleForm();
+  const {
+    formData,
+    updateField,
+    features,
+    addFeature,
+    removeFeature,
+    updateFeature,
+  } = useVehicleForm();
 
   // State for countries data
   const [, setCountries] = useState<Country[]>([]);
@@ -101,6 +107,35 @@ const CarDetails = () => {
 
   const removeCarDetailsField = (index: number) => {
     removeFeature?.(index);
+  };
+
+  const handleFeatureUpdate = (
+    index: number,
+    field: Partial<{
+      image: File | null;
+      titleEn: string;
+      titleAr: string;
+      descriptionEn: string;
+      descriptionAr: string;
+    }>
+  ) => {
+    const currentFeature = features[index];
+    if (!currentFeature) return;
+
+    const updatedFeature = {
+      ...currentFeature,
+      name: {
+        ar: field.titleAr ?? currentFeature.name?.ar ?? "",
+        en: field.titleEn ?? currentFeature.name?.en ?? "",
+      },
+      description: {
+        ar: field.descriptionAr ?? currentFeature.description?.ar ?? "",
+        en: field.descriptionEn ?? currentFeature.description?.en ?? "",
+      },
+      image: field.image ?? currentFeature.image,
+    };
+
+    updateFeature?.(index, updatedFeature);
   };
 
   return (
@@ -381,7 +416,8 @@ const CarDetails = () => {
               descriptionEn: feature.description?.en || "",
               descriptionAr: feature.description?.ar || "",
             }}
-            key={index}
+            onUpdate={(field) => handleFeatureUpdate(index, field)}
+            key={feature.id || `feature-${index}`}
           />
         ))}
       </div>
