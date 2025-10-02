@@ -7,7 +7,6 @@ import CarPackages from "@/components/cars/addcars/CarPackages";
 import CarAccessories from "@/components/cars/addcars/CarAccessories";
 import CarOffers from "@/components/cars/addcars/CarOffers";
 import RentToOwn from "@/components/cars/addcars/RentToOwn";
-import CarAdvertisingImages from "@/components/cars/addcars/CarAdvertisingImages";
 import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import { useParams, useNavigate } from "react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -48,12 +47,12 @@ const AddCarsForm = () => {
     if (vehicle && isEdit) {
       console.log("Loading vehicle data:", vehicle); // Debug log
       const normalizeDate = (date: unknown): string => {
-      if (!date) return "";
-      const str = String(date);
-      if (str.includes("T")) return str;
-      return str.split(" ")[0];
-    };
-    
+        if (!date) return "";
+        const str = String(date);
+        if (str.includes("T")) return str;
+        return str.split(" ")[0];
+      };
+
       // Helper function to convert VehicleImageObject to VehicleImage array
       const convertToVehicleImages = (images: unknown[]): VehicleImage[] => {
         if (!Array.isArray(images)) return [];
