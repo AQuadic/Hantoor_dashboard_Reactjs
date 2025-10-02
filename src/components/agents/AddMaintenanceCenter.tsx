@@ -15,6 +15,13 @@ interface AddMaintenanceCenterProps {
   type: "center" | "show_room";
 }
 
+type CountryType = {
+  iso2: string;
+  name: string;
+  phone: string[];
+};
+
+
 const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
   centers,
   setCenters,
@@ -50,6 +57,33 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
       })
     );
   }, [centers]);
+
+  const [phoneCountries, setPhoneCountries] = useState<CountryType[]>(
+  centers.map((c) => {
+    if (c?.phone) {
+      const m = /^(\d+)\s+(.+)$/.exec(String(c.phone));
+      if (m) {
+        return { iso2: "EG", name: "Egypt", phone: [m[1]] };
+      }
+    }
+    return DEFAULT_COUNTRY;
+  })
+);
+
+  useEffect(() => {
+    setPhoneCountries(
+      centers.map((c) => {
+        if (c?.phone) {
+          const m = /^(\d+)\s+(.+)$/.exec(String(c.phone));
+          if (m) {
+            return { iso2: "EG", name: "Egypt", phone: [m[1]] };
+          }
+        }
+        return DEFAULT_COUNTRY;
+      })
+    );
+  }, [centers]);
+
 
   // Add a new empty center form
   const handleAddCenter = () => {
@@ -181,11 +215,24 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
                     defaultValue: "رقم الجوال",
                   })}
                   labelClassName="font-normal"
-                  selectedCountry={{ iso2: "EG", name: "Egypt", phone: ["20"] }}
-                  setSelectedCountry={() => {}}
-                  phone={center.phone}
+                  selectedCountry={phoneCountries[index] || DEFAULT_COUNTRY}      // ✅ correct one
+                  setSelectedCountry={(country: CountryType) => {
+                    const newCountries = [...phoneCountries];
+                    newCountries[index] = country;
+                    setPhoneCountries(newCountries);
+
+                    if (centers[index].phone) {
+                      const number = String(centers[index].phone).replace(/^\d+\s+/, "");
+                      handleCenterChange(index, "phone", `${country.phone[0]} ${number}`);
+                    }
+                  }}
+                  phone={(center.phone || "").replace(/^\d+\s+/, "")}
                   setPhone={(val: string) =>
-                    handleCenterChange(index, "phone", val)
+                    handleCenterChange(
+                      index,
+                      "phone",
+                      `${(phoneCountries[index] || DEFAULT_COUNTRY).phone[0]} ${val}`
+                    )
                   }
                 />
                 <div className="absolute top-9 left-5"></div>
