@@ -648,10 +648,10 @@ const AddBank = () => {
                   updateVisitorData(visitorData.id, "employer", e.target.value)
                 }
               >
-                <SelectItem key="private_party" textValue="private_party">
+                <SelectItem key="private_party" >
                   {i18n.language === "ar" ? "قطاع خاص" : "Private party"}
                 </SelectItem>
-                <SelectItem key="government" textValue="government">
+                <SelectItem key="government">
                   {i18n.language === "ar" ? "حكومي" : "Government"}
                 </SelectItem>
               </Select>
@@ -766,10 +766,10 @@ const AddBank = () => {
                   updateCitizenData(citizenData.id, "employer", e.target.value)
                 }
               >
-                <SelectItem key="private_party" textValue="private_party">
+                <SelectItem key="private_party" >
                   {i18n.language === "ar" ? "قطاع خاص" : "Private party"}
                 </SelectItem>
-                <SelectItem key="government" textValue="government">
+                <SelectItem key="government">
                   {i18n.language === "ar" ? "حكومي" : "Government"}
                 </SelectItem>
               </Select>
