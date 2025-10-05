@@ -378,7 +378,12 @@ const CarsTable = ({
                 <TableCell>
                   {vehicle.vehicle_model?.name[i18n.language as "ar" | "en"]}
                 </TableCell>
-                <TableCell>{formatPrice(vehicle.price)}</TableCell>
+                <TableCell>
+                  {formatPrice(vehicle.price)}{" "}
+                  {vehicle.country?.currency_text?.[i18n.language as "ar" | "en"] ??
+                    vehicle.country?.currency ??
+                    ""}
+                </TableCell>
                 <TableCell>{translateYesNo(vehicle.is_discount)}</TableCell>
                 <TableCell>
                   {vehicle.is_discount && vehicle.discount_value
