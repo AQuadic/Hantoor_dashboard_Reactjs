@@ -20,8 +20,14 @@ import { fetchAgents, Agent } from "@/api/agents/fetchAgents";
 
 const CarDetails = () => {
   const { t, i18n } = useTranslation("cars");
-  const { formData, updateField, features, addFeature, removeFeature } =
-    useVehicleForm();
+  const {
+    formData,
+    updateField,
+    features,
+    addFeature,
+    removeFeature,
+    updateFeature,
+  } = useVehicleForm();
 
   // State for countries data
   const [, setCountries] = useState<Country[]>([]);
@@ -103,6 +109,35 @@ const CarDetails = () => {
     removeFeature?.(index);
   };
 
+  const handleFeatureUpdate = (
+    index: number,
+    field: Partial<{
+      image: File | null;
+      titleEn: string;
+      titleAr: string;
+      descriptionEn: string;
+      descriptionAr: string;
+    }>
+  ) => {
+    const currentFeature = features[index];
+    if (!currentFeature) return;
+
+    const updatedFeature = {
+      ...currentFeature,
+      name: {
+        ar: field.titleAr ?? currentFeature.name?.ar ?? "",
+        en: field.titleEn ?? currentFeature.name?.en ?? "",
+      },
+      description: {
+        ar: field.descriptionAr ?? currentFeature.description?.ar ?? "",
+        en: field.descriptionEn ?? currentFeature.description?.en ?? "",
+      },
+      image: field.image ?? currentFeature.image,
+    };
+
+    updateFeature?.(index, updatedFeature);
+  };
+
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px] ">
       <h1 className="text-lg text-[#2A32F8] font-bold mb-2">
@@ -111,7 +146,7 @@ const CarDetails = () => {
       <div className="flex flex-col md:flex-row gap-[15px] ">
         <div className="w-full">
           <DashboardInput
-            label={t("arCarName")}
+            label={`${t("arCarName")} *`}
             value={formData?.nameAr || ""}
             onChange={(value) => updateField?.("nameAr", value)}
             placeholder={t("writeHere")}
@@ -119,7 +154,7 @@ const CarDetails = () => {
         </div>
         <div className="w-full">
           <DashboardInput
-            label={t("enCarName")}
+            label={`${t("enCarName")} *`}
             value={formData?.nameEn || ""}
             onChange={(value) => updateField?.("nameEn", value)}
             placeholder={t("writeHere")}
@@ -128,7 +163,7 @@ const CarDetails = () => {
       </div>
       <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 gap-[15px]">
         <Select
-          label={t("country")}
+          label={`${t("country")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -149,7 +184,7 @@ const CarDetails = () => {
           ))}
         </Select>
         <Select
-          label={t("brand")}
+          label={`${t("brand")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -169,7 +204,7 @@ const CarDetails = () => {
         </Select>
 
         <Select
-          label={t("agent")}
+          label={`${t("agent")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -189,7 +224,7 @@ const CarDetails = () => {
         </Select>
 
         <Select
-          label={t("model")}
+          label={`${t("model")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -211,7 +246,7 @@ const CarDetails = () => {
         </Select>
 
         <Select
-          label={t("structureType")}
+          label={`${t("structureType")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -235,7 +270,7 @@ const CarDetails = () => {
         </Select>
 
         <Select
-          label={t("type")}
+          label={`${t("type")} *`}
           variant="bordered"
           placeholder={
             selectedBrandId
@@ -262,7 +297,7 @@ const CarDetails = () => {
         </Select>
 
         <Select
-          label={t("category")}
+          label={`${t("category")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -284,7 +319,7 @@ const CarDetails = () => {
         </Select>
 
         <Select
-          label={t("brandOrigin")}
+          label={`${t("brandOrigin")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -306,7 +341,7 @@ const CarDetails = () => {
         </Select>
 
         <Select
-          label={t("seats")}
+          label={`${t("seats")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -326,7 +361,7 @@ const CarDetails = () => {
         </Select>
 
         <Select
-          label={t("engineType")}
+          label={`${t("engineType")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -348,7 +383,7 @@ const CarDetails = () => {
         </Select>
 
         <Select
-          label={t("engineSize")}
+          label={`${t("engineSize")} *`}
           variant="bordered"
           placeholder={t("choose")}
           classNames={{ label: "mb-2 text-base" }}
@@ -381,7 +416,8 @@ const CarDetails = () => {
               descriptionEn: feature.description?.en || "",
               descriptionAr: feature.description?.ar || "",
             }}
-            key={index}
+            onUpdate={(field) => handleFeatureUpdate(index, field)}
+            key={feature.id || `feature-${index}`}
           />
         ))}
       </div>

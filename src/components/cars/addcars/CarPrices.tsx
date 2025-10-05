@@ -16,7 +16,6 @@ const CarPrices = () => {
     queryFn: () => getAllCountries(),
   });
 
-
   // Calculate discounted price
   const discountedPrice =
     formData?.price && formData?.discount_value
@@ -24,12 +23,12 @@ const CarPrices = () => {
         (parseFloat(formData.price) * parseFloat(formData.discount_value)) / 100
       : parseFloat(formData?.price || "0");
 
-    const selectedCountry = allCountries.find(
-      (c) => c.id.toString() === formData?.country_id?.toString()
-    );
+  const selectedCountry = allCountries.find(
+    (c) => c.id.toString() === formData?.country_id?.toString()
+  );
 
-    const currencyText =
-      selectedCountry?.currency_text?.[i18n.language as "ar" | "en"] || "";
+  const currencyText =
+    selectedCountry?.currency_text?.[i18n.language as "ar" | "en"] || "";
 
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
@@ -39,7 +38,7 @@ const CarPrices = () => {
           value={formData?.price || ""}
           onChange={(e) => updateField?.("price", e.target.value)}
           type="number"
-          label={t("price")}
+          label={`${t("price")} *`}
           variant="bordered"
           placeholder={t("writeHere")}
           classNames={{ label: "mb-2 text-base" }}
@@ -92,7 +91,10 @@ const CarPrices = () => {
                 : null
             }
             onChange={(date) =>
-              updateField?.("discount_from_date", date?.toString().split("T")[0] || "")
+              updateField?.(
+                "discount_from_date",
+                date?.toString().split("T")[0] || ""
+              )
             }
           />
 
@@ -109,7 +111,10 @@ const CarPrices = () => {
                 : null
             }
             onChange={(date) =>
-              updateField?.("discount_to_date", date?.toString().split("T")[0] || "")
+              updateField?.(
+                "discount_to_date",
+                date?.toString().split("T")[0] || ""
+              )
             }
           />
 
