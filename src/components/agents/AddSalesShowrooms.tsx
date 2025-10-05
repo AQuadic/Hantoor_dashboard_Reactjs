@@ -6,6 +6,12 @@ import { AgentCenter } from "@/api/agents/fetchAgents";
 import { useState } from "react";
 import { X } from "lucide-react";
 
+type CountryType = {
+  iso2: string;
+  name: string;
+  phone: string[];
+};
+
 interface AddSalesShowroomsProps {
   centers: AgentCenter[];
   setCenters: (centers: AgentCenter[]) => void;
@@ -20,8 +26,9 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
   const { t } = useTranslation("agents");
 
   // Country state for WhatsApp input per showroom
-  const defaultCountry = { iso2: "EG", name: "Egypt", phone: ["20"] };
-  const [whatsappCountries, setWhatsappCountries] = useState(
+  const defaultCountry: CountryType = { iso2: "EG", name: "Egypt", phone: ["20"] };
+  const [whatsappCountries, setWhatsappCountries] = useState<CountryType[]>(centers.map(() => defaultCountry));
+  const [phoneCountries, setPhoneCountries] = useState<CountryType[]>(
     centers.map(() => defaultCountry)
   );
 
@@ -35,10 +42,11 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
         phone: "",
         whatsapp: "",
         type,
-        is_active: "1", // Changed from boolean to string
+        is_active: "1",
       },
     ]);
     setWhatsappCountries([...whatsappCountries, defaultCountry]);
+    setPhoneCountries([...phoneCountries, defaultCountry]);
   };
 
   // Update a field in a specific showroom
@@ -152,14 +160,31 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
                     defaultValue: "رقم الجوال",
                   })}
                   labelClassName="font-normal"
-                  selectedCountry={{ iso2: "EG", name: "Egypt", phone: ["20"] }}
-                  setSelectedCountry={() => {}}
-                  phone={center.phone}
+                  selectedCountry={phoneCountries[index] || defaultCountry}
+                  setSelectedCountry={(country: CountryType) => {
+                    const newCountries = [...phoneCountries];
+                    newCountries[index] = country;
+                    setPhoneCountries(newCountries);
+
+                    if (centers[index].phone) {
+                      const number = String(centers[index].phone).replace(/^\d+\s+/, "");
+                      handleShowroomChange(
+                        index,
+                        "phone",
+                        `${country.phone[0]} ${number}`
+                      );
+                    }
+                  }}
+                  phone={(center.phone || "").replace(/^\d+\s+/, "")}
                   setPhone={(val: string) =>
-                    handleShowroomChange(index, "phone", val)
+                    handleShowroomChange(
+                      index,
+                      "phone",
+                      `${(phoneCountries[index] || defaultCountry).phone[0]} ${val}`
+                    )
                   }
                 />
-                <div className="absolute top-9 left-5"></div>
+              <div className="absolute top-9 left-5"></div>
               </div>
               <div className="w-full">
                 <MobileInput
