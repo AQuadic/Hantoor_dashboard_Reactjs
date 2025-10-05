@@ -713,6 +713,10 @@ Requirements: Force font usage throughout entire project
 - [ ] Verify all vehicle-related components handle multilingual data correctly
 - [ ] Test to ensure error is resolved
 
+# 2025-10-05: FIX - permission key for StructureTable
+
+- Changed `useHasPermission("edit_vehicle_body")` to `useHasPermission("edit_vehicle_body_type")` in `src/components/models/StructureTable.tsx` so the Edit button respects the actual permission key returned by the backend.
+
 ## 2025-09-08: Prefill phone and country for AddSubordinatePage
 
 - **Change**: `src/pages/subordinates/AddSubordinatePage.tsx` updated to prefill phone and phone country when editing a subordinate. It extracts phone from `phone`, `phone_national`, `phone_e164`, `phone_normalized`, or `mobile` fields and sets `selectedCountry` using `phone_country` via `getCountryByIso2`.

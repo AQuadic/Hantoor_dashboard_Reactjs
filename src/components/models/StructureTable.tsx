@@ -42,7 +42,7 @@ export function StructureTable({
   dateParams,
 }: StructureTableProps) {
   const { t, i18n } = useTranslation("models");
-  const canEdit = useHasPermission("edit_vehicle_body");
+  const canEdit = useHasPermission("edit_vehicle_body_type");
   const language = i18n.language as "ar" | "en";
 
   const {
