@@ -11,6 +11,7 @@ import {
 import { GeneralSettingsResponse, getSettings } from "@/api/setting/getSetting";
 import { uploadLangCountryImage } from "@/api/setting/uploadLangCountryImage";
 import { chooseLangCountryImage } from "@/api/setting/chooseLangCountryImage";
+import { removeLangCountryImage } from "@/api/setting/removeImage";
 
 const GeneralSettings = () => {
   const { t } = useTranslation("setting");
@@ -262,7 +263,7 @@ const GeneralSettings = () => {
 
   try {
     setLoadingStates((prev) => ({ ...prev, profile_image: true }));
-    const response = await updateSettings({ remove_image: true });
+    const response = await removeLangCountryImage();
     toast.success(response.message || t("savedSuccessfully"));
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
