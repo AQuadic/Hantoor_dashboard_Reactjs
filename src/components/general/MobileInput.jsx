@@ -339,7 +339,7 @@ const MobileInput = ({
               }}
               type="button"
               key={country.iso2}
-              className="flex items-center gap-2 text-left"
+              className="flex items-center gap-2 text-left text-xs"
             >
               <img
                 src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country.iso2}.svg`}
