@@ -48,6 +48,7 @@ interface VehicleFormContextType {
   addOffer: () => void;
   updateOffer: (index: number, offer: Partial<VehicleOffer>) => void;
   removeOffer: (index: number) => void;
+  clearOffers: () => void;
   accessories: VehicleAccessory[];
   addAccessory: () => void;
   updateAccessory: (
@@ -55,10 +56,12 @@ interface VehicleFormContextType {
     accessory: Partial<VehicleAccessory>
   ) => void;
   removeAccessory: (index: number) => void;
+  clearAccessories: () => void;
   packages: VehiclePackage[];
   addPackage: () => void;
   updatePackage: (index: number, pkg: Partial<VehiclePackage>) => void;
   removePackage: (index: number) => void;
+  clearPackages: () => void;
   addCarImage: () => void;
   updateCarImage: (index: number, image: VehicleImage) => void;
   removeCarImage: (index: number) => void;
@@ -215,6 +218,13 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
     }));
   }, []);
 
+  const clearOffers = useCallback(() => {
+    setFormDataState((prev) => ({
+      ...prev,
+      offers: [],
+    }));
+  }, []);
+
   // Accessories management
   const addAccessory = useCallback(() => {
     const newAccessory: VehicleAccessory = {
@@ -249,6 +259,13 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
     }));
   }, []);
 
+  const clearAccessories = useCallback(() => {
+    setFormDataState((prev) => ({
+      ...prev,
+      accessories: [],
+    }));
+  }, []);
+
   // Packages management
   const addPackage = useCallback(() => {
     const newPackage: VehiclePackage = {
@@ -278,6 +295,13 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
     setFormDataState((prev) => ({
       ...prev,
       packages: prev.packages?.filter((_, i) => i !== index) || [],
+    }));
+  }, []);
+
+  const clearPackages = useCallback(() => {
+    setFormDataState((prev) => ({
+      ...prev,
+      packages: [],
     }));
   }, []);
 
@@ -398,10 +422,11 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       images: formData.carImages,
       additional_images: formData.additionalImages,
       ads_images: formData.adsImages,
-      offers: formData.offers,
-      packages: formData.packages,
+      // Only include these if their toggle is active
+      offers: formData.is_offers_active ? formData.offers : [],
+      packages: formData.is_packages_active ? formData.packages : [],
       features: formData.features,
-      accessories: formData.accessories,
+      accessories: formData.is_accessories_active ? formData.accessories : [],
     };
   }, [formData]);
 
@@ -425,14 +450,17 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       addOffer,
       updateOffer,
       removeOffer,
+      clearOffers,
       accessories: formData.accessories || [],
       addAccessory,
       updateAccessory,
       removeAccessory,
+      clearAccessories,
       packages: formData.packages || [],
       addPackage,
       updatePackage,
       removePackage,
+      clearPackages,
       addCarImage,
       updateCarImage,
       removeCarImage,
@@ -456,12 +484,15 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       addOffer,
       updateOffer,
       removeOffer,
+      clearOffers,
       addAccessory,
       updateAccessory,
       removeAccessory,
+      clearAccessories,
       addPackage,
       updatePackage,
       removePackage,
+      clearPackages,
       addCarImage,
       updateCarImage,
       removeCarImage,

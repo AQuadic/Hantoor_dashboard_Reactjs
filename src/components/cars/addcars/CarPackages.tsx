@@ -10,27 +10,21 @@ const CarPackages = () => {
   const { formData, updateField, packages, addPackage, removePackage } =
     useVehicleForm();
 
-  // Auto-enable toggle when packages exist
-  React.useEffect(() => {
-    if (packages.length > 0 && !formData.is_packages_active) {
-      updateField("is_packages_active", true);
-    }
-  }, [packages.length, formData.is_packages_active, updateField]);
-
   const handleToggle = (value: boolean) => {
+    // Just toggle the state - don't manipulate the data
     updateField("is_packages_active", value);
-    if (!value) {
-      // Clear all packages when disabled
-      while (packages.length > 0) {
-        removePackage(0);
-      }
-    } else if (packages.length === 0) {
-      // Add initial package when enabled
+
+    // Only add initial item if enabling and there are no items
+    if (value && packages.length === 0) {
       addPackage();
     }
   };
 
   const addCarPackage = () => {
+    // Auto-enable when adding if not already enabled
+    if (!formData.is_packages_active) {
+      updateField("is_packages_active", true);
+    }
     addPackage();
   };
 
