@@ -159,7 +159,18 @@ export function UserTable({
   };
 
   if (isLoading) return <Loading />;
-  if (users.length === 0) return <NoData />;
+  
+  // Check if any filters are active
+  const hasActiveFilters = !!(
+    searchTerm || 
+    countryId || 
+    signupWith || 
+    dateParams?.from_date || 
+    dateParams?.to_date
+  );
+  
+  // Only show NoData if there are no results AND no active filters
+  if (users.length === 0 && !hasActiveFilters) return <NoData />;
 
   const signupMethodLabels: Record<string, string> = {
     all: t("all"),
@@ -197,8 +208,15 @@ export function UserTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {users.map((user, index) => (
-          <TableRow key={user.id} noBackgroundColumns={2}>
+        {users.length === 0 ? (
+          <TableRow>
+            <TableCell colSpan={14} className="text-center py-8 text-gray-500">
+              {t("noResultsFound")}
+            </TableCell>
+          </TableRow>
+        ) : (
+          users.map((user, index) => (
+            <TableRow key={user.id} noBackgroundColumns={2}>
             <TableCell>{index + 1}</TableCell>
             <TableCell>
               {user.image?.url ? (
@@ -308,7 +326,8 @@ export function UserTable({
               <TableDeleteButton handleDelete={() => handleDelete(user.id)} />
             </TableCell>
           </TableRow>
-        ))}
+          ))
+        )}
       </TableBody>
     </Table>
   );

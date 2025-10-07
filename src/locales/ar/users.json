@@ -41,5 +41,6 @@
   "emailRequired": "البريد الإلكتروني مطلوب",
   "phoneRequired": "رقم الجوال مطلوب",
   "imageRemoved": "تم حذف الصورة بنجاح",
-  "imageRequired": "الصورة مطلوبة"
+  "imageRequired": "الصورة مطلوبة",
+  "noResultsFound": "لم يتم العثور على نتائج. حاول تعديل الفلاتر."
 }
