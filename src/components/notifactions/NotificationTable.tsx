@@ -65,7 +65,7 @@ const NotificationTable: React.FC<NotificationTableProps> = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((notification, index) => {
+        {data.map((notification) => {
           const isExpanded = expandedRows[notification.id];
           const bodyText =
             i18n.language === "ar"
@@ -77,16 +77,16 @@ const NotificationTable: React.FC<NotificationTableProps> = ({
 
           return (
             <TableRow key={notification.id} noBackgroundColumns={1}>
-              <TableCell>{from + index}</TableCell>
+              <TableCell>{notification.id}</TableCell>
               <TableCell>
                 {notification.image && "url" in notification.image ? (
                   <img
                     src={notification.image.url}
                     alt="Notification"
-                    className="w-16 h-16 object-cover rounded-md"
+                    className="w-[48px] h-[48px] object-cover rounded-lg"
                   />
                 ) : (
-                  <TableImagePlaceholder className="w-10 h-10" />
+                  <TableImagePlaceholder className="w-[48px] h-[48px]" />
                 )}
               </TableCell>
               <TableCell>

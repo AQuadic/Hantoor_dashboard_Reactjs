@@ -90,9 +90,9 @@ const TermsTable = ({ data, isLoading, refetch }: TermsTableProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((page, index) => (
+        {data.map((page) => (
           <TableRow key={page.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{page.id}</TableCell>
             <TableCell>{page.title?.[lang] || page.title?.en}</TableCell>
             <TableCell>{getCountryName(page.country_id)}</TableCell>
             <TableCell>

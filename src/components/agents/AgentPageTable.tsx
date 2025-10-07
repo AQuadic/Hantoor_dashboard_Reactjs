@@ -60,9 +60,9 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {agents.map((agent, index) => (
+        {agents.map((agent) => (
           <TableRow key={agent.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{agent.id}</TableCell>
             <TableCell>{agent.name[i18n.language as "ar" | "en"]}</TableCell>
             <TableCell className="">
               {typeof agent.centers_count === "number"

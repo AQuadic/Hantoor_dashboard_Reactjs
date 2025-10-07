@@ -65,13 +65,13 @@ const DashboardUsers = () => {
             <DashboardDatePicker value={dateRange} onChange={setDateRange} />
           </div>
           {/* {canAdd && ( */}
-            <Link to="/users/add">
-              <DashboardButton
-                titleAr={"إضافة مستخدم جديد"}
-                titleEn={"Add new user"}
-                variant="add"
-              />
-            </Link>
+          <Link to="/users/add">
+            <DashboardButton
+              titleAr={"إضافة مستخدم جديد"}
+              titleEn={"Add new user"}
+              variant="add"
+            />
+          </Link>
           {/* )} */}
         </div>
 

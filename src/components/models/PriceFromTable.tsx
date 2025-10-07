@@ -108,9 +108,9 @@ export function PriceFromTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {priceFromList.map((price: PriceFrom, index: number) => (
+        {priceFromList.map((price: PriceFrom) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
-            <TableCell>{data ? data.from + index : index + 1}</TableCell>
+            <TableCell>{price.id}</TableCell>
             <TableCell>
               {price.name}
               <span className="px-2">

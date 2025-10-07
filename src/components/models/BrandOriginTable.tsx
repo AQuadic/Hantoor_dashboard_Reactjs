@@ -102,9 +102,9 @@ export function BrandOriginTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((brand, index) => (
+        {data.map((brand) => (
           <TableRow key={brand.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{brand.id}</TableCell>
             <TableCell className="w-full">
               {currentLang === "ar" ? brand.name.ar : brand.name.en}
             </TableCell>

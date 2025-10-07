@@ -115,9 +115,9 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((country, index) => (
+        {data.map((country) => (
           <TableRow key={country.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{country.id}</TableCell>
             <TableCell>
               {isArabic ? country.name.ar : country.name.en}
             </TableCell>

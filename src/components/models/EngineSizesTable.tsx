@@ -105,9 +105,9 @@ export function EngineSizesTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {engineSize?.map((engine, index) => (
+        {engineSize?.map((engine) => (
           <TableRow key={engine.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{engine.id}</TableCell>
             <TableCell className="w-full">
               {i18n.language === "ar"
                 ? engine.name.ar.slice(0, 7)

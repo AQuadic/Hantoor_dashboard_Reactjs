@@ -108,9 +108,9 @@ export function SubordinatesTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.data.map((admin, index) => (
+        {data.data.map((admin) => (
           <TableRow key={admin.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{admin.id}</TableCell>
             <TableCell>
               {admin.image?.responsive_urls?.[0] || admin.image?.url ? (
                 <img
@@ -120,13 +120,13 @@ export function SubordinatesTable({
                     "/images/admin/admin1.svg"
                   }
                   alt={admin.name || "admin"}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="w-[48px] h-[48px] rounded-lg object-cover"
                   onError={(e) => {
                     e.currentTarget.src = "/images/admin/admin1.svg";
                   }}
                 />
               ) : (
-                <TableImagePlaceholder className="w-10 h-10" />
+                <TableImagePlaceholder className="w-[48px] h-[48px]" />
               )}
             </TableCell>
             <TableCell>{admin.name}</TableCell>

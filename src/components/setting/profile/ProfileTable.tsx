@@ -87,22 +87,22 @@ const ProfileTable = ({ countryId }: Props) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {profiles.map((profile: OnboardingItem, index: number) => (
+        {profiles.map((profile: OnboardingItem) => (
           <TableRow key={profile.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{profile.id}</TableCell>
             <TableCell>
               {profile.image ? (
                 typeof profile.image === "string" ? (
                   <img
                     src={profile.image}
                     alt={profile.title.en}
-                    className="w-20 h-20 object-cover"
+                    className="w-[48px] h-[48px] object-cover rounded-lg"
                   />
                 ) : (
                   <img
                     src={profile.image.url}
                     alt={profile.title.en}
-                    className="w-20 h-20 object-cover"
+                    className="w-[48px] h-[48px] object-cover rounded-lg"
                   />
                 )
               ) : (

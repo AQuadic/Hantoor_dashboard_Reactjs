@@ -87,9 +87,9 @@ const SupportMessagesTable = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {conversations.map((message, index) => (
+            {conversations.map((message) => (
               <TableRow key={message.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>{message.id}</TableCell>
                 <TableCell>{message.id}</TableCell>
                 <TableCell>
                   {i18n.language === "ar"
@@ -161,7 +161,6 @@ const SupportMessagesTable = ({
                       className="w-[150px] h-[37px] bg-[#FFFFFF] border border-[#D8D8D8] rounded-[10px] focus:outline-none px-3 placeholder:text-[13px]"
                       placeholder={t("yourNotes")}
                     />
-
                   </div>
 
                   <button onClick={() => setOpenMessageId(message.id)}>

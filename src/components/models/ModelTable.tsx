@@ -111,9 +111,9 @@ export function ModelTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {models.map((model, index) => (
+        {models.map((model) => (
           <TableRow key={model.id} noBackgroundColumns={1}>
-            <TableCell>{paginationData.from + index}</TableCell>
+            <TableCell>{model.id}</TableCell>
             <TableCell className="w-full">
               {i18n.language === "ar"
                 ? model.name.ar

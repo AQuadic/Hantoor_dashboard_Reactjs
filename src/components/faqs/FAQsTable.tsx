@@ -115,9 +115,9 @@ const FAQsTable = ({ data, isLoading = false, refetch }: FAQsTableProps) => {
           </TableHeader>
 
           <TableBody>
-            {data.map((faq: FAQ, index: number) => (
+            {data.map((faq: FAQ) => (
               <TableRow key={faq.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>{faq.id}</TableCell>
                 <TableCell>
                   {i18n.language === "ar" ? faq.question.ar : faq.question.en}
                 </TableCell>

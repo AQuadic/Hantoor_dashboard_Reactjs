@@ -37,7 +37,9 @@ const AddNotification = () => {
   const [enDescription, setEnDescription] = useState("");
 
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
-  const [recieverType, setRecieverType] = useState<"all" | "selected" | null>(null);
+  const [recieverType, setRecieverType] = useState<"all" | "selected" | null>(
+    null
+  );
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
   const navigate = useNavigate();
   const [search, setSearch] = useState("");
@@ -76,7 +78,6 @@ const AddNotification = () => {
       toast.error(t("selectUsers"));
       return;
     }
-
 
     const payload: BroadcastNotificationPayload = {
       title: { en: enText, ar: arText },
@@ -216,7 +217,11 @@ const AddNotification = () => {
               classNames={{ label: "mb-2 text-base" }}
               size="lg"
               value={
-                recieverType === "all" ? "1" : recieverType === "selected" ? "2" : ""
+                recieverType === "all"
+                  ? "1"
+                  : recieverType === "selected"
+                  ? "2"
+                  : ""
               }
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 if (e.target.value === "1") setRecieverType("all");
@@ -294,7 +299,10 @@ const AddNotification = () => {
                   <tbody>
                     {usersData && (usersData.data?.length ?? 0) === 0 ? (
                       <tr>
-                        <td colSpan={4} className="text-center py-8 text-sm text-[#606C7E]">
+                        <td
+                          colSpan={4}
+                          className="text-center py-8 text-sm text-[#606C7E]"
+                        >
                           {i18n.language === "ar"
                             ? "لا توجد نتائج"
                             : "No results found"}
@@ -302,39 +310,39 @@ const AddNotification = () => {
                       </tr>
                     ) : (
                       (usersData?.data || []).map((user) => (
-                          <tr
-                            key={user.id}
-                            className="bg-white border-b border-[#E3E8EF] text-sm text-right"
-                          >
-                            <td className="align-middle">
-                              <Checkbox
-                                isSelected={selectedUsers.includes(
-                                  user.id.toString()
-                                )}
-                                onChange={handleUserCheckboxChange(
-                                  user.id.toString()
-                                )}
-                                disabled={
-                                  (recieverType as "all" | "selected") === "all"
-                                }
-                              />
-                            </td>
-                            <td className="py-3 pr-2">
-                              <img
-                                src="/images/user.svg"
-                                alt="user"
-                                className="w-[52px] h-[51px] rounded-full"
-                              />
-                            </td>
-                            <td className="py-3 pr-2 text-[#071739] font-normal">
-                              {user.name}
-                            </td>
+                        <tr
+                          key={user.id}
+                          className="bg-white border-b border-[#E3E8EF] text-sm text-right"
+                        >
+                          <td className="align-middle">
+                            <Checkbox
+                              isSelected={selectedUsers.includes(
+                                user.id.toString()
+                              )}
+                              onChange={handleUserCheckboxChange(
+                                user.id.toString()
+                              )}
+                              disabled={
+                                (recieverType as "all" | "selected") === "all"
+                              }
+                            />
+                          </td>
+                          <td className="py-3 pr-2">
+                            <img
+                              src="/images/user.svg"
+                              alt="user"
+                              className="w-[52px] h-[51px] rounded-full"
+                            />
+                          </td>
+                          <td className="py-3 pr-2 text-[#071739] font-normal">
+                            {user.name}
+                          </td>
 
-                            <td className="py-3 pr-2 text-[#606C7E]" dir="ltr">
-                              {user.phone}
-                            </td>
-                          </tr>
-                        ))
+                          <td className="py-3 pr-2 text-[#606C7E]" dir="ltr">
+                            {user.phone}
+                          </td>
+                        </tr>
+                      ))
                     )}
                   </tbody>
                 </table>

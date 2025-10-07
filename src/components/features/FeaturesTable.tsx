@@ -79,15 +79,15 @@ const FeaturesTable: React.FC<Props> = ({ features, refetch }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {features.map((feature, index) => (
+        {features.map((feature) => (
           <TableRow key={feature.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{feature.id}</TableCell>
             <TableCell>
               {feature.image?.url ? (
                 <img
                   src={feature.image.url}
                   alt="feature"
-                  className="w-[52.36px] h-[51px] rounded-[7px] object-cover"
+                  className="w-[52px] h-[52px] rounded-[7px] object-cover"
                 />
               ) : (
                 <span className="text-gray-400">No Image</span>

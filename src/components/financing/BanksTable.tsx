@@ -116,20 +116,22 @@ const BanksTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {banksArray.map((bank: Bank, index: number) => (
+          {banksArray.map((bank: Bank) => (
             <TableRow key={bank.id} noBackgroundColumns={1}>
-              <TableCell>{index + 1}</TableCell>
+              <TableCell>{bank.id}</TableCell>
               <TableCell>
                 {(() => {
                   if (!bank.image) {
-                    return <TableImagePlaceholder className="w-10 h-10" />;
+                    return (
+                      <TableImagePlaceholder className="w-[48px] h-[48px]" />
+                    );
                   }
                   if (typeof bank.image === "string") {
                     return (
                       <img
                         src={bank.image}
                         alt={bank.name?.ar || bank.name?.en || "bank-image"}
-                        className="w-10 h-10 object-contain rounded"
+                        className="w-[48px] h-[48px] object-cover rounded-lg"
                         onError={(e) => {
                           e.currentTarget.src = "/images/admin/admin1.svg";
                         }}
@@ -141,13 +143,13 @@ const BanksTable = ({
                     <img
                       src={imgObj.url}
                       alt={bank.name?.ar || bank.name?.en || "bank-image"}
-                      className="w-10 h-10 object-contain rounded"
+                      className="w-[48px] h-[48px] object-cover rounded-lg"
                       onError={(e) => {
                         e.currentTarget.src = "/images/admin/admin1.svg";
                       }}
                     />
                   ) : (
-                    <TableImagePlaceholder className="w-10 h-10" />
+                    <TableImagePlaceholder className="w-[48px] h-[48px]" />
                   );
                 })()}
               </TableCell>

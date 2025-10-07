@@ -12,7 +12,10 @@ import Edit from "@/components/icons/general/Edit";
 import { useTranslation } from "react-i18next";
 import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
-import { getRequestFinancing, FinancingItem } from "@/api/financing/fetchFinancing";
+import {
+  getRequestFinancing,
+  FinancingItem,
+} from "@/api/financing/fetchFinancing";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
@@ -27,11 +30,14 @@ interface InsuranceTableProps {
 const InsuranceTable = ({ selectedCountry }: InsuranceTableProps) => {
   const { t, i18n } = useTranslation("setting");
 
-const { data: financingItems = [], isLoading: financingLoading, refetch } = useQuery({
-  queryKey: ["request-financing"],
-  queryFn: () => getRequestFinancing(undefined, false),
-});
-
+  const {
+    data: financingItems = [],
+    isLoading: financingLoading,
+    refetch,
+  } = useQuery({
+    queryKey: ["request-financing"],
+    queryFn: () => getRequestFinancing(undefined, false),
+  });
 
   const { data: countriesData, isLoading: countriesLoading } = useQuery({
     queryKey: ["countries"],
@@ -80,46 +86,50 @@ const { data: financingItems = [], isLoading: financingLoading, refetch } = useQ
 
   const filteredItems =
     selectedCountry && selectedCountry !== "all"
-      ? financingItems.filter((item) => String(item.country_id) === selectedCountry)
+      ? financingItems.filter(
+          (item) => String(item.country_id) === selectedCountry
+        )
       : financingItems;
 
   if (!filteredItems.length) {
     return <NoData />;
   }
 
-    return (
-        <Table>
-        <TableHeader>
-            <TableRow>
-            <TableHead className="text-right">#</TableHead>
-            <TableHead className="text-right">{t('whatsappNumber')}</TableHead>
-            <TableHead className="text-right">{t('country')}</TableHead>
-            <TableHead className="text-right">{t('status')}</TableHead>
-            </TableRow>
-        </TableHeader>
-        <TableBody>
-            {filteredItems.map((item, index) => (
-            <TableRow key={item.id} noBackgroundColumns={1}>
-              <TableCell>{index + 1}</TableCell>
-                <TableCell dir="ltr">{item.phone}</TableCell>
-                <TableCell className="w-full">{getCountryName(item.country_id)}</TableCell>
-                <TableCell className="flex gap-[7px] items-center">
-                  <Switch
-                    isSelected={!!item.is_active}
-                    onChange={() => handleToggle(item)}
-                  />
-                <Link to={`/setting/edit-whatsapp/${item.id}`}>
-                    <Edit />
-                </Link>
-                <div className="mt-2">
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="text-right">#</TableHead>
+          <TableHead className="text-right">{t("whatsappNumber")}</TableHead>
+          <TableHead className="text-right">{t("country")}</TableHead>
+          <TableHead className="text-right">{t("status")}</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {filteredItems.map((item) => (
+          <TableRow key={item.id} noBackgroundColumns={1}>
+            <TableCell>{item.id}</TableCell>
+            <TableCell dir="ltr">{item.phone}</TableCell>
+            <TableCell className="w-full">
+              {getCountryName(item.country_id)}
+            </TableCell>
+            <TableCell className="flex gap-[7px] items-center">
+              <Switch
+                isSelected={!!item.is_active}
+                onChange={() => handleToggle(item)}
+              />
+              <Link to={`/setting/edit-whatsapp/${item.id}`}>
+                <Edit />
+              </Link>
+              <div className="mt-2">
                 <TableDeleteButton handleDelete={() => handleDelete(item.id)} />
-                </div>
-                </TableCell>
-            </TableRow>
-            ))}
-        </TableBody>
-        </Table>
-    )
-}
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+};
 
-export default InsuranceTable
+export default InsuranceTable;
