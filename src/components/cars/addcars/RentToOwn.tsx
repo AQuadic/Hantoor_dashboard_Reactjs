@@ -24,16 +24,38 @@ const RentToOwn: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = React.useState(
     getCountryByIso2("AE")
   );
-  const [phone, setPhone] = React.useState(
-    formData?.rent_to_own_whatsapp || ""
-  );
+  const [phone, setPhone] = React.useState("");
+  const [initialized, setInitialized] = React.useState(false);
 
-  // Update WhatsApp number in form when phone changes
+  // Initialize phone and country from formData when editing (only once)
+  React.useEffect(() => {
+    if (!initialized && formData) {
+      if (formData.rent_to_own_whatsapp) {
+        setPhone(formData.rent_to_own_whatsapp);
+      }
+      if (formData.rent_to_own_phone_country) {
+        const country = getCountryByIso2(formData.rent_to_own_phone_country);
+        setSelectedCountry(country);
+      }
+      setInitialized(true);
+    }
+  }, [formData, initialized]);
+
+  // Update WhatsApp number and phone country in form when they change
   React.useEffect(() => {
     if (phone !== formData?.rent_to_own_whatsapp) {
       updateField?.("rent_to_own_whatsapp", phone as unknown as string);
     }
   }, [phone, formData?.rent_to_own_whatsapp, updateField]);
+
+  React.useEffect(() => {
+    if (selectedCountry.iso2 !== formData?.rent_to_own_phone_country) {
+      updateField?.(
+        "rent_to_own_phone_country",
+        selectedCountry.iso2 as unknown as string
+      );
+    }
+  }, [selectedCountry, formData?.rent_to_own_phone_country, updateField]);
 
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">

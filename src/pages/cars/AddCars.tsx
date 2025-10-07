@@ -110,6 +110,37 @@ const AddCarsForm = () => {
         nameEn = vehicle.name.en || "";
       }
 
+      // Helper function to extract localized duration
+      const getDurationAr = (): string => {
+        if (
+          vehicle.rent_to_own_duration &&
+          typeof vehicle.rent_to_own_duration === "object"
+        ) {
+          const duration = vehicle.rent_to_own_duration as {
+            ar?: string;
+            en?: string;
+          };
+          return duration.ar || "";
+        }
+        return vehicle.rent_to_own_duration
+          ? safeToString(vehicle.rent_to_own_duration)
+          : "";
+      };
+
+      const getDurationEn = (): string => {
+        if (
+          vehicle.rent_to_own_duration &&
+          typeof vehicle.rent_to_own_duration === "object"
+        ) {
+          const duration = vehicle.rent_to_own_duration as {
+            ar?: string;
+            en?: string;
+          };
+          return duration.en || "";
+        }
+        return ""; // If duration is a number/string, English version not available
+      };
+
       const formDataToSet = {
         id: vehicle.id,
         nameAr,
@@ -126,11 +157,13 @@ const AddCarsForm = () => {
         is_Insurance_warranty: Boolean(vehicle.is_Insurance_warranty),
         is_include_warranty: Boolean(vehicle.is_include_warranty),
         is_rent_to_own: Boolean(vehicle.is_rent_to_own),
-        rent_to_own_duration: vehicle.rent_to_own_duration
-          ? safeToString(vehicle.rent_to_own_duration)
-          : "",
+        rent_to_own_duration: getDurationAr(),
+        rent_to_own_duration_en: getDurationEn(),
         rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp
           ? safeToString(vehicle.rent_to_own_whatsapp)
+          : "",
+        rent_to_own_phone_country: vehicle.rent_to_own_phone_country
+          ? safeToString(vehicle.rent_to_own_phone_country)
           : "",
         rent_to_own_price: vehicle.rent_to_own_price
           ? safeToString(vehicle.rent_to_own_price)
@@ -173,6 +206,13 @@ const AddCarsForm = () => {
           vehicle.additional_images || []
         ), // PhotosAndVideos MultiImageInput -> additional_images API field
         adsImages: convertToVehicleImages(vehicle.images_ads || []),
+        // Set toggle states based on whether data exists
+        is_offers_active:
+          (vehicle.offers && vehicle.offers.length > 0) || false,
+        is_packages_active:
+          (vehicle.packages && vehicle.packages.length > 0) || false,
+        is_accessories_active:
+          (vehicle.accessories && vehicle.accessories.length > 0) || false,
       };
 
       console.log("Setting form data:", formDataToSet); // Debug log

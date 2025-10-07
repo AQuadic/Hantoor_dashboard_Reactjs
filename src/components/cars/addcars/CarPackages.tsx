@@ -7,7 +7,28 @@ import { useVehicleForm } from "@/contexts/VehicleFormContext";
 
 const CarPackages = () => {
   const { t } = useTranslation("cars");
-  const { packages, addPackage, removePackage } = useVehicleForm();
+  const { formData, updateField, packages, addPackage, removePackage } =
+    useVehicleForm();
+
+  // Auto-enable toggle when packages exist
+  React.useEffect(() => {
+    if (packages.length > 0 && !formData.is_packages_active) {
+      updateField("is_packages_active", true);
+    }
+  }, [packages.length, formData.is_packages_active, updateField]);
+
+  const handleToggle = (value: boolean) => {
+    updateField("is_packages_active", value);
+    if (!value) {
+      // Clear all packages when disabled
+      while (packages.length > 0) {
+        removePackage(0);
+      }
+    } else if (packages.length === 0) {
+      // Add initial package when enabled
+      addPackage();
+    }
+  };
 
   const addCarPackage = () => {
     addPackage();
@@ -23,18 +44,26 @@ const CarPackages = () => {
         <h1 className="text-lg text-primary font-bold mb-2">
           {t("maintenancePackages")}
         </h1>
-        <Switch />
-      </div>
-      {packages.map((pkg, index) => (
-        <CarPackageField
-          index={index}
-          key={index}
-          pkg={pkg}
-          handleDelete={() => removeCarPackage(index)}
+        <Switch
+          isSelected={formData.is_packages_active || false}
+          onValueChange={handleToggle}
+          size="sm"
+          color="primary"
         />
-      ))}
+      </div>
+      {formData.is_packages_active &&
+        packages.map((pkg, index) => (
+          <CarPackageField
+            index={index}
+            key={index}
+            pkg={pkg}
+            handleDelete={() => removeCarPackage(index)}
+          />
+        ))}
 
-      <AddFieldButton onClick={addCarPackage} title={t("addMoreData")} />
+      {formData.is_packages_active && (
+        <AddFieldButton onClick={addCarPackage} title={t("addMoreData")} />
+      )}
     </div>
   );
 };

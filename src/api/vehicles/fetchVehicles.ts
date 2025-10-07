@@ -39,7 +39,7 @@ export interface VehicleFeature {
   created_at?: string;
   updated_at?: string;
   discount_from_date?: string;
-  discount_to_date?: string; 
+  discount_to_date?: string;
 }
 
 export interface VehicleOffer {
@@ -142,8 +142,9 @@ export interface Vehicle {
   is_include_warranty: boolean;
   views: number | null;
   is_rent_to_own: boolean;
-  rent_to_own_duration: number | null;
+  rent_to_own_duration: number | string | VehicleName | null;
   rent_to_own_whatsapp: string | null;
+  rent_to_own_phone_country?: string | null;
   rent_to_own_price: string | null;
   is_active?: boolean; // Status field for vehicle activation
   status?: number; // Backend status field (1 for active, 0 for inactive)
@@ -277,13 +278,16 @@ export interface CreateVehiclePayload {
   discount_value?: string;
   discount_date?: string;
   discount_from_date?: string;
-  discount_to_date?: string; 
+  discount_to_date?: string;
   is_include_tax?: boolean;
   is_Insurance_warranty?: boolean;
   is_include_warranty?: boolean;
   is_rent_to_own?: boolean;
   rent_to_own_duration?: string | null;
+  "rent_to_own_duration[ar]"?: string | null;
+  "rent_to_own_duration[en]"?: string | null;
   rent_to_own_whatsapp?: string | null;
+  rent_to_own_phone_country?: string | null;
   rent_to_own_price?: string | null;
   is_active?: boolean;
   status?: string; // Status field as string for FormData
@@ -379,7 +383,7 @@ export async function fetchVehicles(
     params.vehicle_class_id = filters.vehicle_class_id;
   }
   if (filters.from_date) {
-  params.from_date = filters.from_date;
+    params.from_date = filters.from_date;
   }
   if (filters.to_date) {
     params.to_date = filters.to_date;
@@ -444,10 +448,10 @@ export async function createVehicle(
     "price",
     "discount_value",
     "discount_from_date",
-    "discount_to_date",  
+    "discount_to_date",
     "discount_date",
-    "rent_to_own_duration",
     "rent_to_own_whatsapp",
+    "rent_to_own_phone_country",
     "rent_to_own_price",
   ];
 
@@ -457,6 +461,20 @@ export async function createVehicle(
       formData.append(field, String(value));
     }
   });
+
+  // Add localized rent_to_own_duration fields
+  if (data["rent_to_own_duration[ar]"]) {
+    formData.append(
+      "rent_to_own_duration[ar]",
+      data["rent_to_own_duration[ar]"]
+    );
+  }
+  if (data["rent_to_own_duration[en]"]) {
+    formData.append(
+      "rent_to_own_duration[en]",
+      data["rent_to_own_duration[en]"]
+    );
+  }
 
   // Add boolean fields
   if (data.is_discount !== undefined) {
@@ -602,191 +620,205 @@ export async function updateVehicle(
   id: number,
   data: UpdateVehiclePayload
 ): Promise<Vehicle> {
-try {
-  const formData = new FormData();
+  try {
+    const formData = new FormData();
 
-  // Add method override for PUT
-  formData.append("_method", "PUT");
+    // Add method override for PUT
+    formData.append("_method", "PUT");
 
-  // Add basic vehicle data
-  if (data.name) {
-    formData.append("name[ar]", data.name.ar);
-    formData.append("name[en]", data.name.en);
-  }
-
-  // Add all scalar fields
-  const scalarFields = [
-    "country_id",
-    "brand_id",
-    "agent_id",
-    "vehicle_model_id",
-    "vehicle_body_type_id",
-    "vehicle_type_id",
-    "vehicle_class_id",
-    "brand_origin_id",
-    "number_of_seat_id",
-    "engine_type_id",
-    "engine_volume_id",
-    "price",
-    "discount_value",
-    "discount_date",
-    "discount_from_date",
-    "discount_to_date", 
-    "rent_to_own_duration",
-    "rent_to_own_whatsapp",
-    "rent_to_own_price",
-  ];
-
-  scalarFields.forEach((field) => {
-    const value = data[field as keyof UpdateVehiclePayload];
-    if (value !== undefined && value !== null && value !== "") {
-      formData.append(field, String(value));
+    // Add basic vehicle data
+    if (data.name) {
+      formData.append("name[ar]", data.name.ar);
+      formData.append("name[en]", data.name.en);
     }
-  });
 
-  // Add boolean fields
-  if (data.is_discount !== undefined) {
-    formData.append("is_discount", data.is_discount ? "1" : "0");
-  }
-  if (data.is_include_tax !== undefined) {
-    formData.append("is_include_tax", data.is_include_tax ? "1" : "0");
-  }
-  if (data.is_Insurance_warranty !== undefined) {
-    formData.append(
-      "is_Insurance_warranty",
-      data.is_Insurance_warranty ? "1" : "0"
-    );
-  }
-  if (data.is_include_warranty !== undefined) {
-    formData.append(
-      "is_include_warranty",
-      data.is_include_warranty ? "1" : "0"
-    );
-  }
-  if (data.is_rent_to_own !== undefined) {
-    formData.append("is_rent_to_own", data.is_rent_to_own ? "1" : "0");
-  }
+    // Add all scalar fields
+    const scalarFields = [
+      "country_id",
+      "brand_id",
+      "agent_id",
+      "vehicle_model_id",
+      "vehicle_body_type_id",
+      "vehicle_type_id",
+      "vehicle_class_id",
+      "brand_origin_id",
+      "number_of_seat_id",
+      "engine_type_id",
+      "engine_volume_id",
+      "price",
+      "discount_value",
+      "discount_date",
+      "discount_from_date",
+      "discount_to_date",
+      "rent_to_own_whatsapp",
+      "rent_to_own_phone_country",
+      "rent_to_own_price",
+    ];
 
-  // Add files
-  if (data.image) {
-    formData.append("image", data.image);
-  }
-  if (data.video) {
-    formData.append("video", data.video);
-  }
-
-  // Add image arrays
-  if (data.images?.length) {
-    data.images.forEach((img, index) => {
-      if (img.image instanceof File) {
-        formData.append(`images[${index}][image]`, img.image);
+    scalarFields.forEach((field) => {
+      const value = data[field as keyof UpdateVehiclePayload];
+      if (value !== undefined && value !== null && value !== "") {
+        formData.append(field, String(value));
       }
     });
-  }
 
-  if (data.additional_images?.length) {
-    data.additional_images.forEach((img, index) => {
-      if (img.image instanceof File) {
-        formData.append(`additional_images[${index}][image]`, img.image);
-      }
+    // Add localized rent_to_own_duration fields
+    if (data["rent_to_own_duration[ar]"]) {
+      formData.append(
+        "rent_to_own_duration[ar]",
+        data["rent_to_own_duration[ar]"]
+      );
+    }
+    if (data["rent_to_own_duration[en]"]) {
+      formData.append(
+        "rent_to_own_duration[en]",
+        data["rent_to_own_duration[en]"]
+      );
+    }
+
+    // Add boolean fields
+    if (data.is_discount !== undefined) {
+      formData.append("is_discount", data.is_discount ? "1" : "0");
+    }
+    if (data.is_include_tax !== undefined) {
+      formData.append("is_include_tax", data.is_include_tax ? "1" : "0");
+    }
+    if (data.is_Insurance_warranty !== undefined) {
+      formData.append(
+        "is_Insurance_warranty",
+        data.is_Insurance_warranty ? "1" : "0"
+      );
+    }
+    if (data.is_include_warranty !== undefined) {
+      formData.append(
+        "is_include_warranty",
+        data.is_include_warranty ? "1" : "0"
+      );
+    }
+    if (data.is_rent_to_own !== undefined) {
+      formData.append("is_rent_to_own", data.is_rent_to_own ? "1" : "0");
+    }
+
+    // Add files
+    if (data.image) {
+      formData.append("image", data.image);
+    }
+    if (data.video) {
+      formData.append("video", data.video);
+    }
+
+    // Add image arrays
+    if (data.images?.length) {
+      data.images.forEach((img, index) => {
+        if (img.image instanceof File) {
+          formData.append(`images[${index}][image]`, img.image);
+        }
+      });
+    }
+
+    if (data.additional_images?.length) {
+      data.additional_images.forEach((img, index) => {
+        if (img.image instanceof File) {
+          formData.append(`additional_images[${index}][image]`, img.image);
+        }
+      });
+    }
+
+    if (data.ads_images?.length) {
+      data.ads_images.forEach((img, index) => {
+        if (img.image instanceof File) {
+          formData.append(`ads_images[${index}][image]`, img.image);
+        }
+      });
+    }
+
+    // Add offers
+    if (data.offers?.length) {
+      data.offers.forEach((offer, index) => {
+        formData.append(`offers[${index}][name][ar]`, offer.name.ar);
+        formData.append(`offers[${index}][name][en]`, offer.name.en);
+        formData.append(
+          `offers[${index}][description][ar]`,
+          offer.description.ar
+        );
+        formData.append(
+          `offers[${index}][description][en]`,
+          offer.description.en
+        );
+        formData.append(
+          `offers[${index}][is_active]`,
+          offer.is_active ? "1" : "0"
+        );
+        if (offer.image instanceof File) {
+          formData.append(`offers[${index}][image]`, offer.image);
+        }
+      });
+    }
+
+    // Add packages
+    if (data.packages?.length) {
+      data.packages.forEach((pkg, index) => {
+        formData.append(`packages[${index}][name][ar]`, pkg.name.ar);
+        formData.append(`packages[${index}][name][en]`, pkg.name.en);
+        formData.append(`packages[${index}][price]`, pkg.price);
+        formData.append(
+          `packages[${index}][is_active]`,
+          pkg.is_active ? "1" : "0"
+        );
+      });
+    }
+
+    // Add features
+    if (data.features?.length) {
+      data.features.forEach((feature, index) => {
+        formData.append(`features[${index}][name][ar]`, feature.name.ar);
+        formData.append(`features[${index}][name][en]`, feature.name.en);
+        formData.append(
+          `features[${index}][description][ar]`,
+          feature.description.ar
+        );
+        formData.append(
+          `features[${index}][description][en]`,
+          feature.description.en
+        );
+        formData.append(
+          `features[${index}][is_active]`,
+          feature.is_active ? "1" : "0"
+        );
+        if (feature.image instanceof File) {
+          formData.append(`features[${index}][image]`, feature.image);
+        }
+      });
+    }
+
+    // Add accessories
+    if (data.accessories?.length) {
+      data.accessories.forEach((accessory, index) => {
+        formData.append(`accessories[${index}][name][ar]`, accessory.name.ar);
+        formData.append(`accessories[${index}][name][en]`, accessory.name.en);
+        formData.append(`accessories[${index}][price]`, accessory.price);
+        formData.append(
+          `accessories[${index}][is_active]`,
+          accessory.is_active ? "1" : "0"
+        );
+        if (accessory.image instanceof File) {
+          formData.append(`accessories[${index}][image]`, accessory.image);
+        }
+      });
+    }
+
+    const response = await axios.post(`/admin/vehicle/${id}`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     });
-  }
-
-  if (data.ads_images?.length) {
-    data.ads_images.forEach((img, index) => {
-      if (img.image instanceof File) {
-        formData.append(`ads_images[${index}][image]`, img.image);
-      }
-    });
-  }
-
-  // Add offers
-  if (data.offers?.length) {
-    data.offers.forEach((offer, index) => {
-      formData.append(`offers[${index}][name][ar]`, offer.name.ar);
-      formData.append(`offers[${index}][name][en]`, offer.name.en);
-      formData.append(
-        `offers[${index}][description][ar]`,
-        offer.description.ar
-      );
-      formData.append(
-        `offers[${index}][description][en]`,
-        offer.description.en
-      );
-      formData.append(
-        `offers[${index}][is_active]`,
-        offer.is_active ? "1" : "0"
-      );
-      if (offer.image instanceof File) {
-        formData.append(`offers[${index}][image]`, offer.image);
-      }
-    });
-  }
-
-  // Add packages
-  if (data.packages?.length) {
-    data.packages.forEach((pkg, index) => {
-      formData.append(`packages[${index}][name][ar]`, pkg.name.ar);
-      formData.append(`packages[${index}][name][en]`, pkg.name.en);
-      formData.append(`packages[${index}][price]`, pkg.price);
-      formData.append(
-        `packages[${index}][is_active]`,
-        pkg.is_active ? "1" : "0"
-      );
-    });
-  }
-
-  // Add features
-  if (data.features?.length) {
-    data.features.forEach((feature, index) => {
-      formData.append(`features[${index}][name][ar]`, feature.name.ar);
-      formData.append(`features[${index}][name][en]`, feature.name.en);
-      formData.append(
-        `features[${index}][description][ar]`,
-        feature.description.ar
-      );
-      formData.append(
-        `features[${index}][description][en]`,
-        feature.description.en
-      );
-      formData.append(
-        `features[${index}][is_active]`,
-        feature.is_active ? "1" : "0"
-      );
-      if (feature.image instanceof File) {
-        formData.append(`features[${index}][image]`, feature.image);
-      }
-    });
-  }
-
-  // Add accessories
-  if (data.accessories?.length) {
-    data.accessories.forEach((accessory, index) => {
-      formData.append(`accessories[${index}][name][ar]`, accessory.name.ar);
-      formData.append(`accessories[${index}][name][en]`, accessory.name.en);
-      formData.append(`accessories[${index}][price]`, accessory.price);
-      formData.append(
-        `accessories[${index}][is_active]`,
-        accessory.is_active ? "1" : "0"
-      );
-      if (accessory.image instanceof File) {
-        formData.append(`accessories[${index}][image]`, accessory.image);
-      }
-    });
-  }
-
-  const response = await axios.post(`/admin/vehicle/${id}`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  const responseData = response.data as VehicleApiResponseWrapper;
-  return responseData.data;
-} catch (error: any) {
+    const responseData = response.data as VehicleApiResponseWrapper;
+    return responseData.data;
+  } catch (error: any) {
     throw new Error(
       error.response?.data?.message || "Failed to update vehicle"
     );
-}
+  }
 }
 
 // Delete vehicle

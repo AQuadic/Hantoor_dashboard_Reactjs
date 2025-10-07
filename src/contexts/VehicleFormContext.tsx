@@ -20,6 +20,7 @@ interface VehicleFormState extends Omit<CreateVehiclePayload, "name"> {
   nameAr: string;
   nameEn: string;
   rent_to_own_duration_en?: string; // Additional field for English duration
+  rent_to_own_phone_country?: string; // Phone country code for WhatsApp number
   mainImage?: File | string | null;
   videoFile?: File | string | null;
   carImages: VehicleImage[];
@@ -27,6 +28,9 @@ interface VehicleFormState extends Omit<CreateVehiclePayload, "name"> {
   adsImages: VehicleImage[];
   discount_from_date?: string;
   discount_to_date?: string;
+  is_offers_active?: boolean; // Toggle state for offers section
+  is_packages_active?: boolean; // Toggle state for packages section
+  is_accessories_active?: boolean; // Toggle state for accessories section
 }
 
 interface VehicleFormContextType {
@@ -77,7 +81,7 @@ const initialFormState: VehicleFormState = {
   discount_value: "",
   discount_date: "",
   discount_from_date: "",
-  discount_to_date: "", 
+  discount_to_date: "",
   is_include_tax: false,
   is_Insurance_warranty: false,
   is_include_warranty: false,
@@ -85,6 +89,7 @@ const initialFormState: VehicleFormState = {
   rent_to_own_duration: "",
   rent_to_own_duration_en: "",
   rent_to_own_whatsapp: "",
+  rent_to_own_phone_country: "",
   rent_to_own_price: "",
   country_id: "",
   brand_id: "",
@@ -106,6 +111,9 @@ const initialFormState: VehicleFormState = {
   packages: [],
   features: [],
   accessories: [],
+  is_offers_active: false,
+  is_packages_active: false,
+  is_accessories_active: false,
 };
 
 const VehicleFormContext = createContext<VehicleFormContextType | null>(null);
@@ -378,8 +386,10 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       is_Insurance_warranty: formData.is_Insurance_warranty,
       is_include_warranty: formData.is_include_warranty,
       is_rent_to_own: formData.is_rent_to_own,
-      rent_to_own_duration: formData.rent_to_own_duration,
+      "rent_to_own_duration[ar]": formData.rent_to_own_duration,
+      "rent_to_own_duration[en]": formData.rent_to_own_duration_en,
       rent_to_own_whatsapp: formData.rent_to_own_whatsapp,
+      rent_to_own_phone_country: formData.rent_to_own_phone_country,
       rent_to_own_price: formData.rent_to_own_price,
       image:
         formData.mainImage instanceof File ? formData.mainImage : undefined,
