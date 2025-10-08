@@ -531,8 +531,8 @@ export async function createVehicle(
     });
   }
 
-  // Add offers
-  if (data.offers?.length) {
+  // Add offers - send empty array explicitly if no offers
+  if (data.offers && data.offers.length > 0) {
     data.offers.forEach((offer, index) => {
       formData.append(`offers[${index}][name][ar]`, offer.name.ar);
       formData.append(`offers[${index}][name][en]`, offer.name.en);
@@ -552,10 +552,13 @@ export async function createVehicle(
         formData.append(`offers[${index}][image]`, offer.image);
       }
     });
+  } else if (data.offers !== undefined) {
+    // Explicitly send empty array to backend
+    formData.append("offers", JSON.stringify([]));
   }
 
-  // Add packages
-  if (data.packages?.length) {
+  // Add packages - send empty array explicitly if no packages
+  if (data.packages && data.packages.length > 0) {
     data.packages.forEach((pkg, index) => {
       formData.append(`packages[${index}][name][ar]`, pkg.name.ar);
       formData.append(`packages[${index}][name][en]`, pkg.name.en);
@@ -565,6 +568,9 @@ export async function createVehicle(
         pkg.is_active ? "1" : "0"
       );
     });
+  } else if (data.packages !== undefined) {
+    // Explicitly send empty array to backend
+    formData.append("packages", JSON.stringify([]));
   }
 
   // Add features
@@ -590,8 +596,8 @@ export async function createVehicle(
     });
   }
 
-  // Add accessories
-  if (data.accessories?.length) {
+  // Add accessories - send empty array explicitly if no accessories
+  if (data.accessories && data.accessories.length > 0) {
     data.accessories.forEach((accessory, index) => {
       formData.append(`accessories[${index}][name][ar]`, accessory.name.ar);
       formData.append(`accessories[${index}][name][en]`, accessory.name.en);
@@ -604,6 +610,9 @@ export async function createVehicle(
         formData.append(`accessories[${index}][image]`, accessory.image);
       }
     });
+  } else if (data.accessories !== undefined) {
+    // Explicitly send empty array to backend
+    formData.append("accessories", JSON.stringify([]));
   }
 
   const response = await axios.post("/admin/vehicle", formData, {
@@ -732,8 +741,8 @@ export async function updateVehicle(
       });
     }
 
-    // Add offers
-    if (data.offers?.length) {
+    // Add offers - send empty array explicitly if no offers
+    if (data.offers && data.offers.length > 0) {
       data.offers.forEach((offer, index) => {
         formData.append(`offers[${index}][name][ar]`, offer.name.ar);
         formData.append(`offers[${index}][name][en]`, offer.name.en);
@@ -753,10 +762,13 @@ export async function updateVehicle(
           formData.append(`offers[${index}][image]`, offer.image);
         }
       });
+    } else if (data.offers !== undefined) {
+      // Explicitly send empty array to backend
+      formData.append("offers", JSON.stringify([]));
     }
 
-    // Add packages
-    if (data.packages?.length) {
+    // Add packages - send empty array explicitly if no packages
+    if (data.packages && data.packages.length > 0) {
       data.packages.forEach((pkg, index) => {
         formData.append(`packages[${index}][name][ar]`, pkg.name.ar);
         formData.append(`packages[${index}][name][en]`, pkg.name.en);
@@ -766,6 +778,9 @@ export async function updateVehicle(
           pkg.is_active ? "1" : "0"
         );
       });
+    } else if (data.packages !== undefined) {
+      // Explicitly send empty array to backend
+      formData.append("packages", JSON.stringify([]));
     }
 
     // Add features
@@ -791,8 +806,8 @@ export async function updateVehicle(
       });
     }
 
-    // Add accessories
-    if (data.accessories?.length) {
+    // Add accessories - send empty array explicitly if no accessories
+    if (data.accessories && data.accessories.length > 0) {
       data.accessories.forEach((accessory, index) => {
         formData.append(`accessories[${index}][name][ar]`, accessory.name.ar);
         formData.append(`accessories[${index}][name][en]`, accessory.name.en);
@@ -805,6 +820,9 @@ export async function updateVehicle(
           formData.append(`accessories[${index}][image]`, accessory.image);
         }
       });
+    } else if (data.accessories !== undefined) {
+      // Explicitly send empty array to backend
+      formData.append("accessories", JSON.stringify([]));
     }
 
     const response = await axios.post(`/admin/vehicle/${id}`, formData, {
