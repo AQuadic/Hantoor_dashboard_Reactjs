@@ -3,13 +3,17 @@ import Add from "../icons/banks/Add";
 import { useTranslation } from "react-i18next";
 import MobileInput from "../general/MobileInput";
 import { AgentCenter } from "@/api/agents/fetchAgents";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import {
+  parsePhoneNumberCountry,
+  CountryType,
+} from "@/utils/getCountryByPhoneCode";
 
-type CountryType = {
-  iso2: string;
-  name: string;
-  phone: string[];
+const DEFAULT_COUNTRY: CountryType = {
+  iso2: "EG",
+  name: "Egypt",
+  phone: ["20"],
 };
 
 interface AddSalesShowroomsProps {
@@ -26,11 +30,22 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
   const { t } = useTranslation("agents");
 
   // Country state for WhatsApp input per showroom
-  const defaultCountry: CountryType = { iso2: "EG", name: "Egypt", phone: ["20"] };
-  const [whatsappCountries, setWhatsappCountries] = useState<CountryType[]>(centers.map(() => defaultCountry));
-  const [phoneCountries, setPhoneCountries] = useState<CountryType[]>(
-    centers.map(() => defaultCountry)
+  const [whatsappCountries, setWhatsappCountries] = useState<CountryType[]>(
+    centers.map((c) => parsePhoneNumberCountry(c?.whatsapp, DEFAULT_COUNTRY))
   );
+  const [phoneCountries, setPhoneCountries] = useState<CountryType[]>(
+    centers.map((c) => parsePhoneNumberCountry(c?.phone, DEFAULT_COUNTRY))
+  );
+
+  // Keep countries in sync when centers prop changes (e.g., on load)
+  useEffect(() => {
+    setWhatsappCountries(
+      centers.map((c) => parsePhoneNumberCountry(c?.whatsapp, DEFAULT_COUNTRY))
+    );
+    setPhoneCountries(
+      centers.map((c) => parsePhoneNumberCountry(c?.phone, DEFAULT_COUNTRY))
+    );
+  }, [centers]);
 
   // Add a new empty showroom form
   const handleAddShowroom = () => {
@@ -45,8 +60,8 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
         is_active: "1",
       },
     ]);
-    setWhatsappCountries([...whatsappCountries, defaultCountry]);
-    setPhoneCountries([...phoneCountries, defaultCountry]);
+    setWhatsappCountries([...whatsappCountries, DEFAULT_COUNTRY]);
+    setPhoneCountries([...phoneCountries, DEFAULT_COUNTRY]);
   };
 
   // Update a field in a specific showroom
@@ -160,14 +175,17 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
                     defaultValue: "رقم الجوال",
                   })}
                   labelClassName="font-normal"
-                  selectedCountry={phoneCountries[index] || defaultCountry}
+                  selectedCountry={phoneCountries[index] || DEFAULT_COUNTRY}
                   setSelectedCountry={(country: CountryType) => {
                     const newCountries = [...phoneCountries];
                     newCountries[index] = country;
                     setPhoneCountries(newCountries);
 
                     if (centers[index].phone) {
-                      const number = String(centers[index].phone).replace(/^\d+\s+/, "");
+                      const number = String(centers[index].phone).replace(
+                        /^\d+\s+/,
+                        ""
+                      );
                       handleShowroomChange(
                         index,
                         "phone",
@@ -180,11 +198,13 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
                     handleShowroomChange(
                       index,
                       "phone",
-                      `${(phoneCountries[index] || defaultCountry).phone[0]} ${val}`
+                      `${
+                        (phoneCountries[index] || DEFAULT_COUNTRY).phone[0]
+                      } ${val}`
                     )
                   }
                 />
-              <div className="absolute top-9 left-5"></div>
+                <div className="absolute top-9 left-5"></div>
               </div>
               <div className="w-full">
                 <MobileInput
@@ -193,7 +213,7 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
                     defaultValue: "رقم الواتساب",
                   })}
                   labelClassName="font-normal"
-                  selectedCountry={whatsappCountries[index] || defaultCountry}
+                  selectedCountry={whatsappCountries[index] || DEFAULT_COUNTRY}
                   setSelectedCountry={(country: {
                     iso2: string;
                     name: string;
@@ -221,7 +241,7 @@ const AddSalesShowrooms: React.FC<AddSalesShowroomsProps> = ({
                       index,
                       "whatsapp",
                       `${
-                        (whatsappCountries[index] || defaultCountry).phone[0]
+                        (whatsappCountries[index] || DEFAULT_COUNTRY).phone[0]
                       } ${val}`
                     )
                   }
