@@ -402,8 +402,12 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       discount_value: formData.discount_value,
       ...(formData.is_discount
         ? {
-            discount_from_date: formData.discount_from_date,
-            discount_to_date: formData.discount_to_date,
+            ...(formData.discount_from_date
+              ? { discount_from_date: formData.discount_from_date }
+              : {}),
+            ...(formData.discount_to_date
+              ? { discount_to_date: formData.discount_to_date }
+              : {}),
           }
         : {}),
       is_include_tax: formData.is_include_tax,

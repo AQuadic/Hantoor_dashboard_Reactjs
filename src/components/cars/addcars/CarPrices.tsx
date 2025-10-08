@@ -88,12 +88,12 @@ const CarPrices = () => {
             value={
               formData?.discount_from_date
                 ? parseDate(formData.discount_from_date)
-                : null
+                : undefined
             }
             onChange={(date) =>
               updateField?.(
                 "discount_from_date",
-                date?.toString().split("T")[0] || ""
+                date ? date.toString().split("T")[0] : ""
               )
             }
           />
@@ -107,13 +107,13 @@ const CarPrices = () => {
             minValue={today(getLocalTimeZone())}
             value={
               formData?.discount_to_date
-                ? parseDate(formData.discount_to_date.split(" ")[0])
-                : null
+                ? parseDate(formData.discount_to_date)
+                : undefined
             }
             onChange={(date) =>
               updateField?.(
                 "discount_to_date",
-                date?.toString().split("T")[0] || ""
+                date ? date.toString().split("T")[0] : ""
               )
             }
           />
