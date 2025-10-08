@@ -7,10 +7,12 @@ import { countries } from "countries-list";
 
 // helper to build the same country shape used across the app's MobileInput
 const getCountryByIso2 = (iso2: string) => {
-  const country = countries[iso2 as keyof typeof countries];
-  if (!country) return { iso2: "EG", name: "Egypt", phone: ["20"] };
+  if (!iso2) return { iso2: "EG", name: "Egypt", phone: ["20"] };
+  const iso = iso2.toUpperCase();
+  const country = countries[iso as keyof typeof countries];
+  if (!country) return { iso2: iso, name: iso, phone: [""] };
   return {
-    iso2,
+    iso2: iso,
     name: country.name,
     phone: [country.phone],
   };
@@ -25,21 +27,39 @@ const RentToOwn: React.FC = () => {
     getCountryByIso2("AE")
   );
   const [phone, setPhone] = React.useState("");
-  const [initialized, setInitialized] = React.useState(false);
+  const initAppliedRef = React.useRef(false);
 
-  // Initialize phone and country from formData when editing (only once)
+  // Initialize phone and country from formData when editing.
+  // Don't flip an "initialized" flag before vehicle data arrives - instead
+  // react to the actual fields so late-arriving data (from API) is applied.
   React.useEffect(() => {
-    if (!initialized && formData) {
-      if (formData.rent_to_own_whatsapp) {
-        setPhone(formData.rent_to_own_whatsapp);
-      }
-      if (formData.rent_to_own_phone_country) {
-        const country = getCountryByIso2(formData.rent_to_own_phone_country);
-        setSelectedCountry(country);
-      }
-      setInitialized(true);
+    // Apply initial values from formData once when vehicle data loads.
+    // This prevents a race where selecting a different country gets
+    // immediately overwritten by stale formData.
+    if (initAppliedRef.current) return;
+    if (!formData) return;
+
+    const hasAnyValue =
+      formData.rent_to_own_whatsapp || formData.rent_to_own_phone_country;
+    if (!hasAnyValue) return;
+
+    // Set phone only if local phone is empty (don't overwrite user input)
+    if (!phone && formData.rent_to_own_whatsapp) {
+      setPhone(formData.rent_to_own_whatsapp);
     }
-  }, [formData, initialized]);
+
+    // Set selected country only if not set by user yet
+    const rawCountry = formData.rent_to_own_phone_country;
+    const normalizedCountry = rawCountry
+      ? String(rawCountry).trim().toUpperCase()
+      : "";
+    if (normalizedCountry && selectedCountry?.iso2 !== normalizedCountry) {
+      const country = getCountryByIso2(normalizedCountry);
+      setSelectedCountry(country);
+    }
+
+    initAppliedRef.current = true;
+  }, [formData, phone, selectedCountry]);
 
   // Update WhatsApp number and phone country in form when they change
   React.useEffect(() => {
@@ -49,13 +69,17 @@ const RentToOwn: React.FC = () => {
   }, [phone, formData?.rent_to_own_whatsapp, updateField]);
 
   React.useEffect(() => {
-    if (selectedCountry.iso2 !== formData?.rent_to_own_phone_country) {
+    const rawFormCountry = formData?.rent_to_own_phone_country;
+    const normalizedFormCountry = rawFormCountry
+      ? String(rawFormCountry).trim().toUpperCase()
+      : "";
+    if (selectedCountry.iso2 !== normalizedFormCountry) {
       updateField?.(
         "rent_to_own_phone_country",
         selectedCountry.iso2 as unknown as string
       );
     }
-  }, [selectedCountry, formData?.rent_to_own_phone_country, updateField]);
+  }, [selectedCountry, formData, updateField]);
 
   return (
     <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
