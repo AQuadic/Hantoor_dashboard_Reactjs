@@ -137,8 +137,6 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       (center) =>
         center.name?.ar &&
         center.name?.en &&
-        center.phone &&
-        center.whatsapp &&
         center.description?.ar &&
         center.description?.en
     );
@@ -166,7 +164,10 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       centers:
     validCenters.length > 0
       ? validCenters.map((c) => ({
+          // ensure optional phone/whatsapp fields default to empty string when undefined
           ...c,
+          phone: c.phone || "",
+          whatsapp: c.whatsapp || "",
           is_active: c.is_active ?? "1",
         }))
       : undefined,

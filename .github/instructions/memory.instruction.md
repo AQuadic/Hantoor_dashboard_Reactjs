@@ -932,7 +932,15 @@ Implementation follows project conventions with TypeScript interfaces, TanStack 
 
 - 2025-08-03: Requirement added to use "Helvetica Neue W23 for SKY" as the global font across the entire project. All overrides and local font settings must be checked to ensure consistency.
 - 2025-08-11: Login functionality reported as not working. Need to investigate Login component, auth store, API integration, and routing to identify and fix issues.
-  2025-08-21: Normalized agent API responses in `src/api/agents/fetchAgents.ts` to ensure `Agent.name` is always an object with `ar` and `en` keys, `is_active` is boolean when appropriate, and centers types/counts are normalized. This prevents empty table rendering when backend returns different shapes.
+ 
+  # 2025-10-08: Made phone and whatsapp optional in agent center/showroom forms ✅
+
+  - Change: Updated `src/pages/agents/AddAgent.tsx` and `src/pages/agents/EditAgent.tsx` so that `phone` and `whatsapp` are optional fields when validating centers/showrooms and when building the payload sent to the API. Empty values are now sent as empty strings instead of requiring a value or using placeholder "N/A".
+
+  ## Reasoning
+
+  - Some centers/showrooms may not have phone or whatsapp prefilled; making these optional avoids blocking form submission while still sending consistent payloads to the backend.
+
 - 2025-08-19: BUILD ERROR FIX TASK - 30 TypeScript errors found, categorized into AgentCenter type issues, MobileInput missing props, TablePagination missing props, and type indexing issues.
 - 2025-08-21: Changed AddAgent to send center.type as numeric strings "1" (center) or "2" (show_room) in the create agent payload; updated `CreateAgentPayload` to accept "1" | "2" for centers.type and casted payload in `AddAgent.tsx` to satisfy TypeScript.
 - 2025-08-19: **CAR CRUD OPERATIONS TASK - COMPLETED** - Implemented complete vehicle CRUD operations (add/edit/get/delete) with API integration following backend endpoints: GET/POST/PUT/DELETE api/admin/vehicle/{id}. Backend uses multipart/form-data for create/update with complex nested structures (offers, packages, features, accessories).
