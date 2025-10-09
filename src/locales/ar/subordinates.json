@@ -123,31 +123,37 @@
     "edit_user": "تعديل",
     "delete_user": "حذف",
     "block_user": "حظر",
+    "change-status_user": "الحالة",
 
     "view_country": "عرض",
     "create_country": "إنشاء",
     "edit_country": "تعديل",
     "delete_country": "حذف",
+    "change-status_country": "الحالة",
 
     "view_brand": "عرض",
     "create_brand": "إنشاء",
     "edit_brand": "تعديل",
     "delete_brand": "حذف",
+    "change-status_brand": "الحالة",
 
     "view_agent": "عرض",
     "create_agent": "إنشاء",
     "edit_agent": "تعديل",
     "delete_agent": "حذف",
+    "change-status_agent": "الحالة",
 
     "view_vehicle_class": "عرض",
     "create_vehicle_class": "إنشاء",
     "edit_vehicle_class": "تعديل",
     "delete_vehicle_class": "حذف",
+    "change-status_vehicle_class": "الحالة",
 
     "view_vehicle_model": "عرض",
     "create_vehicle_model": "إنشاء",
     "edit_vehicle_model": "تعديل",
     "delete_vehicle_model": "حذف",
+    "change-status_vehicle_model": "الحالة",
 
     "view_vehicle": "عرض",
     "create_vehicle": "إنشاء",
