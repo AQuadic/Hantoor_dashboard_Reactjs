@@ -389,7 +389,7 @@ const AddPermissionPage = () => {
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <div>
-                        <h3 className="text-[21px] font-bold text-black">
+                        <h3 className="text-[21px]  font-bold text-black">
                           المسؤولين الفرعيين
                         </h3>
                       </div>

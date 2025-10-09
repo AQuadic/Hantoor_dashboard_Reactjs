@@ -44,7 +44,7 @@ const PermissionsCard: React.FC<PermissionsCardProps> = ({
       className={"flex flex-col gap-4 p-4 rounded-2xl bg-white text-[#606060]"}
     >
       <div className={"flex items-center justify-between"}>
-        <h3 className="mb-4 text-lg font-bold text-primary">
+        <h3 className="-mb-2 text-lg font-bold text-primary">
           {language === "ar" ? titleAr : titleEn}
         </h3>
         {/* compute whether all items are selected and control the checkbox state */}
