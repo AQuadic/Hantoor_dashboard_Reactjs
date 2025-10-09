@@ -55,7 +55,6 @@ axios.interceptors.response.use(
       !window.location.href.includes("forget-password")
     ) {
       Cookies.remove("hantoor_token");
-      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
