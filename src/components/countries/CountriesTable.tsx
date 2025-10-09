@@ -88,10 +88,10 @@ const CountriesTable = ({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {localCountries.map((country, index) => {
+        {localCountries.map((country) => {
           return (
             <TableRow key={country.id} noBackgroundColumns={1}>
-              <TableCell>{index + 1}</TableCell>
+              <TableCell>{country.id}</TableCell>
               <TableCell>
                 {i18n.language === "ar" ? country.name.ar : country.name.en}
               </TableCell>

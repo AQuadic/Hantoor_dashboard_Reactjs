@@ -154,9 +154,9 @@ export function CategoriesTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {classes.map((item, index) => (
+        {classes.map((item) => (
           <TableRow key={item.id} noBackgroundColumns={1}>
-            <TableCell>{from + index}</TableCell>
+            <TableCell>{item.id}</TableCell>
             <TableCell className="w-full">
               {i18n.language === "ar" ? item.name.ar : item.name.en}
             </TableCell>

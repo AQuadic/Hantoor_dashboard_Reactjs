@@ -8,7 +8,7 @@ import { UserTable } from "@/components/users/UsersTable";
 import { AdminUsersResponse } from "@/api/users/getUsers";
 import { useDatePicker } from "@/hooks/useDatePicker";
 import { Link } from "react-router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useHasPermission, usePermissions } from "@/permissions";
 
 const DashboardUsers = () => {
@@ -22,6 +22,12 @@ const DashboardUsers = () => {
   const [signupWith, setSignupWith] = useState<string | undefined>(undefined);
 
   const activeSearchTerm = searchTermEn || searchTermAr;
+
+  // Clear search when country changes
+  useEffect(() => {
+    setSearchTermAr("");
+    setSearchTermEn("");
+  }, [countryId]);
 
   const canAdd = useHasPermission("add_user");
   const permissions = usePermissions();
@@ -59,13 +65,13 @@ const DashboardUsers = () => {
             <DashboardDatePicker value={dateRange} onChange={setDateRange} />
           </div>
           {/* {canAdd && ( */}
-            <Link to="/users/add">
-              <DashboardButton
-                titleAr={"إضافة مستخدم جديد"}
-                titleEn={"Add new user"}
-                variant="add"
-              />
-            </Link>
+          <Link to="/users/add">
+            <DashboardButton
+              titleAr={"إضافة مستخدم جديد"}
+              titleEn={"Add new user"}
+              variant="add"
+            />
+          </Link>
           {/* )} */}
         </div>
 

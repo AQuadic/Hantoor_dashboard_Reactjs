@@ -121,10 +121,10 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
                 </TableCell>
               </TableRow>
             ) : (
-              conversations.map((conversation, index) => {
+              conversations.map((conversation) => {
                 return (
                   <TableRow key={conversation.id} noBackgroundColumns={1}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{conversation.id}</TableCell>
                     <TableCell>
                       {getLocalizedName(conversation.vehicle?.name)}
                     </TableCell>

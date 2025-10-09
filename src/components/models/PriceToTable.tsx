@@ -104,9 +104,9 @@ export function PriceToTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {priceToList.map((price: PriceTo, index: number) => (
+        {priceToList.map((price: PriceTo) => (
           <TableRow key={price.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{price.id}</TableCell>
             <TableCell>
               {price.name}
               <span className="px-2">

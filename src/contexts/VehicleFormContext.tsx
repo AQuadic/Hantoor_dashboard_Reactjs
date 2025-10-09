@@ -48,6 +48,7 @@ interface VehicleFormContextType {
   addOffer: () => void;
   updateOffer: (index: number, offer: Partial<VehicleOffer>) => void;
   removeOffer: (index: number) => void;
+  clearOffers: () => void;
   accessories: VehicleAccessory[];
   addAccessory: () => void;
   updateAccessory: (
@@ -55,10 +56,12 @@ interface VehicleFormContextType {
     accessory: Partial<VehicleAccessory>
   ) => void;
   removeAccessory: (index: number) => void;
+  clearAccessories: () => void;
   packages: VehiclePackage[];
   addPackage: () => void;
   updatePackage: (index: number, pkg: Partial<VehiclePackage>) => void;
   removePackage: (index: number) => void;
+  clearPackages: () => void;
   addCarImage: () => void;
   updateCarImage: (index: number, image: VehicleImage) => void;
   removeCarImage: (index: number) => void;
@@ -143,7 +146,34 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       field: K,
       value: VehicleFormState[K]
     ) => {
-      setFormDataState((prev) => ({ ...prev, [field]: value }));
+      setFormDataState((prev) => {
+        // When disabling certain toggles we want to also clear their related data
+        if (field === "is_offers_active" && value === false) {
+          return { ...prev, [field]: value, offers: [] } as VehicleFormState;
+        }
+        if (field === "is_packages_active" && value === false) {
+          return { ...prev, [field]: value, packages: [] } as VehicleFormState;
+        }
+        if (field === "is_accessories_active" && value === false) {
+          return {
+            ...prev,
+            [field]: value,
+            accessories: [],
+          } as VehicleFormState;
+        }
+        if (field === "is_rent_to_own" && value === false) {
+          return {
+            ...prev,
+            [field]: value,
+            rent_to_own_duration: "",
+            rent_to_own_duration_en: "",
+            rent_to_own_whatsapp: "",
+            rent_to_own_phone_country: "",
+            rent_to_own_price: "",
+          } as VehicleFormState;
+        }
+        return { ...prev, [field]: value } as VehicleFormState;
+      });
     },
     []
   );
@@ -215,6 +245,13 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
     }));
   }, []);
 
+  const clearOffers = useCallback(() => {
+    setFormDataState((prev) => ({
+      ...prev,
+      offers: [],
+    }));
+  }, []);
+
   // Accessories management
   const addAccessory = useCallback(() => {
     const newAccessory: VehicleAccessory = {
@@ -249,6 +286,13 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
     }));
   }, []);
 
+  const clearAccessories = useCallback(() => {
+    setFormDataState((prev) => ({
+      ...prev,
+      accessories: [],
+    }));
+  }, []);
+
   // Packages management
   const addPackage = useCallback(() => {
     const newPackage: VehiclePackage = {
@@ -278,6 +322,13 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
     setFormDataState((prev) => ({
       ...prev,
       packages: prev.packages?.filter((_, i) => i !== index) || [],
+    }));
+  }, []);
+
+  const clearPackages = useCallback(() => {
+    setFormDataState((prev) => ({
+      ...prev,
+      packages: [],
     }));
   }, []);
 
@@ -360,7 +411,8 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
   }, []);
 
   const getCreatePayload = useCallback((): CreateVehiclePayload => {
-    return {
+    // Build payload as a flexible object so we can include explicit nulls
+    const payload: any = {
       name: { ar: formData.nameAr, en: formData.nameEn },
       country_id: formData.country_id,
       brand_id: formData.brand_id,
@@ -376,21 +428,10 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       price: formData.price,
       is_discount: formData.is_discount,
       discount_value: formData.discount_value,
-      ...(formData.is_discount
-        ? {
-            discount_from_date: formData.discount_from_date,
-            discount_to_date: formData.discount_to_date,
-          }
-        : {}),
       is_include_tax: formData.is_include_tax,
       is_Insurance_warranty: formData.is_Insurance_warranty,
       is_include_warranty: formData.is_include_warranty,
       is_rent_to_own: formData.is_rent_to_own,
-      "rent_to_own_duration[ar]": formData.rent_to_own_duration,
-      "rent_to_own_duration[en]": formData.rent_to_own_duration_en,
-      rent_to_own_whatsapp: formData.rent_to_own_whatsapp,
-      rent_to_own_phone_country: formData.rent_to_own_phone_country,
-      rent_to_own_price: formData.rent_to_own_price,
       image:
         formData.mainImage instanceof File ? formData.mainImage : undefined,
       video:
@@ -398,11 +439,46 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       images: formData.carImages,
       additional_images: formData.additionalImages,
       ads_images: formData.adsImages,
-      offers: formData.offers,
-      packages: formData.packages,
       features: formData.features,
-      accessories: formData.accessories,
     };
+
+    // Optional discount dates only when discount is active
+    if (formData.is_discount) {
+      if (formData.discount_from_date)
+        payload.discount_from_date = formData.discount_from_date;
+      if (formData.discount_to_date)
+        payload.discount_to_date = formData.discount_to_date;
+    }
+
+    // Rent-to-own fields: send localized durations and other fields only when enabled,
+    // otherwise explicitly send null so backend can remove them.
+    if (formData.is_rent_to_own) {
+      payload["rent_to_own_duration[ar]"] =
+        formData.rent_to_own_duration || undefined;
+      payload["rent_to_own_duration[en]"] =
+        formData.rent_to_own_duration_en || undefined;
+      if (formData.rent_to_own_whatsapp)
+        payload.rent_to_own_whatsapp = formData.rent_to_own_whatsapp;
+      if (formData.rent_to_own_phone_country)
+        payload.rent_to_own_phone_country = formData.rent_to_own_phone_country;
+      if (formData.rent_to_own_price)
+        payload.rent_to_own_price = formData.rent_to_own_price;
+    } else {
+      payload["rent_to_own_duration[ar]"] = null;
+      payload["rent_to_own_duration[en]"] = null;
+      payload.rent_to_own_whatsapp = null;
+      payload.rent_to_own_phone_country = null;
+      payload.rent_to_own_price = null;
+    }
+
+    // Offers / packages / accessories: send empty arrays when toggles disabled so server removes them
+    payload.offers = formData.is_offers_active ? formData.offers : [];
+    payload.packages = formData.is_packages_active ? formData.packages : [];
+    payload.accessories = formData.is_accessories_active
+      ? formData.accessories
+      : [];
+
+    return payload as CreateVehiclePayload;
   }, [formData]);
 
   const getUpdatePayload = useCallback((): UpdateVehiclePayload => {
@@ -425,14 +501,17 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       addOffer,
       updateOffer,
       removeOffer,
+      clearOffers,
       accessories: formData.accessories || [],
       addAccessory,
       updateAccessory,
       removeAccessory,
+      clearAccessories,
       packages: formData.packages || [],
       addPackage,
       updatePackage,
       removePackage,
+      clearPackages,
       addCarImage,
       updateCarImage,
       removeCarImage,
@@ -456,12 +535,15 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
       addOffer,
       updateOffer,
       removeOffer,
+      clearOffers,
       addAccessory,
       updateAccessory,
       removeAccessory,
+      clearAccessories,
       addPackage,
       updatePackage,
       removePackage,
+      clearPackages,
       addCarImage,
       updateCarImage,
       removeCarImage,

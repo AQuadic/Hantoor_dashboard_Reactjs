@@ -106,9 +106,9 @@ export function EngineTypesTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {engineTypes?.map((engine, index) => (
+        {engineTypes?.map((engine) => (
           <TableRow key={engine.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{engine.id}</TableCell>
             <TableCell className="w-full">{engine.name.ar}</TableCell>
             <TableCell className="flex gap-[7px] items-center">
               <Switch

@@ -11,27 +11,21 @@ const CarOffers = () => {
   const { formData, updateField, offers, addOffer, updateOffer, removeOffer } =
     useVehicleForm();
 
-  // Auto-enable toggle when offers exist
-  React.useEffect(() => {
-    if (offers.length > 0 && !formData.is_offers_active) {
-      updateField("is_offers_active", true);
-    }
-  }, [offers.length, formData.is_offers_active, updateField]);
-
   const handleToggle = (value: boolean) => {
+    // Just toggle the state - don't manipulate the data
     updateField("is_offers_active", value);
-    if (!value) {
-      // Clear all offers when disabled
-      while (offers.length > 0) {
-        removeOffer(0);
-      }
-    } else if (offers.length === 0) {
-      // Add initial offer when enabled
+
+    // Only add initial item if enabling and there are no items
+    if (value && offers.length === 0) {
       addOffer();
     }
   };
 
   const addCarDetailsField = () => {
+    // Auto-enable when adding if not already enabled
+    if (!formData.is_offers_active) {
+      updateField("is_offers_active", true);
+    }
     addOffer();
   };
 

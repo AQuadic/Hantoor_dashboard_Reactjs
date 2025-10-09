@@ -17,27 +17,21 @@ const CarAccessories = () => {
     removeAccessory,
   } = useVehicleForm();
 
-  // Auto-enable toggle when accessories exist
-  React.useEffect(() => {
-    if (accessories.length > 0 && !formData.is_accessories_active) {
-      updateField("is_accessories_active", true);
-    }
-  }, [accessories.length, formData.is_accessories_active, updateField]);
-
   const handleToggle = (value: boolean) => {
+    // Just toggle the state - don't manipulate the data
     updateField("is_accessories_active", value);
-    if (!value) {
-      // Clear all accessories when disabled
-      while (accessories.length > 0) {
-        removeAccessory(0);
-      }
-    } else if (accessories.length === 0) {
-      // Add initial accessory when enabled
+
+    // Only add initial item if enabling and there are no items
+    if (value && accessories.length === 0) {
       addAccessory();
     }
   };
 
   const addCarDetailsField = () => {
+    // Auto-enable when adding if not already enabled
+    if (!formData.is_accessories_active) {
+      updateField("is_accessories_active", true);
+    }
     addAccessory();
   };
 

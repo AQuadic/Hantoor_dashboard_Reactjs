@@ -129,9 +129,9 @@ export function BrandsTable({
       </TableHeader>
       <TableBody>
         {localBrands &&
-          localBrands.map((brand, index) => (
+          localBrands.map((brand) => (
             <TableRow key={brand.id} noBackgroundColumns={1}>
-              <TableCell>{index + 1}</TableCell>
+              <TableCell>{brand.id}</TableCell>
               <TableCell>
                 {brand.image &&
                 (brand.image.url ||
@@ -149,12 +149,12 @@ export function BrandsTable({
                       <img
                         src={url}
                         alt="brand"
-                        className="w-10 h-10 rounded-lg object-cover"
+                        className="w-[48px] h-[48px] rounded-lg object-cover"
                       />
                     );
                   })()
                 ) : (
-                  <TableImagePlaceholder className="w-10 h-10" />
+                  <TableImagePlaceholder className="w-[48px] h-[48px]" />
                 )}
               </TableCell>
               <TableCell>

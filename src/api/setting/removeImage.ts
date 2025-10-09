@@ -8,7 +8,7 @@ export interface RemoveLangCountryImageResponse {
 
 export async function removeLangCountryImage(): Promise<RemoveLangCountryImageResponse> {
   const response = await axios.post<RemoveLangCountryImageResponse>(
-    "/admin/setting/choose_lang_country_image",
+    "/admin/setting/upload_lang_country_image",
     { remove_image: true }
   );
   return response.data;

@@ -174,9 +174,9 @@ export function CarTypesTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {carTypes.map((car, index) => (
+        {carTypes.map((car) => (
           <TableRow key={car.id} noBackgroundColumns={1}>
-            <TableCell>{from + index}</TableCell>
+            <TableCell>{car.id}</TableCell>
             <TableCell>{getTypeName(car)}</TableCell>
             <TableCell className="w-full">
               {getBrandName(car.brand_id)}

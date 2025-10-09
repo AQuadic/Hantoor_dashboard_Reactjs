@@ -78,9 +78,9 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((question, index) => (
+        {data.map((question) => (
           <TableRow key={question.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{question.id}</TableCell>
             <TableCell>{question.question.ar}</TableCell>
             <TableCell>
               {question.country

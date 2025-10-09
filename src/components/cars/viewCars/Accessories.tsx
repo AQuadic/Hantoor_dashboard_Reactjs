@@ -25,7 +25,8 @@ interface AccessoriesProps {
 const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
   const { t, i18n } = useTranslation("cars");
 
-  const [localAccessories, setLocalAccessories] = useState<Accessory[]>(accessories);
+  const [localAccessories, setLocalAccessories] =
+    useState<Accessory[]>(accessories);
 
   useEffect(() => {
     setLocalAccessories(accessories);
@@ -50,11 +51,15 @@ const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
       });
 
       setLocalAccessories((prev) =>
-        prev.map((a) => (a.id === accessory.id ? { ...a, is_active: updated.is_active } : a))
+        prev.map((a) =>
+          a.id === accessory.id ? { ...a, is_active: updated.is_active } : a
+        )
       );
 
       toast.success(
-        updated.is_active ? t("vehicleStatusUpdated") : t("vehicleStatusUpdated")
+        updated.is_active
+          ? t("vehicleStatusUpdated")
+          : t("vehicleStatusUpdated")
       );
 
       refetch();
@@ -75,30 +80,37 @@ const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
           <TableHeader>
             <TableRow>
               <TableHead className="text-right">#</TableHead>
-              <TableHead className="text-right">{t('image')}</TableHead>
-              <TableHead className="text-right">{t('name')}</TableHead>
-              <TableHead className="text-right">{t('price')}</TableHead>
-              <TableHead className="text-right">{t('status')}</TableHead>
+              <TableHead className="text-right">{t("image")}</TableHead>
+              <TableHead className="text-right">{t("name")}</TableHead>
+              <TableHead className="text-right">{t("price")}</TableHead>
+              <TableHead className="text-right">{t("status")}</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {localAccessories.map((accessory, index) => (
+            {localAccessories.map((accessory) => (
               <TableRow key={accessory.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>{accessory.id}</TableCell>
                 <TableCell>
                   {accessory.image?.url ? (
                     <img
                       src={accessory.image.url}
-                      alt={accessory.name.ar || accessory.name.en || "accessory"}
-                      className="w-16 h-16 object-cover rounded"
+                      alt={
+                        accessory.name.ar || accessory.name.en || "accessory"
+                      }
+                      className="w-[48px] h-[48px] object-cover rounded-lg"
                     />
                   ) : (
-                    <TableImagePlaceholder />
+                    <TableImagePlaceholder className="w-[48px] h-[48px]" />
                   )}
                 </TableCell>
                 <TableCell>
-                  {t(accessory.name[i18n.language as "ar" | "en"] || accessory.name.en || accessory.name.ar || "-")}
+                  {t(
+                    accessory.name[i18n.language as "ar" | "en"] ||
+                      accessory.name.en ||
+                      accessory.name.ar ||
+                      "-"
+                  )}
                 </TableCell>
                 <TableCell className="w-full">{accessory.price}</TableCell>
                 <TableCell className="flex items-center gap-[7px]">
@@ -107,7 +119,9 @@ const Accessories = ({ accessories, refetch }: AccessoriesProps) => {
                     onValueChange={() => handleToggleActive(accessory)}
                   />
                   <div className="mt-2">
-                    <TableDeleteButton handleDelete={() => handleDelete(accessory.id)} />
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(accessory.id)}
+                    />
                   </div>
                 </TableCell>
               </TableRow>

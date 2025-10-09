@@ -346,21 +346,21 @@ const CarsTable = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {vehicles.map((vehicle, index) => (
+            {vehicles.map((vehicle) => (
               <TableRow key={vehicle.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>{vehicle.id}</TableCell>
                 <TableCell>
                   {getVehicleImage(vehicle) ? (
                     <img
                       src={getVehicleImage(vehicle)}
                       alt={getVehicleDisplayName(vehicle.name)}
-                      className="w-[93px] h-[60px] object-cover rounded"
+                      className="w-[60px] h-[60px] object-cover rounded-lg"
                       onError={(e) => {
                         (e.currentTarget as HTMLImageElement).src = carImage;
                       }}
                     />
                   ) : (
-                    <TableImagePlaceholder className="w-[93px] h-[60px]" />
+                    <TableImagePlaceholder className="w-[60px] h-[60px]" />
                   )}
                 </TableCell>
                 <TableCell>{getVehicleDisplayName(vehicle.name)}</TableCell>
@@ -380,7 +380,9 @@ const CarsTable = ({
                 </TableCell>
                 <TableCell>
                   {formatPrice(vehicle.price)}{" "}
-                  {vehicle.country?.currency_text?.[i18n.language as "ar" | "en"] ??
+                  {vehicle.country?.currency_text?.[
+                    i18n.language as "ar" | "en"
+                  ] ??
                     vehicle.country?.currency ??
                     ""}
                 </TableCell>

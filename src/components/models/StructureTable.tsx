@@ -109,17 +109,10 @@ export function StructureTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {bodies.map((item, index) => {
-          const displayIndex =
-            bodiesResponse &&
-            typeof bodiesResponse === "object" &&
-            "from" in bodiesResponse
-              ? (bodiesResponse.from || 0) + index
-              : index + 1;
-
+        {bodies.map((item) => {
           return (
             <TableRow key={item.id} noBackgroundColumns={1}>
-              <TableCell>{displayIndex}</TableCell>
+              <TableCell>{item.id}</TableCell>
               <TableCell className="w-full">{item.name[language]}</TableCell>
               <TableCell className="flex gap-[7px] items-center">
                 <Switch

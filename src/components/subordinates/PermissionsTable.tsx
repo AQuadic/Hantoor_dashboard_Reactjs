@@ -117,11 +117,9 @@ export function PermissionsTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.data.map((role: Role, index: number) => (
+          {data.data.map((role: Role) => (
             <TableRow key={role.id} noBackgroundColumns={1}>
-              <TableCell>
-                {(currentPage - 1) * itemsPerPage + index + 1}
-              </TableCell>
+              <TableCell>{role.id}</TableCell>
               <TableCell className="font-medium">{role.name}</TableCell>
               <TableCell>
                 <span className="text-sm text-gray-600">

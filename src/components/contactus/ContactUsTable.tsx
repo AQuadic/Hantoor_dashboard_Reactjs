@@ -59,9 +59,10 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
     queryKey: ["countries"],
     queryFn: () => getAllCountries(),
   });
-  const countries: Country[] = Array.isArray(countriesData) ? countriesData : [];
+  const countries: Country[] = Array.isArray(countriesData)
+    ? countriesData
+    : [];
   const countryMap = new Map(countries.map((c) => [c.id, c]));
-
 
   // track ids that are currently being toggled to prevent duplicate presses
   const [togglingIds, setTogglingIds] = useState<number[]>([]);
@@ -116,15 +117,17 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {suggestions.map((message, index) => (
+            {suggestions.map((message) => (
               <TableRow key={message.id} noBackgroundColumns={1}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell>{message.id}</TableCell>
                 <TableCell>{message.name}</TableCell>
                 <TableCell dir="ltr">{message.phone}</TableCell>
                 <TableCell>{message.email}</TableCell>
                 <TableCell>
                   {message.country?.name?.[i18n.language as "ar" | "en"] ||
-                    countryMap.get(message.country_id || -1)?.name?.[i18n.language as "ar" | "en"] ||
+                    countryMap.get(message.country_id || -1)?.name?.[
+                      i18n.language as "ar" | "en"
+                    ] ||
                     "-"}
                 </TableCell>
                 <TableCell className="flex items-center gap-2">

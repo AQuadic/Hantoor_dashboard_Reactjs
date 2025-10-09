@@ -115,9 +115,9 @@ export function NumberOfSeatsTable({
         </TableRow>
       </TableHeader>
       <TableBody>
-        {seats?.map((seat, index) => (
+        {seats?.map((seat) => (
           <TableRow key={seat.id} noBackgroundColumns={1}>
-            <TableCell>{index + 1}</TableCell>
+            <TableCell>{seat.id}</TableCell>
             <TableCell className="w-full">
               {(i18n.language === "ar" ? seat.name.ar : seat.name.en).replace(
                 /^0+/,

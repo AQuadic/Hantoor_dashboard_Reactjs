@@ -93,8 +93,6 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       (center) =>
         center.name?.ar &&
         center.name?.en &&
-        center.phone &&
-        center.whatsapp &&
         center.description?.ar &&
         center.description?.en
     );
@@ -142,8 +140,9 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
           ar: center.description.ar,
           en: center.description.en,
         },
-        phone: center.phone || "N/A",
-        whatsapp: center.whatsapp || "N/A",
+        // phone and whatsapp are optional now; include when present or send empty string
+        phone: center.phone || "",
+        whatsapp: center.whatsapp || "",
         type: center.type,
         is_active: center.is_active ? "1" : "0",
         link_google_map: center.link_google_map || ""
