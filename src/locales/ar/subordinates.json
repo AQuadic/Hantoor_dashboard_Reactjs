@@ -246,11 +246,15 @@
     "create_chat": "إنشاء",
     "edit_chat": "تعديل",
     "delete_chat": "حذف",
+    "change-status_chat": "الحالة",
+
 
     "view_support_question": "عرض",
     "create_support_question": "إنشاء",
     "edit_support_question": "تعديل",
     "delete_support_question": "حذف",
+    "change-status_support_question": "الحالة",
+
 
     "view_support_message": "عرض",
     "create_support_message": "إنشاء",
@@ -261,6 +265,8 @@
     "create_faq": "إنشاء",
     "edit_faq": "تعديل",
     "delete_faq": "حذف",
+    "change-status_faq": "الحالة",
+
 
     "view_notification": "عرض",
     "create_notification": "إنشاء",
@@ -279,11 +285,15 @@
     "create_info_page": "إنشاء",
     "edit_info_page": "تعديل",
     "delete_info_page": "حذف",
+    "change-status_info_page": "الحالة",
+
 
     "view_ad_image": "عرض",
     "create_ad_image": "إنشاء",
     "edit_ad_image": "تعديل",
     "delete_ad_image": "حذف",
+    "change-status_ad_image": "الحالة",
+
 
     "view_terms": "عرض",
     "update_terms": "تحديث",
@@ -296,21 +306,29 @@
     "create_app_feature": "إنشاء",
     "edit_app_feature": "تعديل",
     "delete_app_feature": "حذف",
+    "change-status_app_feature": "الحالة",
+
 
     "view_onboarding": "عرض",
     "create_onboarding": "إنشاء",
     "edit_onboarding": "تعديل",
     "delete_onboarding": "حذف",
+    "change-status_onboarding": "الحالة",
+
 
     "view_request_financing": "عرض",
     "create_request_financing": "إنشاء",
     "edit_request_financing": "تعديل",
     "delete_request_financing": "حذف",
+    "change-status_request_financing": "الحالة",
+
 
     "role": "دور",
     "create_role": "إضافة",
     "view_role": "عرض",
     "edit_role": "تعديل",
-    "delete_role": "حذف"
+    "delete_role": "حذف",
+    "change-status_role":"الحالة"
+
   }
 }
