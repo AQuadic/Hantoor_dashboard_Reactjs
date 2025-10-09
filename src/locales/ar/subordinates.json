@@ -241,6 +241,8 @@
     "create_support_chat": "إنشاء",
     "edit_support_chat": "تعديل",
     "delete_support_chat": "حذف",
+    "notes_support_chat": "ملاحظات",
+
 
     "view_chat": "عرض",
     "create_chat": "إنشاء",
@@ -277,6 +279,8 @@
     "create_contact_us": "إنشاء",
     "edit_contact_us": "تعديل",
     "delete_contact_us": "حذف",
+    "email_contact_us": "البريد الإلكتروني",
+    "star_contact_us": "تقييم",
 
     "view_general_setting": "عرض",
     "update_general_setting": "تحديث",
