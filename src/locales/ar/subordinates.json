@@ -116,6 +116,7 @@
     "create_permission": "إنشاء",
     "edit_permission": "تعديل",
     "delete_permission": "حذف",
+    "change-status_permission": "الحالة",
 
     "view_user": "عرض",
     "create_user": "إنشاء",
