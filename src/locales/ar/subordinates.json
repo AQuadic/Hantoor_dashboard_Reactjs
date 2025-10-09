@@ -45,6 +45,8 @@
   "pleaseEnterRoleName": "يرجى إدخال اسم الصلاحية",
   "selectAtLeastOnePermission": "يرجى اختيار صلاحية واحدة على الأقل",
   "mohamed": "محمد احمد",
+  "subordinatesGroup": "المسؤولين الفرعيين",
+  "carSections": "اقسام السيارات",
 
   "permissionSections": {
     "dashboard": "لوحة التحكم",
