@@ -257,77 +257,49 @@ const AddPermissionPage = () => {
               - Keep control panel / dashboard full width (col-span-2)
             */}
 
-            {/* mapping for the six specific sections the user asked to rename */}
+            {/* Grouping logic for permission sections */}
             {(() => {
-              const mapping: Record<string, string> = {
-                admin: "المسؤولين الفرعيين",
-                permission: "الصلاحيات",
-                role: "الادوار",
-                user: "المستخدمين",
-                country: "البلاد",
-                brand: "الماركات",
-                agent: "الوكلاء",
-              };
+              // Keys for first group (المسؤولين الفرعيين)
+              const group1Keys = [
+                "admin",
+                "permission",
+                "role",
+                "user",
+                "country",
+                "brand",
+                "agent",
+              ];
 
-              const mappingValues = Object.values(mapping).map((v) =>
-                v.toLowerCase()
-              );
-
-              // Helper function to remove "إدارة " prefix from titles
-              const cleanTitle = (title: string) => {
-                return title.replace(/^إدارة\s+/g, "");
-              };
+              // Keys for second group (اقسام السيارات)
+              const group2Keys = [
+                "vehicle_model",
+                "seat_count",
+                "engine_type",
+                "brand_origin",
+                "engine_size",
+                "price_from",
+                "price_to",
+                "category",
+                "vehicle_body_type",
+                "vehicle_type",
+                "vehicle_class",
+                "vehicle_model_type",
+              ];
 
               const entries = Object.entries(permissionsData.permissions);
 
               const isGrouped = (sectionKey: string) => {
-                const lowerKey = sectionKey.toLowerCase();
-                if (Object.keys(mapping).includes(lowerKey)) return true;
-                const translated = t(`permissionSections.${sectionKey}`, {
-                  defaultValue: sectionKey,
-                })
-                  .toString()
-                  .toLowerCase();
-                if (mappingValues.includes(translated)) return true;
-                return false;
+                return group1Keys.includes(sectionKey.toLowerCase());
+              };
+
+              const isGrouped2 = (sectionKey: string) => {
+                return group2Keys.includes(sectionKey.toLowerCase());
               };
 
               const firstGroupedIndex = entries.findIndex(([k]) =>
                 isGrouped(k)
               );
               if (firstGroupedIndex === -1) return null;
-
-              const mappingVehicles: Record<string, string> = {
-                vehicle_model: "الموديلات",
-                seat_count: "عدد المقاعد",
-                engine_type: "انواع الماكينة",
-                brand_origin: "منشأ الماركة",
-                engine_size: "احجام الماكينة",
-                price_from: "السعر من",
-                price_to: "السعر الي",
-                category: "الفئات",
-                vehicle_body_type: "انواع الهيكل",
-                vehicle_type: "انواع الهيكل",
-                vehicle_class: "الفئات",
-                vehicle_model_type: "الموديلات",
-              };
-
-              const mappingVehiclesValues = Object.values(mappingVehicles).map(
-                (v) => v.toLowerCase()
-              );
-
-              const isGrouped2 = (sectionKey: string) => {
-                const lowerKey = sectionKey.toLowerCase();
-                if (Object.keys(mappingVehicles).includes(lowerKey))
-                  return true;
-                const translated = t(`permissionSections.${sectionKey}`, {
-                  defaultValue: sectionKey,
-                })
-                  .toString()
-                  .toLowerCase();
-                if (mappingVehiclesValues.includes(translated)) return true;
-                return false;
-              };
 
               const beforeEntries = entries.slice(0, firstGroupedIndex);
               const groupedEntries = entries.filter(([k]) => isGrouped(k));
@@ -350,9 +322,8 @@ const AddPermissionPage = () => {
                             defaultValue: sectionKey,
                           }
                         );
-                        const cleanedTitle = cleanTitle(translated);
                         const isControlPanel =
-                          cleanedTitle === "لوحة التحكم" ||
+                          translated === "لوحة التحكم" ||
                           sectionKey.toLowerCase().includes("control") ||
                           sectionKey.toLowerCase().includes("dashboard");
 
@@ -364,8 +335,8 @@ const AddPermissionPage = () => {
                             }
                           >
                             <PermissionsCard
-                              titleAr={cleanedTitle}
-                              titleEn={cleanedTitle}
+                              titleAr={translated}
+                              titleEn={translated}
                               selectedPermissions={permissions.map(
                                 (permission) => ({
                                   permission: {
@@ -400,30 +371,26 @@ const AddPermissionPage = () => {
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="text-[21px]  font-bold text-black">
-                          المسؤولين الفرعيين
+                          {t("subordinatesGroup")}
                         </h3>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {groupedEntries.map(([sectionKey, permissions]) => {
-                        const lower = sectionKey.toLowerCase();
-                        const title =
-                          mapping[lower] ||
-                          t(`permissionSections.${sectionKey}`, {
-                            defaultValue: sectionKey,
-                          });
-                        const cleanedTitle = cleanTitle(title);
+                        const title = t(`permissionSections.${sectionKey}`, {
+                          defaultValue: sectionKey,
+                        });
 
                         // Check if divider should be shown after this card
-                        const shouldShowDivider = cleanedTitle === "الادوار";
+                        const shouldShowDivider = title === "الادوار";
 
                         return (
                           <>
                             <div key={sectionKey} className="space-y-4">
                               <PermissionsCard
-                                titleAr={cleanedTitle}
-                                titleEn={cleanedTitle}
+                                titleAr={title}
+                                titleEn={title}
                                 selectedPermissions={permissions.map(
                                   (permission) => ({
                                     permission: {
@@ -451,7 +418,7 @@ const AddPermissionPage = () => {
                             {shouldShowDivider && (
                               <div
                                 key={`divider-${sectionKey}`}
-                                className="md:col-span-2 mt-[12px] mb-[20px]"
+                                className="md:col-span-2 mt-[12px]"
                               >
                                 <hr className="border-t border-gray-300" />
                               </div>
@@ -478,23 +445,18 @@ const AddPermissionPage = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {groupedVehiclesEntries.map(
                           ([sectionKey, permissions]) => {
-                            const lower = sectionKey.toLowerCase();
-                            const title =
-                              mappingVehicles[lower] ||
-                              t(`permissionSections.${sectionKey}`, {
-                                defaultValue: sectionKey,
-                              });
-                            const cleanedTitle = cleanTitle(title);
+                            const title = t(`permissionSections.${sectionKey}`, {
+                              defaultValue: sectionKey,
+                            });
 
-                            const shouldShowDivider =
-                              cleanedTitle === "السعر الي";
+                            const shouldShowDivider = title === "السعر الي";
 
                             return (
                               <>
                                 <div key={sectionKey} className="space-y-4">
                                   <PermissionsCard
-                                    titleAr={cleanedTitle}
-                                    titleEn={cleanedTitle}
+                                    titleAr={title}
+                                    titleEn={title}
                                     selectedPermissions={permissions.map(
                                       (permission) => ({
                                         permission: {
@@ -547,14 +509,13 @@ const AddPermissionPage = () => {
                           `permissionSections.${sectionKey}`,
                           { defaultValue: sectionKey }
                         );
-                        const cleanedTitle = cleanTitle(translated);
                         const isControlPanel =
-                          cleanedTitle === "لوحة التحكم" ||
+                          translated === "لوحة التحكم" ||
                           sectionKey.toLowerCase().includes("control") ||
                           sectionKey.toLowerCase().includes("dashboard");
 
                         const isContactUs =
-                          cleanedTitle === "تواصل معنا" ||
+                          translated === "تواصل معنا" ||
                           sectionKey.toLowerCase() === "contact_us";
 
                         const shouldShowDivider = isContactUs;
@@ -570,8 +531,8 @@ const AddPermissionPage = () => {
                               }
                             >
                               <PermissionsCard
-                                titleAr={cleanedTitle}
-                                titleEn={cleanedTitle}
+                                titleAr={translated}
+                                titleEn={translated}
                                 selectedPermissions={permissions.map(
                                   (permission) => ({
                                     permission: {
