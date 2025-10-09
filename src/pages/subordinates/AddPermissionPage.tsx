@@ -133,28 +133,20 @@ const AddPermissionPage = () => {
   };
 
   // Handle form submission
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-
-    // Client-side validation: ensure role name is present and non-empty
+  const validateName = () => {
     const nameTrimmed = roleName.trim();
     if (!nameTrimmed) {
       const validationMsg = t("nameMustBeText", {
         defaultValue: "يجب أن يكون حقل الاسم نصًا.",
       });
       toast.error(validationMsg);
-      setIsSubmitting(false);
-      return;
+      return false;
     }
+    return true;
+  };
 
+  const submitRole = async () => {
     try {
-      console.log("Submitting role data:", {
-        name: roleName,
-        permissions: selectedPermissions,
-        isEdit,
-        roleId,
-      });
-
       if (isEdit && roleId) {
         await updateMutation.mutateAsync({
           id: Number(roleId),
@@ -171,32 +163,57 @@ const AddPermissionPage = () => {
       }
     } catch (error: unknown) {
       console.error("Form submission error:", error);
-      let backendMsg = "An unexpected error occurred";
+      const backendMsg = extractBackendMessage(error, t);
+      toast.error(backendMsg);
+    }
+  };
 
-      if (error instanceof Error) {
-        backendMsg = error.message;
-        // Try to extract backend error message if available
-        if (
-          "response" in error &&
-          typeof error.response === "object" &&
-          error.response
-        ) {
-          const response = error.response as Record<string, unknown>;
-          if (typeof response.data === "object" && response.data) {
-            const data = response.data as Record<string, unknown>;
-            if (typeof data.message === "string") {
-              backendMsg = data.message;
-            } else if (typeof data.error === "string") {
-              backendMsg = data.error;
-            }
+  const extractBackendMessage = (
+    error: unknown,
+    tFn: (k: string) => string
+  ) => {
+    let backendMsg = "An unexpected error occurred";
+    if (error instanceof Error) {
+      backendMsg = error.message;
+      // Try to extract backend error message if available
+      if (
+        "response" in error &&
+        typeof error.response === "object" &&
+        error.response
+      ) {
+        const response = error.response as Record<string, unknown>;
+        if (typeof response.data === "object" && response.data) {
+          const data = response.data as Record<string, unknown>;
+          if (typeof data.message === "string") {
+            backendMsg = data.message;
+          } else if (typeof data.error === "string") {
+            backendMsg = data.error;
           }
         }
       }
-
-      toast.error(backendMsg);
-    } finally {
-      setIsSubmitting(false);
     }
+
+    return backendMsg || tFn("failedToUpdateRole");
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+
+    if (!validateName()) {
+      setIsSubmitting(false);
+      return;
+    }
+
+    console.log("Submitting role data:", {
+      name: roleName,
+      permissions: selectedPermissions,
+      isEdit,
+      roleId,
+    });
+
+    await submitRole();
+
+    setIsSubmitting(false);
   };
 
   if (isLoadingPermissions || (isEdit && isLoadingRole)) {
@@ -233,34 +250,268 @@ const AddPermissionPage = () => {
         {/* Permissions from API */}
         {permissionsData?.permissions && (
           <div className="space-y-6">
-            {Object.entries(permissionsData.permissions).map(
-              ([sectionKey, permissions]) => (
-                <div key={sectionKey} className="space-y-4">
-                  <PermissionsCard
-                    titleAr={t(`permissionSections.${sectionKey}`, {
-                      defaultValue: sectionKey,
-                    })}
-                    titleEn={t(`permissionSections.${sectionKey}`, {
-                      defaultValue: sectionKey,
-                    })}
-                    selectedPermissions={permissions.map((permission) => ({
-                      permission: {
-                        titleAr: t(`permissionNames.${permission}`, {
-                          defaultValue: permission,
-                        }),
-                        titleEn: t(`permissionNames.${permission}`, {
-                          defaultValue: permission,
-                        }),
-                      },
-                      isSelected: selectedPermissions.includes(permission),
-                    }))}
-                    setSelectedPermissions={(updatedPermissions) =>
-                      handlePermissionChange(sectionKey, updatedPermissions)
-                    }
-                  />
-                </div>
-              )
-            )}
+            {/*
+              Grouping and renaming logic:
+              - Put specific sections under a single titled group (المسؤولين الفرعيين)
+              - Render permission cards in two columns per row (grid)
+              - Keep control panel / dashboard full width (col-span-2)
+            */}
+
+            {/* mapping for the six specific sections the user asked to rename */}
+            {(() => {
+              const mapping: Record<string, string> = {
+                admins: "إدارة المسؤولين",
+                roles: "إدارة الصلاحيات",
+                users: "إدارة المستخدمين",
+                countries: "إدارة البلدان",
+                brands: "إدارة العلامات التجارية",
+                agents: "إدارة الوكلاء",
+              };
+
+              const mappingValues = Object.values(mapping).map((v) =>
+                v.toLowerCase()
+              );
+
+              const entries = Object.entries(permissionsData.permissions);
+
+              const isGrouped = (sectionKey: string) => {
+                const lowerKey = sectionKey.toLowerCase();
+                if (Object.keys(mapping).includes(lowerKey)) return true;
+                const translated = t(`permissionSections.${sectionKey}`, {
+                  defaultValue: sectionKey,
+                })
+                  .toString()
+                  .toLowerCase();
+                if (mappingValues.includes(translated)) return true;
+                return false;
+              };
+
+              const firstGroupedIndex = entries.findIndex(([k]) =>
+                isGrouped(k)
+              );
+              if (firstGroupedIndex === -1) return null;
+
+              const beforeEntries = entries.slice(0, firstGroupedIndex);
+              const groupedEntries = entries.filter(([k]) => isGrouped(k));
+              const afterEntries = entries
+                .slice(firstGroupedIndex)
+                .filter(([k]) => !isGrouped(k));
+
+              return (
+                <>
+                  {/* render entries before the group in original order */}
+                  {beforeEntries.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {beforeEntries.map(([sectionKey, permissions]) => {
+                        const translated = t(
+                          `permissionSections.${sectionKey}`,
+                          {
+                            defaultValue: sectionKey,
+                          }
+                        );
+                        const isControlPanel =
+                          translated === "لوحة التحكم" ||
+                          sectionKey.toLowerCase().includes("control") ||
+                          sectionKey.toLowerCase().includes("dashboard");
+
+                        return (
+                          <div
+                            key={sectionKey}
+                            className={
+                              isControlPanel ? "md:col-span-2" : undefined
+                            }
+                          >
+                            <PermissionsCard
+                              titleAr={translated}
+                              titleEn={translated}
+                              selectedPermissions={permissions.map(
+                                (permission) => ({
+                                  permission: {
+                                    titleAr: t(
+                                      `permissionNames.${permission}`,
+                                      { defaultValue: permission }
+                                    ),
+                                    titleEn: t(
+                                      `permissionNames.${permission}`,
+                                      { defaultValue: permission }
+                                    ),
+                                  },
+                                  isSelected:
+                                    selectedPermissions.includes(permission),
+                                })
+                              )}
+                              setSelectedPermissions={(updatedPermissions) =>
+                                handlePermissionChange(
+                                  sectionKey,
+                                  updatedPermissions
+                                )
+                              }
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {/* grouped header */}
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="text-[21px] font-bold text-black">
+                          المسؤولين الفرعيين
+                        </h3>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {groupedEntries.map(([sectionKey, permissions]) => {
+                        const lower = sectionKey.toLowerCase();
+                        const title =
+                          mapping[lower] ||
+                          t(`permissionSections.${sectionKey}`, {
+                            defaultValue: sectionKey,
+                          });
+
+                        return (
+                          <div key={sectionKey} className="space-y-4">
+                            <PermissionsCard
+                              titleAr={title}
+                              titleEn={title}
+                              selectedPermissions={permissions.map(
+                                (permission) => ({
+                                  permission: {
+                                    titleAr: t(
+                                      `permissionNames.${permission}`,
+                                      { defaultValue: permission }
+                                    ),
+                                    titleEn: t(
+                                      `permissionNames.${permission}`,
+                                      { defaultValue: permission }
+                                    ),
+                                  },
+                                  isSelected:
+                                    selectedPermissions.includes(permission),
+                                })
+                              )}
+                              setSelectedPermissions={(updatedPermissions) =>
+                                handlePermissionChange(
+                                  sectionKey,
+                                  updatedPermissions
+                                )
+                              }
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* render remaining entries after group */}
+                  {afterEntries.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {afterEntries.map(([sectionKey, permissions]) => {
+                        const translated = t(
+                          `permissionSections.${sectionKey}`,
+                          { defaultValue: sectionKey }
+                        );
+                        const isControlPanel =
+                          translated === "لوحة التحكم" ||
+                          sectionKey.toLowerCase().includes("control") ||
+                          sectionKey.toLowerCase().includes("dashboard");
+
+                        return (
+                          <div
+                            key={sectionKey}
+                            className={
+                              isControlPanel ? "md:col-span-2" : undefined
+                            }
+                          >
+                            <PermissionsCard
+                              titleAr={translated}
+                              titleEn={translated}
+                              selectedPermissions={permissions.map(
+                                (permission) => ({
+                                  permission: {
+                                    titleAr: t(
+                                      `permissionNames.${permission}`,
+                                      { defaultValue: permission }
+                                    ),
+                                    titleEn: t(
+                                      `permissionNames.${permission}`,
+                                      { defaultValue: permission }
+                                    ),
+                                  },
+                                  isSelected:
+                                    selectedPermissions.includes(permission),
+                                })
+                              )}
+                              setSelectedPermissions={(updatedPermissions) =>
+                                handlePermissionChange(
+                                  sectionKey,
+                                  updatedPermissions
+                                )
+                              }
+                            />
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+
+            {/* Render the rest of permission sections (excluding ones already shown) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {Object.entries(permissionsData.permissions)
+                .filter(([sectionKey]) => {
+                  const lower = sectionKey.toLowerCase();
+                  return ![
+                    "admins",
+                    "roles",
+                    "users",
+                    "countries",
+                    "brands",
+                    "agents",
+                  ].includes(lower);
+                })
+                .map(([sectionKey, permissions]) => {
+                  // Detect if this section is the control panel (لوحة التحكم) and let it span both columns
+                  const translated = t(`permissionSections.${sectionKey}`, {
+                    defaultValue: sectionKey,
+                  });
+                  const isControlPanel =
+                    translated === "لوحة التحكم" ||
+                    sectionKey.toLowerCase().includes("control") ||
+                    sectionKey.toLowerCase().includes("dashboard");
+
+                  return (
+                    <div
+                      key={sectionKey}
+                      className={isControlPanel ? "md:col-span-2" : undefined}
+                    >
+                      <PermissionsCard
+                        titleAr={translated}
+                        titleEn={translated}
+                        selectedPermissions={permissions.map((permission) => ({
+                          permission: {
+                            titleAr: t(`permissionNames.${permission}`, {
+                              defaultValue: permission,
+                            }),
+                            titleEn: t(`permissionNames.${permission}`, {
+                              defaultValue: permission,
+                            }),
+                          },
+                          isSelected: selectedPermissions.includes(permission),
+                        }))}
+                        setSelectedPermissions={(updatedPermissions) =>
+                          handlePermissionChange(sectionKey, updatedPermissions)
+                        }
+                      />
+                    </div>
+                  );
+                })}
+            </div>
           </div>
         )}
 
