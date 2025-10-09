@@ -90,17 +90,18 @@
   },
 
   "permissionNames": {
-    "view_users_count_dashboard": "عرض عدد المستخدمين في لوحة التحكم",
-    "view_admins_count_dashboard": "عرض عدد المسؤولين في لوحة التحكم",
-    "view_cars_count_dashboard": "عرض عدد السيارات في لوحة التحكم",
+    "view_users_count_dashboard": "عدد المتسخدمين المسجلين",
+    "view_admins_count_dashboard": "عرض عدد المسؤولين",
+    "view_cars_count_dashboard": "عرض عدد السيارات ",
     "view_finances_count_dashboard": "عرض عدد التمويلات في لوحة التحكم",
-    "view_agents_count_dashboard": "عرض عدد الوكلاء في لوحة التحكم",
-    "view_cars_has_discounts_count_dashboard": "عرض عدد السيارات التي لديها خصومات في لوحة التحكم",
-    "view_cars_has_offers_count_dashboard": "عرض عدد السيارات التي لديها عروض في لوحة التحكم",
-    "view_cars_has_rent_to_own_count_dashboard": "عرض عدد السيارات للإيجار المنتهي بالتمليك في لوحة التحكم",
+    "view_agents_count_dashboard": "عدد الوكلاء",
+    "view_cars_has_discounts_count_dashboard": "عدد السيارات التي تحتوي على خصم",
+    "view_cars_has_offers_count_dashboard": "عدد السيارات التي تحتوي على عروض",
+    "view_cars_has_rent_to_own_count_dashboard": "عدد السيارات الايجار و تنتهي بالتملك",
     "view_advanced_search_count_dashboard": "عرض عدد البحث المتقدم في لوحة التحكم",
-    "view_brand_count_dashboard": "عرض عدد العلامات التجارية في لوحة التحكم",
+    "view_brand_count_dashboard": "عدد الماركات",
     "view_request_finance_count_dashboard": "عرض عدد طلبات التمويل في لوحة التحكم",
+
 
     "view_admin": "عرض",
     "create_admin": "إنشاء",
