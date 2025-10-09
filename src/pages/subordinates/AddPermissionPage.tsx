@@ -324,10 +324,7 @@ const AddPermissionPage = () => {
                         );
 
                         return (
-                          <div
-                            key={sectionKey}
-                            className="max-w-[50%]"
-                          >
+                          <div key={sectionKey}>
                             <PermissionsCard
                               titleAr={translated}
                               titleEn={translated}
@@ -377,11 +374,12 @@ const AddPermissionPage = () => {
                         });
 
                         // Check if divider should be shown after this card
-                        const shouldShowDivider = title === "الصلاحيات" || title === "الوكلاء";
+                        const shouldShowDivider =
+                          title === "الصلاحيات" || title === "الوكلاء";
 
                         return (
                           <>
-                            <div key={sectionKey} className="space-y-4 max-w-[50%]">
+                            <div key={sectionKey} className="space-y-4">
                               <PermissionsCard
                                 titleAr={title}
                                 titleEn={title}
@@ -450,7 +448,7 @@ const AddPermissionPage = () => {
 
                             return (
                               <>
-                                <div key={sectionKey} className="space-y-4 max-w-[50%]">
+                                <div key={sectionKey} className="space-y-4">
                                   <PermissionsCard
                                     titleAr={title}
                                     titleEn={title}
@@ -517,7 +515,9 @@ const AddPermissionPage = () => {
                           <>
                             <div
                               key={sectionKey}
-                              className="max-w-[50%]"
+                              className={
+                                isContactUs ? "max-w-[50%]" : undefined
+                              }
                             >
                               <PermissionsCard
                                 titleAr={translated}
