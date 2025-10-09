@@ -103,10 +103,14 @@
     "view_request_finance_count_dashboard": "عرض عدد طلبات التمويل في لوحة التحكم",
 
 
+    
+    
     "view_admin": "عرض",
     "create_admin": "إنشاء",
     "edit_admin": "تعديل",
     "delete_admin": "حذف",
+    "change-status_admin": "الحالة",
+    "change-password_admin": "تغيير كلمة المرور",
 
     "view_permission": "عرض",
     "create_permission": "إنشاء",
