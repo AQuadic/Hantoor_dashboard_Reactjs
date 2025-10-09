@@ -445,9 +445,12 @@ const AddPermissionPage = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {groupedVehiclesEntries.map(
                           ([sectionKey, permissions]) => {
-                            const title = t(`permissionSections.${sectionKey}`, {
-                              defaultValue: sectionKey,
-                            });
+                            const title = t(
+                              `permissionSections.${sectionKey}`,
+                              {
+                                defaultValue: sectionKey,
+                              }
+                            );
 
                             const shouldShowDivider = title === "السعر الي";
 
