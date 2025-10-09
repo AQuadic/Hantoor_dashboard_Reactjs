@@ -513,12 +513,7 @@ const AddPermissionPage = () => {
 
                         return (
                           <>
-                            <div
-                              key={sectionKey}
-                              className={
-                                isContactUs ? "max-w-[50%]" : undefined
-                              }
-                            >
+                            <div key={sectionKey}>
                               <PermissionsCard
                                 titleAr={translated}
                                 titleEn={translated}
