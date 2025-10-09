@@ -323,8 +323,18 @@ const AddPermissionPage = () => {
                           }
                         );
 
+                        const isControlPanel =
+                          translated === "لوحة التحكم" ||
+                          sectionKey.toLowerCase().includes("control") ||
+                          sectionKey.toLowerCase().includes("dashboard");
+
                         return (
-                          <div key={sectionKey}>
+                          <div
+                            key={sectionKey}
+                            className={
+                              isControlPanel ? "md:col-span-2" : undefined
+                            }
+                          >
                             <PermissionsCard
                               titleAr={translated}
                               titleEn={translated}
@@ -373,13 +383,26 @@ const AddPermissionPage = () => {
                           defaultValue: sectionKey,
                         });
 
+                        const isControlPanel =
+                          title === "لوحة التحكم" ||
+                          sectionKey.toLowerCase().includes("control") ||
+                          sectionKey.toLowerCase().includes("dashboard");
+
                         // Check if divider should be shown after this card
+                        // moved divider from 'الوكلاء' to be under 'الدور'
                         const shouldShowDivider =
-                          title === "الصلاحيات" || title === "الوكلاء";
+                          title === "الصلاحيات" || title === "الدور";
 
                         return (
                           <>
-                            <div key={sectionKey} className="space-y-4">
+                            <div
+                              key={sectionKey}
+                              className={
+                                isControlPanel
+                                  ? "md:col-span-2 space-y-4"
+                                  : "space-y-4"
+                              }
+                            >
                               <PermissionsCard
                                 titleAr={title}
                                 titleEn={title}
@@ -444,11 +467,23 @@ const AddPermissionPage = () => {
                               }
                             );
 
+                            const isControlPanel =
+                              title === "لوحة التحكم" ||
+                              sectionKey.toLowerCase().includes("control") ||
+                              sectionKey.toLowerCase().includes("dashboard");
+
                             const shouldShowDivider = title === "السعر إلى";
 
                             return (
                               <>
-                                <div key={sectionKey} className="space-y-4">
+                                <div
+                                  key={sectionKey}
+                                  className={
+                                    isControlPanel
+                                      ? "md:col-span-2 space-y-4"
+                                      : "space-y-4"
+                                  }
+                                >
                                   <PermissionsCard
                                     titleAr={title}
                                     titleEn={title}
@@ -509,11 +544,25 @@ const AddPermissionPage = () => {
                           translated === "تواصل معنا" ||
                           sectionKey.toLowerCase() === "contact_us";
 
+                        const isControlPanel =
+                          translated === "لوحة التحكم" ||
+                          sectionKey.toLowerCase().includes("control") ||
+                          sectionKey.toLowerCase().includes("dashboard");
+
                         const shouldShowDivider = isContactUs;
+
+                        let containerClass: string | undefined;
+                        if (isContactUs) {
+                          containerClass = "max-w-[50%]";
+                        } else if (isControlPanel) {
+                          containerClass = "md:col-span-2";
+                        } else {
+                          containerClass = undefined;
+                        }
 
                         return (
                           <>
-                            <div key={sectionKey}>
+                            <div key={sectionKey} className={containerClass}>
                               <PermissionsCard
                                 titleAr={translated}
                                 titleEn={translated}
