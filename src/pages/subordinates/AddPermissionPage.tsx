@@ -260,17 +260,23 @@ const AddPermissionPage = () => {
             {/* mapping for the six specific sections the user asked to rename */}
             {(() => {
               const mapping: Record<string, string> = {
-                admins: "إدارة المسؤولين",
-                roles: "إدارة الصلاحيات",
-                users: "إدارة المستخدمين",
-                countries: "إدارة البلدان",
-                brands: "إدارة العلامات التجارية",
-                agents: "إدارة الوكلاء",
+                admin: "المسؤولين الفرعيين",
+                permission: "الصلاحيات",
+                role: "الادوار",
+                user: "المستخدمين",
+                country: "البلاد",
+                brand: "الماركات",
+                agent: "الوكلاء",
               };
 
               const mappingValues = Object.values(mapping).map((v) =>
                 v.toLowerCase()
               );
+
+              // Helper function to remove "إدارة " prefix from titles
+              const cleanTitle = (title: string) => {
+                return title.replace(/^إدارة\s+/g, "");
+              };
 
               const entries = Object.entries(permissionsData.permissions);
 
@@ -292,15 +298,18 @@ const AddPermissionPage = () => {
               if (firstGroupedIndex === -1) return null;
 
               const mappingVehicles: Record<string, string> = {
-                models: "إدارة نماذج المركبات",
-                seats: "إدارة عدد المقاعد",
-                engine_types: "إدارة نوع المحرك",
-                brand_origin: "إدارة منشأ العلامة التجارية",
-                engine_sizes: "إدارة حجم المحرك",
-                price_from: "إدارة السعر من",
-                price_to: "إدارة السعر الى",
-                categories: "إدارة الفئات",
-                body_types: "إدارة أنواع هيكل المركبة",
+                vehicle_model: "الموديلات",
+                seat_count: "عدد المقاعد",
+                engine_type: "انواع الماكينة",
+                brand_origin: "منشأ الماركة",
+                engine_size: "احجام الماكينة",
+                price_from: "السعر من",
+                price_to: "السعر الي",
+                category: "الفئات",
+                vehicle_body_type: "انواع الهيكل",
+                vehicle_type: "انواع الهيكل",
+                vehicle_class: "الفئات",
+                vehicle_model_type: "الموديلات",
               };
 
               const mappingVehiclesValues = Object.values(mappingVehicles).map(
@@ -341,8 +350,9 @@ const AddPermissionPage = () => {
                             defaultValue: sectionKey,
                           }
                         );
+                        const cleanedTitle = cleanTitle(translated);
                         const isControlPanel =
-                          translated === "لوحة التحكم" ||
+                          cleanedTitle === "لوحة التحكم" ||
                           sectionKey.toLowerCase().includes("control") ||
                           sectionKey.toLowerCase().includes("dashboard");
 
@@ -354,8 +364,8 @@ const AddPermissionPage = () => {
                             }
                           >
                             <PermissionsCard
-                              titleAr={translated}
-                              titleEn={translated}
+                              titleAr={cleanedTitle}
+                              titleEn={cleanedTitle}
                               selectedPermissions={permissions.map(
                                 (permission) => ({
                                   permission: {
@@ -403,36 +413,50 @@ const AddPermissionPage = () => {
                           t(`permissionSections.${sectionKey}`, {
                             defaultValue: sectionKey,
                           });
+                        const cleanedTitle = cleanTitle(title);
+
+                        // Check if divider should be shown after this card
+                        const shouldShowDivider = cleanedTitle === "الادوار";
 
                         return (
-                          <div key={sectionKey} className="space-y-4">
-                            <PermissionsCard
-                              titleAr={title}
-                              titleEn={title}
-                              selectedPermissions={permissions.map(
-                                (permission) => ({
-                                  permission: {
-                                    titleAr: t(
-                                      `permissionNames.${permission}`,
-                                      { defaultValue: permission }
-                                    ),
-                                    titleEn: t(
-                                      `permissionNames.${permission}`,
-                                      { defaultValue: permission }
-                                    ),
-                                  },
-                                  isSelected:
-                                    selectedPermissions.includes(permission),
-                                })
-                              )}
-                              setSelectedPermissions={(updatedPermissions) =>
-                                handlePermissionChange(
-                                  sectionKey,
-                                  updatedPermissions
-                                )
-                              }
-                            />
-                          </div>
+                          <>
+                            <div key={sectionKey} className="space-y-4">
+                              <PermissionsCard
+                                titleAr={cleanedTitle}
+                                titleEn={cleanedTitle}
+                                selectedPermissions={permissions.map(
+                                  (permission) => ({
+                                    permission: {
+                                      titleAr: t(
+                                        `permissionNames.${permission}`,
+                                        { defaultValue: permission }
+                                      ),
+                                      titleEn: t(
+                                        `permissionNames.${permission}`,
+                                        { defaultValue: permission }
+                                      ),
+                                    },
+                                    isSelected:
+                                      selectedPermissions.includes(permission),
+                                  })
+                                )}
+                                setSelectedPermissions={(updatedPermissions) =>
+                                  handlePermissionChange(
+                                    sectionKey,
+                                    updatedPermissions
+                                  )
+                                }
+                              />
+                            </div>
+                            {shouldShowDivider && (
+                              <div
+                                key={`divider-${sectionKey}`}
+                                className="md:col-span-2 mt-[12px] mb-[20px]"
+                              >
+                                <hr className="border-t border-gray-300" />
+                              </div>
+                            )}
+                          </>
                         );
                       })}
                     </div>
@@ -460,40 +484,54 @@ const AddPermissionPage = () => {
                               t(`permissionSections.${sectionKey}`, {
                                 defaultValue: sectionKey,
                               });
+                            const cleanedTitle = cleanTitle(title);
+
+                            const shouldShowDivider =
+                              cleanedTitle === "السعر الي";
 
                             return (
-                              <div key={sectionKey} className="space-y-4">
-                                <PermissionsCard
-                                  titleAr={title}
-                                  titleEn={title}
-                                  selectedPermissions={permissions.map(
-                                    (permission) => ({
-                                      permission: {
-                                        titleAr: t(
-                                          `permissionNames.${permission}`,
-                                          { defaultValue: permission }
-                                        ),
-                                        titleEn: t(
-                                          `permissionNames.${permission}`,
-                                          { defaultValue: permission }
-                                        ),
-                                      },
-                                      isSelected:
-                                        selectedPermissions.includes(
-                                          permission
-                                        ),
-                                    })
-                                  )}
-                                  setSelectedPermissions={(
-                                    updatedPermissions
-                                  ) =>
-                                    handlePermissionChange(
-                                      sectionKey,
+                              <>
+                                <div key={sectionKey} className="space-y-4">
+                                  <PermissionsCard
+                                    titleAr={cleanedTitle}
+                                    titleEn={cleanedTitle}
+                                    selectedPermissions={permissions.map(
+                                      (permission) => ({
+                                        permission: {
+                                          titleAr: t(
+                                            `permissionNames.${permission}`,
+                                            { defaultValue: permission }
+                                          ),
+                                          titleEn: t(
+                                            `permissionNames.${permission}`,
+                                            { defaultValue: permission }
+                                          ),
+                                        },
+                                        isSelected:
+                                          selectedPermissions.includes(
+                                            permission
+                                          ),
+                                      })
+                                    )}
+                                    setSelectedPermissions={(
                                       updatedPermissions
-                                    )
-                                  }
-                                />
-                              </div>
+                                    ) =>
+                                      handlePermissionChange(
+                                        sectionKey,
+                                        updatedPermissions
+                                      )
+                                    }
+                                  />
+                                </div>
+                                {shouldShowDivider && (
+                                  <div
+                                    key={`divider-${sectionKey}`}
+                                    className="md:col-span-2 mt-[12px] mb-[20px]"
+                                  >
+                                    <hr className="border-t border-gray-300" />
+                                  </div>
+                                )}
+                              </>
                             );
                           }
                         )}
@@ -509,45 +547,64 @@ const AddPermissionPage = () => {
                           `permissionSections.${sectionKey}`,
                           { defaultValue: sectionKey }
                         );
+                        const cleanedTitle = cleanTitle(translated);
                         const isControlPanel =
-                          translated === "لوحة التحكم" ||
+                          cleanedTitle === "لوحة التحكم" ||
                           sectionKey.toLowerCase().includes("control") ||
                           sectionKey.toLowerCase().includes("dashboard");
 
+                        const isContactUs =
+                          cleanedTitle === "تواصل معنا" ||
+                          sectionKey.toLowerCase() === "contact_us";
+
+                        const shouldShowDivider = isContactUs;
+
                         return (
-                          <div
-                            key={sectionKey}
-                            className={
-                              isControlPanel ? "md:col-span-2" : undefined
-                            }
-                          >
-                            <PermissionsCard
-                              titleAr={translated}
-                              titleEn={translated}
-                              selectedPermissions={permissions.map(
-                                (permission) => ({
-                                  permission: {
-                                    titleAr: t(
-                                      `permissionNames.${permission}`,
-                                      { defaultValue: permission }
-                                    ),
-                                    titleEn: t(
-                                      `permissionNames.${permission}`,
-                                      { defaultValue: permission }
-                                    ),
-                                  },
-                                  isSelected:
-                                    selectedPermissions.includes(permission),
-                                })
-                              )}
-                              setSelectedPermissions={(updatedPermissions) =>
-                                handlePermissionChange(
-                                  sectionKey,
-                                  updatedPermissions
-                                )
+                          <>
+                            <div
+                              key={sectionKey}
+                              className={
+                                isControlPanel || isContactUs
+                                  ? "md:col-span-2"
+                                  : undefined
                               }
-                            />
-                          </div>
+                            >
+                              <PermissionsCard
+                                titleAr={cleanedTitle}
+                                titleEn={cleanedTitle}
+                                selectedPermissions={permissions.map(
+                                  (permission) => ({
+                                    permission: {
+                                      titleAr: t(
+                                        `permissionNames.${permission}`,
+                                        { defaultValue: permission }
+                                      ),
+                                      titleEn: t(
+                                        `permissionNames.${permission}`,
+                                        { defaultValue: permission }
+                                      ),
+                                    },
+                                    isSelected:
+                                      selectedPermissions.includes(permission),
+                                  })
+                                )}
+                                setSelectedPermissions={(updatedPermissions) =>
+                                  handlePermissionChange(
+                                    sectionKey,
+                                    updatedPermissions
+                                  )
+                                }
+                              />
+                            </div>
+                            {shouldShowDivider && (
+                              <div
+                                key={`divider-${sectionKey}`}
+                                className="md:col-span-2 mt-[12px] mb-[20px]"
+                              >
+                                <hr className="border-t border-gray-300" />
+                              </div>
+                            )}
+                          </>
                         );
                       })}
                     </div>
@@ -555,58 +612,6 @@ const AddPermissionPage = () => {
                 </>
               );
             })()}
-
-            {/* Render the rest of permission sections (excluding ones already shown) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {Object.entries(permissionsData.permissions)
-                .filter(([sectionKey]) => {
-                  const lower = sectionKey.toLowerCase();
-                  return ![
-                    "admins",
-                    "roles",
-                    "users",
-                    "countries",
-                    "brands",
-                    "agents",
-                  ].includes(lower);
-                })
-                .map(([sectionKey, permissions]) => {
-                  // Detect if this section is the control panel (لوحة التحكم) and let it span both columns
-                  const translated = t(`permissionSections.${sectionKey}`, {
-                    defaultValue: sectionKey,
-                  });
-                  const isControlPanel =
-                    translated === "لوحة التحكم" ||
-                    sectionKey.toLowerCase().includes("control") ||
-                    sectionKey.toLowerCase().includes("dashboard");
-
-                  return (
-                    <div
-                      key={sectionKey}
-                      className={isControlPanel ? "md:col-span-2" : undefined}
-                    >
-                      <PermissionsCard
-                        titleAr={translated}
-                        titleEn={translated}
-                        selectedPermissions={permissions.map((permission) => ({
-                          permission: {
-                            titleAr: t(`permissionNames.${permission}`, {
-                              defaultValue: permission,
-                            }),
-                            titleEn: t(`permissionNames.${permission}`, {
-                              defaultValue: permission,
-                            }),
-                          },
-                          isSelected: selectedPermissions.includes(permission),
-                        }))}
-                        setSelectedPermissions={(updatedPermissions) =>
-                          handlePermissionChange(sectionKey, updatedPermissions)
-                        }
-                      />
-                    </div>
-                  );
-                })}
-            </div>
           </div>
         )}
 
