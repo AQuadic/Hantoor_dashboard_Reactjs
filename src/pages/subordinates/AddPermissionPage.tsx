@@ -322,17 +322,11 @@ const AddPermissionPage = () => {
                             defaultValue: sectionKey,
                           }
                         );
-                        const isControlPanel =
-                          translated === "لوحة التحكم" ||
-                          sectionKey.toLowerCase().includes("control") ||
-                          sectionKey.toLowerCase().includes("dashboard");
 
                         return (
                           <div
                             key={sectionKey}
-                            className={
-                              isControlPanel ? "md:col-span-2" : undefined
-                            }
+                            className="max-w-[50%]"
                           >
                             <PermissionsCard
                               titleAr={translated}
@@ -383,11 +377,11 @@ const AddPermissionPage = () => {
                         });
 
                         // Check if divider should be shown after this card
-                        const shouldShowDivider = title === "الادوار";
+                        const shouldShowDivider = title === "الصلاحيات" || title === "الوكلاء";
 
                         return (
                           <>
-                            <div key={sectionKey} className="space-y-4">
+                            <div key={sectionKey} className="space-y-4 max-w-[50%]">
                               <PermissionsCard
                                 titleAr={title}
                                 titleEn={title}
@@ -418,7 +412,7 @@ const AddPermissionPage = () => {
                             {shouldShowDivider && (
                               <div
                                 key={`divider-${sectionKey}`}
-                                className="md:col-span-2 mt-[12px]"
+                                className="md:col-span-2 mt-2 -mb-4"
                               >
                                 <hr className="border-t border-gray-300" />
                               </div>
@@ -452,11 +446,11 @@ const AddPermissionPage = () => {
                               }
                             );
 
-                            const shouldShowDivider = title === "السعر الي";
+                            const shouldShowDivider = title === "السعر إلى";
 
                             return (
                               <>
-                                <div key={sectionKey} className="space-y-4">
+                                <div key={sectionKey} className="space-y-4 max-w-[50%]">
                                   <PermissionsCard
                                     titleAr={title}
                                     titleEn={title}
@@ -491,7 +485,7 @@ const AddPermissionPage = () => {
                                 {shouldShowDivider && (
                                   <div
                                     key={`divider-${sectionKey}`}
-                                    className="md:col-span-2 mt-[12px] mb-[20px]"
+                                    className="md:col-span-2 mt-2 -mb-4"
                                   >
                                     <hr className="border-t border-gray-300" />
                                   </div>
@@ -512,10 +506,6 @@ const AddPermissionPage = () => {
                           `permissionSections.${sectionKey}`,
                           { defaultValue: sectionKey }
                         );
-                        const isControlPanel =
-                          translated === "لوحة التحكم" ||
-                          sectionKey.toLowerCase().includes("control") ||
-                          sectionKey.toLowerCase().includes("dashboard");
 
                         const isContactUs =
                           translated === "تواصل معنا" ||
@@ -527,11 +517,7 @@ const AddPermissionPage = () => {
                           <>
                             <div
                               key={sectionKey}
-                              className={
-                                isControlPanel || isContactUs
-                                  ? "md:col-span-2"
-                                  : undefined
-                              }
+                              className="max-w-[50%]"
                             >
                               <PermissionsCard
                                 titleAr={translated}
@@ -563,7 +549,7 @@ const AddPermissionPage = () => {
                             {shouldShowDivider && (
                               <div
                                 key={`divider-${sectionKey}`}
-                                className="md:col-span-2 mt-[12px] mb-[20px]"
+                                className="md:col-span-2 mt-2 -mb-4"
                               >
                                 <hr className="border-t border-gray-300" />
                               </div>
