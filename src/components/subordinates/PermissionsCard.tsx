@@ -58,7 +58,7 @@ const PermissionsCard: React.FC<PermissionsCardProps> = ({
           {t("selectAll")}
         </Checkbox>
       </div>
-      <div className={"flex flex-wrap gap-2"}>
+      <div className={"flex flex-wrap gap-4"}>
         {selectedPermissions.map((permission, index) => {
           const title =
             language === "ar"
