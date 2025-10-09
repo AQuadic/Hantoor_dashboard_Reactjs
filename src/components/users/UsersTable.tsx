@@ -50,7 +50,7 @@ export function UserTable({
 }: UserTableProps) {
   const { t, i18n } = useTranslation("users");
   const canEdit = useHasPermission("edit_user");
-  const canChangePassword = useHasPermission("edit_user_password");
+  const canChangePassword = useHasPermission("edit_user");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: [

@@ -38,7 +38,7 @@ export function SubordinatesTable({
 }: SubordinatesTableProps) {
   const { t, i18n } = useTranslation("subordinates");
   const canEdit = useHasPermission("edit_admin");
-  const canChangePassword = useHasPermission("edit_admin_password");
+  const canChangePassword = useHasPermission("edit_admin");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["admins", currentPage, itemsPerPage, searchTerm, dateParams],

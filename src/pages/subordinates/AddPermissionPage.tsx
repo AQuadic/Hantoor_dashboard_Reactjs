@@ -291,11 +291,43 @@ const AddPermissionPage = () => {
               );
               if (firstGroupedIndex === -1) return null;
 
+              const mappingVehicles: Record<string, string> = {
+                models: "إدارة نماذج المركبات",
+                seats: "إدارة عدد المقاعد",
+                engine_types: "إدارة نوع المحرك",
+                brand_origin: "إدارة منشأ العلامة التجارية",
+                engine_sizes: "إدارة حجم المحرك",
+                price_from: "إدارة السعر من",
+                price_to: "إدارة السعر الى",
+                categories: "إدارة الفئات",
+                body_types: "إدارة أنواع هيكل المركبة",
+              };
+
+              const mappingVehiclesValues = Object.values(mappingVehicles).map(
+                (v) => v.toLowerCase()
+              );
+
+              const isGrouped2 = (sectionKey: string) => {
+                const lowerKey = sectionKey.toLowerCase();
+                if (Object.keys(mappingVehicles).includes(lowerKey))
+                  return true;
+                const translated = t(`permissionSections.${sectionKey}`, {
+                  defaultValue: sectionKey,
+                })
+                  .toString()
+                  .toLowerCase();
+                if (mappingVehiclesValues.includes(translated)) return true;
+                return false;
+              };
+
               const beforeEntries = entries.slice(0, firstGroupedIndex);
               const groupedEntries = entries.filter(([k]) => isGrouped(k));
+              const groupedVehiclesEntries = entries.filter(([k]) =>
+                isGrouped2(k)
+              );
               const afterEntries = entries
                 .slice(firstGroupedIndex)
-                .filter(([k]) => !isGrouped(k));
+                .filter(([k]) => !isGrouped(k) && !isGrouped2(k));
 
               return (
                 <>
@@ -405,6 +437,69 @@ const AddPermissionPage = () => {
                       })}
                     </div>
                   </div>
+
+                  {/* Vehicle sections header */}
+                  {groupedVehiclesEntries.length > 0 && (
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <h3 className="text-[21px] font-bold text-black">
+                            {t("carSections", {
+                              defaultValue: "اقسام السيارات",
+                            })}
+                          </h3>
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {groupedVehiclesEntries.map(
+                          ([sectionKey, permissions]) => {
+                            const lower = sectionKey.toLowerCase();
+                            const title =
+                              mappingVehicles[lower] ||
+                              t(`permissionSections.${sectionKey}`, {
+                                defaultValue: sectionKey,
+                              });
+
+                            return (
+                              <div key={sectionKey} className="space-y-4">
+                                <PermissionsCard
+                                  titleAr={title}
+                                  titleEn={title}
+                                  selectedPermissions={permissions.map(
+                                    (permission) => ({
+                                      permission: {
+                                        titleAr: t(
+                                          `permissionNames.${permission}`,
+                                          { defaultValue: permission }
+                                        ),
+                                        titleEn: t(
+                                          `permissionNames.${permission}`,
+                                          { defaultValue: permission }
+                                        ),
+                                      },
+                                      isSelected:
+                                        selectedPermissions.includes(
+                                          permission
+                                        ),
+                                    })
+                                  )}
+                                  setSelectedPermissions={(
+                                    updatedPermissions
+                                  ) =>
+                                    handlePermissionChange(
+                                      sectionKey,
+                                      updatedPermissions
+                                    )
+                                  }
+                                />
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {/* render remaining entries after group */}
                   {afterEntries.length > 0 && (
