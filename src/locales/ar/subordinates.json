@@ -159,10 +159,14 @@
     "create_vehicle": "إنشاء",
     "edit_vehicle": "تعديل",
     "delete_vehicle": "حذف",
+    "change-status_vehicle": "الحالة",
+
 
     "view_vehicle_model_type": "عرض",
     "create_vehicle_model_type": "إنشاء",
     "delete_vehicle_model_type": "حذف",
+    "change-status_vehicle_body_type": "الحالة",
+
 
     "edit_vehicle_body_type": "تعديل",
 
@@ -170,51 +174,68 @@
     "create_vehicle_type": "إنشاء",
     "edit_vehicle_type": "تعديل",
     "delete_vehicle_type": "حذف",
+    "change-status_vehicle_type": "الحالة",
+
 
     "view_category": "عرض",
     "create_category": "إنشاء",
     "edit_category": "تعديل",
     "delete_category": "حذف",
+    "change-status_category": "الحالة",
+
 
     "view_brand_origin": "عرض",
     "create_brand_origin": "إنشاء",
     "edit_brand_origin": "تعديل",
     "delete_brand_origin": "حذف",
+    "change-status_brand_origin": "الحالة",
+
 
     "view_seat_count": "عرض",
     "create_seat_count": "إنشاء",
     "edit_seat_count": "تعديل",
     "delete_seat_count": "حذف",
+    "change-status_seat_count": "الحالة",
+
 
     "view_engine_type": "عرض",
     "create_engine_type": "إنشاء",
     "edit_engine_type": "تعديل",
     "delete_engine_type": "حذف",
+    "change-status_engine_type": "الحالة",
+
 
     "view_engine_size": "عرض",
     "create_engine_size": "إنشاء",
     "edit_engine_size": "تعديل",
     "delete_engine_size": "حذف",
+    "change-status_engine_size": "الحالة",
+
 
     "view_price_from": "عرض",
     "create_price_from": "إنشاء",
     "edit_price_from": "تعديل",
     "delete_price_from": "حذف",
+    "change-status_price_from": "الحالة",
+
 
     "view_price_to": "عرض",
     "create_price_to": "إنشاء",
     "edit_price_to": "تعديل",
     "delete_price_to": "حذف",
+    "change-status_price_to": "الحالة",
 
     "view_finance": "عرض",
     "create_finance": "إنشاء",
     "edit_finance": "تعديل",
     "delete_finance": "حذف",
+    "change-status_finance": "الحالة",
 
     "view_bank": "عرض",
     "create_bank": "إنشاء",
     "edit_bank": "تعديل",
     "delete_bank": "حذف",
+    "change-status_bank": "الحالة",
 
     "view_support_chat": "عرض",
     "create_support_chat": "إنشاء",
