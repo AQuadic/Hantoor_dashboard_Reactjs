@@ -66,12 +66,12 @@ const PermissionsCard: React.FC<PermissionsCardProps> = ({
               : permission.permission.titleEn;
           // use permission title as key to avoid using array index
           return (
-            <div key={title || index} className="w-72 flex-shrink-0">
+            <div key={title || index} className=" flex-shrink-0 ">
               <Checkbox
                 isSelected={permission.isSelected}
                 onChange={() => handleSelectOne(index)}
               >
-                {title}
+                <span className="text-sm"> {title}</span>
               </Checkbox>
             </div>
           );
