@@ -14,6 +14,7 @@ import { LoginPayload } from "@/api/auth/postLogin";
 const Login = () => {
   const loginToStore = useAuthStore((state) => state.login);
   const storeLoading = useAuthStore((state) => state.loading);
+  const storeError = useAuthStore((state) => state.error); // إضافة رسالة الخطأ من الـ store
   const { t } = useTranslation("login");
   const navigate = useNavigate();
 
@@ -59,6 +60,29 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  const getTranslatedError = (error: string | null): string | null => {
+    if (!error) return null;
+    
+    const errorMap: Record<string, string> = {
+      "Invalid email or password": t("invalidCredentials", {
+        defaultValue: "Invalid email or password",
+      }),
+      "Too many login attempts. Please try again later.": t("tooManyAttempts", {
+        defaultValue: "Too many login attempts. Please try again later.",
+      }),
+      "Login failed. Please try again.": t("loginFailed", {
+        defaultValue: "Login failed. Please try again.",
+      }),
+    };
+
+    for (const [key, value] of Object.entries(errorMap)) {
+      if (error.includes(key)) {
+        return value;
+      }
+    }
+    return error;
+  };
+
   const handleLogin = async (e?: React.FormEvent | React.MouseEvent) => {
     if (e) {
       e.preventDefault();
@@ -88,21 +112,9 @@ const Login = () => {
           // ignore localStorage errors
         }
         navigate("/", { replace: true });
-      } else {
-        // Login failed - error should be in store
-        setErrors({
-          general: t("invalidCredentials", {
-            defaultValue: "Invalid email or password",
-          }),
-        });
       }
     } catch (error) {
       console.error("Login error:", error);
-      setErrors({
-        general: t("invalidCredentials", {
-          defaultValue: "Invalid email or password",
-        }),
-      });
     }
   };
 
@@ -120,9 +132,9 @@ const Login = () => {
 
         <form onSubmit={handleLogin} noValidate>
           {/* General error message */}
-          {errors.general && (
+          {(errors.general || storeError) && (
             <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-              {errors.general}
+              {errors.general || getTranslatedError(storeError)}
             </div>
           )}
 
