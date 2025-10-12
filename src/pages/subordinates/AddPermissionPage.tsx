@@ -553,7 +553,7 @@ const AddPermissionPage = () => {
 
                         let containerClass: string | undefined;
                         if (isContactUs) {
-                          containerClass = "max-w-[50%]";
+                          containerClass = "";
                         } else if (isControlPanel) {
                           containerClass = "md:col-span-2";
                         } else {
