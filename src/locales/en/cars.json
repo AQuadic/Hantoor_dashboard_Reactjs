@@ -102,5 +102,24 @@
   "duration": "Duration",
 
   "discountFromDate": "Discount Start Date",
-  "discountToDate": "Discount End Date"
+  "discountToDate": "Discount End Date",
+
+  "pleaseSelectBrand": "Please select a brand",
+  "pleaseSelectAgent": "Please select an agent",
+  "pleaseSelectModel": "Please select a model",
+  "pleaseSelectStructureType": "Please select a body type",
+  "pleaseSelectType": "Please select a type",
+  "pleaseSelectCategory": "Please select a category",
+  "pleaseSelectBrandOrigin": "Please select brand origin",
+  "pleaseSelectSeats": "Please select number of seats",
+  "pleaseSelectEngineType": "Please select engine type",
+  "pleaseSelectEngineSize": "Please select engine size",
+  "pleaseEnterCarNameAr": "Please enter car name in Arabic",
+  "pleaseEnterCarNameEn": "Please enter car name in English",
+  "pleaseCompletePackages": "Please complete all maintenance package fields",
+  "pleaseCompleteAccessories": "Please complete all accessories fields",
+  "pleaseCompleteOffers": "Please complete all offers fields",
+  "pleaseCompleteRentToOwn": "Please complete all rent-to-own fields",
+  "vehicleCreationError": "Error creating vehicle",
+  "vehicleUpdateError": "Error updating vehicle"
 }

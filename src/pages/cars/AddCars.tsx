@@ -307,21 +307,137 @@ const AddCarsForm = () => {
   });
 
   const handleSubmit = () => {
-    if (!formData.nameAr || !formData.nameEn) {
-      toast.error(
-        t("pleaseFillAllFields") || "Please complete all required fields"
-      );
+    // Validate بيانات السيارة (Car Details) - All fields required
+    if (!formData.nameAr) {
+      toast.error(t("pleaseEnterCarNameAr"));
       return;
     }
 
-    if (!formData.price) {
-      toast.error(t("pleaseEnterPrice") || "Please enter a price");
+    if (!formData.nameEn) {
+      toast.error(t("pleaseEnterCarNameEn"));
       return;
     }
 
     if (!formData.country_id) {
       toast.error(t("pleaseSelectCountry"));
       return;
+    }
+
+    if (!formData.brand_id) {
+      toast.error(t("pleaseSelectBrand"));
+      return;
+    }
+
+    if (!formData.agent_id) {
+      toast.error(t("pleaseSelectAgent"));
+      return;
+    }
+
+    if (!formData.vehicle_model_id) {
+      toast.error(t("pleaseSelectModel"));
+      return;
+    }
+
+    if (!formData.vehicle_body_type_id) {
+      toast.error(t("pleaseSelectStructureType"));
+      return;
+    }
+
+    if (!formData.vehicle_type_id) {
+      toast.error(t("pleaseSelectType"));
+      return;
+    }
+
+    if (!formData.vehicle_class_id) {
+      toast.error(t("pleaseSelectCategory"));
+      return;
+    }
+
+    if (!formData.brand_origin_id) {
+      toast.error(t("pleaseSelectBrandOrigin"));
+      return;
+    }
+
+    if (!formData.number_of_seat_id) {
+      toast.error(t("pleaseSelectSeats"));
+      return;
+    }
+
+    if (!formData.engine_type_id) {
+      toast.error(t("pleaseSelectEngineType"));
+      return;
+    }
+
+    if (!formData.engine_volume_id) {
+      toast.error(t("pleaseSelectEngineSize"));
+      return;
+    }
+
+    // Validate سعر السيارة (Car Price) - Required
+    if (!formData.price) {
+      toast.error(t("pleaseEnterPrice"));
+      return;
+    }
+
+    // Validate باقات الصيانة (Maintenance Packages) - Required when active
+    if (formData.is_packages_active) {
+      if (!formData.packages || formData.packages.length === 0) {
+        toast.error(t("pleaseCompletePackages"));
+        return;
+      }
+
+      // Check each package has required fields
+      for (const pkg of formData.packages) {
+        if (!pkg.name?.ar || !pkg.name?.en || !pkg.price) {
+          toast.error(t("pleaseCompletePackages"));
+          return;
+        }
+      }
+    }
+
+    // Validate الاكسسوارات (Accessories) - Required when active
+    if (formData.is_accessories_active) {
+      if (!formData.accessories || formData.accessories.length === 0) {
+        toast.error(t("pleaseCompleteAccessories"));
+        return;
+      }
+
+      // Check each accessory has required fields
+      for (const accessory of formData.accessories) {
+        if (!accessory.name?.ar || !accessory.name?.en || !accessory.price) {
+          toast.error(t("pleaseCompleteAccessories"));
+          return;
+        }
+      }
+    }
+
+    // Validate العروض (Offers) - Required when active
+    if (formData.is_offers_active) {
+      if (!formData.offers || formData.offers.length === 0) {
+        toast.error(t("pleaseCompleteOffers"));
+        return;
+      }
+
+      // Check each offer has required fields
+      for (const offer of formData.offers) {
+        if (!offer.name?.ar || !offer.name?.en) {
+          toast.error(t("pleaseCompleteOffers"));
+          return;
+        }
+      }
+    }
+
+    // Validate إيجار منتهي بالتملك (Rent to Own) - Required when active
+    if (formData.is_rent_to_own) {
+      if (
+        !formData.rent_to_own_duration ||
+        !formData.rent_to_own_duration_en ||
+        !formData.rent_to_own_whatsapp ||
+        !formData.rent_to_own_price
+      ) {
+        toast.error(t("pleaseCompleteRentToOwn"));
+        return;
+      }
     }
 
     if (isEdit && vehicleId) {

@@ -102,5 +102,24 @@
   "duration": "المدة",
 
   "discountFromDate": "تاريخ بداية الخصم",
-  "discountToDate": "تاريخ نهاية الخصم"
+  "discountToDate": "تاريخ نهاية الخصم",
+
+  "pleaseSelectBrand": "يرجى اختيار الماركة",
+  "pleaseSelectAgent": "يرجى اختيار الوكيل",
+  "pleaseSelectModel": "يرجى اختيار الموديل",
+  "pleaseSelectStructureType": "يرجى اختيار نوع الهيكل",
+  "pleaseSelectType": "يرجى اختيار النوع",
+  "pleaseSelectCategory": "يرجى اختيار الفئة",
+  "pleaseSelectBrandOrigin": "يرجى اختيار منشأ الماركة",
+  "pleaseSelectSeats": "يرجى اختيار عدد المقاعد",
+  "pleaseSelectEngineType": "يرجى اختيار نوع الماكينة",
+  "pleaseSelectEngineSize": "يرجى اختيار حجم الماكينة",
+  "pleaseEnterCarNameAr": "يرجى إدخال اسم السيارة بالعربية",
+  "pleaseEnterCarNameEn": "يرجى إدخال اسم السيارة بالإنجليزية",
+  "pleaseCompletePackages": "يرجى إكمال جميع حقول باقات الصيانة",
+  "pleaseCompleteAccessories": "يرجى إكمال جميع حقول الاكسسوارات",
+  "pleaseCompleteOffers": "يرجى إكمال جميع حقول العروض",
+  "pleaseCompleteRentToOwn": "يرجى إكمال جميع حقول الإيجار منتهي بالتملك",
+  "vehicleCreationError": "حدث خطأ أثناء إضافة السيارة",
+  "vehicleUpdateError": "حدث خطأ أثناء تحديث السيارة"
 }
