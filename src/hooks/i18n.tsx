@@ -51,7 +51,7 @@ import contactUsEn from "../locales/en/contactUs.json";
 // Ensure we're in browser environment
 const savedLang =
   typeof window !== "undefined"
-    ? localStorage.getItem("language") || "ar"
+    ? localStorage.getItem("language") || "en"
     : "en";
 
 // Initialize i18n
