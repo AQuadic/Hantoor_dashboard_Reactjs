@@ -49,6 +49,7 @@ const CarsTable = ({
 }: CarsTableProps) => {
   const { t, i18n } = useTranslation("cars");
   const canEdit = useHasPermission("edit_vehicle");
+  const canChangeStatus = useHasPermission("change-status_vehicle");
   const queryClient = useQueryClient();
   const [openChatId, setOpenChatId] = useState<number | null>(null);
   // Local status map to allow immediate UI toggle feedback
@@ -342,7 +343,9 @@ const CarsTable = ({
               <TableHead className="text-right">{t("leaseToOwn")}</TableHead>
               <TableHead className="text-right">{t("favTimes")}</TableHead>
               <TableHead className="text-right">{t("dateAndTime")}</TableHead>
-              <TableHead className="text-right">{t("status")}</TableHead>
+              {(canChangeStatus || canEdit) && (
+                <TableHead className="text-right">{t("status")}</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -407,35 +410,39 @@ const CarsTable = ({
                 <TableCell>
                   {vehicle.created_at ? formatDate(vehicle.created_at) : "-"}
                 </TableCell>
-                <TableCell className="flex gap-[7px] items-center">
-                  <Switch
-                    isSelected={
-                      localStatusMap[vehicle.id] !== undefined
-                        ? localStatusMap[vehicle.id]
-                        : vehicle.status !== undefined
-                        ? vehicle.status === 1
-                        : vehicle.is_active || false
-                    }
-                    onValueChange={() => handleToggleStatus(vehicle)}
-                    size="sm"
-                  />
-                  <button onClick={() => setOpenChatId(vehicle.id)}>
-                    <ChatIcon />
-                  </button>
-                  <Link to={`/cars/${vehicle.id}`} className="">
-                    <ViewIcon />
-                  </Link>
-                  {canEdit && (
-                    <Link to={`/cars/edit/${vehicle.id}`} className="mt-2">
-                      <TableEditButton />
+                {(canChangeStatus || canEdit) && (
+                  <TableCell className="flex gap-[7px] items-center">
+                    {canChangeStatus && (
+                      <Switch
+                        isSelected={
+                          localStatusMap[vehicle.id] !== undefined
+                            ? localStatusMap[vehicle.id]
+                            : vehicle.status !== undefined
+                            ? vehicle.status === 1
+                            : vehicle.is_active || false
+                        }
+                        onValueChange={() => handleToggleStatus(vehicle)}
+                        size="sm"
+                      />
+                    )}
+                    <button onClick={() => setOpenChatId(vehicle.id)}>
+                      <ChatIcon />
+                    </button>
+                    <Link to={`/cars/${vehicle.id}`} className="">
+                      <ViewIcon />
                     </Link>
-                  )}
-                  <div className="mt-2">
-                    <TableDeleteButton
-                      handleDelete={() => handleDelete(vehicle.id)}
-                    />
-                  </div>
-                </TableCell>
+                    {canEdit && (
+                      <Link to={`/cars/edit/${vehicle.id}`} className="mt-2">
+                        <TableEditButton />
+                      </Link>
+                    )}
+                    <div className="mt-2">
+                      <TableDeleteButton
+                        handleDelete={() => handleDelete(vehicle.id)}
+                      />
+                    </div>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

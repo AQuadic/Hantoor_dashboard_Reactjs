@@ -37,6 +37,7 @@ const BanksTable = ({
   const { t, i18n } = useTranslation("financing");
 
   const canEdit = useHasPermission("edit_bank");
+  const canChangeStatus = useHasPermission("change-status_bank");
 
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -112,7 +113,9 @@ const BanksTable = ({
             <TableHead className="text-right">{t("image")}</TableHead>
             <TableHead className="text-right">{t("bankNameTitle")}</TableHead>
             <TableHead className="text-right">{t("interestValue")}</TableHead>
-            <TableHead className="text-right">{t("status")}</TableHead>
+            {(canChangeStatus || canEdit) && (
+              <TableHead className="text-right">{t("status")}</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -164,28 +167,32 @@ const BanksTable = ({
                   bank.expatriates?.[0]?.value ||
                   "-"}
               </TableCell>
-              <TableCell className="flex gap-[7px] items-center">
-                <Switch
-                  defaultSelected={Boolean(bank.is_active)}
-                  onValueChange={() =>
-                    handleToggleStatus(bank.id, Boolean(bank.is_active))
-                  }
-                />
-                {canEdit && (
-                  <Link
-                    to={`/bank/edit/${bank.id}`}
-                    state={{ fromDetailsId: bank.country_id }}
-                  >
-                    <Edit />
-                  </Link>
-                )}
+              {(canChangeStatus || canEdit) && (
+                <TableCell className="flex gap-[7px] items-center">
+                  {canChangeStatus && (
+                    <Switch
+                      defaultSelected={Boolean(bank.is_active)}
+                      onValueChange={() =>
+                        handleToggleStatus(bank.id, Boolean(bank.is_active))
+                      }
+                    />
+                  )}
+                  {canEdit && (
+                    <Link
+                      to={`/bank/edit/${bank.id}`}
+                      state={{ fromDetailsId: bank.country_id }}
+                    >
+                      <Edit />
+                    </Link>
+                  )}
 
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(bank.id)}
-                  />
-                </div>
-              </TableCell>
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(bank.id)}
+                    />
+                  </div>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

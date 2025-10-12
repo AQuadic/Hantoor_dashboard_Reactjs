@@ -31,6 +31,7 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
   const { t, i18n } = useTranslation("questions");
 
   const canEdit = useHasPermission("edit_support_question");
+  const canChangeStatus = useHasPermission("change-status_support_question");
 
   if (isLoading) return <Loading />;
   if (!data.length) return <NoData />;
@@ -74,7 +75,9 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
           <TableHead className="text-right">{t("country")}</TableHead>
           <TableHead className="text-right">{t("NOMessages")}</TableHead>
           <TableHead className="text-right">{t("dateAndTime")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -101,25 +104,29 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
                 }
               )}
             </TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={!!question.is_active}
-                onChange={() =>
-                  handleToggleStatus(question.id, question.is_active)
-                }
-              />
-              {canEdit && (
-                <Link to={`/technical-support/edit/${question.id}`}>
-                  <Edit />
-                </Link>
-              )}
+            {(canChangeStatus || canEdit) && (
+              <TableCell className="flex gap-[7px] items-center">
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={!!question.is_active}
+                    onChange={() =>
+                      handleToggleStatus(question.id, question.is_active)
+                    }
+                  />
+                )}
+                {canEdit && (
+                  <Link to={`/technical-support/edit/${question.id}`}>
+                    <Edit />
+                  </Link>
+                )}
 
-              <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(question.id)}
-                />
-              </div>
-            </TableCell>
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(question.id)}
+                  />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

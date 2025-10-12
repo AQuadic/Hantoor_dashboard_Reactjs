@@ -15,6 +15,7 @@ import {
 import { Switch } from "@heroui/react";
 import View from "../icons/general/View";
 import { useTranslation } from "react-i18next";
+import { useHasPermission } from "@/hooks/usePermissions";
 import Delete from "../icons/general/Delete";
 import NoData from "../general/NoData";
 
@@ -35,6 +36,7 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
   const { t, i18n } = useTranslation("financing");
   const navigate = useNavigate();
   const isArabic = i18n.language === "ar";
+  const canChangeStatus = useHasPermission("change-status_finance");
 
   const handleViewCountry = (country: FinancingCountry) => {
     const countryName = isArabic ? country.name.ar : country.name.en;
@@ -111,7 +113,9 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("country")}</TableHead>
           <TableHead className="text-right">{t("NOBanks")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {canChangeStatus && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -122,45 +126,47 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
               {isArabic ? country.name.ar : country.name.en}
             </TableCell>
             <TableCell className="w-full">{country.banks_count}</TableCell>
-            <TableCell className="flex items-center gap-2">
-              <Switch
-                isSelected={country.is_active}
-                onChange={async (e) => {
-                  // Prevent row click navigation when toggling
-                  e.stopPropagation();
-                  if (country.banks_count === 0) return;
-                  await handleToggleStatus(country, e.target.checked);
-                }}
-              />
-              <button
-                type="button"
-                className="cursor-pointer"
-                onClick={() => handleViewCountry(country)}
-                aria-label={
-                  isArabic
-                    ? `عرض ${country.name.ar}`
-                    : `View ${country.name.en}`
-                }
-              >
-                <View />
-              </button>
-              {country.banks_count > 0 ? (
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(country.id)}
+            {canChangeStatus && (
+              <TableCell className="flex items-center gap-2">
+                <Switch
+                  isSelected={country.is_active}
+                  onChange={async (e) => {
+                    // Prevent row click navigation when toggling
+                    e.stopPropagation();
+                    if (country.banks_count === 0) return;
+                    await handleToggleStatus(country, e.target.checked);
+                  }}
                 />
-              ) : (
                 <button
                   type="button"
-                  disabled
-                  className="cursor-not-allowed opacity-50"
+                  className="cursor-pointer"
+                  onClick={() => handleViewCountry(country)}
                   aria-label={
-                    isArabic ? `حذف غير متاح` : "Delete not available"
+                    isArabic
+                      ? `عرض ${country.name.ar}`
+                      : `View ${country.name.en}`
                   }
                 >
-                  <Delete />
+                  <View />
                 </button>
-              )}
-            </TableCell>
+                {country.banks_count > 0 ? (
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(country.id)}
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    disabled
+                    className="cursor-not-allowed opacity-50"
+                    aria-label={
+                      isArabic ? `حذف غير متاح` : "Delete not available"
+                    }
+                  >
+                    <Delete />
+                  </button>
+                )}
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

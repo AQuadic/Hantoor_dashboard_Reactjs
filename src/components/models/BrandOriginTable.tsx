@@ -44,6 +44,7 @@ export function BrandOriginTable({
 }: BrandOriginTableProps) {
   const { i18n, t } = useTranslation("models");
   const canEdit = useHasPermission("edit_brand_origin");
+  const canChangeStatus = useHasPermission("change-status_brand_origin");
   const currentLang = i18n.language;
 
   const { data, isLoading, refetch } = useQuery({
@@ -98,7 +99,9 @@ export function BrandOriginTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("brandOrigin")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -108,22 +111,26 @@ export function BrandOriginTable({
             <TableCell className="w-full">
               {currentLang === "ar" ? brand.name.ar : brand.name.en}
             </TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={brand.is_active}
-                onChange={() => handleToggle(brand.id, brand.is_active)}
-              />
-              {canEdit && (
-                <Link to={`/brand-origins/${brand.id}`}>
-                  <Edit />
-                </Link>
-              )}
-              <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(brand.id)}
-                />
-              </div>
-            </TableCell>
+            {(canChangeStatus || canEdit) && (
+              <TableCell className="flex gap-[7px] items-center">
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={brand.is_active}
+                    onChange={() => handleToggle(brand.id, brand.is_active)}
+                  />
+                )}
+                {canEdit && (
+                  <Link to={`/brand-origins/${brand.id}`}>
+                    <Edit />
+                  </Link>
+                )}
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(brand.id)}
+                  />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

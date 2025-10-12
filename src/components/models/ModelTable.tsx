@@ -46,6 +46,7 @@ export function ModelTable({
 }: ModelTableProps) {
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_vehicle_model");
+  const canChangeStatus = useHasPermission("change-status_vehicle_model");
 
   const {
     data: modelsResponse,
@@ -107,7 +108,9 @@ export function ModelTable({
         <TableRow>
           <TableHead className="text-right ">#</TableHead>
           <TableHead className="text-right">{t("model")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -119,22 +122,26 @@ export function ModelTable({
                 ? model.name.ar
                 : model.name.en || model.name.ar}
             </TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={model.is_active}
-                onChange={() => handleToggleStatus(model)}
-              />
-              {canEdit && (
-                <Link to={`/models/edit/${model.id}`}>
-                  <Edit />
-                </Link>
-              )}
-              <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(model.id)}
-                />
-              </div>
-            </TableCell>
+            {(canChangeStatus || canEdit) && (
+              <TableCell className="flex gap-[7px] items-center">
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={model.is_active}
+                    onChange={() => handleToggleStatus(model)}
+                  />
+                )}
+                {canEdit && (
+                  <Link to={`/models/edit/${model.id}`}>
+                    <Edit />
+                  </Link>
+                )}
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(model.id)}
+                  />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

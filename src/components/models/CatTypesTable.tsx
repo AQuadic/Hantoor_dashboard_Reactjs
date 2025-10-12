@@ -50,6 +50,7 @@ export function CarTypesTable({
   dateParams,
 }: Readonly<CarTypesTableProps>) {
   const canEdit = useHasPermission("edit_vehicle_type");
+  const canChangeStatus = useHasPermission("change-status_vehicle_type");
   const { t, i18n } = useTranslation("models");
   const queryClient = useQueryClient();
 
@@ -170,7 +171,9 @@ export function CarTypesTable({
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("type")}</TableHead>
           <TableHead className="text-right">{t("brand")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -181,20 +184,26 @@ export function CarTypesTable({
             <TableCell className="w-full">
               {getBrandName(car.brand_id)}
             </TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={car.is_active}
-                onChange={() => handleToggleStatus(car)}
-              />
-              {canEdit && (
-                <Link to={`/car-types/${car.id}`}>
-                  <Edit />
-                </Link>
-              )}
-              <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(car.id)} />
-              </div>
-            </TableCell>
+            {(canChangeStatus || canEdit) && (
+              <TableCell className="flex gap-[7px] items-center">
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={car.is_active}
+                    onChange={() => handleToggleStatus(car)}
+                  />
+                )}
+                {canEdit && (
+                  <Link to={`/car-types/${car.id}`}>
+                    <Edit />
+                  </Link>
+                )}
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(car.id)}
+                  />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

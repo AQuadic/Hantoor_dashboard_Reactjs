@@ -19,6 +19,7 @@ import { useTranslation } from "react-i18next";
 import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
+import { useHasPermission } from "@/hooks/usePermissions";
 
 import { useNavigate } from "react-router";
 
@@ -38,6 +39,8 @@ export function PermissionsTable({
   const { t } = useTranslation("subordinates");
   const [activeStates, setActiveStates] = useState<Record<number, boolean>>({});
   const queryClient = useQueryClient();
+  const canChangeStatus = useHasPermission("change-status_role");
+  const canEdit = useHasPermission("edit_role");
 
   const navigate = useNavigate();
 
@@ -111,9 +114,11 @@ export function PermissionsTable({
             <TableHead className="text-right w-full">
               {t("permissions") || "Permissions"}
             </TableHead>
-            <TableHead className="text-right">
-              {t("status") || "Status"}
-            </TableHead>
+            {(canChangeStatus || canEdit) && (
+              <TableHead className="text-right">
+                {t("status") || "Status"}
+              </TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -126,35 +131,48 @@ export function PermissionsTable({
                   {role.permissions.length} {t("permissions") || "permissions"}
                 </span>
               </TableCell>
-              <TableCell className="flex gap-2 items-center">
-                <Switch
-                  isSelected={!!activeStates[role.id]}
-                  onChange={async () => {
-                    const current = !!activeStates[role.id];
-                    try {
-                      await updateRole(role.id, { is_active: !current });
-                      setActiveStates((s) => ({ ...s, [role.id]: !current }));
-                      toast.success(
-                        !current
-                          ? t("roleActivated") || "Role activated"
-                          : t("roleDeactivated") || "Role deactivated"
-                      );
-                      queryClient.invalidateQueries({ queryKey: ["roles"] });
-                      refetch();
-                    } catch (error) {
-                      console.error(
-                        "Failed to update role active state",
-                        error
-                      );
-                      toast.error(t("error") || "Error");
-                    }
-                  }}
-                />
-                <button onClick={() => handleEditRole(role.id)}>
-                  <Edit />
-                </button>
-                <TableDeleteButton handleDelete={() => handleDelete(role.id)} />
-              </TableCell>
+              {(canChangeStatus || canEdit) && (
+                <TableCell className="flex gap-2 items-center">
+                  {canChangeStatus && (
+                    <Switch
+                      isSelected={!!activeStates[role.id]}
+                      onChange={async () => {
+                        const current = !!activeStates[role.id];
+                        try {
+                          await updateRole(role.id, { is_active: !current });
+                          setActiveStates((s) => ({
+                            ...s,
+                            [role.id]: !current,
+                          }));
+                          toast.success(
+                            !current
+                              ? t("roleActivated") || "Role activated"
+                              : t("roleDeactivated") || "Role deactivated"
+                          );
+                          queryClient.invalidateQueries({
+                            queryKey: ["roles"],
+                          });
+                          refetch();
+                        } catch (error) {
+                          console.error(
+                            "Failed to update role active state",
+                            error
+                          );
+                          toast.error(t("error") || "Error");
+                        }
+                      }}
+                    />
+                  )}
+                  {canEdit && (
+                    <button onClick={() => handleEditRole(role.id)}>
+                      <Edit />
+                    </button>
+                  )}
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(role.id)}
+                  />
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

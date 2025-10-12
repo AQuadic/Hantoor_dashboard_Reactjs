@@ -36,6 +36,7 @@ interface FAQsTableProps {
 const FAQsTable = ({ data, isLoading = false, refetch }: FAQsTableProps) => {
   const { t, i18n } = useTranslation("questions");
   const canEdit = useHasPermission("edit_faq");
+  const canChangeStatus = useHasPermission("change-status_faq");
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
 
   const handleDelete = async (id: number) => {
@@ -110,7 +111,9 @@ const FAQsTable = ({ data, isLoading = false, refetch }: FAQsTableProps) => {
                 {t("NONotBenefited")}
               </TableHead>
               <TableHead className="text-right">{t("dateAndTime")}</TableHead>
-              <TableHead className="text-right">{t("status")}</TableHead>
+              {(canChangeStatus || canEdit) && (
+                <TableHead className="text-right">{t("status")}</TableHead>
+              )}
             </TableRow>
           </TableHeader>
 
@@ -127,29 +130,33 @@ const FAQsTable = ({ data, isLoading = false, refetch }: FAQsTableProps) => {
                 <TableCell className="w-full">
                   {formatDateTime(faq.created_at)}
                 </TableCell>
-                <TableCell
-                  className="flex gap-[7px] items-center"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Switch
-                    isSelected={!!faq.is_active}
-                    onChange={() => handleToggleSwitch(faq)}
-                  />
+                {(canChangeStatus || canEdit) && (
+                  <TableCell
+                    className="flex gap-[7px] items-center"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {canChangeStatus && (
+                      <Switch
+                        isSelected={!!faq.is_active}
+                        onChange={() => handleToggleSwitch(faq)}
+                      />
+                    )}
 
-                  <button onClick={() => setOpenFaqId(faq.id)}>
-                    <View />
-                  </button>
-                  {canEdit && (
-                    <Link to={`/faq/edit/${faq.id}`}>
-                      <Edit />
-                    </Link>
-                  )}
-                  <div className="mt-2">
-                    <TableDeleteButton
-                      handleDelete={() => handleDelete(faq.id)}
-                    />
-                  </div>
-                </TableCell>
+                    <button onClick={() => setOpenFaqId(faq.id)}>
+                      <View />
+                    </button>
+                    {canEdit && (
+                      <Link to={`/faq/edit/${faq.id}`}>
+                        <Edit />
+                      </Link>
+                    )}
+                    <div className="mt-2">
+                      <TableDeleteButton
+                        handleDelete={() => handleDelete(faq.id)}
+                      />
+                    </div>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

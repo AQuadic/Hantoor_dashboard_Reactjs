@@ -38,7 +38,8 @@ export function SubordinatesTable({
 }: SubordinatesTableProps) {
   const { t, i18n } = useTranslation("subordinates");
   const canEdit = useHasPermission("edit_admin");
-  const canChangePassword = useHasPermission("edit_admin");
+  const canChangePassword = useHasPermission("change-password_admin");
+  const canChangeStatus = useHasPermission("change-status_admin");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["admins", currentPage, itemsPerPage, searchTerm, dateParams],
@@ -104,7 +105,9 @@ export function SubordinatesTable({
             {t("administrativePositions")}
           </TableHead>
           <TableHead className="text-right">{t("lastLogin")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit || canChangePassword) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -154,27 +157,33 @@ export function SubordinatesTable({
                   })()
                 : "..."}
             </TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={!!admin.is_active}
-                onChange={() => handleToggleStatus(admin.id, !!admin.is_active)}
-              />
-              {canEdit && (
-                <Link to={`/subordinates/${admin.id}`}>
-                  <Edit />
-                </Link>
-              )}
-              {canChangePassword && (
-                <Link to={`/subordinates/change_password/${admin.id}`}>
-                  <Password />
-                </Link>
-              )}
-              <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(admin.id)}
-                />
-              </div>
-            </TableCell>
+            {(canChangeStatus || canEdit || canChangePassword) && (
+              <TableCell className="flex gap-[7px] items-center">
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={!!admin.is_active}
+                    onChange={() =>
+                      handleToggleStatus(admin.id, !!admin.is_active)
+                    }
+                  />
+                )}
+                {canEdit && (
+                  <Link to={`/subordinates/${admin.id}`}>
+                    <Edit />
+                  </Link>
+                )}
+                {canChangePassword && (
+                  <Link to={`/subordinates/change_password/${admin.id}`}>
+                    <Password />
+                  </Link>
+                )}
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(admin.id)}
+                  />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

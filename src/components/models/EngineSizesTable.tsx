@@ -47,6 +47,7 @@ export function EngineSizesTable({
 }: EngineSizesTableProps) {
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_engine_size");
+  const canChangeStatus = useHasPermission("change-status_engine_size");
   const {
     data: engineSize,
     isLoading,
@@ -101,7 +102,9 @@ export function EngineSizesTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("engineSize")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -113,23 +116,29 @@ export function EngineSizesTable({
                 ? engine.name.ar.slice(0, 7)
                 : engine.name.en.slice(0, 7)}
             </TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={engine.is_active}
-                onChange={() => handleToggleStatus(engine.id, engine.is_active)}
-              />
-              {canEdit && (
-                <Link to={`/engine-size/edit/${engine.id}`}>
-                  <Edit />
-                </Link>
-              )}
+            {(canChangeStatus || canEdit) && (
+              <TableCell className="flex gap-[7px] items-center">
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={engine.is_active}
+                    onChange={() =>
+                      handleToggleStatus(engine.id, engine.is_active)
+                    }
+                  />
+                )}
+                {canEdit && (
+                  <Link to={`/engine-size/edit/${engine.id}`}>
+                    <Edit />
+                  </Link>
+                )}
 
-              <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(engine.id)}
-                />
-              </div>
-            </TableCell>
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(engine.id)}
+                  />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

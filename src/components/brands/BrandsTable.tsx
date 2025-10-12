@@ -66,6 +66,7 @@ export function BrandsTable({
   isLoading,
 }: Readonly<BrandsTableProps>) {
   const canEdit = useHasPermission("edit_brand");
+  const canChangeStatus = useHasPermission("change-status_brand");
   const { t, i18n } = useTranslation("brands");
   const [updatingId, setUpdatingId] = React.useState<number | null>(null);
   const [localBrands, setLocalBrands] = React.useState<Brand[] | undefined>(
@@ -124,7 +125,9 @@ export function BrandsTable({
           <TableHead className="text-right">{t("brandImage")}</TableHead>
           <TableHead className="text-right">{t("brandName")}</TableHead>
           <TableHead className="text-right">{t("count")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -163,23 +166,27 @@ export function BrandsTable({
               <TableCell className="w-full">
                 {brand.vehicles_count ?? "-"}
               </TableCell>
-              <TableCell className="flex gap-[7px] items-center">
-                <Switch
-                  isSelected={Boolean(brand.is_active)}
-                  isDisabled={updatingId === brand.id}
-                  onChange={() => handleToggleActive(brand)}
-                />
-                {canEdit && (
-                  <Link to={`/brands/${brand.id}`}>
-                    <Edit />
-                  </Link>
-                )}
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(brand.id)}
-                  />
-                </div>
-              </TableCell>
+              {(canChangeStatus || canEdit) && (
+                <TableCell className="flex gap-[7px] items-center">
+                  {canChangeStatus && (
+                    <Switch
+                      isSelected={Boolean(brand.is_active)}
+                      isDisabled={updatingId === brand.id}
+                      onChange={() => handleToggleActive(brand)}
+                    />
+                  )}
+                  {canEdit && (
+                    <Link to={`/brands/${brand.id}`}>
+                      <Edit />
+                    </Link>
+                  )}
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(brand.id)}
+                    />
+                  </div>
+                </TableCell>
+              )}
             </TableRow>
           ))}
       </TableBody>

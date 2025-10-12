@@ -34,6 +34,8 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
 }) => {
   const { t, i18n } = useTranslation("agents");
   const canEdit = useHasPermission("edit_agent");
+  const canChangeStatus = useHasPermission("change-status_agent");
+  const canLinkAgent = useHasPermission("link_agent");
   if (isLoading) return <Loading />;
   if (!agents || agents.length === 0) return <NoData />;
 
@@ -56,7 +58,9 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
           <TableHead className="text-right">{t("agentName")}</TableHead>
           <TableHead className="text-right">{t("NOMaintenance")}</TableHead>
           <TableHead className="text-right">{t("NOShowrooms")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit || canLinkAgent) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -78,36 +82,42 @@ const AgentPageTable: React.FC<AgentPageTableProps> = ({
                 ? agent.centers.filter((c) => c.type === "show_room").length
                 : 0}
             </TableCell>
-            <TableCell
-              className="flex gap-[7px] items-center"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Switch
-                isSelected={!!agent.is_active}
-                onValueChange={(isSelected) => {
-                  onToggleActive?.(agent.id, isSelected);
-                  toast.dismiss();
-                  toast.success(t("statusUpdated"));
-                }}
-              />
-              <button
-                onClick={() => handleCopy(agent.website)}
-                className="hover:opacity-75"
+            {(canChangeStatus || canEdit || canLinkAgent) && (
+              <TableCell
+                className="flex gap-[7px] items-center"
+                onClick={(e) => e.stopPropagation()}
               >
-                <Copy />
-              </button>
-              <Link to={`/agent/details/${agent.id}`}>
-                <View />
-              </Link>
-              {canEdit && (
-                <Link to={`/agent/edit/${agent.id}`}>
-                  <Edit />
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={!!agent.is_active}
+                    onValueChange={(isSelected) => {
+                      onToggleActive?.(agent.id, isSelected);
+                      toast.dismiss();
+                      toast.success(t("statusUpdated"));
+                    }}
+                  />
+                )}
+                {canLinkAgent && (
+                  <button
+                    onClick={() => handleCopy(agent.website)}
+                    className="hover:opacity-75"
+                  >
+                    <Copy />
+                  </button>
+                )}
+                <Link to={`/agent/details/${agent.id}`}>
+                  <View />
                 </Link>
-              )}
-              <div className="mt-2">
-                <TableDeleteButton handleDelete={() => onDelete(agent.id)} />
-              </div>
-            </TableCell>
+                {canEdit && (
+                  <Link to={`/agent/edit/${agent.id}`}>
+                    <Edit />
+                  </Link>
+                )}
+                <div className="mt-2">
+                  <TableDeleteButton handleDelete={() => onDelete(agent.id)} />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

@@ -36,6 +36,7 @@ const CountriesTable = ({
 }: CountriesTableProps) => {
   const { t, i18n } = useTranslation("country");
   const canEdit = useHasPermission("edit_country");
+  const canChangeStatus = useHasPermission("change-status_country");
 
   const [localCountries, setLocalCountries] = useState(countries);
 
@@ -84,7 +85,9 @@ const CountriesTable = ({
           <TableHead className="text-right">{t("currency")}</TableHead>
           <TableHead className="text-right">{t("NOUsers")}</TableHead>
           <TableHead className="text-right">{t("dateAndTime")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -117,23 +120,27 @@ const CountriesTable = ({
                   }
                 )}
               </TableCell>
-              <TableCell className="flex gap-[7px] items-center">
-                <Switch
-                  isSelected={country.is_active}
-                  onChange={() => handleToggleStatus(country)}
-                />
-                {canEdit && (
-                  <Link to={`/countries/edit/${country.id}`}>
-                    <Edit />
-                  </Link>
-                )}
+              {(canChangeStatus || canEdit) && (
+                <TableCell className="flex gap-[7px] items-center">
+                  {canChangeStatus && (
+                    <Switch
+                      isSelected={country.is_active}
+                      onChange={() => handleToggleStatus(country)}
+                    />
+                  )}
+                  {canEdit && (
+                    <Link to={`/countries/edit/${country.id}`}>
+                      <Edit />
+                    </Link>
+                  )}
 
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(country.id)}
-                  />
-                </div>
-              </TableCell>
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(country.id)}
+                    />
+                  </div>
+                </TableCell>
+              )}
             </TableRow>
           );
         })}

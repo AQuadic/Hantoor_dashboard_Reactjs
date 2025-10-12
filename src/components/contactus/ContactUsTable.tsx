@@ -14,6 +14,7 @@ import Email from "../icons/contactus/Email";
 import Star from "../icons/contactus/Star";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
+import { useHasPermission } from "@/hooks/usePermissions";
 import {
   getSuggestions,
   SuggestionsResponse,
@@ -48,6 +49,8 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
 }) => {
   const { t, i18n } = useTranslation("contactUs");
   const [openMessageId, setOpenMessageId] = useState<number | null>(null);
+  const canEmail = useHasPermission("email_contact_us");
+  const canStar = useHasPermission("star_contact_us");
 
   const { data, isLoading, refetch } = useQuery<SuggestionsResponse, Error>({
     queryKey: ["suggestions", page, perPage, search, dateParams],
@@ -131,42 +134,48 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
                     "-"}
                 </TableCell>
                 <TableCell className="flex items-center gap-2">
-                  <div
-                    className="flex gap-[7px] items-center"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <a
-                      href={`mailto:${message.email}`}
-                      className="flex items-center justify-center gap-[10px] w-[160px] h-[37px] bg-[#1E1B1B] rounded-[8.15px]"
+                  {canEmail && (
+                    <div
+                      className="flex gap-[7px] items-center"
+                      onClick={(e) => e.stopPropagation()}
                     >
-                      <Email />
-                      <span className="text-[#FFFFFF] font-bold text-sm">
-                        {t("replayViaEmail")}
-                      </span>
-                    </a>
-                  </div>
+                      <a
+                        href={`mailto:${message.email}`}
+                        className="flex items-center justify-center gap-[10px] w-[160px] h-[37px] bg-[#1E1B1B] rounded-[8.15px]"
+                      >
+                        <Email />
+                        <span className="text-[#FFFFFF] font-bold text-sm">
+                          {t("replayViaEmail")}
+                        </span>
+                      </a>
+                    </div>
+                  )}
 
                   <button onClick={() => setOpenMessageId(message.id)}>
                     <View />
                   </button>
-                  <button
-                    onClick={() =>
-                      handleToggleStar(message.id, !!message.is_starred)
-                    }
-                    disabled={togglingIds.includes(message.id)}
-                    aria-busy={togglingIds.includes(message.id)}
-                    className={
-                      togglingIds.includes(message.id)
-                        ? "opacity-60 cursor-not-allowed"
-                        : ""
-                    }
-                  >
-                    <Star
-                      className={
-                        message.is_starred ? "text-yellow-400" : "text-gray-400"
+                  {canStar && (
+                    <button
+                      onClick={() =>
+                        handleToggleStar(message.id, !!message.is_starred)
                       }
-                    />
-                  </button>
+                      disabled={togglingIds.includes(message.id)}
+                      aria-busy={togglingIds.includes(message.id)}
+                      className={
+                        togglingIds.includes(message.id)
+                          ? "opacity-60 cursor-not-allowed"
+                          : ""
+                      }
+                    >
+                      <Star
+                        className={
+                          message.is_starred
+                            ? "text-yellow-400"
+                            : "text-gray-400"
+                        }
+                      />
+                    </button>
+                  )}
 
                   <div className="mt-2">
                     <TableDeleteButton

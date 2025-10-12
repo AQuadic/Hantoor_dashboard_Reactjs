@@ -44,6 +44,7 @@ export function NumberOfSeatsTable({
 }: NumberOfSeatsTableProps) {
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_seat_count");
+  const canChangeStatus = useHasPermission("change-status_seat_count");
 
   const {
     data: seats,
@@ -111,7 +112,9 @@ export function NumberOfSeatsTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("NOSeats")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -124,21 +127,29 @@ export function NumberOfSeatsTable({
                 ""
               )}
             </TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={!!seat.is_active}
-                onChange={() => handleToggleStatus(seat.id, !!seat.is_active)}
-              />
-              {canEdit && (
-                <Link to={`/seats/edit/${seat.id}`}>
-                  <Edit />
-                </Link>
-              )}
+            {(canChangeStatus || canEdit) && (
+              <TableCell className="flex gap-[7px] items-center">
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={!!seat.is_active}
+                    onChange={() =>
+                      handleToggleStatus(seat.id, !!seat.is_active)
+                    }
+                  />
+                )}
+                {canEdit && (
+                  <Link to={`/seats/edit/${seat.id}`}>
+                    <Edit />
+                  </Link>
+                )}
 
-              <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(seat.id)} />
-              </div>
-            </TableCell>
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(seat.id)}
+                  />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

@@ -43,6 +43,7 @@ export function StructureTable({
 }: StructureTableProps) {
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_vehicle_body_type");
+  const canChangeStatus = useHasPermission("change-status_vehicle_body_type");
   const language = i18n.language as "ar" | "en";
 
   const {
@@ -105,7 +106,9 @@ export function StructureTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("structureType")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -114,22 +117,26 @@ export function StructureTable({
             <TableRow key={item.id} noBackgroundColumns={1}>
               <TableCell>{item.id}</TableCell>
               <TableCell className="w-full">{item.name[language]}</TableCell>
-              <TableCell className="flex gap-[7px] items-center">
-                <Switch
-                  isSelected={!!item.is_active}
-                  onChange={() => handleToggleStatus(item)}
-                />
-                {canEdit && (
-                  <Link to={`/structure-types/edit/${item.id}`}>
-                    <Edit />
-                  </Link>
-                )}
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(item.id)}
-                  />
-                </div>
-              </TableCell>
+              {(canChangeStatus || canEdit) && (
+                <TableCell className="flex gap-[7px] items-center">
+                  {canChangeStatus && (
+                    <Switch
+                      isSelected={!!item.is_active}
+                      onChange={() => handleToggleStatus(item)}
+                    />
+                  )}
+                  {canEdit && (
+                    <Link to={`/structure-types/edit/${item.id}`}>
+                      <Edit />
+                    </Link>
+                  )}
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(item.id)}
+                    />
+                  </div>
+                </TableCell>
+              )}
             </TableRow>
           );
         })}

@@ -48,6 +48,7 @@ export function PriceToTable({
 }: PriceToTableProps) {
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_price_to");
+  const canChangeStatus = useHasPermission("change-status_price_to");
 
   const { data, isLoading, refetch } = useQuery<PriceToResponse>({
     queryKey: ["priceto", page, search, dateParams, countryId],
@@ -100,7 +101,9 @@ export function PriceToTable({
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("priceTo")}</TableHead>
           <TableHead className="text-right">{t("country")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -120,22 +123,28 @@ export function PriceToTable({
                 ? price.country.name[i18n.language as "ar" | "en"] || "-"
                 : "-"}
             </TableCell>
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={price.is_active === 1}
-                onChange={() => handleToggleStatus(price.id, price.is_active)}
-              />
-              {canEdit && (
-                <Link to={`/price-to/edit/${price.id}`}>
-                  <Edit />
-                </Link>
-              )}
-              <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(price.id)}
-                />
-              </div>
-            </TableCell>
+            {(canChangeStatus || canEdit) && (
+              <TableCell className="flex gap-[7px] items-center">
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={price.is_active === 1}
+                    onChange={() =>
+                      handleToggleStatus(price.id, price.is_active)
+                    }
+                  />
+                )}
+                {canEdit && (
+                  <Link to={`/price-to/edit/${price.id}`}>
+                    <Edit />
+                  </Link>
+                )}
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(price.id)}
+                  />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>

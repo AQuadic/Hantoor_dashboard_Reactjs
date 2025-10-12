@@ -51,6 +51,8 @@ export function UserTable({
   const { t, i18n } = useTranslation("users");
   const canEdit = useHasPermission("edit_user");
   const canChangePassword = useHasPermission("edit_user");
+  const canChangeStatus = useHasPermission("change-status_user");
+  const canBlock = useHasPermission("block_user");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: [
@@ -201,16 +203,20 @@ export function UserTable({
           <TableHead className="text-right">{t("carNumbers")}</TableHead>
           <TableHead className="text-right">{t("currency")}</TableHead>
           <TableHead className="text-right">{t("active")}</TableHead>
-          <TableHead className="text-right">
-            {t("suspensionDuration")}
-          </TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {canBlock && (
+            <TableHead className="text-right">
+              {t("suspensionDuration")}
+            </TableHead>
+          )}
+          {(canChangeStatus || canEdit || canChangePassword || canBlock) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
         {users.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={14} className="text-center py-8 text-gray-500">
+            <TableCell colSpan={15} className="text-center py-8 text-gray-500">
               {t("noResultsFound")}
             </TableCell>
           </TableRow>
@@ -259,74 +265,85 @@ export function UserTable({
               <TableCell>
                 {formatLastOnline(user.last_online, i18n.language)}
               </TableCell>
-              <TableCell>
-                <div className="w-[160px]" dir="ltr">
-                  <DatePicker
-                    aria-label="blocked until"
-                    value={toCalendarDate(user.blocked_until ?? undefined)}
-                    onChange={async (val) => {
-                      const iso = calendarDateToISO(val);
-                      try {
-                        const payload: import("@/api/users/editUsers").UpdateAdminUserPayload =
-                          iso ? { blocked_until: iso } : {};
-                        await updateAdminUser(user.id, payload);
-                        toast.success(t("statusUpdated"));
-                        refetch();
-                      } catch (err) {
-                        const errorLike = err as
-                          | {
-                              response?: { data?: { message?: string } };
-                              message?: string;
-                            }
-                          | undefined;
-                        const message =
-                          errorLike?.response?.data?.message ||
-                          errorLike?.message ||
-                          t("error");
-                        toast.error(message);
-                      }
-                    }}
+              {canBlock && (
+                <TableCell>
+                  <div className="w-[160px]" dir="ltr">
+                    <DatePicker
+                      aria-label="blocked until"
+                      value={toCalendarDate(user.blocked_until ?? undefined)}
+                      onChange={async (val) => {
+                        const iso = calendarDateToISO(val);
+                        try {
+                          const payload: import("@/api/users/editUsers").UpdateAdminUserPayload =
+                            iso ? { blocked_until: iso } : {};
+                          await updateAdminUser(user.id, payload);
+                          toast.success(t("statusUpdated"));
+                          refetch();
+                        } catch (err) {
+                          const errorLike = err as
+                            | {
+                                response?: { data?: { message?: string } };
+                                message?: string;
+                              }
+                            | undefined;
+                          const message =
+                            errorLike?.response?.data?.message ||
+                            errorLike?.message ||
+                            t("error");
+                          toast.error(message);
+                        }
+                      }}
+                    />
+                  </div>
+                </TableCell>
+              )}
+              {(canChangeStatus ||
+                canEdit ||
+                canChangePassword ||
+                canBlock) && (
+                <TableCell className="flex items-center gap-[7px]">
+                  {canChangeStatus && (
+                    <Switch
+                      isSelected={user.is_active}
+                      onChange={async (e) => {
+                        try {
+                          await updateAdminUser(user.id, {
+                            is_active: e.target.checked,
+                          });
+                          toast.dismiss();
+                          toast.success(t("statusUpdated"));
+                          refetch();
+                        } catch (err) {
+                          const errorLike = err as
+                            | {
+                                response?: { data?: { message?: string } };
+                                message?: string;
+                              }
+                            | undefined;
+                          const message =
+                            errorLike?.response?.data?.message ||
+                            errorLike?.message ||
+                            t("error");
+                          toast.error(message);
+                        }
+                      }}
+                    />
+                  )}
+                  {canEdit && (
+                    <Link to={`/users/edit/${user.id}`}>
+                      <Edit />
+                    </Link>
+                  )}
+                  {canChangePassword && (
+                    <Link to={`/users/change-password/${user.id}`}>
+                      <Password />
+                    </Link>
+                  )}
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(user.id)}
                   />
-                </div>
-              </TableCell>
-              <TableCell className="flex items-center gap-[7px]">
-                <Switch
-                  isSelected={user.is_active}
-                  onChange={async (e) => {
-                    try {
-                      await updateAdminUser(user.id, {
-                        is_active: e.target.checked,
-                      });
-                      toast.dismiss();
-                      toast.success(t("statusUpdated"));
-                      refetch();
-                    } catch (err) {
-                      const errorLike = err as
-                        | {
-                            response?: { data?: { message?: string } };
-                            message?: string;
-                          }
-                        | undefined;
-                      const message =
-                        errorLike?.response?.data?.message ||
-                        errorLike?.message ||
-                        t("error");
-                      toast.error(message);
-                    }
-                  }}
-                />
-                {canEdit && (
-                  <Link to={`/users/edit/${user.id}`}>
-                    <Edit />
-                  </Link>
-                )}
-                {canChangePassword && (
-                  <Link to={`/users/change-password/${user.id}`}>
-                    <Password />
-                  </Link>
-                )}
-                <TableDeleteButton handleDelete={() => handleDelete(user.id)} />
-              </TableCell>
+                </TableCell>
+              )}
             </TableRow>
           ))
         )}

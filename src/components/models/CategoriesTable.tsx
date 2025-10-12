@@ -54,6 +54,7 @@ export function CategoriesTable({
 }: CategoriesTableProps) {
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_category");
+  const canChangeStatus = useHasPermission("change-status_category");
 
   const {
     data: classesResponse,
@@ -150,7 +151,9 @@ export function CategoriesTable({
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("categoryName")}</TableHead>
           {/* <TableHead className="text-right">{t("type")}</TableHead> */}
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -163,20 +166,26 @@ export function CategoriesTable({
             {/* <TableCell className="w-full">
               {typeMap[item.vehicle_type_id] || item.vehicle_type_id}
             </TableCell> */}
-            <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={item.is_active}
-                onChange={() => handleToggleStatus(item.id, item.is_active)}
-              />
-              {canEdit && (
-                <Link to={`/categories/${item.id}`}>
-                  <Edit />
-                </Link>
-              )}
-              <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(item.id)} />
-              </div>
-            </TableCell>
+            {(canChangeStatus || canEdit) && (
+              <TableCell className="flex gap-[7px] items-center">
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={item.is_active}
+                    onChange={() => handleToggleStatus(item.id, item.is_active)}
+                  />
+                )}
+                {canEdit && (
+                  <Link to={`/categories/${item.id}`}>
+                    <Edit />
+                  </Link>
+                )}
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(item.id)}
+                  />
+                </div>
+              </TableCell>
+            )}
           </TableRow>
         ))}
       </TableBody>
