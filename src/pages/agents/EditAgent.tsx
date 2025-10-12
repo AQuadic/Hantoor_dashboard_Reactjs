@@ -101,11 +101,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
     onError: (error: unknown) => {
       let errorMessage = t("agentUpdateError");
 
-      if (
-        typeof error === "object" &&
-        error !== null &&
-        "response" in error
-      ) {
+      if (typeof error === "object" && error !== null && "response" in error) {
         const axiosError = error as {
           response?: {
             data?: { message?: string; error?: string };
@@ -127,24 +123,48 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
   });
 
   const handleSubmit = () => {
-    if (!arName || !enName) {
+    // Trim and validate basic agent info
+    const trimmedArName = arName.trim();
+    const trimmedEnName = enName.trim();
+
+    if (!trimmedArName || !trimmedEnName) {
       toast.error(t("pleaseFillAllFields"));
       return;
     }
 
-    // Check if at least one center OR showroom is present and filled
-    const validCenters = centers.filter(
-      (center) =>
-        center.name?.ar &&
-        center.name?.en &&
-        center.description?.ar &&
-        center.description?.en
+    // Helper function to check if a string has meaningful content (not just whitespace)
+    const hasContent = (str: string | undefined): boolean => {
+      return !!str && str.trim().length > 0;
+    };
+
+    // Validate and filter centers - a center is valid only if ALL required fields are filled
+    const validCenters = centers.filter((center) => {
+      // Check if all name and description fields have content
+      const hasValidName =
+        hasContent(center.name?.ar) && hasContent(center.name?.en);
+      const hasValidDescription =
+        hasContent(center.description?.ar) &&
+        hasContent(center.description?.en);
+
+      // All required fields must be present
+      return hasValidName && hasValidDescription;
+    });
+
+    // Check if we have at least one valid center OR one valid showroom
+    const validCentersList = validCenters.filter((c) => c.type === "center");
+    const validShowroomsList = validCenters.filter(
+      (c) => c.type === "show_room"
     );
 
+    if (validCentersList.length === 0 && validShowroomsList.length === 0) {
+      toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
+      return;
+    }
+
     const hasChanges =
-      arName !== agent?.name.ar ||
-      enName !== agent?.name.en ||
-      emailLink !== (agent?.website || agent?.link || "") ||
+      trimmedArName !== agent?.name.ar ||
+      trimmedEnName !== agent?.name.en ||
+      emailLink.trim() !== (agent?.website || agent?.link || "") ||
       JSON.stringify(validCenters) !== JSON.stringify(agent?.centers || []);
 
     if (!hasChanges) {
@@ -155,22 +175,31 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
 
     const payload: UpdateAgentPayload = {
       name: {
-        ar: arName,
-        en: enName,
+        ar: trimmedArName,
+        en: trimmedEnName,
       },
       is_active: "1", // Changed from boolean to string
-      link: emailLink,
+      link: emailLink.trim(),
       // brand_id intentionally omitted (brand removed from UI)
       centers:
-    validCenters.length > 0
-      ? validCenters.map((c) => ({
-          // ensure optional phone/whatsapp fields default to empty string when undefined
-          ...c,
-          phone: c.phone || "",
-          whatsapp: c.whatsapp || "",
-          is_active: c.is_active ?? "1",
-        }))
-      : undefined,
+        validCenters.length > 0
+          ? validCenters.map((c) => ({
+              // ensure optional phone/whatsapp fields default to empty string when undefined
+              ...c,
+              name: {
+                ar: c.name.ar.trim(),
+                en: c.name.en.trim(),
+              },
+              description: {
+                ar: c.description.ar.trim(),
+                en: c.description.en.trim(),
+              },
+              phone: c.phone?.trim() || "",
+              whatsapp: c.whatsapp?.trim() || "",
+              is_active: c.is_active ?? "1",
+              link_google_map: c.link_google_map?.trim() || "",
+            }))
+          : undefined,
     };
 
     updateAgentMutation.mutate(payload);

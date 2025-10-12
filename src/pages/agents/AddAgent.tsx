@@ -61,56 +61,60 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       navigate("/agents");
     },
     onError: (error: any) => {
-  let errorMessage = t("agentCreationError");
+      let errorMessage = t("agentCreationError");
 
-  if (error.response) {
-    const data = error.response.data;
-    if (data?.message) {
-      errorMessage = data.message;
-    }
-    if (data?.errors) {
-      const allErrors = Object.values(data.errors).flat() as string[];
-      errorMessage = allErrors.join(" - ");
-    }
-  } else if (error instanceof Error) {
-    errorMessage = error.message;
-  }
+      if (error.response) {
+        const data = error.response.data;
+        if (data?.message) {
+          errorMessage = data.message;
+        }
+        if (data?.errors) {
+          const allErrors = Object.values(data.errors).flat() as string[];
+          errorMessage = allErrors.join(" - ");
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
 
-  toast.error(errorMessage);
-},
+      toast.error(errorMessage);
+    },
   });
 
   const handleSubmit = () => {
-    if (!arName || !enName) {
+    // Trim and validate basic agent info
+    const trimmedArName = arName.trim();
+    const trimmedEnName = enName.trim();
+
+    if (!trimmedArName || !trimmedEnName) {
       toast.error(t("pleaseFillAllFields"));
       return;
     }
 
-    // brand selection removed; no validation required for brand
+    // Helper function to check if a string has meaningful content (not just whitespace)
+    const hasContent = (str: string | undefined): boolean => {
+      return !!str && str.trim().length > 0;
+    };
 
-    // Check if at least one center OR showroom is present and filled
-    const validCenters = centers.filter(
-      (center) =>
-        center.name?.ar &&
-        center.name?.en &&
-        center.description?.ar &&
-        center.description?.en
+    // Validate and filter centers - a center is valid only if ALL required fields are filled
+    const validCenters = centers.filter((center) => {
+      // Check if all name and description fields have content
+      const hasValidName =
+        hasContent(center.name?.ar) && hasContent(center.name?.en);
+      const hasValidDescription =
+        hasContent(center.description?.ar) &&
+        hasContent(center.description?.en);
+
+      // All required fields must be present
+      return hasValidName && hasValidDescription;
+    });
+
+    // Check if we have at least one valid center OR one valid showroom
+    const validCentersList = validCenters.filter((c) => c.type === "center");
+    const validShowroomsList = validCenters.filter(
+      (c) => c.type === "show_room"
     );
 
-    if (validCenters.length === 0) {
-      toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
-      return;
-    }
-
-    // Check if at least one center OR one showroom exists
-    const hasValidCenter = validCenters.some(
-      (center) => center.type === "center"
-    );
-    const hasValidShowroom = validCenters.some(
-      (center) => center.type === "show_room"
-    );
-
-    if (!hasValidCenter && !hasValidShowroom) {
+    if (validCentersList.length === 0 && validShowroomsList.length === 0) {
       toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
       return;
     }
@@ -129,34 +133,32 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       }
     > = {};
     validCenters.forEach((center, idx) => {
-      // Map local type (center | show_room) to backend numeric codes: "1" = center, "2" = show_room
-      const typeCode = center.type === "center" ? "1" : "2";
       centersPayload[idx] = {
         name: {
-          ar: center.name.ar,
-          en: center.name.en,
+          ar: center.name.ar.trim(),
+          en: center.name.en.trim(),
         },
         description: {
-          ar: center.description.ar,
-          en: center.description.en,
+          ar: center.description.ar.trim(),
+          en: center.description.en.trim(),
         },
         // phone and whatsapp are optional now; include when present or send empty string
-        phone: center.phone || "",
-        whatsapp: center.whatsapp || "",
+        phone: center.phone?.trim() || "",
+        whatsapp: center.whatsapp?.trim() || "",
         type: center.type,
         is_active: center.is_active ? "1" : "0",
-        link_google_map: center.link_google_map || ""
+        link_google_map: center.link_google_map?.trim() || "",
       };
     });
 
     const payload: CreateAgentPayload = {
       name: {
-        ar: arName,
-        en: enName,
+        ar: trimmedArName,
+        en: trimmedEnName,
       },
       is_active: "1", // Always send as string "1"
-      link: emailLink,
-      website,
+      link: emailLink.trim(),
+      website: website.trim(),
       // brand_id intentionally omitted (brand removed from UI)
       // centersPayload uses numeric-string type codes ("1" | "2"); cast to match CreateAgentPayload
       centers: centersPayload as unknown as CreateAgentPayload["centers"],
