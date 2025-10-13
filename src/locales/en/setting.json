@@ -80,6 +80,7 @@
   "pageUpdatedSuccessfully": "Page updated successfully",
   "imageDeleted": "Image deleted successfully",
   "imageAdded": "Slider uploaded successfully",
+  "imageUploading": "Uploading image...",
   "profileAdded": "Profile page added successfully",
   "profileDeleted": "Profile deleted successfully",
   "profileUpdated": "Profile updated successfully",
@@ -88,5 +89,5 @@
   "all": "All",
   "addImage": "Please add an image",
   "pleaseFillTitles": "Please fill titles",
-  "pleaseFillDescriptions":"Please fill descriptions"
+  "pleaseFillDescriptions": "Please fill descriptions"
 }

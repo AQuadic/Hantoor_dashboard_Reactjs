@@ -80,6 +80,7 @@
   "pageUpdatedSuccessfully": "تم تحديث الصفحة بنجاح",
   "imageDeleted": "تم حذف الصورة بنجاح",
   "imageAdded": "تم اضافة الصورة بنجاح",
+  "imageUploading": "جاري رفع الصورة...",
   "profileAdded": "تم اضافة الصفحة بنجاح",
   "profileDeleted": "تم حذف الصفحة بنجاح",
   "profileUpdated": "تم تحديث الصفحة بنجاح",
@@ -88,5 +89,5 @@
   "all": "الكل",
   "addImage": "يرجى إضافة صورة",
   "pleaseFillTitles": "يرجى ملء العناوين",
-  "pleaseFillDescriptions":" يرجى ملء الوصف"
+  "pleaseFillDescriptions": " يرجى ملء الوصف"
 }

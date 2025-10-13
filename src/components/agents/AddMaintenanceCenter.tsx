@@ -12,9 +12,9 @@ import {
 
 // Default country used for WhatsApp inputs when no country code is present
 const DEFAULT_COUNTRY: CountryType = {
-  iso2: "EG",
-  name: "Egypt",
-  phone: ["20"],
+  iso2: "AE",
+  name: "United Arab Emirates",
+  phone: ["971"],
 };
 
 interface AddMaintenanceCenterProps {
@@ -32,25 +32,45 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
 
   // Country state for WhatsApp input per center
   const [whatsappCountries, setWhatsappCountries] = useState<CountryType[]>(
-    centers.map((c) => parsePhoneNumberCountry(c?.whatsapp, DEFAULT_COUNTRY))
+    () =>
+      centers.map((c) => parsePhoneNumberCountry(c?.whatsapp, DEFAULT_COUNTRY))
   );
 
-  // Keep whatsappCountries in sync when centers prop changes (e.g., on load)
-  useEffect(() => {
-    setWhatsappCountries(
-      centers.map((c) => parsePhoneNumberCountry(c?.whatsapp, DEFAULT_COUNTRY))
-    );
-  }, [centers]);
-
-  const [phoneCountries, setPhoneCountries] = useState<CountryType[]>(
+  const [phoneCountries, setPhoneCountries] = useState<CountryType[]>(() =>
     centers.map((c) => parsePhoneNumberCountry(c?.phone, DEFAULT_COUNTRY))
   );
 
+  // Sync country arrays when centers are added/removed from parent (length changes)
+  // but preserve existing country selections for unchanged indices
   useEffect(() => {
-    setPhoneCountries(
-      centers.map((c) => parsePhoneNumberCountry(c?.phone, DEFAULT_COUNTRY))
-    );
-  }, [centers]);
+    if (centers.length > whatsappCountries.length) {
+      // Centers added - add default countries for new items only
+      const newWhatsappCountries = [...whatsappCountries];
+      for (let i = whatsappCountries.length; i < centers.length; i++) {
+        newWhatsappCountries.push(
+          parsePhoneNumberCountry(centers[i]?.whatsapp, DEFAULT_COUNTRY)
+        );
+      }
+      setWhatsappCountries(newWhatsappCountries);
+    } else if (centers.length < whatsappCountries.length) {
+      // Centers removed - trim the array
+      setWhatsappCountries(whatsappCountries.slice(0, centers.length));
+    }
+
+    if (centers.length > phoneCountries.length) {
+      // Centers added - add default countries for new items only
+      const newPhoneCountries = [...phoneCountries];
+      for (let i = phoneCountries.length; i < centers.length; i++) {
+        newPhoneCountries.push(
+          parsePhoneNumberCountry(centers[i]?.phone, DEFAULT_COUNTRY)
+        );
+      }
+      setPhoneCountries(newPhoneCountries);
+    } else if (centers.length < phoneCountries.length) {
+      // Centers removed - trim the array
+      setPhoneCountries(phoneCountries.slice(0, centers.length));
+    }
+  }, [centers.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Add a new empty center form
   const handleAddCenter = () => {

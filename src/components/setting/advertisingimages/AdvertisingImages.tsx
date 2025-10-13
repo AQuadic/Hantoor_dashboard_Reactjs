@@ -39,7 +39,13 @@ const AdvertisingImages = () => {
 
   const [preview, setPreview] = useState<string | null>(null);
 
+  // Clear preview when country changes to allow new uploads
+  useEffect(() => {
+    setPreview(null);
+  }, [selectedCountryId]);
+
   const handleUpload = async (file: File) => {
+    const loadingToast = toast.loading(t("imageUploading"));
     setPreview(URL.createObjectURL(file));
     setUploading(true);
     setUploadError(null);
@@ -52,11 +58,14 @@ const AdvertisingImages = () => {
         imageEn: file,
         country_id: selectedCountryId ?? undefined,
       });
+      toast.dismiss(loadingToast);
       toast.success(t("imageAdded"));
       setPreview(null);
       refetch();
     } catch {
+      toast.dismiss(loadingToast);
       setUploadError("Failed to upload image");
+      toast.error("Failed to upload image");
     } finally {
       setUploading(false);
     }

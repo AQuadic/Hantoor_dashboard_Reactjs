@@ -27,10 +27,22 @@ applyTo: "**"
 ## Conversation History
 
 - Fixed a bug where the "blocked until" date shifted by one month due to timezone-based parsing; changed `toCalendarDate` to parse the yyyy-mm-dd portion directly.
+- 2025-10-13 (Session 1): Made description fields optional in offers, packages, and accessories. Changed default country code from EG (Egypt) to AE (UAE) in agent components.
+- 2025-10-13 (Session 2): Fixed phone country reset issue in agent centers/showrooms. Fixed advertising images upload issue when switching countries. Added loading toast for image uploads.
 
 ## Notes
 
 - File changed: `src/components/users/UsersTable.tsx` — replaced Date parsing with direct ISO date extraction to avoid timezone shifts.
+- Files changed (2025-10-13 Session 1):
+  - `src/api/vehicles/fetchVehicles.ts` — Made VehicleOffer.description optional and updated createVehicle/updateVehicle to conditionally append description fields
+  - `src/components/agents/AddMaintenanceCenter.tsx` — Changed DEFAULT_COUNTRY from EG (Egypt) to AE (UAE)
+  - `src/components/agents/AddSalesShowrooms.tsx` — Changed DEFAULT_COUNTRY from EG (Egypt) to AE (UAE)
+- Files changed (2025-10-13 Session 2):
+  - `src/components/agents/AddMaintenanceCenter.tsx` — Fixed useEffect to preserve country selections when adding new centers (prevents reset to default)
+  - `src/components/agents/AddSalesShowrooms.tsx` — Fixed useEffect to preserve country selections when adding new showrooms (prevents reset to default)
+  - `src/components/setting/advertisingimages/AdvertisingImages.tsx` — Added useEffect to clear preview when country changes + added loading toast with translations
+  - `src/locales/en/setting.json` — Added "imageUploading" translation
+  - `src/locales/ar/setting.json` — Added "imageUploading" translation
 
 ---
 

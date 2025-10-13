@@ -46,7 +46,7 @@ export interface VehicleOffer {
   id?: number;
   vehicle_id?: number;
   name: VehicleName;
-  description: VehicleDescription;
+  description?: VehicleDescription;
   is_active: boolean;
   image?: File | string | null;
   created_at?: string;
@@ -536,14 +536,18 @@ export async function createVehicle(
     data.offers.forEach((offer, index) => {
       formData.append(`offers[${index}][name][ar]`, offer.name.ar);
       formData.append(`offers[${index}][name][en]`, offer.name.en);
-      formData.append(
-        `offers[${index}][description][ar]`,
-        offer.description.ar
-      );
-      formData.append(
-        `offers[${index}][description][en]`,
-        offer.description.en
-      );
+      if (offer.description?.ar) {
+        formData.append(
+          `offers[${index}][description][ar]`,
+          offer.description.ar
+        );
+      }
+      if (offer.description?.en) {
+        formData.append(
+          `offers[${index}][description][en]`,
+          offer.description.en
+        );
+      }
       formData.append(
         `offers[${index}][is_active]`,
         offer.is_active ? "1" : "0"
@@ -746,14 +750,18 @@ export async function updateVehicle(
       data.offers.forEach((offer, index) => {
         formData.append(`offers[${index}][name][ar]`, offer.name.ar);
         formData.append(`offers[${index}][name][en]`, offer.name.en);
-        formData.append(
-          `offers[${index}][description][ar]`,
-          offer.description.ar
-        );
-        formData.append(
-          `offers[${index}][description][en]`,
-          offer.description.en
-        );
+        if (offer.description?.ar) {
+          formData.append(
+            `offers[${index}][description][ar]`,
+            offer.description.ar
+          );
+        }
+        if (offer.description?.en) {
+          formData.append(
+            `offers[${index}][description][en]`,
+            offer.description.en
+          );
+        }
         formData.append(
           `offers[${index}][is_active]`,
           offer.is_active ? "1" : "0"
