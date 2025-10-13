@@ -37,6 +37,9 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
   const navigate = useNavigate();
   const isArabic = i18n.language === "ar";
   const canChangeStatus = useHasPermission("change-status_finance");
+  const canView = useHasPermission("view_finance");
+  const canDelete = useHasPermission("delete_finance");
+  const showActionsColumn = canChangeStatus || canView || canDelete;
 
   const handleViewCountry = (country: FinancingCountry) => {
     const countryName = isArabic ? country.name.ar : country.name.en;
@@ -113,7 +116,7 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("country")}</TableHead>
           <TableHead className="text-right">{t("NOBanks")}</TableHead>
-          {canChangeStatus && (
+          {showActionsColumn && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -126,45 +129,52 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
               {isArabic ? country.name.ar : country.name.en}
             </TableCell>
             <TableCell className="w-full">{country.banks_count}</TableCell>
-            {canChangeStatus && (
+            {showActionsColumn && (
               <TableCell className="flex items-center gap-2">
-                <Switch
-                  isSelected={country.is_active}
-                  onChange={async (e) => {
-                    // Prevent row click navigation when toggling
-                    e.stopPropagation();
-                    if (country.banks_count === 0) return;
-                    await handleToggleStatus(country, e.target.checked);
-                  }}
-                />
-                <button
-                  type="button"
-                  className="cursor-pointer"
-                  onClick={() => handleViewCountry(country)}
-                  aria-label={
-                    isArabic
-                      ? `عرض ${country.name.ar}`
-                      : `View ${country.name.en}`
-                  }
-                >
-                  <View />
-                </button>
-                {country.banks_count > 0 ? (
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(country.id)}
+                {canChangeStatus && (
+                  <Switch
+                    isSelected={country.is_active}
+                    onChange={async (e) => {
+                      // Prevent row click navigation when toggling
+                      e.stopPropagation();
+                      if (country.banks_count === 0) return;
+                      await handleToggleStatus(country, e.target.checked);
+                    }}
                   />
-                ) : (
+                )}
+
+                {canView && (
                   <button
                     type="button"
-                    disabled
-                    className="cursor-not-allowed opacity-50"
+                    className="cursor-pointer"
+                    onClick={() => handleViewCountry(country)}
                     aria-label={
-                      isArabic ? `حذف غير متاح` : "Delete not available"
+                      isArabic
+                        ? `عرض ${country.name.ar}`
+                        : `View ${country.name.en}`
                     }
                   >
-                    <Delete />
+                    <View />
                   </button>
                 )}
+
+                {canDelete &&
+                  (country.banks_count > 0 ? (
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(country.id)}
+                    />
+                  ) : (
+                    <button
+                      type="button"
+                      disabled
+                      className="cursor-not-allowed opacity-50"
+                      aria-label={
+                        isArabic ? `حذف غير متاح` : "Delete not available"
+                      }
+                    >
+                      <Delete />
+                    </button>
+                  ))}
               </TableCell>
             )}
           </TableRow>
