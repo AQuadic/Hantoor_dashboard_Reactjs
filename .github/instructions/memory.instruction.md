@@ -932,7 +932,7 @@ Implementation follows project conventions with TypeScript interfaces, TanStack 
 
 - 2025-08-03: Requirement added to use "Helvetica Neue W23 for SKY" as the global font across the entire project. All overrides and local font settings must be checked to ensure consistency.
 - 2025-08-11: Login functionality reported as not working. Need to investigate Login component, auth store, API integration, and routing to identify and fix issues.
- 
+
   # 2025-10-08: Made phone and whatsapp optional in agent center/showroom forms ✅
 
   - Change: Updated `src/pages/agents/AddAgent.tsx` and `src/pages/agents/EditAgent.tsx` so that `phone` and `whatsapp` are optional fields when validating centers/showrooms and when building the payload sent to the API. Empty values are now sent as empty strings instead of requiring a value or using placeholder "N/A".
@@ -1115,3 +1115,11 @@ const handleSave = async (
   4. Run full lint/TS build, fix remaining warnings/errors, and run quick smoke tests in the app.
 
 I will continue applying the remaining patches and then run a full lint/build pass; progress will be appended to this memory entry.
+
+# 2025-10-13: Fixed duplicate error toast in AddPermissionPage ✅
+
+- Change: Removed `onError` handler from the `updateMutation` in `src/pages/subordinates/AddPermissionPage.tsx` so that backend errors are surfaced only once via the centralized submit catch and `extractBackendMessage`. This prevents the raw "Request failed with status code 422" toast from appearing alongside the user-friendly message.
+
+## Memory Update
+
+- Recorded fix to prevent duplicate toasts when role create/update fails.

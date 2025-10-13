@@ -77,12 +77,6 @@ const AddPermissionPage = () => {
       // Navigate back to subordinates page with permissions tab
       navigate("/subordinates");
     },
-    onError: (error: unknown) => {
-      console.error("Error updating role:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : t("failedToUpdateRole");
-      toast.error(errorMessage);
-    },
   });
 
   // Effect to populate form when editing
@@ -172,28 +166,46 @@ const AddPermissionPage = () => {
     error: unknown,
     tFn: (k: string) => string
   ) => {
-    let backendMsg = "An unexpected error occurred";
-    if (error instanceof Error) {
-      backendMsg = error.message;
-      // Try to extract backend error message if available
-      if (
-        "response" in error &&
-        typeof error.response === "object" &&
-        error.response
-      ) {
-        const response = error.response as Record<string, unknown>;
-        if (typeof response.data === "object" && response.data) {
-          const data = response.data as Record<string, unknown>;
-          if (typeof data.message === "string") {
-            backendMsg = data.message;
-          } else if (typeof data.error === "string") {
-            backendMsg = data.error;
-          }
-        }
+    // Default friendly message
+    const defaultMsg =
+      tFn("failedToUpdateRole") || "An unexpected error occurred";
+    const tryExtractFromResponse = (obj: unknown): string | null => {
+      if (!obj || typeof obj !== "object") return null;
+      const data = obj as Record<string, unknown>;
+      const msg =
+        typeof data.message === "string" && data.message.trim()
+          ? data.message
+          : null;
+      if (msg) return msg;
+      const err =
+        typeof data.error === "string" && data.error.trim() ? data.error : null;
+      if (err) return err;
+      const errs = data.errors as Record<string, unknown> | undefined;
+      if (errs && typeof errs === "object") {
+        const first = Object.values(errs)[0];
+        if (Array.isArray(first) && first[0]) return String(first[0]);
+        if (typeof first === "string") return first;
       }
+      return null;
+    };
+
+    // Try known locations for backend messages
+    const respData =
+      typeof error === "object" && error !== null
+        ? (error as Record<string, unknown>)["response"]
+        : undefined;
+    const fromResponse = tryExtractFromResponse(
+      respData && (respData as Record<string, unknown>)?.["data"]
+    );
+    if (fromResponse) return fromResponse;
+
+    if (error instanceof Error) {
+      const msg = error.message || "";
+      if (msg.startsWith("Request failed with status code")) return defaultMsg;
+      return msg || defaultMsg;
     }
 
-    return backendMsg || tFn("failedToUpdateRole");
+    return defaultMsg;
   };
 
   const handleSubmit = async () => {
