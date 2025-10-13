@@ -47,7 +47,9 @@ const FeaturesTable: React.FC<Props> = ({ features, refetch }) => {
       });
       toast.success(t("statusUpdated") || "Status updated");
       refetch();
-    } catch (err) {
+    } catch (err: unknown) {
+      // log the error for debugging and restore previous state
+      console.error(err);
       feature.is_active = prevState;
       toast.error(t("somethingWentWrong"));
     } finally {

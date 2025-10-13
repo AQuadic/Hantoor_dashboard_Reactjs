@@ -60,6 +60,8 @@ const EditFeatures = () => {
           en: enDescription,
         },
         is_active: isActive,
+        image: profileImage ?? undefined,
+        remove_image: profileImage === null && existingImageUrl === null,
       });
       toast.success(t("featuedUpdated"));
       navigate("/settings?section=App Features");
