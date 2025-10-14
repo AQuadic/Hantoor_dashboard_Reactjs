@@ -1,16 +1,28 @@
 import DashboardHeader from "@/components/general/dashboard/DashboardHeader";
 import TabsFilter from "@/components/general/dashboard/TabsFilter";
 import React from "react";
+import { Agent } from "@/api/agents/getAgentById";
+import { useTranslation } from "react-i18next";
 
 interface ViewAgentHeaderProps {
   selectedFilter: string;
   setSelectedFilter: React.Dispatch<React.SetStateAction<string>>;
+  agent?: Agent;
 }
 
 const ViewAgentHeader = ({
   selectedFilter,
   setSelectedFilter,
+  agent,
 }: ViewAgentHeaderProps) => {
+  const { i18n } = useTranslation();
+  const isArabic = i18n.language === "ar";
+
+  const getAgentName = () => {
+    if (!agent) return "...";
+    return isArabic ? agent.name.ar : agent.name.en;
+  };
+
   return (
     <div className="bg-white rounded-b-2xl">
       <DashboardHeader
@@ -30,7 +42,7 @@ const ViewAgentHeader = ({
           {
             titleAr: "تفاصيل الوكيل",
             titleEn: "Agent details",
-            link: "/dashboard/cars/view-agent",
+            link: `/cars/agent/${agent?.id || ""}`,
           },
         ]}
       />
@@ -41,7 +53,7 @@ const ViewAgentHeader = ({
             alt="Agent Header"
             className="w-[56px] h-[56px] object-cover bg-white rounded-lg border-2 p-2"
           />
-          <h3 className="text-xl">الشركة الدولية التجارية</h3>
+          <h3 className="text-xl">{getAgentName()}</h3>
         </div>
       </div>
       <TabsFilter

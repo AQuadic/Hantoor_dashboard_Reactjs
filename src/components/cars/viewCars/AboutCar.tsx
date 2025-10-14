@@ -126,12 +126,16 @@ const AboutCar = ({ vehicle }: AboutCarProps) => {
                   {row.insuranceIncluded}
                 </TableCell>
                 <TableCell className="min-w-[15%]">
-                  <Link
-                    to={`/cars/agent/${row.id}`}
-                    className="text-primary underline cursor-pointer"
-                  >
-                    {row.agentName}
-                  </Link>
+                  {vehicle.agent_id ? (
+                    <Link
+                      to={`/cars/agent/${vehicle.agent_id}`}
+                      className="text-primary underline cursor-pointer"
+                    >
+                      {row.agentName}
+                    </Link>
+                  ) : (
+                    <span>{row.agentName}</span>
+                  )}
                 </TableCell>
                 <TableCell className="min-w-[15%]">{row.leaseToOwn}</TableCell>
                 <TableCell className="w-full">{row.addedAt}</TableCell>
