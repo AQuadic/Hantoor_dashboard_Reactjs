@@ -137,29 +137,84 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       return !!str && str.trim().length > 0;
     };
 
-    // Validate and filter centers - a center is valid only if ALL required fields are filled
-    const validCenters = centers.filter((center) => {
-      // Check if all name and description fields have content
-      const hasValidName =
-        hasContent(center.name?.ar) && hasContent(center.name?.en);
-      const hasValidDescription =
+    // Separate centers into different categories for better validation
+    const allCenters = centers.filter((c) => c.type === "center");
+    const allShowrooms = centers.filter((c) => c.type === "show_room");
+
+    // Check if any center/showroom has partial data (some fields filled, some not)
+    const hasPartialData = (center: AgentCenter): boolean => {
+      const nameAr = hasContent(center.name?.ar);
+      const nameEn = hasContent(center.name?.en);
+      const descAr = hasContent(center.description?.ar);
+      const descEn = hasContent(center.description?.en);
+      const phone = hasContent(center.phone);
+
+      const filledFields = [nameAr, nameEn, descAr, descEn, phone].filter(
+        Boolean
+      ).length;
+      return filledFields > 0 && filledFields < 5;
+    };
+
+    // Check if any center/showroom is completely empty
+    const isEmpty = (center: AgentCenter): boolean => {
+      return (
+        !hasContent(center.name?.ar) &&
+        !hasContent(center.name?.en) &&
+        !hasContent(center.description?.ar) &&
+        !hasContent(center.description?.en) &&
+        !hasContent(center.phone)
+      );
+    };
+
+    // Check if any center/showroom is complete
+    const isComplete = (center: AgentCenter): boolean => {
+      return (
+        hasContent(center.name?.ar) &&
+        hasContent(center.name?.en) &&
         hasContent(center.description?.ar) &&
-        hasContent(center.description?.en);
-      // Phone number is required for both centers and showrooms
-      const hasValidPhone = hasContent(center.phone);
+        hasContent(center.description?.en) &&
+        hasContent(center.phone)
+      );
+    };
 
-      // All required fields must be present
-      return hasValidName && hasValidDescription && hasValidPhone;
-    });
+    // Validate centers and showrooms
+    const incompleteCenters = [...allCenters, ...allShowrooms].filter(
+      (c) => !isEmpty(c) && hasPartialData(c)
+    );
 
-    // Check if we have at least one valid center OR one valid showroom
+    if (incompleteCenters.length > 0) {
+      // Check what specific fields are missing
+      const missingNames = incompleteCenters.some(
+        (c) => !hasContent(c.name?.ar) || !hasContent(c.name?.en)
+      );
+      const missingDescriptions = incompleteCenters.some(
+        (c) => !hasContent(c.description?.ar) || !hasContent(c.description?.en)
+      );
+      const missingPhones = incompleteCenters.some((c) => !hasContent(c.phone));
+
+      if (missingNames) {
+        toast.error(t("centerIncompleteName"));
+      } else if (missingDescriptions) {
+        toast.error(t("centerIncompleteDescription"));
+      } else if (missingPhones) {
+        toast.error(t("centerMissingPhone"));
+      } else {
+        toast.error(t("centerIncompleteData"));
+      }
+      return;
+    }
+
+    // Filter out completely empty centers/showrooms and keep only complete ones
+    const validCenters = [...allCenters, ...allShowrooms].filter(isComplete);
+
+    // Check if we have at least one complete center OR showroom
     const validCentersList = validCenters.filter((c) => c.type === "center");
     const validShowroomsList = validCenters.filter(
       (c) => c.type === "show_room"
     );
 
     if (validCentersList.length === 0 && validShowroomsList.length === 0) {
-      toast.error(t("pleaseAddAtLeastOneCenterOrShowroom"));
+      toast.error(t("noCentersOrShowrooms"));
       return;
     }
 
