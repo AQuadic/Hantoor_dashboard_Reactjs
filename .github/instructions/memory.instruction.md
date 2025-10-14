@@ -328,6 +328,10 @@ ads_images[0][image] = File; // from CarAdvertisingImages component
 - **Build Tool**: Vite v7.0.5
 - **TypeScript**: All compilation errors resolved
 
+# 2025-10-14: Made car main image and video optional in AddCars form ✅
+
+- Change: Updated `src/pages/cars/AddCars.tsx` so `mainImage` and `videoFile` are treated as optional fields when loading vehicle data for edit. The helpers now return empty strings when an image/video URL is not present, preventing the form from requiring these fields and ensuring consistent empty-string payloads to the API.
+
 # 2025-09-08: FIXED BUILD ERRORS - Casing and payload type fixes
 
 - Task completed: Fixed TypeScript build errors that prevented the project from compiling.

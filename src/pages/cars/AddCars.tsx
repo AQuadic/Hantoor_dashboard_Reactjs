@@ -74,21 +74,23 @@ const AddCarsForm = () => {
       };
 
       // Helper function to get video URL from VehicleImageObject
-      const getVideoFile = (videoObj: unknown): string | null => {
+      // Return empty string when not available so the field is optional
+      const getVideoFile = (videoObj: unknown): string => {
         if (videoObj && typeof videoObj === "object" && "url" in videoObj) {
           const video = videoObj as { url?: string };
-          return video.url || null;
+          return video.url || "";
         }
-        return null;
+        return "";
       };
 
       // Helper function to get main image URL from VehicleImageObject
-      const getMainImageUrl = (imageObj: unknown): string | null => {
+      // Return empty string when not available so the field is optional
+      const getMainImageUrl = (imageObj: unknown): string => {
         if (imageObj && typeof imageObj === "object" && "url" in imageObj) {
           const image = imageObj as { url?: string };
-          return image.url || null;
+          return image.url || "";
         }
-        return null;
+        return "";
       };
 
       // Helper function to safely convert to string
@@ -195,8 +197,9 @@ const AddCarsForm = () => {
         engine_volume_id: vehicle.engine_volume_id
           ? safeToString(vehicle.engine_volume_id)
           : "",
-        mainImage: getMainImageUrl(vehicle.image),
-        videoFile: getVideoFile(vehicle.video),
+        // Make main image and video optional (empty string when missing)
+        mainImage: getMainImageUrl(vehicle.image) || "",
+        videoFile: getVideoFile(vehicle.video) || "",
         offers: vehicle.offers || [],
         packages: vehicle.packages || [],
         features: vehicle.features || [],

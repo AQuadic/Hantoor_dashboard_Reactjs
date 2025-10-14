@@ -73,7 +73,10 @@ const CarOffers = () => {
                 value={offer.name?.ar || ""}
                 onChange={(e) =>
                   updateOffer(index, {
-                    name: { ...offer.name, ar: e.target.value },
+                    name: {
+                      ...(offer.name ?? { ar: "", en: "" }),
+                      ar: e.target.value,
+                    },
                   })
                 }
               />
@@ -89,7 +92,10 @@ const CarOffers = () => {
                 value={offer.name?.en || ""}
                 onChange={(e) =>
                   updateOffer(index, {
-                    name: { ...offer.name, en: e.target.value },
+                    name: {
+                      ...(offer.name ?? { ar: "", en: "" }),
+                      en: e.target.value,
+                    },
                   })
                 }
               />
@@ -105,7 +111,10 @@ const CarOffers = () => {
                 value={offer.description?.ar || ""}
                 onChange={(e) =>
                   updateOffer(index, {
-                    description: { ...offer.description, ar: e.target.value },
+                    description: {
+                      ...(offer.description ?? { ar: "", en: "" }),
+                      ar: e.target.value,
+                    },
                   })
                 }
               />
@@ -121,7 +130,10 @@ const CarOffers = () => {
                 value={offer.description?.en || ""}
                 onChange={(e) =>
                   updateOffer(index, {
-                    description: { ...offer.description, en: e.target.value },
+                    description: {
+                      ...(offer.description ?? { ar: "", en: "" }),
+                      en: e.target.value,
+                    },
                   })
                 }
               />
