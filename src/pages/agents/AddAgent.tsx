@@ -103,9 +103,11 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       const hasValidDescription =
         hasContent(center.description?.ar) &&
         hasContent(center.description?.en);
+      // Phone number is required for both centers and showrooms
+      const hasValidPhone = hasContent(center.phone);
 
       // All required fields must be present
-      return hasValidName && hasValidDescription;
+      return hasValidName && hasValidDescription && hasValidPhone;
     });
 
     // Check if we have at least one valid center OR one valid showroom
@@ -142,7 +144,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
           ar: center.description.ar.trim(),
           en: center.description.en.trim(),
         },
-        // phone and whatsapp are optional now; include when present or send empty string
+        // phone is required; whatsapp is optional - include when present or send empty string
         phone: center.phone?.trim() || "",
         whatsapp: center.whatsapp?.trim() || "",
         type: center.type,

@@ -145,9 +145,11 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       const hasValidDescription =
         hasContent(center.description?.ar) &&
         hasContent(center.description?.en);
+      // Phone number is required for both centers and showrooms
+      const hasValidPhone = hasContent(center.phone);
 
       // All required fields must be present
-      return hasValidName && hasValidDescription;
+      return hasValidName && hasValidDescription && hasValidPhone;
     });
 
     // Check if we have at least one valid center OR one valid showroom
