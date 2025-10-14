@@ -15,7 +15,11 @@ import { useTranslation } from "react-i18next";
 import { updateFaq } from "@/api/faq/editFaq";
 import { getFAQById, FAQ } from "@/api/faq/getFaqById";
 import toast from "react-hot-toast";
-import { CountriesResponse, Country, getCountries } from "@/api/countries/getCountry";
+import {
+  CountriesResponse,
+  Country,
+  getCountries,
+} from "@/api/countries/getCountry";
 import { useQuery } from "@tanstack/react-query";
 
 const EditFaq = () => {
@@ -27,46 +31,31 @@ const EditFaq = () => {
   const [enBody, setEnBody] = useState("");
   const [arQuestion, setArQuestion] = useState("");
   const [enQuestion, setEnQuestion] = useState("");
-  const [, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { data: countriesData, isLoading: countriesLoading } = useQuery<CountriesResponse>({
-    queryKey: ["countries"],
-    queryFn: () => getCountries(1),
-  });
+  const { data: countriesData, isLoading: countriesLoading } =
+    useQuery<CountriesResponse>({
+      queryKey: ["countries"],
+      queryFn: () => getCountries(1),
+    });
   useEffect(() => {
     if (!faqId) return;
 
     const fetchFaq = async () => {
       try {
-        setLoading(true);
         const data: FAQ = await getFAQById(faqId);
 
         setCountryId(data.country_id ? String(data.country_id) : "");
         setArQuestion(data.question?.ar || "");
         setEnQuestion(data.question?.en || "");
-
-        const parseAnswer = (val?: string) => {
-          if (!val) return "";
-          try {
-            const parsed = JSON.parse(val);
-            return parsed?.value || "";
-          } catch {
-            return val;
-          }
-        };
-
-        setArBody(parseAnswer(data.answer?.ar));
-        setEnBody(parseAnswer(data.answer?.en));
+        setArBody(data.answer?.ar || "");
+        setEnBody(data.answer?.en || "");
       } catch (error) {
         console.error("Failed to fetch FAQ:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchFaq();
   }, [faqId]);
-
 
   const handleSave = async () => {
     if (!faqId) {
@@ -75,29 +64,33 @@ const EditFaq = () => {
     }
 
     try {
-      setLoading(true);
       await updateFaq(faqId, {
         country_id: countryId,
         type: "Frequent Questions",
         question: { ar: arQuestion, en: enQuestion },
         answer: { ar: arBody, en: enBody },
       });
-      toast.success(t('editedSuccessfully'));
+      toast.success(t("editedSuccessfully"));
       navigate("/faqs");
-    } catch (error: any) {
-        if (error.response && error.response.data) {
-          const apiMessage =
-            error.response.data.message ||
-            JSON.stringify(error.response.data.errors) ||
-            "Something went wrong";
+    } catch (error: unknown) {
+      if (error && typeof error === "object" && "response" in error) {
+        const response = (
+          error as {
+            response?: { data?: { message?: string; errors?: unknown } };
+          }
+        ).response;
+        const apiMessage =
+          response?.data?.message ||
+          (response?.data?.errors
+            ? JSON.stringify(response.data.errors)
+            : "") ||
+          "Something went wrong";
 
-          toast.error(apiMessage);
-        } else {
-          toast.error("Network error. Please try again.");
-        }
-      } finally {
-        setLoading(false);
+        toast.error(apiMessage);
+      } else {
+        toast.error("Network error. Please try again.");
       }
+    }
   };
 
   return (
@@ -115,23 +108,26 @@ const EditFaq = () => {
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Country */}
           <div className="md:w-1/2 w-full">
-              <Select
-                value={countryId}
-                onValueChange={(value) => setCountryId(value)}
-                disabled={countriesLoading || !countriesData?.data?.length}
+            <Select
+              value={countryId}
+              onValueChange={(value) => setCountryId(value)}
+              disabled={countriesLoading || !countriesData?.data?.length}
+            >
+              <SelectTrigger
+                className="w-full !h-16 rounded-[12px] mt-4"
+                dir="rtl"
               >
-                <SelectTrigger className="w-full !h-16 rounded-[12px] mt-4" dir="rtl">
-                  <SelectValue placeholder={t("country")} />
-                </SelectTrigger>
-                <SelectContent dir="rtl">
-                  {countriesData?.data.map((country: Country) => (
-                    <SelectItem key={country.id} value={country.id.toString()}>
-                      {country.name.ar}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+                <SelectValue placeholder={t("country")} />
+              </SelectTrigger>
+              <SelectContent dir="rtl">
+                {countriesData?.data.map((country: Country) => (
+                  <SelectItem key={country.id} value={country.id.toString()}>
+                    {country.name.ar}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Arabic Question */}
@@ -154,7 +150,6 @@ const EditFaq = () => {
           </div>
         </div>
 
-
         <div className="flex md:flex-row flex-col items-center gap-[15px] mt-4">
           {/* Arabic Answer */}
           <div className="relative w-full">
@@ -175,7 +170,7 @@ const EditFaq = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave}/>
+          <DashboardButton titleAr="حفظ" titleEn="Save" onClick={handleSave} />
         </div>
       </div>
     </section>

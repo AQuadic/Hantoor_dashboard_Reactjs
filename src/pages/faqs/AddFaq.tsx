@@ -17,7 +17,11 @@ import {
 } from "@/components/ui/select";
 
 import { createFAQ, CreateFAQPayload } from "@/api/faq/addFaq";
-import { getCountries, CountriesResponse, Country } from "@/api/countries/getCountry";
+import {
+  getCountries,
+  CountriesResponse,
+  Country,
+} from "@/api/countries/getCountry";
 
 const AddFaq = () => {
   const { t } = useTranslation("questions");
@@ -31,21 +35,26 @@ const AddFaq = () => {
   const [type] = useState<"Frequent Questions" | "Technical Support Questions">(
     "Frequent Questions"
   );
-  const [, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string[]>>({});
   const navigate = useNavigate();
-  const { data: countriesData, isLoading: countriesLoading } = useQuery<CountriesResponse>({
-    queryKey: ["countries"],
-    queryFn: () => getCountries(1),
-  });
+  const { data: countriesData, isLoading: countriesLoading } =
+    useQuery<CountriesResponse>({
+      queryKey: ["countries"],
+      queryFn: () => getCountries(1),
+    });
 
   const handleSubmit = async () => {
     if (!countryId) {
-      toast.dismiss()
+      toast.dismiss();
       toast.error(t("selectCountry"));
       return;
     }
-    if (!arQuestion.trim() || !enQuestion.trim() || !arBody.trim() || !enBody.trim()) {
+    if (
+      !arQuestion.trim() ||
+      !enQuestion.trim() ||
+      !arBody.trim() ||
+      !enBody.trim()
+    ) {
       toast.dismiss();
       toast.error(t("pleaseFillAllFields"));
       return;
@@ -58,10 +67,8 @@ const AddFaq = () => {
       answer: { ar: arBody, en: enBody },
     };
 
-    setLoading(true);
     try {
       const result = await createFAQ(payload);
-      setLoading(false);
 
       if (result) {
         toast.success(t("addedSuccessfully"));
@@ -75,16 +82,20 @@ const AddFaq = () => {
       } else {
         toast.error(t("Something went wrong"));
       }
-    } catch (err: any) {
-      setLoading(false);
-      if (err?.errors) {
-        setErrors(err.errors);
-        const errorMessages = Object.entries(err.errors)
-          .map(([key, msgs]) => `${key}: ${(msgs as string[]).join(", ")}`)
+    } catch (err: unknown) {
+      if (err && typeof err === "object" && "errors" in err) {
+        const errorObj = err as { errors: Record<string, string[]> };
+        setErrors(errorObj.errors);
+        const errorMessages = Object.entries(errorObj.errors)
+          .map(([key, msgs]) => `${key}: ${msgs.join(", ")}`)
           .join("\n");
         toast.error(errorMessages);
+      } else if (err && typeof err === "object" && "message" in err) {
+        toast.error(
+          (err as { message: string }).message || t("Something went wrong")
+        );
       } else {
-        toast.error(err?.message || t("Something went wrong"));
+        toast.error(t("Something went wrong"));
       }
     }
   };
@@ -108,7 +119,10 @@ const AddFaq = () => {
               onValueChange={(value) => setCountryId(value)}
               disabled={countriesLoading || !countriesData?.data?.length}
             >
-              <SelectTrigger className="w-full !h-16 rounded-[12px] mt-4" dir="rtl">
+              <SelectTrigger
+                className="w-full !h-16 rounded-[12px] mt-4"
+                dir="rtl"
+              >
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
               <SelectContent dir="rtl">
@@ -120,7 +134,9 @@ const AddFaq = () => {
               </SelectContent>
             </Select>
             {errors["country_id"] && (
-              <p className="text-red-500 mt-1">{errors["country_id"].join(", ")}</p>
+              <p className="text-red-500 mt-1">
+                {errors["country_id"].join(", ")}
+              </p>
             )}
           </div>
         </div>
@@ -150,9 +166,9 @@ const AddFaq = () => {
           <div className="relative w-full">
             <DashboardTextEditor
               title={t("arAnswer")}
-               body={arBody}
-               setBody={setArBody}
-              />
+              body={arBody}
+              setBody={setArBody}
+            />
           </div>
           {/* English Answer */}
           <div className="relative w-full">
@@ -165,7 +181,11 @@ const AddFaq = () => {
         </div>
 
         <div className="mt-4">
-          <DashboardButton titleAr="اضافة" titleEn="Add" onClick={handleSubmit} />
+          <DashboardButton
+            titleAr="اضافة"
+            titleEn="Add"
+            onClick={handleSubmit}
+          />
         </div>
       </div>
     </section>
