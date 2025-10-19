@@ -63,10 +63,19 @@ const RentToOwn: React.FC = () => {
 
   // Update WhatsApp number and phone country in form when they change
   React.useEffect(() => {
-    if (phone !== formData?.rent_to_own_whatsapp) {
-      updateField?.("rent_to_own_whatsapp", phone as unknown as string);
+    if (!selectedCountry) return;
+
+    const countryCode = selectedCountry.phone?.[0] || "";
+    let formattedPhone = phone.trim();
+
+    if (formattedPhone && !formattedPhone.startsWith("+")) {
+      formattedPhone = `+${countryCode}${formattedPhone.replace(/^0+/, "")}`;
     }
-  }, [phone, formData?.rent_to_own_whatsapp, updateField]);
+
+    if (formattedPhone !== formData?.rent_to_own_whatsapp) {
+      updateField?.("rent_to_own_whatsapp", formattedPhone as unknown as string);
+    }
+  }, [phone, selectedCountry, formData?.rent_to_own_whatsapp, updateField]);
 
   React.useEffect(() => {
     const rawFormCountry = formData?.rent_to_own_phone_country;
