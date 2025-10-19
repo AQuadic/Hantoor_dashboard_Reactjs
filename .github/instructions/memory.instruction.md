@@ -44,6 +44,10 @@ applyTo: "**"
   - `src/locales/en/setting.json` — Added "imageUploading" translation
   - `src/locales/ar/setting.json` — Added "imageUploading" translation
 
+# 2025-10-19: SupportMessages status field updated
+
+- Updated `src/components/supportmessages/SupportMessagesTable.tsx` to stop sending `is_active` and instead send `status` with values `pending` or `resolved` when toggling message state; added local `statusMap` to manage optimistic UI updates.
+
 ---
 
 ## applyTo: "\*\*"

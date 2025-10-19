@@ -34,7 +34,9 @@ const SupportMessagesTable = ({
   const { t, i18n } = useTranslation("questions");
   const [openMessageId, setOpenMessageId] = useState<number | null>(null);
   const [notesMap, setNotesMap] = useState<Record<number, string>>({});
-  const [activeMap, setActiveMap] = useState<Record<number, boolean>>({});
+  // statusMap holds the local override for a conversation's status.
+  // backend expects `status` with values like 'pending' or 'resolved'
+  const [statusMap, setStatusMap] = useState<Record<number, string>>({});
   const debouncedUpdaters = useRef<Record<number, (value: string) => void>>({});
 
   const handleDelete = async (id: number) => {
@@ -45,16 +47,23 @@ const SupportMessagesTable = ({
 
   const handleUpdate = async (
     id: number,
-    updates: { notes?: string; status?: string; is_active?: boolean }
+    updates: { notes?: string; status?: string }
   ) => {
     try {
       await updateConversation(id, updates);
       toast.dismiss();
       toast.success(t("conversationUpdated"));
       refetch();
-    } catch (err: any) {
-      const message =
-        err?.response?.data?.message || err?.message || t("error");
+    } catch (err: unknown) {
+      const extractMessage = (e: unknown) => {
+        if (!e || typeof e !== "object") return undefined;
+        const maybe = e as {
+          response?: { data?: { message?: string } };
+          message?: string;
+        };
+        return maybe.response?.data?.message || maybe.message;
+      };
+      const message = extractMessage(err) || t("error");
       toast.error(message);
     }
   };
@@ -112,17 +121,17 @@ const SupportMessagesTable = ({
                   <div className="flex items-center gap-[10px]">
                     <button
                       className={`w-[78px] h-[37px] rounded-[8.15px] font-bold text-[13px] ${
-                        activeMap[message.id] ?? message.is_active
+                        (statusMap[message.id] ?? message.status) === "pending"
                           ? "bg-[#2A32F8] text-[#FFFFFF]"
                           : "bg-[#FFFFFF] text-[#A1A1A1]"
                       }`}
                       onClick={() => {
-                        const newValue = true;
-                        setActiveMap((prev) => ({
+                        const newValue = "pending";
+                        setStatusMap((prev) => ({
                           ...prev,
                           [message.id]: newValue,
                         }));
-                        handleUpdate(message.id, { is_active: newValue });
+                        handleUpdate(message.id, { status: newValue });
                       }}
                     >
                       {t("working")}
@@ -130,17 +139,17 @@ const SupportMessagesTable = ({
 
                     <button
                       className={`w-[78px] h-[37px] rounded-[8.15px] font-normal text-[13px] ${
-                        !(activeMap[message.id] ?? message.is_active)
+                        (statusMap[message.id] ?? message.status) === "resolved"
                           ? "bg-[#2A32F8] text-[#FFFFFF]"
                           : "bg-[#FFFFFF] text-[#A1A1A1]"
                       }`}
                       onClick={() => {
-                        const newValue = false;
-                        setActiveMap((prev) => ({
+                        const newValue = "resolved";
+                        setStatusMap((prev) => ({
                           ...prev,
                           [message.id]: newValue,
                         }));
-                        handleUpdate(message.id, { is_active: newValue });
+                        handleUpdate(message.id, { status: newValue });
                       }}
                     >
                       {t("done")}
@@ -200,7 +209,7 @@ const SupportMessagesTable = ({
               transition={{ duration: 0.3 }}
               className="fixed top-0 right-0 h-full md:w-[493px] w-[300px] bg-white shadow-lg z-50 overflow-y-auto"
             >
-              <SupportMsgsConversation conversationId={openMessageId!} />
+              <SupportMsgsConversation conversationId={openMessageId} />
             </motion.div>
           </>
         )}
