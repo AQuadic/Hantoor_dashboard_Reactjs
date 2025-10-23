@@ -1,22 +1,15 @@
 import { Select, SelectItem } from "@heroui/react";
 import DashboardInput from "@/components/general/DashboardInput";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import CarDetailsField from "@/components/cars/addcars/CarDetailsField";
 import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
 import { VehicleFeature } from "@/api/vehicles/fetchVehicles";
 import { useAllDropdownData, useVehicleTypes } from "@/hooks/useDropdownData";
-import {
-  getCountries,
-  Country,
-  getAllCountries,
-} from "@/api/countries/getCountry";
+import { getAllCountries, Country } from "@/api/countries/getCountry";
 import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { useQuery } from "@tanstack/react-query";
-import { Brand } from "@/types/dropdown";
-import { fetchBrands } from "@/api/brand/fetchBrands";
-import { fetchAgents, Agent } from "@/api/agents/fetchAgents";
 
 const CarDetails = () => {
   const { t, i18n } = useTranslation("cars");
@@ -29,16 +22,11 @@ const CarDetails = () => {
     updateFeature,
   } = useVehicleForm();
 
-  // State for countries data
-  const [, setCountries] = useState<Country[]>([]);
-  const [countriesLoading, setCountriesLoading] = useState(true);
-
-  // Fetch all dropdown data (excluding countries and vehicle bodies)
+  // Fetch all dropdown data
   const {
     brands,
     agents,
     models,
-    // vehicleTypes will be fetched separately with selected brand
     vehicleClasses,
     brandOrigins,
     seats,
@@ -50,56 +38,26 @@ const CarDetails = () => {
   const selectedBrandId = formData?.brand_id;
   const vehicleTypes = useVehicleTypes(selectedBrandId);
 
-  // Fetch vehicle bodies - use same approach as Models page
+  // Fetch vehicle bodies - non-paginated
   const { data: vehicleBodiesData, isLoading: vehicleBodiesLoading } =
     useVehicleBodies({
-      pagination: true,
+      pagination: false,
     });
 
-  const { data: allBrands = [] } = useQuery<Brand[], Error>({
-    queryKey: ["allBrands"],
-    queryFn: async () => {
-      const res = await fetchBrands(1, "", undefined, undefined, false); // isPaginated = false
-      return res.data as Brand[];
-    },
-  });
-
-  const { data: allCountries = [] } = useQuery<Country[], Error>({
+  // Fetch all countries - non-paginated
+  const { data: allCountries = [], isLoading: countriesLoading } = useQuery<
+    Country[],
+    Error
+  >({
     queryKey: ["allCountries"],
     queryFn: async () => {
       return await getAllCountries();
     },
   });
 
-  const { data: allAgents = [] } = useQuery<Agent[], Error>({
-    queryKey: ["allAgents"],
-    queryFn: async () => {
-      const res = await fetchAgents(1, "", undefined, false); // isPaginated = false
-      return res.data as Agent[];
-    },
-  });
-
   const vehicleBodies = Array.isArray(vehicleBodiesData)
     ? vehicleBodiesData
-    : vehicleBodiesData?.data || [];
-
-  // Fetch countries on component mount
-  useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        setCountriesLoading(true);
-        const response = await getCountries(1, ""); // Get first page with no search
-        setCountries(response.data);
-      } catch (error) {
-        console.error("Failed to fetch countries:", error);
-        setCountries([]);
-      } finally {
-        setCountriesLoading(false);
-      }
-    };
-
-    fetchCountries();
-  }, []);
+    : [];
 
   const addCarDetailsField = () => {
     addFeature?.();
@@ -196,7 +154,7 @@ const CarDetails = () => {
           }}
           isLoading={brands.isLoading}
         >
-          {allBrands.map((brand) => (
+          {brands.data.map((brand) => (
             <SelectItem key={brand.id.toString()}>
               {brand.name[i18n.language as "ar" | "en"]}
             </SelectItem>
@@ -216,7 +174,7 @@ const CarDetails = () => {
           }}
           isLoading={agents.isLoading}
         >
-          {allAgents.map((agent) => (
+          {agents.data.map((agent) => (
             <SelectItem key={agent.id.toString()}>
               {agent.name[i18n.language as "ar" | "en"]}
             </SelectItem>

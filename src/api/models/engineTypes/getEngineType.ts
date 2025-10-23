@@ -20,7 +20,39 @@ interface EngineTypesResponse {
   to?: number;
 }
 
-export const getEngineType = async (): Promise<EngineType[]> => {
+export const getEngineType = async (
+  pagination: boolean = true
+): Promise<EngineType[] | EngineTypesResponse> => {
+  if (!pagination) {
+    // Fetch all data without pagination
+    let allTypes: EngineType[] = [];
+    let currentPage = 1;
+    let hasMore = true;
+
+    while (hasMore) {
+      const res = await axios.get<EngineTypesResponse>("/admin/engine-types", {
+        params: { page: currentPage, per_page: 100 },
+      });
+
+      allTypes = [...allTypes, ...res.data.data];
+
+      // Check if there are more pages
+      const totalPages =
+        res.data.total && res.data.per_page
+          ? Math.ceil(res.data.total / res.data.per_page)
+          : 1;
+
+      if (currentPage >= totalPages) {
+        hasMore = false;
+      } else {
+        currentPage++;
+      }
+    }
+
+    return allTypes;
+  }
+
+  // Paginated/default response
   const res = await axios.get<EngineTypesResponse>("/admin/engine-types");
   return res.data.data;
 };
@@ -41,5 +73,5 @@ export const getEngineTypePaginated = async (params?: {
     params: query,
   });
 
-  return res.data as EngineTypesResponse;
+  return res.data;
 };

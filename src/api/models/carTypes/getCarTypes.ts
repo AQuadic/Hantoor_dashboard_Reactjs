@@ -43,6 +43,52 @@ export type GetVehicleTypesResponse = GetVehicleTypesPaginated | VehicleType[];
 export const getVehicleTypes = async (
   params?: GetVehicleTypesParams
 ): Promise<GetVehicleTypesPaginated | VehicleType[]> => {
+  // If pagination is explicitly false, fetch all data
+  if (params?.pagination === false) {
+    let allTypes: VehicleType[] = [];
+    let currentPage = 1;
+    let hasMore = true;
+
+    while (hasMore) {
+      const response = await axios.get<
+        GetVehicleTypesPaginated | VehicleType[]
+      >("/admin/vehicle/type", {
+        params: {
+          ...params,
+          pagination: undefined, // Remove pagination param from request
+          page: currentPage,
+          per_page: 100,
+        },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      });
+
+      // Check if response is array or paginated
+      if (Array.isArray(response.data)) {
+        allTypes = [...allTypes, ...response.data];
+        hasMore = false; // API returned array, no more pages
+      } else {
+        const paginatedData = response.data;
+        allTypes = [...allTypes, ...paginatedData.data];
+
+        // Check if there are more pages
+        if (
+          !paginatedData.next_page_url ||
+          currentPage >= paginatedData.last_page
+        ) {
+          hasMore = false;
+        } else {
+          currentPage++;
+        }
+      }
+    }
+
+    return allTypes;
+  }
+
+  // Paginated response
   const response = await axios.get<GetVehicleTypesPaginated | VehicleType[]>(
     "/admin/vehicle/type",
     {
