@@ -52,7 +52,7 @@ export const useBrands = (): UseDropdownData<Brand> => {
     queryKey: ["brands"],
     queryFn: async () => {
       const response = await fetchBrands(1, "", undefined, undefined, false);
-      return response.data;
+      return Array.isArray(response) ? response : response.data;
     },
   });
 
@@ -70,7 +70,7 @@ export const useAgents = (): UseDropdownData<Agent> => {
     queryKey: ["agents"],
     queryFn: async () => {
       const response = await fetchAgents(1, "", undefined, false);
-      return response.data;
+      return Array.isArray(response) ? response : response.data;
     },
   });
 

@@ -57,7 +57,7 @@ const CarDetails = () => {
 
   const vehicleBodies = Array.isArray(vehicleBodiesData)
     ? vehicleBodiesData
-    : [];
+    : vehicleBodiesData?.data ?? [];
 
   const addCarDetailsField = () => {
     addFeature?.();

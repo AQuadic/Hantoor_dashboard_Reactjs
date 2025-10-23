@@ -36,47 +36,7 @@ export interface VehicleBodiesPaginated {
 export const getVehicleBodies = async (
   params?: GetVehicleBodiesParams
 ): Promise<VehicleBodiesPaginated | VehicleBody[]> => {
-  // If pagination is explicitly false, fetch all data
-  if (params?.pagination === false) {
-    let allBodies: VehicleBody[] = [];
-    let currentPage = 1;
-    let hasMore = true;
-
-    while (hasMore) {
-      const response = await axios.get<VehicleBodiesPaginated>(
-        "/admin/vehicle/body",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-          params: {
-            ...params,
-            pagination: undefined, // Remove pagination param from request
-            page: currentPage,
-            per_page: 100,
-          },
-        }
-      );
-
-      allBodies = [...allBodies, ...response.data.data];
-
-      // Check if there are more pages
-      if (
-        !response.data.next_page_url ||
-        currentPage >= response.data.last_page
-      ) {
-        hasMore = false;
-      } else {
-        currentPage++;
-      }
-    }
-
-    return allBodies;
-  }
-
-  // Paginated response
-  const response = await axios.get<VehicleBodiesPaginated>(
+  const response = await axios.get<VehicleBodiesPaginated | VehicleBody[]>(
     "/admin/vehicle/body",
     {
       headers: {
@@ -86,6 +46,13 @@ export const getVehicleBodies = async (
       params,
     }
   );
+
+  // When pagination=false, API returns array directly
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  // When paginated, API returns VehicleBodiesPaginated
   return response.data;
 };
 

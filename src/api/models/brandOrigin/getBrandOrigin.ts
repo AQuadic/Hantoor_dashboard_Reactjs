@@ -23,38 +23,23 @@ interface BrandOriginResponse {
 export const getBrandOrigin = async (
   pagination: boolean = true
 ): Promise<BrandOrigin[] | BrandOriginResponse> => {
+  const params: Record<string, boolean> = {};
   if (!pagination) {
-    // Fetch all data without pagination
-    let allOrigins: BrandOrigin[] = [];
-    let currentPage = 1;
-    let hasMore = true;
-
-    while (hasMore) {
-      const res = await axios.get<BrandOriginResponse>("/admin/brand-origin", {
-        params: { page: currentPage, per_page: 100 },
-      });
-
-      allOrigins = [...allOrigins, ...res.data.data];
-
-      // Check if there are more pages
-      const totalPages =
-        res.data.total && res.data.per_page
-          ? Math.ceil(res.data.total / res.data.per_page)
-          : 1;
-
-      if (currentPage >= totalPages) {
-        hasMore = false;
-      } else {
-        currentPage++;
-      }
-    }
-
-    return allOrigins;
+    params.pagination = false;
   }
 
-  // Paginated response
-  const res = await axios.get<BrandOriginResponse>("/admin/brand-origin");
-  return res.data.data;
+  const res = await axios.get<BrandOrigin[] | BrandOriginResponse>(
+    "/admin/brand-origin",
+    { params }
+  );
+
+  // When pagination=false, API returns array directly
+  if (Array.isArray(res.data)) {
+    return res.data;
+  }
+
+  // When paginated, API returns BrandOriginResponse
+  return res.data;
 };
 
 // Paginated variant - accepts optional page and search params and returns full response

@@ -109,7 +109,10 @@ const AddCarTypes = () => {
                   setSelectedBrand(key);
                 }}
               >
-                {(brandsResponse?.data ?? []).map((brand) => (
+                {(Array.isArray(brandsResponse)
+                  ? brandsResponse
+                  : brandsResponse?.data ?? []
+                ).map((brand) => (
                   <SelectItem
                     key={brand.id.toString()}
                     textValue={brand.name[i18n.language as "ar" | "en"]}

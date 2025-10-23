@@ -23,41 +23,23 @@ interface EngineSizesResponse {
 export const getEngineSize = async (
   pagination: boolean = true
 ): Promise<EngineSize[] | EngineSizesResponse> => {
+  const params: Record<string, boolean> = {};
   if (!pagination) {
-    // Fetch all data without pagination
-    let allSizes: EngineSize[] = [];
-    let currentPage = 1;
-    let hasMore = true;
-
-    while (hasMore) {
-      const res = await axios.get<EngineSizesResponse>(
-        "/admin/vehicle/engine-volume",
-        { params: { page: currentPage, per_page: 100 } }
-      );
-
-      allSizes = [...allSizes, ...res.data.data];
-
-      // Check if there are more pages
-      const totalPages =
-        res.data.total && res.data.per_page
-          ? Math.ceil(res.data.total / res.data.per_page)
-          : 1;
-
-      if (currentPage >= totalPages) {
-        hasMore = false;
-      } else {
-        currentPage++;
-      }
-    }
-
-    return allSizes;
+    params.pagination = false;
   }
 
-  // Paginated/default response
-  const res = await axios.get<EngineSizesResponse>(
-    "/admin/vehicle/engine-volume"
+  const res = await axios.get<EngineSize[] | EngineSizesResponse>(
+    "/admin/vehicle/engine-volume",
+    { params }
   );
-  return res.data.data;
+
+  // When pagination=false, API returns array directly
+  if (Array.isArray(res.data)) {
+    return res.data;
+  }
+
+  // When paginated, API returns EngineSizesResponse
+  return res.data;
 };
 
 export const getEngineSizePaginated = async (params?: {

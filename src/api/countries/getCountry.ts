@@ -133,17 +133,24 @@ export async function getCountries(
 export async function getAllCountries(
   searchTerm: string = ""
 ): Promise<Country[]> {
-  const all: Country[] = [];
-  let page = 1;
+  const params: Record<string, string | boolean> = {
+    pagination: false,
+  };
 
-  while (true) {
-    const resp = await getCountries(page, searchTerm);
-    all.push(...resp.data);
-    if (!resp.links?.next) break;
-    page++;
-    // defensive: if last_page is present, stop when page exceeds it
-    if (resp.meta?.last_page && page > resp.meta.last_page) break;
+  if (searchTerm && searchTerm.trim()) {
+    params.search = searchTerm.trim();
   }
 
-  return all;
+  const response = await axios.get<Country[] | ApiCountriesResponse>(
+    "/admin/country",
+    { params }
+  );
+
+  // When pagination=false, API returns array directly
+  if (Array.isArray(response.data)) {
+    return response.data;
+  }
+
+  // Fallback: if API still returns paginated response, return the data array
+  return response.data.data;
 }

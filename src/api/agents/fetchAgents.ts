@@ -95,156 +95,81 @@ export async function fetchAgents(
   searchTerm: string = "",
   params?: FetchAgentsParams,
   isPaginated: boolean = true
-): Promise<AgentsApiResponse> {
+): Promise<AgentsApiResponse | Agent[]> {
+  const query: Record<string, string | number | boolean> = {};
+
   if (isPaginated) {
-    const query: Record<string, string | number> = { page };
-
-    if (searchTerm) query.search = searchTerm;
-    if (params?.type) query.type = params.type;
-    if (params?.from_date) query.from_date = params.from_date;
-    if (params?.to_date) query.to_date = params.to_date;
-
-    const response = await axios.get("/admin/agents", { params: query });
-    const raw = response.data as any;
-
-    const normalizeAgent = (item: any): Agent => {
-      const name =
-        typeof item.name === "string"
-          ? { ar: item.name, en: item.name }
-          : item.name ?? { ar: "", en: "" };
-
-      const centers = Array.isArray(item.centers)
-        ? item.centers.map((c: any) => ({
-            ...c,
-            name:
-              typeof c.name === "string"
-                ? { ar: c.name, en: c.name }
-                : c.name ?? { ar: "", en: "" },
-            description:
-              typeof c.description === "string"
-                ? { ar: c.description, en: c.description }
-                : c.description ?? { ar: "", en: "" },
-            type:
-              c.type === 1 || c.type === "1"
-                ? "center"
-                : c.type === 2 || c.type === "2"
-                ? "show_room"
-                : c.type,
-          }))
-        : undefined;
-
-      const is_active =
-        item.is_active === 1 || item.is_active === true
-          ? true
-          : item.is_active === 0 || item.is_active === false
-          ? false
-          : item.is_active;
-
-      return {
-        id: item.id,
-        name,
-        is_active,
-        link: item.link,
-        website: item.website,
-        whatsapp: item.whatsapp,
-        brand_id: item.brand_id,
-        centers,
-        centers_count: item.centers_count,
-        show_rooms_count: item.show_rooms_count,
-        created_at: item.created_at,
-        updated_at: item.updated_at,
-      } as Agent;
-    };
-
-    return {
-      ...raw,
-      data: Array.isArray(raw.data) ? raw.data.map(normalizeAgent) : [],
-    } as AgentsApiResponse;
+    query.page = page;
+  } else {
+    query.pagination = false;
   }
 
-  // Non-paginated: aggregate all pages and return a AgentsApiResponse-shaped object
-  let allAgents: Agent[] = [];
-  let currentPage = 1;
-  let totalPages = 1;
+  if (searchTerm) query.search = searchTerm;
+  if (params?.type) query.type = params.type;
+  if (params?.from_date) query.from_date = params.from_date;
+  if (params?.to_date) query.to_date = params.to_date;
 
-  do {
-    const query: Record<string, string | number> = { page: currentPage };
-    if (searchTerm) query.search = searchTerm;
-    if (params?.type) query.type = params.type;
-    if (params?.from_date) query.from_date = params.from_date;
-    if (params?.to_date) query.to_date = params.to_date;
+  const response = await axios.get("/admin/agents", { params: query });
+  const raw = response.data as any;
 
-    const response = await axios.get("/admin/agents", { params: query });
-    const raw = response.data as any;
-    const agentsPage: Agent[] = Array.isArray(raw.data)
-      ? raw.data.map((item: any) => {
-          const name =
-            typeof item.name === "string"
-              ? { ar: item.name, en: item.name }
-              : item.name ?? { ar: "", en: "" };
+  const normalizeAgent = (item: any): Agent => {
+    const name =
+      typeof item.name === "string"
+        ? { ar: item.name, en: item.name }
+        : item.name ?? { ar: "", en: "" };
 
-          const centers = Array.isArray(item.centers)
-            ? item.centers.map((c: any) => ({
-                ...c,
-                name:
-                  typeof c.name === "string"
-                    ? { ar: c.name, en: c.name }
-                    : c.name ?? { ar: "", en: "" },
-                description:
-                  typeof c.description === "string"
-                    ? { ar: c.description, en: c.description }
-                    : c.description ?? { ar: "", en: "" },
-                type:
-                  c.type === 1 || c.type === "1"
-                    ? "center"
-                    : c.type === 2 || c.type === "2"
-                    ? "show_room"
-                    : c.type,
-              }))
-            : undefined;
+    const centers = Array.isArray(item.centers)
+      ? item.centers.map((c: any) => ({
+          ...c,
+          name:
+            typeof c.name === "string"
+              ? { ar: c.name, en: c.name }
+              : c.name ?? { ar: "", en: "" },
+          description:
+            typeof c.description === "string"
+              ? { ar: c.description, en: c.description }
+              : c.description ?? { ar: "", en: "" },
+          type:
+            c.type === 1 || c.type === "1"
+              ? "center"
+              : c.type === 2 || c.type === "2"
+              ? "show_room"
+              : c.type,
+        }))
+      : undefined;
 
-          const is_active =
-            item.is_active === 1 || item.is_active === true
-              ? true
-              : item.is_active === 0 || item.is_active === false
-              ? false
-              : item.is_active;
+    const is_active =
+      item.is_active === 1 || item.is_active === true
+        ? true
+        : item.is_active === 0 || item.is_active === false
+        ? false
+        : item.is_active;
 
-          return {
-            id: item.id,
-            name,
-            is_active,
-            link: item.link,
-            website: item.website,
-            whatsapp: item.whatsapp,
-            brand_id: item.brand_id,
-            centers,
-            centers_count: item.centers_count,
-            show_rooms_count: item.show_rooms_count,
-            created_at: item.created_at,
-            updated_at: item.updated_at,
-          } as Agent;
-        })
-      : [];
+    return {
+      id: item.id,
+      name,
+      is_active,
+      link: item.link,
+      website: item.website,
+      whatsapp: item.whatsapp,
+      brand_id: item.brand_id,
+      centers,
+      centers_count: item.centers_count,
+      show_rooms_count: item.show_rooms_count,
+      created_at: item.created_at,
+      updated_at: item.updated_at,
+    } as Agent;
+  };
 
-    allAgents = [...allAgents, ...agentsPage];
-    totalPages = raw.last_page || 1;
-    currentPage++;
-  } while (currentPage <= totalPages);
+  // When pagination=false, API returns array directly
+  if (Array.isArray(raw)) {
+    return raw.map(normalizeAgent);
+  }
 
+  // When paginated, API returns AgentsApiResponse
   return {
-    current_page: 1,
-    data: allAgents,
-    first_page_url: "",
-    from: allAgents.length > 0 ? 1 : 0,
-    last_page: 1,
-    last_page_url: "",
-    next_page_url: null,
-    path: "",
-    per_page: allAgents.length,
-    prev_page_url: null,
-    to: allAgents.length,
-    total: allAgents.length,
+    ...raw,
+    data: Array.isArray(raw.data) ? raw.data.map(normalizeAgent) : [],
   } as AgentsApiResponse;
 }
 

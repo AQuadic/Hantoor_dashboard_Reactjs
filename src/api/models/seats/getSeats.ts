@@ -23,53 +23,22 @@ export interface SeatsResponse {
 export const getSeats = async (
   pagination: boolean = true
 ): Promise<numOfSeats[] | SeatsResponse> => {
+  const params: Record<string, boolean> = {};
   if (!pagination) {
-    // Fetch all data without pagination
-    let allSeats: numOfSeats[] = [];
-    let currentPage = 1;
-    let hasMore = true;
-
-    while (hasMore) {
-      const res = await axios.get("/admin/seats", {
-        params: { page: currentPage, per_page: 100 },
-      });
-
-      let seatsData: numOfSeats[] = [];
-      if (Array.isArray(res.data)) {
-        seatsData = res.data as numOfSeats[];
-      } else {
-        seatsData = (res.data as SeatsResponse).data || [];
-      }
-
-      allSeats = [...allSeats, ...seatsData];
-
-      // Check if response is paginated
-      if (Array.isArray(res.data)) {
-        hasMore = false; // API returned array, no more pages
-      } else {
-        const paginatedResponse = res.data as SeatsResponse;
-        const totalPages =
-          paginatedResponse.total && paginatedResponse.per_page
-            ? Math.ceil(paginatedResponse.total / paginatedResponse.per_page)
-            : 1;
-
-        if (currentPage >= totalPages) {
-          hasMore = false;
-        } else {
-          currentPage++;
-        }
-      }
-    }
-
-    return allSeats;
+    params.pagination = false;
   }
 
-  // Paginated/default response
-  const res = await axios.get("/admin/seats");
+  const res = await axios.get<numOfSeats[] | SeatsResponse>("/admin/seats", {
+    params,
+  });
+
+  // When pagination=false, API returns array directly
   if (Array.isArray(res.data)) {
-    return res.data as numOfSeats[];
+    return res.data;
   }
-  return (res.data as SeatsResponse).data || [];
+
+  // When paginated, API returns SeatsResponse
+  return res.data;
 };
 
 export const getSeatsPaginated = async (params?: {

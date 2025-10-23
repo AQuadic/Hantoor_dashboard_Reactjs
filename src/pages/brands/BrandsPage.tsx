@@ -23,13 +23,32 @@ const BrandsPage = () => {
 
   const { data, refetch, isLoading, error } = useQuery<BrandsApiResponse>({
     queryKey: ["brands", currentPage, searchTerm, dateParams],
-    queryFn: () =>
-      fetchBrands(
+    queryFn: async () => {
+      const response = await fetchBrands(
         currentPage,
         searchTerm,
         dateParams.from_date,
         dateParams.to_date
-      ),
+      );
+      // Ensure we always return BrandsApiResponse for paginated queries
+      return Array.isArray(response)
+        ? {
+            current_page: 1,
+            data: response,
+            first_page_url: "",
+            from: 0,
+            last_page: 1,
+            last_page_url: "",
+            links: [],
+            next_page_url: null,
+            path: "",
+            per_page: response.length,
+            prev_page_url: null,
+            to: response.length,
+            total: response.length,
+          }
+        : response;
+    },
     placeholderData: undefined,
   });
 

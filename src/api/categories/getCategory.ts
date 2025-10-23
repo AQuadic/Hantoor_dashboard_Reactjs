@@ -38,52 +38,6 @@ export const getVehicleClasses = async (
   params?: GetVehicleClassesParams
 ): Promise<GetVehicleClassesPaginated | VehicleClass[]> => {
   try {
-    // If pagination is explicitly false, fetch all data
-    if (params?.pagination === false) {
-      let allClasses: VehicleClass[] = [];
-      let currentPage = 1;
-      let hasMore = true;
-
-      while (hasMore) {
-        const response = await axios.get<
-          GetVehicleClassesPaginated | VehicleClass[]
-        >("/admin/vehicle/class", {
-          params: {
-            ...params,
-            pagination: undefined, // Remove pagination param from request
-            page: currentPage,
-            per_page: 100,
-          },
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        });
-
-        // Check if response is array or paginated
-        if (Array.isArray(response.data)) {
-          allClasses = [...allClasses, ...response.data];
-          hasMore = false; // API returned array, no more pages
-        } else {
-          const paginatedData = response.data;
-          allClasses = [...allClasses, ...paginatedData.data];
-
-          // Check if there are more pages
-          if (
-            !paginatedData.next_page_url ||
-            currentPage >= paginatedData.last_page
-          ) {
-            hasMore = false;
-          } else {
-            currentPage++;
-          }
-        }
-      }
-
-      return allClasses;
-    }
-
-    // Paginated response
     const response = await axios.get<
       GetVehicleClassesPaginated | VehicleClass[]
     >("/admin/vehicle/class", {
@@ -94,6 +48,12 @@ export const getVehicleClasses = async (
       },
     });
 
+    // When pagination=false, API returns array directly
+    if (Array.isArray(response.data)) {
+      return response.data;
+    }
+
+    // When paginated, API returns GetVehicleClassesPaginated
     return response.data;
   } catch (error: unknown) {
     console.error("Error fetching vehicle classes:", error);
