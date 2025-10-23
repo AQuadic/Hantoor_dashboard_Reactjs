@@ -1,7 +1,7 @@
 import { Select, SelectItem } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { getCountries } from "@/api/countries/getCountry";
+import { getAllCountries } from "@/api/countries/getCountry";
 
 interface UserSelectsProps {
   countryId?: number;
@@ -18,13 +18,13 @@ const UserSelects = ({
 }: UserSelectsProps) => {
   const { t, i18n } = useTranslation("users");
 
-  const { data } = useQuery({
-    queryKey: ["countries"],
-    queryFn: () => getCountries(1),
-  });
+  const { data: countriesData } = useQuery({
+      queryKey: ["allCountries"],
+      queryFn: () => getAllCountries(),
+    });
 
   const countries =
-    data?.data.map((c) => ({
+    countriesData?.map((c) => ({
       key: String(c.id),
       label: i18n.language === "ar" ? c.name.ar : c.name.en,
     })) ?? [];

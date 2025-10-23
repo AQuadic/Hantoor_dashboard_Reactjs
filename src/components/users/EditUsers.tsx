@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { updateAdminUser, UpdateAdminUserPayload } from "@/api/users/editUsers";
 import { AdminUser, getAdminUser } from "@/api/users/getUserById";
-import { CountriesResponse, getCountries } from "@/api/countries/getCountry";
+import { getAllCountries } from "@/api/countries/getCountry";
 import { useQuery } from "@tanstack/react-query";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import DashboardButton from "../general/dashboard/DashboardButton";
@@ -46,10 +46,10 @@ const EditUsers = () => {
   const [removeExistingImage, setRemoveExistingImage] = useState(false);
   const [selectedCountryId, setSelectedCountryId] = useState<string>("");
 
-  const { data: countriesData } = useQuery<CountriesResponse>({
-    queryKey: ["countries"],
-    queryFn: () => getCountries(1),
-  });
+  const { data: countriesData } = useQuery({
+      queryKey: ["allCountries"],
+      queryFn: () => getAllCountries(),
+    });
 
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -267,7 +267,7 @@ const EditUsers = () => {
                 setSelectedCountryId(value);
               }}
               items={
-                countriesData?.data.map((c) => ({
+                countriesData?.map((c) => ({
                   key: c.id.toString(),
                   label: c.name.ar,
                 })) || []
