@@ -12,14 +12,14 @@ import {
 import { useTranslation } from "react-i18next";
 import { useHasPermission } from "@/hooks/usePermissions";
 import { Switch } from "@heroui/react";
-import { useVehicleBodies } from "@/api/models/structureType/getStructure";
+import {
+  useVehicleBodies,
+  VehicleBody,
+} from "@/api/models/structureType/getStructure";
 import { deleteBodyType } from "@/api/models/structureType/deleteStructure";
 import toast from "react-hot-toast";
 import { useEffect } from "react";
-import {
-  BodyType,
-  updateBodyType,
-} from "@/api/models/structureType/editStructure";
+import { updateBodyType } from "@/api/models/structureType/editStructure";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 
@@ -78,14 +78,18 @@ export function StructureTable({
     refetch();
   };
 
-  const handleToggleStatus = async (body: BodyType) => {
+  const handleToggleStatus = async (body: VehicleBody) => {
     try {
+      const isActive =
+        typeof body.is_active === "number"
+          ? body.is_active === 1
+          : body.is_active;
       await updateBodyType(body.id, {
         name: body.name,
-        is_active: !body.is_active,
+        is_active: !isActive,
       });
       toast.success(
-        !body.is_active ? t("bodyTypeActivated") : t("bodyTypeDeactivated")
+        !isActive ? t("bodyTypeActivated") : t("bodyTypeDeactivated")
       );
       refetch();
     } catch (error) {
@@ -121,7 +125,11 @@ export function StructureTable({
                 <TableCell className="flex gap-[7px] items-center">
                   {canChangeStatus && (
                     <Switch
-                      isSelected={!!item.is_active}
+                      isSelected={
+                        typeof item.is_active === "number"
+                          ? item.is_active === 1
+                          : item.is_active
+                      }
                       onChange={() => handleToggleStatus(item)}
                     />
                   )}

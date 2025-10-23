@@ -20,8 +20,10 @@ const EditModel = () => {
     if (!id) return;
     const fetchModel = async () => {
       const response = await getModels(1, 100, "", undefined, false);
-      const models = Array.isArray(response) ? response : response.data;
-      const model = models.find((m) => m.id === Number(id));
+      const model = response.data.find(
+        (m: { id: number; name: { ar: string; en: string } }) =>
+          m.id === Number(id)
+      );
       if (model) {
         setNameAr(model.name.ar);
         setNameEn(model.name.en || "");
