@@ -34,7 +34,7 @@ const AddCarTypes = () => {
 
   const { data: brandsResponse, isLoading: isLoadingBrands } = useQuery({
     queryKey: ["brands-list"],
-    queryFn: () => fetchBrands(1, "", "", "", false),
+    queryFn: () => fetchBrands(1, "", undefined, undefined, false),
   });
 
   return (
@@ -158,9 +158,11 @@ const AddCarTypes = () => {
                 const errorMsg =
                   error?.response?.data?.message ||
                   (error?.response?.data?.errors
-                    ? Object.values(error.response.data.errors).flat().join("\n")
-                    : error?.message) || 
-                      t("somethingWentWrong");
+                    ? Object.values(error.response.data.errors)
+                        .flat()
+                        .join("\n")
+                    : error?.message) ||
+                  t("somethingWentWrong");
                 toast.error(errorMsg);
               } finally {
                 setLoading(false);

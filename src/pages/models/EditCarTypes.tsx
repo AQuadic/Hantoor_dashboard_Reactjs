@@ -35,7 +35,7 @@ const EditCarTypes: React.FC = () => {
 
   const { data: brandsResponse, isLoading: isLoadingBrands } = useQuery({
     queryKey: ["brands-list"],
-    queryFn: () => fetchBrands(1, "", "", ""),
+    queryFn: () => fetchBrands(1, "", undefined, undefined, false),
   });
 
   const { data: carType } = useQuery({
@@ -139,7 +139,9 @@ const EditCarTypes: React.FC = () => {
                 size={"lg"}
                 variant="bordered"
                 label={t("brand")}
-                selectedKeys={selectedBrand ? new Set([selectedBrand]) : new Set()}
+                selectedKeys={
+                  selectedBrand ? new Set([selectedBrand]) : new Set()
+                }
                 onSelectionChange={(keys) => {
                   const key = Array.from(keys)[0] as string;
                   setSelectedBrand(key);
