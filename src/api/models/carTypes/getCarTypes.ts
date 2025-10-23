@@ -8,6 +8,13 @@ export interface VehicleType {
   };
   body_type_id: number;
   brand_id: number;
+  brand?: {
+    id: number;
+    name: {
+      ar: string;
+      en: string;
+    };
+  };
   is_active: boolean;
   created_at: string;
   updated_at: string;
@@ -20,6 +27,9 @@ export interface GetVehicleTypesParams {
   pagination?: boolean;
   page?: number;
   per_page?: number;
+  with_brand?: number;
+  from_date?: string;
+  to_date?: string;
 }
 
 export interface GetVehicleTypesPaginated {

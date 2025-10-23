@@ -65,6 +65,7 @@ export function CarTypesTable({
         pagination: true,
         search,
         page,
+        with_brand: 1,
         ...dateParams,
       }),
   });
@@ -117,10 +118,15 @@ export function CarTypesTable({
       </div>
     );
 
-  const getBrandName = (id: number | string) => {
+  const getBrandName = (car: VehicleType) => {
+    // Use brand from API response if available
+    if (car.brand) {
+      return i18n.language === "ar" ? car.brand.name.ar : car.brand.name.en;
+    }
+    // Fallback to brands list if brand not included in response
     const brands = brandsResponse?.data || [];
     if (!Array.isArray(brands)) return "-";
-    const brand = brands.find((b) => b.id == id);
+    const brand = brands.find((b) => b.id == car.brand_id);
     if (!brand) return "-";
     return i18n.language === "ar" ? brand.name.ar : brand.name.en;
   };
@@ -181,9 +187,7 @@ export function CarTypesTable({
           <TableRow key={car.id} noBackgroundColumns={1}>
             <TableCell>{car.id}</TableCell>
             <TableCell>{getTypeName(car)}</TableCell>
-            <TableCell className="w-full">
-              {getBrandName(car.brand_id)}
-            </TableCell>
+            <TableCell className="w-full">{getBrandName(car)}</TableCell>
             {(canChangeStatus || canEdit) && (
               <TableCell className="flex gap-[7px] items-center">
                 {canChangeStatus && (
