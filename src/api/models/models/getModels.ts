@@ -24,7 +24,7 @@ export const getModels = async (
   search: string = "",
   dateParams?: { from_date?: string; to_date?: string },
   isPaginated: boolean = true
-): Promise<GetModelsResponse | Model[]> => {
+): Promise<GetModelsResponse> => {
   try {
     const params: Record<string, string | number | boolean> = {};
 
@@ -46,19 +46,23 @@ export const getModels = async (
 
     console.log("API Response:", res.data);
 
-    // When pagination=false, API returns array directly
+    // When pagination=false, API returns array directly, wrap it
     if (Array.isArray(res.data)) {
-      return res.data;
+      return {
+        data: res.data,
+        meta: {
+          totalItems: res.data.length,
+          totalPages: 1,
+          itemsPerPage: res.data.length,
+          currentPage: 1,
+        },
+      };
     }
 
     // When paginated, API returns GetModelsResponse
     return res.data;
   } catch (error) {
     console.error("Failed to fetch models:", error);
-
-    if (!isPaginated) {
-      return [];
-    }
 
     return {
       data: [],
