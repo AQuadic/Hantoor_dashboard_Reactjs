@@ -16,9 +16,8 @@ import { updateFaq } from "@/api/faq/editFaq";
 import { getFAQById, FAQ } from "@/api/faq/getFaqById";
 import toast from "react-hot-toast";
 import {
-  CountriesResponse,
   Country,
-  getCountries,
+  getAllCountries,
 } from "@/api/countries/getCountry";
 import { useQuery } from "@tanstack/react-query";
 
@@ -32,11 +31,10 @@ const EditFaq = () => {
   const [arQuestion, setArQuestion] = useState("");
   const [enQuestion, setEnQuestion] = useState("");
   const navigate = useNavigate();
-  const { data: countriesData, isLoading: countriesLoading } =
-    useQuery<CountriesResponse>({
-      queryKey: ["countries"],
-      queryFn: () => getCountries(1),
-    });
+  const { data: countriesData, isLoading: countriesLoading } = useQuery({
+    queryKey: ["allCountries"],
+    queryFn: () => getAllCountries(),
+  });
   useEffect(() => {
     if (!faqId) return;
 
@@ -111,7 +109,7 @@ const EditFaq = () => {
             <Select
               value={countryId}
               onValueChange={(value) => setCountryId(value)}
-              disabled={countriesLoading || !countriesData?.data?.length}
+              disabled={countriesLoading || !countriesData?.length}
             >
               <SelectTrigger
                 className="w-full !h-16 rounded-[12px] mt-4"
@@ -120,7 +118,7 @@ const EditFaq = () => {
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
               <SelectContent dir="rtl">
-                {countriesData?.data.map((country: Country) => (
+                {countriesData?.map((country: Country) => (
                   <SelectItem key={country.id} value={country.id.toString()}>
                     {country.name.ar}
                   </SelectItem>
