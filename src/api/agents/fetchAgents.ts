@@ -95,7 +95,7 @@ export async function fetchAgents(
   searchTerm: string = "",
   params?: FetchAgentsParams,
   isPaginated: boolean = true
-): Promise<AgentsApiResponse | Agent[]> {
+): Promise<AgentsApiResponse> {
   const query: Record<string, string | number | boolean> = {};
 
   if (isPaginated) {
@@ -161,9 +161,23 @@ export async function fetchAgents(
     } as Agent;
   };
 
-  // When pagination=false, API returns array directly
+  // When pagination=false, API returns array directly, wrap it
   if (Array.isArray(raw)) {
-    return raw.map(normalizeAgent);
+    const normalizedData = raw.map(normalizeAgent);
+    return {
+      current_page: 1,
+      data: normalizedData,
+      first_page_url: "",
+      from: normalizedData.length > 0 ? 1 : 0,
+      last_page: 1,
+      last_page_url: "",
+      next_page_url: null,
+      path: "",
+      per_page: normalizedData.length,
+      prev_page_url: null,
+      to: normalizedData.length,
+      total: normalizedData.length,
+    } as AgentsApiResponse;
   }
 
   // When paginated, API returns AgentsApiResponse

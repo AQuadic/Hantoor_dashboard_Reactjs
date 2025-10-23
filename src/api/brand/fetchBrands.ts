@@ -55,7 +55,7 @@ export async function fetchBrands(
   from_date?: string,
   to_date?: string,
   isPaginated: boolean = true
-): Promise<BrandsApiResponse | Brand[]> {
+): Promise<BrandsApiResponse> {
   const params: Record<string, string | number | boolean> = {};
 
   if (isPaginated) {
@@ -75,7 +75,24 @@ export async function fetchBrands(
     }
   );
 
-  // When pagination=false, API returns array directly
+  // When pagination=false, API returns array directly, wrap it
+  if (Array.isArray(response.data)) {
+    return {
+      current_page: 1,
+      data: response.data,
+      first_page_url: "",
+      from: response.data.length > 0 ? 1 : 0,
+      last_page: 1,
+      last_page_url: "",
+      next_page_url: null,
+      path: "",
+      per_page: response.data.length,
+      prev_page_url: null,
+      to: response.data.length,
+      total: response.data.length,
+    };
+  }
+
   // When paginated, API returns BrandsApiResponse
   return response.data;
 }
