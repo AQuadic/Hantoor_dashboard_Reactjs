@@ -18,7 +18,7 @@ import {
   getOnboardingById,
   OnboardingDetail,
 } from "@/api/onboarding/getProfileById";
-import { getCountries, Country } from "@/api/countries/getCountry";
+import { getAllCountries } from "@/api/countries/getCountry";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
 import { updateOnboarding } from "@/api/onboarding/updateProfile";
@@ -45,9 +45,9 @@ const EditProfile: React.FC = () => {
     enabled: !!id,
   });
 
-  const { data: countriesData } = useQuery<{ data: Country[] }, Error>({
-    queryKey: ["countries"],
-    queryFn: () => getCountries(1),
+  const { data: countriesData } = useQuery({
+    queryKey: ["allCountries"],
+    queryFn: () => getAllCountries(),
   });
 
   useEffect(() => {
@@ -169,7 +169,7 @@ const EditProfile: React.FC = () => {
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
               <SelectContent dir="rtl">
-                {countriesData?.data.map((c) => (
+                {countriesData?.map((c) => (
                   <SelectItem key={c.id} value={c.id.toString()}>
                     {i18n.language === "ar" ? c.name.ar : c.name.en}
                   </SelectItem>

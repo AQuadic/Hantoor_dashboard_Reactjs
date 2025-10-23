@@ -15,9 +15,8 @@ import { createFAQ, CreateFAQPayload } from "@/api/faq/addFaq";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
 import {
-  CountriesResponse,
   Country,
-  getCountries,
+  getAllCountries,
 } from "@/api/countries/getCountry";
 import { useNavigate } from "react-router";
 
@@ -35,10 +34,9 @@ const AddQuestions = () => {
   );
   const [, setErrors] = useState<Record<string, string[]>>({});
 
-  const { data: countriesData, isLoading: countriesLoading } =
-    useQuery<CountriesResponse>({
-      queryKey: ["countries"],
-      queryFn: () => getCountries(1),
+  const { data: countriesData, isLoading: countriesLoading } = useQuery({
+      queryKey: ["allCountries"],
+      queryFn: () => getAllCountries(),
     });
 
   const handleSubmit = async () => {
@@ -117,7 +115,7 @@ const AddQuestions = () => {
           <div className="md:w-1/2 w-full">
             <Select
               onValueChange={(value) => setCountryId(value)}
-              disabled={countriesLoading || !countriesData?.data?.length}
+              disabled={countriesLoading || !countriesData?.length}
             >
               <SelectTrigger
                 className="w-full !h-16 rounded-[12px] mt-4"
@@ -126,7 +124,7 @@ const AddQuestions = () => {
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
               <SelectContent dir="rtl">
-                {countriesData?.data.map((country: Country) => (
+                {countriesData?.map((country: Country) => (
                   <SelectItem key={country.id} value={country.id.toString()}>
                     {country.name.ar}
                   </SelectItem>
