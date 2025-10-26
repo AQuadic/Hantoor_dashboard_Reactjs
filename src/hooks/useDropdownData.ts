@@ -48,105 +48,73 @@ export const useCountries = (): UseDropdownData<Country> => {
 
 // Brands hook
 export const useBrands = (): UseDropdownData<Brand> => {
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<Brand[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<Brand[], Error>({
     queryKey: ["brands"],
     queryFn: async () => {
       const response = await fetchBrands(1, "", undefined, undefined, false);
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : response.data;
     },
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
 // Agents hook
 export const useAgents = (): UseDropdownData<Agent> => {
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<Agent[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<Agent[], Error>({
     queryKey: ["agents"],
     queryFn: async () => {
       const response = await fetchAgents(1, "", undefined, false);
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : response.data;
     },
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
 // Models hook
 export const useModels = (): UseDropdownData<Model> => {
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<Model[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<Model[], Error>({
     queryKey: ["models"],
     queryFn: async () => {
       const response = await getModels(1, 100, "", undefined, false);
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : response.data || [];
     },
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
 // Vehicle Bodies (Structure Type) hook
 export const useVehicleBodies = (): UseDropdownData<VehicleBody> => {
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<VehicleBody[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<VehicleBody[], Error>({
     queryKey: ["vehicleBodies"],
     queryFn: async () => {
       const response = await getVehicleBodies({ pagination: false });
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : [];
     },
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
@@ -159,161 +127,113 @@ export const useVehicleTypes = (
       ? Number(brandId)
       : undefined;
 
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<VehicleType[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<VehicleType[], Error>({
     queryKey: ["vehicleTypes", parsedBrandId ?? "all"],
     queryFn: async () => {
       const response = await getVehicleTypes({
         pagination: false,
         brand_id: parsedBrandId,
       });
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : [];
     },
     enabled: parsedBrandId !== undefined, // only fetch when brand provided
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
 // Vehicle Classes (Categories) hook
 export const useVehicleClasses = (): UseDropdownData<VehicleClass> => {
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<VehicleClass[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<VehicleClass[], Error>({
     queryKey: ["vehicleClasses"],
     queryFn: async () => {
       const response = await getVehicleClasses({ pagination: false });
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : [];
     },
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
 // Brand Origins hook
 export const useBrandOrigins = (): UseDropdownData<BrandOrigin> => {
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<BrandOrigin[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<BrandOrigin[], Error>({
     queryKey: ["brandOrigins"],
     queryFn: async () => {
       const response = await getBrandOrigin(false);
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : [];
     },
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
 // Seats hook
 export const useSeats = (): UseDropdownData<NumberOfSeats> => {
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<NumberOfSeats[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<NumberOfSeats[], Error>({
     queryKey: ["seats"],
     queryFn: async () => {
       const response = await getSeats(false);
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : [];
     },
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
 // Engine Types hook
 export const useEngineTypes = (): UseDropdownData<EngineType> => {
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<EngineType[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<EngineType[], Error>({
     queryKey: ["engineTypes"],
     queryFn: async () => {
       const response = await getEngineType(false);
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : [];
     },
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
 // Engine Sizes hook
 export const useEngineSizes = (): UseDropdownData<EngineSize> => {
-  const {
-    data = [],
-    isLoading,
-    error,
-    refetch: queryRefetch,
-  } = useQuery<EngineSize[], Error>({
+  const { data, isLoading, error, refetch } = useQuery<EngineSize[], Error>({
     queryKey: ["engineSizes"],
     queryFn: async () => {
       const response = await getEngineSize(false);
-      return Array.isArray(response) ? response : response?.data ?? [];
+      return Array.isArray(response) ? response : [];
     },
-    placeholderData: [],
   });
 
   return {
-    data: Array.isArray(data) ? data : [],
+    data: data || [],
     isLoading,
     error,
-    refetch: () => {
-      void queryRefetch();
-    },
+    refetch,
   };
 };
 
