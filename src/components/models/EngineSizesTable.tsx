@@ -55,10 +55,15 @@ export function EngineSizesTable({
   } = useQuery<EngineSize[]>({
     queryKey: ["engineSize", page, search, dateParams],
     queryFn: async () => {
-      const r = await getEngineSizePaginated({ page, search, ...dateParams });
+      const r = await getEngineSizePaginated({
+        page,
+        per_page: 15,
+        search,
+        ...dateParams,
+      });
       if (setPagination) {
         const total = r.total ?? 0;
-        const per_page = r.per_page ?? (r.data?.length || 10);
+        const per_page = r.per_page ?? 15;
         const totalPages = per_page ? Math.ceil(total / per_page) : 1;
         setPagination({
           totalPages,

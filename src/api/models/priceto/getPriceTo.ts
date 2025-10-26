@@ -16,7 +16,6 @@ export interface PriceTo {
   country?: Country | null;
 }
 
-
 export interface PriceToResponse {
   data: PriceTo[];
   current_page: number;
@@ -31,6 +30,7 @@ export interface GetPriceToParams {
   pagination?: boolean;
   is_active?: boolean;
   page?: number;
+  per_page?: number;
   search?: string;
   from_date?: string;
   to_date?: string;
@@ -40,14 +40,24 @@ export interface GetPriceToParams {
 export async function getPriceTo(
   params?: GetPriceToParams
 ): Promise<PriceToResponse> {
+  const queryParams: Record<string, unknown> = {};
+
+  // Only send pagination parameter when it's explicitly false
+  if (params?.pagination === false) {
+    queryParams.pagination = false;
+  }
+
+  // Add other parameters
+  if (params?.page) queryParams.page = params.page;
+  if (params?.per_page) queryParams.per_page = params.per_page;
+  if (params?.search) queryParams.search = params.search;
+  if (params?.country_id) queryParams.country_id = params.country_id;
+  if (params?.from_date) queryParams.from_date = params.from_date;
+  if (params?.to_date) queryParams.to_date = params.to_date;
+  if (params?.is_active !== undefined) queryParams.is_active = params.is_active;
+
   const response = await axios.get("/admin/priceto", {
-    params: {
-      ...params,
-      search: params?.search || undefined,
-      from_date: params?.from_date,
-      to_date: params?.to_date,
-      country_id: params?.country_id || undefined,
-    },
+    params: queryParams,
   });
 
   if (Array.isArray(response.data)) {

@@ -38,6 +38,7 @@ interface StructureTableProps {
 
 export function StructureTable({
   search = "",
+  page,
   setPagination,
   dateParams,
 }: StructureTableProps) {
@@ -51,8 +52,9 @@ export function StructureTable({
     isLoading,
     refetch,
   } = useVehicleBodies({
-    pagination: true,
     search,
+    page,
+    per_page: 15,
     ...dateParams,
   });
 

@@ -54,7 +54,7 @@ export function ModelTable({
     refetch,
   } = useQuery<GetModelsResponse, Error>({
     queryKey: ["models-list", page, search, dateParams],
-    queryFn: () => getModels(page, 10, search, dateParams),
+    queryFn: () => getModels(page, 15, search, dateParams),
   });
 
   // Provide defaults if undefined

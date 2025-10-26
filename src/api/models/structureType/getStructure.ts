@@ -4,6 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 export interface GetVehicleBodiesParams {
   search?: string;
   pagination?: boolean;
+  page?: number;
+  per_page?: number;
+  from_date?: string;
+  to_date?: string;
 }
 
 export interface VehicleBody {

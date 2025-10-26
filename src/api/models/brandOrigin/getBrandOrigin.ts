@@ -45,12 +45,14 @@ export const getBrandOrigin = async (
 // Paginated variant - accepts optional page and search params and returns full response
 export const getBrandOriginPaginated = async (params?: {
   page?: number;
+  per_page?: number;
   search?: string;
   from_date?: string;
   to_date?: string;
 }): Promise<BrandOriginResponse> => {
   const query: Record<string, unknown> = {};
   if (params?.page) query.page = params.page;
+  if (params?.per_page) query.per_page = params.per_page;
   if (params?.search) query.search = params.search;
   if (params?.from_date) query.from_date = params.from_date;
   if (params?.to_date) query.to_date = params.to_date;

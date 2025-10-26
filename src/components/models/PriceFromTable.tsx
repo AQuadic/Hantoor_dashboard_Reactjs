@@ -56,6 +56,7 @@ export function PriceFromTable({
     queryFn: () =>
       getPriceFrom({
         page,
+        per_page: 15,
         search,
         country_id: countryId ? Number(countryId) : undefined,
         ...dateParams,

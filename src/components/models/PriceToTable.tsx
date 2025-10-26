@@ -53,7 +53,13 @@ export function PriceToTable({
   const { data, isLoading, refetch } = useQuery<PriceToResponse>({
     queryKey: ["priceto", page, search, dateParams, countryId],
     queryFn: () =>
-      getPriceTo({ page, search, country_id: countryId, ...dateParams }),
+      getPriceTo({
+        page,
+        per_page: 15,
+        search,
+        country_id: countryId,
+        ...dateParams,
+      }),
     placeholderData: (previousData: PriceToResponse | undefined) =>
       previousData,
   });
