@@ -20,6 +20,10 @@ import {
   fetchVehicleById,
   type UpdateVehiclePayload,
   type VehicleImage,
+  type VehicleAccessory,
+  type VehicleOffer,
+  type VehicleName,
+  type VehicleDescription,
 } from "@/api/vehicles";
 import Loading from "@/components/general/Loading";
 import CarAdvertisingImages from "@/components/cars/addcars/CarAdvertisingImages";
@@ -92,6 +96,59 @@ const AddCarsForm = () => {
           return image.url || "";
         }
         return "";
+      };
+
+      // Helper function to extract image URL from VehicleImageObject or File
+      const getImageUrl = (image: unknown): string | null => {
+        if (!image) return null;
+        if (typeof image === "string") return image;
+        if (image && typeof image === "object" && "url" in image) {
+          const imageObj = image as { url?: string };
+          return imageObj.url || null;
+        }
+        return null;
+      };
+
+      // Helper function to convert accessories with proper image URLs
+      const convertAccessories = (
+        accessories: unknown[]
+      ): VehicleAccessory[] => {
+        if (!Array.isArray(accessories)) return [];
+        return accessories.map((acc) => {
+          const accessory = acc as Record<string, unknown>;
+          return {
+            id: accessory.id as number | undefined,
+            vehicle_id: accessory.vehicle_id as number | undefined,
+            name: accessory.name as VehicleName,
+            price: safeToString(accessory.price),
+            is_active:
+              accessory.is_active !== undefined
+                ? Boolean(accessory.is_active)
+                : true,
+            image: getImageUrl(accessory.image),
+            created_at: accessory.created_at as string | undefined,
+            updated_at: accessory.updated_at as string | undefined,
+          };
+        });
+      };
+
+      // Helper function to convert offers with proper image URLs
+      const convertOffers = (offers: unknown[]): VehicleOffer[] => {
+        if (!Array.isArray(offers)) return [];
+        return offers.map((off) => {
+          const offer = off as Record<string, unknown>;
+          return {
+            id: offer.id as number | undefined,
+            vehicle_id: offer.vehicle_id as number | undefined,
+            name: offer.name as VehicleName,
+            description: offer.description as VehicleDescription | undefined,
+            is_active:
+              offer.is_active !== undefined ? Boolean(offer.is_active) : true,
+            image: getImageUrl(offer.image),
+            created_at: offer.created_at as string | undefined,
+            updated_at: offer.updated_at as string | undefined,
+          };
+        });
       };
 
       // Helper function to safely convert to string
@@ -201,10 +258,10 @@ const AddCarsForm = () => {
         // Make main image and video optional (empty string when missing)
         mainImage: getMainImageUrl(vehicle.image) || "",
         videoFile: getVideoFile(vehicle.video) || "",
-        offers: vehicle.offers || [],
+        offers: convertOffers(vehicle.offers || []),
         packages: vehicle.packages || [],
         features: vehicle.features || [],
-        accessories: vehicle.accessories || [],
+        accessories: convertAccessories(vehicle.accessories || []),
         carImages: [], // Not used anymore
         additionalImages: convertToVehicleImages(
           vehicle.additional_images || []

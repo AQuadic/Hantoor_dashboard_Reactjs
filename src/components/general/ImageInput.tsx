@@ -100,9 +100,8 @@ const ImageInput: React.FC<ImageInputProps> = ({
 
   // Handle click to open file dialog
   const handleClick = () => {
-    if (!image) {
-      fileInputRef.current?.click();
-    }
+    // Always allow opening file dialog to replace the image
+    fileInputRef.current?.click();
   };
 
   // Handle remove image

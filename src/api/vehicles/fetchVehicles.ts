@@ -748,6 +748,10 @@ export async function updateVehicle(
     // Add offers - send empty array explicitly if no offers
     if (data.offers && data.offers.length > 0) {
       data.offers.forEach((offer, index) => {
+        // Include ID if present (for updates to existing offers)
+        if (offer.id) {
+          formData.append(`offers[${index}][id]`, String(offer.id));
+        }
         formData.append(`offers[${index}][name][ar]`, offer.name.ar);
         formData.append(`offers[${index}][name][en]`, offer.name.en);
         if (offer.description?.ar) {
@@ -778,6 +782,10 @@ export async function updateVehicle(
     // Add packages - send empty array explicitly if no packages
     if (data.packages && data.packages.length > 0) {
       data.packages.forEach((pkg, index) => {
+        // Include ID if present (for updates to existing packages)
+        if (pkg.id) {
+          formData.append(`packages[${index}][id]`, String(pkg.id));
+        }
         formData.append(`packages[${index}][name][ar]`, pkg.name.ar);
         formData.append(`packages[${index}][name][en]`, pkg.name.en);
         formData.append(`packages[${index}][price]`, pkg.price);
@@ -817,6 +825,10 @@ export async function updateVehicle(
     // Add accessories - send empty array explicitly if no accessories
     if (data.accessories && data.accessories.length > 0) {
       data.accessories.forEach((accessory, index) => {
+        // Include ID if present (for updates to existing accessories)
+        if (accessory.id) {
+          formData.append(`accessories[${index}][id]`, String(accessory.id));
+        }
         formData.append(`accessories[${index}][name][ar]`, accessory.name.ar);
         formData.append(`accessories[${index}][name][en]`, accessory.name.en);
         formData.append(`accessories[${index}][price]`, accessory.price);
