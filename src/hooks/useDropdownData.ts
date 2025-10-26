@@ -88,7 +88,7 @@ export const useModels = (): UseDropdownData<Model> => {
     queryKey: ["models"],
     queryFn: async () => {
       const response = await getModels(1, 100, "", undefined, false);
-      return Array.isArray(response) ? response : [];
+      return Array.isArray(response) ? response : response.data || [];
     },
   });
 
