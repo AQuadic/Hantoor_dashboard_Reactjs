@@ -102,8 +102,8 @@ const SupportMessagesTable = ({
                 <TableCell>{message.id}</TableCell>
                 <TableCell>
                   {i18n.language === "ar"
-                    ? message.faq?.question?.ar ?? "-"
-                    : message.faq?.question?.en ?? "-"}
+                    ? message.faq?.country?.name?.ar ?? "-"
+                    : message.faq?.country?.name?.en ?? "-"}
                 </TableCell>
                 <TableCell>
                   {i18n.language === "ar"
