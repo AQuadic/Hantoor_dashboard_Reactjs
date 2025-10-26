@@ -154,7 +154,7 @@ const CarDetails = () => {
           }}
           isLoading={brands.isLoading}
         >
-          {brands.data.map((brand) => (
+          {(brands.data || []).map((brand) => (
             <SelectItem key={brand.id.toString()}>
               {brand.name[i18n.language as "ar" | "en"]}
             </SelectItem>
@@ -174,7 +174,7 @@ const CarDetails = () => {
           }}
           isLoading={agents.isLoading}
         >
-          {agents.data.map((agent) => (
+          {(agents.data || []).map((agent) => (
             <SelectItem key={agent.id.toString()}>
               {agent.name[i18n.language as "ar" | "en"]}
             </SelectItem>
@@ -196,7 +196,7 @@ const CarDetails = () => {
           }}
           isLoading={models.isLoading}
         >
-          {models.data.map((model) => (
+          {(models.data || []).map((model) => (
             <SelectItem key={model.id.toString()}>
               {model?.name[i18n.language as "ar" | "en"]}
             </SelectItem>
@@ -220,7 +220,7 @@ const CarDetails = () => {
           }}
           isLoading={vehicleBodiesLoading}
         >
-          {vehicleBodies.map((body) => (
+          {(vehicleBodies || []).map((body) => (
             <SelectItem key={body.id.toString()}>
               {body.name[i18n.language as "ar" | "en"]}
             </SelectItem>
@@ -247,7 +247,7 @@ const CarDetails = () => {
           isLoading={vehicleTypes.isLoading}
           disabled={!selectedBrandId}
         >
-          {vehicleTypes.data.map((type) => (
+          {(vehicleTypes.data || []).map((type) => (
             <SelectItem key={type.id.toString()}>
               {type.name[i18n.language as "ar" | "en"]}
             </SelectItem>
@@ -269,7 +269,7 @@ const CarDetails = () => {
           }}
           isLoading={vehicleClasses.isLoading}
         >
-          {vehicleClasses.data.map((vehicleClass) => (
+          {(vehicleClasses.data || []).map((vehicleClass) => (
             <SelectItem key={vehicleClass.id.toString()}>
               {vehicleClass.name[i18n.language as "ar" | "en"]}
             </SelectItem>
@@ -291,7 +291,7 @@ const CarDetails = () => {
           }}
           isLoading={brandOrigins.isLoading}
         >
-          {brandOrigins.data.map((origin) => (
+          {(brandOrigins.data || []).map((origin) => (
             <SelectItem key={origin.id.toString()}>
               {origin.name[i18n.language as "ar" | "en"]}
             </SelectItem>
@@ -313,7 +313,7 @@ const CarDetails = () => {
           }}
           isLoading={seats.isLoading}
         >
-          {seats.data.map((seat) => (
+          {(seats.data || []).map((seat) => (
             <SelectItem key={seat.id.toString()}>{seat.name.ar}</SelectItem>
           ))}
         </Select>
@@ -333,7 +333,7 @@ const CarDetails = () => {
           }}
           isLoading={engineTypes.isLoading}
         >
-          {engineTypes.data.map((engineType) => (
+          {(engineTypes.data || []).map((engineType) => (
             <SelectItem key={engineType.id.toString()}>
               {engineType.name[i18n.language as "ar" | "en"]}
             </SelectItem>
@@ -355,7 +355,7 @@ const CarDetails = () => {
           }}
           isLoading={engineSizes.isLoading}
         >
-          {engineSizes.data.map((engineSize) => (
+          {(engineSizes.data || []).map((engineSize) => (
             <SelectItem key={engineSize.id.toString()}>
               {engineSize.name[i18n.language as "ar" | "en"]}
             </SelectItem>
