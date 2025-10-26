@@ -22,6 +22,7 @@ import {
   type VehicleImage,
 } from "@/api/vehicles";
 import Loading from "@/components/general/Loading";
+import CarAdvertisingImages from "@/components/cars/addcars/CarAdvertisingImages";
 
 const AddCarsForm = () => {
   const params = useParams();
@@ -208,7 +209,7 @@ const AddCarsForm = () => {
         additionalImages: convertToVehicleImages(
           vehicle.additional_images || []
         ), // PhotosAndVideos MultiImageInput -> additional_images API field
-        adsImages: convertToVehicleImages(vehicle.images_ads || []),
+        adsImages: convertToVehicleImages(vehicle.images_ads || []), // Advertising images from images_ads API field
         // Set toggle states based on whether data exists
         is_offers_active:
           (vehicle.offers && vehicle.offers.length > 0) || false,
@@ -467,7 +468,7 @@ const AddCarsForm = () => {
         <CarAccessories />
         <CarOffers />
         <RentToOwn />
-        {/* <CarAdvertisingImages /> */}
+        <CarAdvertisingImages />
         <div className="mt-6">
           <DashboardButton
             titleAr={isEdit ? "تحديث" : "اضافة"}

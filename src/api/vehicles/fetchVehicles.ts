@@ -526,7 +526,7 @@ export async function createVehicle(
   if (data.ads_images?.length) {
     data.ads_images.forEach((img, index) => {
       if (img.image instanceof File) {
-        formData.append(`ads_images[${index}][image]`, img.image);
+        formData.append(`images_ads[${index}][image]`, img.image);
       }
     });
   }
@@ -740,7 +740,7 @@ export async function updateVehicle(
     if (data.ads_images?.length) {
       data.ads_images.forEach((img, index) => {
         if (img.image instanceof File) {
-          formData.append(`ads_images[${index}][image]`, img.image);
+          formData.append(`images_ads[${index}][image]`, img.image);
         }
       });
     }

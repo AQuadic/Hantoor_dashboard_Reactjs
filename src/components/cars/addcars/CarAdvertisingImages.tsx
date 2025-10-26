@@ -4,6 +4,12 @@ import { Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
 
+// Extended VehicleImage to track existing images with IDs
+export interface AdImageWithId {
+  id?: number; // If this exists, it's from the backend
+  image: File | string;
+}
+
 const CarAdvertisingImages = () => {
   const { t } = useTranslation("cars");
   const { formData, updateField } = useVehicleForm();
@@ -20,6 +26,7 @@ const CarAdvertisingImages = () => {
   };
 
   // Convert adsImages (VehicleImage[]) to File[] for MultiImageInput
+  // Only include NEW files (not existing URLs)
   const convertedImages = useMemo(() => {
     if (!formData?.adsImages) return null;
     const files = formData.adsImages
@@ -28,26 +35,50 @@ const CarAdvertisingImages = () => {
     return files.length > 0 ? files : null;
   }, [formData?.adsImages]);
 
-  // Create previews for File objects and build a previews array that matches formData.adsImages order.
+  // When MultiImageInput changes, we need to merge new files with existing URLs
+  const handleImagesChange = (
+    value: File[] | null | ((prev: File[] | null) => File[] | null)
+  ) => {
+    const newImages =
+      typeof value === "function" ? value(convertedImages) : value;
+
+    if (newImages) {
+      // Get existing URL images (not Files)
+      const existingUrlImages = (formData?.adsImages || []).filter(
+        (img) => !(img.image instanceof File)
+      );
+
+      // Combine existing URLs with new Files
+      const combinedImages = [
+        ...existingUrlImages,
+        ...newImages.map((file) => ({ image: file })),
+      ];
+
+      updateField?.("adsImages", combinedImages);
+    } else {
+      // If cleared, keep only existing URL images
+      const existingUrlImages = (formData?.adsImages || []).filter(
+        (img) => !(img.image instanceof File)
+      );
+      updateField?.("adsImages", existingUrlImages);
+    }
+  };
+
+  // Create previews for File objects
   useEffect(() => {
     const ads = formData?.adsImages || [];
     const map = filePreviewMapRef.current;
-
-    // If there are no adsImages, nothing to do
-    if (!ads || ads.length === 0) return;
 
     let fileCount = 0;
     ads.forEach((a) => {
       if (a && a.image instanceof File) fileCount++;
     });
 
-    // If there are no File objects, no need to read files; just trigger a render
     if (fileCount === 0) {
       setPreviewVersion((v) => v + 1);
       return;
     }
 
-    // There are files to read - build previews in order
     const previews: string[] = new Array(ads.length).fill("");
     let loaded = 0;
 
@@ -58,7 +89,6 @@ const CarAdvertisingImages = () => {
           previews[index] = map.get(img)!;
           loaded++;
           if (loaded === fileCount) {
-            // merge with any string URLs in ads and trigger re-render
             setPreviewVersion((v) => v + 1);
           }
           return;
@@ -73,8 +103,6 @@ const CarAdvertisingImages = () => {
           if (loaded === fileCount) setPreviewVersion((v) => v + 1);
         };
         reader.readAsDataURL(img);
-      } else {
-        // non-file, will be handled when merging
       }
     });
   }, [formData?.adsImages]);
@@ -88,18 +116,7 @@ const CarAdvertisingImages = () => {
         <div className="flex flex-col gap-4">
           <MultiImageInput
             images={convertedImages}
-            setImages={(value) => {
-              const newImages =
-                typeof value === "function" ? value(convertedImages) : value;
-              if (newImages) {
-                const vehicleImages = newImages.map((img) => ({
-                  image: img,
-                }));
-                updateField?.("adsImages", vehicleImages);
-              } else {
-                updateField?.("adsImages", []);
-              }
-            }}
+            setImages={handleImagesChange}
             height={169}
           />
         </div>
@@ -112,21 +129,23 @@ const CarAdvertisingImages = () => {
           {/* Image Gallery for both URL and File images */}
           <div className="mt-6 flex flex-wrap gap-4">
             {(formData?.adsImages || []).map((imgObj, index) => {
-              const isFile = imgObj && imgObj.image instanceof File;
+              const isFile = imgObj?.image instanceof File;
               let src = "";
+
               if (isFile) {
                 src = filePreviewMapRef.current.get(imgObj.image as File) || "";
-              } else if (imgObj && imgObj.image) {
+              } else if (imgObj?.image) {
                 // handle string URL or object containing url
-                if (typeof imgObj.image === "string") src = imgObj.image;
-                else if (
+                if (typeof imgObj.image === "string") {
+                  src = imgObj.image;
+                } else if (
                   typeof imgObj.image === "object" &&
                   imgObj.image !== null &&
-                  "url" in imgObj.image
+                  "url" in imgObj.image &&
+                  typeof (imgObj.image as { url?: string }).url === "string"
                 ) {
-                  // @ts-ignore
-                  src = imgObj.image.url || "";
-                } else src = String(imgObj.image);
+                  src = (imgObj.image as { url: string }).url;
+                }
               }
 
               if (!src) return null;
@@ -134,7 +153,7 @@ const CarAdvertisingImages = () => {
               return (
                 <div
                   key={`ads-image-${index}-${src.slice(-10)}`}
-                  className={`bg-white rounded-lg relative overflow-hidden border border-gray-200 w-[210px] h-[160px]`}
+                  className="bg-white rounded-lg relative overflow-hidden border border-gray-200 w-[210px] h-[160px]"
                 >
                   <img
                     src={src}
