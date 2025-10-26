@@ -52,6 +52,7 @@ export function StructureTable({
     isLoading,
     refetch,
   } = useVehicleBodies({
+    pagination: "normal",
     search,
     page,
     per_page: 15,

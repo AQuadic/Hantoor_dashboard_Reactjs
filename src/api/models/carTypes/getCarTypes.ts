@@ -24,7 +24,7 @@ export interface GetVehicleTypesParams {
   search?: string;
   body_type_id?: number;
   brand_id?: number;
-  pagination?: boolean;
+  pagination?: boolean | string;
   page?: number;
   per_page?: number;
   with_brand?: number;
@@ -53,10 +53,29 @@ export type GetVehicleTypesResponse = GetVehicleTypesPaginated | VehicleType[];
 export const getVehicleTypes = async (
   params?: GetVehicleTypesParams
 ): Promise<GetVehicleTypesPaginated | VehicleType[]> => {
+  const queryParams: Record<string, unknown> = {};
+
+  // Send pagination parameter based on the value
+  if (params?.pagination === false) {
+    queryParams.pagination = false;
+  } else if (params?.pagination === "normal" || params?.pagination === true) {
+    queryParams.pagination = "normal";
+  }
+
+  // Add other parameters
+  if (params?.search) queryParams.search = params.search;
+  if (params?.body_type_id) queryParams.body_type_id = params.body_type_id;
+  if (params?.brand_id) queryParams.brand_id = params.brand_id;
+  if (params?.page) queryParams.page = params.page;
+  if (params?.per_page) queryParams.per_page = params.per_page;
+  if (params?.with_brand) queryParams.with_brand = params.with_brand;
+  if (params?.from_date) queryParams.from_date = params.from_date;
+  if (params?.to_date) queryParams.to_date = params.to_date;
+
   const response = await axios.get<GetVehicleTypesPaginated | VehicleType[]>(
     "/admin/vehicle/type",
     {
-      params,
+      params: queryParams,
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",

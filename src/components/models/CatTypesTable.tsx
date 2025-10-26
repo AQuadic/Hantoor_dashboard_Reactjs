@@ -62,6 +62,7 @@ export function CarTypesTable({
     queryKey: ["vehicleTypes", search, page, dateParams],
     queryFn: () =>
       getVehicleTypes({
+        pagination: "normal",
         search,
         page,
         per_page: 15,

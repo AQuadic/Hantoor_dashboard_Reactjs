@@ -64,6 +64,7 @@ export function CategoriesTable({
     queryKey: ["vehicleClasses", search, page, dateParams],
     queryFn: () =>
       getVehicleClasses({
+        pagination: "normal",
         search,
         page,
         per_page: 15,

@@ -27,7 +27,7 @@ export interface PriceFromResponse {
 }
 
 export interface GetPriceFromParams {
-  pagination?: boolean;
+  pagination?: boolean | string;
   is_active?: boolean;
   page?: number;
   per_page?: number;
@@ -42,9 +42,11 @@ export async function getPriceFrom(
 ): Promise<PriceFromResponse> {
   const queryParams: Record<string, unknown> = {};
 
-  // Only send pagination parameter when it's explicitly false
+  // Send pagination parameter based on the value
   if (params?.pagination === false) {
     queryParams.pagination = false;
+  } else if (params?.pagination === "normal" || params?.pagination === true) {
+    queryParams.pagination = "normal";
   }
 
   // Add other parameters

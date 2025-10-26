@@ -56,6 +56,7 @@ export function EngineSizesTable({
     queryKey: ["engineSize", page, search, dateParams],
     queryFn: async () => {
       const r = await getEngineSizePaginated({
+        pagination: "normal",
         page,
         per_page: 15,
         search,

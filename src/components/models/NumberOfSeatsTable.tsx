@@ -54,6 +54,7 @@ export function NumberOfSeatsTable({
     queryKey: ["seats", page, search, dateParams],
     queryFn: async () => {
       const r = await getSeatsPaginated({
+        pagination: "normal",
         page,
         per_page: 15,
         search,

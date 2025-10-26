@@ -54,6 +54,7 @@ export function PriceToTable({
     queryKey: ["priceto", page, search, dateParams, countryId],
     queryFn: () =>
       getPriceTo({
+        pagination: "normal",
         page,
         per_page: 15,
         search,

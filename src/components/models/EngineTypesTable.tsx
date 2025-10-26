@@ -56,6 +56,7 @@ export function EngineTypesTable({
     queryKey: ["engineTypes", page, search, dateParams],
     queryFn: async () => {
       const r = await getEngineTypePaginated({
+        pagination: "normal",
         page,
         per_page: 15,
         search,

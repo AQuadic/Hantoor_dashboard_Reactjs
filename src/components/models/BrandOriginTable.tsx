@@ -51,6 +51,7 @@ export function BrandOriginTable({
     queryKey: ["brandOrigins", page, search, dateParams],
     queryFn: async () => {
       const r = await getBrandOriginPaginated({
+        pagination: "normal",
         page,
         per_page: 15,
         search,

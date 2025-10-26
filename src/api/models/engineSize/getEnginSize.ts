@@ -48,17 +48,26 @@ export const getEngineSizePaginated = async (params?: {
   search?: string;
   from_date?: string;
   to_date?: string;
+  pagination?: boolean | string;
 }): Promise<EngineSizesResponse> => {
-  const query: Record<string, unknown> = {};
-  if (params?.page) query.page = params.page;
-  if (params?.per_page) query.per_page = params.per_page;
-  if (params?.search) query.search = params.search;
-  if (params?.from_date) query.from_date = params.from_date;
-  if (params?.to_date) query.to_date = params.to_date;
+  const queryParams: Record<string, unknown> = {};
+
+  // Send pagination parameter based on the value
+  if (params?.pagination === false) {
+    queryParams.pagination = false;
+  } else if (params?.pagination === "normal" || params?.pagination === true) {
+    queryParams.pagination = "normal";
+  }
+
+  if (params?.page) queryParams.page = params.page;
+  if (params?.per_page) queryParams.per_page = params.per_page;
+  if (params?.search) queryParams.search = params.search;
+  if (params?.from_date) queryParams.from_date = params.from_date;
+  if (params?.to_date) queryParams.to_date = params.to_date;
 
   const res = await axios.get<EngineSizesResponse>(
     "/admin/vehicle/engine-volume",
-    { params: query }
+    { params: queryParams }
   );
 
   return res.data;

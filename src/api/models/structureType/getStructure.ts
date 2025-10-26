@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export interface GetVehicleBodiesParams {
   search?: string;
-  pagination?: boolean;
+  pagination?: boolean | string;
   page?: number;
   per_page?: number;
   from_date?: string;
@@ -40,6 +40,22 @@ export interface VehicleBodiesPaginated {
 export const getVehicleBodies = async (
   params?: GetVehicleBodiesParams
 ): Promise<VehicleBodiesPaginated | VehicleBody[]> => {
+  const queryParams: Record<string, unknown> = {};
+
+  // Send pagination parameter based on the value
+  if (params?.pagination === false) {
+    queryParams.pagination = false;
+  } else if (params?.pagination === "normal" || params?.pagination === true) {
+    queryParams.pagination = "normal";
+  }
+
+  // Add other parameters
+  if (params?.search) queryParams.search = params.search;
+  if (params?.page) queryParams.page = params.page;
+  if (params?.per_page) queryParams.per_page = params.per_page;
+  if (params?.from_date) queryParams.from_date = params.from_date;
+  if (params?.to_date) queryParams.to_date = params.to_date;
+
   const response = await axios.get<VehicleBodiesPaginated | VehicleBody[]>(
     "/admin/vehicle/body",
     {
@@ -47,7 +63,7 @@ export const getVehicleBodies = async (
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      params,
+      params: queryParams,
     }
   );
 
