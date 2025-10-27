@@ -87,8 +87,6 @@ const BrandsPage = () => {
   const [selectedTab, setSelectedTab] = useState(sectionParam);
   const [currentPage, setCurrentPage] = useState(pageParam);
 
-
-
   const handlePageChange = useCallback(
     (value: React.SetStateAction<number>) => {
       const newPage = typeof value === "function" ? value(currentPage) : value;
@@ -113,21 +111,28 @@ const BrandsPage = () => {
     to: 0,
   });
 
+  // Reset page to 1 when search term changes
+  useEffect(() => {
+    if (search) {
+      setCurrentPage(1);
+    }
+  }, [search]);
+
   const handleTabChange = useCallback(
-  (value: React.SetStateAction<string>) => {
-    const newTab = typeof value === "function" ? value(selectedTab) : value;
-    setSelectedTab(newTab);
-    setCurrentPage(1);
-    setSearch("");
-    setDateRange(null);
+    (value: React.SetStateAction<string>) => {
+      const newTab = typeof value === "function" ? value(selectedTab) : value;
+      setSelectedTab(newTab);
+      setCurrentPage(1);
+      setSearch("");
+      setDateRange(null);
 
-    const newParams = new URLSearchParams(searchParams);
-    newParams.set("section", newTab);
-    newParams.set("page", "1");
-    newParams.delete("dateFrom");
-    newParams.delete("dateTo");
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("section", newTab);
+      newParams.set("page", "1");
+      newParams.delete("dateFrom");
+      newParams.delete("dateTo");
 
-    setSearchParams(newParams, { replace: true });
+      setSearchParams(newParams, { replace: true });
     },
     [selectedTab, searchParams, setSearchParams, setDateRange]
   );
@@ -261,7 +266,7 @@ const BrandsPage = () => {
             search={search}
             page={currentPage}
             setPagination={handleSetPagination}
-            countryId={selectedCountry} 
+            countryId={selectedCountry}
             dateParams={dateParams}
           />
         );

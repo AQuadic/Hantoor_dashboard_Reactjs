@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ContactUsHeader from "@/components/contactus/ContactUsHeader";
 import ContactUsTable from "@/components/contactus/ContactUsTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
@@ -11,6 +11,13 @@ const ContactUsPage = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [search, setSearch] = useState("");
   const { dateRange, setDateRange, dateParams } = useDatePicker();
+
+  // Reset page to 1 when search term changes
+  useEffect(() => {
+    if (search) {
+      setPage(1);
+    }
+  }, [search]);
 
   return (
     <div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import NotificationsHeader from "@/components/notifactions/NotificationsHeader";
 import NotificationTable from "@/components/notifactions/NotificationTable";
@@ -13,6 +13,13 @@ const NotificationPage = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const { dateRange, setDateRange, dateParams } = useDatePicker();
+
+  // Reset page to 1 when search term changes
+  useEffect(() => {
+    if (searchTerm) {
+      setPage(1);
+    }
+  }, [searchTerm]);
 
   const {
     data: notificationsData,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import TechnicalsupportHeader from "@/components/technicalsupport/TechnicalsupportHeader";
 import TechnicalSupportTable from "@/components/technicalsupport/TechnicalSupportTable";
@@ -10,6 +10,13 @@ const TechnicalSupport = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const { dateRange, setDateRange, dateParams } = useDatePicker();
+
+  // Reset page to 1 when search term changes
+  useEffect(() => {
+    if (search) {
+      setPage(1);
+    }
+  }, [search]);
 
   const { data, isLoading, refetch } = useQuery<FAQsResponse, Error>({
     queryKey: ["TechnicalSupportFAQs", page, search, dateParams],

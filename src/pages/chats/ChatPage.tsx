@@ -2,7 +2,7 @@ import ChatHeader from "@/components/chats/ChatHeader";
 import ChatTable from "@/components/chats/ChatTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import Loading from "@/components/general/Loading";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchConversations,
@@ -19,6 +19,13 @@ const ChatPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const { dateRange, setDateRange, dateParams } = useDatePicker();
+
+  // Reset page to 1 when search term changes
+  useEffect(() => {
+    if (searchTerm) {
+      setCurrentPage(1);
+    }
+  }, [searchTerm]);
 
   const {
     data: conversationsData,

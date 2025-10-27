@@ -29,6 +29,13 @@ const DashboardUsers = () => {
     setSearchTermEn("");
   }, [countryId]);
 
+  // Reset page to 1 when search term changes
+  useEffect(() => {
+    if (activeSearchTerm) {
+      setCurrentPage(1);
+    }
+  }, [activeSearchTerm]);
+
   const canAdd = useHasPermission("create_user");
 
   return (

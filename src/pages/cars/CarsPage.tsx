@@ -1,7 +1,7 @@
 import CarsHeader from "@/components/cars/CarsHeader";
 import CarsTable from "@/components/cars/CarsTable";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { type VehiclesApiResponse, type VehicleFilters } from "@/api/vehicles";
 import { useDatePicker } from "@/hooks/useDatePicker";
 
@@ -44,6 +44,13 @@ const CarsPage = () => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
     setCurrentPage(1); // Reset to first page when filters change
   };
+
+  // Reset page to 1 when search term changes
+  useEffect(() => {
+    if (searchTerm) {
+      setCurrentPage(1);
+    }
+  }, [searchTerm]);
 
   return (
     <div>

@@ -21,6 +21,13 @@ const BrandsPage = () => {
   const isArabic = i18n.language === "ar";
   const searchTerm = isArabic ? searchTermAr : searchTermEn;
 
+  // Reset page to 1 when search term changes
+  React.useEffect(() => {
+    if (searchTerm) {
+      setCurrentPage(1);
+    }
+  }, [searchTerm]);
+
   const { data, refetch, isLoading, error } = useQuery<BrandsApiResponse>({
     queryKey: ["brands", currentPage, searchTerm, dateParams],
     queryFn: async () => {

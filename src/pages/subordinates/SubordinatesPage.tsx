@@ -4,7 +4,7 @@ import SubordinatesHeader from "@/components/subordinates/SubordinatesHeader";
 import { SubordinatesTable } from "@/components/subordinates/SubordinatesTable";
 import { useDatePicker } from "@/hooks/useDatePicker";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAdmins } from "@/api/admins/getAdmins";
 import { getRoles } from "@/api/roles/getRoles";
@@ -23,6 +23,16 @@ const SubordinatesPage = () => {
 
   const [permissionsCurrentPage, setPermissionsCurrentPage] = useState(1);
   const [permissionsItemsPerPage] = useState(20);
+
+  const activeSearchTerm = searchTermEn || searchTermAr;
+
+  // Reset pages to 1 when search term changes
+  useEffect(() => {
+    if (activeSearchTerm) {
+      setSubordinatesCurrentPage(1);
+      setPermissionsCurrentPage(1);
+    }
+  }, [activeSearchTerm]);
 
   const { data: subordinatesData } = useQuery({
     queryKey: [
@@ -83,7 +93,6 @@ const SubordinatesPage = () => {
     permissionsCurrentPage * permissionsItemsPerPage,
     permissionsTotalItems
   );
-
 
   return (
     <section>

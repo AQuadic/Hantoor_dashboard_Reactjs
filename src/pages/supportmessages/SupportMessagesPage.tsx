@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
 import SupportMessagesHeader from "@/components/supportmessages/SupportMessagesHeader";
 import SupportMessagesTable from "@/components/supportmessages/SupportMessagesTable";
@@ -15,6 +15,14 @@ const SupportMessagesPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { dateRange, setDateRange, dateParams } = useDatePicker();
   const itemsPerPage = 5;
+
+  // Reset page to 1 when search term changes
+  useEffect(() => {
+    if (searchTerm) {
+      setCurrentPage(1);
+    }
+  }, [searchTerm]);
+
   const { data, isLoading, refetch } = useQuery<
     SupportConversationsResponse,
     Error
@@ -32,7 +40,7 @@ const SupportMessagesPage = () => {
         page: currentPage,
         per_page: itemsPerPage,
         search: searchTerm,
-        country_id: selectedCountry ? Number(selectedCountry) : undefined, 
+        country_id: selectedCountry ? Number(selectedCountry) : undefined,
         ...dateParams,
       }),
   });
