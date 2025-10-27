@@ -61,7 +61,7 @@
     "vehicle": "السيارات",
     "vehicle_model_type": "أنواع نماذج المركبات",
     "vehicle_body_type": "أنواع الهيكل",
-    "vehicle_type": "أنواع السيارات",
+    "vehicle_type": "انواع السيارة",
     "category": "الفئات",
     "brand_origin": "منشأ الماركة",
     "seat_count": "عدد المقاعد",
@@ -84,8 +84,8 @@
     "terms": "الشروط والأحكام",
     "social_link": "روابط التواصل الاجتماعي",
     "app_feature": "مميزات التطبيق",
-    "onboarding": "التعريف بالتطبيق",
-    "request_financing": "طلبات التمويل",
+    "onboarding": "الصفحات التعريفية",
+    "request_financing": "زر طلب تفاصيل سعر التأمين",
     "role": "الدور"
   },
 
