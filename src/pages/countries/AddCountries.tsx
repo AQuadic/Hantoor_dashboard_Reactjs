@@ -134,7 +134,7 @@ const handleSubmit = async () => {
               label={t("tax")}
               value={serviceFee}
               onChange={setServiceFee}
-              placeholder="20 درهم"
+              placeholder={t('20dirham')}
             />
           </div>
           <div className="relative w-full border border-gray-300 rounded-lg p-3 text-sm">
