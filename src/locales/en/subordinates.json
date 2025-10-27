@@ -146,20 +146,24 @@
     "create_vehicle_class": "Create Vehicle Class",
     "edit_vehicle_class": "Edit Vehicle Class",
     "delete_vehicle_class": "Delete Vehicle Class",
+    "change-status_vehicle_class": "Status",
 
     "view_vehicle_model": "View Vehicle Model",
     "create_vehicle_model": "Create Vehicle Model",
     "edit_vehicle_model": "Edit Vehicle Model",
     "delete_vehicle_model": "Delete Vehicle Model",
+    "change-status_vehicle_model": "Status",
 
     "view_vehicle": "View Vehicle",
     "create_vehicle": "Create Vehicle",
     "edit_vehicle": "Edit Vehicle",
     "delete_vehicle": "Delete Vehicle",
+    "change-status_vehicle": "Status",
 
     "view_vehicle_model_type": "View Vehicle Model Type",
     "create_vehicle_model_type": "Create Vehicle Model Type",
     "delete_vehicle_model_type": "Delete Vehicle Model Type",
+    "change-status_vehicle_body_type": "Status",
 
     "edit_vehicle_body_type": "Edit Vehicle Body Type",
 
@@ -167,51 +171,61 @@
     "create_vehicle_type": "Create Vehicle Type",
     "edit_vehicle_type": "Edit Vehicle Type",
     "delete_vehicle_type": "Delete Vehicle Type",
+    "change-status_vehicle_type": "Status",
 
     "view_category": "View Category",
     "create_category": "Create Category",
     "edit_category": "Edit Category",
     "delete_category": "Delete Category",
+    "change-status_category": "Status",
 
     "view_brand_origin": "View Brand Origin",
     "create_brand_origin": "Create Brand Origin",
     "edit_brand_origin": "Edit Brand Origin",
     "delete_brand_origin": "Delete Brand Origin",
+    "change-status_brand_origin": "Status",
 
     "view_seat_count": "View Seat Count",
     "create_seat_count": "Create Seat Count",
     "edit_seat_count": "Edit Seat Count",
     "delete_seat_count": "Delete Seat Count",
+    "change-status_seat_count": "Status",
 
     "view_engine_type": "View Engine Type",
     "create_engine_type": "Create Engine Type",
     "edit_engine_type": "Edit Engine Type",
     "delete_engine_type": "Delete Engine Type",
+    "change-status_engine_type": "Status",
 
     "view_engine_size": "View Engine Size",
     "create_engine_size": "Create Engine Size",
     "edit_engine_size": "Edit Engine Size",
     "delete_engine_size": "Delete Engine Size",
+    "change-status_engine_size": "Status",
 
     "view_price_from": "View Price From",
     "create_price_from": "Create Price From",
     "edit_price_from": "Edit Price From",
     "delete_price_from": "Delete Price From",
+    "change-status_price_from": "Status",
 
     "view_price_to": "View Price To",
     "create_price_to": "Create Price To",
     "edit_price_to": "Edit Price To",
     "delete_price_to": "Delete Price To",
+    "change-status_price_to": "Status",
 
     "view_finance": "View Finance",
     "create_finance": "Create Finance",
     "edit_finance": "Edit Finance",
     "delete_finance": "Delete Finance",
+    "change-status_finance": "Status",
 
     "view_bank": "View Bank",
     "create_bank": "Create Bank",
     "edit_bank": "Edit Bank",
     "delete_bank": "Delete Bank",
+    "change-status_bank": "Status",
 
     "view_support_chat": "View Support Chat",
     "create_support_chat": "Create Support Chat",
@@ -223,31 +237,39 @@
     "create_chat": "Create Chat",
     "edit_chat": "Edit Chat",
     "delete_chat": "Delete Chat",
+    "change-status_chat": "Status",
 
     "view_support_question": "View Support Question",
     "create_support_question": "Create Support Question",
     "edit_support_question": "Edit Support Question",
     "delete_support_question": "Delete Support Question",
+    "change-status_support_question": "Status",
 
     "view_support_message": "View Support Message",
     "create_support_message": "Create Support Message",
     "edit_support_message": "Edit Support Message",
     "delete_support_message": "Delete Support Message",
+    "change-status_support_message": "Status",
 
     "view_faq": "View FAQ",
     "create_faq": "Create FAQ",
     "edit_faq": "Edit FAQ",
     "delete_faq": "Delete FAQ",
+    "change-status_faq": "Status",
 
     "view_notification": "View Notification",
     "create_notification": "Create Notification",
     "edit_notification": "Edit Notification",
     "delete_notification": "Delete Notification",
+    "change-status_notification": "Status",
 
     "view_contact_us": "View Contact Us",
     "create_contact_us": "Create Contact Us",
     "edit_contact_us": "Edit Contact Us",
     "delete_contact_us": "Delete Contact Us",
+    "email_contact_us": "Email",
+    "star_contact_us": "Rating",
+    "change-status_contact_us": "Status",
 
     "view_general_setting": "View General Settings",
     "update_general_setting": "Update General Settings",
@@ -256,11 +278,13 @@
     "create_info_page": "Create Info Page",
     "edit_info_page": "Edit Info Page",
     "delete_info_page": "Delete Info Page",
+    "change-status_info_page": "Status",
 
     "view_ad_image": "View Ad Image",
     "create_ad_image": "Create Ad Image",
     "edit_ad_image": "Edit Ad Image",
     "delete_ad_image": "Delete Ad Image",
+    "change-status_ad_image": "Status",
 
     "view_terms": "View Terms",
     "update_terms": "Update Terms",
@@ -273,23 +297,25 @@
     "create_app_feature": "Create App Feature",
     "edit_app_feature": "Edit App Feature",
     "delete_app_feature": "Delete App Feature",
+    "change-status_app_feature": "Status",
 
     "view_onboarding": "View Onboarding",
     "create_onboarding": "Create Onboarding",
     "edit_onboarding": "Edit Onboarding",
     "delete_onboarding": "Delete Onboarding",
+    "change-status_onboarding": "Status",
 
     "view_request_financing": "View Request Financing",
     "create_request_financing": "Create Request Financing",
     "edit_request_financing": "Edit Request Financing",
     "delete_request_financing": "Delete Request Financing",
+    "change-status_request_financing": "Status",
 
     "role": "Role",
     "create_role": "Add role",
     "view_role": "View role",
     "edit_role": "Edit role",
     "delete_role": "Delete role",
-    "change-status_role":"Status"
-
+    "change-status_role": "Status"
   }
 }
