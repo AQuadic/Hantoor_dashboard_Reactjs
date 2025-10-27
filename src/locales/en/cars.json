@@ -121,5 +121,9 @@
   "pleaseCompleteOffers": "Please complete all offers fields",
   "pleaseCompleteRentToOwn": "Please complete all rent-to-own fields",
   "vehicleCreationError": "Error creating vehicle",
-  "vehicleUpdateError": "Error updating vehicle"
+  "vehicleUpdateError": "Error updating vehicle",
+  "imageDeletedSuccess": "Image deleted successfully",
+  "imageDeleteError": "Failed to delete image",
+  "adImageDeletedSuccess": "Ad image deleted successfully",
+  "adImageDeleteError": "Failed to delete ad image"
 }

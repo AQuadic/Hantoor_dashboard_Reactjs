@@ -1,4 +1,4 @@
-import { X, Play, Pause } from "lucide-react";
+import { X, Play, Pause, Volume2, VolumeX } from "lucide-react";
 import React, {
   ChangeEvent,
   DragEvent,
@@ -25,11 +25,12 @@ const VideoInput: React.FC<VideoInputProps> = ({
   setVideo,
   isRounded = false,
   existingVideoUrl,
-  onRemoveVideo,
 }) => {
   const { t } = useTranslation("setting");
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const [isHovering, setIsHovering] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -125,6 +126,16 @@ const VideoInput: React.FC<VideoInputProps> = ({
     }
   };
 
+  // Toggle mute
+  const handleMuteToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!videoRef.current) return;
+
+    const newMutedState = !videoRef.current.muted;
+    videoRef.current.muted = newMutedState;
+    setIsMuted(newMutedState);
+  };
+
   // Handle video events
   const handleVideoLoadedData = () => {
     setIsLoaded(true);
@@ -152,64 +163,81 @@ const VideoInput: React.FC<VideoInputProps> = ({
   };
 
   return (
-    <>
-      <div
-        className={`bg-white ${isRounded ? "rounded-full" : "rounded-lg"} 
-                    flex flex-col gap-5 items-center justify-center 
-                    border-dashed border-2 cursor-pointer relative overflow-hidden`}
-        style={{ width: width ?? 180, height: height ?? 180 }}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={handleClick}
-      >
-        {/* Hidden file input */}
-        <input
-          ref={fileInputRef}
-          type="file"
-          accept="video/*"
-          onChange={handleFileInputChange}
-          className="hidden"
-        />
+    <div
+      className={`bg-white ${isRounded ? "rounded-full" : "rounded-lg"} 
+                  flex flex-col gap-5 items-center justify-center 
+                  border-dashed border-2 cursor-pointer relative overflow-hidden`}
+      style={{ width: width ?? 180, height: height ?? 180 }}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if ((e.key === "Enter" || e.key === " ") && !video) {
+          handleClick();
+        }
+      }}
+    >
+      {/* Hidden file input */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="video/*"
+        onChange={handleFileInputChange}
+        className="hidden"
+      />
 
-        {/* Remove button - only show when video is present */}
-        {video && (
-          <button
-            onClick={handleRemoveVideo}
-            className="absolute top-2 right-2 bg-black text-white rounded-full p-1 transition-colors duration-200 z-20 hover:bg-gray-800"
-            aria-label="Remove video"
-          >
-            <X size={16} />
-          </button>
-        )}
+      {/* Remove button - only show when video is present */}
+      {video && (
+        <button
+          onClick={handleRemoveVideo}
+          className="absolute top-2 right-2 bg-black text-white rounded-full p-1 transition-colors duration-200 z-20 hover:bg-gray-800"
+          aria-label="Remove video"
+        >
+          <X size={16} />
+        </button>
+      )}
 
-        {/* Content */}
-        {video && videoPreview ? (
-          <div className="relative w-full h-full">
-            <video
-              ref={videoRef}
-              src={videoPreview}
-              className={`w-full h-full object-cover ${
-                isRounded ? "rounded-full" : "rounded-lg"
-              }`}
-              muted
-              playsInline
-              preload="metadata"
-              onLoadedData={handleVideoLoadedData}
-              onPlay={handleVideoPlay}
-              onPause={handleVideoPause}
-              onEnded={handleVideoEnded}
-            />
+      {/* Content */}
+      {(video || existingVideoUrl) && videoPreview ? (
+        <div
+          className="relative w-full h-full"
+          onMouseEnter={() => setIsHovering(true)}
+          onMouseLeave={() => setIsHovering(false)}
+        >
+          <video
+            ref={videoRef}
+            src={videoPreview}
+            className={`w-full h-full object-cover ${
+              isRounded ? "rounded-full" : "rounded-lg"
+            }`}
+            muted={isMuted}
+            playsInline
+            preload="metadata"
+            onLoadedData={handleVideoLoadedData}
+            onPlay={handleVideoPlay}
+            onPause={handleVideoPause}
+            onEnded={handleVideoEnded}
+          />
 
-            {/* Play/Pause overlay */}
-            {isLoaded && (
+          {/* Play/Pause and Mute Controls - visible on hover or when paused */}
+          {isLoaded && (isHovering || !isPlaying) && (
+            <>
+              {/* Play/Pause overlay */}
               <div
                 className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 cursor-pointer z-10"
                 onClick={handleOverlayClick}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    handleVideoClick(e as unknown as React.MouseEvent);
+                  }
+                }}
                 style={{
-                  opacity: isPlaying ? 0 : 1,
                   transition: "opacity 0.3s ease",
-                  pointerEvents: isPlaying ? "none" : "auto",
                 }}
               >
                 <div className="bg-white bg-opacity-90 rounded-full p-4 shadow-lg">
@@ -220,27 +248,40 @@ const VideoInput: React.FC<VideoInputProps> = ({
                   )}
                 </div>
               </div>
-            )}
 
-            {/* Loading indicator */}
-            {!isLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div className="text-white text-sm">Loading...</div>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className={"flex flex-col items-center justify-center"}>
-            <img
-              src="/images/addVideo.svg"
-              alt="Add Video"
-              className="w-[36px] h-[36px]"
-            />
-            <p className="text-lg text-primary underline">{t("addVideo")}</p>
-          </div>
-        )}
-      </div>
-    </>
+              {/* Mute/Unmute button */}
+              <button
+                onClick={handleMuteToggle}
+                className="absolute bottom-4 right-4 bg-white bg-opacity-90 rounded-full p-2 shadow-lg transition-colors duration-200 z-20 hover:bg-opacity-100"
+                aria-label={isMuted ? "Unmute video" : "Mute video"}
+              >
+                {isMuted ? (
+                  <VolumeX size={20} className="text-black" />
+                ) : (
+                  <Volume2 size={20} className="text-black" />
+                )}
+              </button>
+            </>
+          )}
+
+          {/* Loading indicator */}
+          {!isLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="text-white text-sm">Loading...</div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div className={"flex flex-col items-center justify-center"}>
+          <img
+            src="/images/addVideo.svg"
+            alt="Add Video"
+            className="w-[36px] h-[36px]"
+          />
+          <p className="text-lg text-primary underline">{t("addVideo")}</p>
+        </div>
+      )}
+    </div>
   );
 };
 

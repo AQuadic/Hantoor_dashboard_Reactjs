@@ -6,6 +6,8 @@ export {
   updateVehicle,
   deleteVehicle,
   toggleVehicleStatus,
+  deleteAdImage,
+  deleteAdditionalImage,
   getVehicleName,
   type Vehicle,
   type VehiclesApiResponse,

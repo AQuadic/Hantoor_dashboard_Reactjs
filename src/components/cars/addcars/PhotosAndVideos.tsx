@@ -5,11 +5,36 @@ import MultiImageInput from "@/components/general/MultiImageInput";
 import { Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
+import { deleteAdditionalImage } from "@/api/vehicles";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
+import { useParams } from "react-router";
 
 const PhotosAndVideos = () => {
   const { t } = useTranslation("cars");
   const { formData, updateField } = useVehicleForm();
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+  const params = useParams();
+  const queryClient = useQueryClient();
+  const vehicleId = params.id;
+
+  // Mutation for deleting additional images
+  const deleteAdditionalImageMutation = useMutation({
+    mutationFn: ({
+      vehicleId,
+      imageId,
+    }: {
+      vehicleId: number;
+      imageId: number;
+    }) => deleteAdditionalImage(vehicleId, imageId),
+    onSuccess: () => {
+      toast.success(t("imageDeletedSuccess"));
+      queryClient.invalidateQueries({ queryKey: ["vehicle", vehicleId] });
+    },
+    onError: () => {
+      toast.error(t("imageDeleteError"));
+    },
+  });
 
   // Convert additionalImages (VehicleImage[]) to File[] for MultiImageInput
   // Only include File objects for the MultiImageInput component
@@ -119,35 +144,52 @@ const PhotosAndVideos = () => {
           {/* Image Gallery */}
           <div className="mt-6 flex flex-wrap gap-4">
             {/* Show existing images from URLs */}
-            {existingImageUrls.map((imageUrl, index) => (
-              <div
-                key={`existing-image-${index}-${imageUrl.slice(-10)}`}
-                className={`bg-white rounded-lg
+            {existingImageUrls.map((imageUrl, index) => {
+              // Find the image object to get its ID
+              const imageObj = formData?.additionalImages?.find(
+                (img) => img.image === imageUrl
+              );
+              const imageId = imageObj?.id;
+
+              return (
+                <div
+                  key={`existing-image-${index}-${imageUrl.slice(-10)}`}
+                  className={`bg-white rounded-lg
                 relative overflow-hidden border border-gray-200 w-[210px]
            h-[160px]`}
-              >
-                <img
-                  src={imageUrl}
-                  alt={`Vehicle view ${index + 1}`}
-                  className="w-full h-full object-cover"
-                />
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    // Remove the existing image from the additionalImages array
-                    const updatedImages =
-                      formData?.additionalImages?.filter(
-                        (img) => img.image !== imageUrl
-                      ) || [];
-                    updateField?.("additionalImages", updatedImages);
-                  }}
-                  className="absolute top-2 right-2 bg-black text-white rounded-full p-1 transition-colors duration-200 z-10 hover:bg-gray-800"
-                  aria-label="Remove image"
                 >
-                  <Trash2 size={16} />
-                </button>
-              </div>
-            ))}
+                  <img
+                    src={imageUrl}
+                    alt={`Vehicle view ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      // If we have an ID and vehicleId, delete from server
+                      if (imageId && vehicleId) {
+                        deleteAdditionalImageMutation.mutate({
+                          vehicleId: Number(vehicleId),
+                          imageId: imageId,
+                        });
+                      }
+
+                      // Remove from local state
+                      const updatedImages =
+                        formData?.additionalImages?.filter(
+                          (img) => img.image !== imageUrl
+                        ) || [];
+                      updateField?.("additionalImages", updatedImages);
+                    }}
+                    className="absolute top-2 right-2 bg-black text-white rounded-full p-1 transition-colors duration-200 z-10 hover:bg-gray-800"
+                    aria-label="Remove image"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+              );
+            })}
             {/* Show new uploaded images */}
             {imagePreviews.map((preview, index) => (
               <div

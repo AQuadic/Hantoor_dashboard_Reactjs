@@ -876,3 +876,21 @@ export async function toggleVehicleStatus(
   const responseData = response.data as VehicleApiResponseWrapper;
   return responseData.data;
 }
+
+// Delete ad image from vehicle
+export async function deleteAdImage(
+  vehicleId: number,
+  imageId: number
+): Promise<void> {
+  await axios.delete(`/admin/vehicle/${vehicleId}/ad_images/${imageId}`);
+}
+
+// Delete additional image from vehicle
+export async function deleteAdditionalImage(
+  vehicleId: number,
+  imageId: number
+): Promise<void> {
+  await axios.delete(
+    `/admin/vehicle/${vehicleId}/additional_images/${imageId}`
+  );
+}

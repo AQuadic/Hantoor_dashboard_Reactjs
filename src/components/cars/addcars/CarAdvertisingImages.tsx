@@ -3,6 +3,10 @@ import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Trash2 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
+import { deleteAdImage } from "@/api/vehicles";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
+import { useParams } from "react-router";
 
 // Extended VehicleImage to track existing images with IDs
 export interface AdImageWithId {
@@ -15,11 +19,45 @@ const CarAdvertisingImages = () => {
   const { formData, updateField } = useVehicleForm();
   const [, setPreviewVersion] = useState(0);
   const filePreviewMapRef = useRef<Map<File, string>>(new Map());
+  const params = useParams();
+  const queryClient = useQueryClient();
+  const vehicleId = params.id;
+
+  // Mutation for deleting ad images
+  const deleteAdImageMutation = useMutation({
+    mutationFn: ({
+      vehicleId,
+      imageId,
+    }: {
+      vehicleId: number;
+      imageId: number;
+    }) => deleteAdImage(vehicleId, imageId),
+    onSuccess: () => {
+      toast.success(t("adImageDeletedSuccess"));
+      queryClient.invalidateQueries({ queryKey: ["vehicle", vehicleId] });
+    },
+    onError: () => {
+      toast.error(t("adImageDeleteError"));
+    },
+  });
 
   const handleRemoveImage = (indexToRemove: number, e?: React.MouseEvent) => {
     if (e) {
       e.stopPropagation();
     }
+
+    // Get the image object to check if it has an ID
+    const imageToRemove = formData?.adsImages?.[indexToRemove];
+
+    // If we have an ID and vehicleId, delete from server
+    if (imageToRemove?.id && vehicleId) {
+      deleteAdImageMutation.mutate({
+        vehicleId: Number(vehicleId),
+        imageId: imageToRemove.id,
+      });
+    }
+
+    // Remove from local state
     const updatedImages =
       formData?.adsImages?.filter((_, index) => index !== indexToRemove) || [];
     updateField?.("adsImages", updatedImages);

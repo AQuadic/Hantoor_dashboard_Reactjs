@@ -81,10 +81,19 @@ const AddCarsForm = () => {
       // Helper function to get video URL from VehicleImageObject
       // Return empty string when not available so the field is optional
       const getVideoFile = (videoObj: unknown): string => {
+        if (!videoObj) return "";
+
+        // Handle direct string URL
+        if (typeof videoObj === "string") {
+          return videoObj;
+        }
+
+        // Handle object with url property
         if (videoObj && typeof videoObj === "object" && "url" in videoObj) {
           const video = videoObj as { url?: string };
           return video.url || "";
         }
+
         return "";
       };
 

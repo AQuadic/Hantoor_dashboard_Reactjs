@@ -121,5 +121,9 @@
   "pleaseCompleteOffers": "يرجى إكمال جميع حقول العروض",
   "pleaseCompleteRentToOwn": "يرجى إكمال جميع حقول الإيجار منتهي بالتملك",
   "vehicleCreationError": "حدث خطأ أثناء إضافة السيارة",
-  "vehicleUpdateError": "حدث خطأ أثناء تحديث السيارة"
+  "vehicleUpdateError": "حدث خطأ أثناء تحديث السيارة",
+  "imageDeletedSuccess": "تم حذف الصورة بنجاح",
+  "imageDeleteError": "فشل حذف الصورة",
+  "adImageDeletedSuccess": "تم حذف صورة الإعلان بنجاح",
+  "adImageDeleteError": "فشل حذف صورة الإعلان"
 }

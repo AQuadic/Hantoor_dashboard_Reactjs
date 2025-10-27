@@ -482,11 +482,30 @@ export const VehicleFormProvider: React.FC<VehicleFormProviderProps> = ({
   }, [formData]);
 
   const getUpdatePayload = useCallback((): UpdateVehiclePayload => {
+    const createPayload = getCreatePayload();
+
+    // Filter additional_images to only include NEW File uploads (not existing URLs)
+    const newAdditionalImages = formData.additionalImages.filter(
+      (img) => img.image instanceof File
+    );
+
+    // Filter ads_images to only include NEW File uploads (not existing URLs)
+    const newAdsImages = formData.adsImages.filter(
+      (img) => img.image instanceof File
+    );
+
     return {
-      ...getCreatePayload(),
+      ...createPayload,
+      additional_images: newAdditionalImages,
+      ads_images: newAdsImages,
       id: formData.id || 0,
     };
-  }, [getCreatePayload, formData.id]);
+  }, [
+    getCreatePayload,
+    formData.id,
+    formData.additionalImages,
+    formData.adsImages,
+  ]);
 
   const value: VehicleFormContextType = React.useMemo(
     () => ({
