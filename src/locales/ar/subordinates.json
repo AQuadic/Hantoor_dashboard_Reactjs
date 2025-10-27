@@ -90,17 +90,17 @@
   },
 
   "permissionNames": {
-    "view_users_count_dashboard": "عدد المتسخدمين المسجلين",
-    "view_admins_count_dashboard": "رؤية عدد المسؤولين",
-    "view_cars_count_dashboard": "رؤية عدد السيارات ",
-    "view_finances_count_dashboard": "رؤية عدد التمويلات في لوحة التحكم",
+    "view_users_count_dashboard": "عدد المستخدمين المسجلين",
+    "view_admins_count_dashboard": "عدد المسؤولين الفرعيين",
+    "view_cars_count_dashboard": "عدد السيارات",
+    "view_finances_count_dashboard": "عدد التمويلات",
     "view_agents_count_dashboard": "عدد الوكلاء",
     "view_cars_has_discounts_count_dashboard": "عدد السيارات التي تحتوي على خصم",
     "view_cars_has_offers_count_dashboard": "عدد السيارات التي تحتوي على عروض",
     "view_cars_has_rent_to_own_count_dashboard": "عدد السيارات الايجار و تنتهي بالتملك",
-    "view_advanced_search_count_dashboard": "رؤية عدد البحث المتقدم في لوحة التحكم",
+    "view_advanced_search_count_dashboard": "عدد مرات البحث المتقدم",
     "view_brand_count_dashboard": "عدد الماركات",
-    "view_request_finance_count_dashboard": "رؤية عدد طلبات التمويل في لوحة التحكم",
+    "view_request_finance_count_dashboard": "عدد مرات طلب تفاصيل سعر التأمين",
 
     "view_admin": "رؤية",
     "create_admin": "إنشاء",
@@ -270,8 +270,8 @@
     "star_contact_us": "تقييم",
     "change-status_contact_us": "الحالة",
 
-    "view_general_setting": "رؤية",
-    "update_general_setting": "تحديث",
+    "view_general_setting": "اضافة",
+    "update_general_setting": "تعديل",
 
     "view_info_page": "رؤية",
     "create_info_page": "إنشاء",
