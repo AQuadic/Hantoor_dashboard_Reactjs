@@ -47,6 +47,10 @@
   "mohamed": "Mohamed Ahmed",
   "subordinatesGroup": "Subordinates",
   "carSections": "Car Sections",
+  "carName": "Car name",
+  "brandName": "Brand name",
+  "usersNumber": "Users in conversation",
+  "conversation": "Conversation",
 
   "permissionSections": {
     "dashboard": "Dashboard",
@@ -83,7 +87,7 @@
     "ad_image": "Ad Images",
     "terms": "Terms",
     "social_link": "Social Links",
-    "app_feature": "مميزات التطبيق",
+    "app_feature": "App Features",
     "onboarding": "Onboarding",
     "request_financing": "Financing Requests",
     "role": "Roles"
@@ -166,6 +170,10 @@
 
     "edit_vehicle_body_type": "Edit Vehicle Body Type",
 
+    "view_vehicle_body_type": "View Vehicle Body Type",
+    "create_vehicle_body_type": "Create Vehicle Body Type",
+    "delete_vehicle_body_type": "Delete Vehicle Body Type",
+
     "view_vehicle_type": "View Vehicle Type",
     "create_vehicle_type": "Create Vehicle Type",
     "edit_vehicle_type": "Edit Vehicle Type",
@@ -237,6 +245,13 @@
     "edit_chat": "Edit Chat",
     "delete_chat": "Delete Chat",
     "change-status_chat": "Status",
+
+    "vehicle_chat": "Vehicle Chat",
+    "view_vehicle_chat": "View Vehicle Chat",
+    "create_vehicle_chat": "Create Vehicle Chat",
+    "edit_vehicle_chat": "Edit Vehicle Chat",
+    "delete_vehicle_chat": "Delete Vehicle Chat",
+    "change-status_vehicle_chat": "Status",
 
     "view_support_question": "View Support Question",
     "create_support_question": "Create Support Question",
