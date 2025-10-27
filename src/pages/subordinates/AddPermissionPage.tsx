@@ -402,8 +402,10 @@ const AddPermissionPage = () => {
 
                         // Check if divider should be shown after this card
                         // moved divider from 'الوكلاء' to be under 'الدور'
+                        // Use the section key so the divider appears correctly
+                        // regardless of current locale/translation.
                         const shouldShowDivider =
-                          title === "الصلاحيات" || title === "الدور";
+                          sectionKey === "permission" || sectionKey === "role";
 
                         return (
                           <>
@@ -484,7 +486,9 @@ const AddPermissionPage = () => {
                               sectionKey.toLowerCase().includes("control") ||
                               sectionKey.toLowerCase().includes("dashboard");
 
-                            const shouldShowDivider = title === "السعر إلى";
+                            // Show divider after the `price_to` vehicle section.
+                            // Use section key so it works in all locales.
+                            const shouldShowDivider = sectionKey === "price_to";
 
                             return (
                               <>
