@@ -5,7 +5,7 @@ export interface DashboardStatusItem {
   key: string;
   textAr: string;
   textEn: string;
-  permission: string;
+  permission: string | string[]; // Can be a single permission or array of permissions (ANY match)
 }
 
 export const DashboardStatus: DashboardStatusItem[] = [
@@ -22,13 +22,6 @@ export const DashboardStatus: DashboardStatusItem[] = [
     textAr: "عدد المسؤولين",
     textEn: "Number of admins",
     permission: "view_admins_count_dashboard",
-  },
-  {
-    icon: userImg,
-    key: "cars_count",
-    textAr: "عدد السيارات",
-    textEn: "Number of cars",
-    permission: "view_cars_count_dashboard",
   },
   {
     icon: userImg,
@@ -49,21 +42,30 @@ export const DashboardStatus: DashboardStatusItem[] = [
     key: "cars_with_discount_count",
     textAr: "عدد السيارات التي تحتوي على خصم",
     textEn: "Number of cars with discounts",
-    permission: "view_cars_has_discounts_count_dashboard",
+    permission: [
+      "view_cars_has_discounts_count_dashboard",
+      "view_cars_count_dashboard",
+    ],
   },
   {
     icon: userImg,
     key: "cars_with_offers_count",
     textAr: "عدد السيارات التي تحتوي على عروض",
     textEn: "Number of cars with offers",
-    permission: "view_cars_has_offers_count_dashboard",
+    permission: [
+      "view_cars_has_offers_count_dashboard",
+      "view_cars_count_dashboard",
+    ],
   },
   {
     icon: userImg,
     key: "cars_with_rent_to_own_count",
     textAr: "عدد السيارات الايجار و تنتهي بالتملك",
     textEn: "Number of lease-to-own cars",
-    permission: "view_cars_has_rent_to_own_count_dashboard",
+    permission: [
+      "view_cars_has_rent_to_own_count_dashboard",
+      "view_cars_count_dashboard",
+    ],
   },
   {
     icon: userImg,

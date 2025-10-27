@@ -20,8 +20,10 @@ const Status = () => {
 
   // Filter statistics based on both user permissions AND data availability
   const allowedStatistics = DashboardStatus.filter((item) => {
-    // Check if user has permission
-    const hasRequiredPermission = hasPermission(item.permission);
+    // Check if user has permission (supports both string and array)
+    const hasRequiredPermission = Array.isArray(item.permission)
+      ? item.permission.some((perm) => hasPermission(perm))
+      : hasPermission(item.permission);
 
     // Check if the data actually exists in the API response
     const dataExists =
