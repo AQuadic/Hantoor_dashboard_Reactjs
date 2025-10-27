@@ -165,6 +165,11 @@
     "change-status_vehicle_body_type": "الحالة",
 
     "edit_vehicle_body_type": "تعديل",
+    "view_vehicle_body_type": "رؤية",
+    "create_vehicle_body_type": "إنشاء",
+    "edit_vehicle_body_type": "تعديل",
+    "delete_vehicle_body_type": "حذف",
+    "change-status_vehicle_body_type": "الحالة",
 
     "view_vehicle_type": "رؤية",
     "create_vehicle_type": "إنشاء",
@@ -231,12 +236,14 @@
     "edit_support_chat": "تعديل",
     "delete_support_chat": "حذف",
     "notes_support_chat": "ملاحظات",
+    "change-status_support_chat": "الحالة",
 
     "view_chat": "رؤية",
     "create_chat": "إنشاء",
     "edit_chat": "تعديل",
     "delete_chat": "حذف",
     "change-status_chat": "الحالة",
+    "vehicle_chat": "محادثة السيارة",
 
     "view_support_question": "رؤية",
     "create_support_question": "إنشاء",
