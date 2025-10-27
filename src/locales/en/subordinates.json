@@ -129,6 +129,7 @@
     "delete_brand": "Delete Brand",
 
     "view_agent": "View Agent",
+    "link_agent": "Link Agent",
     "create_agent": "Create Agent",
     "edit_agent": "Edit Agent",
     "delete_agent": "Delete Agent",
