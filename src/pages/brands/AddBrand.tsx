@@ -159,17 +159,18 @@ const AddBrand = () => {
 
   const handleSubmit = () => {
     // Validation: require Arabic name, English name, and image (for add)
-    if (!arBrand.trim() || !enBrand.trim() || (!isEdit && !profileImage)) {
-      toast.error(
-        t(
-          "brandFieldsRequired",
-          i18n.language === "ar"
-            ? "يرجى تعبئة جميع الحقول المطلوبة."
-            : "Please fill all required fields."
-        )
-      );
-      return;
-    }
+    if (!arBrand.trim()) {
+        toast.error(i18n.language === "ar" ? "يرجى إدخال الاسم العربي للماركة" : "Please enter Arabic brand name");
+        return;
+      }
+      if (!enBrand.trim()) {
+        toast.error(i18n.language === "ar" ? "يرجى إدخال الاسم الإنجليزي للماركة" : "Please enter English brand name");
+        return;
+      }
+      if (!profileImage && !existingImageUrl) {
+        toast.error(i18n.language === "ar" ? "يرجى رفع صورة للماركة" : "Please upload a brand image");
+        return;
+      }
 
     // If editing and the user removed the existing image without uploading a replacement,
     // block submission and show an error toast instead of sending the request.
