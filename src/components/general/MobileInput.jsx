@@ -307,22 +307,31 @@ const MobileInput = ({
   return (
     <div
       className={`relative w-full h-[53px] px-4 py-7.5 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2 p-2 border-2 dark:border-neutral-700 rounded-xl focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
+      dir="ltr"
     >
-      <input
-        disabled={disabled}
-        placeholder="123456789"
-        type="number"
-        value={phone}
-        onChange={(e) => setPhone(e.target.value)}
-        className="w-full bg-transparent dark:text-neutral-200 focus:outline-none rtl:text-right py-2 mt-3"
+      <img
+        src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry.iso2}.svg`}
+        alt={`${selectedCountry} flag`}
+        draggable={false}
+        width={24}
+        height={16}
       />
-      <Label
-        className={`text-[#000000] dark:text-neutral-200 text-[15px] !font-normal absolute top-0.5 rtl:right-4 ltr:left-4 ${labelClassName}`}
+      <p className="text-[#2A32F8] text-sm font-normal -ml-1" dir="ltr">
+        +{selectedCountry.phone[0]}
+      </p>
+      <button
+        disabled={disabled}
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
       >
-        {label || t("phone")}
-      </Label>
+        {isOpen ? (
+          <ChevronUp size={14} className="text-[#2A32F8]" />
+        ) : (
+          <ChevronDown size={14} className="text-[#2A32F8]" />
+        )}
+      </button>
       {isOpen && (
-        <div className="flex flex-col gap-2 border shadow-sm p-3 z-30 absolute left-0 top-11 max-h-[200px] min-w-full overflow-y-auto bg-white dark:bg-darkBg dark:text-neutral-200 rounded-[4px]">
+        <div className="flex flex-col gap-2 border shadow-sm p-3 z-30 absolute rtl:right-0 ltr:left-0 top-11 max-h-[200px] min-w-full overflow-y-auto bg-white dark:bg-darkBg dark:text-neutral-200 rounded-[4px]">
           <Input
             disabled={disabled}
             placeholder={t("searchCountryOrPhoneCode")}
@@ -354,27 +363,22 @@ const MobileInput = ({
           ))}
         </div>
       )}
-      <button
+      <input
         disabled={disabled}
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? (
-          <ChevronUp size={14} className="text-[#2A32F8]" />
-        ) : (
-          <ChevronDown size={14} className="text-[#2A32F8]" />
-        )}
-      </button>
-      <p className="text-[#2A32F8] text-sm font-normal -mr-1" dir="ltr">
-        +{selectedCountry.phone[0]}
-      </p>
-      <img
-        src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${selectedCountry.iso2}.svg`}
-        alt={`${selectedCountry} flag`}
-        draggable={false}
-        width={24}
-        height={16}
+        placeholder="123456789"
+        type="number"
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
+        dir="ltr"
+        className="w-full bg-transparent dark:text-neutral-200 focus:outline-none py-2 mt-3"
+        style={{ textAlign: 'left' }}
       />
+      <Label
+        className={`text-[#000000] dark:text-neutral-200 text-[15px] !font-normal absolute top-0.5 rtl:right-4 ltr:left-4 ${labelClassName}`}
+        dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+      >
+        {label || t("phone")}
+      </Label>
     </div>
   );
 };
