@@ -119,6 +119,7 @@ export const SidebarLinks: SidebarLink[] = [
       "create_agent",
       "edit_agent",
       "delete_agent",
+      "link_agent",
     ],
     requireAny: true,
   },

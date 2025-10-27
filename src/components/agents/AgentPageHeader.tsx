@@ -3,6 +3,7 @@ import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
 import DashboardButton from "../general/dashboard/DashboardButton";
+import { useHasPermission } from "@/hooks/usePermissions";
 
 interface AgentPageHeaderProps {
   setSearchTerm: (term: string) => void;
@@ -17,6 +18,8 @@ const AgentPageHeader: React.FC<AgentPageHeaderProps> = ({
   dateRange,
   setDateRange,
 }) => {
+  const canCreate = useHasPermission("create_agent");
+
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -41,13 +44,15 @@ const AgentPageHeader: React.FC<AgentPageHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
-        <Link to="/agent/add">
-          <DashboardButton
-            titleAr={"اضافة وكيل جديد"}
-            titleEn={"Add new agent"}
-            variant="add"
-          />
-        </Link>
+        {canCreate && (
+          <Link to="/agent/add">
+            <DashboardButton
+              titleAr={"اضافة وكيل جديد"}
+              titleEn={"Add new agent"}
+              variant="add"
+            />
+          </Link>
+        )}
       </div>
     </div>
   );

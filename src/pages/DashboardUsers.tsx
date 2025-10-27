@@ -9,7 +9,7 @@ import { AdminUsersResponse } from "@/api/users/getUsers";
 import { useDatePicker } from "@/hooks/useDatePicker";
 import { Link } from "react-router";
 import { useState, useEffect } from "react";
-import { useHasPermission, usePermissions } from "@/permissions";
+import { useHasPermission } from "@/permissions";
 
 const DashboardUsers = () => {
   const [searchTermAr, setSearchTermAr] = useState("");
@@ -29,10 +29,7 @@ const DashboardUsers = () => {
     setSearchTermEn("");
   }, [countryId]);
 
-  const canAdd = useHasPermission("add_user");
-  const permissions = usePermissions();
-  console.log("canAdd", canAdd);
-  console.log("canAdd", permissions.permissions);
+  const canAdd = useHasPermission("create_user");
 
   return (
     <section>
@@ -64,15 +61,15 @@ const DashboardUsers = () => {
           <div className="flex-1">
             <DashboardDatePicker value={dateRange} onChange={setDateRange} />
           </div>
-          {/* {canAdd && ( */}
-          <Link to="/users/add">
-            <DashboardButton
-              titleAr={"إضافة مستخدم جديد"}
-              titleEn={"Add new user"}
-              variant="add"
-            />
-          </Link>
-          {/* )} */}
+          {canAdd && (
+            <Link to="/users/add">
+              <DashboardButton
+                titleAr={"إضافة مستخدم جديد"}
+                titleEn={"Add new user"}
+                variant="add"
+              />
+            </Link>
+          )}
         </div>
 
         <UserSelects

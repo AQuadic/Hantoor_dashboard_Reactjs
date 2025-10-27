@@ -321,6 +321,7 @@ export const privateRoutes: RouteTypes[] = [
       "create_agent",
       "edit_agent",
       "delete_agent",
+      "link_agent",
     ],
     requireAny: true,
   },
