@@ -63,7 +63,7 @@
     "vehicle_body_type": "أنواع الهيكل",
     "vehicle_type": "أنواع السيارات",
     "category": "الفئات",
-    "brand_origin": "منشأالماركة",
+    "brand_origin": "منشأ الماركة",
     "seat_count": "عدد المقاعد",
     "engine_type": "أنواع الماكينة",
     "engine_size": "أحجام الماكينة",
@@ -91,249 +91,228 @@
 
   "permissionNames": {
     "view_users_count_dashboard": "عدد المتسخدمين المسجلين",
-    "view_admins_count_dashboard": "عرض عدد المسؤولين",
-    "view_cars_count_dashboard": "عرض عدد السيارات ",
-    "view_finances_count_dashboard": "عرض عدد التمويلات في لوحة التحكم",
+    "view_admins_count_dashboard": "رؤية عدد المسؤولين",
+    "view_cars_count_dashboard": "رؤية عدد السيارات ",
+    "view_finances_count_dashboard": "رؤية عدد التمويلات في لوحة التحكم",
     "view_agents_count_dashboard": "عدد الوكلاء",
     "view_cars_has_discounts_count_dashboard": "عدد السيارات التي تحتوي على خصم",
     "view_cars_has_offers_count_dashboard": "عدد السيارات التي تحتوي على عروض",
     "view_cars_has_rent_to_own_count_dashboard": "عدد السيارات الايجار و تنتهي بالتملك",
-    "view_advanced_search_count_dashboard": "عرض عدد البحث المتقدم في لوحة التحكم",
+    "view_advanced_search_count_dashboard": "رؤية عدد البحث المتقدم في لوحة التحكم",
     "view_brand_count_dashboard": "عدد الماركات",
-    "view_request_finance_count_dashboard": "عرض عدد طلبات التمويل في لوحة التحكم",
+    "view_request_finance_count_dashboard": "رؤية عدد طلبات التمويل في لوحة التحكم",
 
-
-    
-    
-    "view_admin": "عرض",
+    "view_admin": "رؤية",
     "create_admin": "إنشاء",
     "edit_admin": "تعديل",
     "delete_admin": "حذف",
     "change-status_admin": "الحالة",
     "change-password_admin": "تغيير كلمة المرور",
 
-    "view_permission": "عرض",
+    "view_permission": "رؤية",
     "create_permission": "إنشاء",
     "edit_permission": "تعديل",
     "delete_permission": "حذف",
     "change-status_permission": "الحالة",
 
-    "view_user": "عرض",
+    "view_user": "رؤية",
     "create_user": "إنشاء",
     "edit_user": "تعديل",
     "delete_user": "حذف",
     "block_user": "حظر",
     "change-status_user": "الحالة",
 
-    "view_country": "عرض",
+    "view_country": "رؤية",
     "create_country": "إنشاء",
     "edit_country": "تعديل",
     "delete_country": "حذف",
     "change-status_country": "الحالة",
 
-    "view_brand": "عرض",
+    "view_brand": "رؤية",
     "create_brand": "إنشاء",
     "edit_brand": "تعديل",
     "delete_brand": "حذف",
     "change-status_brand": "الحالة",
 
-    "view_agent": "عرض",
+    "view_agent": "رؤية",
+    "link_agent": "الرابط",
     "create_agent": "إنشاء",
     "edit_agent": "تعديل",
     "delete_agent": "حذف",
     "change-status_agent": "الحالة",
     "link_agent": "ربط وكيل",
 
-    "view_vehicle_class": "عرض",
+    "view_vehicle_class": "رؤية",
     "create_vehicle_class": "إنشاء",
     "edit_vehicle_class": "تعديل",
     "delete_vehicle_class": "حذف",
     "change-status_vehicle_class": "الحالة",
 
-    "view_vehicle_model": "عرض",
+    "view_vehicle_model": "رؤية",
     "create_vehicle_model": "إنشاء",
     "edit_vehicle_model": "تعديل",
     "delete_vehicle_model": "حذف",
     "change-status_vehicle_model": "الحالة",
 
-    "view_vehicle": "عرض",
+    "view_vehicle": "رؤية",
     "create_vehicle": "إنشاء",
     "edit_vehicle": "تعديل",
     "delete_vehicle": "حذف",
     "change-status_vehicle": "الحالة",
 
-
-    "view_vehicle_model_type": "عرض",
+    "view_vehicle_model_type": "رؤية",
     "create_vehicle_model_type": "إنشاء",
     "delete_vehicle_model_type": "حذف",
     "change-status_vehicle_body_type": "الحالة",
 
-
     "edit_vehicle_body_type": "تعديل",
 
-    "view_vehicle_type": "عرض",
+    "view_vehicle_type": "رؤية",
     "create_vehicle_type": "إنشاء",
     "edit_vehicle_type": "تعديل",
     "delete_vehicle_type": "حذف",
     "change-status_vehicle_type": "الحالة",
 
-
-    "view_category": "عرض",
+    "view_category": "رؤية",
     "create_category": "إنشاء",
     "edit_category": "تعديل",
     "delete_category": "حذف",
     "change-status_category": "الحالة",
 
-
-    "view_brand_origin": "عرض",
+    "view_brand_origin": "رؤية",
     "create_brand_origin": "إنشاء",
     "edit_brand_origin": "تعديل",
     "delete_brand_origin": "حذف",
     "change-status_brand_origin": "الحالة",
 
-
-    "view_seat_count": "عرض",
+    "view_seat_count": "رؤية",
     "create_seat_count": "إنشاء",
     "edit_seat_count": "تعديل",
     "delete_seat_count": "حذف",
     "change-status_seat_count": "الحالة",
 
-
-    "view_engine_type": "عرض",
+    "view_engine_type": "رؤية",
     "create_engine_type": "إنشاء",
     "edit_engine_type": "تعديل",
     "delete_engine_type": "حذف",
     "change-status_engine_type": "الحالة",
 
-
-    "view_engine_size": "عرض",
+    "view_engine_size": "رؤية",
     "create_engine_size": "إنشاء",
     "edit_engine_size": "تعديل",
     "delete_engine_size": "حذف",
     "change-status_engine_size": "الحالة",
 
-
-    "view_price_from": "عرض",
+    "view_price_from": "رؤية",
     "create_price_from": "إنشاء",
     "edit_price_from": "تعديل",
     "delete_price_from": "حذف",
     "change-status_price_from": "الحالة",
 
-
-    "view_price_to": "عرض",
+    "view_price_to": "رؤية",
     "create_price_to": "إنشاء",
     "edit_price_to": "تعديل",
     "delete_price_to": "حذف",
     "change-status_price_to": "الحالة",
 
-    "view_finance": "عرض",
+    "view_finance": "رؤية",
     "create_finance": "إنشاء",
     "edit_finance": "تعديل",
     "delete_finance": "حذف",
     "change-status_finance": "الحالة",
 
-    "view_bank": "عرض",
+    "view_bank": "رؤية",
     "create_bank": "إنشاء",
     "edit_bank": "تعديل",
     "delete_bank": "حذف",
     "change-status_bank": "الحالة",
 
-    "view_support_chat": "عرض",
+    "view_support_chat": "رؤية",
     "create_support_chat": "إنشاء",
     "edit_support_chat": "تعديل",
     "delete_support_chat": "حذف",
     "notes_support_chat": "ملاحظات",
 
-
-    "view_chat": "عرض",
+    "view_chat": "رؤية",
     "create_chat": "إنشاء",
     "edit_chat": "تعديل",
     "delete_chat": "حذف",
     "change-status_chat": "الحالة",
 
-
-    "view_support_question": "عرض",
+    "view_support_question": "رؤية",
     "create_support_question": "إنشاء",
     "edit_support_question": "تعديل",
     "delete_support_question": "حذف",
     "change-status_support_question": "الحالة",
 
-
-    "view_support_message": "عرض",
+    "view_support_message": "رؤية",
     "create_support_message": "إنشاء",
     "edit_support_message": "تعديل",
     "delete_support_message": "حذف",
 
-    "view_faq": "عرض",
+    "view_faq": "رؤية",
     "create_faq": "إنشاء",
     "edit_faq": "تعديل",
     "delete_faq": "حذف",
     "change-status_faq": "الحالة",
 
-
-    "view_notification": "عرض",
+    "view_notification": "رؤية",
     "create_notification": "إنشاء",
     "edit_notification": "تعديل",
     "delete_notification": "حذف",
 
-    "view_contact_us": "عرض",
+    "view_contact_us": "رؤية",
     "create_contact_us": "إنشاء",
     "edit_contact_us": "تعديل",
     "delete_contact_us": "حذف",
     "email_contact_us": "البريد الإلكتروني",
     "star_contact_us": "تقييم",
 
-    "view_general_setting": "عرض",
+    "view_general_setting": "رؤية",
     "update_general_setting": "تحديث",
 
-    "view_info_page": "عرض",
+    "view_info_page": "رؤية",
     "create_info_page": "إنشاء",
     "edit_info_page": "تعديل",
     "delete_info_page": "حذف",
     "change-status_info_page": "الحالة",
 
-
-    "view_ad_image": "عرض",
+    "view_ad_image": "رؤية",
     "create_ad_image": "إنشاء",
     "edit_ad_image": "تعديل",
     "delete_ad_image": "حذف",
     "change-status_ad_image": "الحالة",
 
-
-    "view_terms": "عرض",
+    "view_terms": "رؤية",
     "update_terms": "تحديث",
 
     "create_social_link": "إنشاء",
     "edit_social_link": "تعديل",
     "delete_social_link": "حذف",
 
-    "view_app_feature": "عرض",
+    "view_app_feature": "رؤية",
     "create_app_feature": "إنشاء",
     "edit_app_feature": "تعديل",
     "delete_app_feature": "حذف",
     "change-status_app_feature": "الحالة",
 
-
-    "view_onboarding": "عرض",
+    "view_onboarding": "رؤية",
     "create_onboarding": "إنشاء",
     "edit_onboarding": "تعديل",
     "delete_onboarding": "حذف",
     "change-status_onboarding": "الحالة",
 
-
-    "view_request_financing": "عرض",
+    "view_request_financing": "رؤية",
     "create_request_financing": "إنشاء",
     "edit_request_financing": "تعديل",
     "delete_request_financing": "حذف",
     "change-status_request_financing": "الحالة",
 
-
     "role": "دور",
     "create_role": "إضافة",
-    "view_role": "عرض",
+    "view_role": "رؤية",
     "edit_role": "تعديل",
     "delete_role": "حذف",
-    "change-status_role":"الحالة"
-
+    "change-status_role": "الحالة"
   }
 }
