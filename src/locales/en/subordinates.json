@@ -106,33 +106,41 @@
     "create_admin": "Create Admin",
     "edit_admin": "Edit Admin",
     "delete_admin": "Delete Admin",
+    "change-status_admin": "Status",
+    "change-password_admin": "Change Password",
 
     "view_permission": "View Permission",
     "create_permission": "Create Permission",
     "edit_permission": "Edit Permission",
     "delete_permission": "Delete Permission",
+    "change-status_permission": "Status",
 
     "view_user": "View User",
     "create_user": "Create User",
     "edit_user": "Edit User",
     "delete_user": "Delete User",
     "block_user": "Block User",
+    "change-status_user": "Status",
 
     "view_country": "View Country",
     "create_country": "Create Country",
     "edit_country": "Edit Country",
     "delete_country": "Delete Country",
+    "change-status_country": "Status",
 
     "view_brand": "View Brand",
     "create_brand": "Create Brand",
     "edit_brand": "Edit Brand",
     "delete_brand": "Delete Brand",
+    "change-status_brand": "Status",
 
     "view_agent": "View Agent",
     "link_agent": "Link Agent",
     "create_agent": "Create Agent",
     "edit_agent": "Edit Agent",
     "delete_agent": "Delete Agent",
+    "change-status_agent": "Status",
+    "link_agent": "Link Agent",
 
     "view_vehicle_class": "View Vehicle Class",
     "create_vehicle_class": "Create Vehicle Class",
@@ -209,6 +217,7 @@
     "create_support_chat": "Create Support Chat",
     "edit_support_chat": "Edit Support Chat",
     "delete_support_chat": "Delete Support Chat",
+    "notes_support_chat": "Support Chat Notes",
 
     "view_chat": "View Chat",
     "create_chat": "Create Chat",
@@ -279,6 +288,8 @@
     "create_role": "Add role",
     "view_role": "View role",
     "edit_role": "Edit role",
-    "delete_role": "Delete role"
+    "delete_role": "Delete role",
+    "change-status_role":"Status"
+
   }
 }

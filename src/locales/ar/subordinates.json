@@ -87,7 +87,7 @@
     "onboarding": "التعريف بالتطبيق",
     "request_financing": "طلبات التمويل",
     "role": "الدور"
-  },
+    },
 
   "permissionNames": {
     "view_users_count_dashboard": "عدد المتسخدمين المسجلين",
@@ -140,6 +140,7 @@
     "edit_agent": "تعديل",
     "delete_agent": "حذف",
     "change-status_agent": "الحالة",
+    "link_agent": "ربط وكيل",
 
     "view_vehicle_class": "رؤية",
     "create_vehicle_class": "إنشاء",
