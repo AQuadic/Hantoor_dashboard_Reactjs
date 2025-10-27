@@ -190,14 +190,14 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       const missingDescriptions = incompleteCenters.some(
         (c) => !hasContent(c.description?.ar) || !hasContent(c.description?.en)
       );
-      const missingPhones = incompleteCenters.some((c) => !hasContent(c.phone));
+      // const missingPhones = incompleteCenters.some((c) => !hasContent(c.phone));
 
       if (missingNames) {
         toast.error(t("centerIncompleteName"));
       } else if (missingDescriptions) {
         toast.error(t("centerIncompleteDescription"));
-      } else if (missingPhones) {
-        toast.error(t("centerMissingPhone"));
+      // } else if (missingPhones) {
+      //   toast.error(t("centerMissingPhone"));
       } else {
         toast.error(t("centerIncompleteData"));
       }
