@@ -147,12 +147,9 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       const nameEn = hasContent(center.name?.en);
       const descAr = hasContent(center.description?.ar);
       const descEn = hasContent(center.description?.en);
-      const phone = hasContent(center.phone);
 
-      const filledFields = [nameAr, nameEn, descAr, descEn, phone].filter(
-        Boolean
-      ).length;
-      return filledFields > 0 && filledFields < 5;
+      const filledFields = [nameAr, nameEn, descAr, descEn].filter(Boolean).length;
+      return filledFields > 0 && filledFields < 4;
     };
 
     // Check if any center/showroom is completely empty
@@ -172,8 +169,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
         hasContent(center.name?.ar) &&
         hasContent(center.name?.en) &&
         hasContent(center.description?.ar) &&
-        hasContent(center.description?.en) &&
-        hasContent(center.phone)
+        hasContent(center.description?.en)
       );
     };
 
