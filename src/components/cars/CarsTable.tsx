@@ -50,6 +50,8 @@ const CarsTable = ({
   const { t, i18n } = useTranslation("cars");
   const canEdit = useHasPermission("edit_vehicle");
   const canChangeStatus = useHasPermission("change-status_vehicle");
+  const canDelete = useHasPermission("delete_vehicle");
+  const canView = useHasPermission("view_vehicle");
   const queryClient = useQueryClient();
   const [openChatId, setOpenChatId] = useState<number | null>(null);
   // Local status map to allow immediate UI toggle feedback
@@ -343,7 +345,7 @@ const CarsTable = ({
               <TableHead className="text-right">{t("leaseToOwn")}</TableHead>
               <TableHead className="text-right">{t("favTimes")}</TableHead>
               <TableHead className="text-right">{t("dateAndTime")}</TableHead>
-              {(canChangeStatus || canEdit) && (
+              {(canChangeStatus || canEdit || canDelete || canView) && (
                 <TableHead className="text-right">{t("status")}</TableHead>
               )}
             </TableRow>
@@ -410,7 +412,7 @@ const CarsTable = ({
                 <TableCell>
                   {vehicle.created_at ? formatDate(vehicle.created_at) : "-"}
                 </TableCell>
-                {(canChangeStatus || canEdit) && (
+                {(canChangeStatus || canEdit || canDelete || canView) && (
                   <TableCell className="flex gap-[7px] items-center">
                     {canChangeStatus && (
                       <Switch
@@ -425,22 +427,32 @@ const CarsTable = ({
                         size="sm"
                       />
                     )}
-                    <button onClick={() => setOpenChatId(vehicle.id)}>
-                      <ChatIcon />
-                    </button>
-                    <Link to={`/cars/${vehicle.id}`} className="">
-                      <ViewIcon />
-                    </Link>
+
+                    {canView && (
+                      <button onClick={() => setOpenChatId(vehicle.id)}>
+                        <ChatIcon />
+                      </button>
+                    )}
+
+                    {canView && (
+                      <Link to={`/cars/${vehicle.id}`} className="">
+                        <ViewIcon />
+                      </Link>
+                    )}
+
                     {canEdit && (
                       <Link to={`/cars/edit/${vehicle.id}`} className="mt-2">
                         <TableEditButton />
                       </Link>
                     )}
-                    <div className="mt-2">
-                      <TableDeleteButton
-                        handleDelete={() => handleDelete(vehicle.id)}
-                      />
-                    </div>
+
+                    {canDelete && (
+                      <div className="mt-2">
+                        <TableDeleteButton
+                          handleDelete={() => handleDelete(vehicle.id)}
+                        />
+                      </div>
+                    )}
                   </TableCell>
                 )}
               </TableRow>

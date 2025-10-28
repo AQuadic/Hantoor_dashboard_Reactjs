@@ -4,6 +4,7 @@ import SearchBar from "../general/dashboard/SearchBar";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import { Link } from "react-router";
 import DashboardButton from "../general/dashboard/DashboardButton";
+import { useHasPermission } from "@/hooks/usePermissions";
 import CarsSelect from "./CarsSelect";
 import { type VehicleFilters } from "@/api/vehicles";
 import { RangeValue } from "@heroui/react";
@@ -26,6 +27,7 @@ const CarsHeader = ({
   dateRange,
   setDateRange,
 }: CarsHeaderProps) => {
+  const canCreate = useHasPermission("create_vehicle");
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
       <DashboardHeader
@@ -49,26 +51,30 @@ const CarsHeader = ({
           />
         </div>
         <div className="flex-1">
-          <DashboardDatePicker value={dateRange} onChange={(range) => {
-            setDateRange?.(range);
+          <DashboardDatePicker
+            value={dateRange}
+            onChange={(range) => {
+              setDateRange?.(range);
 
-            if (onFilterChange) {
-              onFilterChange({
-                ...filters,
-                from_date: range?.start ? range.start.toString() : undefined,
-                to_date: range?.end ? range.end.toString() : undefined,
-              });
-            }
-          }} />
-
-        </div>
-        <Link to="/cars/add">
-          <DashboardButton
-            titleAr={"اضافة سيارة جديدة"}
-            titleEn={"Add a new car"}
-            variant="add"
+              if (onFilterChange) {
+                onFilterChange({
+                  ...filters,
+                  from_date: range?.start ? range.start.toString() : undefined,
+                  to_date: range?.end ? range.end.toString() : undefined,
+                });
+              }
+            }}
           />
-        </Link>
+        </div>
+        {canCreate && (
+          <Link to="/cars/add">
+            <DashboardButton
+              titleAr={"اضافة سيارة جديدة"}
+              titleEn={"Add a new car"}
+              variant="add"
+            />
+          </Link>
+        )}
       </div>
       <CarsSelect filters={filters} onFilterChange={onFilterChange} />
     </div>
