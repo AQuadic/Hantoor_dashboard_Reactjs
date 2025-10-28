@@ -48,6 +48,8 @@ export function EngineTypesTable({
   const { t } = useTranslation("models");
   const canEdit = useHasPermission("edit_engine_type");
   const canChangeStatus = useHasPermission("change-status_engine_type");
+  const canDelete = useHasPermission("delete_engine_type");
+
   const {
     data: engineTypes,
     isLoading,
@@ -135,11 +137,13 @@ export function EngineTypesTable({
                   </Link>
                 )}
 
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(engine.id)}
-                  />
-                </div>
+                {canDelete && (
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(engine.id)}
+                    />
+                  </div>
+                )}
               </TableCell>
             )}
           </TableRow>
