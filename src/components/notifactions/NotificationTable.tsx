@@ -17,6 +17,7 @@ import NoData from "../general/NoData";
 import { deleteNotification } from "@/api/notifications/deleteNotification";
 import toast from "react-hot-toast";
 import { BroadcastNotification } from "@/api/notifications/getNotifications";
+import { useHasPermission } from "@/hooks/usePermissions";
 
 interface NotificationTableProps {
   data: BroadcastNotification[];
@@ -35,6 +36,7 @@ const NotificationTable: React.FC<NotificationTableProps> = ({
   const [expandedRows, setExpandedRows] = useState<{ [key: number]: boolean }>(
     {}
   );
+  const canDelete = useHasPermission("delete_notification");
 
   const toggleExpand = (id: number) => {
     setExpandedRows((prev) => ({
@@ -117,11 +119,14 @@ const NotificationTable: React.FC<NotificationTableProps> = ({
                 <Link to={`/notifications/details/${notification.id}`}>
                   <View />
                 </Link>
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(notification.id)}
-                  />
-                </div>
+
+                  {canDelete && (
+                    <div className="mt-2">
+                      <TableDeleteButton
+                        handleDelete={() => handleDelete(notification.id)}
+                      />
+                    </div>
+                  )}
               </TableCell>
             </TableRow>
           );
