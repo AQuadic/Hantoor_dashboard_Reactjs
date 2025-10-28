@@ -30,6 +30,9 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
 }) => {
   const canCreateAdmin = useHasPermission("create_admin");
   const canCreatePermission = useHasPermission("create_permission");
+  const canViewRole = useHasPermission("view_role");
+  const canViewPermission = useHasPermission("view_permission");
+  const canViewPermissionsTab = canViewRole || canViewPermission;
 
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
@@ -43,18 +46,35 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
       />
 
       <TabsFilter
-        filters={[
-          {
-            titleAr: "المسؤولين الفرعيين",
-            titleEn: "Subordinates",
-          },
-          {
-            titleAr: " الصلاحيات",
-            titleEn: "Permissions",
-          },
-        ]}
+        filters={
+          // Only include the Permissions tab if the user can view roles/permissions
+          canViewPermissionsTab
+            ? [
+                {
+                  titleAr: "المسؤولين الفرعيين",
+                  titleEn: "Subordinates",
+                },
+                {
+                  titleAr: " الصلاحيات",
+                  titleEn: "Permissions",
+                },
+              ]
+            : [
+                {
+                  titleAr: "المسؤولين الفرعيين",
+                  titleEn: "Subordinates",
+                },
+              ]
+        }
         selectedFilter={selectedFilter}
-        setSelectedFilter={setSelectedFilter}
+        setSelectedFilter={(f) => {
+          // If the permissions tab is not visible but somehow selected, reset to Subordinates
+          if (!canViewPermissionsTab && f === "Permissions") {
+            setSelectedFilter("Subordinates");
+            return;
+          }
+          setSelectedFilter(f as "Subordinates" | "Permissions");
+        }}
       />
 
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">

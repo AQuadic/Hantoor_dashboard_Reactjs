@@ -39,8 +39,10 @@ export function PermissionsTable({
   const { t } = useTranslation("subordinates");
   const [activeStates, setActiveStates] = useState<Record<number, boolean>>({});
   const queryClient = useQueryClient();
-  const canChangeStatus = useHasPermission("change-status_role");
-  const canEdit = useHasPermission("edit_role");
+  // Permission keys use the "permission" resource naming in the API
+  const canChangeStatus = useHasPermission("change-status_permission");
+  const canEdit = useHasPermission("edit_permission");
+  const canDelete = useHasPermission("delete_permission");
 
   const navigate = useNavigate();
 
@@ -114,7 +116,7 @@ export function PermissionsTable({
             <TableHead className="text-right w-full">
               {t("permissions") || "Permissions"}
             </TableHead>
-            {(canChangeStatus || canEdit) && (
+            {(canChangeStatus || canEdit || canDelete) && (
               <TableHead className="text-right">
                 {t("status") || "Status"}
               </TableHead>
@@ -131,7 +133,7 @@ export function PermissionsTable({
                   {role.permissions.length} {t("permissions") || "permissions"}
                 </span>
               </TableCell>
-              {(canChangeStatus || canEdit) && (
+              {(canChangeStatus || canEdit || canDelete) && (
                 <TableCell className="flex gap-2 items-center">
                   {canChangeStatus && (
                     <Switch
@@ -163,14 +165,18 @@ export function PermissionsTable({
                       }}
                     />
                   )}
+
                   {canEdit && (
                     <button onClick={() => handleEditRole(role.id)}>
                       <Edit />
                     </button>
                   )}
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(role.id)}
-                  />
+
+                  {canDelete && (
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(role.id)}
+                    />
+                  )}
                 </TableCell>
               )}
             </TableRow>
