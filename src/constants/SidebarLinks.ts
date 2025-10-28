@@ -59,6 +59,9 @@ export const SidebarLinks: SidebarLink[] = [
     path: "/subordinates",
     requiredPermissions: [
       "view_admin",
+      // Also allow access when user can view permissions/roles
+      "view_permission",
+      "view_role",
       "create_admin",
       "edit_admin",
       "delete_admin",

@@ -30,9 +30,23 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
 }) => {
   const canCreateAdmin = useHasPermission("create_admin");
   const canCreatePermission = useHasPermission("create_permission");
+  const canViewSubordinates = useHasPermission("view_admin");
   const canViewRole = useHasPermission("view_role");
   const canViewPermission = useHasPermission("view_permission");
   const canViewPermissionsTab = canViewRole || canViewPermission;
+
+  // Build available filters based on explicit view permissions for each tab
+  const filters = [] as {
+    titleAr: string;
+    titleEn: "Subordinates" | "Permissions";
+  }[];
+
+  if (canViewSubordinates) {
+    filters.push({ titleAr: "المسؤولين الفرعيين", titleEn: "Subordinates" });
+  }
+  if (canViewPermissionsTab) {
+    filters.push({ titleAr: " الصلاحيات", titleEn: "Permissions" });
+  }
 
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
@@ -46,33 +60,19 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
       />
 
       <TabsFilter
-        filters={
-          // Only include the Permissions tab if the user can view roles/permissions
-          canViewPermissionsTab
-            ? [
-                {
-                  titleAr: "المسؤولين الفرعيين",
-                  titleEn: "Subordinates",
-                },
-                {
-                  titleAr: " الصلاحيات",
-                  titleEn: "Permissions",
-                },
-              ]
-            : [
-                {
-                  titleAr: "المسؤولين الفرعيين",
-                  titleEn: "Subordinates",
-                },
-              ]
-        }
+        filters={filters}
         selectedFilter={selectedFilter}
         setSelectedFilter={(f) => {
-          // If the permissions tab is not visible but somehow selected, reset to Subordinates
-          if (!canViewPermissionsTab && f === "Permissions") {
-            setSelectedFilter("Subordinates");
+          // If the selected tab isn't available, pick the first available filter
+          if (f === "Subordinates" && !canViewSubordinates) {
+            if (canViewPermissionsTab) setSelectedFilter("Permissions");
             return;
           }
+          if (f === "Permissions" && !canViewPermissionsTab) {
+            if (canViewSubordinates) setSelectedFilter("Subordinates");
+            return;
+          }
+
           setSelectedFilter(f as "Subordinates" | "Permissions");
         }}
       />

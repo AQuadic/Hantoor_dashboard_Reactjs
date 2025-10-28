@@ -40,17 +40,20 @@ export function SubordinatesTable({
   const canEdit = useHasPermission("edit_admin");
   const canChangePassword = useHasPermission("change-password_admin");
   const canChangeStatus = useHasPermission("change-status_admin");
+  const canDelete = useHasPermission("delete_admin");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["admins", currentPage, itemsPerPage, searchTerm, dateParams],
-    queryFn: () =>
-      getAdmins({
+    queryFn: () => {
+      const params: Record<string, unknown> = {
         search: searchTerm,
         pagination: "normal",
         per_page: itemsPerPage,
         page: currentPage,
-        ...(dateParams || {}),
-      }),
+      };
+      if (dateParams) Object.assign(params, dateParams);
+      return getAdmins(params);
+    },
   });
 
   const handleDelete = async (id: number) => {
@@ -65,8 +68,9 @@ export function SubordinatesTable({
 
   const handleToggleStatus = async (id: number, current: boolean) => {
     try {
-      await updateAdmin(id, { isActive: !current });
-      toast.success(!current ? t("adminActivated") : t("adminDeactivated"));
+      const newState = !current;
+      await updateAdmin(id, { isActive: newState });
+      toast.success(newState ? t("adminActivated") : t("adminDeactivated"));
       refetch();
     } catch {
       toast.error(t("error"));
@@ -105,7 +109,7 @@ export function SubordinatesTable({
             {t("administrativePositions")}
           </TableHead>
           <TableHead className="text-right">{t("lastLogin")}</TableHead>
-          {(canChangeStatus || canEdit || canChangePassword) && (
+          {(canChangeStatus || canEdit || canChangePassword || canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -157,7 +161,7 @@ export function SubordinatesTable({
                   })()
                 : "..."}
             </TableCell>
-            {(canChangeStatus || canEdit || canChangePassword) && (
+            {(canChangeStatus || canEdit || canChangePassword || canDelete) && (
               <TableCell className="flex gap-[7px] items-center">
                 {canChangeStatus && (
                   <Switch
@@ -167,21 +171,26 @@ export function SubordinatesTable({
                     }
                   />
                 )}
+
                 {canEdit && (
                   <Link to={`/subordinates/${admin.id}`}>
                     <Edit />
                   </Link>
                 )}
+
                 {canChangePassword && (
                   <Link to={`/subordinates/change_password/${admin.id}`}>
                     <Password />
                   </Link>
                 )}
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(admin.id)}
-                  />
-                </div>
+
+                {canDelete && (
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(admin.id)}
+                    />
+                  </div>
+                )}
               </TableCell>
             )}
           </TableRow>

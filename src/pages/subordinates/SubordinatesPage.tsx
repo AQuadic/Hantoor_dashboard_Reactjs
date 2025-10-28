@@ -5,14 +5,27 @@ import { SubordinatesTable } from "@/components/subordinates/SubordinatesTable";
 import { useDatePicker } from "@/hooks/useDatePicker";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useHasPermission } from "@/hooks/usePermissions";
 import { useQuery } from "@tanstack/react-query";
 import { getAdmins } from "@/api/admins/getAdmins";
 import { getRoles } from "@/api/roles/getRoles";
 
 const SubordinatesPage = () => {
+  // Determine available view permissions for tabs
+  const canViewSubordinates = useHasPermission("view_admin");
+  const canViewRole = useHasPermission("view_role");
+  const canViewPermission = useHasPermission("view_permission");
+  const canViewPermissionsTab = canViewRole || canViewPermission;
+
   const [selectedFilter, setSelectedFilter] = useState<
     "Subordinates" | "Permissions"
-  >("Subordinates");
+  >(() => {
+    // Default to the first available tab: Subordinates if view_admin exists,
+    // otherwise Permissions if permission view exists. Fall back to Subordinates.
+    if (canViewSubordinates) return "Subordinates";
+    if (canViewPermissionsTab) return "Permissions";
+    return "Subordinates";
+  });
 
   const [searchTermAr, setSearchTermAr] = useState("");
   const [searchTermEn, setSearchTermEn] = useState("");
@@ -34,6 +47,17 @@ const SubordinatesPage = () => {
     }
   }, [activeSearchTerm]);
 
+  // If permissions change (for example user lacks subordinates view but has permissions view),
+  // ensure selectedFilter points to an available tab.
+  useEffect(() => {
+    if (selectedFilter === "Subordinates" && !canViewSubordinates) {
+      if (canViewPermissionsTab) setSelectedFilter("Permissions");
+    }
+    if (selectedFilter === "Permissions" && !canViewPermissionsTab) {
+      if (canViewSubordinates) setSelectedFilter("Subordinates");
+    }
+  }, [canViewSubordinates, canViewPermissionsTab, selectedFilter]);
+
   const { data: subordinatesData } = useQuery({
     queryKey: [
       "admins",
@@ -46,13 +70,15 @@ const SubordinatesPage = () => {
     queryFn: () =>
       getAdmins({
         search:
-          selectedFilter === "Subordinates" ? searchTermEn || searchTermAr : "",
+          selectedFilter === "Subordinates" && canViewSubordinates
+            ? searchTermEn || searchTermAr
+            : "",
         pagination: "normal",
         per_page: subordinatesItemsPerPage,
         page: subordinatesCurrentPage,
         ...dateParams,
       }),
-    enabled: selectedFilter === "Subordinates",
+    enabled: selectedFilter === "Subordinates" && canViewSubordinates,
   });
 
   const { data: permissionsData } = useQuery({
@@ -67,13 +93,15 @@ const SubordinatesPage = () => {
     queryFn: () =>
       getRoles({
         search:
-          selectedFilter === "Permissions" ? searchTermEn || searchTermAr : "",
+          selectedFilter === "Permissions" && canViewPermissionsTab
+            ? searchTermEn || searchTermAr
+            : "",
         pagination: "normal",
         per_page: permissionsItemsPerPage,
         page: permissionsCurrentPage,
         ...dateParams,
       }),
-    enabled: selectedFilter === "Permissions",
+    enabled: selectedFilter === "Permissions" && canViewPermissionsTab,
   });
 
   const subordinatesTotalItems = subordinatesData?.meta?.total || 0;
