@@ -203,6 +203,14 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
   // Permission checking functions using utilities
   const hasPermission = useCallback(
     (permissionKey: string | string[]): boolean => {
+      // `view_terms` is public and should always be available to all users.
+      // Short-circuit checks here to avoid injecting fake permissions into state.
+      if (typeof permissionKey === "string") {
+        if (permissionKey === "view_terms") return true;
+      } else if (Array.isArray(permissionKey)) {
+        if (permissionKey.includes("view_terms")) return true;
+      }
+
       return utilHasPermission(state.permissions, permissionKey);
     },
     [state.permissions]
@@ -210,6 +218,9 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
 
   const hasAnyPermission = useCallback(
     (permissionKeys: string[]): boolean => {
+      // If any of the requested permissions is `view_terms`, consider it satisfied.
+      if (permissionKeys.includes("view_terms")) return true;
+
       return utilHasAnyPermission(state.permissions, permissionKeys);
     },
     [state.permissions]
@@ -217,7 +228,12 @@ export const PermissionProvider: React.FC<PermissionProviderProps> = ({
 
   const hasAllPermissions = useCallback(
     (permissionKeys: string[]): boolean => {
-      return utilHasAllPermissions(state.permissions, permissionKeys);
+      // `view_terms` is public so remove it from the required list when checking "all".
+      const filtered = permissionKeys.filter((k) => k !== "view_terms");
+      // If after filtering there are no required permissions left, return true
+      if (filtered.length === 0) return true;
+
+      return utilHasAllPermissions(state.permissions, filtered);
     },
     [state.permissions]
   );
