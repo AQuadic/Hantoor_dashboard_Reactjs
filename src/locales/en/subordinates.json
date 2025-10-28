@@ -331,5 +331,8 @@
     "edit_role": "Edit role",
     "delete_role": "Delete role",
     "change-status_role": "Status"
-  }
+  },
+
+  "writePermissionName": "Write permission name",
+  "writeHere": "Write here"
 }

@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import DashboardButton from "../general/dashboard/DashboardButton";
 import { useHasPermission } from "@/hooks/usePermissions";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
@@ -47,6 +47,21 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
   if (canViewPermissionsTab) {
     filters.push({ titleAr: " الصلاحيات", titleEn: "Permissions" });
   }
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    const tab = searchParams.get("tab");
+    if (tab === "Permissions" || tab === "Subordinates") {
+      setSelectedFilter(tab);
+    }
+  }, [searchParams, setSelectedFilter]);
+
+  useEffect(() => {
+    const newParams = new URLSearchParams();
+    newParams.set("tab", selectedFilter);
+    setSearchParams(newParams);
+  }, [selectedFilter, setSearchParams]);
 
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">

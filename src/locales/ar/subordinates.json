@@ -323,5 +323,8 @@
     "edit_role": "تعديل",
     "delete_role": "حذف",
     "change-status_role": "الحالة"
-  }
+  },
+
+  "writePermissionName": "اكتب اسم الصلاحية",
+  "writeHere": "اكتب هنا"
 }

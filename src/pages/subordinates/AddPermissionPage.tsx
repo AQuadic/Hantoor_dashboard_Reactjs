@@ -57,7 +57,7 @@ const AddPermissionPage = () => {
       toast.success(t("roleCreatedSuccessfully"));
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       // Navigate back to subordinates page with permissions tab
-      navigate("/subordinates");
+      navigate("/subordinates?tab=Permissions");
     },
   });
 
@@ -255,7 +255,7 @@ const AddPermissionPage = () => {
           label={t("roleName")}
           value={roleName}
           onChange={(val: string) => setRoleName(val)}
-          placeholder={t("roleNamePlaceholder")}
+          placeholder={t("writePermissionName")}
         />
       </div>
       <div className="px-8 py-4 space-y-8">
