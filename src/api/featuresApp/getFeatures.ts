@@ -18,24 +18,36 @@ export interface Feature {
 }
 
 export interface FeaturesResponse {
-  current_page: number;
-  current_page_url: string;
   data: Feature[];
-  first_page_url: string;
-  from: number;
-  next_page_url: string | null;
-  path: string;
-  per_page: number;
-  prev_page_url: string | null;
-  to: number;
-  last_page: number;
-  total: number;
+  meta: {
+    current_page: number;
+    per_page: number;
+    total: number;
+    last_page: number;
+    from: number;
+    to: number;
+  };
 }
 
-export const getFeatures = async (page: number, perPage: number): Promise<Feature[]> => {
-  const { data } = await axios.get<Feature[]>(
-    `/admin/vehicle/feature-app?page=${page}&per_page=${perPage}`,
+interface GetFeaturesParams {
+  pagination?: string;
+  page: number;
+  per_page?: number;
+  search?: string;
+}
+
+export const getFeatures = async (
+  params: GetFeaturesParams
+): Promise<FeaturesResponse> => {
+  const { data } = await axios.get<FeaturesResponse>(
+    `/admin/vehicle/feature-app`,
     {
+      params: {
+        pagination: params.pagination || "normal",
+        page: params.page,
+        per_page: params.per_page || 15,
+        ...(params.search && { search: params.search }),
+      },
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json",
