@@ -13,13 +13,13 @@ import SupportMsgsConversation from "@/pages/supportmessages/SupportMsgsConversa
 import { useTranslation } from "react-i18next";
 import { Conversation } from "@/api/support/getConversations";
 import { useState, useRef } from "react";
+import { useHasPermission } from "@/permissions";
 import { debounce } from "@/lib/debounce";
 import Loading from "../general/Loading";
 import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { deleteConversation } from "@/api/support/deleteConversation";
 import { updateConversation } from "@/api/support/updateConversation";
-import { useHasPermission } from "@/permissions";
 
 interface SupportMessagesTableProps {
   conversations: Conversation[];
@@ -39,7 +39,16 @@ const SupportMessagesTable = ({
   // backend expects `status` with values like 'pending' or 'resolved'
   const [statusMap, setStatusMap] = useState<Record<number, string>>({});
   const debouncedUpdaters = useRef<Record<number, (value: string) => void>>({});
+  // Map permissions for support messages module
   const canDelete = useHasPermission("delete_support_message");
+  const canChangeStatus = useHasPermission("change-status_support_message");
+  const canNotes = useHasPermission("notes_support_message");
+  // NOTE: requirement: view shows by default. The View button is rendered regardless
+  // of the view permission.
+
+  const [notesVisibleMap, setNotesVisibleMap] = useState<
+    Record<number, boolean>
+  >({});
 
   const handleDelete = async (id: number) => {
     await deleteConversation(id);
@@ -121,57 +130,88 @@ const SupportMessagesTable = ({
                   onClick={(e) => e.stopPropagation()}
                 >
                   <div className="flex items-center gap-[10px]">
-                    <button
-                      className={`w-[78px] h-[37px] rounded-[8.15px] font-bold text-[13px] ${
-                        (statusMap[message.id] ?? message.status) === "pending"
-                          ? "bg-[#2A32F8] text-[#FFFFFF]"
-                          : "bg-[#FFFFFF] text-[#A1A1A1]"
-                      }`}
-                      onClick={() => {
-                        const newValue = "pending";
-                        setStatusMap((prev) => ({
-                          ...prev,
-                          [message.id]: newValue,
-                        }));
-                        handleUpdate(message.id, { status: newValue });
-                      }}
-                    >
-                      {t("working")}
-                    </button>
+                    {/* Status buttons: only show interactive buttons when user has change-status permission */}
+                    {canChangeStatus ? (
+                      <>
+                        <button
+                          className={`w-[78px] h-[37px] rounded-[8.15px] font-bold text-[13px] ${
+                            (statusMap[message.id] ?? message.status) ===
+                            "pending"
+                              ? "bg-[#2A32F8] text-[#FFFFFF]"
+                              : "bg-[#FFFFFF] text-[#A1A1A1]"
+                          }`}
+                          onClick={() => {
+                            const newValue = "pending";
+                            setStatusMap((prev) => ({
+                              ...prev,
+                              [message.id]: newValue,
+                            }));
+                            handleUpdate(message.id, { status: newValue });
+                          }}
+                        >
+                          {t("working")}
+                        </button>
 
-                    <button
-                      className={`w-[78px] h-[37px] rounded-[8.15px] font-normal text-[13px] ${
-                        (statusMap[message.id] ?? message.status) === "resolved"
-                          ? "bg-[#2A32F8] text-[#FFFFFF]"
-                          : "bg-[#FFFFFF] text-[#A1A1A1]"
-                      }`}
-                      onClick={() => {
-                        const newValue = "resolved";
-                        setStatusMap((prev) => ({
-                          ...prev,
-                          [message.id]: newValue,
-                        }));
-                        handleUpdate(message.id, { status: newValue });
-                      }}
-                    >
-                      {t("done")}
-                    </button>
-                    <input
-                      type="text"
-                      name="notes"
-                      id="notes"
-                      value={notesMap[message.id] ?? message.notes}
-                      onChange={(e) => {
-                        const newValue = e.target.value;
-                        setNotesMap((prev) => ({
-                          ...prev,
-                          [message.id]: newValue,
-                        }));
-                        getDebouncedUpdater(message.id)(newValue);
-                      }}
-                      className="w-[150px] h-[37px] bg-[#FFFFFF] border border-[#D8D8D8] rounded-[10px] focus:outline-none px-3 placeholder:text-[13px]"
-                      placeholder={t("yourNotes")}
-                    />
+                        <button
+                          className={`w-[78px] h-[37px] rounded-[8.15px] font-normal text-[13px] ${
+                            (statusMap[message.id] ?? message.status) ===
+                            "resolved"
+                              ? "bg-[#2A32F8] text-[#FFFFFF]"
+                              : "bg-[#FFFFFF] text-[#A1A1A1]"
+                          }`}
+                          onClick={() => {
+                            const newValue = "resolved";
+                            setStatusMap((prev) => ({
+                              ...prev,
+                              [message.id]: newValue,
+                            }));
+                            handleUpdate(message.id, { status: newValue });
+                          }}
+                        >
+                          {t("done")}
+                        </button>
+                      </>
+                    ) : null}
+
+                    {/* Notes: show editable input when user has notes permission. Provide toggle to hide/show input. Default: visible */}
+                    <div className="flex items-center gap-2">
+                      {canNotes ? (
+                        <>
+                          <button
+                            onClick={() =>
+                              setNotesVisibleMap((prev) => ({
+                                ...prev,
+                                [message.id]: !prev[message.id],
+                              }))
+                            }
+                            className="text-sm px-2 py-1 bg-gray-100 rounded"
+                          >
+                            {notesVisibleMap[message.id]
+                              ? t("hideNotes")
+                              : t("showNotes")}
+                          </button>
+
+                          {notesVisibleMap[message.id] ?? true ? (
+                            <input
+                              type="text"
+                              name="notes"
+                              id={`notes-${message.id}`}
+                              value={notesMap[message.id] ?? message.notes}
+                              onChange={(e) => {
+                                const newValue = e.target.value;
+                                setNotesMap((prev) => ({
+                                  ...prev,
+                                  [message.id]: newValue,
+                                }));
+                                getDebouncedUpdater(message.id)(newValue);
+                              }}
+                              className="w-[150px] h-[37px] bg-[#FFFFFF] border border-[#D8D8D8] rounded-[10px] focus:outline-none px-3 placeholder:text-[13px]"
+                              placeholder={t("yourNotes")}
+                            />
+                          ) : null}
+                        </>
+                      ) : null}
+                    </div>
                   </div>
 
                   <button onClick={() => setOpenMessageId(message.id)}>
