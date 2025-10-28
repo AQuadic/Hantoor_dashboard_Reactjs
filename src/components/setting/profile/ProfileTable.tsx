@@ -50,7 +50,10 @@ interface Props {
 
 const ProfileTable = ({ countryId }: Props) => {
   const { t, i18n } = useTranslation("setting");
-  const canEdit = useHasPermission("edit_profile");
+  const canEdit = useHasPermission("edit_onboarding");
+  const canDelete = useHasPermission("delete_onboarding");
+  const canChangeStatus = useHasPermission("change-status_onboarding");
+  const canView = useHasPermission("view_onboarding");
 
   const {
     data: profiles,
@@ -83,7 +86,9 @@ const ProfileTable = ({ countryId }: Props) => {
           <TableHead className="text-right">{t("textTitle")}</TableHead>
           <TableHead className="text-right">{t("country")}</TableHead>
           <TableHead className="text-right">{t("description")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit || canDelete || canView) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -131,11 +136,13 @@ const ProfileTable = ({ countryId }: Props) => {
                 </Link>
               )}
 
-              <div className="mt-2">
-                <TableDeleteButton
-                  handleDelete={() => handleDelete(profile.id)}
-                />
-              </div>
+              {canDelete && (
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(profile.id)}
+                  />
+                </div>
+              )}
             </TableCell>
           </TableRow>
         ))}

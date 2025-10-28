@@ -10,6 +10,7 @@ import { Link } from "react-router";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCountries, Country } from "@/api/countries/getCountry";
+import { useHasPermission } from "@/hooks/usePermissions";
 
 interface Props {
   countryId: string;
@@ -21,6 +22,8 @@ const ProfileHeader = ({ countryId, setCountryId }: Props) => {
     queryKey: ["allCountries"],
     queryFn: () => getAllCountries(),
   });
+
+  const canCreate = useHasPermission("create_onboarding");
 
   return (
     <div className="flex items-center justify-between">
@@ -46,13 +49,15 @@ const ProfileHeader = ({ countryId, setCountryId }: Props) => {
           </SelectContent>
         </Select>
       </div>
-      <Link to="/setting/add-profile">
-        <DashboardButton
-          titleAr={"اضافة صفحة تعريفية جديدة"}
-          titleEn="Add a new profile page"
-          variant="add"
-        />
-      </Link>
+      {canCreate && (
+        <Link to="/setting/add-onboarding">
+          <DashboardButton
+            titleAr={"اضافة صفحة تعريفية"}
+            titleEn="Add a new onboarding page"
+            variant="add"
+          />
+        </Link>
+      )}
     </div>
   );
 };

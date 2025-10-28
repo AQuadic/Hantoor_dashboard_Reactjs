@@ -23,7 +23,7 @@ const SettingPage = () => {
     () => ({
       "General Settings": "view_general_setting",
       "Insurance Price Request Button": "view_request_financing",
-      "Informational Pages": "view_info_page",
+      "Onboarding Pages": "view_onboarding",
       "Advertising Images": "view_ad_image",
       "Terms and Conditions": "view_terms",
       "Social Media Links": "edit_social_link", // No view permission available
@@ -119,7 +119,7 @@ const SettingPage = () => {
         return <GeneralSettings />;
       case "Insurance Price Request Button":
         return <InsurancePage />;
-      case "Informational Pages":
+      case "Onboarding Pages":
         return <ProfileSetting />;
       case "Advertising Images":
         return <AdvertisingImages />;

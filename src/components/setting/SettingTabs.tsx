@@ -28,8 +28,8 @@ const SettingTabs: React.FC<SubordinatesHeaderProps> = ({
       },
       {
         titleAr: "الصفحات التعريفية",
-        titleEn: "Informational Pages",
-        permission: "view_info_page",
+        titleEn: "Onboarding Pages",
+        permission: "view_onboarding",
       },
       {
         titleAr: "الصور الاعلانية",
