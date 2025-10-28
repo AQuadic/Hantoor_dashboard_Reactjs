@@ -32,6 +32,7 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
 
   const canEdit = useHasPermission("edit_support_question");
   const canChangeStatus = useHasPermission("change-status_support_question");
+  const canDelete = useHasPermission("delete_support_question");
 
   if (isLoading) return <Loading />;
   if (!data.length) return <NoData />;
@@ -120,11 +121,13 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
                   </Link>
                 )}
 
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(question.id)}
-                  />
-                </div>
+                {canDelete && (
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(question.id)}
+                    />
+                  </div>
+                )}
               </TableCell>
             )}
           </TableRow>
