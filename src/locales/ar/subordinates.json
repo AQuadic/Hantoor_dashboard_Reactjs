@@ -101,6 +101,7 @@
     "view_advanced_search_count_dashboard": "عدد مرات البحث المتقدم",
     "view_brand_count_dashboard": "عدد الماركات",
     "view_request_finance_count_dashboard": "عدد مرات طلب تفاصيل سعر التأمين",
+    "change-password_user": "تغيير كلمة المرور",
 
     "view_admin": "رؤية",
     "create_admin": "إنشاء",
@@ -236,6 +237,7 @@
     "edit_support_chat": "تعديل",
     "delete_support_chat": "حذف",
     "notes_support_chat": "ملاحظات",
+    "notes_support_message": "ملاحظات",
     "change-status_support_chat": "الحالة",
 
     "view_chat": "رؤية",
@@ -299,6 +301,7 @@
     "delete_terms": "حذف الشروط والأحكام",
 
     "create_social_link": "إنشاء",
+    "add_social_link": "إنشاء",
     "edit_social_link": "تعديل",
     "delete_social_link": "حذف",
 

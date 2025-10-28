@@ -105,6 +105,7 @@
     "view_advanced_search_count_dashboard": "Advanced Search Count",
     "view_brand_count_dashboard": "Brands Count",
     "view_request_finance_count_dashboard": "Insurance Price Details Requests Count",
+    "change-password_user": "Change Password",
 
     "view_admin": "View Admin",
     "create_admin": "Create Admin",
@@ -239,6 +240,7 @@
     "edit_support_chat": "Edit Support Chat",
     "delete_support_chat": "Delete Support Chat",
     "notes_support_chat": "Support Chat Notes",
+    "notes_support_message": "Support Messages Notes",
 
     "view_chat": "View Chat",
     "create_chat": "Create Chat",
@@ -307,6 +309,7 @@
     "delete_terms": "Delete Terms",
 
     "create_social_link": "Create Social Link",
+    "add_social_link": "Create Social Link",
     "edit_social_link": "Edit Social Link",
     "delete_social_link": "Delete Social Link",
 
