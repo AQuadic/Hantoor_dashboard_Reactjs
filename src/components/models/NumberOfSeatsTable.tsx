@@ -45,6 +45,7 @@ export function NumberOfSeatsTable({
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_seat_count");
   const canChangeStatus = useHasPermission("change-status_seat_count");
+  const canDelete = useHasPermission("delete_seat_count");
 
   const {
     data: seats,
@@ -149,11 +150,13 @@ export function NumberOfSeatsTable({
                   </Link>
                 )}
 
+                {canDelete && (
                 <div className="mt-2">
                   <TableDeleteButton
                     handleDelete={() => handleDelete(seat.id)}
                   />
                 </div>
+                )}
               </TableCell>
             )}
           </TableRow>
