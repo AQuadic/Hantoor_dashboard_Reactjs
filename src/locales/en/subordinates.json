@@ -288,7 +288,9 @@
     "change-status_contact_us": "Status",
 
     "view_general_setting": "Add",
+    "add_general_setting": "Add",
     "update_general_setting": "Edit",
+    "edit_general_setting": "Edit",
 
     "view_info_page": "View Info Page",
     "create_info_page": "Create Info Page",
