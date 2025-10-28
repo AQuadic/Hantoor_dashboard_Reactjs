@@ -19,6 +19,7 @@ import NoData from "../general/NoData";
 import toast from "react-hot-toast";
 import { deleteConversation } from "@/api/support/deleteConversation";
 import { updateConversation } from "@/api/support/updateConversation";
+import { useHasPermission } from "@/permissions";
 
 interface SupportMessagesTableProps {
   conversations: Conversation[];
@@ -38,6 +39,7 @@ const SupportMessagesTable = ({
   // backend expects `status` with values like 'pending' or 'resolved'
   const [statusMap, setStatusMap] = useState<Record<number, string>>({});
   const debouncedUpdaters = useRef<Record<number, (value: string) => void>>({});
+  const canDelete = useHasPermission("delete_support_message");
 
   const handleDelete = async (id: number) => {
     await deleteConversation(id);
@@ -176,11 +178,13 @@ const SupportMessagesTable = ({
                     <View />
                   </button>
 
-                  <div className="mt-2">
-                    <TableDeleteButton
-                      handleDelete={() => handleDelete(message.id)}
-                    />
-                  </div>
+                  {canDelete && (
+                    <div className="mt-2">
+                      <TableDeleteButton
+                        handleDelete={() => handleDelete(message.id)}
+                      />
+                    </div>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

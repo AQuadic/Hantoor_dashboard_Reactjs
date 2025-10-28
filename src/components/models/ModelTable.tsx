@@ -47,6 +47,7 @@ export function ModelTable({
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_vehicle_model");
   const canChangeStatus = useHasPermission("change-status_vehicle_model");
+  const canDelete = useHasPermission("delete_vehicle_model");
 
   const {
     data: modelsResponse,
@@ -135,11 +136,13 @@ export function ModelTable({
                     <Edit />
                   </Link>
                 )}
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(model.id)}
-                  />
-                </div>
+                {canDelete && (
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(model.id)}
+                    />
+                  </div>
+                )}
               </TableCell>
             )}
           </TableRow>
