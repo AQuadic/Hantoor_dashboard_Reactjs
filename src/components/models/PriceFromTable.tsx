@@ -50,6 +50,7 @@ export function PriceFromTable({
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_price_from");
   const canChangeStatus = useHasPermission("change-status_price_from");
+  const canDelete = useHasPermission("delete_price_from");
 
   const { data, isLoading, refetch } = useQuery<PriceFromResponse>({
     queryKey: ["pricefrom", page, search, countryId, dateParams],
@@ -144,11 +145,14 @@ export function PriceFromTable({
                     <Edit />
                   </Link>
                 )}
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(price.id)}
-                  />
-                </div>
+
+                {canDelete && (
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(price.id)}
+                    />
+                  </div>
+                )}
               </TableCell>
             )}
           </TableRow>

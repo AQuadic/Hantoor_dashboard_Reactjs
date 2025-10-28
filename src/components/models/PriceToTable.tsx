@@ -49,6 +49,7 @@ export function PriceToTable({
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_price_to");
   const canChangeStatus = useHasPermission("change-status_price_to");
+  const canDelete = useHasPermission("delete_price_to");
 
   const { data, isLoading, refetch } = useQuery<PriceToResponse>({
     queryKey: ["priceto", page, search, dateParams, countryId],
@@ -145,11 +146,14 @@ export function PriceToTable({
                     <Edit />
                   </Link>
                 )}
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(price.id)}
-                  />
-                </div>
+
+                {canDelete && (
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(price.id)}
+                    />
+                  </div>
+                )}
               </TableCell>
             )}
           </TableRow>
