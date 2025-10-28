@@ -25,7 +25,7 @@ const TermsHeader = ({
   const { i18n } = useTranslation("setting");
   const isRTL = i18n.language === "ar";
 
-  const canCreate = useHasPermission("create_info_page");
+  const canCreate = useHasPermission("create_terms");
 
   return (
     <div className="flex items-center justify-between">

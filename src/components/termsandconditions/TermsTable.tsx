@@ -37,7 +37,8 @@ const TermsTable = ({ data, isLoading, refetch }: TermsTableProps) => {
 
   const countries: Country[] = countriesData?.data || [];
 
-  const canEdit = useHasPermission("edit_info_page");
+  const canEdit = useHasPermission("edit_terms");
+  const canDelete = useHasPermission("delete_terms");
 
   if (isLoading) return <Loading />;
   if (!data || data.length === 0) return <NoData />;
@@ -105,9 +106,13 @@ const TermsTable = ({ data, isLoading, refetch }: TermsTableProps) => {
                 </Link>
               )}
 
-              <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(page.id)} />
-              </div>
+              {canDelete && (
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(page.id)}
+                  />
+                </div>
+              )}
             </TableCell>
           </TableRow>
         ))}
