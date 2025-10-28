@@ -136,7 +136,11 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
       },
     ];
 
-    return allFiltersData.filter((tab) => hasPermission(tab.permission));
+    return allFiltersData.filter((tab) => {
+      const perm = (tab as any).permission;
+      if (Array.isArray(perm)) return perm.some((p) => hasPermission(p));
+      return hasPermission(perm);
+    });
   }, [hasPermission]);
 
   // Find current filter or default to first available if user doesn't have permission
@@ -158,13 +162,9 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   const placeholder = getSearchPlaceholder(selectedFilter);
 
   useEffect(() => {
-    if (selectedFilter !== "Price From" && selectedFilter !== "Price To") {
-      setSelectedCountry(null);
-    } else {
-      setSelectedCountry(null);
-    }
+    // Always clear selected country when filter changes in this header.
+    setSelectedCountry(null);
   }, [selectedFilter, setSelectedCountry]);
-
 
   return (
     <div className="pt-0 pb-2 bg-white border-b border-[#E1E1E1]">
@@ -185,15 +185,14 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
 
       <div className="flex flex-wrap items-center gap-2 px-2 md:px-8">
         <div className="flex-1">
-        <SearchBar
-          termAr={search}
-          termEn={search}
-          setTermAr={setSearch}
-          setTermEn={setSearch}
-          placeholderAr={placeholder.ar}
-          placeholderEn={placeholder.en}
-        />
-
+          <SearchBar
+            termAr={search}
+            termEn={search}
+            setTermAr={setSearch}
+            setTermEn={setSearch}
+            placeholderAr={placeholder.ar}
+            placeholderEn={placeholder.en}
+          />
         </div>
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
@@ -210,19 +209,21 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
       {(selectedFilter === "Price From" || selectedFilter === "Price To") && (
         <div className="w-[160px] mt-3 md:mx-8 mx-0">
           <Select
-              items={selectItems}
-              label={t("country")}
-              placeholder={t("all")}
-              selectedKeys={selectedCountry ? [selectedCountry] : ["all"]}
-              onSelectionChange={(selection) => {
-                  const key = [...selection][0];
-                  setSelectedCountry(key === "all" ? null : String(key));
-                }}
-              >
-              {(country) => <SelectItem key={country.key}>{country.label}</SelectItem>}
-            </Select>
-            </div>
-          )}
+            items={selectItems}
+            label={t("country")}
+            placeholder={t("all")}
+            selectedKeys={selectedCountry ? [selectedCountry] : ["all"]}
+            onSelectionChange={(selection) => {
+              const key = [...selection][0];
+              setSelectedCountry(key === "all" ? null : String(key));
+            }}
+          >
+            {(country) => (
+              <SelectItem key={country.key}>{country.label}</SelectItem>
+            )}
+          </Select>
+        </div>
+      )}
     </div>
   );
 };

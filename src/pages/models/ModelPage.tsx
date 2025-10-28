@@ -17,7 +17,7 @@ import { EngineSizesTable } from "@/components/models/EngineSizesTable";
 import { PriceFromTable } from "@/components/models/PriceFromTable";
 import { PriceToTable } from "@/components/models/PriceToTable";
 
-const BrandsPage = () => {
+const ModelPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { hasPermission } = usePermissions();
@@ -30,7 +30,8 @@ const BrandsPage = () => {
   const sectionPermissions = useMemo(
     () => ({
       Models: "view_vehicle_model",
-      "Structure Types": "view_vehicle_class",
+      // Structure Types may be named vehicle_class or vehicle_body_type in permission sets
+      "Structure Types": ["view_vehicle_class", "view_vehicle_body_type"],
       "Car Types": "view_vehicle_type",
       Categories: "view_category",
       "Brand Origin": "view_brand_origin",
@@ -53,6 +54,17 @@ const BrandsPage = () => {
       ),
     [sectionPermissions, hasPermission]
   );
+
+  // Compute initial selected section validated against permissions (mirrors SubordinatesPage logic)
+  const initialSelected = (() => {
+    // If URL requested section is available and user has permission, use it
+    if (sectionParam && availableSections.includes(sectionParam))
+      return sectionParam;
+    // Otherwise fall back to first available section the user can access
+    if (availableSections.length > 0) return availableSections[0];
+    // Last resort: keep the URL value (it will be redirected later to 403)
+    return sectionParam || "Models";
+  })();
 
   // Check if user has access to the requested section
   const hasAccessToSection = useMemo(() => {
@@ -84,7 +96,7 @@ const BrandsPage = () => {
     searchParams,
   ]);
 
-  const [selectedTab, setSelectedTab] = useState(sectionParam);
+  const [selectedTab, setSelectedTab] = useState<string>(initialSelected);
   const [currentPage, setCurrentPage] = useState(pageParam);
 
   const handlePageChange = useCallback(
@@ -138,7 +150,7 @@ const BrandsPage = () => {
   );
   useEffect(() => {
     setDateRange(null);
-  }, [sectionParam]);
+  }, [sectionParam, setDateRange]);
 
   const handleSetPagination = useCallback((meta: typeof paginationMeta) => {
     setPaginationMeta(meta);
@@ -166,82 +178,62 @@ const BrandsPage = () => {
     switch (selectedTab) {
       case "Structure Types":
         return (
-          <>
-            <StructureTable
-              search={search}
-              page={currentPage}
-              setPagination={handleSetPagination}
-              dateParams={dateParams}
-            />
-          </>
+          <StructureTable
+            search={search}
+            page={currentPage}
+            setPagination={handleSetPagination}
+            dateParams={dateParams}
+          />
         );
       case "Brand Origin":
         return (
-          <>
-            <BrandOriginTable
-              search={search}
-              page={currentPage}
-              setPagination={handleSetPagination}
-              dateParams={dateParams}
-            />
-          </>
+          <BrandOriginTable
+            search={search}
+            page={currentPage}
+            setPagination={handleSetPagination}
+            dateParams={dateParams}
+          />
         );
       case "Number of Seats":
         return (
-          <>
-            <NumberOfSeatsTable
-              search={search}
-              page={currentPage}
-              setPagination={handleSetPagination}
-              dateParams={dateParams}
-            />
-          </>
+          <NumberOfSeatsTable
+            search={search}
+            page={currentPage}
+            setPagination={handleSetPagination}
+            dateParams={dateParams}
+          />
         );
       case "Engine Types":
         return (
-          <>
-            <EngineTypesTable
-              search={search}
-              page={currentPage}
-              setPagination={handleSetPagination}
-              dateParams={dateParams}
-            />
-          </>
+          <EngineTypesTable
+            search={search}
+            page={currentPage}
+            setPagination={handleSetPagination}
+            dateParams={dateParams}
+          />
         );
       case "Engine Sizes":
         return (
-          <>
-            <EngineSizesTable
-              search={search}
-              page={currentPage}
-              setPagination={handleSetPagination}
-              dateParams={dateParams}
-            />
-          </>
+          <EngineSizesTable
+            search={search}
+            page={currentPage}
+            setPagination={handleSetPagination}
+            dateParams={dateParams}
+          />
         );
       case "Price From":
         return (
-          <>
-            <PriceFromTable
-              page={currentPage}
-              search={search}
-              setPagination={handleSetPagination}
-              countryId={selectedCountry}
-              dateParams={dateParams}
-            />
-          </>
+          <PriceFromTable
+            page={currentPage}
+            search={search}
+            setPagination={handleSetPagination}
+            countryId={selectedCountry}
+            dateParams={dateParams}
+          />
         );
       case "Models":
-        return (
-          <>
-            <ModelTable
-              page={currentPage}
-              search={search}
-              setPagination={handleSetPagination}
-              dateParams={dateParams}
-            />
-          </>
-        );
+        // fall through to default which renders ModelTable
+        break;
       case "Car Types":
         return (
           <CarTypesTable
@@ -272,14 +264,12 @@ const BrandsPage = () => {
         );
       default:
         return (
-          <>
-            <ModelTable
-              page={currentPage}
-              search={search}
-              setPagination={handleSetPagination}
-              dateParams={dateParams}
-            />
-          </>
+          <ModelTable
+            page={currentPage}
+            search={search}
+            setPagination={handleSetPagination}
+            dateParams={dateParams}
+          />
         );
     }
   };
@@ -324,4 +314,4 @@ const BrandsPage = () => {
   );
 };
 
-export default BrandsPage;
+export default ModelPage;

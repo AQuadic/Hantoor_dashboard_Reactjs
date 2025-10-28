@@ -140,6 +140,11 @@ export const SidebarLinks: SidebarLink[] = [
       "delete_vehicle_model",
       // Structure Types (Body Types)
       "view_vehicle_class",
+      // Also allow the newer/alternate body-type permission names
+      "view_vehicle_body_type",
+      "create_vehicle_body_type",
+      "edit_vehicle_body_type",
+      "delete_vehicle_body_type",
       "create_vehicle_class",
       "edit_vehicle_class",
       "delete_vehicle_class",
