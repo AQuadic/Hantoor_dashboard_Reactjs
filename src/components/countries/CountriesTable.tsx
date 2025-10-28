@@ -37,6 +37,7 @@ const CountriesTable = ({
   const { t, i18n } = useTranslation("country");
   const canEdit = useHasPermission("edit_country");
   const canChangeStatus = useHasPermission("change-status_country");
+  const canDelete = useHasPermission("delete_country");
 
   const [localCountries, setLocalCountries] = useState(countries);
 
@@ -58,12 +59,11 @@ const CountriesTable = ({
     setLocalCountries(updatedCountries);
 
     try {
+      const newState = !country.is_active;
       await updateCountry(country.id, {
-        is_active: !country.is_active,
+        is_active: newState,
       });
-      toast.success(
-        !country.is_active ? t("countryActivated") : t("countryDeactivated")
-      );
+      toast.success(newState ? t("countryActivated") : t("countryDeactivated"));
       // refetch(); // optional
     } catch (error) {
       console.error(error);
@@ -85,7 +85,7 @@ const CountriesTable = ({
           <TableHead className="text-right">{t("currency")}</TableHead>
           <TableHead className="text-right">{t("NOUsers")}</TableHead>
           <TableHead className="text-right">{t("dateAndTime")}</TableHead>
-          {(canChangeStatus || canEdit) && (
+          {(canChangeStatus || canEdit || canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -134,11 +134,13 @@ const CountriesTable = ({
                     </Link>
                   )}
 
-                  <div className="mt-2">
-                    <TableDeleteButton
-                      handleDelete={() => handleDelete(country.id)}
-                    />
-                  </div>
+                  {canDelete && (
+                    <div className="mt-2">
+                      <TableDeleteButton
+                        handleDelete={() => handleDelete(country.id)}
+                      />
+                    </div>
+                  )}
                 </TableCell>
               )}
             </TableRow>
