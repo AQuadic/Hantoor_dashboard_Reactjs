@@ -302,6 +302,9 @@
 
     "view_terms": "View Terms",
     "update_terms": "Update Terms",
+    "create_terms": "Create Terms",
+    "edit_terms": "Edit Terms",
+    "delete_terms": "Delete Terms",
 
     "create_social_link": "Create Social Link",
     "edit_social_link": "Edit Social Link",

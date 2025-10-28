@@ -294,6 +294,9 @@
 
     "view_terms": "رؤية",
     "update_terms": "تحديث",
+    "create_terms": "اضافة شروط وأحكام",
+    "edit_terms": "تعديل الشروط والأحكام",
+    "delete_terms": "حذف الشروط والأحكام",
 
     "create_social_link": "إنشاء",
     "edit_social_link": "تعديل",
