@@ -255,7 +255,7 @@ const AddPermissionPage = () => {
           label={t("roleName")}
           value={roleName}
           onChange={(val: string) => setRoleName(val)}
-          placeholder={t("roleNamePlaceholder")}
+          placeholder={t("writePermissionName")}
         />
       </div>
       <div className="px-8 py-4 space-y-8">
