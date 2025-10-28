@@ -38,6 +38,7 @@ const FAQsTable = ({ data, isLoading = false, refetch }: FAQsTableProps) => {
   const canEdit = useHasPermission("edit_faq");
   const canChangeStatus = useHasPermission("change-status_faq");
   const [openFaqId, setOpenFaqId] = useState<number | null>(null);
+  const canDelete = useHasPermission("delete_faq");
 
   const handleDelete = async (id: number) => {
     await deleteFAQ(id);
@@ -150,11 +151,13 @@ const FAQsTable = ({ data, isLoading = false, refetch }: FAQsTableProps) => {
                         <Edit />
                       </Link>
                     )}
+                  {canDelete && (
                     <div className="mt-2">
                       <TableDeleteButton
                         handleDelete={() => handleDelete(faq.id)}
                       />
                     </div>
+                  )}
                   </TableCell>
                 )}
               </TableRow>
