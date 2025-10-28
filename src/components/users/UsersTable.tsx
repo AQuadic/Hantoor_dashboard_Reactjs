@@ -50,9 +50,10 @@ export function UserTable({
 }: UserTableProps) {
   const { t, i18n } = useTranslation("users");
   const canEdit = useHasPermission("edit_user");
-  const canChangePassword = useHasPermission("edit_user");
+  const canChangePassword = useHasPermission("change-password_user");
   const canChangeStatus = useHasPermission("change-status_user");
   const canBlock = useHasPermission("block_user");
+  const canDelete = useHasPermission("delete_user");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: [
@@ -79,9 +80,14 @@ export function UserTable({
   const users: AdminUser[] = data?.data || [];
 
   const formatDate = (date?: string, lang: string = "en") => {
-    if (!date) return "Invalid Date";
+    if (!date) {
+      return "Invalid Date";
+    }
+
     const d = new Date(date);
-    if (isNaN(d.getTime())) return "Invalid Date";
+    if (Number.isNaN(d.getTime())) {
+      return "Invalid Date";
+    }
 
     const isArabic = lang.startsWith("ar");
 
@@ -103,9 +109,14 @@ export function UserTable({
   };
 
   const formatLastOnline = (date?: string, lang: string = "en") => {
-    if (!date) return "-";
+    if (!date) {
+      return "-";
+    }
+
     const d = new Date(date);
-    if (isNaN(d.getTime())) return "-";
+    if (Number.isNaN(d.getTime())) {
+      return "-";
+    }
 
     const isArabic = lang.startsWith("ar");
 
@@ -208,7 +219,11 @@ export function UserTable({
               {t("suspensionDuration")}
             </TableHead>
           )}
-          {(canChangeStatus || canEdit || canChangePassword || canBlock) && (
+          {(canChangeStatus ||
+            canEdit ||
+            canChangePassword ||
+            canBlock ||
+            canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -300,7 +315,8 @@ export function UserTable({
               {(canChangeStatus ||
                 canEdit ||
                 canChangePassword ||
-                canBlock) && (
+                canBlock ||
+                canDelete) && (
                 <TableCell className="flex items-center gap-[7px]">
                   {canChangeStatus && (
                     <Switch
@@ -339,9 +355,11 @@ export function UserTable({
                       <Password />
                     </Link>
                   )}
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(user.id)}
-                  />
+                  {canDelete && (
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(user.id)}
+                    />
+                  )}
                 </TableCell>
               )}
             </TableRow>
