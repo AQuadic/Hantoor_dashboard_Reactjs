@@ -9,6 +9,41 @@ applyTo: "**"
 - Programming languages: javascript/ typescript/ next js
 - Code style preferences: prettier
 - Development environment: vs code
+- Communication style: concise, engineering-focused
+
+## Project Context
+
+- Current project: Hantoor_dashboard_Reactjs (React + TypeScript + Vite)
+- Area worked on: Subordinates / Permissions tab URL sync and navigation
+
+## Coding Patterns
+
+- Prefer syncing UI state with URL search params for predictable back/forward behavior
+
+## Context7 Research History
+
+- None for this task
+
+## Conversation History
+
+- Fixed Subordinates page tab handling to initialize from URL and updated permission add/edit redirects to include ?tab=Permissions
+
+## Notes
+
+- Files changed: src/pages/subordinates/SubordinatesPage.tsx, src/pages/subordinates/AddPermissionPage.tsx
+- Rationale: Ensure URL-driven tab selection to resolve back-button issues and keep edited/created permissions returning to the Permissions tab
+
+---
+
+## applyTo: "\*\*"
+
+# User Memory
+
+## User Preferences
+
+- Programming languages: javascript/ typescript/ next js
+- Code style preferences: prettier
+- Development environment: vs code
 - Communication style: concise
 
 ## Project Context

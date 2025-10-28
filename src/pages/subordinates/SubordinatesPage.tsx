@@ -5,6 +5,7 @@ import { SubordinatesTable } from "@/components/subordinates/SubordinatesTable";
 import { useDatePicker } from "@/hooks/useDatePicker";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { useHasPermission } from "@/hooks/usePermissions";
 import { useQuery } from "@tanstack/react-query";
 import { getAdmins } from "@/api/admins/getAdmins";
@@ -17,15 +18,47 @@ const SubordinatesPage = () => {
   const canViewPermission = useHasPermission("view_permission");
   const canViewPermissionsTab = canViewRole || canViewPermission;
 
-  const [selectedFilter, setSelectedFilter] = useState<
-    "Subordinates" | "Permissions"
-  >(() => {
-    // Default to the first available tab: Subordinates if view_admin exists,
-    // otherwise Permissions if permission view exists. Fall back to Subordinates.
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Initialize selectedFilter from URL if present and permitted; otherwise
+  // fall back to permission-based default. This prevents the header from
+  // overwriting the URL on mount and creates a single source of truth for
+  // tab selection which fixes back-button navigation issues.
+  const initialTabFromUrl = searchParams.get("tab");
+  const initialSelected = ((): "Subordinates" | "Permissions" => {
+    if (initialTabFromUrl === "Subordinates" && canViewSubordinates)
+      return "Subordinates";
+    if (initialTabFromUrl === "Permissions" && canViewPermissionsTab)
+      return "Permissions";
     if (canViewSubordinates) return "Subordinates";
     if (canViewPermissionsTab) return "Permissions";
     return "Subordinates";
-  });
+  })();
+
+  const [selectedFilter, setSelectedFilter] = useState<
+    "Subordinates" | "Permissions"
+  >(initialSelected);
+
+  const location = useLocation();
+
+  // When selectedFilter changes (user clicks tabs), update the URL but use
+  // replace:true to avoid creating a history entry for every tab click. This
+  // mirrors the pattern used in `ModelPage` and prevents back/forward spam.
+  useEffect(() => {
+    // Only update the search params when we're on the subordinates route to
+    // avoid changing search params for other pages (and to prevent
+    // cross-route history spam).
+    if (!location.pathname.startsWith("/subordinates")) return;
+
+    const currentTab = searchParams.get("tab");
+    if (selectedFilter && currentTab !== selectedFilter) {
+      const newParams = new URLSearchParams(searchParams);
+      newParams.set("tab", selectedFilter);
+      // Use replace so tab clicks don't create history entries that the
+      // back button would need to step through.
+      setSearchParams(newParams, { replace: true });
+    }
+  }, [selectedFilter, searchParams, setSearchParams, location.pathname]);
 
   const [searchTermAr, setSearchTermAr] = useState("");
   const [searchTermEn, setSearchTermEn] = useState("");

@@ -75,7 +75,7 @@ const AddPermissionPage = () => {
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       queryClient.invalidateQueries({ queryKey: ["role", roleId] });
       // Navigate back to subordinates page with permissions tab
-      navigate("/subordinates");
+      navigate("/subordinates?tab=Permissions");
     },
   });
 
