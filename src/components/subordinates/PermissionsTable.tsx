@@ -48,22 +48,26 @@ export function PermissionsTable({
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["roles", currentPage, itemsPerPage, searchTerm, dateParams],
-    queryFn: () =>
-      getRoles({
+    queryFn: () => {
+      const params: Record<string, unknown> = {
         search: searchTerm,
         pagination: "normal",
         per_page: itemsPerPage,
         page: currentPage,
-        ...(dateParams || {}),
-      }),
+      };
+      if (dateParams) Object.assign(params, dateParams);
+      return getRoles(params);
+    },
   });
 
   useEffect(() => {
     // Initialize active state for each role using the API-provided is_active if present
     const initial: Record<number, boolean> = {};
-    data?.data?.forEach((r: Role) => {
-      initial[r.id] = !!r.is_active;
-    });
+    if (data?.data) {
+      for (const r of data.data) {
+        initial[r.id] = Boolean(r.is_active);
+      }
+    }
     setActiveStates(initial);
   }, [data]);
 
@@ -141,13 +145,14 @@ export function PermissionsTable({
                       onChange={async () => {
                         const current = !!activeStates[role.id];
                         try {
-                          await updateRole(role.id, { is_active: !current });
+                          const newState = !current;
+                          await updateRole(role.id, { is_active: newState });
                           setActiveStates((s) => ({
                             ...s,
-                            [role.id]: !current,
+                            [role.id]: newState,
                           }));
                           toast.success(
-                            !current
+                            newState
                               ? t("roleActivated") || "Role activated"
                               : t("roleDeactivated") || "Role deactivated"
                           );

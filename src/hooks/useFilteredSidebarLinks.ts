@@ -12,7 +12,7 @@ export const useFilteredSidebarLinks = (): SidebarLink[] => {
   // Filter sidebar links based on permissions
   const filteredLinks = useMemo(() => {
     // Get permission keys for easier checking
-    const permissionKeys = permissions.map((p) => p.key);
+    const permissionKeys = new Set(permissions.map((p) => p.key));
 
     return SidebarLinks.filter((link) => {
       // If no permissions required, always show the link (e.g., Dashboard, Logout)
@@ -20,19 +20,34 @@ export const useFilteredSidebarLinks = (): SidebarLink[] => {
         return true;
       }
 
-      // Check if user has required permissions
-      if (link.requireAny !== false) {
-        // Default is requireAny: true
-        // User needs ANY of the required permissions
+      // Enforce: if any view_* permission exists in the requiredPermissions list,
+      // the user must have at least one view permission to see the link.
+      const viewPermissions = link.requiredPermissions.filter((p) =>
+        p.startsWith("view_")
+      );
+
+      if (viewPermissions.length > 0) {
+        // User must have at least one of the view permissions for this link
+        const hasAnyView = viewPermissions.some((vp) => permissionKeys.has(vp));
+        if (!hasAnyView) return false;
+        // If user has view permission, allow showing the link (they can view at least one resource)
+        return true;
+      }
+
+      // If no explicit view_* permissions are present, fall back to existing logic
+      const requireAny = link.requireAny ?? true;
+
+      if (requireAny) {
+        // Default is requireAny: true - user needs ANY of the required permissions
         return link.requiredPermissions.some((permission) =>
-          permissionKeys.includes(permission)
-        );
-      } else {
-        // User needs ALL of the required permissions
-        return link.requiredPermissions.every((permission) =>
-          permissionKeys.includes(permission)
+          permissionKeys.has(permission)
         );
       }
+
+      // User needs ALL of the required permissions
+      return link.requiredPermissions.every((permission) =>
+        permissionKeys.has(permission)
+      );
     });
   }, [permissions]);
 
