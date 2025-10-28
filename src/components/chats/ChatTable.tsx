@@ -13,6 +13,7 @@ import ConversationPage from "@/pages/chats/ConversationPage";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useHasPermission } from "@/hooks/usePermissions";
 import {
   updateConversationStatus,
   type Conversation,
@@ -33,6 +34,9 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
     null
   );
   const isArabic = i18n.language === "ar";
+  const canChangeStatus = useHasPermission("change-status_chat");
+  const canView = useHasPermission("view_chat");
+  const canDelete = useHasPermission("delete_chat");
 
   // Helper function to get localized name
   const getLocalizedName = (
@@ -110,7 +114,9 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
               <TableHead className="text-right">{t("carName")}</TableHead>
               <TableHead className="text-right">{t("brandName")}</TableHead>
               <TableHead className="text-right">{t("usersNumber")}</TableHead>
-              <TableHead className="text-right">{t("status")}</TableHead>
+              {(canChangeStatus || canView || canDelete) && (
+                <TableHead className="text-right">{t("status")}</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -137,24 +143,32 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
                         "-"}
                     </TableCell>
                     <TableCell className="flex gap-[7px] items-center">
-                      <Switch
-                        isSelected={Boolean(conversation.is_active)}
-                        onChange={() =>
-                          handleToggleActive(
-                            conversation.id,
-                            !conversation.is_active
-                          )
-                        }
-                        isDisabled={updateStatusMutation.isPending}
-                      />
-                      <button onClick={() => handleOpenChat(conversation.id)}>
-                        <ChatIcon />
-                      </button>
-                      <div className="mt-2">
-                        <TableDeleteButton
-                          handleDelete={() => handleDelete(conversation.id)}
+                      {canChangeStatus && (
+                        <Switch
+                          isSelected={Boolean(conversation.is_active)}
+                          onChange={() =>
+                            handleToggleActive(
+                              conversation.id,
+                              !conversation.is_active
+                            )
+                          }
+                          isDisabled={updateStatusMutation.isPending}
                         />
-                      </div>
+                      )}
+
+                      {canView && (
+                        <button onClick={() => handleOpenChat(conversation.id)}>
+                          <ChatIcon />
+                        </button>
+                      )}
+
+                      {canDelete && (
+                        <div className="mt-2">
+                          <TableDeleteButton
+                            handleDelete={() => handleDelete(conversation.id)}
+                          />
+                        </div>
+                      )}
                     </TableCell>
                   </TableRow>
                 );
