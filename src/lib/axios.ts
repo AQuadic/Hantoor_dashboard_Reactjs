@@ -45,7 +45,7 @@ axios.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 403) {
-      window.location.href = "/403";
+      // window.location.href = "/403";
     }
     if (
       error.response &&

@@ -37,9 +37,12 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
   const navigate = useNavigate();
   const isArabic = i18n.language === "ar";
   const canChangeStatus = useHasPermission("change-status_finance");
-  const canView = useHasPermission("view_finance");
+  const canViewFinance = useHasPermission("view_finance");
+  // The 'View' action for financing countries should depend on bank viewing permission
+  const canViewBank = useHasPermission("view_bank");
   const canDelete = useHasPermission("delete_finance");
-  const showActionsColumn = canChangeStatus || canView || canDelete;
+  const showActionsColumn =
+    canChangeStatus || canViewFinance || canViewBank || canDelete;
 
   const handleViewCountry = (country: FinancingCountry) => {
     const countryName = isArabic ? country.name.ar : country.name.en;
@@ -143,7 +146,7 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
                   />
                 )}
 
-                {canView && (
+                {canViewBank && (
                   <button
                     type="button"
                     className="cursor-pointer"

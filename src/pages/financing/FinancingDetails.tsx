@@ -7,6 +7,7 @@ import DashboardButton from "@/components/general/dashboard/DashboardButton";
 import BanksTable from "@/components/financing/BanksTable";
 import { useTranslation } from "react-i18next";
 import { useDatePicker } from "@/hooks/useDatePicker";
+import { useHasPermission } from "@/hooks/usePermissions";
 
 const FinancingDetails = () => {
   const location = useLocation();
@@ -26,6 +27,8 @@ const FinancingDetails = () => {
     setDateRange: setFinancingDateRange,
     dateParams,
   } = useDatePicker();
+
+  const canCreateBank = useHasPermission("create_bank");
 
   return (
     <section>
@@ -59,7 +62,7 @@ const FinancingDetails = () => {
             />
           </div>
 
-          {countryId && (
+          {countryId && canCreateBank && (
             <Link to={`/bank/add/${countryId}`}>
               <DashboardButton
                 titleAr="اضافة بنك جديد"
