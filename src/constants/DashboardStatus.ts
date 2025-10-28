@@ -74,4 +74,18 @@ export const DashboardStatus: DashboardStatusItem[] = [
     textEn: "Number of agents",
     permission: "view_agents_count_dashboard",
   },
+  {
+    icon: userImg,
+    key: "finance_count",
+    textAr: "عدد التمويلات",
+    textEn: "Number of finances",
+    permission: "view_finances_count_dashboard",
+  },
+  {
+    icon: userImg,
+    key: "request_finance_price_count",
+    textAr: "عدد طلبات تسعير التمويل",
+    textEn: "Number of financing price requests",
+    permission: "view_request_finance_count_dashboard",
+  },
 ];
