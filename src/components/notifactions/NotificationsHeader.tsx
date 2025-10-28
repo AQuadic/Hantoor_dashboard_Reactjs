@@ -6,6 +6,7 @@ import DashboardButton from "../general/dashboard/DashboardButton";
 import { Link } from "react-router";
 import { RangeValue } from "@heroui/react";
 import { CalendarDate } from "@internationalized/date";
+import { useHasPermission } from "@/permissions";
 
 interface NotificationsHeaderProps {
   onSearch: (term: string) => void;
@@ -18,6 +19,7 @@ const NotificationsHeader: React.FC<NotificationsHeaderProps> = ({
   dateRange,
   setDateRange,
 }) => {
+  const canCreate = useHasPermission("create_notification");
   const handleSearch = (value: string) => {
     onSearch(value);
   };
@@ -47,6 +49,8 @@ const NotificationsHeader: React.FC<NotificationsHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
+
+        {canCreate && (
         <Link to="/notifications/add">
           <DashboardButton
             titleAr={"اضافة اشعار جديد"}
@@ -54,6 +58,7 @@ const NotificationsHeader: React.FC<NotificationsHeaderProps> = ({
             variant="add"
           />
         </Link>
+        )}
       </div>
     </div>
   );
