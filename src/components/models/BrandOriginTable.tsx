@@ -46,6 +46,7 @@ export function BrandOriginTable({
   const canEdit = useHasPermission("edit_brand_origin");
   const canChangeStatus = useHasPermission("change-status_brand_origin");
   const currentLang = i18n.language;
+  const canDelete = useHasPermission("delete_brand_origin");
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ["brandOrigins", page, search, dateParams],
@@ -130,11 +131,13 @@ export function BrandOriginTable({
                     <Edit />
                   </Link>
                 )}
+                {canDelete && (
                 <div className="mt-2">
                   <TableDeleteButton
                     handleDelete={() => handleDelete(brand.id)}
                   />
                 </div>
+                )}
               </TableCell>
             )}
           </TableRow>
