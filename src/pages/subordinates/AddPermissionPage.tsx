@@ -57,7 +57,7 @@ const AddPermissionPage = () => {
       toast.success(t("roleCreatedSuccessfully"));
       queryClient.invalidateQueries({ queryKey: ["roles"] });
       // Navigate back to subordinates page with permissions tab
-      navigate("/subordinates");
+      navigate("/subordinates?tab=Permissions");
     },
   });
 
