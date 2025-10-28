@@ -12,6 +12,7 @@ import Edit from "@/components/icons/general/Edit";
 import { useTranslation } from "react-i18next";
 import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
+import { useHasPermission } from "@/hooks/usePermissions";
 import {
   getRequestFinancing,
   FinancingItem,
@@ -29,6 +30,10 @@ interface InsuranceTableProps {
 
 const InsuranceTable = ({ selectedCountry }: InsuranceTableProps) => {
   const { t, i18n } = useTranslation("setting");
+
+  const canChangeStatus = useHasPermission("change-status_request_financing");
+  const canEdit = useHasPermission("edit_request_financing");
+  const canDelete = useHasPermission("delete_request_financing");
 
   const {
     data: financingItems = [],
@@ -102,7 +107,9 @@ const InsuranceTable = ({ selectedCountry }: InsuranceTableProps) => {
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("whatsappNumber")}</TableHead>
           <TableHead className="text-right">{t("country")}</TableHead>
-          <TableHead className="text-right">{t("status")}</TableHead>
+          {(canChangeStatus || canEdit || canDelete) && (
+            <TableHead className="text-right">{t("status")}</TableHead>
+          )}
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -114,16 +121,26 @@ const InsuranceTable = ({ selectedCountry }: InsuranceTableProps) => {
               {getCountryName(item.country_id)}
             </TableCell>
             <TableCell className="flex gap-[7px] items-center">
-              <Switch
-                isSelected={!!item.is_active}
-                onChange={() => handleToggle(item)}
-              />
-              <Link to={`/setting/edit-whatsapp/${item.id}`}>
-                <Edit />
-              </Link>
-              <div className="mt-2">
-                <TableDeleteButton handleDelete={() => handleDelete(item.id)} />
-              </div>
+              {canChangeStatus && (
+                <Switch
+                  isSelected={!!item.is_active}
+                  onChange={() => handleToggle(item)}
+                />
+              )}
+
+              {canEdit && (
+                <Link to={`/setting/edit-whatsapp/${item.id}`}>
+                  <Edit />
+                </Link>
+              )}
+
+              {canDelete && (
+                <div className="mt-2">
+                  <TableDeleteButton
+                    handleDelete={() => handleDelete(item.id)}
+                  />
+                </div>
+              )}
             </TableCell>
           </TableRow>
         ))}
