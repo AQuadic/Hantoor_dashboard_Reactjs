@@ -51,6 +51,7 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
   const [openMessageId, setOpenMessageId] = useState<number | null>(null);
   const canEmail = useHasPermission("email_contact_us");
   const canStar = useHasPermission("star_contact_us");
+  const canDelete = useHasPermission("delete_contact_us");
 
   const { data, isLoading, refetch } = useQuery<SuggestionsResponse, Error>({
     queryKey: ["suggestions", page, perPage, search, dateParams],
@@ -177,11 +178,13 @@ const ContactUsTable: React.FC<ContactUsTableProps> = ({
                     </button>
                   )}
 
-                  <div className="mt-2">
-                    <TableDeleteButton
-                      handleDelete={() => handleDelete(message.id)}
-                    />
-                  </div>
+                  {canDelete && (
+                    <div className="mt-2">
+                      <TableDeleteButton
+                        handleDelete={() => handleDelete(message.id)}
+                      />
+                    </div>
+                  )}
                 </TableCell>
               </TableRow>
             ))}
