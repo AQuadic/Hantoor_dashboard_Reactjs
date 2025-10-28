@@ -333,5 +333,6 @@
     "change-status_role": "Status"
   },
 
-  "writePermissionName": "Write permission name"
+  "writePermissionName": "Write permission name",
+  "writeHere": "Write here"
 }

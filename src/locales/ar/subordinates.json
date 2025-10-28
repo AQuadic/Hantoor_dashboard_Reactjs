@@ -325,5 +325,6 @@
     "change-status_role": "الحالة"
   },
 
-  "writePermissionName": "اكتب اسم الصلاحية"
+  "writePermissionName": "اكتب اسم الصلاحية",
+  "writeHere": "اكتب هنا"
 }
