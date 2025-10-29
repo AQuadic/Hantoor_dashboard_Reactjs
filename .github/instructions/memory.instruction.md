@@ -1182,3 +1182,9 @@ I will continue applying the remaining patches and then run a full lint/build pa
 ## Memory Update
 
 - Recorded fix to prevent duplicate toasts when role create/update fails.
+
+## 2025-10-29: Fixed TermsAndConditions initial-load bug
+
+- Issue: When navigating to the Terms & Conditions tab for the first time, the pages data did not fetch until a manual refresh.
+- Fix: Replaced the manual countries useEffect with a `useQuery('countries')` and changed the pages `useQuery` to enable when the countries query finishes; this ensures pages are fetched automatically on first navigation.
+- Files changed: `src/pages/setting/TermsAndConditions.tsx`

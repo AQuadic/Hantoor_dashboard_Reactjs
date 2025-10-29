@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import TermsHeader from "@/components/termsandconditions/TermsHeader";
 import TermsTable from "@/components/termsandconditions/TermsTable";
@@ -9,28 +9,20 @@ import { getAllCountries, Country } from "@/api/countries/getCountry";
 
 const TermsAndConditions = () => {
   const [page, setPage] = useState(1);
-  const [countries, setCountries] = useState<Country[] | null>(null);
   const [selectedCountryId, setSelectedCountryId] = useState<number | null>(
     null
   );
 
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const all = await getAllCountries();
-        if (!mounted) return;
-        setCountries(all);
-        // default to All (null) so the header Select shows 'All' and fetches all pages
-        setSelectedCountryId(null);
-      } catch (err) {
-        console.error("Failed to fetch countries", err);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, []);
+  // Use react-query for countries so fetch lifecycle is consistent with pages query
+  const { data: countries, isLoading: countriesLoading } = useQuery<
+    Country[],
+    Error
+  >({
+    queryKey: ["countries"],
+    queryFn: () => getAllCountries(),
+    // cache countries for a short time to avoid refetching on quick navigations
+    staleTime: 1000 * 60 * 5,
+  });
 
   const {
     data: pagesData,
@@ -44,7 +36,8 @@ const TermsAndConditions = () => {
         ...(selectedCountryId ? { country_id: selectedCountryId } : {}),
       }),
     // enable once countries are loaded; when selectedCountryId is null ("All") we still want to fetch all pages
-    enabled: countries !== null,
+    // enable pages query once countries fetch finished (allows 'All' = null)
+    enabled: !countriesLoading,
   });
 
   const pages = pagesData?.data || [];
@@ -57,7 +50,7 @@ const TermsAndConditions = () => {
   return (
     <div className="md:px-8 px-2">
       <TermsHeader
-        countries={countries}
+        countries={countries ?? null}
         selectedCountryId={selectedCountryId}
         onCountryChange={(id) => setSelectedCountryId(id)}
       />
