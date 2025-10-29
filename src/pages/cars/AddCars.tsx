@@ -160,6 +160,28 @@ const AddCarsForm = () => {
         });
       };
 
+      // Helper function to convert features with proper image URLs and keep ids
+      const convertFeatures = (features: unknown[]) => {
+        if (!Array.isArray(features)) return [];
+        return features.map((f) => {
+          const feat = f as Record<string, unknown>;
+          return {
+            id: feat.id as number | undefined,
+            vehicle_id: feat.vehicle_id as number | undefined,
+            name: (feat.name as VehicleName) ?? { ar: "", en: "" },
+            description: (feat.description as VehicleDescription) ?? {
+              ar: "",
+              en: "",
+            },
+            is_active: feat.is_active == null ? true : Boolean(feat.is_active),
+            // some feature objects may have an `image` or `icon` field
+            image: getImageUrl(feat.image ?? feat.icon),
+            created_at: feat.created_at as string | undefined,
+            updated_at: feat.updated_at as string | undefined,
+          };
+        });
+      };
+
       // Helper function to safely convert to string
       const safeToString = (value: unknown): string => {
         if (value === null || value === undefined) return "";
@@ -269,7 +291,7 @@ const AddCarsForm = () => {
         videoFile: getVideoFile(vehicle.video) || "",
         offers: convertOffers(vehicle.offers || []),
         packages: vehicle.packages || [],
-        features: vehicle.features || [],
+        features: convertFeatures(vehicle.features || []),
         accessories: convertAccessories(vehicle.accessories || []),
         carImages: [], // Not used anymore
         additionalImages: convertToVehicleImages(
