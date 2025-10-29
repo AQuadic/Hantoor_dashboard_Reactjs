@@ -44,6 +44,7 @@ export function ModelTable({
   dateParams,
   setPagination,
 }: ModelTableProps) {
+  console.log("ModelTable: mounted", { page, search, dateParams });
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_vehicle_model");
   const canChangeStatus = useHasPermission("change-status_vehicle_model");
@@ -63,6 +64,7 @@ export function ModelTable({
         dateParams,
       });
       const res = await getModels(page, 15, search, dateParams);
+      console.log("ModelTable: getModels returned", res);
       console.debug("ModelTable: fetch result meta", res.meta);
       return res;
     },

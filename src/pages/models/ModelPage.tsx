@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { usePermissions } from "@/hooks/usePermissions";
 
 import TablePagination from "@/components/general/dashboard/table/TablePagination";
+import Loading from "@/components/general/Loading";
 import { useDatePicker } from "@/hooks/useDatePicker";
 import ModelHeader from "@/components/models/ModelHeader";
 import { ModelTable } from "@/components/models/ModelTable";
@@ -20,7 +21,11 @@ import { PriceToTable } from "@/components/models/PriceToTable";
 const ModelPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { hasPermission, hasAnyPermission } = usePermissions();
+  const {
+    hasPermission,
+    hasAnyPermission,
+    isLoading: permsLoading,
+  } = usePermissions();
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
   const sectionParam = searchParams.get("section") || "Models";
@@ -77,6 +82,11 @@ const ModelPage = () => {
 
   // Redirect logic for unauthorized access
   useEffect(() => {
+    // Wait until permissions finish loading before deciding redirects.
+    // If we act while permissions are loading we may incorrectly
+    // consider availableSections empty and redirect to 403.
+    if (permsLoading) return;
+
     if (!hasAccessToSection && availableSections.length > 0) {
       // User doesn't have access to current section, redirect to first available section
       const firstAvailableSection = availableSections[0];
@@ -84,6 +94,7 @@ const ModelPage = () => {
       newParams.set("section", firstAvailableSection);
       newParams.set("page", "1");
       setSearchParams(newParams, { replace: true });
+      return;
     }
 
     if (availableSections.length === 0) {
@@ -91,6 +102,7 @@ const ModelPage = () => {
       navigate("/403", { replace: true });
     }
   }, [
+    permsLoading,
     hasAccessToSection,
     availableSections,
     navigate,
@@ -159,6 +171,15 @@ const ModelPage = () => {
   }, []);
 
   const renderTable = () => {
+    // If permissions are still loading, show a loading indicator so we don't
+    // prematurely show Access Denied before the permission checks are ready.
+    if (permsLoading) {
+      return (
+        <div className="flex items-center justify-center p-8">
+          <Loading />
+        </div>
+      );
+    }
     // Double-check permission before rendering. For sections that list multiple
     // permissions we consider the section accessible if the user has any of
     // the listed sub-permissions (OR logic). The permission utilities use
@@ -244,8 +265,14 @@ const ModelPage = () => {
           />
         );
       case "Models":
-        // fall through to default which renders ModelTable
-        break;
+        return (
+          <ModelTable
+            page={currentPage}
+            search={search}
+            setPagination={handleSetPagination}
+            dateParams={dateParams}
+          />
+        );
       case "Car Types":
         return (
           <CarTypesTable
@@ -275,14 +302,7 @@ const ModelPage = () => {
           />
         );
       default:
-        return (
-          <ModelTable
-            page={currentPage}
-            search={search}
-            setPagination={handleSetPagination}
-            dateParams={dateParams}
-          />
-        );
+        return null;
     }
   };
 
@@ -298,6 +318,7 @@ const ModelPage = () => {
         selectedCountry={selectedCountry}
         setSelectedCountry={setSelectedCountry}
       />
+      {/* DEV debug panel removed - was interfering with real rendering */}
       <div className="px-2 md:px-8 relative min-h-[300px]">
         <AnimatePresence mode="wait">
           <motion.div
