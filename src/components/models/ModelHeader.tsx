@@ -34,7 +34,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   setSelectedCountry,
 }) => {
   const { t, i18n } = useTranslation("users");
-  const { hasPermission } = usePermissions();
+  const { hasPermission, hasAnyPermission } = usePermissions();
 
   const { data } = useQuery<Country[]>({
     queryKey: ["countries"],
@@ -52,8 +52,19 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   ];
 
   // Filter tabs based on user permissions
+  // Filter tabs based on user permissions
+  type FilterItem = {
+    titleAr: string;
+    titleEn: string;
+    addTextAr: string;
+    addTextEn: string;
+    link: string;
+    permission?: string | string[]; // view permission(s)
+    createPermission?: string | string[]; // create permission(s)
+  };
+
   const filtersData = useMemo(() => {
-    const allFiltersData = [
+    const allFiltersData: FilterItem[] = [
       {
         titleAr: "الموديلات",
         titleEn: "Models",
@@ -61,6 +72,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextEn: "Add New Model",
         link: "/models/add",
         permission: "view_vehicle_model",
+        createPermission: "create_vehicle_model",
       },
       {
         titleAr: "انواع الهيكل",
@@ -68,10 +80,9 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة نوع هيكل جديد",
         addTextEn: "Add New Structure Type",
         link: "/structure-types/add",
-        // Structure types consist of two related modules in the backend
-        // (vehicle_class and vehicle_body_type). Show this tab if the
-        // user has at least one of the view permissions.
         permission: ["view_vehicle_class", "view_vehicle_body_type"],
+        // Structure Types add should be allowed when user can create vehicle body types
+        createPermission: "create_vehicle_body_type",
       },
       {
         titleAr: "انواع السيارة",
@@ -80,6 +91,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextEn: "Add New Car Type",
         link: "/car-types/add",
         permission: "view_vehicle_type",
+        createPermission: "create_vehicle_type",
       },
       {
         titleAr: "الفئات",
@@ -87,9 +99,9 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة فئة جديدة",
         addTextEn: "Add New Category",
         link: "/categories/add",
-        // Allow showing Categories tab when user has either category permissions
-        // or vehicle_class permissions (some backends group categories under vehicle_class)
         permission: ["view_category", "view_vehicle_class"],
+        // Allow creation via either create_category or create_vehicle_class when appropriate
+        createPermission: ["create_category", "create_vehicle_class"],
       },
       {
         titleAr: "منشأ الماركة",
@@ -98,6 +110,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextEn: "Add New Brand Origin",
         link: "/brand-origins/add",
         permission: "view_brand_origin",
+        createPermission: "create_brand_origin",
       },
       {
         titleAr: "عدد المقاعد",
@@ -106,6 +119,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextEn: "Add New Number of Seats",
         link: "/seat-numbers/add",
         permission: "view_seat_count",
+        createPermission: "create_seat_count",
       },
       {
         titleAr: "انواع الماكينة",
@@ -114,6 +128,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextEn: "Add New Engine Type",
         link: "/engine-types/add",
         permission: "view_engine_type",
+        createPermission: "create_engine_type",
       },
       {
         titleAr: "احجام الماكينة",
@@ -122,6 +137,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextEn: "Add New Engine Size",
         link: "/engine-sizes/add",
         permission: "view_engine_size",
+        createPermission: "create_engine_size",
       },
       {
         titleAr: "السعر من",
@@ -130,6 +146,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextEn: "Add New Price From",
         link: "/price-from/add",
         permission: "view_price_from",
+        createPermission: "create_price_from",
       },
       {
         titleAr: "السعر الى",
@@ -138,20 +155,43 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextEn: "Add New Price To",
         link: "/price-to/add",
         permission: "view_price_to",
+        createPermission: "create_price_to",
       },
     ];
 
     return allFiltersData.filter((tab) => {
-      const perm = (tab as any).permission;
-      if (Array.isArray(perm)) return perm.some((p) => hasPermission(p));
-      return hasPermission(perm);
+      const perm = tab.permission;
+      if (Array.isArray(perm)) return hasAnyPermission(perm);
+      return perm ? hasPermission(perm) : false;
     });
-  }, [hasPermission]);
+  }, [hasPermission, hasAnyPermission]);
 
   // Find current filter or default to first available if user doesn't have permission
-  const currentFilter =
+  const currentFilter: FilterItem | undefined =
     filtersData.find((filter) => filter.titleEn === selectedFilter) ||
     filtersData[0];
+
+  // Determine whether the Add button should be shown for the current tab.
+  // We map view_* permission keys to create_* equivalents and check those.
+  const showAddButton = useMemo(() => {
+    if (!currentFilter) return false;
+    const viewPerm = currentFilter.permission;
+    const explicitCreate = currentFilter.createPermission;
+
+    // If createPermission is explicitly provided, prefer it.
+    if (explicitCreate) {
+      if (Array.isArray(explicitCreate))
+        return hasAnyPermission(explicitCreate);
+      return hasPermission(explicitCreate);
+    }
+
+    if (!viewPerm) return false;
+    if (Array.isArray(viewPerm)) {
+      const createPerms = viewPerm.map((p) => p.replace(/^view_/, "create_"));
+      return hasAnyPermission(createPerms);
+    }
+    return hasPermission(viewPerm.replace(/^view_/, "create_"));
+  }, [currentFilter, hasPermission, hasAnyPermission]);
 
   const getSearchPlaceholder = (filter: string) => {
     switch (filter) {
@@ -202,13 +242,15 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         <div className="flex-1">
           <DashboardDatePicker value={dateRange} onChange={setDateRange} />
         </div>
-        <Link to={currentFilter.link}>
-          <DashboardButton
-            titleAr={currentFilter.addTextAr}
-            titleEn={currentFilter.addTextEn}
-            variant="add"
-          />
-        </Link>
+        {showAddButton && (
+          <Link to={currentFilter.link}>
+            <DashboardButton
+              titleAr={currentFilter.addTextAr}
+              titleEn={currentFilter.addTextEn}
+              variant="add"
+            />
+          </Link>
+        )}
       </div>
 
       {(selectedFilter === "Price From" || selectedFilter === "Price To") && (

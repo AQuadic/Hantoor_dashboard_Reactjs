@@ -63,7 +63,21 @@ export function ModelTable({
   const itemsPerPage = modelsResponse?.meta?.itemsPerPage ?? 10;
   const totalPages = modelsResponse?.meta?.totalPages ?? 1;
   const currentPage = modelsResponse?.meta?.currentPage ?? page;
-  const models: Model[] = modelsResponse?.data ?? [];
+  // Sometimes API returns items under different keys; prefer data, then items/rows as fallback
+  let models: Model[] = [];
+  const respAny = modelsResponse as unknown as
+    | Record<string, unknown>
+    | undefined;
+
+  if (modelsResponse?.data && Array.isArray(modelsResponse.data)) {
+    models = modelsResponse.data;
+  } else if (respAny && Array.isArray(respAny.items)) {
+    models = respAny.items as unknown as Model[];
+  } else if (respAny && Array.isArray(respAny.rows)) {
+    models = respAny.rows as unknown as Model[];
+  } else {
+    models = [];
+  }
 
   const paginationData = useMemo(() => {
     const from = models.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0;
@@ -78,8 +92,16 @@ export function ModelTable({
   }, [totalPages, totalItems, itemsPerPage, models.length, currentPage]);
 
   useEffect(() => {
+    // If meta reports items but models array is empty, log for debugging and still set pagination
+    if (models.length === 0 && (modelsResponse?.meta?.totalItems ?? 0) > 0) {
+      console.warn(
+        "Models meta indicates items but data array is empty:",
+        modelsResponse
+      );
+    }
+
     setPagination(paginationData);
-  }, [paginationData, setPagination]);
+  }, [paginationData, setPagination, models.length, modelsResponse]);
 
   const handleDelete = async (id: number) => {
     await deleteModel(id);
@@ -91,7 +113,7 @@ export function ModelTable({
     try {
       await editVehicleModel(model.id, { is_active: !model.is_active });
       toast.success(
-        !model.is_active ? t("modelActivated") : t("modelDeactivated")
+        model.is_active ? t("modelDeactivated") : t("modelActivated")
       );
       refetch();
     } catch (error) {
