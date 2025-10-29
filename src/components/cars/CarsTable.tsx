@@ -52,6 +52,8 @@ const CarsTable = ({
   const canChangeStatus = useHasPermission("change-status_vehicle");
   const canDelete = useHasPermission("delete_vehicle");
   const canView = useHasPermission("view_vehicle");
+  // Permission to view or open vehicle chat
+  const canChat = useHasPermission("vehicle_chat");
   const queryClient = useQueryClient();
   const [openChatId, setOpenChatId] = useState<number | null>(null);
   // Local status map to allow immediate UI toggle feedback
@@ -428,8 +430,10 @@ const CarsTable = ({
                       />
                     )}
 
-                    {canView && (
-                      <button onClick={() => setOpenChatId(vehicle.id)}>
+                    {canChat && (
+                      <button
+                        onClick={() => canChat && setOpenChatId(vehicle.id)}
+                      >
                         <ChatIcon />
                       </button>
                     )}
@@ -462,7 +466,7 @@ const CarsTable = ({
       </div>
 
       <AnimatePresence>
-        {openChatId !== null && (
+        {openChatId !== null && canChat && (
           <>
             <motion.div
               key="overlay"
