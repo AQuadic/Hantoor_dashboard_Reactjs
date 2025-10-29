@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import {
   usePermissions,
-  useHasPermission,
   useHasAnyPermission,
   useHasAllPermissions,
   useHasRole,
@@ -74,24 +73,28 @@ const determineAccess = (
   mode: PermissionMode,
   permissions?: string | string[],
   roles?: string | string[],
-  hasPermissionResult = false,
   hasAnyPermissionResult = false,
   hasAllPermissionsResult = false,
   hasRoleResult = false
 ): boolean => {
   switch (mode) {
     case "require":
-      return permissions ? hasPermissionResult : hasRoleResult;
+      // If permissions were provided, show the page/tab when the user has ANY
+      // of the relevant permissions (view/edit/add/delete/status etc.). If no
+      // permissions were provided, fall back to role check.
+      return permissions ? hasAnyPermissionResult : hasRoleResult;
 
     case "requireAny":
-      return permissions && Array.isArray(permissions)
-        ? hasAnyPermissionResult
-        : hasRoleResult;
+      return permissions ? hasAnyPermissionResult : hasRoleResult;
 
     case "requireAll":
-      return permissions && Array.isArray(permissions)
+      // If an array of permissions was provided, require all of them. If a
+      // single permission string was provided treat it as "any variant"
+      // (see generation rules) and allow access if the user has any of those
+      // variants.
+      return Array.isArray(permissions)
         ? hasAllPermissionsResult
-        : hasRoleResult;
+        : hasAnyPermissionResult || hasRoleResult;
 
     case "requireRole":
       return hasRoleResult;
@@ -100,6 +103,27 @@ const determineAccess = (
       console.warn(`ProtectedComponent: Unknown mode "${mode}"`);
       return false;
   }
+};
+
+// Generate a set of permission variants for a resource-like permission string.
+// If the incoming permission is already a full permission (e.g. "view_models")
+// we still include it, but we also add common action variants so that having
+// any of them grants access to the page/tab.
+const generatePermissionVariants = (perm: string): string[] => {
+  const actions = [
+    "view",
+    "create",
+    "add",
+    "edit",
+    "update",
+    "delete",
+    "status",
+  ];
+  // If permission already contains an action prefix, strip it to get the base
+  // resource (e.g. view_models -> models), but still include the original.
+  const maybeBase = perm.includes("_") ? perm.replace(/^[^_]+_/, "") : perm;
+  const variants = actions.map((a) => `${a}_${maybeBase}`);
+  return Array.from(new Set([perm, ...variants]));
 };
 
 export const ProtectedComponent: React.FC<ProtectedComponentProps> = ({
@@ -118,13 +142,19 @@ export const ProtectedComponent: React.FC<ProtectedComponentProps> = ({
   // Get permission context - call hooks unconditionally
   const { isLoading, permissions: userPermissions } = usePermissions();
 
+  // Build permission list: if a string is provided we expand it to common
+  // action variants so that having any related permission grants view access.
+  let permissionList: string[] = [];
+  if (Array.isArray(permissions)) {
+    permissionList = permissions;
+  } else if (typeof permissions === "string") {
+    permissionList = generatePermissionVariants(permissions);
+  }
+
   // Call all possible hooks unconditionally to satisfy React Hook rules
-  const hasPermissionResult = useHasPermission(permissions || "");
-  const hasAnyPermissionResult = useHasAnyPermission(
-    Array.isArray(permissions) ? permissions : []
-  );
+  const hasAnyPermissionResult = useHasAnyPermission(permissionList);
   const hasAllPermissionsResult = useHasAllPermissions(
-    Array.isArray(permissions) ? permissions : []
+    Array.isArray(permissions) ? permissions : permissionList
   );
   const hasRoleResult = useHasRole(roles || "");
 
@@ -138,7 +168,6 @@ export const ProtectedComponent: React.FC<ProtectedComponentProps> = ({
     mode,
     permissions,
     roles,
-    hasPermissionResult,
     hasAnyPermissionResult,
     hasAllPermissionsResult,
     hasRoleResult
@@ -149,6 +178,7 @@ export const ProtectedComponent: React.FC<ProtectedComponentProps> = ({
     console.log("🔐 ProtectedComponent Debug:", {
       mode,
       permissions,
+      derivedPermissions: permissionList,
       roles,
       hasAccess,
       userPermissionsCount: userPermissions?.length || 0,
