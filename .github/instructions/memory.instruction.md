@@ -28,6 +28,10 @@ applyTo: "**"
 
 - Fixed Subordinates page tab handling to initialize from URL and updated permission add/edit redirects to include ?tab=Permissions
 
+- 2025-10-29: Updated translations for contact-us permission key `star_contact_us`:
+  - English: "Rating" -> "Favourite"
+  - Arabic: "تقييم" -> "المفضلة"
+
 ## Notes
 
 - Files changed: src/pages/subordinates/SubordinatesPage.tsx, src/pages/subordinates/AddPermissionPage.tsx
