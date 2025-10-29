@@ -33,7 +33,7 @@ const ModelPage = () => {
       // Structure Types may be named vehicle_class or vehicle_body_type in permission sets
       "Structure Types": ["view_vehicle_class", "view_vehicle_body_type"],
       "Car Types": "view_vehicle_type",
-      Categories: "view_category",
+      Categories: ["view_category", "view_vehicle_class"],
       "Brand Origin": "view_brand_origin",
       "Number of Seats": "view_seat_count",
       "Engine Types": "view_engine_type",

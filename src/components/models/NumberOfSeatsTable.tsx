@@ -119,7 +119,7 @@ export function NumberOfSeatsTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("NOSeats")}</TableHead>
-          {(canChangeStatus || canEdit) && (
+          {(canChangeStatus || canEdit || canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -134,7 +134,7 @@ export function NumberOfSeatsTable({
                 ""
               )}
             </TableCell>
-            {(canChangeStatus || canEdit) && (
+            {(canChangeStatus || canEdit || canDelete) && (
               <TableCell className="flex gap-[7px] items-center">
                 {canChangeStatus && (
                   <Switch
@@ -151,11 +151,11 @@ export function NumberOfSeatsTable({
                 )}
 
                 {canDelete && (
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(seat.id)}
-                  />
-                </div>
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(seat.id)}
+                    />
+                  </div>
                 )}
               </TableCell>
             )}

@@ -109,7 +109,7 @@ export function PriceToTable({
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("priceTo")}</TableHead>
           <TableHead className="text-right">{t("country")}</TableHead>
-          {(canChangeStatus || canEdit) && (
+          {(canChangeStatus || canEdit || canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -131,7 +131,7 @@ export function PriceToTable({
                 ? price.country.name[i18n.language as "ar" | "en"] || "-"
                 : "-"}
             </TableCell>
-            {(canChangeStatus || canEdit) && (
+            {(canChangeStatus || canEdit || canDelete) && (
               <TableCell className="flex gap-[7px] items-center">
                 {canChangeStatus && (
                   <Switch

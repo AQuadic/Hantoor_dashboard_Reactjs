@@ -87,7 +87,9 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة فئة جديدة",
         addTextEn: "Add New Category",
         link: "/categories/add",
-        permission: "view_category",
+        // Allow showing Categories tab when user has either category permissions
+        // or vehicle_class permissions (some backends group categories under vehicle_class)
+        permission: ["view_category", "view_vehicle_class"],
       },
       {
         titleAr: "منشأ الماركة",

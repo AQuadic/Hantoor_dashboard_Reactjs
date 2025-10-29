@@ -110,7 +110,7 @@ export function EngineSizesTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("engineSize")}</TableHead>
-          {(canChangeStatus || canEdit) && (
+          {(canChangeStatus || canEdit || canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -122,7 +122,7 @@ export function EngineSizesTable({
             <TableCell className="w-full break-words">
               {i18n.language === "ar" ? engine.name.ar : engine.name.en}
             </TableCell>
-            {(canChangeStatus || canEdit) && (
+            {(canChangeStatus || canEdit || canDelete) && (
               <TableCell className="flex gap-[7px] items-center">
                 {canChangeStatus && (
                   <Switch

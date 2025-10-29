@@ -114,7 +114,7 @@ export function StructureTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("structureType")}</TableHead>
-          {(canChangeStatus || canEdit) && (
+          {(canChangeStatus || canEdit || canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -125,7 +125,7 @@ export function StructureTable({
             <TableRow key={item.id} noBackgroundColumns={1}>
               <TableCell>{item.id}</TableCell>
               <TableCell className="w-full">{item.name[language]}</TableCell>
-              {(canChangeStatus || canEdit) && (
+              {(canChangeStatus || canEdit || canDelete) && (
                 <TableCell className="flex gap-[7px] items-center">
                   {canChangeStatus && (
                     <Switch

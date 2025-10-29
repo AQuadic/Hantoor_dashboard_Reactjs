@@ -179,7 +179,7 @@ export function CarTypesTable({
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("type")}</TableHead>
           <TableHead className="text-right">{t("brand")}</TableHead>
-          {(canChangeStatus || canEdit) && (
+          {(canChangeStatus || canEdit || canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -190,7 +190,7 @@ export function CarTypesTable({
             <TableCell>{car.id}</TableCell>
             <TableCell>{getTypeName(car)}</TableCell>
             <TableCell className="w-full">{getBrandName(car)}</TableCell>
-            {(canChangeStatus || canEdit) && (
+            {(canChangeStatus || canEdit || canDelete) && (
               <TableCell className="flex gap-[7px] items-center">
                 {canChangeStatus && (
                   <Switch

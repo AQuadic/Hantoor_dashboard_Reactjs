@@ -11,7 +11,7 @@ import {
 } from "../ui/table";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
-import { useHasPermission } from "@/hooks/usePermissions";
+import { useHasAnyPermission } from "@/hooks/usePermissions";
 import { useQuery } from "@tanstack/react-query";
 import {
   getVehicleClasses,
@@ -53,9 +53,16 @@ export function CategoriesTable({
   setPagination,
 }: CategoriesTableProps) {
   const { t, i18n } = useTranslation("models");
-  const canEdit = useHasPermission("edit_category");
-  const canChangeStatus = useHasPermission("change-status_category");
-  const canDelete = useHasPermission("delete_category");
+  // Allow category actions if user has category permissions OR vehicle_class permissions
+  const canEdit = useHasAnyPermission(["edit_category", "edit_vehicle_class"]);
+  const canChangeStatus = useHasAnyPermission([
+    "change-status_category",
+    "change-status_vehicle_class",
+  ]);
+  const canDelete = useHasAnyPermission([
+    "delete_category",
+    "delete_vehicle_class",
+  ]);
 
   const {
     data: classesResponse,
@@ -153,7 +160,7 @@ export function CategoriesTable({
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("categoryName")}</TableHead>
           {/* <TableHead className="text-right">{t("type")}</TableHead> */}
-          {(canChangeStatus || canEdit) && (
+          {(canChangeStatus || canEdit || canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -168,7 +175,7 @@ export function CategoriesTable({
             {/* <TableCell className="w-full">
               {typeMap[item.vehicle_type_id] || item.vehicle_type_id}
             </TableCell> */}
-            {(canChangeStatus || canEdit) && (
+            {(canChangeStatus || canEdit || canDelete) && (
               <TableCell className="flex gap-[7px] items-center">
                 {canChangeStatus && (
                   <Switch

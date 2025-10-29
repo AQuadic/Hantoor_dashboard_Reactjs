@@ -111,7 +111,7 @@ export function EngineTypesTable({
         <TableRow>
           <TableHead className="text-right">#</TableHead>
           <TableHead className="text-right">{t("engineType")}</TableHead>
-          {(canChangeStatus || canEdit) && (
+          {(canChangeStatus || canEdit || canDelete) && (
             <TableHead className="text-right">{t("status")}</TableHead>
           )}
         </TableRow>
@@ -121,7 +121,7 @@ export function EngineTypesTable({
           <TableRow key={engine.id} noBackgroundColumns={1}>
             <TableCell>{engine.id}</TableCell>
             <TableCell className="w-full">{engine.name.ar}</TableCell>
-            {(canChangeStatus || canEdit) && (
+            {(canChangeStatus || canEdit || canDelete) && (
               <TableCell className="flex gap-[7px] items-center">
                 {canChangeStatus && (
                   <Switch
