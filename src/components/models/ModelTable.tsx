@@ -55,7 +55,17 @@ export function ModelTable({
     refetch,
   } = useQuery<GetModelsResponse, Error>({
     queryKey: ["models-list", page, search, dateParams],
-    queryFn: () => getModels(page, 15, search, dateParams),
+    queryFn: async () => {
+      console.debug("ModelTable: fetching models", {
+        page,
+        perPage: 15,
+        search,
+        dateParams,
+      });
+      const res = await getModels(page, 15, search, dateParams);
+      console.debug("ModelTable: fetch result meta", res.meta);
+      return res;
+    },
   });
 
   // Provide defaults if undefined
