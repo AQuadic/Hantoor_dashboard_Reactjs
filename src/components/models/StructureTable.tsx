@@ -45,6 +45,7 @@ export function StructureTable({
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_vehicle_body_type");
   const canChangeStatus = useHasPermission("change-status_vehicle_body_type");
+  const canDelete = useHasPermission("delete_vehicle_body_type");
   const language = i18n.language as "ar" | "en";
 
   const {
@@ -141,11 +142,13 @@ export function StructureTable({
                       <Edit />
                     </Link>
                   )}
-                  <div className="mt-2">
-                    <TableDeleteButton
-                      handleDelete={() => handleDelete(item.id)}
-                    />
-                  </div>
+                  {canDelete && (
+                    <div className="mt-2">
+                      <TableDeleteButton
+                        handleDelete={() => handleDelete(item.id)}
+                      />
+                    </div>
+                  )}
                 </TableCell>
               )}
             </TableRow>

@@ -20,7 +20,7 @@ import { PriceToTable } from "@/components/models/PriceToTable";
 const ModelPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { hasPermission } = usePermissions();
+  const { hasPermission, hasAnyPermission } = usePermissions();
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
   const sectionParam = searchParams.get("section") || "Models";
@@ -45,15 +45,14 @@ const ModelPage = () => {
   );
 
   // Get available sections based on user permissions
-  const availableSections = useMemo(
-    () =>
-      Object.keys(sectionPermissions).filter((section) =>
-        hasPermission(
-          sectionPermissions[section as keyof typeof sectionPermissions]
-        )
-      ),
-    [sectionPermissions, hasPermission]
-  );
+  const availableSections = useMemo(() => {
+    return Object.keys(sectionPermissions).filter((section) => {
+      const required =
+        sectionPermissions[section as keyof typeof sectionPermissions];
+      if (Array.isArray(required)) return hasAnyPermission(required);
+      return hasPermission(required as string);
+    });
+  }, [sectionPermissions, hasPermission, hasAnyPermission]);
 
   // Compute initial selected section validated against permissions (mirrors SubordinatesPage logic)
   const initialSelected = (() => {
@@ -70,8 +69,11 @@ const ModelPage = () => {
   const hasAccessToSection = useMemo(() => {
     const requiredPermission =
       sectionPermissions[sectionParam as keyof typeof sectionPermissions];
-    return requiredPermission ? hasPermission(requiredPermission) : false;
-  }, [sectionParam, sectionPermissions, hasPermission]);
+    if (!requiredPermission) return false;
+    if (Array.isArray(requiredPermission))
+      return hasAnyPermission(requiredPermission);
+    return hasPermission(requiredPermission as string);
+  }, [sectionParam, sectionPermissions, hasPermission, hasAnyPermission]);
 
   // Redirect logic for unauthorized access
   useEffect(() => {
@@ -157,10 +159,20 @@ const ModelPage = () => {
   }, []);
 
   const renderTable = () => {
-    // Double-check permission before rendering
+    // Double-check permission before rendering. For sections that list multiple
+    // permissions we consider the section accessible if the user has any of
+    // the listed sub-permissions (OR logic). The permission utilities use
+    // AND semantics for array inputs, so call hasAnyPermission explicitly.
     const requiredPermission =
       sectionPermissions[selectedTab as keyof typeof sectionPermissions];
-    if (!requiredPermission || !hasPermission(requiredPermission)) {
+    const hasAccess =
+      requiredPermission === undefined
+        ? false
+        : Array.isArray(requiredPermission)
+        ? hasAnyPermission(requiredPermission)
+        : hasPermission(requiredPermission as string);
+
+    if (!hasAccess) {
       return (
         <div className="flex items-center justify-center p-8">
           <div className="text-center">

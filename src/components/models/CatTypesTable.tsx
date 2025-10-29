@@ -51,6 +51,7 @@ export function CarTypesTable({
 }: Readonly<CarTypesTableProps>) {
   const canEdit = useHasPermission("edit_vehicle_type");
   const canChangeStatus = useHasPermission("change-status_vehicle_type");
+  const canDelete = useHasPermission("delete_vehicle_type");
   const { t, i18n } = useTranslation("models");
   const queryClient = useQueryClient();
 
@@ -202,11 +203,13 @@ export function CarTypesTable({
                     <Edit />
                   </Link>
                 )}
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(car.id)}
-                  />
-                </div>
+                {canDelete && (
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(car.id)}
+                    />
+                  </div>
+                )}
               </TableCell>
             )}
           </TableRow>

@@ -68,7 +68,10 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة نوع هيكل جديد",
         addTextEn: "Add New Structure Type",
         link: "/structure-types/add",
-        permission: "view_vehicle_class",
+        // Structure types consist of two related modules in the backend
+        // (vehicle_class and vehicle_body_type). Show this tab if the
+        // user has at least one of the view permissions.
+        permission: ["view_vehicle_class", "view_vehicle_body_type"],
       },
       {
         titleAr: "انواع السيارة",

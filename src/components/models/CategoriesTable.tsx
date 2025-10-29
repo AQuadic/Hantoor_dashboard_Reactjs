@@ -55,6 +55,7 @@ export function CategoriesTable({
   const { t, i18n } = useTranslation("models");
   const canEdit = useHasPermission("edit_category");
   const canChangeStatus = useHasPermission("change-status_category");
+  const canDelete = useHasPermission("delete_category");
 
   const {
     data: classesResponse,
@@ -180,11 +181,13 @@ export function CategoriesTable({
                     <Edit />
                   </Link>
                 )}
-                <div className="mt-2">
-                  <TableDeleteButton
-                    handleDelete={() => handleDelete(item.id)}
-                  />
-                </div>
+                {canDelete && (
+                  <div className="mt-2">
+                    <TableDeleteButton
+                      handleDelete={() => handleDelete(item.id)}
+                    />
+                  </div>
+                )}
               </TableCell>
             )}
           </TableRow>
