@@ -94,9 +94,10 @@
   },
 
   "permissionNames": {
-    "view_users_count_dashboard": "Registered Users Count",
+    "view_users_count_dashboard": "users count (chart)",
+    "view_users_count_chart_dashboard": "users count (chart)",
     "view_admins_count_dashboard": "Subordinates Count",
-    "view_cars_count_dashboard": "Cars Count",
+    "view_cars_count_dashboard": "cars count (chart)",
     "view_finances_count_dashboard": "Finances Count",
     "view_agents_count_dashboard": "Agents Count",
     "view_cars_has_discounts_count_dashboard": "Cars with Discounts Count",

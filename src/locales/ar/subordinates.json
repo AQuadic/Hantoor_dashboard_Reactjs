@@ -90,9 +90,10 @@
   },
 
   "permissionNames": {
-    "view_users_count_dashboard": "عدد المستخدمين المسجلين",
+    "view_users_count_dashboard": "عدد المستخدمين (مخطط)",
+    "view_users_count_chart_dashboard": "عدد المستخدمين (مخطط)",
     "view_admins_count_dashboard": "عدد المسؤولين الفرعيين",
-    "view_cars_count_dashboard": "عدد السيارات",
+    "view_cars_count_dashboard": "عدد السيارات (مخطط)",
     "view_finances_count_dashboard": "عدد التمويلات",
     "view_agents_count_dashboard": "عدد الوكلاء",
     "view_cars_has_discounts_count_dashboard": "عدد السيارات التي تحتوي على خصم",
@@ -164,9 +165,7 @@
     "view_vehicle_model_type": "رؤية",
     "create_vehicle_model_type": "إنشاء",
     "delete_vehicle_model_type": "حذف",
-    "change-status_vehicle_body_type": "الحالة",
 
-    "edit_vehicle_body_type": "تعديل",
     "view_vehicle_body_type": "رؤية",
     "create_vehicle_body_type": "إنشاء",
     "edit_vehicle_body_type": "تعديل",
