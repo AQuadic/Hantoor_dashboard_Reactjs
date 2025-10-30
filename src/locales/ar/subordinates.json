@@ -90,7 +90,7 @@
   },
 
   "permissionNames": {
-    "view_users_count_dashboard": "عدد المستخدمين (مخطط)",
+    "view_users_count_dashboard": "عدد المستخدمين",
     "view_users_count_chart_dashboard": "عدد المستخدمين (مخطط)",
     "view_admins_count_dashboard": "عدد المسؤولين الفرعيين",
     "view_cars_count_dashboard": "عدد السيارات (مخطط)",

@@ -94,7 +94,7 @@
   },
 
   "permissionNames": {
-    "view_users_count_dashboard": "users count (chart)",
+    "view_users_count_dashboard": "users count",
     "view_users_count_chart_dashboard": "users count (chart)",
     "view_admins_count_dashboard": "Subordinates Count",
     "view_cars_count_dashboard": "cars count (chart)",
