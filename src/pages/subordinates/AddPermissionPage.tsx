@@ -49,7 +49,7 @@ const AddPermissionPage = () => {
     queryFn: () => getRole(Number(roleId)),
     enabled: isEdit && !!roleId,
   });
-
+  console.log("isEdit:", isEdit, "roleId:", roleId, "roleData:", roleData);
   // Create role mutation
   const createMutation = useMutation({
     mutationFn: createRole,

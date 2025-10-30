@@ -79,14 +79,29 @@ const PermissionRouteGuard: React.FC<PermissionRouteGuardProps> = ({
   // Get permission keys for checking
   const permissionKeys = permissions.map((p) => p.key);
 
-  // Check if user has required permissions
+  const resourceFromKey = (key: string) => key.split("_").slice(1).join("_");
+
+  // Strict matching helper used by UI: exact key, or user key endsWith `_<resource>`,
+  // or contains `_<resource>_` as a middle segment. This avoids matching
+  // dashboard counter keys like `view_finances_count_dashboard`.
+  const permissionMatches = (requiredPermission: string) => {
+    if (permissionKeys.includes(requiredPermission)) return true;
+    const resource = resourceFromKey(requiredPermission);
+    if (!resource) return false;
+
+    for (const k of permissionKeys) {
+      if (k === requiredPermission) return true;
+      if (k.endsWith(`_${resource}`)) return true;
+      if (k.includes(`_${resource}_`)) return true;
+    }
+
+    return false;
+  };
+
+  // Check if user has required permissions using the strict matcher
   const hasAccess = requireAny
-    ? requiredPermissions.some((permission) =>
-        permissionKeys.includes(permission)
-      )
-    : requiredPermissions.every((permission) =>
-        permissionKeys.includes(permission)
-      );
+    ? requiredPermissions.some((permission) => permissionMatches(permission))
+    : requiredPermissions.every((permission) => permissionMatches(permission));
 
   if (!hasAccess) {
     // Redirect to 403 page with state containing the attempted location

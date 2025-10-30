@@ -7,7 +7,7 @@ import TabsFilter from "../general/dashboard/TabsFilter";
 import { Select, SelectItem, RangeValue } from "@heroui/react";
 import { CalendarDate } from "@internationalized/date";
 import { usePermissions } from "@/hooks/usePermissions";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useCallback } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Country, getAllCountries } from "@/api/countries/getCountry";
 import { useTranslation } from "react-i18next";
@@ -34,7 +34,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
   setSelectedCountry,
 }) => {
   const { t, i18n } = useTranslation("users");
-  const { hasPermission, hasAnyPermission } = usePermissions();
+  const { permissions } = usePermissions();
 
   const { data } = useQuery<Country[]>({
     queryKey: ["countries"],
@@ -62,6 +62,65 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
     permission?: string | string[]; // view permission(s)
     createPermission?: string | string[]; // create permission(s)
   };
+
+  // Build a helper set of permission keys for matching related permissions
+  const permissionKeys = useMemo(
+    () => new Set(permissions.map((p) => p.key)),
+    [permissions]
+  );
+
+  const actionPrefixes = useMemo(
+    () =>
+      new Set([
+        "view",
+        "create",
+        "edit",
+        "delete",
+        "change-status",
+        "change_status",
+        "block",
+        "link",
+        "vehicle",
+        "notes",
+        "email",
+        "star",
+        "change-password",
+        "vehicle_chat",
+      ]),
+    []
+  );
+
+  const trailingSuffixes = useMemo(() => new Set(["count", "dashboard"]), []);
+
+  // Strict matching helper used by tabs and add button logic
+  const permissionMatches = useCallback(
+    (requiredPermission: string) => {
+      const extractResource = (key: string) => {
+        if (!key) return "";
+        const parts = key.split("_");
+        while (parts.length > 0 && actionPrefixes.has(parts[0])) {
+          parts.shift();
+        }
+        while (parts.length > 0 && trailingSuffixes.has(parts.at(-1)!)) {
+          parts.pop();
+        }
+        return parts.join("_");
+      };
+
+      if (permissionKeys.has(requiredPermission)) return true;
+      const reqResource = extractResource(requiredPermission);
+      if (!reqResource) return false;
+
+      for (const k of permissionKeys) {
+        if (k === requiredPermission) return true;
+        const userResource = extractResource(k);
+        if (userResource && userResource === reqResource) return true;
+      }
+
+      return false;
+    },
+    [permissionKeys, actionPrefixes, trailingSuffixes]
+  );
 
   const filtersData = useMemo(() => {
     const allFiltersData: FilterItem[] = [
@@ -161,10 +220,14 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
 
     return allFiltersData.filter((tab) => {
       const perm = tab.permission;
-      if (Array.isArray(perm)) return hasAnyPermission(perm);
-      return perm ? hasPermission(perm) : false;
+      if (!perm) return false;
+      if (Array.isArray(perm)) {
+        // If any of the listed permissions match user permissions, show the tab
+        return perm.some((p) => permissionMatches(p));
+      }
+      return permissionMatches(perm);
     });
-  }, [hasPermission, hasAnyPermission]);
+  }, [permissionMatches]);
 
   // Find current filter or default to first available if user doesn't have permission
   const currentFilter: FilterItem | undefined =
@@ -181,17 +244,17 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
     // If createPermission is explicitly provided, prefer it.
     if (explicitCreate) {
       if (Array.isArray(explicitCreate))
-        return hasAnyPermission(explicitCreate);
-      return hasPermission(explicitCreate);
+        return explicitCreate.some((p) => permissionMatches(p));
+      return permissionMatches(explicitCreate);
     }
 
     if (!viewPerm) return false;
     if (Array.isArray(viewPerm)) {
       const createPerms = viewPerm.map((p) => p.replace(/^view_/, "create_"));
-      return hasAnyPermission(createPerms);
+      return createPerms.some((p) => permissionMatches(p));
     }
-    return hasPermission(viewPerm.replace(/^view_/, "create_"));
-  }, [currentFilter, hasPermission, hasAnyPermission]);
+    return permissionMatches(viewPerm.replace(/^view_/, "create_"));
+  }, [currentFilter, permissionMatches]);
 
   const getSearchPlaceholder = (filter: string) => {
     switch (filter) {

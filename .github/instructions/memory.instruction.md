@@ -29,8 +29,13 @@ applyTo: "**"
 - Fixed Subordinates page tab handling to initialize from URL and updated permission add/edit redirects to include ?tab=Permissions
 
 - 2025-10-29: Updated translations for contact-us permission key `star_contact_us`:
+
   - English: "Rating" -> "Favourite"
   - Arabic: "تقييم" -> "المفضلة"
+
+- 2025-10-30: Adjusted sidebar link visibility logic to rely on `requireAny`/`requireAll` semantics instead of forcing a `view_` permission.
+  - File changed: `src/hooks/useFilteredSidebarLinks.ts`
+  - Rationale: Ensure pages (e.g., Users) appear when the user has any relevant permission such as `edit_user`, not only when they have `view_user`.
 
 ## Notes
 

@@ -22,14 +22,14 @@ const ModelPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const {
-    hasPermission,
+    permissions,
     hasAnyPermission,
     isLoading: permsLoading,
   } = usePermissions();
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
 
   const sectionParam = searchParams.get("section") || "Models";
-  const pageParam = parseInt(searchParams.get("page") || "1");
+  const pageParam = Number.parseInt(searchParams.get("page") || "1");
 
   // Define permission mapping for each section
   const sectionPermissions = useMemo(
@@ -50,14 +50,71 @@ const ModelPage = () => {
   );
 
   // Get available sections based on user permissions
+  // Helper: derive resource identifier from a permission key
+  const actionPrefixes = useMemo(
+    () =>
+      new Set([
+        "view",
+        "create",
+        "edit",
+        "delete",
+        "change-status",
+        "change_status",
+        "block",
+        "link",
+        "vehicle",
+        "notes",
+        "email",
+        "star",
+        "change-password",
+        "vehicle_chat",
+      ]),
+    []
+  );
+
+  const trailingSuffixes = useMemo(() => new Set(["count", "dashboard"]), []);
+
+  // (extractResource moved into the permission-checking callback to avoid
+  // hook dependency complexity and keep logic localized)
+
+  // Check whether the user has any permission related to a resource.
+  // If `required` is an array, prefer explicit any-permission check;
+  // otherwise derive the resource (e.g., view_vehicle_model -> vehicle_model)
+  // and match against loaded permission keys (so edit_/create_/change-status_ etc. count).
+  const hasAnyRelatedPermission = useCallback(
+    (required?: string | string[]) => {
+      const extractResource = (key: string) => {
+        if (!key) return "";
+        const parts = key.split("_");
+        while (parts.length > 0 && actionPrefixes.has(parts[0])) parts.shift();
+        while (parts.length > 0 && trailingSuffixes.has(parts.at(-1)!))
+          parts.pop();
+        return parts.join("_");
+      };
+
+      if (!required) return false;
+      if (Array.isArray(required)) return hasAnyPermission(required);
+
+      const reqResource = extractResource(required);
+      if (!reqResource) return false;
+
+      // Match when a user permission's derived resource equals required resource
+      return permissions.some((p) => {
+        if (p.key === required) return true;
+        const userRes = extractResource(p.key);
+        return userRes && userRes === reqResource;
+      });
+    },
+    [hasAnyPermission, permissions, actionPrefixes, trailingSuffixes]
+  );
+
   const availableSections = useMemo(() => {
     return Object.keys(sectionPermissions).filter((section) => {
       const required =
         sectionPermissions[section as keyof typeof sectionPermissions];
-      if (Array.isArray(required)) return hasAnyPermission(required);
-      return hasPermission(required as string);
+      return hasAnyRelatedPermission(required);
     });
-  }, [sectionPermissions, hasPermission, hasAnyPermission]);
+  }, [sectionPermissions, hasAnyRelatedPermission]);
 
   // Compute initial selected section validated against permissions (mirrors SubordinatesPage logic)
   const initialSelected = (() => {
@@ -74,11 +131,8 @@ const ModelPage = () => {
   const hasAccessToSection = useMemo(() => {
     const requiredPermission =
       sectionPermissions[sectionParam as keyof typeof sectionPermissions];
-    if (!requiredPermission) return false;
-    if (Array.isArray(requiredPermission))
-      return hasAnyPermission(requiredPermission);
-    return hasPermission(requiredPermission as string);
-  }, [sectionParam, sectionPermissions, hasPermission, hasAnyPermission]);
+    return hasAnyRelatedPermission(requiredPermission);
+  }, [sectionParam, sectionPermissions, hasAnyRelatedPermission]);
 
   // Redirect logic for unauthorized access
   useEffect(() => {
@@ -186,12 +240,7 @@ const ModelPage = () => {
     // AND semantics for array inputs, so call hasAnyPermission explicitly.
     const requiredPermission =
       sectionPermissions[selectedTab as keyof typeof sectionPermissions];
-    const hasAccess =
-      requiredPermission === undefined
-        ? false
-        : Array.isArray(requiredPermission)
-        ? hasAnyPermission(requiredPermission)
-        : hasPermission(requiredPermission as string);
+    const hasAccess = hasAnyRelatedPermission(requiredPermission);
 
     if (!hasAccess) {
       return (
