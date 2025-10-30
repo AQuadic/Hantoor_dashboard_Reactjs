@@ -1,4 +1,3 @@
-import Avatar from "/images/avatar.svg";
 import { Switch } from "@heroui/react";
 import { useTranslation } from "react-i18next";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -94,6 +93,19 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
     setCurrentConversation(found || null);
   }, [conversationId, vehicleId, queryClient]);
 
+  // If we fetched the conversation by id, ensure local currentConversation
+  // reflects the fetched data so the UI (eg. the status switch) shows
+  // the correct initial value even when there was nothing in cache.
+  useEffect(() => {
+    if (conversationData?.conversation) {
+      // conversationData comes from a different API type; cast to the
+      // local Conversation type so we can reuse the same state shape.
+      setCurrentConversation(
+        conversationData.conversation as unknown as Conversation
+      );
+    }
+  }, [conversationData]);
+
   // Delete message mutation
   const deleteMessageMutation = useMutation({
     mutationFn: deleteMessage,
@@ -128,16 +140,13 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
       conversationId: number;
       isActive: boolean;
     }) => toggleConversationStatus(conversationId, isActive),
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       toast.success(t("statusUpdatedSuccess") || "Status updated successfully");
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
-      // Update local state
-      if (currentConversation) {
-        setCurrentConversation({
-          ...currentConversation,
-          is_active: !currentConversation.is_active,
-        });
-      }
+      // Use the variables passed to the mutation to set the canonical state
+      setCurrentConversation((prev) =>
+        prev ? { ...prev, is_active: variables.isActive ? 1 : 0 } : prev
+      );
     },
     onError: () => {
       toast.error(t("statusUpdateFailed") || "Failed to update status");
@@ -146,20 +155,32 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
 
   // message deletion is handled via TableDeleteButton which opens the DeleteModal
 
-  const handleToggleStatus = () => {
+  const handleToggleStatus = (newValue?: boolean) => {
     const idToUse = conversationId || currentConversation?.id;
     if (!idToUse) return;
-    if (currentConversation) {
-      setCurrentConversation({
-        ...currentConversation,
-        is_active: !currentConversation.is_active,
-      });
-    }
 
-    toggleStatusMutation.mutate({
-      conversationId: idToUse,
-      isActive: !(currentConversation?.is_active ?? false),
-    });
+    // Current canonical boolean value
+    const current = Boolean(currentConversation?.is_active);
+    // If caller provided the new value (Switch onValueChange), use it,
+    // otherwise toggle the current value.
+    const next = typeof newValue === "boolean" ? newValue : !current;
+
+    // Optimistically update UI (store as 1/0 to match server shape)
+    setCurrentConversation((prev) =>
+      prev ? { ...prev, is_active: next ? 1 : 0 } : prev
+    );
+
+    toggleStatusMutation.mutate(
+      { conversationId: idToUse, isActive: next },
+      {
+        onError: () => {
+          // Revert optimistic update on error
+          setCurrentConversation((prev) =>
+            prev ? { ...prev, is_active: current ? 1 : 0 } : prev
+          );
+        },
+      }
+    );
   };
   const handleDeleteConversation = async (id: number) => {
     try {
@@ -236,9 +257,10 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
         </div>
         <div className="flex items-center gap-[14px] md:mt-0 mt-4">
           <Switch
-            checked={Boolean(currentConversation?.is_active)}
-            onChange={handleToggleStatus}
+            isSelected={Boolean(currentConversation?.is_active)}
+            onValueChange={(v) => handleToggleStatus(v)}
             disabled={toggleStatusMutation.isPending}
+            size="sm"
           />
           <TableDeleteButton
             handleDelete={() => {
@@ -262,7 +284,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
             <div key={message.id} className="flex flex-col items-start gap-2">
               <div className="flex items-start gap-2">
                 {/* Avatar */}
-              {message.user?.image?.url ? (
+                {message.user?.image?.url ? (
                   <img
                     src={message.user.image.url}
                     alt={message.user?.name || "User"}
