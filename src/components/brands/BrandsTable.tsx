@@ -67,6 +67,7 @@ export function BrandsTable({
 }: Readonly<BrandsTableProps>) {
   const canEdit = useHasPermission("edit_brand");
   const canChangeStatus = useHasPermission("change-status_brand");
+  const canDelete = useHasPermission("delete_brand");
   const { t, i18n } = useTranslation("brands");
   const [updatingId, setUpdatingId] = React.useState<number | null>(null);
   const [localBrands, setLocalBrands] = React.useState<Brand[] | undefined>(
@@ -166,7 +167,7 @@ export function BrandsTable({
               <TableCell className="w-full">
                 {brand.vehicles_count ?? "-"}
               </TableCell>
-              {(canChangeStatus || canEdit) && (
+              {(canChangeStatus || canEdit || canDelete) && (
                 <TableCell className="flex gap-[7px] items-center">
                   {canChangeStatus && (
                     <Switch
@@ -180,11 +181,13 @@ export function BrandsTable({
                       <Edit />
                     </Link>
                   )}
-                  <div className="mt-2">
-                    <TableDeleteButton
-                      handleDelete={() => handleDelete(brand.id)}
-                    />
-                  </div>
+                  {canDelete && (
+                    <div className="mt-2">
+                      <TableDeleteButton
+                        handleDelete={() => handleDelete(brand.id)}
+                      />
+                    </div>
+                  )}
                 </TableCell>
               )}
             </TableRow>
