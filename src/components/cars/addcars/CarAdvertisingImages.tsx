@@ -14,7 +14,11 @@ export interface AdImageWithId {
   image: File | string;
 }
 
-const CarAdvertisingImages = () => {
+const CarAdvertisingImages = ({
+  showInput = true,
+}: {
+  showInput?: boolean;
+}) => {
   const { t } = useTranslation("cars");
   const { formData, updateField } = useVehicleForm();
   const [, setPreviewVersion] = useState(0);
@@ -147,18 +151,20 @@ const CarAdvertisingImages = () => {
 
   return (
     <section>
-      <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
-        <h1 className="text-lg text-[#2A32F8] font-bold mb-4">
-          {t("advertisingImages") || "صور الإعلانات"}
-        </h1>
-        <div className="flex flex-col gap-4">
-          <MultiImageInput
-            images={convertedImages}
-            setImages={handleImagesChange}
-            height={169}
-          />
+      {showInput && (
+        <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
+          <h1 className="text-lg text-[#2A32F8] font-bold mb-4">
+            {t("advertisingImages") || "صور الإعلانات"}
+          </h1>
+          <div className="flex flex-col gap-4">
+            <MultiImageInput
+              images={convertedImages}
+              setImages={handleImagesChange}
+              height={169}
+            />
+          </div>
         </div>
-      </div>
+      )}
       {formData?.adsImages && formData.adsImages.length > 0 && (
         <div className="bg-white mt-3 rounded-[15px] py-[19px] px-[29px]">
           <h1 className="text-lg text-[#2A32F8] font-bold mb-2">

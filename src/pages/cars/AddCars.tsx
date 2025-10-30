@@ -556,7 +556,7 @@ const AddCarsForm = () => {
         <CarAccessories />
         <CarOffers />
         <RentToOwn />
-        <CarAdvertisingImages />
+        <CarAdvertisingImages showInput={false} />
         <div className="mt-6">
           <DashboardButton
             titleAr={isEdit ? "تحديث" : "اضافة"}
