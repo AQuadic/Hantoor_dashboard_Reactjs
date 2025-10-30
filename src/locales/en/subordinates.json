@@ -105,6 +105,7 @@
     "view_advanced_search_count_dashboard": "Advanced Search Count",
     "view_brand_count_dashboard": "Brands Count",
     "view_request_finance_count_dashboard": "Insurance Price Details Requests Count",
+    "view_request_insurance_price_count_dashboard": "Insurance Price Details Requests Count",
     "change-password_user": "Change Password",
 
     "view_admin": "View Admin",

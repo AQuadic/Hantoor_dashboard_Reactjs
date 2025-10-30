@@ -88,4 +88,11 @@ export const DashboardStatus: DashboardStatusItem[] = [
     textEn: "Number of financing price requests",
     permission: "view_request_finance_count_dashboard",
   },
+  {
+    icon: userImg,
+    key: "request_insurance_price_count",
+    textAr: "عدد مرات طلب تفاصيل سعر التأمين",
+    textEn: "Insurance Price Details Requests Count",
+    permission: "view_request_insurance_price_count_dashboard",
+  },
 ];
