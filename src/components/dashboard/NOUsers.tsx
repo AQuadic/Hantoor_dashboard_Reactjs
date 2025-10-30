@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminStats, AdminStatsResponse } from "@/api/stats/getStats";
 import Loading from "../general/Loading";
+import { useCanAccess } from "@/hooks/useCanAccess";
 
 interface UserData {
   label: string;
@@ -16,15 +17,29 @@ interface CartesianPoint {
   y: number;
 }
 
-const COLORS = ["#2A32F8", "#FEA54D", "#37BF40", "#47BDF8", "#8948E6", "#BE2E8E"];
+const COLORS = [
+  "#2A32F8",
+  "#FEA54D",
+  "#37BF40",
+  "#47BDF8",
+  "#8948E6",
+  "#BE2E8E",
+];
 
 const NOUsers = () => {
   const { t, i18n } = useTranslation("header");
   const isArabic = i18n.language === "ar";
 
+  // Gate chart by permission
+  const { canAccess, isLoading: isPermissionLoading } = useCanAccess({
+    permissions: "view_users_count_chart_dashboard",
+  });
+
+  // Keep hooks order stable: always call useQuery, but enable it only when permission is granted
   const { data: stats, isLoading } = useQuery<AdminStatsResponse>({
     queryKey: ["adminStats"],
     queryFn: getAdminStats,
+    enabled: Boolean(canAccess),
   });
 
   const data: UserData[] = useMemo(() => {
@@ -50,15 +65,19 @@ const NOUsers = () => {
     });
   }, [stats, isArabic, t]);
 
+  // If permission state still loading or user can't access, hide the component
+  if (isPermissionLoading) return null;
+  if (!canAccess) return null;
+
   const total = data.reduce((sum, item) => sum + item.value, 0);
 
   const polarToCartesian = (
     centerX: number,
     centerY: number,
     radius: number,
-    angleInDegrees: number,
+    angleInDegrees: number
   ): CartesianPoint => {
-    const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
+    const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180;
     return {
       x: centerX + radius * Math.cos(angleInRadians),
       y: centerY + radius * Math.sin(angleInRadians),
@@ -69,7 +88,7 @@ const NOUsers = () => {
     startAngle: number,
     endAngle: number,
     innerRadius: number,
-    outerRadius: number,
+    outerRadius: number
   ): string => {
     const start = polarToCartesian(0, 0, outerRadius, endAngle);
     const end = polarToCartesian(0, 0, outerRadius, startAngle);
@@ -122,12 +141,12 @@ const NOUsers = () => {
     };
   });
 
-  if (isLoading) return <Loading />
+  if (isLoading) return <Loading />;
 
   return (
     <section className="w-[251px] h-full bg-[#FFFFFF] rounded-[15px] mt-[15px] p-6">
       <h2 className="text-[#000000] text-[23px] font-bold mb-4">
-        {t('NumofUsers')}
+        {t("NumofUsers")}
       </h2>
 
       <div className="flex justify-center mb-8">
@@ -138,9 +157,9 @@ const NOUsers = () => {
             viewBox="-100 -100 200 200"
             className="transform rotate-0"
           >
-            {segments.map((segment, index) => (
+            {segments.map((segment) => (
               <path
-                key={index}
+                key={`${segment.label}-${segment.value}`}
                 d={segment.path}
                 fill={segment.color}
                 className="hover:opacity-80 transition-opacity cursor-pointer"
@@ -154,15 +173,20 @@ const NOUsers = () => {
           >
             <div className="text-center">
               <div className="text-3xl font-bold text-gray-800">{total}</div>
-              <div className="text-sm text-[#2A32F8] font-medium">{t('users')}</div>
+              <div className="text-sm text-[#2A32F8] font-medium">
+                {t("users")}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4 mt-4" style={{ direction: "rtl" }}>
-        {data.map((item, index) => (
-          <div key={index} className="flex items-center justify-between gap-2">
+        {data.map((item) => (
+          <div
+            key={`${item.label}-${item.value}`}
+            className="flex items-center justify-between gap-2"
+          >
             <div>
               <div
                 className="w-[9px] h-[23px] rounded-sm"
