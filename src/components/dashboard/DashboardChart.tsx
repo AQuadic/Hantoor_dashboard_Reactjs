@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/chart";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import { getAdminStats } from "@/api/stats/getStats";
+import { getAdminStats, VehiclePerCountry } from "@/api/stats/getStats";
+import { useCanAccess } from "@/hooks/useCanAccess";
 
 const chartConfig = {
   cars: {
@@ -22,13 +23,24 @@ const DashboardChart = () => {
   const { t, i18n } = useTranslation("header");
   const isArabic = i18n.language === "ar";
 
+  // Hide chart if user doesn't have the required permission
+  const { canAccess, isLoading: isPermissionLoading } = useCanAccess({
+    permissions: "view_cars_count_dashboard",
+  });
+
+  // Keep hook order stable: call useQuery always but only enable fetching when permission is granted
   const { data } = useQuery({
     queryKey: ["adminStats"],
     queryFn: getAdminStats,
+    enabled: Boolean(canAccess),
   });
 
+  // If permission state is still loading or user can't access, hide the chart
+  if (isPermissionLoading) return null;
+  if (!canAccess) return null;
+
   const chartData =
-    data?.vehicles_per_country?.map((item: any) => ({
+    data?.vehicles_per_country?.map((item: VehiclePerCountry) => ({
       day: isArabic ? item.country?.name?.ar : item.country?.name?.en,
       cars: item.vehicle_count,
     })) || [];
@@ -39,7 +51,9 @@ const DashboardChart = () => {
       dir="rtl"
     >
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-[#000000] text-[23px] font-bold">{t('NumofCars')}</h2>
+        <h2 className="text-[#000000] text-[23px] font-bold">
+          {t("NumofCars")}
+        </h2>
         <DashboardDatePicker />
       </div>
 
