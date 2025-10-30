@@ -306,7 +306,7 @@ const MobileInput = ({
 
   return (
     <div
-      className={`relative w-full h-[53px] px-4 py-7.5 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2 p-2 border-2 dark:border-neutral-700 rounded-xl focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName}`}
+      className={`relative w-full h-[53px] px-4 py-7.5 hover:border-neutral-400 dark:hover:border-neutral-500 flex items-center gap-2 p-2 border-2 dark:border-neutral-700 rounded-xl focus-within:!border-neutral-700 dark:focus-within:!border-neutral-300 ${inputClassName} `}
       dir="ltr"
     >
       <img
@@ -315,14 +315,16 @@ const MobileInput = ({
         draggable={false}
         width={24}
         height={16}
+        className="mt-3"
       />
-      <p className="text-[#2A32F8] text-sm font-normal -ml-1" dir="ltr">
+      <p className="text-[#2A32F8] text-sm font-normal -ml-1 mt-3" dir="ltr">
         +{selectedCountry.phone[0]}
       </p>
       <button
         disabled={disabled}
         type="button"
         onClick={() => setIsOpen(!isOpen)}
+        className="mt-3"
       >
         {isOpen ? (
           <ChevronUp size={14} className="text-[#2A32F8]" />
@@ -371,11 +373,11 @@ const MobileInput = ({
         onChange={(e) => setPhone(e.target.value)}
         dir="ltr"
         className="w-full bg-transparent dark:text-neutral-200 focus:outline-none py-2 mt-3"
-        style={{ textAlign: 'left' }}
+        style={{ textAlign: "left" }}
       />
       <Label
         className={`text-[#000000] dark:text-neutral-200 text-[15px] !font-normal absolute top-0.5 rtl:right-4 ltr:left-4 ${labelClassName}`}
-        dir={i18n.language === 'ar' ? 'rtl' : 'ltr'}
+        dir={i18n.language === "ar" ? "rtl" : "ltr"}
       >
         {label || t("phone")}
       </Label>
