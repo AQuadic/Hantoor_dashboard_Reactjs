@@ -79,7 +79,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
       <div className="flex flex-wrap items-center justify-between mt-4 mx-8">
         {to > 0 ? (
           <p className="text-center text-[#808080]">
-          {t('from')} {from} {t('to')}
+          {t('from')} {from} {t('to')} {""}
             {currentPage < totalPages ? currentPage * itemsPerPage : to} {t('of')}{" "}
             {totalItems || to} {t('items')}
           </p>
