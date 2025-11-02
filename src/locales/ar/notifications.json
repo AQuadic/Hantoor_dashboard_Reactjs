@@ -31,5 +31,7 @@
     "noImage": "لا توجد صورة",
 
     "selectReceiverType": "يرجى اختيار نوع المستلم",
-    "selectUsers": "يرجى اختيار المستخدمين"
+    "selectUsers": "يرجى اختيار المستخدمين",
+    "showMore": "عرض المزيد",
+    "showLess": "عرض أقل"
 }

@@ -31,5 +31,7 @@
     "noImage": "No Image",
 
     "selectReceiverType": "Please select a receiver type",
-    "selectUsers": "Please select users"
+    "selectUsers": "Please select users",
+    "showMore": "Show more",
+    "showLess": "show less"
 }
