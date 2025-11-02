@@ -13,5 +13,10 @@
     "noDataAvailable": "No data available",
     "Unknown": "Unknown",
 
-    "users": "Users"
+    "users": "Users",
+
+    "from": "from",
+    "to": "to",
+    "of": "of",
+    "items": "items"
 }

@@ -1,5 +1,6 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 interface TablePaginationProps {
   currentPage: number;
@@ -51,6 +52,7 @@ const TablePagination: React.FC<TablePaginationProps> = ({
   from,
   to,
 }) => {
+  const { t } = useTranslation("header");
   const steps = generateSteps(currentPage, totalPages);
 
   const handleStepClick = (step: number | string) => {
@@ -77,9 +79,9 @@ const TablePagination: React.FC<TablePaginationProps> = ({
       <div className="flex flex-wrap items-center justify-between mt-4 mx-8">
         {to > 0 ? (
           <p className="text-center text-[#808080]">
-            من {from} إلى{" "}
-            {currentPage < totalPages ? currentPage * itemsPerPage : to} من{" "}
-            {totalItems || to} عنصر
+          {t('from')} {from} {t('to')}
+            {currentPage < totalPages ? currentPage * itemsPerPage : to} {t('of')}{" "}
+            {totalItems || to} {t('items')}
           </p>
         ) : (
           <p className="text-center text-[#808080]">لا يوجد عناصر</p>
