@@ -139,8 +139,9 @@ const AddCarTypes = () => {
             titleEn={loading ? "Adding..." : "Add"}
             isLoading={loading}
             onClick={async () => {
-              if (!selectedBrand) {
-                toast.error(t("brand") + " " + t("isRequired"));
+              if (!arType || !enType || !selectedBrand) {
+                toast.dismiss();
+                toast.error(t("pleaseFillAllRequiredFields"));
                 return;
               }
 

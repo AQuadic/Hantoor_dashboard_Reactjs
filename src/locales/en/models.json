@@ -94,5 +94,6 @@
     "priceMustMatch": "Price must match in both languages",
     "categoryUpdated": "Category updated successfully",
 
-    "carTypeUpdated": "Car type updated successfully"
+    "carTypeUpdated": "Car type updated successfully",
+    "pleaseFillAllRequiredFields": "Please fill all required fields"
 }

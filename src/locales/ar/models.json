@@ -94,5 +94,6 @@
     "priceMustMatch": "يجب أن يتطابق السعر باللغتين",
     "categoryUpdated": "تم تعديل الفئة بنجاح",
 
-    "carTypeUpdated": "تم تعديل نوع السيارة بنجاح"
+    "carTypeUpdated": "تم تعديل نوع السيارة بنجاح",
+    "pleaseFillAllRequiredFields": "يرجى إدخال جميع الحقول المطلوبة"
 }
