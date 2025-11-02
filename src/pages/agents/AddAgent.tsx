@@ -243,7 +243,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
               label={t("arName")}
               value={arName}
               onChange={setArName}
-              placeholder="الشركة الدولية التجارية"
+              placeholder={t('writeHere')}
             />
           </div>
           {/* English name */}
