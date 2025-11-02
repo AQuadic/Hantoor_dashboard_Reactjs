@@ -24,5 +24,6 @@
     "countryDeactivated": "Country deactivated successfully",
     "countryUpdatedSuccessfully": "Country updated successfully",
     "AED": "AED",
-    "20dirham": "20 dirham"
+    "20dirham": "20 dirham",
+    "pleaseFillAllRequiredFields": "Please fill all required fields"
 }

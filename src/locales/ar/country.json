@@ -24,5 +24,6 @@
     "countryDeactivated": "تم إلغاء تفعيل البلد بنجاح",
     "countryUpdatedSuccessfully": "تم تحديث البلد بنجاح",
     "AED": "درهم",
-    "20dirham": "20 درهم"
+    "20dirham": "20 درهم",
+    "pleaseFillAllRequiredFields": "يرجى ملء جميع الحقول المطلوبة"
 }

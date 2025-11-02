@@ -23,6 +23,12 @@ const AddCountries = () => {
   const [loading, setLoading] = useState(false);
 
 const handleSubmit = async () => {
+  if (!arCountry || !enCountry || !code || !currencyCode || !arCurrency || !enCurrency || !serviceFee || !serviceDuration) {
+    toast.dismiss();
+    toast.error(t("pleaseFillAllRequiredFields"));
+    return;
+  }
+
   try {
     setLoading(true);
 
@@ -44,6 +50,7 @@ const handleSubmit = async () => {
     toast.success(t("countryAddedSuccessfully"));
     navigate("/countries");
 
+    // إعادة تعيين القيم
     setArCountry("");
     setEnCountry("");
     setCode("");
@@ -52,6 +59,7 @@ const handleSubmit = async () => {
     setCurrencyCode("");
     setServiceFee("");
     setServiceDurationType("month");
+    setServiceDuration("");
   } catch (error: unknown) {
     console.error("Failed to create country:", error);
 
