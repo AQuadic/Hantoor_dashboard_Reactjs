@@ -29,7 +29,10 @@ const AddPriceFrom = () => {
   });
 
   const handleSubmit = async () => {
-    if (arPrice !== enPrice) {
+  const arPriceNumber = arPrice.replace(/[^0-9.]/g, '');
+  const enPriceNumber = enPrice.replace(/[^0-9.]/g, '');
+
+  if (arPriceNumber !== enPriceNumber) {
       toast.dismiss();
       toast.error(t("priceMustMatch"));
       return;
@@ -37,7 +40,7 @@ const AddPriceFrom = () => {
 
     try {
       await createPriceFrom({
-        name: arPrice,
+        name: arPriceNumber,
         country_id: Number(selectedCountry),
       });
       toast.success(t("priceAddedSuccessfully"));
