@@ -42,5 +42,6 @@
   "phoneRequired": "Phone number is required",
   "imageRemoved": "Image removed successfully",
   "imageRequired": "Image is required",
-  "noResultsFound": "No results found. Try adjusting your filters."
+  "noResultsFound": "No results found. Try adjusting your filters.",
+  "username": "username"
 }

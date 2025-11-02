@@ -160,7 +160,7 @@ const AddUsers = () => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full h-[64px] border border-[#E2E2E2] rounded-[12px] mt-[15px] px-4 pt-4"
-            placeholder="username"
+            placeholder={t('username')}
           />
           <h2 className="text-[#000000] text-[15px] font-normal absolute rtl:top-5 ltr:top-4 rtl:right-4 ltr:left-4">
             {t("name")}
