@@ -237,3 +237,149 @@ export const getPermissionsByPattern = (
     permission.key.toLowerCase().includes(pattern.toLowerCase())
   );
 };
+
+/**
+ * List of action prefixes that should be stripped when extracting resource names
+ */
+const ACTION_PREFIXES = new Set([
+  "view",
+  "create",
+  "edit",
+  "delete",
+  "change-status",
+  "change_status",
+  "block",
+  "link",
+  "vehicle",
+  "notes",
+  "email",
+  "star",
+  "change-password",
+  "vehicle_chat",
+]);
+
+/**
+ * List of trailing suffixes that should be stripped (for dashboard counters, etc.)
+ */
+const TRAILING_SUFFIXES = new Set(["count", "dashboard"]);
+
+/**
+ * Extracts the resource name from a permission key
+ * Strips action prefixes and trailing suffixes to get the core resource
+ *
+ * Examples:
+ * - "view_user" -> "user"
+ * - "create_admin" -> "admin"
+ * - "edit_brand" -> "brand"
+ * - "view_finances_count_dashboard" -> "finances" (strips count and dashboard)
+ *
+ * @param key - Permission key to extract resource from
+ * @returns string - The extracted resource name
+ */
+export const extractResourceFromPermission = (key: string): string => {
+  if (!key) return "";
+  const parts = key.split("_");
+
+  // Remove leading action prefixes
+  while (parts.length > 0 && ACTION_PREFIXES.has(parts[0])) {
+    parts.shift();
+  }
+
+  // Remove trailing suffixes like count/dashboard
+  while (parts.length > 0 && TRAILING_SUFFIXES.has(parts.at(-1)!)) {
+    parts.pop();
+  }
+
+  return parts.join("_");
+};
+
+/**
+ * Checks if a user permission matches a required permission
+ * Uses exact matching first, then falls back to resource-based matching
+ * This avoids false positives from dashboard counter permissions
+ *
+ * @param userPermissionKey - The user's permission key
+ * @param requiredPermission - The required permission to check against
+ * @returns boolean - True if the permissions match
+ */
+export const permissionKeyMatches = (
+  userPermissionKey: string,
+  requiredPermission: string
+): boolean => {
+  // Exact match
+  if (userPermissionKey === requiredPermission) {
+    return true;
+  }
+
+  // Extract resources from both keys
+  const userResource = extractResourceFromPermission(userPermissionKey);
+  const requiredResource = extractResourceFromPermission(requiredPermission);
+
+  // If either resource is empty, no match
+  if (!userResource || !requiredResource) {
+    return false;
+  }
+
+  // Match if resources are the same
+  return userResource === requiredResource;
+};
+
+/**
+ * Checks if a user has any of the required permissions
+ * Uses the centralized permission matching logic
+ *
+ * @param userPermissions - Array of user's permission objects
+ * @param requiredPermissions - Array of required permission keys
+ * @returns boolean - True if user has at least one of the required permissions
+ */
+export const hasAnyRequiredPermission = (
+  userPermissions: Permission[],
+  requiredPermissions: string[]
+): boolean => {
+  if (!userPermissions || userPermissions.length === 0) {
+    return false;
+  }
+
+  if (!requiredPermissions || requiredPermissions.length === 0) {
+    return true;
+  }
+
+  const userPermissionKeys = userPermissions.map((p) => p.key);
+
+  // Check if any required permission matches any user permission
+  return requiredPermissions.some((requiredPerm) =>
+    userPermissionKeys.some((userPerm) =>
+      permissionKeyMatches(userPerm, requiredPerm)
+    )
+  );
+};
+
+/**
+ * Checks if a user has all of the required permissions
+ * Uses the centralized permission matching logic
+ *
+ * @param userPermissions - Array of user's permission objects
+ * @param requiredPermissions - Array of required permission keys
+ * @returns boolean - True if user has all of the required permissions
+ */
+export const hasAllRequiredPermissions = (
+  userPermissions: Permission[],
+  requiredPermissions: string[]
+): boolean => {
+  if (!userPermissions || userPermissions.length === 0) {
+    return false;
+  }
+
+  if (!requiredPermissions || requiredPermissions.length === 0) {
+    return true;
+  }
+
+  const userPermissionKeys = userPermissions.map((p) => p.key);
+
+  // Check if all required permissions are matched by user permissions
+  return requiredPermissions.every((requiredPerm) =>
+    userPermissionKeys.some((userPerm) =>
+      permissionKeyMatches(userPerm, requiredPerm)
+    )
+  );
+};
