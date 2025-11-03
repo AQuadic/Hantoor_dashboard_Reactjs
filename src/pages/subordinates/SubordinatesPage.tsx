@@ -6,17 +6,31 @@ import { useDatePicker } from "@/hooks/useDatePicker";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useSearchParams, useLocation } from "react-router-dom";
-import { useHasPermission } from "@/hooks/usePermissions";
+import { useHasAnyPermission } from "@/hooks/usePermissions";
 import { useQuery } from "@tanstack/react-query";
 import { getAdmins } from "@/api/admins/getAdmins";
 import { getRoles } from "@/api/roles/getRoles";
 
 const SubordinatesPage = () => {
   // Determine available view permissions for tabs
-  const canViewSubordinates = useHasPermission("view_admin");
-  const canViewRole = useHasPermission("view_role");
-  const canViewPermission = useHasPermission("view_permission");
-  const canViewPermissionsTab = canViewRole || canViewPermission;
+  // User can access Subordinates tab if they have ANY admin-related permission
+  // Note: There is no "view_admin" permission in the API, only CRUD operations
+  const canViewSubordinates = useHasAnyPermission([
+    "create_admin",
+    "edit_admin",
+    "delete_admin",
+    "change-status_admin",
+    "change-password_admin",
+  ]);
+
+  // User can access Permissions tab if they have ANY permission or role-related permission
+  // Note: There are no "view_role" or "view_permission" permissions in the API, only CRUD operations
+  const canViewPermissionsTab = useHasAnyPermission([
+    "create_permission",
+    "edit_permission",
+    "delete_permission",
+    "change-status_permission",
+  ]);
 
   const [searchParams, setSearchParams] = useSearchParams();
 

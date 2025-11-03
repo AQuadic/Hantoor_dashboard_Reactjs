@@ -15,9 +15,11 @@ import { deleteSlider } from "@/api/slider/deleteSlider";
 import { getAllCountries, Country } from "@/api/countries/getCountry";
 import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useHasPermission } from "@/hooks/usePermissions";
 
 const AdvertisingImages = () => {
   const { t, i18n } = useTranslation("setting");
+  const canDeleteAdImage = useHasPermission("delete_ad_image");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -162,13 +164,15 @@ const AdvertisingImages = () => {
                 alt={slider.name || `Slider ${slider.id}`}
               />
 
-              <button
-                type="button"
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                onClick={() => handleDelete(slider.id)}
-              >
-                <Delete />
-              </button>
+              {canDeleteAdImage && (
+                <button
+                  type="button"
+                  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
+                  onClick={() => handleDelete(slider.id)}
+                >
+                  <Delete />
+                </button>
+              )}
             </div>
           ))}
         </div>

@@ -52,14 +52,22 @@ export const useFilteredSidebarLinks = (): SidebarLink[] => {
     // Matching rules (strict):
     // - exact permission key match, OR
     // - resource derived from user permission equals resource derived from required permission
-    // This avoids matching unrelated dashboard counter keys like `view_finances_count_dashboard`.
+    // IMPORTANT: Dashboard permissions (containing "_dashboard") should NEVER match entity permissions
     const permissionMatches = (requiredPermission: string) => {
       if (permissionKeys.has(requiredPermission)) return true;
+
+      // Don't do fuzzy matching for dashboard permissions
+      if (requiredPermission.includes("_dashboard")) return false;
+
       const reqResource = extractResource(requiredPermission);
       if (!reqResource) return false;
 
       for (const k of permissionKeys) {
         if (k === requiredPermission) return true;
+
+        // Don't allow dashboard permissions to match with entity permissions
+        if (k.includes("_dashboard")) continue;
+
         const userResource = extractResource(k);
         if (userResource && userResource === reqResource) return true;
       }

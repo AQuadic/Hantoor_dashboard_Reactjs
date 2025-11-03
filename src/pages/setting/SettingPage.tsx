@@ -14,20 +14,47 @@ import FeaturesPage from "../features/FeaturesPage";
 const SettingPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { hasPermission } = usePermissions();
+  const { hasAnyPermission } = usePermissions();
 
   const sectionParam = searchParams.get("section") || "General Settings";
 
-  // Define permission mapping for each section
+  // Define permission mapping for each section - user needs ANY of these permissions
+  // Note: Many sections don't have view_ permissions in API, only CRUD operations
   const sectionPermissions = useMemo(
     () => ({
-      "General Settings": "view_general_setting",
-      "Insurance Price Request Button": "view_request_financing",
-      "Onboarding Pages": "view_onboarding",
-      "Advertising Images": "view_ad_image",
-      "Terms and Conditions": "view_terms",
-      "Social Media Links": "edit_social_link", // No view permission available
-      "App Features": "view_app_feature",
+      "General Settings": ["edit_general_setting"],
+      "Insurance Price Request Button": [
+        // No view_request_financing in API
+        "create_request_financing",
+        "edit_request_financing",
+        "delete_request_financing",
+        "change-status_request_financing",
+      ],
+      "Onboarding Pages": [
+        // No view_onboarding in API
+        "create_onboarding",
+        "edit_onboarding",
+        "delete_onboarding",
+      ],
+      "Advertising Images": [
+        // No view_ad_image in API
+        "create_ad_image",
+        "delete_ad_image",
+      ],
+      "Terms and Conditions": [
+        // No view_terms in API
+        "create_terms",
+        "edit_terms",
+        "delete_terms",
+      ],
+      "Social Media Links": ["edit_social_link"],
+      "App Features": [
+        // No view_app_feature in API
+        "create_app_feature",
+        "edit_app_feature",
+        "delete_app_feature",
+        "change-status_app_feature",
+      ],
     }),
     []
   );
@@ -35,20 +62,20 @@ const SettingPage = () => {
   // Get available sections based on user permissions
   const availableSections = useMemo(
     () =>
-      Object.keys(sectionPermissions).filter((section) =>
-        hasPermission(
-          sectionPermissions[section as keyof typeof sectionPermissions]
-        )
-      ),
-    [sectionPermissions, hasPermission]
+      Object.keys(sectionPermissions).filter((section) => {
+        const permissions =
+          sectionPermissions[section as keyof typeof sectionPermissions];
+        return hasAnyPermission(permissions);
+      }),
+    [sectionPermissions, hasAnyPermission]
   );
 
   // Check if user has access to the requested section
   const hasAccessToSection = useMemo(() => {
-    const requiredPermission =
+    const requiredPermissions =
       sectionPermissions[sectionParam as keyof typeof sectionPermissions];
-    return requiredPermission ? hasPermission(requiredPermission) : false;
-  }, [sectionParam, sectionPermissions, hasPermission]);
+    return requiredPermissions ? hasAnyPermission(requiredPermissions) : false;
+  }, [sectionParam, sectionPermissions, hasAnyPermission]);
 
   // Redirect logic for unauthorized access
   useEffect(() => {
@@ -97,9 +124,9 @@ const SettingPage = () => {
 
   const renderSection = () => {
     // Double-check permission before rendering
-    const requiredPermission =
+    const requiredPermissions =
       sectionPermissions[selectedFilter as keyof typeof sectionPermissions];
-    if (!requiredPermission || !hasPermission(requiredPermission)) {
+    if (!requiredPermissions || !hasAnyPermission(requiredPermissions)) {
       return (
         <div className="flex items-center justify-center p-8">
           <div className="text-center">

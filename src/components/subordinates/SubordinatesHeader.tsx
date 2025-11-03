@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import DashboardButton from "../general/dashboard/DashboardButton";
-import { useHasPermission } from "@/hooks/usePermissions";
+import { useHasPermission, useHasAnyPermission } from "@/hooks/usePermissions";
 import DashboardDatePicker from "../general/dashboard/DashboardDatePicker";
 import DashboardHeader from "../general/dashboard/DashboardHeader";
 import SearchBar from "../general/dashboard/SearchBar";
@@ -30,10 +30,25 @@ const SubordinatesHeader: React.FC<SubordinatesHeaderProps> = ({
 }) => {
   const canCreateAdmin = useHasPermission("create_admin");
   const canCreatePermission = useHasPermission("create_permission");
-  const canViewSubordinates = useHasPermission("view_admin");
-  const canViewRole = useHasPermission("view_role");
-  const canViewPermission = useHasPermission("view_permission");
-  const canViewPermissionsTab = canViewRole || canViewPermission;
+
+  // User can access Subordinates tab if they have ANY admin-related permission
+  // Note: There is no "view_admin" permission in the API, only CRUD operations
+  const canViewSubordinates = useHasAnyPermission([
+    "create_admin",
+    "edit_admin",
+    "delete_admin",
+    "change-status_admin",
+    "change-password_admin",
+  ]);
+
+  // User can access Permissions tab if they have ANY permission or role-related permission
+  // Note: There are no "view_role" or "view_permission" permissions in the API, only CRUD operations
+  const canViewPermissionsTab = useHasAnyPermission([
+    "create_permission",
+    "edit_permission",
+    "delete_permission",
+    "change-status_permission",
+  ]);
 
   // Build available filters based on explicit view permissions for each tab
   const filters = [] as {

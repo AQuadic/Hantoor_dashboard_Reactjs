@@ -58,13 +58,17 @@ export const SidebarLinks: SidebarLink[] = [
     linkEn: "Subordinates",
     path: "/subordinates",
     requiredPermissions: [
-      "view_admin",
-      // Also allow access when user can view permissions/roles
-      "view_permission",
-      "view_role",
+      // Admin permissions (no view_admin in API)
       "create_admin",
       "edit_admin",
       "delete_admin",
+      "change-status_admin",
+      "change-password_admin",
+      // Permission permissions (no view_permission or view_role in API)
+      "create_permission",
+      "edit_permission",
+      "delete_permission",
+      "change-status_permission",
     ],
     requireAny: true,
   },
@@ -75,11 +79,13 @@ export const SidebarLinks: SidebarLink[] = [
     linkEn: "Users",
     path: "/users",
     requiredPermissions: [
-      "view_user",
+      // No view_user in API, only CRUD operations
       "create_user",
       "edit_user",
       "delete_user",
       "block_user",
+      "change-status_user",
+      "change-password_user",
     ],
     requireAny: true,
   },
@@ -90,10 +96,11 @@ export const SidebarLinks: SidebarLink[] = [
     linkEn: "Countries",
     path: "/countries",
     requiredPermissions: [
-      "view_country",
+      // No view_country in API, only CRUD operations
       "create_country",
       "edit_country",
       "delete_country",
+      "change-status_country",
     ],
     requireAny: true,
   },
@@ -104,10 +111,11 @@ export const SidebarLinks: SidebarLink[] = [
     linkEn: "Brands",
     path: "/brands",
     requiredPermissions: [
-      "view_brand",
+      // No view_brand in API, only CRUD operations
       "create_brand",
       "edit_brand",
       "delete_brand",
+      "change-status_brand",
     ],
     requireAny: true,
   },
@@ -123,6 +131,7 @@ export const SidebarLinks: SidebarLink[] = [
       "edit_agent",
       "delete_agent",
       "link_agent",
+      "change-status_agent",
     ],
     requireAny: true,
   },
@@ -133,61 +142,56 @@ export const SidebarLinks: SidebarLink[] = [
     linkEn: "Car Sections",
     path: "/models",
     requiredPermissions: [
-      // Models section
-      "view_vehicle_model",
+      // Vehicle Models (no view_ in API)
       "create_vehicle_model",
       "edit_vehicle_model",
       "delete_vehicle_model",
-      // Structure Types (Body Types)
-      "view_vehicle_class",
-      // Also allow the newer/alternate body-type permission names
-      "view_vehicle_body_type",
-      "create_vehicle_body_type",
-      "edit_vehicle_body_type",
-      "delete_vehicle_body_type",
+      "change-status_vehicle_model",
+      // Vehicle Classes (no view_ in API)
       "create_vehicle_class",
       "edit_vehicle_class",
       "delete_vehicle_class",
-      // Vehicle Types
-      "view_vehicle_type",
+      "change-status_vehicle_class",
+      // Vehicle Body Types (no view_ in API)
+      "create_vehicle_body_type",
+      "edit_vehicle_body_type",
+      "delete_vehicle_body_type",
+      "change-status_vehicle_body_type",
+      // Vehicle Types (no view_ in API)
       "create_vehicle_type",
       "edit_vehicle_type",
       "delete_vehicle_type",
-      // Categories
-      "view_category",
-      "create_category",
-      "edit_category",
-      "delete_category",
-      // Brand Origins
-      "view_brand_origin",
+      "change-status_vehicle_type",
+      // Brand Origins (no view_ in API)
       "create_brand_origin",
       "edit_brand_origin",
       "delete_brand_origin",
-      // Number of Seats
-      "view_seat_count",
+      "change-status_brand_origin",
+      // Seat Counts (no view_ in API)
       "create_seat_count",
       "edit_seat_count",
       "delete_seat_count",
-      // Engine Types
-      "view_engine_type",
+      "change-status_seat_count",
+      // Engine Types (no view_ in API)
       "create_engine_type",
       "edit_engine_type",
       "delete_engine_type",
-      // Engine Sizes
-      "view_engine_size",
+      "change-status_engine_type",
+      // Engine Sizes (no view_ in API)
       "create_engine_size",
       "edit_engine_size",
       "delete_engine_size",
-      // Price From
-      "view_price_from",
+      "change-status_engine_size",
+      // Price From (no view_ in API)
       "create_price_from",
       "edit_price_from",
       "delete_price_from",
-      // Price To
-      "view_price_to",
+      "change-status_price_from",
+      // Price To (no view_ in API)
       "create_price_to",
       "edit_price_to",
       "delete_price_to",
+      "change-status_price_to",
     ],
     requireAny: true,
   },
@@ -202,6 +206,7 @@ export const SidebarLinks: SidebarLink[] = [
       "create_vehicle",
       "edit_vehicle",
       "delete_vehicle",
+      "change-status_vehicle",
     ],
     requireAny: true,
   },
@@ -213,13 +218,13 @@ export const SidebarLinks: SidebarLink[] = [
     path: "/financing",
     requiredPermissions: [
       "view_finance",
-      "create_finance",
-      "edit_finance",
       "delete_finance",
+      "change-status_finance",
       "view_bank",
       "create_bank",
       "edit_bank",
       "delete_bank",
+      "change-status_bank",
     ],
     requireAny: true,
   },
@@ -230,10 +235,10 @@ export const SidebarLinks: SidebarLink[] = [
     linkEn: "Chats",
     path: "/chats",
     requiredPermissions: [
-      "view_chat",
-      "create_chat",
-      "edit_chat",
+      // No view_chat in API, only operations
+      "vehicle_chat",
       "delete_chat",
+      "change-status_chat",
     ],
     requireAny: true,
   },
@@ -244,10 +249,11 @@ export const SidebarLinks: SidebarLink[] = [
     linkEn: "Support Questions",
     path: "/technical-support",
     requiredPermissions: [
-      "view_support_question",
+      // No view_support_question in API, only CRUD operations
       "create_support_question",
       "edit_support_question",
       "delete_support_question",
+      "change-status_support_question",
     ],
     requireAny: true,
   },
@@ -259,9 +265,9 @@ export const SidebarLinks: SidebarLink[] = [
     path: "/support-messages",
     requiredPermissions: [
       "view_support_message",
-      "create_support_message",
-      "edit_support_message",
+      "notes_support_message",
       "delete_support_message",
+      "change-status_support_message",
     ],
     requireAny: true,
   },
@@ -271,7 +277,13 @@ export const SidebarLinks: SidebarLink[] = [
     linkAr: "الاسئلة الشائعة",
     linkEn: "FAQs",
     path: "/faqs",
-    requiredPermissions: ["view_faq", "create_faq", "edit_faq", "delete_faq"],
+    requiredPermissions: [
+      "view_faq",
+      "create_faq",
+      "edit_faq",
+      "delete_faq",
+      "change-status_faq",
+    ],
     requireAny: true,
   },
   {
@@ -283,7 +295,6 @@ export const SidebarLinks: SidebarLink[] = [
     requiredPermissions: [
       "view_notification",
       "create_notification",
-      "edit_notification",
       "delete_notification",
     ],
     requireAny: true,
@@ -296,8 +307,8 @@ export const SidebarLinks: SidebarLink[] = [
     path: "/contact-us",
     requiredPermissions: [
       "view_contact_us",
-      "create_contact_us",
-      "edit_contact_us",
+      "email_contact_us",
+      "star_contact_us",
       "delete_contact_us",
     ],
     requireAny: true,
@@ -309,12 +320,25 @@ export const SidebarLinks: SidebarLink[] = [
     linkEn: "Settings",
     path: "/settings",
     requiredPermissions: [
-      "view_general_setting",
-      "view_request_financing",
-      "view_info_page",
-      "view_ad_image",
-      "view_terms",
-      "view_app_feature",
+      "edit_general_setting",
+      // No view_ permissions in API for these, only CRUD
+      "create_request_financing",
+      "edit_request_financing",
+      "delete_request_financing",
+      "change-status_request_financing",
+      "create_onboarding",
+      "edit_onboarding",
+      "delete_onboarding",
+      "create_ad_image",
+      "delete_ad_image",
+      "create_terms",
+      "edit_terms",
+      "delete_terms",
+      "edit_social_link",
+      "create_app_feature",
+      "edit_app_feature",
+      "delete_app_feature",
+      "change-status_app_feature",
     ],
     requireAny: true,
   },
