@@ -110,10 +110,26 @@ const AddPermissionPage = () => {
       (p) => !sectionData.includes(p)
     );
 
-    const newSelectedPermissions = [
+    let newSelectedPermissions = [
       ...otherSectionsPermissions,
       ...sectionPermissionNames,
     ];
+
+    // Auto-select view_finance when any bank permission is selected
+    if (sectionKey === "bank" && sectionPermissionNames.length > 0) {
+      // Check if view_finance is not already selected
+      if (!newSelectedPermissions.includes("view_finance")) {
+        newSelectedPermissions = [...newSelectedPermissions, "view_finance"];
+        toast.success(
+          t("autoSelectedFinanceView", {
+            defaultValue: "تم تحديد صلاحية عرض التمويل تلقائياً",
+          })
+        );
+        console.log(
+          "Auto-selected view_finance because bank permission was selected"
+        );
+      }
+    }
 
     console.log("Permission change:", {
       sectionKey,
