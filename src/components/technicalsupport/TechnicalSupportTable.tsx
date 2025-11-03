@@ -91,7 +91,7 @@ const TechnicalSupportTable: React.FC<TechnicalSupportTableProps> = (props) => {
                 ? question.country.name[i18n.language as "ar" | "en"]
                 : "-"}
             </TableCell>
-            <TableCell>{0}</TableCell>
+            <TableCell>{question.conversations_count ?? 0}</TableCell>
             <TableCell className="w-full">
               {new Date(question.created_at).toLocaleString(
                 i18n.language === "ar" ? "ar-EG" : "en-US",
