@@ -18,6 +18,7 @@ export interface GetVehicleClassesParams {
   per_page?: number;
   from_date?: string;
   to_date?: string;
+  is_active?: boolean;
 }
 
 export interface GetVehicleClassesPaginated {
@@ -57,6 +58,8 @@ export const getVehicleClasses = async (
     if (params?.per_page) queryParams.per_page = params.per_page;
     if (params?.from_date) queryParams.from_date = params.from_date;
     if (params?.to_date) queryParams.to_date = params.to_date;
+    if (params?.is_active !== undefined)
+      queryParams.is_active = params.is_active;
 
     const response = await axios.get<
       GetVehicleClassesPaginated | VehicleClass[]

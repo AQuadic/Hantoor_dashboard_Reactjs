@@ -74,11 +74,12 @@ export async function getCountries(
   page: number = 1,
   searchTerm: string = "",
   from_date?: string,
-  to_date?: string
+  to_date?: string,
+  is_active?: boolean
 ): Promise<CountriesResponse> {
   const pageNum = Number(page);
 
-  const params: Record<string, string | number> = {
+  const params: Record<string, string | number | boolean> = {
     page: pageNum,
   };
 
@@ -92,6 +93,10 @@ export async function getCountries(
 
   if (to_date) {
     params.to_date = to_date;
+  }
+
+  if (is_active !== undefined) {
+    params.is_active = is_active;
   }
 
   // Fetch raw API response
@@ -131,7 +136,8 @@ export async function getCountries(
  * Returns a flat array of Country objects.
  */
 export async function getAllCountries(
-  searchTerm: string = ""
+  searchTerm: string = "",
+  is_active?: boolean
 ): Promise<Country[]> {
   const params: Record<string, string | boolean> = {
     pagination: false,
@@ -139,6 +145,10 @@ export async function getAllCountries(
 
   if (searchTerm && searchTerm.trim()) {
     params.search = searchTerm.trim();
+  }
+
+  if (is_active !== undefined) {
+    params.is_active = is_active;
   }
 
   const response = await axios.get<Country[] | ApiCountriesResponse>(

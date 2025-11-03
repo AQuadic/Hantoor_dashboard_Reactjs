@@ -23,8 +23,9 @@ export const getModels = async (
   perPage: number = 10,
   search: string = "",
   dateParams?: { from_date?: string; to_date?: string },
-  isPaginated: boolean = true
-): Promise<GetModelsResponse> => {
+  isPaginated: boolean = true,
+  is_active?: boolean
+): Promise<GetModelsResponse> {
   try {
     const params: Record<string, string | number | boolean> = {};
 
@@ -38,6 +39,7 @@ export const getModels = async (
     if (search) params.search = search;
     if (dateParams?.from_date) params.from_date = dateParams.from_date;
     if (dateParams?.to_date) params.to_date = dateParams.to_date;
+    if (is_active !== undefined) params.is_active = is_active;
 
     const res = await axios.get<GetModelsResponse | Model[]>(
       "/admin/vehicle/model",

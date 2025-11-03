@@ -17,10 +17,7 @@ import {
 } from "@/components/ui/select";
 
 import { createFAQ, CreateFAQPayload } from "@/api/faq/addFaq";
-import {
-  Country,
-  getAllCountries,
-} from "@/api/countries/getCountry";
+import { Country, getAllCountries } from "@/api/countries/getCountry";
 
 const AddFaq = () => {
   const { t } = useTranslation("questions");
@@ -38,9 +35,8 @@ const AddFaq = () => {
   const navigate = useNavigate();
   const { data: countriesData, isLoading: countriesLoading } = useQuery({
     queryKey: ["allCountries"],
-    queryFn: () => getAllCountries(),
+    queryFn: () => getAllCountries("", true),
   });
-
 
   const handleSubmit = async () => {
     if (!countryId) {

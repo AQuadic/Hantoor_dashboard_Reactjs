@@ -30,6 +30,7 @@ export interface GetVehicleTypesParams {
   with_brand?: number;
   from_date?: string;
   to_date?: string;
+  is_active?: boolean;
 }
 
 export interface GetVehicleTypesPaginated {
@@ -71,6 +72,7 @@ export const getVehicleTypes = async (
   if (params?.with_brand) queryParams.with_brand = params.with_brand;
   if (params?.from_date) queryParams.from_date = params.from_date;
   if (params?.to_date) queryParams.to_date = params.to_date;
+  if (params?.is_active !== undefined) queryParams.is_active = params.is_active;
 
   const response = await axios.get<GetVehicleTypesPaginated | VehicleType[]>(
     "/admin/vehicle/type",

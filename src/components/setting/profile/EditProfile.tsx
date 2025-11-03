@@ -47,7 +47,7 @@ const EditProfile: React.FC = () => {
 
   const { data: countriesData } = useQuery({
     queryKey: ["allCountries"],
-    queryFn: () => getAllCountries(),
+    queryFn: () => getAllCountries("", true),
   });
 
   useEffect(() => {
@@ -101,7 +101,9 @@ const EditProfile: React.FC = () => {
         return;
       }
       if (!arBody.trim() || !enBody.trim()) {
-        toast.error(t("pleaseFillDescriptions") || "Please fill in both descriptions");
+        toast.error(
+          t("pleaseFillDescriptions") || "Please fill in both descriptions"
+        );
         return;
       }
 

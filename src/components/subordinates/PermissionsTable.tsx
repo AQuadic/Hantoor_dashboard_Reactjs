@@ -54,6 +54,7 @@ export function PermissionsTable({
         pagination: "normal",
         per_page: itemsPerPage,
         page: currentPage,
+        is_active: true,
       };
       if (dateParams) Object.assign(params, dateParams);
       return getRoles(params);

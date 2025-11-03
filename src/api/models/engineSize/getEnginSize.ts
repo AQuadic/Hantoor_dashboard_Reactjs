@@ -21,11 +21,15 @@ interface EngineSizesResponse {
 }
 
 export const getEngineSize = async (
-  pagination: boolean = true
+  pagination: boolean = true,
+  is_active?: boolean
 ): Promise<EngineSize[] | EngineSizesResponse> => {
   const params: Record<string, boolean> = {};
   if (!pagination) {
     params.pagination = false;
+  }
+  if (is_active !== undefined) {
+    params.is_active = is_active;
   }
 
   const res = await axios.get<EngineSize[] | EngineSizesResponse>(
@@ -49,6 +53,7 @@ export const getEngineSizePaginated = async (params?: {
   from_date?: string;
   to_date?: string;
   pagination?: boolean | string;
+  is_active?: boolean;
 }): Promise<EngineSizesResponse> => {
   const queryParams: Record<string, unknown> = {};
 
@@ -64,6 +69,7 @@ export const getEngineSizePaginated = async (params?: {
   if (params?.search) queryParams.search = params.search;
   if (params?.from_date) queryParams.from_date = params.from_date;
   if (params?.to_date) queryParams.to_date = params.to_date;
+  if (params?.is_active !== undefined) queryParams.is_active = params.is_active;
 
   const res = await axios.get<EngineSizesResponse>(
     "/admin/vehicle/engine-volume",

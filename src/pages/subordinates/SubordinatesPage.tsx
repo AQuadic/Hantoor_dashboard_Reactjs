@@ -146,6 +146,7 @@ const SubordinatesPage = () => {
         pagination: "normal",
         per_page: permissionsItemsPerPage,
         page: permissionsCurrentPage,
+        is_active: true,
         ...dateParams,
       }),
     enabled: selectedFilter === "Permissions" && canViewPermissionsTab,

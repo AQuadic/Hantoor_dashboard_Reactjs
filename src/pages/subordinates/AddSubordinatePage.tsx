@@ -88,7 +88,10 @@ const AddSubordinatePage = () => {
     const fetchRoles = async () => {
       try {
         setLoadingRoles(true);
-        const rolesData = await getRoles({ pagination: "all" });
+        const rolesData = await getRoles({
+          pagination: "all",
+          is_active: true,
+        });
         setRoles(rolesData.data);
       } catch (err: unknown) {
         const message = extractErrorMessage(err) || "Failed to load roles";
@@ -119,18 +122,17 @@ const AddSubordinatePage = () => {
           "";
         setPhone(phoneVal);
         if (data.phone_country) {
-        const country = getCountryByIso2(data.phone_country);
-        setSelectedCountry(country);
+          const country = getCountryByIso2(data.phone_country);
+          setSelectedCountry(country);
 
-        let rawPhone = data.phone_e164 || data.phone || "";
+          let rawPhone = data.phone_e164 || data.phone || "";
 
-        if (rawPhone.startsWith("+" + country.phone[0])) {
-          rawPhone = rawPhone.slice(country.phone[0].length + 1);
+          if (rawPhone.startsWith("+" + country.phone[0])) {
+            rawPhone = rawPhone.slice(country.phone[0].length + 1);
+          }
+
+          setPhone(rawPhone.trim());
         }
-
-        setPhone(rawPhone.trim());
-      }
-
 
         if (data.image?.url) {
           setExistingImageUrl(data.image.url);
@@ -170,7 +172,7 @@ const AddSubordinatePage = () => {
     }
 
     if (!isEdit && password !== confirmPassword) {
-      toast.error(t('passwordsDoNotMatch'));
+      toast.error(t("passwordsDoNotMatch"));
       return;
     }
 
@@ -247,7 +249,9 @@ const AddSubordinatePage = () => {
       />
       <div className="flex flex-col gap-8 p-8">
         <div className="p-8 bg-white rounded-2xl">
-          <h3 className="text-[#2A32F8] mb-4 text-lg font-bold">{t("personalImage")}</h3>
+          <h3 className="text-[#2A32F8] mb-4 text-lg font-bold">
+            {t("personalImage")}
+          </h3>
           <ImageInput
             image={profileImage}
             setImage={setProfileImage}
@@ -263,7 +267,7 @@ const AddSubordinatePage = () => {
                 label={`${t("name")} *`}
                 value={name}
                 onChange={setName}
-                placeholder={t('writeHere')}
+                placeholder={t("writeHere")}
               />
             </div>
             <div className="w-full">

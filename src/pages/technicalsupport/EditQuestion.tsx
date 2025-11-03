@@ -11,10 +11,7 @@ import {
 } from "@/components/ui/select";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  Country,
-  getAllCountries,
-} from "@/api/countries/getCountry";
+import { Country, getAllCountries } from "@/api/countries/getCountry";
 import { useQuery } from "@tanstack/react-query";
 import { FAQ, getFAQById } from "@/api/faq/getFaqById";
 import { updateFaq, FaqPayload } from "@/api/faq/editFaq";
@@ -35,9 +32,9 @@ const EditQuestion = () => {
   const [loading, setLoading] = useState(false);
 
   const { data: countriesData, isLoading: countriesLoading } = useQuery({
-      queryKey: ["allCountries"],
-      queryFn: () => getAllCountries(),
-    });
+    queryKey: ["allCountries"],
+    queryFn: () => getAllCountries("", true),
+  });
 
   useEffect(() => {
     if (!faqId) return;

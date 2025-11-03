@@ -94,7 +94,8 @@ export async function fetchAgents(
   page: number = 1,
   searchTerm: string = "",
   params?: FetchAgentsParams,
-  isPaginated: boolean = true
+  isPaginated: boolean = true,
+  is_active?: boolean
 ): Promise<AgentsApiResponse> {
   const query: Record<string, string | number | boolean> = {};
 
@@ -108,6 +109,7 @@ export async function fetchAgents(
   if (params?.type) query.type = params.type;
   if (params?.from_date) query.from_date = params.from_date;
   if (params?.to_date) query.to_date = params.to_date;
+  if (is_active !== undefined) query.is_active = is_active;
 
   const response = await axios.get("/admin/agents", { params: query });
   const raw = response.data as any;

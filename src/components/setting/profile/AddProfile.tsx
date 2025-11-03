@@ -35,8 +35,8 @@ const AddProfile = () => {
     const fetchCountries = async () => {
       try {
         // Use non-paginated endpoint for this select so we get the full list
-        const all = await getAllCountries();
-        setCountries(all.filter((c) => c.is_active));
+        const all = await getAllCountries("", true);
+        setCountries(all);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load countries");

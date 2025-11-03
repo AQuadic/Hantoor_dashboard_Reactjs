@@ -14,10 +14,7 @@ import { useTranslation } from "react-i18next";
 import { createFAQ, CreateFAQPayload } from "@/api/faq/addFaq";
 import toast from "react-hot-toast";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Country,
-  getAllCountries,
-} from "@/api/countries/getCountry";
+import { Country, getAllCountries } from "@/api/countries/getCountry";
 import { useNavigate } from "react-router";
 
 const AddQuestions = () => {
@@ -35,9 +32,9 @@ const AddQuestions = () => {
   const [, setErrors] = useState<Record<string, string[]>>({});
 
   const { data: countriesData, isLoading: countriesLoading } = useQuery({
-      queryKey: ["allCountries"],
-      queryFn: () => getAllCountries(),
-    });
+    queryKey: ["allCountries"],
+    queryFn: () => getAllCountries("", true),
+  });
 
   const handleSubmit = async () => {
     if (!countryId) {

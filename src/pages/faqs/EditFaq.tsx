@@ -15,10 +15,7 @@ import { useTranslation } from "react-i18next";
 import { updateFaq } from "@/api/faq/editFaq";
 import { getFAQById, FAQ } from "@/api/faq/getFaqById";
 import toast from "react-hot-toast";
-import {
-  Country,
-  getAllCountries,
-} from "@/api/countries/getCountry";
+import { Country, getAllCountries } from "@/api/countries/getCountry";
 import { useQuery } from "@tanstack/react-query";
 
 const EditFaq = () => {
@@ -33,7 +30,7 @@ const EditFaq = () => {
   const navigate = useNavigate();
   const { data: countriesData, isLoading: countriesLoading } = useQuery({
     queryKey: ["allCountries"],
-    queryFn: () => getAllCountries(),
+    queryFn: () => getAllCountries("", true),
   });
   useEffect(() => {
     if (!faqId) return;

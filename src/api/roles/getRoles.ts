@@ -24,6 +24,7 @@ export interface GetRolesParams extends Partial<DateFilterParams> {
   pagination?: "normal" | "all";
   per_page?: number;
   page?: number;
+  is_active?: boolean;
 }
 
 export async function getRoles(

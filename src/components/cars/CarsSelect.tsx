@@ -24,19 +24,19 @@ const CarsSelect = ({ filters, onFilterChange }: CarsSelectProps) => {
   // Fetch brands data
   const { data: brandsData } = useQuery({
     queryKey: ["brands"],
-    queryFn: () => fetchBrands(1, "", undefined, undefined, false),
+    queryFn: () => fetchBrands(1, "", undefined, undefined, false, true),
   });
 
   // Fetch vehicle types data
   const { data: vehicleTypesData } = useQuery({
     queryKey: ["vehicleTypes"],
-    queryFn: () => getVehicleTypes({ pagination: false }),
+    queryFn: () => getVehicleTypes({ pagination: false, is_active: true }),
   });
 
   // Fetch models data
   const { data: modelsData } = useQuery({
     queryKey: ["models"],
-    queryFn: () => getModels(1, 100), // Get more models for filtering
+    queryFn: () => getModels(1, 100, "", undefined, false, true), // Get more models for filtering
   });
 
   const brands = Array.isArray(brandsData?.data) ? brandsData.data : [];

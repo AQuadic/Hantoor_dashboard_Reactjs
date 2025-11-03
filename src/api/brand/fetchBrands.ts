@@ -54,7 +54,8 @@ export async function fetchBrands(
   searchTerm: string = "",
   from_date?: string,
   to_date?: string,
-  isPaginated: boolean = true
+  isPaginated: boolean = true,
+  is_active?: boolean
 ): Promise<BrandsApiResponse> {
   const params: Record<string, string | number | boolean> = {};
 
@@ -67,6 +68,7 @@ export async function fetchBrands(
   if (searchTerm) params.search = searchTerm;
   if (from_date) params.from_date = from_date;
   if (to_date) params.to_date = to_date;
+  if (is_active !== undefined) params.is_active = is_active;
 
   const response = await axios.get<BrandsApiResponse | Brand[]>(
     `/admin/brands`,

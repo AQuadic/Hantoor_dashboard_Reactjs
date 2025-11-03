@@ -56,7 +56,14 @@ export const useBrands = (): UseDropdownData<Brand> => {
   } = useQuery<Brand[], Error>({
     queryKey: ["brands"],
     queryFn: async () => {
-      const response = await fetchBrands(1, "", undefined, undefined, false);
+      const response = await fetchBrands(
+        1,
+        "",
+        undefined,
+        undefined,
+        false,
+        true
+      );
       return Array.isArray(response) ? response : response?.data ?? [];
     },
     placeholderData: [],
@@ -82,7 +89,7 @@ export const useAgents = (): UseDropdownData<Agent> => {
   } = useQuery<Agent[], Error>({
     queryKey: ["agents"],
     queryFn: async () => {
-      const response = await fetchAgents(1, "", undefined, false);
+      const response = await fetchAgents(1, "", undefined, false, true);
       return Array.isArray(response) ? response : response?.data ?? [];
     },
     placeholderData: [],
@@ -108,7 +115,7 @@ export const useModels = (): UseDropdownData<Model> => {
   } = useQuery<Model[], Error>({
     queryKey: ["models"],
     queryFn: async () => {
-      const response = await getModels(1, 100, "", undefined, false);
+      const response = await getModels(1, 100, "", undefined, false, true);
       return Array.isArray(response) ? response : response?.data ?? [];
     },
     placeholderData: [],
@@ -134,7 +141,10 @@ export const useVehicleBodies = (): UseDropdownData<VehicleBody> => {
   } = useQuery<VehicleBody[], Error>({
     queryKey: ["vehicleBodies"],
     queryFn: async () => {
-      const response = await getVehicleBodies({ pagination: false });
+      const response = await getVehicleBodies({
+        pagination: false,
+        is_active: true,
+      });
       return Array.isArray(response) ? response : response?.data ?? [];
     },
     placeholderData: [],
@@ -170,6 +180,7 @@ export const useVehicleTypes = (
       const response = await getVehicleTypes({
         pagination: false,
         brand_id: parsedBrandId,
+        is_active: true,
       });
       return Array.isArray(response) ? response : response?.data ?? [];
     },
@@ -197,7 +208,10 @@ export const useVehicleClasses = (): UseDropdownData<VehicleClass> => {
   } = useQuery<VehicleClass[], Error>({
     queryKey: ["vehicleClasses"],
     queryFn: async () => {
-      const response = await getVehicleClasses({ pagination: false });
+      const response = await getVehicleClasses({
+        pagination: false,
+        is_active: true,
+      });
       return Array.isArray(response) ? response : response?.data ?? [];
     },
     placeholderData: [],
@@ -223,7 +237,7 @@ export const useBrandOrigins = (): UseDropdownData<BrandOrigin> => {
   } = useQuery<BrandOrigin[], Error>({
     queryKey: ["brandOrigins"],
     queryFn: async () => {
-      const response = await getBrandOrigin(false);
+      const response = await getBrandOrigin(false, true);
       return Array.isArray(response) ? response : response?.data ?? [];
     },
     placeholderData: [],
@@ -249,7 +263,7 @@ export const useSeats = (): UseDropdownData<NumberOfSeats> => {
   } = useQuery<NumberOfSeats[], Error>({
     queryKey: ["seats"],
     queryFn: async () => {
-      const response = await getSeats(false);
+      const response = await getSeats(false, true);
       return Array.isArray(response) ? response : response?.data ?? [];
     },
     placeholderData: [],
@@ -275,7 +289,7 @@ export const useEngineTypes = (): UseDropdownData<EngineType> => {
   } = useQuery<EngineType[], Error>({
     queryKey: ["engineTypes"],
     queryFn: async () => {
-      const response = await getEngineType(false);
+      const response = await getEngineType(false, true);
       return Array.isArray(response) ? response : response?.data ?? [];
     },
     placeholderData: [],
@@ -301,7 +315,7 @@ export const useEngineSizes = (): UseDropdownData<EngineSize> => {
   } = useQuery<EngineSize[], Error>({
     queryKey: ["engineSizes"],
     queryFn: async () => {
-      const response = await getEngineSize(false);
+      const response = await getEngineSize(false, true);
       return Array.isArray(response) ? response : response?.data ?? [];
     },
     placeholderData: [],
