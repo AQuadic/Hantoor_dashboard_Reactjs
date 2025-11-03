@@ -317,12 +317,14 @@ const ConversationPage: React.FC<ConversationPageProps> = ({
                       )}
                       {message.message}
                     </div>
-                    <TableDeleteButton
-                      handleDelete={() =>
-                        deleteMessageMutation.mutate(message.id)
-                      }
-                      disabled={deleteMessageMutation.isPending}
-                    />
+                    {!message.deleted_at && (
+                      <TableDeleteButton
+                        handleDelete={() =>
+                          deleteMessageMutation.mutate(message.id)
+                        }
+                        disabled={deleteMessageMutation.isPending}
+                      />
+                    )}
                   </div>
                 </div>
               </div>

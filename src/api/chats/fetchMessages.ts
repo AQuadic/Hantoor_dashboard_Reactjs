@@ -5,7 +5,7 @@ export interface User {
   name: string;
   image?: string | null;
   last_online?: string | null;
-  created_at?: string
+  created_at?: string;
 }
 
 export interface ReplyMessage {
@@ -23,6 +23,7 @@ export interface Message {
   message: string;
   created_at: string;
   updated_at: string;
+  deleted_at?: string | null;
   user?: User;
   reply_message?: ReplyMessage | null;
 }

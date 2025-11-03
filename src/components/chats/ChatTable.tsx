@@ -102,6 +102,14 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
     setOpenConversationId(conversationId);
   };
 
+  // Check if conversation has any non-deleted messages
+  const hasActiveMessages = (conversation: Conversation) => {
+    if (!conversation.messages || conversation.messages.length === 0) {
+      return true; // Allow deletion if no messages exist
+    }
+    return conversation.messages.some((message) => !message.deleted_at);
+  };
+
   if (conversations.length === 0) return <NoData />;
 
   return (
@@ -162,7 +170,7 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
                         </button>
                       )}
 
-                      {canDelete && (
+                      {canDelete && hasActiveMessages(conversation) && (
                         <div className="mt-2">
                           <TableDeleteButton
                             handleDelete={() => handleDelete(conversation.id)}

@@ -290,8 +290,8 @@ const ChatSlider: React.FC<ChatSliderProps> = ({
                     {new Date(message.created_at).toLocaleTimeString()}
                   </p>
 
-                  {/* Delete button - only show for admin messages */}
-                  {message.sender_type === "admin" && (
+                  {/* Delete button - only show for admin messages that are not deleted */}
+                  {message.sender_type === "admin" && !message.deleted_at && (
                     <div className="absolute -top-2 -left-2 opacity-0 group-hover:opacity-100 transition-opacity">
                       <TableDeleteButton
                         handleDelete={() =>

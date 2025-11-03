@@ -26,6 +26,7 @@ export interface Message {
   conversation_id: number;
   message: string;
   created_at: string;
+  deleted_at?: string | null;
   reply_message: ReplyMessage | null;
   user: User | null;
 }
@@ -48,7 +49,7 @@ export interface Vehicle {
 
 export interface Conversation {
   id: number;
-  is_active: number; 
+  is_active: number;
   is_followed: boolean;
   followers_count: number | null;
   created_at: string;
