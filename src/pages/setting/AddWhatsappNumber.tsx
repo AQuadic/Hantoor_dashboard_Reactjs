@@ -34,11 +34,14 @@ const AddWhatsappNumber = () => {
   const { data: requestFinancingData, isLoading: isLoadingFinancing } =
     useQuery({
       queryKey: ["request-financing-list"],
-      queryFn: () => getRequestFinancing(undefined, false),
+      // request non-paginated list for this usage
+      queryFn: () => getRequestFinancing(1, undefined, false),
     });
 
   const countries: Country[] = countriesData?.data ?? [];
-  const financingItems: FinancingItem[] = requestFinancingData ?? [];
+  const financingItems: FinancingItem[] = Array.isArray(requestFinancingData)
+    ? requestFinancingData
+    : requestFinancingData?.data ?? [];
 
   // Build a set of country ids that already have request-financing entries
   const financedCountryIds = new Set<number>(

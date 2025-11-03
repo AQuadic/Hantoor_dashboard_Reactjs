@@ -13,10 +13,7 @@ import { useTranslation } from "react-i18next";
 import { Switch } from "@heroui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useHasPermission } from "@/hooks/usePermissions";
-import {
-  getRequestFinancing,
-  FinancingItem,
-} from "@/api/financing/fetchFinancing";
+import { FinancingItem } from "@/api/financing/fetchFinancing";
 import { getCountries, Country } from "@/api/countries/getCountry";
 import Loading from "@/components/general/Loading";
 import NoData from "@/components/general/NoData";
@@ -26,25 +23,24 @@ import { updateRequestFinancing } from "@/api/financing/editFinancing";
 
 interface InsuranceTableProps {
   selectedCountry: string | null;
+  financingItems: FinancingItem[];
+  isLoading: boolean;
+  refetch: () => void;
 }
 
-const InsuranceTable = ({ selectedCountry }: InsuranceTableProps) => {
+const InsuranceTable = ({
+  selectedCountry,
+  financingItems,
+  isLoading,
+  refetch,
+}: InsuranceTableProps) => {
   const { t, i18n } = useTranslation("setting");
 
   const canChangeStatus = useHasPermission("change-status_request_financing");
   const canEdit = useHasPermission("edit_request_financing");
   const canDelete = useHasPermission("delete_request_financing");
 
-  const {
-    data: financingItems = [],
-    isLoading: financingLoading,
-    refetch,
-  } = useQuery({
-    queryKey: ["request-financing"],
-    queryFn: () => getRequestFinancing(undefined, false),
-  });
-
-  const { data: countriesData, isLoading: countriesLoading } = useQuery({
+  const { data: countriesData } = useQuery({
     queryKey: ["countries"],
     queryFn: () => getCountries(1, ""),
   });
@@ -85,10 +81,10 @@ const InsuranceTable = ({ selectedCountry }: InsuranceTableProps) => {
     }
   };
 
-  if (financingLoading || countriesLoading) {
-    return <Loading />;
-  }
+  if (isLoading) return <Loading />;
 
+  // If the page-level filtering by country was not performed on server side,
+  // still support client-side filter when `selectedCountry` is set (keeps behavior compatible)
   const filteredItems =
     selectedCountry && selectedCountry !== "all"
       ? financingItems.filter(
@@ -96,9 +92,7 @@ const InsuranceTable = ({ selectedCountry }: InsuranceTableProps) => {
         )
       : financingItems;
 
-  if (!filteredItems.length) {
-    return <NoData />;
-  }
+  if (!filteredItems || filteredItems.length === 0) return <NoData />;
 
   return (
     <Table>
