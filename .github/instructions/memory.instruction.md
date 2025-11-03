@@ -28,6 +28,21 @@ applyTo: "**"
 
 - Fixed Subordinates page tab handling to initialize from URL and updated permission add/edit redirects to include ?tab=Permissions
 
+- 2025-11-03: Updated Arabic translations for permissions
+
+  - File changed: `src/locales/ar/subordinates.json`
+  - Changes:
+    - `permissionNames.block_user`: "حظر" -> "مدة الايقاف"
+  - `permissionSections.vehicle_class`: "فئات المركبات" -> "الفئات"
+    - Replaced permission create labels from "إنشاء" to "اضافة" for all `create_*` keys related to permissions
+  - Additional changes (2025-11-03):
+    - Under "رسائل الدعم":
+      - `notes_support_chat` / `notes_support_message`: "ملاحظات" -> "كتابة الملاحظات"
+      - `change-status_support_chat`: "الحالة" -> "التحكم في حالة الدعم"
+    - Under "تواصل معنا":
+      - `star_contact_us`: "المفضلة" -> "اضافة للمميزه"
+      - `email_contact_us`: "البريد الإلكتروني" -> "الرد عن طريق البريد"
+
 - 2025-10-29: Updated translations for contact-us permission key `star_contact_us`:
 
   - English: "Rating" -> "Favourite"
