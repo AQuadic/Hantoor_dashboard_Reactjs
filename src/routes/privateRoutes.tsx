@@ -273,39 +273,24 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/subordinates/change_password/:id",
     element: <SubordinatesChangePassword />,
-    requiredPermissions: ["edit_admin"],
-    requireAny: false,
   },
   {
     path: "/subordinates/permissions/add",
     element: <AddPermissionPage />,
-    requiredPermissions: ["create_role"],
-    requireAny: false,
   },
   {
     path: "/subordinates/permissions/:id",
     element: <AddPermissionPage />,
-    requiredPermissions: ["edit_role"],
-    requireAny: false,
   },
 
   // Support messages route
   {
     path: "/support-messages",
     element: <SupportMessagesPage />,
-    requiredPermissions: [
-      "view_support_message",
-      "create_support_message",
-      "edit_support_message",
-      "delete_support_message",
-    ],
-    requireAny: true,
   },
   {
     path: "/support-messages/view/:id",
     element: <SupportMsgsConversationWrapper />,
-    requiredPermissions: ["view_support_message"],
-    requireAny: false,
   },
 
   // Contact-us route
@@ -363,19 +348,10 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/chats",
     element: <ChatPage />,
-    requiredPermissions: [
-      "view_chat",
-      "create_chat",
-      "edit_chat",
-      "delete_chat",
-    ],
-    requireAny: true,
   },
   {
     path: "/chats/:id",
     element: <ConversationPageWrapper />,
-    requiredPermissions: ["view_chat"],
-    requireAny: false,
   },
 
   // Models route (Car Sections)
@@ -594,26 +570,18 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/setting/add-terms",
     element: <AddTerms />,
-    requiredPermissions: ["create_terms"],
-    requireAny: false,
   },
   {
     path: "/profile/edit-termsandconditions/:id",
     element: <EditTerms />,
-    requiredPermissions: ["edit_terms"],
-    requireAny: false,
   },
   {
     path: "/features/add",
     element: <AddFeatures />,
-    requiredPermissions: ["create_app_feature"],
-    requireAny: false,
   },
   {
     path: "/features/edit/:id",
     element: <EditFeatures />,
-    requiredPermissions: ["edit_app_feature"],
-    requireAny: false,
   },
 
   // Cars route
@@ -657,25 +625,14 @@ export const privateRoutes: RouteTypes[] = [
   {
     path: "/notifications",
     element: <NotificationPage />,
-    requiredPermissions: [
-      "view_notification",
-      "create_notification",
-      "edit_notification",
-      "delete_notification",
-    ],
-    requireAny: true,
   },
   {
     path: "/notifications/details/:id",
     element: <NotificationDetails />,
-    requiredPermissions: ["view_notification"],
-    requireAny: false,
   },
   {
     path: "/notifications/add/",
     element: <AddNotification />,
-    requiredPermissions: ["create_notification"],
-    requireAny: false,
   },
   {
     path: "/403",
