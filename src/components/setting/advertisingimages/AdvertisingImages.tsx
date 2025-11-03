@@ -17,7 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 const AdvertisingImages = () => {
-  const { t } = useTranslation("setting");
+  const { t, i18n } = useTranslation("setting");
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState<string | null>(null);
 
@@ -123,7 +123,11 @@ const AdvertisingImages = () => {
           <SelectContent dir="rtl">
             {countries?.map((c) => (
               <SelectItem key={c.id} value={String(c.id)}>
-                {c.name.ar || c.name.en}
+                {/* Show English name when app language starts with "en", otherwise show Arabic first */}
+                {i18n.language &&
+                String(i18n.language).toLowerCase().startsWith("en")
+                  ? c.name.en || c.name.ar
+                  : c.name.ar || c.name.en}
               </SelectItem>
             ))}
           </SelectContent>
