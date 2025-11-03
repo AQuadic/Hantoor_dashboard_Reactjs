@@ -42,30 +42,21 @@ export const DashboardStatus: DashboardStatusItem[] = [
     key: "cars_with_discount_count",
     textAr: "عدد السيارات التي تحتوي على خصم",
     textEn: "Number of cars with discounts",
-    permission: [
-      "view_cars_has_discounts_count_dashboard",
-      "view_cars_count_dashboard",
-    ],
+    permission: "view_cars_has_discounts_count_dashboard",
   },
   {
     icon: userImg,
     key: "cars_with_offers_count",
     textAr: "عدد السيارات التي تحتوي على عروض",
     textEn: "Number of cars with offers",
-    permission: [
-      "view_cars_has_offers_count_dashboard",
-      "view_cars_count_dashboard",
-    ],
+    permission: "view_cars_has_offers_count_dashboard",
   },
   {
     icon: userImg,
     key: "cars_with_rent_to_own_count",
     textAr: "عدد السيارات الايجار و تنتهي بالتملك",
     textEn: "Number of lease-to-own cars",
-    permission: [
-      "view_cars_has_rent_to_own_count_dashboard",
-      "view_cars_count_dashboard",
-    ],
+    permission: "view_cars_has_rent_to_own_count_dashboard",
   },
   {
     icon: userImg,
