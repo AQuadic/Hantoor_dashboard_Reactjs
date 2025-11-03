@@ -161,6 +161,7 @@
     "edit_vehicle": "تعديل",
     "delete_vehicle": "حذف",
     "change-status_vehicle": "الحالة",
+    "chat_vehicle": "الدردشة",
 
     "view_vehicle_model_type": "رؤية",
     "create_vehicle_model_type": "اضافة",
@@ -245,7 +246,7 @@
     "edit_chat": "تعديل",
     "delete_chat": "حذف",
     "change-status_chat": "الحالة",
-    "vehicle_chat": "محادثة السيارة",
+    "vehicle_chat": "الدردشة",
 
     "view_support_question": "رؤية",
     "create_support_question": "اضافة",

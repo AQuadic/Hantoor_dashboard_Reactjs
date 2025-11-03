@@ -165,6 +165,7 @@
     "edit_vehicle": "Edit Vehicle",
     "delete_vehicle": "Delete Vehicle",
     "change-status_vehicle": "Status",
+    "chat_vehicle": "Chat",
 
     "view_vehicle_model_type": "View Vehicle Model Type",
     "create_vehicle_model_type": "Create Vehicle Model Type",
@@ -250,7 +251,7 @@
     "delete_chat": "Delete Chat",
     "change-status_chat": "Status",
 
-    "vehicle_chat": "Vehicle Chat",
+    "vehicle_chat": "Chat",
     "view_vehicle_chat": "View Vehicle Chat",
     "create_vehicle_chat": "Create Vehicle Chat",
     "edit_vehicle_chat": "Edit Vehicle Chat",

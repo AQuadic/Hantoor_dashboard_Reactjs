@@ -35,7 +35,7 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
   );
   const isArabic = i18n.language === "ar";
   const canChangeStatus = useHasPermission("change-status_chat");
-  const canView = useHasPermission("view_chat");
+  const canChat = useHasPermission("vehicle_chat");
   const canDelete = useHasPermission("delete_chat");
 
   // Helper function to get localized name
@@ -122,7 +122,7 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
               <TableHead className="text-right">{t("carName")}</TableHead>
               <TableHead className="text-right">{t("brandName")}</TableHead>
               <TableHead className="text-right">{t("usersNumber")}</TableHead>
-              {(canChangeStatus || canView || canDelete) && (
+              {(canChangeStatus || canChat || canDelete) && (
                 <TableHead className="text-right">{t("status")}</TableHead>
               )}
             </TableRow>
@@ -164,7 +164,7 @@ const ChatTable: React.FC<ChatTableProps> = ({ conversations, onDelete }) => {
                         />
                       )}
 
-                      {canView && (
+                      {canChat && (
                         <button onClick={() => handleOpenChat(conversation.id)}>
                           <ChatIcon />
                         </button>

@@ -53,7 +53,7 @@ const CarsTable = ({
   const canDelete = useHasPermission("delete_vehicle");
   const canView = useHasPermission("view_vehicle");
   // Permission to view or open vehicle chat
-  const canChat = useHasPermission("vehicle_chat");
+  const canChat = useHasPermission("chat_vehicle");
   const queryClient = useQueryClient();
   const [openChatId, setOpenChatId] = useState<number | null>(null);
   // Local status map to allow immediate UI toggle feedback

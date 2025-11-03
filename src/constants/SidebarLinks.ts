@@ -207,6 +207,7 @@ export const SidebarLinks: SidebarLink[] = [
       "edit_vehicle",
       "delete_vehicle",
       "change-status_vehicle",
+      "chat_vehicle",
     ],
     requireAny: true,
   },
