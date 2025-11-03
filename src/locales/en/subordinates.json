@@ -268,7 +268,7 @@
     "create_support_message": "Create Support Message",
     "edit_support_message": "Edit Support Message",
     "delete_support_message": "Delete Support Message",
-    "change-status_support_message": "Status",
+    "change-status_support_message": "Support status control",
 
     "view_faq": "View FAQ",
     "create_faq": "Create FAQ",
