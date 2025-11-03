@@ -25,7 +25,7 @@ export const getModels = async (
   dateParams?: { from_date?: string; to_date?: string },
   isPaginated: boolean = true,
   is_active?: boolean
-): Promise<GetModelsResponse> {
+): Promise<GetModelsResponse> => {
   try {
     const params: Record<string, string | number | boolean> = {};
 
