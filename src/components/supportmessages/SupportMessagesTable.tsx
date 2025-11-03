@@ -133,43 +133,58 @@ const SupportMessagesTable = ({
                     {/* Status buttons: only show interactive buttons when user has change-status permission */}
                     {canChangeStatus ? (
                       <>
-                        <button
-                          className={`w-[78px] h-[37px] rounded-[8.15px] font-bold text-[13px] ${
-                            (statusMap[message.id] ?? message.status) ===
-                            "pending"
-                              ? "bg-[#2A32F8] text-[#FFFFFF]"
-                              : "bg-[#FFFFFF] text-[#A1A1A1]"
-                          }`}
-                          onClick={() => {
-                            const newValue = "pending";
-                            setStatusMap((prev) => ({
-                              ...prev,
-                              [message.id]: newValue,
-                            }));
-                            handleUpdate(message.id, { status: newValue });
-                          }}
-                        >
-                          {t("working")}
-                        </button>
+                        {(() => {
+                          const currentStatus =
+                            statusMap[message.id] ?? message.status;
+                          const isPendingActive = currentStatus === "pending";
+                          const isResolvedActive = currentStatus === "resolved";
 
-                        <button
-                          className={`w-[78px] h-[37px] rounded-[8.15px] font-normal text-[13px] ${
-                            (statusMap[message.id] ?? message.status) ===
-                            "resolved"
-                              ? "bg-[#2A32F8] text-[#FFFFFF]"
-                              : "bg-[#FFFFFF] text-[#A1A1A1]"
-                          }`}
-                          onClick={() => {
-                            const newValue = "resolved";
-                            setStatusMap((prev) => ({
-                              ...prev,
-                              [message.id]: newValue,
-                            }));
-                            handleUpdate(message.id, { status: newValue });
-                          }}
-                        >
-                          {t("done")}
-                        </button>
+                          return (
+                            <>
+                              <button
+                                className={`w-[78px] h-[37px] rounded-[8.15px] font-bold text-[13px] ${
+                                  isPendingActive
+                                    ? "bg-[#F3F4F6] text-[#6B7280]"
+                                    : "bg-[#2A32F8] text-[#FFFFFF]"
+                                }`}
+                                onClick={() => {
+                                  if (isPendingActive) return; // do nothing when clicking current status
+                                  const newValue = "pending";
+                                  setStatusMap((prev) => ({
+                                    ...prev,
+                                    [message.id]: newValue,
+                                  }));
+                                  handleUpdate(message.id, {
+                                    status: newValue,
+                                  });
+                                }}
+                              >
+                                {t("working")}
+                              </button>
+
+                              <button
+                                className={`w-[78px] h-[37px] rounded-[8.15px] font-normal text-[13px] ${
+                                  isResolvedActive
+                                    ? "bg-[#F3F4F6] text-[#6B7280]"
+                                    : "bg-[#2A32F8] text-[#FFFFFF]"
+                                }`}
+                                onClick={() => {
+                                  if (isResolvedActive) return; // do nothing when clicking current status
+                                  const newValue = "resolved";
+                                  setStatusMap((prev) => ({
+                                    ...prev,
+                                    [message.id]: newValue,
+                                  }));
+                                  handleUpdate(message.id, {
+                                    status: newValue,
+                                  });
+                                }}
+                              >
+                                {t("done")}
+                              </button>
+                            </>
+                          );
+                        })()}
                       </>
                     ) : null}
 
