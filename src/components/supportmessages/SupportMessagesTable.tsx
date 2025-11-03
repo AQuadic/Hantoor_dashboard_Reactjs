@@ -192,20 +192,6 @@ const SupportMessagesTable = ({
                     <div className="flex items-center gap-2">
                       {canNotes ? (
                         <>
-                          <button
-                            onClick={() =>
-                              setNotesVisibleMap((prev) => ({
-                                ...prev,
-                                [message.id]: !prev[message.id],
-                              }))
-                            }
-                            className="text-sm px-2 py-1 bg-gray-100 rounded"
-                          >
-                            {notesVisibleMap[message.id]
-                              ? t("hideNotes")
-                              : t("showNotes")}
-                          </button>
-
                           {notesVisibleMap[message.id] ?? true ? (
                             <input
                               type="text"
