@@ -556,7 +556,7 @@ export const privateRoutes: RouteTypes[] = [
     requireAny: false,
   },
   {
-    path: "/setting/add-profile",
+    path: "/setting/add-onboarding",
     element: <AddProfile />,
     requiredPermissions: ["create_info_page"],
     requireAny: false,

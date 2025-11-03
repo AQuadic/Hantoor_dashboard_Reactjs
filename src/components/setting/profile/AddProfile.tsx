@@ -16,7 +16,7 @@ import {
   createOnboarding,
   OnboardingData,
 } from "@/api/onboarding/storeProfile";
-import { getCountries, Country } from "@/api/countries/getCountry";
+import { getAllCountries, Country } from "@/api/countries/getCountry";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router";
 
@@ -34,8 +34,9 @@ const AddProfile = () => {
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const res = await getCountries();
-        setCountries(res.data.filter((c) => c.is_active));
+        // Use non-paginated endpoint for this select so we get the full list
+        const all = await getAllCountries();
+        setCountries(all.filter((c) => c.is_active));
       } catch (err) {
         console.error(err);
         toast.error("Failed to load countries");
@@ -46,13 +47,13 @@ const AddProfile = () => {
 
   const handleSubmit = async () => {
     if (!countryId) {
-      toast.dismiss()
+      toast.dismiss();
       toast.error(t("selectCountry"));
       return;
     }
 
     if (!profileImage) {
-      toast.dismiss()
+      toast.dismiss();
       toast.error(t("addImage"));
       return;
     }
@@ -88,7 +89,7 @@ const AddProfile = () => {
       <div className="pt-0 pb-2 bg-white ">
         <DashboardHeader
           titleAr="اضافة صفحة تعريفية جديدة"
-          titleEn="Add a new profile page"
+          titleEn="Add onboarding pages"
           items={[
             { titleAr: "لوحة التحكم", titleEn: "Dashboard", link: "/" },
             { titleAr: "الاعدادات", titleEn: "Setting", link: "/" },
