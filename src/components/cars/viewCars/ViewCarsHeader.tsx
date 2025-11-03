@@ -54,10 +54,6 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
       titleAr: "الفيديوهات",
       titleEn: "Videos",
     },
-    {
-      titleAr: "الصور الاعلانية",
-      titleEn: "Ad Images",
-    },
   ];
 
   return (
@@ -83,7 +79,7 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
             />
           ) : (
             <div className="w-[338px] h-[175px] rounded-xl bg-gray-200 flex items-center justify-center text-gray-400">
-              {t('noImage')}
+              {t("noImage")}
             </div>
           )}
 
@@ -132,29 +128,6 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
                 </p>
               </div>
             ) : null}
-
-            {/* {(vehicle?.vehicle_model?.name || vehicle?.vehicle_type?.name || vehicle?.vehicle_class?.name) && (
-              <div className="flex gap-4 mt-2 text-sm text-[#606060]">
-                {vehicle?.vehicle_model?.name && (
-                  <div>
-                    <span>الموديل: </span>
-                    <span className="font-medium">{getdispbByLang(vehicle.vehicle_model.name)}</span>
-                  </div>
-                )}
-                {vehicle?.vehicle_type?.name && (
-                  <div>
-                    <span>النوع: </span>
-                    <span className="font-medium">{getdispbByLang(vehicle.vehicle_type.name)}</span>
-                  </div>
-                )}
-                {vehicle?.vehicle_class?.name && (
-                  <div>
-                    <span>الفئة: </span>
-                    <span className="font-medium">{getdispbByLang(vehicle.vehicle_class.name)}</span>
-                  </div>
-                )}
-              </div>
-            )} */}
           </div>
         </div>
 

@@ -12,7 +12,6 @@ import Offers from "@/components/cars/viewCars/Offers";
 import LeaseToOwn from "@/components/cars/viewCars/LeaseToOwn";
 import AdditionalImages from "@/components/cars/viewCars/AdditionalImages";
 import Videos from "@/components/cars/viewCars/Videos";
-import AdImages from "@/components/cars/viewCars/AdImages";
 import { AnimatePresence, motion } from "framer-motion";
 import Loading from "@/components/general/Loading";
 const DEFAULT_FILTER = "About Car";
@@ -22,8 +21,11 @@ const ViewCars = () => {
   const params = useParams<{ id: string }>();
   const vehicleId = params.id ? Number(params.id) : null;
 
-
-  const { data: vehicle, isLoading, refetch } = useQuery<Vehicle>({
+  const {
+    data: vehicle,
+    isLoading,
+    refetch,
+  } = useQuery<Vehicle>({
     queryKey: ["vehicle", vehicleId],
     queryFn: async () => {
       const result = await getVehicleById(vehicleId!);
@@ -32,7 +34,7 @@ const ViewCars = () => {
     enabled: vehicleId !== null,
   });
 
-  if (isLoading) return <Loading />
+  if (isLoading) return <Loading />;
 
   return (
     <div>
@@ -50,15 +52,23 @@ const ViewCars = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            {selectedFilter === "About Car" && vehicle && <AboutCar vehicle={vehicle} />}
+            {selectedFilter === "About Car" && vehicle && (
+              <AboutCar vehicle={vehicle} />
+            )}
             {selectedFilter === "Specifications" && vehicle && (
               <Specifications vehicle={vehicle} />
             )}
             {selectedFilter === "Maintenance Packages" && (
-              <MaintenancePackages packages={vehicle?.packages || []} refetch={refetch} />
+              <MaintenancePackages
+                packages={vehicle?.packages || []}
+                refetch={refetch}
+              />
             )}
             {selectedFilter === "Accessories" && (
-              <Accessories accessories={vehicle?.accessories || []} refetch={refetch}/>
+              <Accessories
+                accessories={vehicle?.accessories || []}
+                refetch={refetch}
+              />
             )}
             {selectedFilter === "Offers" && (
               <Offers offers={vehicle?.offers || []} />
@@ -69,9 +79,8 @@ const ViewCars = () => {
             {selectedFilter === "Additional Images" && (
               <AdditionalImages images={vehicle?.additional_images || []} />
             )}
-            {selectedFilter === "Videos" && <Videos video={vehicle?.video || null} />}
-            {selectedFilter === "Ad Images" && vehicle?.images_ads && (
-              <AdImages imagesAds={vehicle.images_ads} />
+            {selectedFilter === "Videos" && (
+              <Videos video={vehicle?.video || null} />
             )}
           </motion.div>
         </AnimatePresence>
