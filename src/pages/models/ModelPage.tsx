@@ -34,17 +34,17 @@ const ModelPage = () => {
   // Define permission mapping for each section
   const sectionPermissions = useMemo(
     () => ({
-      Models: "view_vehicle_model",
-      // Structure Types may be named vehicle_class or vehicle_body_type in permission sets
-      "Structure Types": ["view_vehicle_class", "view_vehicle_body_type"],
-      "Car Types": "view_vehicle_type",
-      Categories: ["view_category", "view_vehicle_class"],
-      "Brand Origin": "view_brand_origin",
-      "Number of Seats": "view_seat_count",
-      "Engine Types": "view_engine_type",
-      "Engine Sizes": "view_engine_size",
-      "Price From": "view_price_from",
-      "Price To": "view_price_to",
+      Models: "vehicle_model",
+      // Structure Types uses vehicle_body_type
+      "Structure Types": "vehicle_body_type",
+      "Car Types": "vehicle_type",
+      Categories: "vehicle_class",
+      "Brand Origin": "brand_origin",
+      "Number of Seats": "seat_count",
+      "Engine Types": "engine_type",
+      "Engine Sizes": "engine_size",
+      "Price From": "price_from",
+      "Price To": "price_to",
     }),
     []
   );

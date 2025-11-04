@@ -53,16 +53,10 @@ export function CategoriesTable({
   setPagination,
 }: CategoriesTableProps) {
   const { t, i18n } = useTranslation("models");
-  // Allow category actions if user has category permissions OR vehicle_class permissions
-  const canEdit = useHasAnyPermission(["edit_category", "edit_vehicle_class"]);
-  const canChangeStatus = useHasAnyPermission([
-    "change-status_category",
-    "change-status_vehicle_class",
-  ]);
-  const canDelete = useHasAnyPermission([
-    "delete_category",
-    "delete_vehicle_class",
-  ]);
+  // Categories use vehicle_class permissions
+  const canEdit = useHasAnyPermission(["edit_vehicle_class"]);
+  const canChangeStatus = useHasAnyPermission(["change-status_vehicle_class"]);
+  const canDelete = useHasAnyPermission(["delete_vehicle_class"]);
 
   const {
     data: classesResponse,

@@ -130,7 +130,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة موديل جديد",
         addTextEn: "Add New Model",
         link: "/models/add",
-        permission: "view_vehicle_model",
+        permission: "vehicle_model",
         createPermission: "create_vehicle_model",
       },
       {
@@ -139,8 +139,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة نوع هيكل جديد",
         addTextEn: "Add New Structure Type",
         link: "/structure-types/add",
-        permission: ["view_vehicle_class", "view_vehicle_body_type"],
-        // Structure Types add should be allowed when user can create vehicle body types
+        permission: "vehicle_body_type",
         createPermission: "create_vehicle_body_type",
       },
       {
@@ -149,7 +148,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة نوع سيارة جديد",
         addTextEn: "Add New Car Type",
         link: "/car-types/add",
-        permission: "view_vehicle_type",
+        permission: "vehicle_type",
         createPermission: "create_vehicle_type",
       },
       {
@@ -158,9 +157,8 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة فئة جديدة",
         addTextEn: "Add New Category",
         link: "/categories/add",
-        permission: ["view_category", "view_vehicle_class"],
-        // Allow creation via either create_category or create_vehicle_class when appropriate
-        createPermission: ["create_category", "create_vehicle_class"],
+        permission: "vehicle_class",
+        createPermission: "create_vehicle_class",
       },
       {
         titleAr: "منشأ الماركة",
@@ -168,7 +166,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة منشأ ماركة جديد",
         addTextEn: "Add New Brand Origin",
         link: "/brand-origins/add",
-        permission: "view_brand_origin",
+        permission: "brand_origin",
         createPermission: "create_brand_origin",
       },
       {
@@ -177,7 +175,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة عدد مقاعد جديد",
         addTextEn: "Add New Number of Seats",
         link: "/seat-numbers/add",
-        permission: "view_seat_count",
+        permission: "seat_count",
         createPermission: "create_seat_count",
       },
       {
@@ -186,7 +184,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة نوع ماكينة جديد",
         addTextEn: "Add New Engine Type",
         link: "/engine-types/add",
-        permission: "view_engine_type",
+        permission: "engine_type",
         createPermission: "create_engine_type",
       },
       {
@@ -195,7 +193,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة حجم ماكينة جديد",
         addTextEn: "Add New Engine Size",
         link: "/engine-sizes/add",
-        permission: "view_engine_size",
+        permission: "engine_size",
         createPermission: "create_engine_size",
       },
       {
@@ -204,7 +202,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة سعر من جديد",
         addTextEn: "Add New Price From",
         link: "/price-from/add",
-        permission: "view_price_from",
+        permission: "price_from",
         createPermission: "create_price_from",
       },
       {
@@ -213,7 +211,7 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
         addTextAr: "اضافة سعر الى جديد",
         addTextEn: "Add New Price To",
         link: "/price-to/add",
-        permission: "view_price_to",
+        permission: "price_to",
         createPermission: "create_price_to",
       },
     ];
@@ -235,25 +233,26 @@ const ModelHeader: React.FC<SubordinatesHeaderProps> = ({
     filtersData[0];
 
   // Determine whether the Add button should be shown for the current tab.
-  // We map view_* permission keys to create_* equivalents and check those.
+  // Check if user has the explicit createPermission for the current tab.
   const showAddButton = useMemo(() => {
     if (!currentFilter) return false;
-    const viewPerm = currentFilter.permission;
     const explicitCreate = currentFilter.createPermission;
 
-    // If createPermission is explicitly provided, prefer it.
+    // If createPermission is explicitly provided, check it.
     if (explicitCreate) {
       if (Array.isArray(explicitCreate))
         return explicitCreate.some((p) => permissionMatches(p));
       return permissionMatches(explicitCreate);
     }
 
+    // Fallback: if no explicit createPermission, derive from permission field
+    const viewPerm = currentFilter.permission;
     if (!viewPerm) return false;
     if (Array.isArray(viewPerm)) {
-      const createPerms = viewPerm.map((p) => p.replace(/^view_/, "create_"));
+      const createPerms = viewPerm.map((p) => `create_${p}`);
       return createPerms.some((p) => permissionMatches(p));
     }
-    return permissionMatches(viewPerm.replace(/^view_/, "create_"));
+    return permissionMatches(`create_${viewPerm}`);
   }, [currentFilter, permissionMatches]);
 
   const getSearchPlaceholder = (filter: string) => {
