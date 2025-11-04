@@ -345,5 +345,6 @@
   },
 
   "writePermissionName": "Write permission name",
-  "writeHere": "Write here"
+  "writeHere": "Write here",
+  "roleDeletedSuccessfully": "Role deleted successfully"
 }

@@ -335,5 +335,6 @@
   },
 
   "writePermissionName": "اكتب اسم الصلاحية",
-  "writeHere": "اكتب هنا"
+  "writeHere": "اكتب هنا",
+  "roleDeletedSuccessfully": "تم حذف الدور بنجاح"
 }
