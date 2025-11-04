@@ -42,22 +42,49 @@ const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
     setLoading(true);
     const newValue = !isRentToOwn;
     try {
-      // When disabling, clear all rent-to-own related data (like in AddCars)
-      // Helper to convert duration to string format expected by API
-      const getDurationString = () => {
+      // Helper to get duration in the format the API expects
+      const getDurationObject = () => {
         if (!vehicle.rent_to_own_duration) return undefined;
-        if (typeof vehicle.rent_to_own_duration === "string") {
-          return vehicle.rent_to_own_duration;
-        }
+
+        // If it's already an object with ar/en, return it as-is
         if (typeof vehicle.rent_to_own_duration === "object") {
           const dur = vehicle.rent_to_own_duration as {
             ar?: string;
             en?: string;
           };
-          return dur.ar || dur.en || undefined;
+          // Return the object if at least one locale exists
+          if (dur.ar || dur.en) {
+            return dur;
+          }
+          return undefined;
         }
-        return String(vehicle.rent_to_own_duration);
+
+        // If it's a string, wrap it in both ar and en
+        if (typeof vehicle.rent_to_own_duration === "string") {
+          return {
+            ar: vehicle.rent_to_own_duration,
+            en: vehicle.rent_to_own_duration,
+          };
+        }
+
+        // Fallback: convert other types to string and wrap
+        return {
+          ar: String(vehicle.rent_to_own_duration),
+          en: String(vehicle.rent_to_own_duration),
+        };
       };
+
+      const durationObj = getDurationObject();
+
+      // If enabling rent-to-own, ensure a duration is present to satisfy API validation
+      if (newValue && !durationObj) {
+        toast.error(
+          t("rentToOwnDurationRequired") ||
+            "Please provide rent-to-own duration before enabling"
+        );
+        setLoading(false);
+        return;
+      }
 
       const updatePayload = {
         id: vehicle.id,
@@ -77,18 +104,19 @@ const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
         engine_type_id: vehicle.engine_type_id?.toString(),
 
         is_rent_to_own: newValue,
-        // Clear all rent-to-own data when disabling
-        ...(newValue
-          ? {
-              rent_to_own_price: vehicle.rent_to_own_price,
-              rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp,
-              rent_to_own_duration: getDurationString(),
-            }
-          : {
-              rent_to_own_price: undefined,
-              rent_to_own_whatsapp: undefined,
-              rent_to_own_duration: undefined,
-            }),
+        // Keep rent-to-own related data when toggling the flag;
+        // only the `is_rent_to_own` flag should change here.
+        rent_to_own_price: vehicle.rent_to_own_price,
+        rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp,
+        // Send duration as separate localized fields as API expects
+        "rent_to_own_duration[ar]": durationObj?.ar || null,
+        "rent_to_own_duration[en]": durationObj?.en || null,
+        // API requires phone country when whatsapp is provided
+        rent_to_own_phone_country: (
+          vehicle as unknown as {
+            rent_to_own_phone_country?: number | string;
+          }
+        ).rent_to_own_phone_country?.toString(),
       };
 
       await updateVehicle(vehicle.id, updatePayload);
@@ -126,7 +154,9 @@ const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
         is_rent_to_own: false,
         rent_to_own_price: undefined,
         rent_to_own_whatsapp: undefined,
-        rent_to_own_duration: undefined,
+        "rent_to_own_duration[ar]": null,
+        "rent_to_own_duration[en]": null,
+        rent_to_own_phone_country: undefined,
       });
       toast.success(t("rentToOwnDeleted"));
 
@@ -153,21 +183,22 @@ const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
     return typeof duration === "number" ? String(duration) : "";
   };
 
+  // Show rent-to-own data if any related field exists, even when the
+  // `is_rent_to_own` flag is false. When the flag is false, the switch
+  // will be rendered as disabled per request.
+  const hasRentToOwnData =
+    !!vehicle.rent_to_own_duration ||
+    !!vehicle.rent_to_own_price ||
+    !!vehicle.rent_to_own_whatsapp;
+
   const rentToOwnData = [
     {
-      duration: isRentToOwn
-        ? getDurationStr(vehicle.rent_to_own_duration)
-        : "-",
-      price: isRentToOwn ? vehicle.rent_to_own_price || "-" : "-",
+      duration: getDurationStr(vehicle.rent_to_own_duration) || "-",
+      price: vehicle.rent_to_own_price || "-",
     },
   ];
 
-  if (
-    !isRentToOwn ||
-    (!vehicle.rent_to_own_duration &&
-      !vehicle.rent_to_own_price &&
-      !vehicle.rent_to_own_whatsapp)
-  ) {
+  if (!hasRentToOwnData) {
     return <NoData />;
   }
 
@@ -197,6 +228,9 @@ const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
                     <Switch
                       isSelected={isRentToOwn}
                       onChange={handleToggle}
+                      // Only disable while a request is in-flight. Allow enabling
+                      // so the component can validate and surface any missing
+                      // required fields (like duration) before sending to API.
                       disabled={loading}
                     />
 
