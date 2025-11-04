@@ -6,9 +6,12 @@ import AddFieldButton from "@/components/cars/addcars/AddFieldButton";
 import { useTranslation } from "react-i18next";
 import { useVehicleForm } from "@/contexts/VehicleFormContext";
 import { VehicleFeature } from "@/api/vehicles/fetchVehicles";
-import { useAllDropdownData, useVehicleTypes } from "@/hooks/useDropdownData";
+import {
+  useAllDropdownData,
+  useVehicleTypes,
+  useVehicleBodies,
+} from "@/hooks/useDropdownData";
 import { getAllCountries, Country } from "@/api/countries/getCountry";
-import { useVehicleBodies } from "@/api/models/structureType/getStructure";
 import { useQuery } from "@tanstack/react-query";
 
 const CarDetails = () => {
@@ -38,11 +41,8 @@ const CarDetails = () => {
   const selectedBrandId = formData?.brand_id;
   const vehicleTypes = useVehicleTypes(selectedBrandId);
 
-  // Fetch vehicle bodies - non-paginated
-  const { data: vehicleBodiesData, isLoading: vehicleBodiesLoading } =
-    useVehicleBodies({
-      pagination: false,
-    });
+  // Fetch vehicle bodies using the hook from useDropdownData
+  const vehicleBodies = useVehicleBodies();
 
   // Fetch all countries - non-paginated
   const { data: allCountries = [], isLoading: countriesLoading } = useQuery<
@@ -54,10 +54,6 @@ const CarDetails = () => {
       return await getAllCountries();
     },
   });
-
-  const vehicleBodies = Array.isArray(vehicleBodiesData)
-    ? vehicleBodiesData
-    : vehicleBodiesData?.data ?? [];
 
   const addCarDetailsField = () => {
     addFeature?.();
@@ -218,9 +214,9 @@ const CarDetails = () => {
             const value = Array.from(keys)[0] as string;
             updateField?.("vehicle_body_type_id", value);
           }}
-          isLoading={vehicleBodiesLoading}
+          isLoading={vehicleBodies.isLoading}
         >
-          {(vehicleBodies || []).map((body) => (
+          {(vehicleBodies.data || []).map((body) => (
             <SelectItem key={body.id.toString()}>
               {body.name[i18n.language as "ar" | "en"]}
             </SelectItem>
