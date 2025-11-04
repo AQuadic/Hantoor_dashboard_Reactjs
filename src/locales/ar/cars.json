@@ -90,6 +90,8 @@
   "accessoriesDeleted": "تم حذف الإكسسوار بنجاح",
   "offerDeleted": "تم حذف الأوفر بنجاح",
   "rentToOwnDeleted": "تم حذف بيانات التقسيط بنجاح",
+  "rentToOwnEnabled": "تم تفعيل الإيجار منتهي بالتملك بنجاح",
+  "rentToOwnDisabled": "تم تعطيل الإيجار منتهي بالتملك بنجاح",
   "noImage": "لا توجد صورة",
   "pleaseSelectCountry": "يرجى اختيار الدولة",
   "priceIncludesTax": "السعر شامل الضريبة",
@@ -125,5 +127,6 @@
   "imageDeletedSuccess": "تم حذف الصورة بنجاح",
   "imageDeleteError": "فشل حذف الصورة",
   "adImageDeletedSuccess": "تم حذف صورة الإعلان بنجاح",
-  "adImageDeleteError": "فشل حذف صورة الإعلان"
+  "adImageDeleteError": "فشل حذف صورة الإعلان",
+  "error": "حدث خطأ"
 }

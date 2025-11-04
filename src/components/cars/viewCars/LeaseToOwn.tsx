@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -29,13 +29,37 @@ const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
   );
   const [loading, setLoading] = useState(false);
 
+  // Sync isRentToOwn state with vehicle data when it changes
+  useEffect(() => {
+    if (vehicle) {
+      setIsRentToOwn(vehicle.is_rent_to_own || false);
+    }
+  }, [vehicle]);
+
   const handleToggle = async () => {
     if (!vehicle) return;
 
     setLoading(true);
     const newValue = !isRentToOwn;
     try {
-      await updateVehicle(vehicle.id, {
+      // When disabling, clear all rent-to-own related data (like in AddCars)
+      // Helper to convert duration to string format expected by API
+      const getDurationString = () => {
+        if (!vehicle.rent_to_own_duration) return undefined;
+        if (typeof vehicle.rent_to_own_duration === "string") {
+          return vehicle.rent_to_own_duration;
+        }
+        if (typeof vehicle.rent_to_own_duration === "object") {
+          const dur = vehicle.rent_to_own_duration as {
+            ar?: string;
+            en?: string;
+          };
+          return dur.ar || dur.en || undefined;
+        }
+        return String(vehicle.rent_to_own_duration);
+      };
+
+      const updatePayload = {
         id: vehicle.id,
         name:
           typeof vehicle.name === "string"
@@ -53,13 +77,26 @@ const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
         engine_type_id: vehicle.engine_type_id?.toString(),
 
         is_rent_to_own: newValue,
-        rent_to_own_price: vehicle.rent_to_own_price,
-        rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp,
-      });
+        // Clear all rent-to-own data when disabling
+        ...(newValue
+          ? {
+              rent_to_own_price: vehicle.rent_to_own_price,
+              rent_to_own_whatsapp: vehicle.rent_to_own_whatsapp,
+              rent_to_own_duration: getDurationString(),
+            }
+          : {
+              rent_to_own_price: undefined,
+              rent_to_own_whatsapp: undefined,
+              rent_to_own_duration: undefined,
+            }),
+      };
+
+      await updateVehicle(vehicle.id, updatePayload);
 
       setIsRentToOwn(newValue);
       toast.dismiss();
-      toast.success(t("vehicleStatusUpdated"));
+      // Show appropriate message based on enable/disable action
+      toast.success(newValue ? t("rentToOwnEnabled") : t("rentToOwnDisabled"));
       queryClient.invalidateQueries({ queryKey: ["vehicle", vehicle.id] });
     } catch {
       toast.error(t("error"));
@@ -158,7 +195,7 @@ const LeaseToOwn = ({ vehicle }: LeaseToOwnProps) => {
                 <TableCell>
                   <div className="flex items-center gap-[7px]">
                     <Switch
-                      checked={isRentToOwn}
+                      isSelected={isRentToOwn}
                       onChange={handleToggle}
                       disabled={loading}
                     />

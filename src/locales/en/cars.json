@@ -90,6 +90,8 @@
   "accessoriesDeleted": "Accessories deleted successfully",
   "offerDeleted": "Offer deleted successfully",
   "rentToOwnDeleted": "Rent-to-own data has been deleted successfully",
+  "rentToOwnEnabled": "Rent-to-own has been enabled successfully",
+  "rentToOwnDisabled": "Rent-to-own has been disabled successfully",
   "noImage": "No Image",
   "pleaseSelectCountry": "Please select a country",
   "priceIncludesTax": "Price (Tax Included)",
@@ -125,5 +127,6 @@
   "imageDeletedSuccess": "Image deleted successfully",
   "imageDeleteError": "Failed to delete image",
   "adImageDeletedSuccess": "Ad image deleted successfully",
-  "adImageDeleteError": "Failed to delete ad image"
+  "adImageDeleteError": "Failed to delete ad image",
+  "error": "An error occurred"
 }
