@@ -146,7 +146,7 @@ const FinancingTable = ({ data, isLoading, error }: FinancingTableProps) => {
                   />
                 )}
 
-                {canViewBank && (
+                {(canViewBank || canViewFinance) && (
                   <button
                     type="button"
                     className="cursor-pointer"
