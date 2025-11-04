@@ -109,12 +109,12 @@ export interface Vehicle {
   // Arrays
   additional_images: AdditionalImage[];
   image: {
-  id: number;
-  uuid: string;
-  size: number;
-  url: string;
-  responsive_urls: string[];
-} | null;
+    id: number;
+    uuid: string;
+    size: number;
+    url: string;
+    responsive_urls: string[];
+  } | null;
   images_ads: ImagesAd[];
   video?: VehicleVideo | null;
   images: string[];
@@ -157,6 +157,8 @@ export interface Vehicle {
   engine_type: unknown | null;
 
   favorites?: number;
+  favorites_count?: number;
+  is_favorite?: boolean;
   color?: string;
   plate_number?: string;
 }

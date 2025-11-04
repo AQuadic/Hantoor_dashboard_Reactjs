@@ -134,7 +134,7 @@ const ViewCarsHeader: React.FC<ViewCarsHeaderProps> = ({
         <div className="flex flex-col gap-1.5">
           <div className="flex flex-col p-4 border rounded-2xl">
             <p className="text-2xl text-primary font-bold">
-              {vehicle?.favorites || 0}
+              {vehicle?.favorites_count ?? vehicle?.favorites ?? 0}
             </p>
             <p className="text-sm text-[#64748B]">{t("favTimes")}</p>
           </div>
