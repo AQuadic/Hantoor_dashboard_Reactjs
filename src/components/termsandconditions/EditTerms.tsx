@@ -20,7 +20,7 @@ import toast from "react-hot-toast";
 import Loading from "../general/Loading";
 
 const EditTerms = () => {
-  const { t } = useTranslation("setting");
+  const { t, i18n } = useTranslation("setting");
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -103,14 +103,14 @@ const EditTerms = () => {
             >
               <SelectTrigger
                 className="w-full !h-16 rounded-[12px] mt-4"
-                dir="rtl"
+                dir={i18n.language === "ar" ? "rtl" : "ltr"}
               >
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
-              <SelectContent dir="rtl">
+              <SelectContent dir={i18n.language === "ar" ? "rtl" : "ltr"}>
                 {countries.map((country) => (
                   <SelectItem key={country.id} value={country.id.toString()}>
-                    {country.name.ar}
+                    {i18n.language === "ar" ? country.name.ar : country.name.en}
                   </SelectItem>
                 ))}
               </SelectContent>

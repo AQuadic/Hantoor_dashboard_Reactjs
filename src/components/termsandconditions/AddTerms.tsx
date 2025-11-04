@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
 
 const AddTerms = () => {
-  const { t } = useTranslation("setting");
+  const { t, i18n } = useTranslation("setting");
   const [arBody, setArBody] = useState("");
   const [enBody, setEnBody] = useState("");
   const [arTitle, setArTitle] = useState("");
@@ -85,11 +85,11 @@ const AddTerms = () => {
             <Select onValueChange={(val) => setCountryId(Number(val))}>
               <SelectTrigger
                 className="w-full !h-16 rounded-[12px] mt-4"
-                dir="rtl"
+                dir={i18n.language === "ar" ? "rtl" : "ltr"}
               >
                 <SelectValue placeholder={t("country")} />
               </SelectTrigger>
-              <SelectContent dir="rtl">
+              <SelectContent dir={i18n.language === "ar" ? "rtl" : "ltr"}>
                 {isLoading && (
                   <SelectItem value="-1" disabled>
                     {t("loading")}
@@ -97,14 +97,14 @@ const AddTerms = () => {
                 )}
                 {isError && (
                   <SelectItem value="-1" disabled>
-                    {t("errorLoading")}
+                    {t('errorLoading')}
                   </SelectItem>
                 )}
                 {!isLoading &&
                   !isError &&
                   countries.map((country) => (
                     <SelectItem key={country.id} value={country.id.toString()}>
-                      {country.name.ar}
+                      {i18n.language === "ar" ? country.name.ar : country.name.en}
                     </SelectItem>
                   ))}
               </SelectContent>
