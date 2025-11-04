@@ -14,14 +14,9 @@ const TermsAndConditions = () => {
   );
 
   // Use react-query for countries so fetch lifecycle is consistent with pages query
-  const { data: countries, isLoading: countriesLoading } = useQuery<
-    Country[],
-    Error
-  >({
-    queryKey: ["countries"],
+    const { data: countries, isLoading: countriesLoading } = useQuery<Country[]>({
+    queryKey: ["countries", "all"],
     queryFn: () => getAllCountries(),
-    // cache countries for a short time to avoid refetching on quick navigations
-    staleTime: 1000 * 60 * 5,
   });
 
   const {
