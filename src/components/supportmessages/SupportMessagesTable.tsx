@@ -46,9 +46,7 @@ const SupportMessagesTable = ({
   // NOTE: requirement: view shows by default. The View button is rendered regardless
   // of the view permission.
 
-  const [notesVisibleMap, setNotesVisibleMap] = useState<
-    Record<number, boolean>
-  >({});
+  const [notesVisibleMap] = useState<Record<number, boolean>>({});
 
   const handleDelete = async (id: number) => {
     await deleteConversation(id);
@@ -144,8 +142,8 @@ const SupportMessagesTable = ({
                               <button
                                 className={`w-[78px] h-[37px] rounded-[8.15px] font-bold text-[13px] ${
                                   isPendingActive
-                                    ? "bg-[#F3F4F6] text-[#6B7280]"
-                                    : "bg-[#2A32F8] text-[#FFFFFF]"
+                                    ? "bg-[#2A32F8] text-[#FFFFFF]"
+                                    : "bg-[#F3F4F6] text-[#6B7280]"
                                 }`}
                                 onClick={() => {
                                   if (isPendingActive) return; // do nothing when clicking current status
@@ -165,8 +163,8 @@ const SupportMessagesTable = ({
                               <button
                                 className={`w-[78px] h-[37px] rounded-[8.15px] font-normal text-[13px] ${
                                   isResolvedActive
-                                    ? "bg-[#F3F4F6] text-[#6B7280]"
-                                    : "bg-[#2A32F8] text-[#FFFFFF]"
+                                    ? "bg-[#2A32F8] text-[#FFFFFF]"
+                                    : "bg-[#F3F4F6] text-[#6B7280]"
                                 }`}
                                 onClick={() => {
                                   if (isResolvedActive) return; // do nothing when clicking current status
