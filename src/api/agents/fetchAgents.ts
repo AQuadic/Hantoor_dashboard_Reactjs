@@ -16,8 +16,10 @@ export interface AgentCenter {
   id?: number;
   is_active: string;
   phone: string;
+  phone_country?: string;
   type: "center" | "show_room";
   whatsapp: string;
+  whatsapp_country?: string;
   name: AgentName;
   description: CenterDescription;
   link_google_map?: string;
@@ -71,10 +73,13 @@ export interface CreateAgentPayload {
       name: AgentName;
       description: CenterDescription;
       phone: string;
+      phone_country: string;
       whatsapp: string;
+      whatsapp_country: string;
       // Backend accepts either the descriptive type or numeric codes ("1" for center, "2" for show_room)
       type: "center" | "show_room" | "1" | "2";
       is_active: string;
+      link_google_map?: string;
     };
   };
 }
@@ -137,6 +142,10 @@ export async function fetchAgents(
               : c.type === 2 || c.type === "2"
               ? "show_room"
               : c.type,
+          phone: c.phone ?? "",
+          phone_country: c.phone_country ?? "",
+          whatsapp: c.whatsapp ?? "",
+          whatsapp_country: c.whatsapp_country ?? "",
         }))
       : undefined;
 
@@ -220,6 +229,10 @@ export async function fetchAgentById(id: number): Promise<Agent> {
               : c.type === 2 || c.type === "2"
               ? "show_room"
               : c.type,
+          phone: c.phone ?? "",
+          phone_country: c.phone_country ?? "",
+          whatsapp: c.whatsapp ?? "",
+          whatsapp_country: c.whatsapp_country ?? "",
         }))
       : [];
 

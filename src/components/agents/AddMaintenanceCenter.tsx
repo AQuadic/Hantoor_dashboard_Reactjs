@@ -5,10 +5,7 @@ import MobileInput from "../general/MobileInput";
 import { AgentCenter } from "@/api/agents/fetchAgents";
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
-import {
-  parsePhoneNumberCountry,
-  CountryType,
-} from "@/utils/getCountryByPhoneCode";
+import { CountryType, getCountryByISO2 } from "@/utils/getCountryByPhoneCode";
 
 // Default country used for WhatsApp inputs when no country code is present
 const DEFAULT_COUNTRY: CountryType = {
@@ -33,11 +30,23 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
   // Country state for WhatsApp input per center
   const [whatsappCountries, setWhatsappCountries] = useState<CountryType[]>(
     () =>
-      centers.map((c) => parsePhoneNumberCountry(c?.whatsapp, DEFAULT_COUNTRY))
+      centers.map((c) => {
+        if (c?.whatsapp_country) {
+          const country = getCountryByISO2(c.whatsapp_country);
+          if (country) return country;
+        }
+        return DEFAULT_COUNTRY;
+      })
   );
 
   const [phoneCountries, setPhoneCountries] = useState<CountryType[]>(() =>
-    centers.map((c) => parsePhoneNumberCountry(c?.phone, DEFAULT_COUNTRY))
+    centers.map((c) => {
+      if (c?.phone_country) {
+        const country = getCountryByISO2(c.phone_country);
+        if (country) return country;
+      }
+      return DEFAULT_COUNTRY;
+    })
   );
 
   // Sync country arrays when centers are added/removed from parent (length changes)
@@ -47,9 +56,13 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
       // Centers added - add default countries for new items only
       const newWhatsappCountries = [...whatsappCountries];
       for (let i = whatsappCountries.length; i < centers.length; i++) {
-        newWhatsappCountries.push(
-          parsePhoneNumberCountry(centers[i]?.whatsapp, DEFAULT_COUNTRY)
-        );
+        const center = centers[i];
+        if (center?.whatsapp_country) {
+          const country = getCountryByISO2(center.whatsapp_country);
+          newWhatsappCountries.push(country || DEFAULT_COUNTRY);
+        } else {
+          newWhatsappCountries.push(DEFAULT_COUNTRY);
+        }
       }
       setWhatsappCountries(newWhatsappCountries);
     } else if (centers.length < whatsappCountries.length) {
@@ -61,9 +74,13 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
       // Centers added - add default countries for new items only
       const newPhoneCountries = [...phoneCountries];
       for (let i = phoneCountries.length; i < centers.length; i++) {
-        newPhoneCountries.push(
-          parsePhoneNumberCountry(centers[i]?.phone, DEFAULT_COUNTRY)
-        );
+        const center = centers[i];
+        if (center?.phone_country) {
+          const country = getCountryByISO2(center.phone_country);
+          newPhoneCountries.push(country || DEFAULT_COUNTRY);
+        } else {
+          newPhoneCountries.push(DEFAULT_COUNTRY);
+        }
       }
       setPhoneCountries(newPhoneCountries);
     } else if (centers.length < phoneCountries.length) {
@@ -204,34 +221,26 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
                     defaultValue: "رقم الجوال",
                   })}
                   labelClassName="font-normal"
-                  selectedCountry={phoneCountries[index] || DEFAULT_COUNTRY} // ✅ correct one
+                  selectedCountry={phoneCountries[index] || DEFAULT_COUNTRY}
                   setSelectedCountry={(country: CountryType) => {
                     const newCountries = [...phoneCountries];
                     newCountries[index] = country;
                     setPhoneCountries(newCountries);
-
-                    if (centers[index].phone) {
-                      const number = String(centers[index].phone).replace(
-                        /^\d+\s+/,
-                        ""
-                      );
+                    // Update phone_country separately
+                    handleCenterChange(index, "phone_country", country.iso2);
+                  }}
+                  phone={center.phone || ""}
+                  setPhone={(val: string) => {
+                    handleCenterChange(index, "phone", val);
+                    // Ensure phone_country is set when phone is entered
+                    if (!center.phone_country) {
                       handleCenterChange(
                         index,
-                        "phone",
-                        `${country.phone[0]} ${number}`
+                        "phone_country",
+                        (phoneCountries[index] || DEFAULT_COUNTRY).iso2
                       );
                     }
                   }}
-                  phone={(center.phone || "").replace(/^\d+\s+/, "")}
-                  setPhone={(val: string) =>
-                    handleCenterChange(
-                      index,
-                      "phone",
-                      `${
-                        (phoneCountries[index] || DEFAULT_COUNTRY).phone[0]
-                      } ${val}`
-                    )
-                  }
                 />
                 <div className="absolute top-9 left-5"></div>
               </div>
@@ -251,29 +260,21 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
                     const newCountries = [...whatsappCountries];
                     newCountries[index] = country;
                     setWhatsappCountries(newCountries);
-                    // If a number is already present, update the value with new country code
-                    if (centers[index].whatsapp) {
-                      const number = String(centers[index].whatsapp).replace(
-                        /^\d+\s+/, // only remove digits when followed by space (country code)
-                        ""
-                      );
+                    // Update whatsapp_country separately
+                    handleCenterChange(index, "whatsapp_country", country.iso2);
+                  }}
+                  phone={center.whatsapp || ""}
+                  setPhone={(val: string) => {
+                    handleCenterChange(index, "whatsapp", val);
+                    // Ensure whatsapp_country is set when whatsapp is entered
+                    if (!center.whatsapp_country) {
                       handleCenterChange(
                         index,
-                        "whatsapp",
-                        `${country.phone[0]} ${number}`
+                        "whatsapp_country",
+                        (whatsappCountries[index] || DEFAULT_COUNTRY).iso2
                       );
                     }
                   }}
-                  phone={(center.whatsapp || "").replace(/^\d+\s+/, "")}
-                  setPhone={(val: string) =>
-                    handleCenterChange(
-                      index,
-                      "whatsapp",
-                      `${
-                        (whatsappCountries[index] || DEFAULT_COUNTRY).phone[0]
-                      } ${val}`
-                    )
-                  }
                 />
               </div>
             </div>

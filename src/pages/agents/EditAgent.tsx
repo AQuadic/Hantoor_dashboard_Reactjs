@@ -68,7 +68,9 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
           name: { ar: "", en: "" },
           description: { ar: "", en: "" },
           phone: "",
+          phone_country: "",
           whatsapp: "",
+          whatsapp_country: "",
           type: "center",
           is_active: "1",
         });
@@ -80,7 +82,9 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
           name: { ar: "", en: "" },
           description: { ar: "", en: "" },
           phone: "",
+          phone_country: "",
           whatsapp: "",
+          whatsapp_country: "",
           type: "show_room",
           is_active: "1",
         });
@@ -148,7 +152,9 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
       const descAr = hasContent(center.description?.ar);
       const descEn = hasContent(center.description?.en);
 
-      const filledFields = [nameAr, nameEn, descAr, descEn].filter(Boolean).length;
+      const filledFields = [nameAr, nameEn, descAr, descEn].filter(
+        Boolean
+      ).length;
       return filledFields > 0 && filledFields < 4;
     };
 
@@ -192,8 +198,8 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
         toast.error(t("centerIncompleteName"));
       } else if (missingDescriptions) {
         toast.error(t("centerIncompleteDescription"));
-      // } else if (missingPhones) {
-      //   toast.error(t("centerMissingPhone"));
+        // } else if (missingPhones) {
+        //   toast.error(t("centerMissingPhone"));
       } else {
         toast.error(t("centerIncompleteData"));
       }
@@ -248,7 +254,9 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
                 en: c.description.en.trim(),
               },
               phone: c.phone?.trim() || "",
+              phone_country: c.phone_country?.trim() || "",
               whatsapp: c.whatsapp?.trim() || "",
+              whatsapp_country: c.whatsapp_country?.trim() || "",
               is_active: c.is_active ?? "1",
               link_google_map: c.link_google_map?.trim() || "",
             }))
@@ -286,7 +294,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
               label={t("arName")}
               value={arName}
               onChange={setArName}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
           {/* English name */}

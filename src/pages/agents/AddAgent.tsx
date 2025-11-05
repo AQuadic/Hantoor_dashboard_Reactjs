@@ -38,7 +38,9 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       name: { ar: "", en: "" },
       description: { ar: "", en: "" },
       phone: "",
+      phone_country: "",
       whatsapp: "",
+      whatsapp_country: "",
       type: "center",
       is_active: "1",
     },
@@ -46,7 +48,9 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       name: { ar: "", en: "" },
       description: { ar: "", en: "" },
       phone: "",
+      phone_country: "",
       whatsapp: "",
+      whatsapp_country: "",
       type: "show_room",
       is_active: "1",
     },
@@ -106,7 +110,9 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       const descAr = hasContent(center.description?.ar);
       const descEn = hasContent(center.description?.en);
 
-      const filledFields = [nameAr, nameEn, descAr, descEn].filter(Boolean).length;
+      const filledFields = [nameAr, nameEn, descAr, descEn].filter(
+        Boolean
+      ).length;
       return filledFields > 0 && filledFields < 4;
     };
 
@@ -150,8 +156,8 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         toast.error(t("centerIncompleteName"));
       } else if (missingDescriptions) {
         toast.error(t("centerIncompleteDescription"));
-      // } else if (missingPhones) {
-      //   toast.error(t("centerMissingPhone"));
+        // } else if (missingPhones) {
+        //   toast.error(t("centerMissingPhone"));
       } else {
         toast.error(t("centerIncompleteData"));
       }
@@ -179,7 +185,9 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         name: { ar: string; en: string };
         description: { ar: string; en: string };
         phone: string;
+        phone_country: string;
         whatsapp: string;
+        whatsapp_country: string;
         type: string;
         is_active: string;
         link_google_map?: string;
@@ -195,9 +203,11 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
           ar: center.description.ar.trim(),
           en: center.description.en.trim(),
         },
-        // phone is required; whatsapp is optional - include when present or send empty string
+        // phone and phone_country are sent separately
         phone: center.phone?.trim() || "",
+        phone_country: center.phone_country?.trim() || "",
         whatsapp: center.whatsapp?.trim() || "",
+        whatsapp_country: center.whatsapp_country?.trim() || "",
         type: center.type,
         is_active: center.is_active ? "1" : "0",
         link_google_map: center.link_google_map?.trim() || "",
@@ -243,7 +253,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
               label={t("arName")}
               value={arName}
               onChange={setArName}
-              placeholder={t('writeHere')}
+              placeholder={t("writeHere")}
             />
           </div>
           {/* English name */}

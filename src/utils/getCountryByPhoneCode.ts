@@ -55,3 +55,22 @@ export const parsePhoneNumberCountry = (
 
   return defaultCountry;
 };
+
+/**
+ * Get country by ISO2 code
+ * @param iso2 - The ISO2 country code (e.g., "EG", "SA", "AE")
+ * @returns CountryType object or null if not found
+ */
+export const getCountryByISO2 = (iso2: string): CountryType | null => {
+  const countries = getCountryDataList();
+
+  const country = countries.find((c) => c.iso2 === iso2.toUpperCase());
+
+  if (!country) return null;
+
+  return {
+    iso2: country.iso2,
+    name: country.name,
+    phone: country.phone.map(String),
+  };
+};
