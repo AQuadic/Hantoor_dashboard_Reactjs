@@ -76,6 +76,7 @@ import {
   AlignCenter,
   AlignRight,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const ToolbarDropdown: React.FC<DropdownProps> = ({
   value,
@@ -523,6 +524,7 @@ const DashboardTextEditor = ({
   body,
   setBody,
 }: DashboardTextEditorProps) => {
+  const { t } = useTranslation("setting");
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const initialValue = useMemo(() => deserialize(body), [body]);
   const renderElement = useCallback(
@@ -573,18 +575,20 @@ const DashboardTextEditor = ({
         ></div>
         <Toolbar editor={editor} />
         <Slate
-        key={body}
-        editor={editor}
-        initialValue={initialValue}
-        onChange={(value) => {
-          const plainText = value.map((n: any) => n.children.map((c: any) => c.text).join("")).join("\n");
-          setBody(plainText);
-        }}
-      >
+          key={body}
+          editor={editor}
+          initialValue={initialValue}
+          onChange={(value) => {
+            const plainText = value
+              .map((n: any) => n.children.map((c: any) => c.text).join(""))
+              .join("\n");
+            setBody(plainText);
+          }}
+        >
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}
-            placeholder="اكتب هنا"
+            placeholder={t("writeHere")}
             className={css`
               min-height: 208px;
               padding: 16px;
