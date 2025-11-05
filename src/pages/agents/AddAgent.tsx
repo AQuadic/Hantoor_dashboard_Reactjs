@@ -30,7 +30,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
 
   const [arName, setArName] = useState("");
   const [enName, setEnName] = useState("");
-  const [emailLink, setEmailLink] = useState("");
+  // emailLink was not used in the form; omit and send an empty link by default
   const [website, setWebsite] = useState("");
   // brands removed: this form no longer requires selecting a brand
   const [centers, setCenters] = useState<AgentCenter[]>([
@@ -64,24 +64,32 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       queryClient.invalidateQueries({ queryKey: ["agents"] });
       navigate("/agents");
     },
-    onError: (error: any) => {
-      let errorMessage = t("agentCreationError");
+      onError: (error: unknown) => {
+        let errorMessage = t("agentCreationError");
 
-      if (error.response) {
-        const data = error.response.data;
-        if (data?.message) {
-          errorMessage = data.message;
-        }
-        if (data?.errors) {
-          const allErrors = Object.values(data.errors).flat() as string[];
-          errorMessage = allErrors.join(" - ");
-        }
-      } else if (error instanceof Error) {
-        errorMessage = error.message;
-      }
+        if (typeof error === "object" && error !== null && "response" in error) {
+          const axiosError = error as {
+            response?: { data?: { message?: string; errors?: Record<string, string[]> } };
+            message?: string;
+          };
 
-      toast.error(errorMessage);
-    },
+          const data = axiosError.response?.data;
+          if (data?.message) {
+            errorMessage = data.message;
+          }
+            if (data?.errors) {
+              const allErrors = Object.values(data.errors).flat();
+              errorMessage = allErrors.join(" - ");
+            }
+          if (!errorMessage && axiosError.message) {
+            errorMessage = axiosError.message;
+          }
+        } else if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+
+        toast.error(errorMessage);
+      },
   });
 
   const handleSubmit = () => {
@@ -150,7 +158,7 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       const missingDescriptions = incompleteCenters.some(
         (c) => !hasContent(c.description?.ar) || !hasContent(c.description?.en)
       );
-      // const missingPhones = incompleteCenters.some((c) => !hasContent(c.phone));
+      
 
       if (missingNames) {
         toast.error(t("centerIncompleteName"));
@@ -178,41 +186,35 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       return;
     }
 
-    // Map centers to object with numeric keys for API
-    const centersPayload: Record<
-      number,
-      {
-        name: { ar: string; en: string };
-        description: { ar: string; en: string };
-        phone: string;
-        phone_country: string;
-        whatsapp: string;
-        whatsapp_country: string;
-        type: string;
-        is_active: string;
-        link_google_map?: string;
-      }
-    > = {};
-    validCenters.forEach((center, idx) => {
-      centersPayload[idx] = {
-        name: {
-          ar: center.name.ar.trim(),
-          en: center.name.en.trim(),
-        },
-        description: {
-          ar: center.description.ar.trim(),
-          en: center.description.en.trim(),
-        },
-        // phone and phone_country are sent separately
-        phone: center.phone?.trim() || "",
-        phone_country: center.phone_country?.trim() || "",
-        whatsapp: center.whatsapp?.trim() || "",
-        whatsapp_country: center.whatsapp_country?.trim() || "",
-        type: center.type,
-        is_active: center.is_active ? "1" : "0",
-        link_google_map: center.link_google_map?.trim() || "",
-      };
-    });
+    // Map centers to an array for API (server expects an array, not an object with numeric keys)
+    const centersArray: Array<{
+      name: { ar: string; en: string };
+      description: { ar: string; en: string };
+      phone: string;
+      phone_country: string;
+      whatsapp: string;
+      whatsapp_country: string;
+      type: string;
+      is_active: string;
+      link_google_map?: string;
+    }> = validCenters.map((center) => ({
+      name: {
+        ar: center.name.ar.trim(),
+        en: center.name.en.trim(),
+      },
+      description: {
+        ar: center.description.ar.trim(),
+        en: center.description.en.trim(),
+      },
+      phone: center.phone?.trim() || "",
+      phone_country: center.phone_country?.trim() || "",
+      whatsapp: center.whatsapp?.trim() || "",
+      whatsapp_country: center.whatsapp_country?.trim() || "",
+      type: center.type,
+      // normalize is_active to "1" or "0"
+      is_active: String(center.is_active) === "1" ? "1" : "0",
+      link_google_map: center.link_google_map?.trim() || "",
+    }));
 
     const payload: CreateAgentPayload = {
       name: {
@@ -220,11 +222,11 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         en: trimmedEnName,
       },
       is_active: "1", // Always send as string "1"
-      link: emailLink.trim(),
+  link: "",
       website: website.trim(),
       // brand_id intentionally omitted (brand removed from UI)
-      // centersPayload uses numeric-string type codes ("1" | "2"); cast to match CreateAgentPayload
-      centers: centersPayload as unknown as CreateAgentPayload["centers"],
+      // send centers as array
+      centers: (centersArray as unknown) as CreateAgentPayload["centers"],
     };
 
     createAgentMutation.mutate(payload);
