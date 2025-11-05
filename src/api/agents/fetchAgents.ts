@@ -17,9 +17,15 @@ export interface AgentCenter {
   is_active: string;
   phone: string;
   phone_country?: string;
+  phone_normalized?: string;
+  phone_national?: string;
+  phone_e164?: string;
   type: "center" | "show_room";
   whatsapp: string;
   whatsapp_country?: string;
+  whatsapp_normalized?: string;
+  whatsapp_national?: string;
+  whatsapp_e164?: string;
   name: AgentName;
   description: CenterDescription;
   link_google_map?: string;

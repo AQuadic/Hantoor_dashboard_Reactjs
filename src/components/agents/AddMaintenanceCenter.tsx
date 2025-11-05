@@ -27,67 +27,48 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
 }) => {
   const { t } = useTranslation("agents");
 
-  // Country state for WhatsApp input per center
-  const [whatsappCountries, setWhatsappCountries] = useState<CountryType[]>(
-    () =>
-      centers.map((c) => {
-        if (c?.whatsapp_country) {
-          const country = getCountryByISO2(c.whatsapp_country);
-          if (country) return country;
-        }
-        return DEFAULT_COUNTRY;
-      })
-  );
+  console.log("AddMaintenanceCenter - centers prop:", centers);
 
-  const [phoneCountries, setPhoneCountries] = useState<CountryType[]>(() =>
-    centers.map((c) => {
-      if (c?.phone_country) {
-        const country = getCountryByISO2(c.phone_country);
+  // Country state for WhatsApp input per center
+  const [whatsappCountries, setWhatsappCountries] = useState<CountryType[]>([]);
+
+  const [phoneCountries, setPhoneCountries] = useState<CountryType[]>([]);
+
+  // Sync country arrays when centers change
+  // This ensures phone/whatsapp countries are properly set when data loads from API
+  useEffect(() => {
+    console.log("useEffect triggered - centers:", centers);
+
+    const newWhatsappCountries = centers.map((c, idx) => {
+      console.log(
+        `Center ${idx} - whatsapp: "${c.whatsapp}", whatsapp_country: "${c.whatsapp_country}"`
+      );
+      if (c?.whatsapp_country) {
+        const country = getCountryByISO2(c.whatsapp_country);
+        console.log(`  -> Found country:`, country);
         if (country) return country;
       }
+      console.log(`  -> Using default country`);
       return DEFAULT_COUNTRY;
-    })
-  );
+    });
+    console.log("Setting whatsappCountries:", newWhatsappCountries);
+    setWhatsappCountries(newWhatsappCountries);
 
-  // Sync country arrays when centers are added/removed from parent (length changes)
-  // but preserve existing country selections for unchanged indices
-  useEffect(() => {
-    if (centers.length > whatsappCountries.length) {
-      // Centers added - add default countries for new items only
-      const newWhatsappCountries = [...whatsappCountries];
-      for (let i = whatsappCountries.length; i < centers.length; i++) {
-        const center = centers[i];
-        if (center?.whatsapp_country) {
-          const country = getCountryByISO2(center.whatsapp_country);
-          newWhatsappCountries.push(country || DEFAULT_COUNTRY);
-        } else {
-          newWhatsappCountries.push(DEFAULT_COUNTRY);
-        }
+    const newPhoneCountries = centers.map((c, idx) => {
+      console.log(
+        `Center ${idx} - phone: "${c.phone}", phone_country: "${c.phone_country}"`
+      );
+      if (c?.phone_country) {
+        const country = getCountryByISO2(c.phone_country);
+        console.log(`  -> Found country:`, country);
+        if (country) return country;
       }
-      setWhatsappCountries(newWhatsappCountries);
-    } else if (centers.length < whatsappCountries.length) {
-      // Centers removed - trim the array
-      setWhatsappCountries(whatsappCountries.slice(0, centers.length));
-    }
-
-    if (centers.length > phoneCountries.length) {
-      // Centers added - add default countries for new items only
-      const newPhoneCountries = [...phoneCountries];
-      for (let i = phoneCountries.length; i < centers.length; i++) {
-        const center = centers[i];
-        if (center?.phone_country) {
-          const country = getCountryByISO2(center.phone_country);
-          newPhoneCountries.push(country || DEFAULT_COUNTRY);
-        } else {
-          newPhoneCountries.push(DEFAULT_COUNTRY);
-        }
-      }
-      setPhoneCountries(newPhoneCountries);
-    } else if (centers.length < phoneCountries.length) {
-      // Centers removed - trim the array
-      setPhoneCountries(phoneCountries.slice(0, centers.length));
-    }
-  }, [centers.length]); // eslint-disable-line react-hooks/exhaustive-deps
+      console.log(`  -> Using default country`);
+      return DEFAULT_COUNTRY;
+    });
+    console.log("Setting phoneCountries:", newPhoneCountries);
+    setPhoneCountries(newPhoneCountries);
+  }, [centers]); // Re-run when centers change (including when API data loads)
 
   // Add a new empty center form
   const handleAddCenter = () => {
@@ -97,13 +78,14 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
         name: { ar: "", en: "" },
         description: { ar: "", en: "" },
         phone: "",
+        phone_country: "",
         whatsapp: "",
+        whatsapp_country: "",
         type,
         is_active: "1", // Changed from boolean to string
       },
     ]);
-    setWhatsappCountries([...whatsappCountries, DEFAULT_COUNTRY]);
-    setPhoneCountries([...phoneCountries, DEFAULT_COUNTRY]);
+    // The useEffect will handle updating the country arrays
   };
 
   // Update a field in a specific center
@@ -140,146 +122,166 @@ const AddMaintenanceCenter: React.FC<AddMaintenanceCenterProps> = ({
     setPhoneCountries(phoneCountries.filter((_, i) => i !== index));
   };
 
+  console.log("RENDER - centers:", centers);
+  console.log("RENDER - phoneCountries:", phoneCountries);
+  console.log("RENDER - whatsappCountries:", whatsappCountries);
+
   return (
     <div className="bg-white mt-6 rounded-[15px] ">
       <div className="flex flex-col gap-6">
-        {centers.map((center, index) => (
-          <div
-            key={center.id ?? index}
-            className="border p-4 rounded-lg relative"
-          >
-            <button
-              type="button"
-              className="absolute -top-3 -right-3 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-sm transition-all border border-white"
-              onClick={() => handleRemoveCenter(index)}
-              aria-label={t("removeCenter")}
+        {centers.map((center, index) => {
+          console.log(`Rendering center ${index}:`, {
+            phone: center.phone,
+            phoneCountry: center.phone_country,
+            whatsapp: center.whatsapp,
+            whatsappCountry: center.whatsapp_country,
+            phoneCountryState: phoneCountries[index],
+            whatsappCountryState: whatsappCountries[index],
+          });
+          return (
+            <div
+              key={center.id ?? index}
+              className="border p-4 rounded-lg relative"
             >
-              <X size={18} strokeWidth={2.2} />
-            </button>
-            <div className="flex flex-col md:flex-row gap-[15px]">
-              <div className="w-full">
-                <DashboardInput
-                  label={t("arCenterName")}
-                  value={center.name.ar}
-                  onChange={(val) =>
-                    handleCenterChange(index, "name", val, "ar")
-                  }
-                  placeholder={t("placeholderName")}
-                />
-              </div>
-              <div className="w-full">
-                <DashboardInput
-                  label={t("enCenterName")}
-                  value={center.name.en}
-                  onChange={(val) =>
-                    handleCenterChange(index, "name", val, "en")
-                  }
-                  placeholder={t("placeholderName")}
-                />
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row gap-[15px] mt-4">
-              <div className="w-full">
-                <DashboardInput
-                  label={t("arAddress")}
-                  value={center.description.ar}
-                  onChange={(val) =>
-                    handleCenterChange(index, "description", val, "ar")
-                  }
-                  placeholder={t("writeHere")}
-                />
-              </div>
-              <div className="w-full">
-                <DashboardInput
-                  label={t("enAddress")}
-                  value={center.description.en}
-                  onChange={(val) =>
-                    handleCenterChange(index, "description", val, "en")
-                  }
-                  placeholder={t("writeHere")}
-                />
-              </div>
-            </div>
-            {/* Google Map Link */}
-            <div className="flex flex-col md:flex-row gap-[15px] mt-4">
-              <div className="w-full">
-                <DashboardInput
-                  label={t("linkGoogleMap")}
-                  value={center.link_google_map || ""}
-                  onChange={(val) =>
-                    handleCenterChange(index, "link_google_map", val)
-                  }
-                  placeholder="https://maps.google.com/..."
-                />
-              </div>
-            </div>
-            <div className="flex flex-col md:flex-row gap-[15px] mt-4">
-              <div className="relative w-full">
-                <MobileInput
-                  label={t("phoneNumber", {
-                    ns: "agents",
-                    defaultValue: "رقم الجوال",
-                  })}
-                  labelClassName="font-normal"
-                  selectedCountry={phoneCountries[index] || DEFAULT_COUNTRY}
-                  setSelectedCountry={(country: CountryType) => {
-                    const newCountries = [...phoneCountries];
-                    newCountries[index] = country;
-                    setPhoneCountries(newCountries);
-                    // Update phone_country separately
-                    handleCenterChange(index, "phone_country", country.iso2);
-                  }}
-                  phone={center.phone || ""}
-                  setPhone={(val: string) => {
-                    handleCenterChange(index, "phone", val);
-                    // Ensure phone_country is set when phone is entered
-                    if (!center.phone_country) {
-                      handleCenterChange(
-                        index,
-                        "phone_country",
-                        (phoneCountries[index] || DEFAULT_COUNTRY).iso2
-                      );
+              <button
+                type="button"
+                className="absolute -top-3 -right-3 z-10 flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 shadow-sm transition-all border border-white"
+                onClick={() => handleRemoveCenter(index)}
+                aria-label={t("removeCenter")}
+              >
+                <X size={18} strokeWidth={2.2} />
+              </button>
+              <div className="flex flex-col md:flex-row gap-[15px]">
+                <div className="w-full">
+                  <DashboardInput
+                    label={t("arCenterName")}
+                    value={center.name.ar}
+                    onChange={(val) =>
+                      handleCenterChange(index, "name", val, "ar")
                     }
-                  }}
-                />
-                <div className="absolute top-9 left-5"></div>
+                    placeholder={t("placeholderName")}
+                  />
+                </div>
+                <div className="w-full">
+                  <DashboardInput
+                    label={t("enCenterName")}
+                    value={center.name.en}
+                    onChange={(val) =>
+                      handleCenterChange(index, "name", val, "en")
+                    }
+                    placeholder={t("placeholderName")}
+                  />
+                </div>
               </div>
-              <div className="w-full">
-                <MobileInput
-                  label={t("whatsApp", {
-                    ns: "agents",
-                    defaultValue: "رقم الواتساب",
-                  })}
-                  labelClassName="font-normal"
-                  selectedCountry={whatsappCountries[index] || DEFAULT_COUNTRY}
-                  setSelectedCountry={(country: {
-                    iso2: string;
-                    name: string;
-                    phone: string[];
-                  }) => {
-                    const newCountries = [...whatsappCountries];
-                    newCountries[index] = country;
-                    setWhatsappCountries(newCountries);
-                    // Update whatsapp_country separately
-                    handleCenterChange(index, "whatsapp_country", country.iso2);
-                  }}
-                  phone={center.whatsapp || ""}
-                  setPhone={(val: string) => {
-                    handleCenterChange(index, "whatsapp", val);
-                    // Ensure whatsapp_country is set when whatsapp is entered
-                    if (!center.whatsapp_country) {
+              <div className="flex flex-col md:flex-row gap-[15px] mt-4">
+                <div className="w-full">
+                  <DashboardInput
+                    label={t("arAddress")}
+                    value={center.description.ar}
+                    onChange={(val) =>
+                      handleCenterChange(index, "description", val, "ar")
+                    }
+                    placeholder={t("writeHere")}
+                  />
+                </div>
+                <div className="w-full">
+                  <DashboardInput
+                    label={t("enAddress")}
+                    value={center.description.en}
+                    onChange={(val) =>
+                      handleCenterChange(index, "description", val, "en")
+                    }
+                    placeholder={t("writeHere")}
+                  />
+                </div>
+              </div>
+              {/* Google Map Link */}
+              <div className="flex flex-col md:flex-row gap-[15px] mt-4">
+                <div className="w-full">
+                  <DashboardInput
+                    label={t("linkGoogleMap")}
+                    value={center.link_google_map || ""}
+                    onChange={(val) =>
+                      handleCenterChange(index, "link_google_map", val)
+                    }
+                    placeholder="https://maps.google.com/..."
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col md:flex-row gap-[15px] mt-4">
+                <div className="relative w-full">
+                  <MobileInput
+                    label={t("phoneNumber", {
+                      ns: "agents",
+                      defaultValue: "رقم الجوال",
+                    })}
+                    labelClassName="font-normal"
+                    selectedCountry={phoneCountries[index] || DEFAULT_COUNTRY}
+                    setSelectedCountry={(country: CountryType) => {
+                      const newCountries = [...phoneCountries];
+                      newCountries[index] = country;
+                      setPhoneCountries(newCountries);
+                      // Update phone_country separately
+                      handleCenterChange(index, "phone_country", country.iso2);
+                    }}
+                    phone={center.phone || ""}
+                    setPhone={(val: string) => {
+                      handleCenterChange(index, "phone", val);
+                      // Ensure phone_country is set when phone is entered
+                      if (!center.phone_country) {
+                        handleCenterChange(
+                          index,
+                          "phone_country",
+                          (phoneCountries[index] || DEFAULT_COUNTRY).iso2
+                        );
+                      }
+                    }}
+                  />
+                  <div className="absolute top-9 left-5"></div>
+                </div>
+                <div className="w-full">
+                  <MobileInput
+                    label={t("whatsApp", {
+                      ns: "agents",
+                      defaultValue: "رقم الواتساب",
+                    })}
+                    labelClassName="font-normal"
+                    selectedCountry={
+                      whatsappCountries[index] || DEFAULT_COUNTRY
+                    }
+                    setSelectedCountry={(country: {
+                      iso2: string;
+                      name: string;
+                      phone: string[];
+                    }) => {
+                      const newCountries = [...whatsappCountries];
+                      newCountries[index] = country;
+                      setWhatsappCountries(newCountries);
+                      // Update whatsapp_country separately
                       handleCenterChange(
                         index,
                         "whatsapp_country",
-                        (whatsappCountries[index] || DEFAULT_COUNTRY).iso2
+                        country.iso2
                       );
-                    }
-                  }}
-                />
+                    }}
+                    phone={center.whatsapp || ""}
+                    setPhone={(val: string) => {
+                      handleCenterChange(index, "whatsapp", val);
+                      // Ensure whatsapp_country is set when whatsapp is entered
+                      if (!center.whatsapp_country) {
+                        handleCenterChange(
+                          index,
+                          "whatsapp_country",
+                          (whatsappCountries[index] || DEFAULT_COUNTRY).iso2
+                        );
+                      }
+                    }}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
       <button
         type="button"

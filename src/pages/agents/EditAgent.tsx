@@ -49,6 +49,9 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
 
   useEffect(() => {
     if (agent) {
+      console.log("EditAgent - agent data received:", agent);
+      console.log("EditAgent - agent.centers:", agent.centers);
+
       setArName(agent.name.ar);
       setEnName(agent.name.en);
       // Prefer top-level website when available, otherwise fall back to link
@@ -57,6 +60,8 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
 
       // Initialize centers with at least one center and one showroom if none exist
       const existingCenters = agent.centers || [];
+      console.log("EditAgent - existingCenters:", existingCenters);
+
       const hasCenter = existingCenters.some((c) => c.type === "center");
       const hasShowroom = existingCenters.some((c) => c.type === "show_room");
 
@@ -90,6 +95,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
         });
       }
 
+      console.log("EditAgent - setting initialCenters:", initialCenters);
       setCenters(initialCenters);
     }
   }, [agent]);

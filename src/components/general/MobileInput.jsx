@@ -15,6 +15,7 @@ const MobileInput = ({
   inputClassName = "",
   disabled = false,
 }) => {
+  console.log("MobileInput - selectedCountry:", phone);
   const { t, i18n } = useTranslation("users");
   const [isOpen, setIsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -368,7 +369,7 @@ const MobileInput = ({
       <input
         disabled={disabled}
         placeholder="123456789"
-        type="number"
+        type="tel"
         value={phone}
         onChange={(e) => setPhone(e.target.value)}
         dir="ltr"
