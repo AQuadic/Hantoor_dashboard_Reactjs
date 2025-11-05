@@ -64,32 +64,34 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       queryClient.invalidateQueries({ queryKey: ["agents"] });
       navigate("/agents");
     },
-      onError: (error: unknown) => {
-        let errorMessage = t("agentCreationError");
+    onError: (error: unknown) => {
+      let errorMessage = t("agentCreationError");
 
-        if (typeof error === "object" && error !== null && "response" in error) {
-          const axiosError = error as {
-            response?: { data?: { message?: string; errors?: Record<string, string[]> } };
-            message?: string;
+      if (typeof error === "object" && error !== null && "response" in error) {
+        const axiosError = error as {
+          response?: {
+            data?: { message?: string; errors?: Record<string, string[]> };
           };
+          message?: string;
+        };
 
-          const data = axiosError.response?.data;
-          if (data?.message) {
-            errorMessage = data.message;
-          }
-            if (data?.errors) {
-              const allErrors = Object.values(data.errors).flat();
-              errorMessage = allErrors.join(" - ");
-            }
-          if (!errorMessage && axiosError.message) {
-            errorMessage = axiosError.message;
-          }
-        } else if (error instanceof Error) {
-          errorMessage = error.message;
+        const data = axiosError.response?.data;
+        if (data?.message) {
+          errorMessage = data.message;
         }
+        if (data?.errors) {
+          const allErrors = Object.values(data.errors).flat();
+          errorMessage = allErrors.join(" - ");
+        }
+        if (!errorMessage && axiosError.message) {
+          errorMessage = axiosError.message;
+        }
+      } else if (error instanceof Error) {
+        errorMessage = error.message;
+      }
 
-        toast.error(errorMessage);
-      },
+      toast.error(errorMessage);
+    },
   });
 
   const handleSubmit = () => {
@@ -158,7 +160,6 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
       const missingDescriptions = incompleteCenters.some(
         (c) => !hasContent(c.description?.ar) || !hasContent(c.description?.en)
       );
-      
 
       if (missingNames) {
         toast.error(t("centerIncompleteName"));
@@ -222,11 +223,11 @@ const AddAgent: React.FC<SubordinatesHeaderProps> = ({
         en: trimmedEnName,
       },
       is_active: "1", // Always send as string "1"
-  link: "",
+      link: "",
       website: website.trim(),
       // brand_id intentionally omitted (brand removed from UI)
       // send centers as array
-      centers: (centersArray as unknown) as CreateAgentPayload["centers"],
+      centers: centersArray as unknown as CreateAgentPayload["centers"],
     };
 
     createAgentMutation.mutate(payload);
