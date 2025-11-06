@@ -88,7 +88,8 @@ const ViewAgent = () => {
                     key={center.id}
                     title={title}
                     description={description}
-                    phone={center.phone}
+                    phoneE164={center.phone_e164}
+                    whatsappE164={center.whatsapp_e164}
                     mapLink={center.link_google_map}
                   />
                 );
@@ -111,7 +112,8 @@ const ViewAgent = () => {
                     key={center.id}
                     title={title}
                     description={description}
-                    phone={center.phone}
+                    phoneE164={center.phone_e164}
+                    whatsappE164={center.whatsapp_e164}
                     mapLink={center.link_google_map}
                   />
                 );

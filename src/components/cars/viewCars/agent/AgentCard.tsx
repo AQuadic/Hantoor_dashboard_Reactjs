@@ -6,27 +6,34 @@ import React from "react";
 interface AgentCardProps {
   title: string;
   description: string;
-  phone?: string | null;
+  phoneE164?: string | null;
+  whatsappE164?: string | null;
   mapLink?: string | null;
 }
 
-const AgentCard = ({ title, description, phone, mapLink }: AgentCardProps) => {
+const AgentCard = ({
+  title,
+  description,
+  phoneE164,
+  whatsappE164,
+  mapLink,
+}: AgentCardProps) => {
   const handlePhoneCall = () => {
-    if (phone) {
-      window.location.href = `tel:${phone}`;
+    if (phoneE164) {
+      globalThis.location.href = `tel:${phoneE164}`;
     }
   };
 
   const handleWhatsApp = () => {
-    if (phone) {
-      const cleanedPhone = phone.replace(/[^0-9+]/g, "");
-      window.open(`https://wa.me/${cleanedPhone}`, "_blank");
+    if (whatsappE164) {
+      const cleanedPhone = whatsappE164.replaceAll(/[^0-9+]/g, "");
+      globalThis.open(`https://wa.me/${cleanedPhone}`, "_blank");
     }
   };
 
   const handleMapOpen = () => {
     if (mapLink) {
-      window.open(mapLink, "_blank");
+      globalThis.open(mapLink, "_blank");
     }
   };
 
@@ -46,23 +53,23 @@ const AgentCard = ({ title, description, phone, mapLink }: AgentCardProps) => {
             <GoogleMapsIcon />
           </button>
         )}
-        {phone && (
-          <>
-            <button
-              onClick={handleWhatsApp}
-              className="cursor-pointer hover:opacity-80 transition-opacity"
-              aria-label="Open WhatsApp"
-            >
-              <WhatsappIcon />
-            </button>
-            <button
-              onClick={handlePhoneCall}
-              className="cursor-pointer hover:opacity-80 transition-opacity"
-              aria-label="Call Phone"
-            >
-              <CallIcon />
-            </button>
-          </>
+        {whatsappE164 && (
+          <button
+            onClick={handleWhatsApp}
+            className="cursor-pointer hover:opacity-80 transition-opacity"
+            aria-label="Open WhatsApp"
+          >
+            <WhatsappIcon />
+          </button>
+        )}
+        {phoneE164 && (
+          <button
+            onClick={handlePhoneCall}
+            className="cursor-pointer hover:opacity-80 transition-opacity"
+            aria-label="Call Phone"
+          >
+            <CallIcon />
+          </button>
         )}
       </div>
     </div>

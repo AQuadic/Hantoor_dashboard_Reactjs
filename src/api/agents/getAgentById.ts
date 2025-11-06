@@ -18,6 +18,10 @@ export interface ServiceCenter {
   phone_normalized?: string | null;
   phone_national?: string | null;
   phone_e164?: string | null;
+  whatsapp_country?: string | null;
+  whatsapp_normalized?: string | null;
+  whatsapp_national?: string | null;
+  whatsapp_e164?: string | null;
   link_google_map?: string | null;
   created_at: string;
   updated_at: string;
