@@ -26,11 +26,7 @@ const AgentCard = ({
 
   const handleWhatsApp = () => {
     if (whatsappE164) {
-      // Remove only the leading + sign for WhatsApp URL
-      const phoneNumber = whatsappE164.startsWith("+")
-        ? whatsappE164.slice(1)
-        : whatsappE164;
-      globalThis.open(`https://wa.me/${phoneNumber}`, "_blank");
+      globalThis.open(`https://wa.me/${whatsappE164}`, "_blank");
     }
   };
 

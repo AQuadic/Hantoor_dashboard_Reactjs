@@ -53,19 +53,20 @@ const MaintenanceCentersTable: React.FC<Props> = ({ agent }) => {
                 </a>
               )}
 
-              {center.phone && (
-                <>
-                  <a href={`tel:${center.phone}`}>
-                    <img src="/images/phone.svg" alt="Phone" />
-                  </a>
-                  <a
-                    href={`https://wa.me/${center.phone}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img src="/images/whatsapp.svg" alt="WhatsApp" />
-                  </a>
-                </>
+              {center.phone_e164 && (
+                <a href={`tel:${center.phone_e164}`}>
+                  <img src="/images/phone.svg" alt="Phone" />
+                </a>
+              )}
+
+              {center.whatsapp_e164 && (
+                <a
+                  href={`https://wa.me/${center.whatsapp_e164}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src="/images/whatsapp.svg" alt="WhatsApp" />
+                </a>
               )}
             </div>
           </div>

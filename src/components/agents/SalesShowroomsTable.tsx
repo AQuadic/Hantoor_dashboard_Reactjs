@@ -52,19 +52,19 @@ const SalesShowroomsTable: React.FC<Props> = ({ agent }) => {
                   <Location />
                 </a>
               )}
-              {showroom.phone && (
-                <>
-                  <a href={`tel:${showroom.phone}`}>
-                    <img src="/images/phone.svg" alt="Phone" />
-                  </a>
-                  <a
-                    href={`https://wa.me/${showroom.phone}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <img src="/images/whatsapp.svg" alt="WhatsApp" />
-                  </a>
-                </>
+              {showroom.phone_e164 && (
+                <a href={`tel:${showroom.phone_e164}`}>
+                  <img src="/images/phone.svg" alt="Phone" />
+                </a>
+              )}
+              {showroom.whatsapp_e164 && (
+                <a
+                  href={`https://wa.me/${showroom.whatsapp_e164}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <img src="/images/whatsapp.svg" alt="WhatsApp" />
+                </a>
               )}
             </div>
           </div>
