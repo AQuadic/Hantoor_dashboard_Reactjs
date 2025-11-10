@@ -244,7 +244,7 @@ const EditAgent: React.FC<SubordinatesHeaderProps> = ({
         en: trimmedEnName,
       },
       is_active: "1", // Changed from boolean to string
-      link: emailLink.trim(),
+      website: emailLink.trim(),
       // brand_id intentionally omitted (brand removed from UI)
       centers:
         validCenters.length > 0
