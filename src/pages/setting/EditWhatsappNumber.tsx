@@ -72,7 +72,8 @@ const EditWhatsappNumber = () => {
       navigate("/settings?section=Insurance+Price+Request+Button");
 
     } catch (err: any) {
-      toast.error(err.message || t("somethingWentWrong"));
+      const errorMsg = err?.response?.data?.message || err.message || t("somethingWentWrong");
+      toast.error(errorMsg);
     }
 
   };
